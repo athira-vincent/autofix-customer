@@ -1,8 +1,10 @@
 import 'package:auto_fix/UI/Splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {
+  await initHiveForFlutter();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
