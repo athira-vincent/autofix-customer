@@ -12,6 +12,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Login",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+    );
   }
 }

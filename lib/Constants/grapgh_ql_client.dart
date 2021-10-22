@@ -1,7 +1,7 @@
-
 // ignore_for_file: avoid_print
 
 import 'package:graphql/client.dart';
+
 class GqlClient {
   GqlClient._privateConstructor();
   static final GqlClient _instance = GqlClient._privateConstructor();
@@ -19,22 +19,23 @@ class GqlClient {
     );
   }
 
-   GraphQLClient _graphClient=GraphQLClient(
-          cache: GraphQLCache(store: HiveStore()), link: HttpLink(
+  GraphQLClient _graphClient = GraphQLClient(
+      cache: GraphQLCache(store: HiveStore()),
+      link: HttpLink(
         "https://api-gateway.techlabz.in/equator-auth/graphql",
-         defaultHeaders: <String, String>{
+        defaultHeaders: <String, String>{
           'x-token': "",
         },
       ));
 
-   GraphQLClient get graphQL => _graphClient;
+  GraphQLClient get graphQL => _graphClient;
 
   /// Methods
   Future<void> config({required String token}) async {
     if (token == "") {
       final HttpLink httpLink = HttpLink(
         "https://api-gateway.techlabz.in/equator-auth/graphql",
-         defaultHeaders: <String, String>{
+        defaultHeaders: <String, String>{
           'x-token': token,
         },
       );
@@ -47,7 +48,7 @@ class GqlClient {
       );
       final HttpLink httpLink = HttpLink(
         "https://api-gateway.techlabz.in/equator-auth/graphql",
-         defaultHeaders: <String, String>{
+        defaultHeaders: <String, String>{
           'x-token': token,
         },
       );
@@ -57,7 +58,6 @@ class GqlClient {
           GraphQLClient(cache: GraphQLCache(store: HiveStore()), link: link);
     }
   }
-
 
   Future<dynamic> query(String query,
       {bool enableDebug = false, required bool isTokenThere}) async {
@@ -110,8 +110,6 @@ class GqlClient {
       };
     }
   }
-
-  
 
   Future<dynamic> mutation(String query,
       {bool enableDebug = false,
@@ -180,7 +178,6 @@ class GqlClient {
       };
     }
   }
-
 
   Future<dynamic> mutation01(String query,
       {bool enableDebug = false,
