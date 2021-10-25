@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Home/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/Home/home_screen.dart';
 import 'package:auto_fix/UI/Login/login_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,8 +39,10 @@ class _SplashScreenState extends State<SplashScreen> {
       GqlClient.I.config(token: token);
     }
     if (_isLoggedin == null) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const ChangePasswordScreen()));
     } else if (_isLoggedin) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomeScreen()));
