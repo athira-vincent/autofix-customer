@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -17,10 +18,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   TextStyle labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
+  final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
     emailController.addListener(onFocusChange);
+    _getForgotPwd();
   }
 
   @override
@@ -28,6 +32,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
     emailFocusNode.removeListener(onFocusChange);
     emailController.dispose();
+    _forgotPasswordBloc.dispose();
+  }
+
+  _getForgotPwd() {
+    _forgotPasswordBloc.postForgotPassword.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message,
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Reset Password",
+                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      }
+    });
   }
 
   void onFocusChange() {
@@ -105,34 +137,35 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 40,
               width: double.infinity,
               margin: const EdgeInsets.only(left: 28, right: 28, top: 15),
-              child:
-                  //  isLoading
-                  //     ? Center(
-                  //         child: CircularProgressIndicator(
-                  //           valueColor: AlwaysStoppedAnimation<Color>(
-                  //               CustColors.peaGreen),
-                  //         ),
-                  //       )
-                  //     :
-                  MaterialButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                  } else {
-                    setState(() => _autoValidate = AutovalidateMode.always);
-                  }
-                },
-                child: const Text(
-                  'SEND',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Roboto_Bold',
-                    fontSize: 14,
-                  ),
-                ),
-                color: CustColors.peaGreen,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(2.5)),
-              ),
+              child: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(CustColors.peaGreen),
+                      ),
+                    )
+                  : MaterialButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          _forgotPasswordBloc
+                              .postForgotPasswordRequest(emailController.text);
+                        } else {
+                          setState(
+                              () => _autoValidate = AutovalidateMode.always);
+                        }
+                      },
+                      child: const Text(
+                        'SEND',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Roboto_Bold',
+                          fontSize: 14,
+                        ),
+                      ),
+                      color: CustColors.peaGreen,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.5)),
+                    ),
             ),
           ],
         ),

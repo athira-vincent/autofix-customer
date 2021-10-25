@@ -1,17 +1,18 @@
-import 'package:auto_fix/UI/Login/Signin/signin_screen.dart';
-import 'package:auto_fix/UI/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/UI/Home/Bookings/BookingsList/Active/active_booking_list.dart';
+import 'package:auto_fix/UI/Home/Bookings/BookingsList/Completed/completed_booking_list.dart';
+import 'package:auto_fix/UI/Home/Bookings/BookingsList/Pending/pending_booking_list.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class ViewBookingListScreen extends StatefulWidget {
+  const ViewBookingListScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _LoginScreenState();
+    return _ViewBookingListScreenState();
   }
 }
 
-class _LoginScreenState extends State<LoginScreen>
+class _ViewBookingListScreenState extends State<ViewBookingListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   @override
@@ -30,14 +31,16 @@ class _LoginScreenState extends State<LoginScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Login",
+          "Bookings",
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: NestedScrollView(
-        body: TabBarView(
-            controller: _tabController,
-            children: const [SigninScreen(), SignupScreen()]),
+        body: TabBarView(controller: _tabController, children: const [
+          ActiveBookingList(),
+          CompletedBookingList(),
+          PendingBookingsList()
+        ]),
         headerSliverBuilder: (context, value) {
           return [
             SliverToBoxAdapter(
@@ -47,14 +50,21 @@ class _LoginScreenState extends State<LoginScreen>
                   Container(
                     margin: const EdgeInsets.all(10),
                     child: const Text(
-                      'SIGN IN',
+                      'ACTIVE',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.all(10),
                     child: const Text(
-                      'SIGN UP',
+                      'COMPLETED',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: const Text(
+                      'PENDING',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),

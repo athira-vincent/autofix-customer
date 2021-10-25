@@ -1,11 +1,11 @@
-class ChangePasswordMdl {
+class AddVehicleMdl {
   late String status;
   late String message;
   late Data? data;
 
-  ChangePasswordMdl({required this.status, required this.message, this.data});
+  AddVehicleMdl({required this.status, required this.message, this.data});
 
-  ChangePasswordMdl.fromJson(Map<String, dynamic> json) {
+  AddVehicleMdl.fromJson(Map<String, dynamic> json) {
     data = (json['data'] != null ? Data.fromJson(json['data']) : null)!;
   }
 

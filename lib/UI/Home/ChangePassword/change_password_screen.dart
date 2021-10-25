@@ -50,6 +50,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Change Password",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: Form(
         key: formKey,
         autovalidateMode: _autoValidate,
