@@ -12,4 +12,12 @@ class QueryProvider {
   deleteVehicle() {}
   vehicleDetails() {}
   addVehicle() {}
+  bookingsList() {}
+  bookingDetail() {}
+  allModel() {}
+  allMake() {}
+  allEngine() {}
+  getAds() {}
+  topBrands() {}
+  topShops() {}
 }
