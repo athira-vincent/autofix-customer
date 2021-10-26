@@ -1,11 +1,11 @@
-class BookingsDetailsMdl {
+class AllMakeMdl {
   late String status;
   late String message;
   late Data? data;
 
-  BookingsDetailsMdl({required this.status, required this.message, this.data});
+  AllMakeMdl({required this.status, required this.message, this.data});
 
-  BookingsDetailsMdl.fromJson(Map<String, dynamic> json) {
+  AllMakeMdl.fromJson(Map<String, dynamic> json) {
     data = (json['data'] != null ? Data.fromJson(json['data']) : null)!;
   }
 
@@ -18,6 +18,7 @@ class BookingsDetailsMdl {
 
 class Data {
   //SignUp signUp;
+
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
