@@ -1,7 +1,7 @@
 class ViewVehicleMdl {
-  late String status;
-  late String message;
-  late Data? data;
+  String? status;
+  String? message;
+  Data? data;
 
   ViewVehicleMdl({required this.status, required this.message, this.data});
 

@@ -11,9 +11,9 @@ class SignupBloc {
   }
 
   postSignUpRequest(String firstName, String userName, String email,
-      String state, String password) async {
-    SignupMdl _signUpMdl =
-        await repository.getSignUp(firstName, userName, email, state, password);
+      String state, String password, String phone) async {
+    SignupMdl _signUpMdl = await repository.getSignUp(
+        firstName, userName, email, state, password, phone);
     postSignUp.sink.add(_signUpMdl);
   }
 }

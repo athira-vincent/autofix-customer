@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Home/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/Home/home_screen.dart';
 import 'package:auto_fix/UI/Login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,24 +23,22 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 2), () {
-      changeScreen();
+      _changeScreen();
     });
   }
 
-  Future changeScreen() async {
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
-    bool? _isLoggedin = shdPre.getBool(SharedPrefKeys.isUserLoggedIn);
-    var token = shdPre.getString(SharedPrefKeys.token);
-    if (token == null || token == "") {
+  Future _changeScreen() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    bool? _isLoggedin = _shdPre.getBool(SharedPrefKeys.isUserLoggedIn);
+    var _token = _shdPre.getString(SharedPrefKeys.token);
+    if (_token == null || _token == "") {
       GqlClient.I.config(token: "");
     } else {
-      GqlClient.I.config(token: token);
+      GqlClient.I.config(token: _token);
     }
     if (_isLoggedin == null) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const ChangePasswordScreen()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
     } else if (_isLoggedin) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomeScreen()));

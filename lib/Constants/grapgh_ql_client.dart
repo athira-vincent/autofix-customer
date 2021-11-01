@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:graphql/client.dart';
 
 class GqlClient {
@@ -8,7 +6,7 @@ class GqlClient {
   static GqlClient get instance => _instance;
   static GqlClient get I => _instance;
   final HttpLink httpLink = HttpLink(
-    "https://api-gateway.techlabz.in/equator-auth/graphql",
+    "https://api-gateway.techlabz.in/autoconnect-be",
   );
 
   GraphQLClient clientToQuery() {
@@ -22,7 +20,7 @@ class GqlClient {
   GraphQLClient _graphClient = GraphQLClient(
       cache: GraphQLCache(store: HiveStore()),
       link: HttpLink(
-        "https://api-gateway.techlabz.in/equator-auth/graphql",
+        "https://api-gateway.techlabz.in/autoconnect-be",
         defaultHeaders: <String, String>{
           'x-token': "",
         },
@@ -34,7 +32,7 @@ class GqlClient {
   Future<void> config({required String token}) async {
     if (token == "") {
       final HttpLink httpLink = HttpLink(
-        "https://api-gateway.techlabz.in/equator-auth/graphql",
+        "https://api-gateway.techlabz.in/autoconnect-be",
         defaultHeaders: <String, String>{
           'x-token': token,
         },
@@ -47,7 +45,7 @@ class GqlClient {
         getToken: () async => '{x-token: $token"}',
       );
       final HttpLink httpLink = HttpLink(
-        "https://api-gateway.techlabz.in/equator-auth/graphql",
+        "https://api-gateway.techlabz.in/autoconnect-be",
         defaultHeaders: <String, String>{
           'x-token': token,
         },

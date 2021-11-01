@@ -1,7 +1,7 @@
 class AllModelMdl {
-  late String status;
-  late String message;
-  late Data? data;
+  String? status;
+  String? message;
+  Data? data;
 
   AllModelMdl({required this.status, required this.message, this.data});
 

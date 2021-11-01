@@ -42,9 +42,9 @@ class Repository {
   final _topShopsApiProvider = TopShopsApiProvider();
   //SignUp
   Future<dynamic> getSignUp(String firstName, String userName, String email,
-          String state, String password) =>
+          String state, String password, String phone) =>
       _signupApiProvider.getSignUpRequest(
-          firstName, userName, email, state, password);
+          firstName, userName, email, state, password, phone);
   //SignIn
   Future<dynamic> getSignIn(String userName, String password) =>
       _signinApiProvider.getSignInRequest(userName, password);

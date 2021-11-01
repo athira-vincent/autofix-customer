@@ -1,5 +1,5 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Home/Ads/ads_md.dart';
+import 'package:auto_fix/UI/Home/Ads/ads_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AdsBloc {

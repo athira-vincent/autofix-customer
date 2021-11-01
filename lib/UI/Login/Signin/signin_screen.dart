@@ -16,40 +16,40 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  FocusNode userNameFocusNode = FocusNode();
-  FocusNode passwordFocusNode = FocusNode();
-  TextStyle labelStyleUserName = const TextStyle();
-  TextStyle labelStylePassword = const TextStyle();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  FocusNode _userNameFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+  TextStyle _labelStyleUserName = const TextStyle();
+  TextStyle _labelStylePassword = const TextStyle();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SigninBloc _signinBloc = SigninBloc();
-  bool isLoading = false;
+  bool _isLoading = false;
   @override
   void initState() {
     super.initState();
-    userNameController.addListener(onFocusChange);
-    passwordController.addListener(onFocusChange);
+    _userNameController.addListener(onFocusChange);
+    _passwordController.addListener(onFocusChange);
     _getSignInRes();
   }
 
   @override
   void dispose() {
     super.dispose();
-    userNameFocusNode.removeListener(onFocusChange);
-    userNameController.dispose();
-    passwordFocusNode.removeListener(onFocusChange);
-    passwordController.dispose();
+    _userNameFocusNode.removeListener(onFocusChange);
+    _userNameController.dispose();
+    _passwordFocusNode.removeListener(onFocusChange);
+    _passwordController.dispose();
     _signinBloc.dispose();
   }
 
   void onFocusChange() {
     setState(() {
-      labelStyleUserName = userNameFocusNode.hasFocus
+      _labelStyleUserName = _userNameFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      labelStylePassword = passwordFocusNode.hasFocus
+      _labelStylePassword = _passwordFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
     });
@@ -59,9 +59,9 @@ class _SigninScreenState extends State<SigninScreen> {
     _signinBloc.postSignIn.listen((value) {
       if (value.status == "error") {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
@@ -71,7 +71,7 @@ class _SigninScreenState extends State<SigninScreen> {
       } else {
         // _signinBloc.userDefault(value.data.agentSignIn.token);
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Signed In",
@@ -93,7 +93,7 @@ class _SigninScreenState extends State<SigninScreen> {
     return Scaffold(
       body: Form(
         autovalidateMode: _autoValidate,
-        key: formKey,
+        key: _formKey,
         child: Column(
           children: [
             Container(
@@ -105,13 +105,13 @@ class _SigninScreenState extends State<SigninScreen> {
                   fontSize: 14,
                   fontFamily: 'Roboto_Regular',
                 ),
-                focusNode: userNameFocusNode,
+                focusNode: _userNameFocusNode,
                 keyboardType: TextInputType.text,
                 validator: InputValidator(ch: "User name").emptyChecking,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                ],
-                controller: userNameController,
+                // inputFormatters: [
+                //   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                // ],
+                controller: _userNameController,
                 decoration: InputDecoration(
                     labelText: 'User Name',
                     hintText: 'User Name',
@@ -145,7 +145,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       color: Color.fromARGB(52, 3, 43, 80),
                       fontSize: 14,
                     ),
-                    labelStyle: labelStyleUserName),
+                    labelStyle: _labelStyleUserName),
               ),
             ),
             Container(
@@ -154,8 +154,8 @@ class _SigninScreenState extends State<SigninScreen> {
                 textAlignVertical: TextAlignVertical.center,
                 obscureText: true,
                 validator: InputValidator(ch: "Password").passwordChecking,
-                controller: passwordController,
-                focusNode: passwordFocusNode,
+                controller: _passwordController,
+                focusNode: _passwordFocusNode,
                 maxLines: 1,
                 style: const TextStyle(
                   fontSize: 14,
@@ -195,14 +195,14 @@ class _SigninScreenState extends State<SigninScreen> {
                       color: Color.fromARGB(52, 3, 43, 80),
                       fontSize: 14,
                     ),
-                    labelStyle: labelStylePassword),
+                    labelStyle: _labelStylePassword),
               ),
             ),
             Container(
               height: 40,
               width: double.infinity,
               margin: const EdgeInsets.only(left: 28, right: 28, top: 15),
-              child: isLoading
+              child: _isLoading
                   ? const Center(
                       child: CircularProgressIndicator(
                         valueColor:
@@ -211,9 +211,13 @@ class _SigninScreenState extends State<SigninScreen> {
                     )
                   : MaterialButton(
                       onPressed: () {
-                        if (formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           _signinBloc.postSignInRequest(
-                              userNameController.text, passwordController.text);
+                              _userNameController.text,
+                              _passwordController.text);
+                          setState(() {
+                            _isLoading = true;
+                          });
                         } else {
                           setState(
                               () => _autoValidate = AutovalidateMode.always);

@@ -1,5 +1,5 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Home/Ads/ads_md.dart';
+import 'package:auto_fix/UI/Home/Ads/ads_mdl.dart';
 
 class AdsApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
