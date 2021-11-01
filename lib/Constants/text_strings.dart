@@ -10,4 +10,6 @@ class TextStrings {
   //* Password weak
   static const weakPassword =
       "Password must contain atleast 8 characters, one alphabet,one digit,one symbol";
+  //* mobile invalid
+  static const invalidMobile = "Invalid phone number";
 }

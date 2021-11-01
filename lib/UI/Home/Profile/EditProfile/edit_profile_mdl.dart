@@ -1,7 +1,7 @@
 class EditProfileMdl {
-  late String status;
-  late String message;
-  late Data? data;
+  String? status;
+  String? message;
+  Data? data;
 
   EditProfileMdl({required this.status, required this.message, this.data});
 

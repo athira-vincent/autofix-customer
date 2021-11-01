@@ -45,7 +45,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
@@ -63,7 +63,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
@@ -81,7 +81,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
@@ -99,7 +99,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),

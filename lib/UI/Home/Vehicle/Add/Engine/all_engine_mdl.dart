@@ -1,7 +1,7 @@
 class AllEngineMdl {
-  late String status;
-  late String message;
-  late Data? data;
+  String? status;
+  String? message;
+  Data? data;
 
   AllEngineMdl({required this.status, required this.message, this.data});
 

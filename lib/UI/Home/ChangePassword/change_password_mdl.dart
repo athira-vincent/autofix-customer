@@ -1,7 +1,7 @@
 class ChangePasswordMdl {
-  late String status;
-  late String message;
-  late Data? data;
+  String? status;
+  String? message;
+  Data? data;
 
   ChangePasswordMdl({required this.status, required this.message, this.data});
 

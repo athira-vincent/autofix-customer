@@ -6,9 +6,9 @@ import 'package:auto_fix/UI/Login/Signup/signup_mdl.dart';
 class SignupApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<SignupMdl> getSignUpRequest(String firstName, String userName,
-      String email, String state, String password) async {
+      String email, String state, String password, String phone) async {
     Map<String, dynamic> _resp = await _queryProvider.signUp(
-        firstName, userName, email, state, password);
+        firstName, userName, email, state, password, phone);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

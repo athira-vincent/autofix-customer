@@ -13,25 +13,25 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  TextEditingController emailController = TextEditingController();
-  FocusNode emailFocusNode = FocusNode();
-  TextStyle labelStyleEmail = const TextStyle();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController _emailController = TextEditingController();
+  FocusNode _emailFocusNode = FocusNode();
+  TextStyle _labelStyleEmail = const TextStyle();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
-  bool isLoading = false;
+  bool _isLoading = false;
   @override
   void initState() {
     super.initState();
-    emailController.addListener(onFocusChange);
+    _emailController.addListener(onFocusChange);
     _getForgotPwd();
   }
 
   @override
   void dispose() {
     super.dispose();
-    emailFocusNode.removeListener(onFocusChange);
-    emailController.dispose();
+    _emailFocusNode.removeListener(onFocusChange);
+    _emailController.dispose();
     _forgotPasswordBloc.dispose();
   }
 
@@ -39,9 +39,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _forgotPasswordBloc.postForgotPassword.listen((value) {
       if (value.status == "error") {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
@@ -50,7 +50,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         });
       } else {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Reset Password",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
@@ -64,7 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void onFocusChange() {
     setState(() {
-      labelStyleEmail = emailFocusNode.hasFocus
+      _labelStyleEmail = _emailFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
     });
@@ -80,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
       body: Form(
-        key: formKey,
+        key: _formKey,
         autovalidateMode: _autoValidate,
         child: Column(
           children: [
@@ -90,8 +90,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.emailAddress,
                 validator: InputValidator(ch: "Email ID").emailValidator,
-                focusNode: emailFocusNode,
-                controller: emailController,
+                focusNode: _emailFocusNode,
+                controller: _emailController,
                 maxLines: 1,
                 style: const TextStyle(
                   fontSize: 14,
@@ -129,7 +129,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     color: Colors.grey,
                     fontSize: 14,
                   ),
-                  labelStyle: labelStyleEmail,
+                  labelStyle: _labelStyleEmail,
                 ),
               ),
             ),
@@ -137,7 +137,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 40,
               width: double.infinity,
               margin: const EdgeInsets.only(left: 28, right: 28, top: 15),
-              child: isLoading
+              child: _isLoading
                   ? const Center(
                       child: CircularProgressIndicator(
                         valueColor:
@@ -146,9 +146,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     )
                   : MaterialButton(
                       onPressed: () {
-                        if (formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           _forgotPasswordBloc
-                              .postForgotPasswordRequest(emailController.text);
+                              .postForgotPasswordRequest(_emailController.text);
                         } else {
                           setState(
                               () => _autoValidate = AutovalidateMode.always);

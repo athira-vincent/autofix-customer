@@ -12,36 +12,36 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPwdController = TextEditingController();
-  FocusNode newPasswordFocusNode = FocusNode();
-  FocusNode confirmPwdFocusNode = FocusNode();
-  TextStyle lableStyleNewPassword = const TextStyle();
-  TextStyle lableStyleConfirmPwd = const TextStyle();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController _newPasswordController = TextEditingController();
+  TextEditingController _confirmPwdController = TextEditingController();
+  FocusNode _newPasswordFocusNode = FocusNode();
+  FocusNode _confirmPwdFocusNode = FocusNode();
+  TextStyle _lableStyleNewPassword = const TextStyle();
+  TextStyle _lableStyleConfirmPwd = const TextStyle();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   @override
   void initState() {
     super.initState();
-    newPasswordController.addListener(onFocusChange);
-    confirmPwdController.addListener(onFocusChange);
+    _newPasswordController.addListener(onFocusChange);
+    _confirmPwdController.addListener(onFocusChange);
   }
 
   @override
   void dispose() {
     super.dispose();
-    newPasswordFocusNode.removeListener(onFocusChange);
-    newPasswordController.dispose();
-    confirmPwdFocusNode.removeListener(onFocusChange);
-    confirmPwdController.dispose();
+    _newPasswordFocusNode.removeListener(onFocusChange);
+    _newPasswordController.dispose();
+    _confirmPwdFocusNode.removeListener(onFocusChange);
+    _confirmPwdController.dispose();
   }
 
   void onFocusChange() {
     setState(() {
-      lableStyleNewPassword = newPasswordFocusNode.hasFocus
+      _lableStyleNewPassword = _newPasswordFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      lableStyleConfirmPwd = confirmPwdFocusNode.hasFocus
+      _lableStyleConfirmPwd = _confirmPwdFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
     });
@@ -57,7 +57,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
       ),
       body: Form(
-        key: formKey,
+        key: _formKey,
         autovalidateMode: _autoValidate,
         child: Column(
           children: [
@@ -67,8 +67,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 textAlignVertical: TextAlignVertical.center,
                 obscureText: true,
                 validator: InputValidator(ch: "New Password").passwordChecking,
-                controller: newPasswordController,
-                focusNode: newPasswordFocusNode,
+                controller: _newPasswordController,
+                focusNode: _newPasswordFocusNode,
                 maxLines: 1,
                 style: const TextStyle(
                   fontSize: 14,
@@ -108,7 +108,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       color: Color.fromARGB(52, 3, 43, 80),
                       fontSize: 14,
                     ),
-                    labelStyle: lableStyleNewPassword),
+                    labelStyle: _lableStyleNewPassword),
               ),
             ),
             Container(
@@ -118,7 +118,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 validator:
                     InputValidator(ch: "Confirm Password").passwordChecking,
                 maxLines: 1,
-                controller: confirmPwdController,
+                controller: _confirmPwdController,
                 textAlignVertical: TextAlignVertical.center,
                 style: const TextStyle(
                   fontSize: 14,
@@ -158,7 +158,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     color: Color.fromARGB(52, 3, 43, 80),
                     fontSize: 14,
                   ),
-                  labelStyle: lableStyleConfirmPwd,
+                  labelStyle: _lableStyleConfirmPwd,
                 ),
               ),
             ),
@@ -177,9 +177,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   //     :
                   MaterialButton(
                 onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    checkPassWord(
-                        newPasswordController.text, confirmPwdController.text);
+                  if (_formKey.currentState!.validate()) {
+                    checkPassWord(_newPasswordController.text,
+                        _confirmPwdController.text);
                   } else {
                     setState(() => _autoValidate = AutovalidateMode.always);
                   }
@@ -213,8 +213,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         backgroundColor: CustColors.peaGreen,
       ));
       setState(() {
-        newPasswordController.text = "";
-        confirmPwdController.text = "";
+        _newPasswordController.text = "";
+        _confirmPwdController.text = "";
       });
     } else {
       setState(() {

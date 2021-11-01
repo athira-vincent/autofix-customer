@@ -15,55 +15,61 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController stateController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPwdController = TextEditingController();
-  FocusNode firstNameFocusNode = FocusNode();
-  FocusNode userNameFocusNode = FocusNode();
-  FocusNode emailFocusNode = FocusNode();
-  FocusNode stateFocusNode = FocusNode();
-  FocusNode passwordFocusNode = FocusNode();
-  FocusNode confirmPwdFocusNode = FocusNode();
-  TextStyle labelStyleFirstName = const TextStyle();
-  TextStyle labelStyleUserName = const TextStyle();
-  TextStyle labelStyleEmail = const TextStyle();
-  TextStyle labelStyleState = const TextStyle();
-  TextStyle labelStylePassword = const TextStyle();
-  TextStyle labelStyleConfirmPwd = const TextStyle();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPwdController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  FocusNode _firstNameFocusNode = FocusNode();
+  FocusNode _userNameFocusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _stateFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+  FocusNode _confirmPwdFocusNode = FocusNode();
+  FocusNode _phoneFocusNode = FocusNode();
+  TextStyle _labelStyleFirstName = const TextStyle();
+  TextStyle _labelStyleUserName = const TextStyle();
+  TextStyle _labelStyleEmail = const TextStyle();
+  TextStyle _labelStyleState = const TextStyle();
+  TextStyle _labelStylePassword = const TextStyle();
+  TextStyle _labelStyleConfirmPwd = const TextStyle();
+  TextStyle _labelStylePhone = const TextStyle();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SignupBloc _signupBloc = SignupBloc();
-  bool isLoading = false;
+  bool _isLoading = false;
   @override
   void initState() {
     super.initState();
-    firstNameController.addListener(onFocusChange);
-    userNameController.addListener(onFocusChange);
-    emailController.addListener(onFocusChange);
-    stateController.addListener(onFocusChange);
-    passwordController.addListener(onFocusChange);
-    confirmPwdController.addListener(onFocusChange);
+    _firstNameController.addListener(onFocusChange);
+    _userNameController.addListener(onFocusChange);
+    _emailController.addListener(onFocusChange);
+    _stateController.addListener(onFocusChange);
+    _passwordController.addListener(onFocusChange);
+    _confirmPwdController.addListener(onFocusChange);
+    _phoneController.addListener(onFocusChange);
     _getSignUpRes();
   }
 
   @override
   void dispose() {
     super.dispose();
-    firstNameFocusNode.removeListener(onFocusChange);
-    firstNameController.dispose();
-    userNameFocusNode.removeListener(onFocusChange);
-    userNameController.dispose();
-    emailFocusNode.removeListener(onFocusChange);
-    emailController.dispose();
-    stateFocusNode.removeListener(onFocusChange);
-    stateController.dispose();
-    passwordFocusNode.removeListener(onFocusChange);
-    passwordController.dispose();
-    confirmPwdFocusNode.removeListener(onFocusChange);
-    confirmPwdController.dispose();
+    _firstNameFocusNode.removeListener(onFocusChange);
+    _firstNameController.dispose();
+    _userNameFocusNode.removeListener(onFocusChange);
+    _userNameController.dispose();
+    _emailFocusNode.removeListener(onFocusChange);
+    _emailController.dispose();
+    _stateFocusNode.removeListener(onFocusChange);
+    _stateController.dispose();
+    _passwordFocusNode.removeListener(onFocusChange);
+    _passwordController.dispose();
+    _confirmPwdFocusNode.removeListener(onFocusChange);
+    _confirmPwdController.dispose();
+    _phoneFocusNode.removeListener(onFocusChange);
+    _phoneController.dispose();
     _signupBloc.dispose();
   }
 
@@ -71,9 +77,10 @@ class _SignupScreenState extends State<SignupScreen> {
     _signupBloc.postSignUp.listen((value) {
       if (value.status == "error") {
         setState(() {
-          isLoading = false;
+          print("errrrorr 02");
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message,
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
@@ -82,7 +89,8 @@ class _SignupScreenState extends State<SignupScreen> {
         });
       } else {
         setState(() {
-          isLoading = false;
+          print("errrrorr 01");
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
@@ -99,22 +107,25 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void onFocusChange() {
     setState(() {
-      labelStyleFirstName = firstNameFocusNode.hasFocus
+      _labelStyleFirstName = _firstNameFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      labelStyleUserName = userNameFocusNode.hasFocus
+      _labelStyleUserName = _userNameFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      labelStyleEmail = emailFocusNode.hasFocus
+      _labelStyleEmail = _emailFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      labelStyleState = stateFocusNode.hasFocus
+      _labelStyleState = _stateFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      labelStylePassword = passwordFocusNode.hasFocus
+      _labelStylePassword = _passwordFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      labelStyleConfirmPwd = confirmPwdFocusNode.hasFocus
+      _labelStyleConfirmPwd = _confirmPwdFocusNode.hasFocus
+          ? const TextStyle(color: CustColors.peaGreen)
+          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
+      _labelStylePhone = _phoneFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
     });
@@ -126,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
       body: SingleChildScrollView(
         child: Form(
           autovalidateMode: _autoValidate,
-          key: formKey,
+          key: _formKey,
           child: Column(
             children: [
               Container(
@@ -138,13 +149,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     fontSize: 14,
                     fontFamily: 'Roboto_Regular',
                   ),
-                  focusNode: firstNameFocusNode,
+                  focusNode: _firstNameFocusNode,
                   keyboardType: TextInputType.text,
                   validator: InputValidator(ch: "First name").nameChecking,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                   ],
-                  controller: firstNameController,
+                  controller: _firstNameController,
                   decoration: InputDecoration(
                       labelText: 'First Name',
                       hintText: 'First Name',
@@ -178,7 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         color: Color.fromARGB(52, 3, 43, 80),
                         fontSize: 14,
                       ),
-                      labelStyle: labelStyleFirstName),
+                      labelStyle: _labelStyleFirstName),
                 ),
               ),
               Container(
@@ -190,13 +201,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     fontSize: 14,
                     fontFamily: 'Roboto_Regular',
                   ),
-                  focusNode: userNameFocusNode,
+                  focusNode: _userNameFocusNode,
                   keyboardType: TextInputType.text,
                   validator: InputValidator(ch: "User name").emptyChecking,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                   ],
-                  controller: userNameController,
+                  controller: _userNameController,
                   decoration: InputDecoration(
                       labelText: 'User Name',
                       hintText: 'User Name',
@@ -230,7 +241,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         color: Color.fromARGB(52, 3, 43, 80),
                         fontSize: 14,
                       ),
-                      labelStyle: labelStyleUserName),
+                      labelStyle: _labelStyleUserName),
                 ),
               ),
               Container(
@@ -239,8 +250,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   textAlignVertical: TextAlignVertical.center,
                   keyboardType: TextInputType.emailAddress,
                   validator: InputValidator(ch: "Email ID").emailValidator,
-                  focusNode: emailFocusNode,
-                  controller: emailController,
+                  focusNode: _emailFocusNode,
+                  controller: _emailController,
                   maxLines: 1,
                   style: const TextStyle(
                     fontSize: 14,
@@ -278,7 +289,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       color: Colors.grey,
                       fontSize: 14,
                     ),
-                    labelStyle: labelStyleEmail,
+                    labelStyle: _labelStyleEmail,
                   ),
                 ),
               ),
@@ -291,13 +302,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     fontSize: 14,
                     fontFamily: 'Roboto_Regular',
                   ),
-                  focusNode: stateFocusNode,
+                  focusNode: _stateFocusNode,
                   keyboardType: TextInputType.text,
                   validator: InputValidator(ch: "State").emptyChecking,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                   ],
-                  controller: stateController,
+                  controller: _stateController,
                   decoration: InputDecoration(
                       labelText: 'State',
                       hintText: 'State',
@@ -331,8 +342,71 @@ class _SignupScreenState extends State<SignupScreen> {
                         color: Color.fromARGB(52, 3, 43, 80),
                         fontSize: 14,
                       ),
-                      labelStyle: labelStyleState),
+                      labelStyle: _labelStyleState),
                 ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                alignment: Alignment.center,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        flex: 8,
+                        child: Container(
+                          width: double.infinity,
+                          child: TextFormField(
+                            validator: InputValidator(ch: "Phone number")
+                                .phoneNumChecking,
+                            maxLines: 1,
+                            focusNode: _phoneFocusNode,
+                            textAlignVertical: TextAlignVertical.center,
+                            keyboardType: TextInputType.phone,
+                            controller: _phoneController,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Roboto_Regular',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Phone Number*',
+                              hintText: 'Phone Number',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2.5),
+                                borderSide: const BorderSide(
+                                  color: CustColors.borderColor,
+                                  width: 0.3,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2.5),
+                                borderSide: const BorderSide(
+                                  color: CustColors.peaGreen,
+                                  width: 0.3,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2.5),
+                                borderSide: const BorderSide(
+                                  color: CustColors.borderColor,
+                                  width: 0.3,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0,
+                                horizontal: 20.0,
+                              ),
+                              hintStyle: const TextStyle(
+                                fontFamily: 'Roboto_Regular',
+                                color: Color.fromARGB(52, 3, 43, 80),
+                                fontSize: 14,
+                              ),
+                              labelStyle: _labelStylePhone,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 15),
@@ -340,8 +414,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   textAlignVertical: TextAlignVertical.center,
                   obscureText: true,
                   validator: InputValidator(ch: "Password").passwordChecking,
-                  controller: passwordController,
-                  focusNode: passwordFocusNode,
+                  controller: _passwordController,
+                  focusNode: _passwordFocusNode,
                   maxLines: 1,
                   style: const TextStyle(
                     fontSize: 14,
@@ -381,7 +455,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         color: Color.fromARGB(52, 3, 43, 80),
                         fontSize: 14,
                       ),
-                      labelStyle: labelStylePassword),
+                      labelStyle: _labelStylePassword),
                 ),
               ),
               Container(
@@ -391,7 +465,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   validator:
                       InputValidator(ch: "Confirm Password").passwordChecking,
                   maxLines: 1,
-                  controller: confirmPwdController,
+                  controller: _confirmPwdController,
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(
                     fontSize: 14,
@@ -431,7 +505,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       color: Color.fromARGB(52, 3, 43, 80),
                       fontSize: 14,
                     ),
-                    labelStyle: labelStyleConfirmPwd,
+                    labelStyle: _labelStyleConfirmPwd,
                   ),
                 ),
               ),
@@ -439,7 +513,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 40,
                 width: double.infinity,
                 margin: const EdgeInsets.only(left: 28, right: 28, top: 15),
-                child: isLoading
+                child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
@@ -448,9 +522,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       )
                     : MaterialButton(
                         onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            checkPassWord(passwordController.text,
-                                confirmPwdController.text);
+                          if (_formKey.currentState!.validate()) {
+                            checkPassWord(_passwordController.text,
+                                _confirmPwdController.text);
                           } else {
                             setState(
                                 () => _autoValidate = AutovalidateMode.always);
@@ -486,18 +560,19 @@ class _SignupScreenState extends State<SignupScreen> {
         backgroundColor: CustColors.peaGreen,
       ));
       setState(() {
-        passwordController.text = "";
-        confirmPwdController.text = "";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
     } else {
       _signupBloc.postSignUpRequest(
-          firstNameController.text,
-          userNameController.text,
-          emailController.text,
-          stateController.text,
-          passwordController.text);
+          _firstNameController.text,
+          _userNameController.text,
+          _emailController.text,
+          _stateController.text,
+          _passwordController.text,
+          _phoneController.text);
       setState(() {
-        isLoading = true;
+        _isLoading = true;
       });
     }
   }
