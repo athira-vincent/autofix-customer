@@ -3,8 +3,8 @@ import 'package:auto_fix/UI/Home/Profile/ViewProfile/view_profile_mdl.dart';
 
 class ViewProfileApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<ViewProfileMdl> getViewProfileRequest() async {
-    Map<String, dynamic> _resp = await _queryProvider.viewProfile();
+  Future<ViewProfileMdl> getViewProfileRequest(String id) async {
+    Map<String, dynamic> _resp = await _queryProvider.viewProfile(id);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

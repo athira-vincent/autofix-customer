@@ -50,7 +50,28 @@ class QueryProvider {
   forgotPassword(String email) {}
   changePassword(String password) {}
   editProfile() {}
-  viewProfile() {}
+  viewProfile(String id) async {
+    String _query = """ 
+    query{
+    customerDetails(id: $id){
+      id
+      firstName
+      lastName
+      address
+      emailId
+      phoneNo
+      status
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   searchResult() {}
   selectCar() {}
   viewVehicle() {}
