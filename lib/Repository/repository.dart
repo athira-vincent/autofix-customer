@@ -58,8 +58,8 @@ class Repository {
   Future<dynamic> getEditProfile() =>
       _editProfileApiProvider.getEditProfileRequest();
   //ViewPrfile
-  Future<dynamic> getViewProfile() =>
-      _viewProfileApiProvider.getViewProfileRequest();
+  Future<dynamic> getViewProfile(String id) =>
+      _viewProfileApiProvider.getViewProfileRequest(id);
   //Search Result
   Future<dynamic> getSearchResult() =>
       _searchResultApiProvider.getSearchResultRequest();
