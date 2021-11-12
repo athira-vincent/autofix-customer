@@ -5,7 +5,8 @@ import 'dart:async';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Home/home_screen.dart';
-import 'package:auto_fix/UI/Login/login_screen.dart';
+import 'package:auto_fix/UI/Login/Signin/signin_screen.dart';
+import 'package:auto_fix/UI/Login/Signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,13 +39,13 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     if (_isLoggedin == null) {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
+          MaterialPageRoute(builder: (context) => const SigninScreen()));
     } else if (_isLoggedin) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } else {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
+          MaterialPageRoute(builder: (context) => const SigninScreen()));
     }
   }
 

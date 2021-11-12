@@ -1,5 +1,5 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Home/Profile/EditProfile/edit_profile_mdl.dart';
+import 'package:auto_fix/UI/SideBar/Profile/EditProfile/edit_profile_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EditProfileBloc {

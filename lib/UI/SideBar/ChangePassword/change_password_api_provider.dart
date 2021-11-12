@@ -1,5 +1,5 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Home/ChangePassword/change_password_mdl.dart';
+import 'package:auto_fix/UI/SideBar/ChangePassword/change_password_mdl.dart';
 
 class ChangePasswordApiProvider {
   final QueryProvider _queryProvider = QueryProvider();

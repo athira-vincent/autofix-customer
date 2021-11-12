@@ -1,5 +1,5 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Home/ChangePassword/change_password_mdl.dart';
+import 'package:auto_fix/UI/SideBar/ChangePassword/change_password_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChangePasswordBloc {

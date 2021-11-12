@@ -1,5 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Home/Profile/ViewProfile/view_profile_bloc.dart';
+import 'package:auto_fix/UI/SideBar/Profile/ViewProfile/view_profile_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
