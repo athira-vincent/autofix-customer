@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
+import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,11 +27,13 @@ class _SigninScreenState extends State<SigninScreen> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SigninBloc _signinBloc = SigninBloc();
   bool _isLoading = false;
+  bool? _passwordVisible;
   @override
   void initState() {
     super.initState();
     _userNameController.addListener(onFocusChange);
     _passwordController.addListener(onFocusChange);
+    _passwordVisible = false;
     _getSignInRes();
   }
 
@@ -47,11 +50,27 @@ class _SigninScreenState extends State<SigninScreen> {
   void onFocusChange() {
     setState(() {
       _labelStyleUserName = _userNameFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
+          ? TextStyle(
+              fontFamily: 'Montserrat_Light',
+              color: Colors.white,
+              fontSize: 12,
+            )
+          : TextStyle(
+              fontFamily: 'Montserrat_Light',
+              color: Colors.white,
+              fontSize: 12,
+            );
       _labelStylePassword = _passwordFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
+          ? TextStyle(
+              fontFamily: 'Montserrat_Light',
+              color: Colors.white,
+              fontSize: 12,
+            )
+          : TextStyle(
+              fontFamily: 'Montserrat_Light',
+              color: Colors.white,
+              fontSize: 12,
+            );
     });
   }
 
@@ -91,167 +110,327 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        autovalidateMode: _autoValidate,
-        key: _formKey,
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: TextFormField(
-                textAlignVertical: TextAlignVertical.center,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Roboto_Regular',
-                ),
-                focusNode: _userNameFocusNode,
-                keyboardType: TextInputType.text,
-                validator: InputValidator(ch: "User name").emptyChecking,
-                // inputFormatters: [
-                //   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                // ],
-                controller: _userNameController,
-                decoration: InputDecoration(
-                    labelText: 'User Name',
-                    hintText: 'User Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.peaGreen,
-                        width: 0.3,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 20.0,
-                    ),
-                    hintStyle: const TextStyle(
-                      fontFamily: 'Roboto_Regular',
-                      color: Color.fromARGB(52, 3, 43, 80),
-                      fontSize: 14,
-                    ),
-                    labelStyle: _labelStyleUserName),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: TextFormField(
-                textAlignVertical: TextAlignVertical.center,
-                obscureText: true,
-                validator: InputValidator(ch: "Password").passwordChecking,
-                controller: _passwordController,
-                focusNode: _passwordFocusNode,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Roboto_Regular',
-                ),
-                decoration: InputDecoration(
-                    labelText: 'Password*',
-                    hintText: 'Password',
-                    errorMaxLines: 3,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.peaGreen,
-                        width: 0.3,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 20.0,
-                    ),
-                    hintStyle: const TextStyle(
-                      fontFamily: 'Roboto_Regular',
-                      color: Color.fromARGB(52, 3, 43, 80),
-                      fontSize: 14,
-                    ),
-                    labelStyle: _labelStylePassword),
-              ),
-            ),
-            Container(
-              height: 40,
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 28, right: 28, top: 15),
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(CustColors.peaGreen),
-                      ),
-                    )
-                  : MaterialButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _signinBloc.postSignInRequest(
-                              _userNameController.text,
-                              _passwordController.text);
-                          setState(() {
-                            _isLoading = true;
-                          });
-                        } else {
-                          setState(
-                              () => _autoValidate = AutovalidateMode.always);
-                        }
-                      },
-                      child: const Text(
-                        'SIGN IN',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Roboto_Bold',
-                          fontSize: 14,
+      backgroundColor: CustColors.blue,
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            color: CustColors.blue,
+            height: MediaQuery.of(context).size.height -
+                MediaQuery.of(context).padding.top,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Form(
+                  autovalidateMode: _autoValidate,
+                  key: _formKey,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 37.5, right: 37.5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 160),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 19.5,
+                                fontFamily: 'Montserrat_SemiBold'),
+                          ),
                         ),
-                      ),
-                      color: CustColors.peaGreen,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2.5)),
+                        Container(
+                          margin: EdgeInsets.only(top: 25.5),
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat_Semibond',
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                            focusNode: _userNameFocusNode,
+                            keyboardType: TextInputType.text,
+                            validator:
+                                InputValidator(ch: "User name").emptyChecking,
+                            // inputFormatters: [
+                            //   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                            // ],
+                            controller: _userNameController,
+                            decoration: InputDecoration(
+                                prefixIcon: Container(
+                                  width: 5,
+                                  alignment: Alignment.centerLeft,
+                                  child: SizedBox(
+                                    height: 15,
+                                    width: 15,
+                                    child: Image.asset(
+                                      'assets/images/username.png',
+                                    ),
+                                  ),
+                                ),
+                                prefixIconConstraints: BoxConstraints(
+                                  minWidth: 25,
+                                  minHeight: 25,
+                                ),
+                                labelText: 'User Name',
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .5,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .5,
+                                  ),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .5,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 7.8,
+                                  horizontal: 20.0,
+                                ),
+                                labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat_Light',
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                )),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 32.5),
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            obscureText: !_passwordVisible!,
+                            validator:
+                                InputValidator(ch: "Password").passwordChecking,
+                            controller: _passwordController,
+                            focusNode: _passwordFocusNode,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat_Semibond',
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                            decoration: InputDecoration(
+                                prefixIcon: Container(
+                                  width: 5,
+                                  alignment: Alignment.centerLeft,
+                                  child: SizedBox(
+                                    height: 15,
+                                    width: 15,
+                                    child: Image.asset(
+                                      'assets/images/password.png',
+                                    ),
+                                  ),
+                                ),
+                                prefixIconConstraints: BoxConstraints(
+                                  minWidth: 25,
+                                  minHeight: 25,
+                                ),
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 25,
+                                  minHeight: 25,
+                                ),
+                                suffixIcon: Container(
+                                  width: 5,
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    iconSize: 15,
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      _passwordVisible!
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                labelText: 'Password',
+                                errorMaxLines: 3,
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .5,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .5,
+                                  ),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .5,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 7.8,
+                                  horizontal: 20.0,
+                                ),
+                                labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat_Light',
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                )),
+                          ),
+                        ),
+                        Container(
+                          height: 28,
+                          width: 96,
+                          margin: EdgeInsets.only(top: 31.8),
+                          child: _isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        CustColors.peaGreen),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: CustColors.darkBlue,
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3.3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _signinBloc.postSignInRequest(
+                                            _userNameController.text,
+                                            _passwordController.text);
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
+                                      } else {
+                                        setState(() => _autoValidate =
+                                            AutovalidateMode.always);
+                                      }
+                                    },
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Login',
+                                            style: TextStyle(
+                                              color: CustColors.blue,
+                                              fontFamily: 'Montserrat_SemiBold',
+                                              fontSize: 11.5,
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              left: 16.6,
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/arrow_forword.png',
+                                              width: 12.5,
+                                              height: 12.5,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                  ),
+                                ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgotPasswordScreen()));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 22),
+                                child: Text(
+                                  'Forgot password?',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: 'Montserrat_Light'),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignupScreen()));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 22),
+                                child: Text(
+                                  'New user ? Sign up',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11.5,
+                                      fontFamily: 'Montserrat_SemiBold'),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ForgotPasswordScreen()));
-              },
-              child: Container(
-                margin: const EdgeInsets.all(15),
-                child: const Text(
-                  'Forgot Password',
-                  style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-            )
-          ],
+                Stack(
+                  alignment: Alignment.bottomLeft,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 225,
+                      alignment: Alignment.bottomLeft,
+                      child: Image.asset(
+                        'assets/images/arc_left.png',
+                      ),
+                    ),
+                    Container(
+                        width: double.infinity,
+                        alignment: Alignment.bottomRight,
+                        child: Image.asset('assets/images/arc_right.png',
+                            width: 336)),
+                    Container(
+                        width: double.infinity,
+                        height: 60,
+                        alignment: Alignment.bottomLeft,
+                        margin:
+                            EdgeInsets.only(left: 66, bottom: 26.5, right: 78),
+                        child: Image.asset(
+                          'assets/images/autofix_logo.png',
+                        )),
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
