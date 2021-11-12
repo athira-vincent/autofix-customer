@@ -4,22 +4,15 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-<<<<<<< HEAD:lib/UI/Splash/splash_screen.dart
-import 'package:auto_fix/UI/Home/home_screen.dart';
-import 'package:auto_fix/UI/Login/Signin/signin_screen.dart';
-import 'package:auto_fix/UI/Login/Signup/signup_screen.dart';
-=======
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
+import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
->>>>>>> a24f82096464da68f60291951771eb4f46989a15:lib/UI/WelcomeScreens/Splash/splash_screen.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({
-    Key? key
-  }) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -50,13 +43,13 @@ class _SplashScreenState extends State<SplashScreen> {
       GqlClient.I.config(token: _token);
     }
 
-    if (isWalked==null || !isWalked) {
+    if (isWalked == null || !isWalked) {
       print('WalkThroughPage');
-      Timer(Duration(seconds: 3), () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => WalkThroughPages())));
+      Timer(
+          Duration(seconds: 3),
+          () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => WalkThroughPages())));
     }
-
-
 
     if (_isLoggedin == null) {
       Navigator.pushReplacement(context,
@@ -75,21 +68,22 @@ class _SplashScreenState extends State<SplashScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-         decoration: BoxDecoration(
+          decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/splash_background.png"),
+              image: AssetImage("assets/images/splash_background.png"),
               fit: BoxFit.cover,
             ),
           ),
           child: Center(
-           child: Container(
-                    margin: EdgeInsets.only(left: 72, right: 72),
-                    child: Image.asset("assets/auto_fix_logo.png",
-                      width: double.infinity,
-                      height: 100,
-                      fit: BoxFit.contain,
-                      ),
-                  ),
+            child: Container(
+              margin: EdgeInsets.only(left: 72, right: 72),
+              child: Image.asset(
+                "assets/images/auto_fix_logo.png",
+                width: double.infinity,
+                height: 100,
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
         ),
       ),

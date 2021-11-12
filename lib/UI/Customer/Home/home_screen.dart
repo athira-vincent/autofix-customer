@@ -19,9 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [],
         title: Text('Hi John'),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [],
-      ),
     );
   }
 }

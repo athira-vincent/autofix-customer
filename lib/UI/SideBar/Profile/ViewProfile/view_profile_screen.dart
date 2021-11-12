@@ -1,9 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-<<<<<<< HEAD:lib/UI/SideBar/Profile/ViewProfile/view_profile_screen.dart
-import 'package:auto_fix/UI/SideBar/Profile/ViewProfile/view_profile_bloc.dart';
-=======
 import 'package:auto_fix/UI/Customer/Home/Profile/ViewProfile/view_profile_bloc.dart';
->>>>>>> a24f82096464da68f60291951771eb4f46989a15:lib/UI/Customer/Home/Profile/ViewProfile/view_profile_screen.dart
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

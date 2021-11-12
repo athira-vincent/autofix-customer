@@ -1,14 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-<<<<<<< HEAD:lib/UI/Login/Signin/signin_screen.dart
-import 'package:auto_fix/UI/Home/home_screen.dart';
-import 'package:auto_fix/UI/Login/ForgotPassword/forgot_password_screen.dart';
-import 'package:auto_fix/UI/Login/Signin/signin_bloc.dart';
-import 'package:auto_fix/UI/Login/Signup/signup_screen.dart';
-=======
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
->>>>>>> a24f82096464da68f60291951771eb4f46989a15:lib/UI/Customer/Login/Signin/signin_screen.dart
+import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
