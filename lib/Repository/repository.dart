@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:auto_fix/UI/Home/Ads/ads_api_provider.dart';
 import 'package:auto_fix/UI/Home/Bookings/BookingsDetails/bookings_details_api_provider.dart';
 import 'package:auto_fix/UI/Home/Bookings/BookingsList/bookings_list_api_provider.dart';
@@ -18,6 +19,28 @@ import 'package:auto_fix/UI/Home/Vehicle/View/view_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/Login/Signup/signup_api_provider.dart';
+=======
+import 'package:auto_fix/UI/Customer/Home/Ads/ads_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Bookings/BookingsDetails/bookings_details_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Bookings/BookingsList/bookings_list_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Brands/top_brands_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/ChangePassword/change_password_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Profile/EditProfile/edit_profile_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Profile/ViewProfile/view_profile_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/SearchResult/search_result_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/SelectCar/select_car_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Shops/top_shops_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/Engine/all_engine_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/Make/all_make_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/Model/all_model_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/add_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/Delete/delete_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/Details/vehicle_details_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/Vehicle/View/view_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Login/Signin/signin_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Login/Signup/signup_api_provider.dart';
+>>>>>>> a24f82096464da68f60291951771eb4f46989a15
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();

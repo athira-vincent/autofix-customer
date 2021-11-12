@@ -1,5 +1,5 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/SideBar/Profile/EditProfile/edit_profile_mdl.dart';
+import 'package:auto_fix/UI/Customer/Home/Profile/EditProfile/edit_profile_mdl.dart';
 
 class EditProfileApiProvider {
   final QueryProvider _queryProvider = QueryProvider();

@@ -49,7 +49,11 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
+<<<<<<< HEAD
   image_path: "assets/images/autofixlogo.jpg"
+=======
+  image_path: "assets/auto_fix_logo.png"
+>>>>>>> a24f82096464da68f60291951771eb4f46989a15
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
