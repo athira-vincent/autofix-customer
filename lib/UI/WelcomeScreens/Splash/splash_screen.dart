@@ -2,11 +2,11 @@
 
 import 'dart:async';
 
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,10 +65,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
+    return Scaffold(
+      backgroundColor: CustColors.blue,
+      body: SafeArea(
+        child: Container(
           decoration: BoxDecoration(
+            color: Colors.white,
             image: DecorationImage(
               image: AssetImage("assets/images/splash_background.png"),
               fit: BoxFit.cover,
