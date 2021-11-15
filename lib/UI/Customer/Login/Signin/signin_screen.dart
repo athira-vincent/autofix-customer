@@ -88,7 +88,7 @@ class _SigninScreenState extends State<SigninScreen> {
           ));
         });
       } else {
-        // _signinBloc.userDefault(value.data.agentSignIn.token);
+        _signinBloc.userDefault(value.data!.token.toString());
         setState(() {
           _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");
