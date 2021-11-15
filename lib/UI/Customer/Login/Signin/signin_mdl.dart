@@ -17,7 +17,6 @@ class SigninMdl {
 }
 
 class Data {
-  String? token;
   CustomerSignIn? customerSignIn;
   Data();
 
@@ -25,7 +24,6 @@ class Data {
     customerSignIn = json['customerSignIn'] != null
         ? new CustomerSignIn.fromJson(json['customerSignIn'])
         : null;
-    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -33,12 +31,30 @@ class Data {
     if (this.customerSignIn != null) {
       data['customerSignIn'] = this.customerSignIn!.toJson();
     }
-    data['token'] = this.token;
+
     return data;
   }
 }
 
 class CustomerSignIn {
+  String? token;
+  Customer? customer;
+  CustomerSignIn.fromJson(Map<String, dynamic> json) {
+    token = json['token'];
+    customer = json['customer'] != null
+        ? new Customer.fromJson(json['customer'])
+        : null;
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.customer != null) {
+      data['customer'] = this.customer!.toJson();
+    }
+    return data;
+  }
+}
+
+class Customer {
   String? id;
   String? firstName;
   String? lastName;
@@ -46,7 +62,7 @@ class CustomerSignIn {
   String? emailId;
   String? phoneNo;
   int? status;
-  CustomerSignIn.fromJson(Map<String, dynamic> json) {
+  Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['firstName'];
     lastName = json['lastName'];
