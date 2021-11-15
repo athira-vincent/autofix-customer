@@ -45,10 +45,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (isWalked == null || !isWalked) {
       print('WalkThroughPage');
-      Timer(
-          Duration(seconds: 3),
-          () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => WalkThroughPages())));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => WalkThroughPages()));
     }
 
     if (_isLoggedin == null) {
