@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:graphql/client.dart';
+import 'package:http/io_client.dart';
 
 class GqlClient {
   GqlClient._privateConstructor();
   static final GqlClient _instance = GqlClient._privateConstructor();
   static GqlClient get instance => _instance;
   static GqlClient get I => _instance;
+
+
   final HttpLink httpLink = HttpLink(
     "https://api-gateway.techlabz.in/autoconnect-be",
   );
@@ -113,6 +118,7 @@ class GqlClient {
       {bool enableDebug = false,
       required Map<String, dynamic> variables,
       required bool isTokenThere}) async {
+
     try {
       if (enableDebug) {
         _showDebugMessage(query, 'GraphQL Query');
@@ -124,6 +130,23 @@ class GqlClient {
       // }
 
       // print("variables==========$variables");
+
+
+
+      HttpClient _httpClient = new HttpClient();
+      _httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      IOClient _ioClient = new IOClient(_httpClient);
+
+      GraphQLClient _graphClient = GraphQLClient(
+          cache: GraphQLCache(store: HiveStore()),
+          link: HttpLink(
+            "https://api-gateway.techlabz.in/autoconnect-be",
+            defaultHeaders: <String, String>{
+              'x-token': "",
+            },
+            httpClient: _ioClient
+          ));
+
 
       final QueryResult resp = await _graphClient
           .mutate(MutationOptions(
