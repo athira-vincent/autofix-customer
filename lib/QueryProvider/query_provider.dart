@@ -47,7 +47,19 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  forgotPassword(String email) {}
+  forgotPassword(String email) async {
+    String _query = """
+      mutation{
+        customerForgotPassword(emailId: "$email"){
+          resetToken
+          }
+       }
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+
+  }
   changePassword(String password) {}
   editProfile() {}
   viewProfile(String id) async {

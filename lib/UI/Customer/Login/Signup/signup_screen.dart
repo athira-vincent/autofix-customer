@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -134,416 +135,464 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          autovalidateMode: _autoValidate,
-          key: _formKey,
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Roboto_Regular',
-                  ),
-                  focusNode: _firstNameFocusNode,
-                  keyboardType: TextInputType.text,
-                  validator: InputValidator(ch: "First name").nameChecking,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                  ],
-                  controller: _firstNameController,
-                  decoration: InputDecoration(
-                      labelText: 'First Name',
-                      hintText: 'First Name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.peaGreen,
-                          width: 0.3,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 20.0,
-                      ),
-                      hintStyle: const TextStyle(
-                        fontFamily: 'Roboto_Regular',
-                        color: Color.fromARGB(52, 3, 43, 80),
-                        fontSize: 14,
-                      ),
-                      labelStyle: _labelStyleFirstName),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Roboto_Regular',
-                  ),
-                  focusNode: _userNameFocusNode,
-                  keyboardType: TextInputType.text,
-                  validator: InputValidator(ch: "User name").emptyChecking,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                  ],
-                  controller: _userNameController,
-                  decoration: InputDecoration(
-                      labelText: 'User Name',
-                      hintText: 'User Name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.peaGreen,
-                          width: 0.3,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 20.0,
-                      ),
-                      hintStyle: const TextStyle(
-                        fontFamily: 'Roboto_Regular',
-                        color: Color.fromARGB(52, 3, 43, 80),
-                        fontSize: 14,
-                      ),
-                      labelStyle: _labelStyleUserName),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 19.3),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: InputValidator(ch: "Email ID").emailValidator,
-                  focusNode: _emailFocusNode,
-                  controller: _emailController,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Roboto_Regular',
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Email ID',
-                    labelText: 'Email ID*',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.peaGreen,
-                        width: 0.3,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 20.0,
-                    ),
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                    ),
-                    labelStyle: _labelStyleEmail,
+      backgroundColor: CustColors.blue,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Form(
+            autovalidateMode: _autoValidate,
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 26, left: 34, right: 34),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Sign up',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 19.5,
+                        fontFamily: 'Montserrat_SemiBold'),
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Roboto_Regular',
-                  ),
-                  focusNode: _stateFocusNode,
-                  keyboardType: TextInputType.text,
-                  validator: InputValidator(ch: "State").emptyChecking,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                  ],
-                  controller: _stateController,
-                  decoration: InputDecoration(
-                      labelText: 'State',
-                      hintText: 'State',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.peaGreen,
-                          width: 0.3,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 20.0,
-                      ),
-                      hintStyle: const TextStyle(
-                        fontFamily: 'Roboto_Regular',
-                        color: Color.fromARGB(52, 3, 43, 80),
-                        fontSize: 14,
-                      ),
-                      labelStyle: _labelStyleState),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15),
-                alignment: Alignment.center,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        flex: 8,
-                        child: Container(
-                          width: double.infinity,
-                          child: TextFormField(
-                            validator: InputValidator(ch: "Phone number")
-                                .phoneNumChecking,
-                            maxLines: 1,
-                            focusNode: _phoneFocusNode,
-                            textAlignVertical: TextAlignVertical.center,
-                            keyboardType: TextInputType.phone,
-                            controller: _phoneController,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontFamily: 'Roboto_Regular',
-                            ),
-                            decoration: InputDecoration(
-                              labelText: 'Phone Number*',
-                              hintText: 'Phone Number',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2.5),
-                                borderSide: const BorderSide(
-                                  color: CustColors.borderColor,
-                                  width: 0.3,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2.5),
-                                borderSide: const BorderSide(
-                                  color: CustColors.peaGreen,
-                                  width: 0.3,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2.5),
-                                borderSide: const BorderSide(
-                                  color: CustColors.borderColor,
-                                  width: 0.3,
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0,
-                                horizontal: 20.0,
-                              ),
-                              hintStyle: const TextStyle(
-                                fontFamily: 'Roboto_Regular',
-                                color: Color.fromARGB(52, 3, 43, 80),
-                                fontSize: 14,
-                              ),
-                              labelStyle: _labelStylePhone,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: TextFormField(
-                  textAlignVertical: TextAlignVertical.center,
-                  obscureText: true,
-                  validator: InputValidator(ch: "Password").passwordChecking,
-                  controller: _passwordController,
-                  focusNode: _passwordFocusNode,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Roboto_Regular',
-                  ),
-                  decoration: InputDecoration(
-                      labelText: 'Password*',
-                      hintText: 'Password',
-                      errorMaxLines: 3,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.peaGreen,
-                          width: 0.3,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(2.5),
-                        borderSide: const BorderSide(
-                          color: CustColors.borderColor,
-                          width: 0.3,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 20.0,
-                      ),
-                      hintStyle: const TextStyle(
-                        fontFamily: 'Roboto_Regular',
-                        color: Color.fromARGB(52, 3, 43, 80),
-                        fontSize: 14,
-                      ),
-                      labelStyle: _labelStylePassword),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: TextFormField(
-                  obscureText: true,
-                  validator:
-                      InputValidator(ch: "Confirm Password").passwordChecking,
-                  maxLines: 1,
-                  controller: _confirmPwdController,
-                  textAlignVertical: TextAlignVertical.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Roboto_Regular',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password*',
-                    hintText: 'Confirm Password',
-                    errorMaxLines: 3,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
+                Container(
+                  margin: const EdgeInsets.only(top: 17, left: 34, right: 34),
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat_Semibond',
+                      color: Colors.white,
+                      fontSize: 13,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.peaGreen,
-                        width: 0.3,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2.5),
-                      borderSide: const BorderSide(
-                        color: CustColors.borderColor,
-                        width: 0.3,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 20.0,
-                    ),
-                    hintStyle: const TextStyle(
-                      fontFamily: 'Roboto_Regular',
-                      color: Color.fromARGB(52, 3, 43, 80),
-                      fontSize: 14,
-                    ),
-                    labelStyle: _labelStyleConfirmPwd,
-                  ),
-                ),
-              ),
-              Container(
-                height: 40,
-                width: double.infinity,
-                margin: const EdgeInsets.only(left: 28, right: 28, top: 15),
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustColors.peaGreen),
-                        ),
-                      )
-                    : MaterialButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            checkPassWord(_passwordController.text,
-                                _confirmPwdController.text);
-                          } else {
-                            setState(
-                                () => _autoValidate = AutovalidateMode.always);
-                          }
-                        },
-                        child: const Text(
-                          'SIGN UP',
-                          style: TextStyle(
+                    focusNode: _firstNameFocusNode,
+                    keyboardType: TextInputType.text,
+                    validator: InputValidator(ch: "Name").nameChecking,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                    ],
+                    controller: _firstNameController,
+                    decoration: InputDecoration(
+                        labelText: 'Name',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
                             color: Colors.white,
-                            fontFamily: 'Roboto_Bold',
-                            fontSize: 14,
+                            width: .3,
                           ),
                         ),
-                        color: CustColors.peaGreen,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(2.5)),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 7.8,
+                        ),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat_Light',
+                          color: Colors.white,
+                          fontSize: 12,
+                        )),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(
+                    top: 20,
+                    left: 34,
+                    right: 34,
+                  ),
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat_Semibond',
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    focusNode: _userNameFocusNode,
+                    keyboardType: TextInputType.text,
+                    validator: InputValidator(ch: "User name").emptyChecking,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                    ],
+                    controller: _userNameController,
+                    decoration: InputDecoration(
+                        labelText: 'User Name',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 7.8,
+                        ),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat_Light',
+                          color: Colors.white,
+                          fontSize: 12,
+                        )),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 34, right: 34),
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: InputValidator(ch: "Email ID").emailValidator,
+                    focusNode: _emailFocusNode,
+                    controller: _emailController,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat_Semibond',
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    decoration: InputDecoration(
+                        labelText: 'Email ID*',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 7.8,
+                        ),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat_Light',
+                          color: Colors.white,
+                          fontSize: 12,
+                        )),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 34, right: 34),
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat_Semibond',
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    focusNode: _stateFocusNode,
+                    keyboardType: TextInputType.text,
+                    validator: InputValidator(ch: "State").emptyChecking,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                    ],
+                    controller: _stateController,
+                    decoration: InputDecoration(
+                        labelText: 'State',
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 7.8,
+                        ),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat_Light',
+                          color: Colors.white,
+                          fontSize: 12,
+                        )),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20, left: 34, right: 34),
+                  alignment: Alignment.center,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          flex: 8,
+                          child: Container(
+                            width: double.infinity,
+                            child: TextFormField(
+                              validator: InputValidator(ch: "Phone number")
+                                  .phoneNumChecking,
+                              maxLines: 1,
+                              focusNode: _phoneFocusNode,
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.phone,
+                              controller: _phoneController,
+                              style: TextStyle(
+                                fontFamily: 'Montserrat_Semibond',
+                                color: Colors.white,
+                                fontSize: 13,
+                              ),
+                              decoration: InputDecoration(
+                                  labelText: 'Phone Number*',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 7.8,
+                                  ),
+                                  labelStyle: TextStyle(
+                                    fontFamily: 'Montserrat_Light',
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 34, right: 34),
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    obscureText: true,
+                    validator: InputValidator(ch: "Password").passwordChecking,
+                    controller: _passwordController,
+                    focusNode: _passwordFocusNode,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat_Semibond',
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    decoration: InputDecoration(
+                        labelText: 'Password*',
+                        errorMaxLines: 3,
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 7.8,
+                        ),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat_Light',
+                          color: Colors.white,
+                          fontSize: 12,
+                        )),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 34, right: 34),
+                  child: TextFormField(
+                    obscureText: true,
+                    validator:
+                        InputValidator(ch: "Confirm Password").passwordChecking,
+                    maxLines: 1,
+                    controller: _confirmPwdController,
+                    textAlignVertical: TextAlignVertical.center,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat_Semibond',
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    decoration: InputDecoration(
+                        labelText: 'Confirm Password*',
+                        errorMaxLines: 3,
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: .3,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 7.8,
+                        ),
+                        labelStyle: TextStyle(
+                          fontFamily: 'Montserrat_Light',
+                          color: Colors.white,
+                          fontSize: 12,
+                        )),
+                  ),
+                ),
+                Container(
+                  height: 28,
+                  width: 108,
+                  margin: const EdgeInsets.only(top: 25, left: 34, right: 34),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CustColors.peaGreen),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: CustColors.darkBlue,
+                                blurRadius: 5,
+                                offset: Offset(0, 3.3),
+                              ),
+                            ],
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                checkPassWord(_passwordController.text,
+                                    _confirmPwdController.text);
+                              } else {
+                                setState(() =>
+                                    _autoValidate = AutovalidateMode.always);
+                              }
+                            },
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Sign up',
+                                    style: TextStyle(
+                                      color: CustColors.blue,
+                                      fontFamily: 'Montserrat_SemiBold',
+                                      fontSize: 11.5,
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      left: 16.6,
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/arrow_forword.png',
+                                      width: 12.5,
+                                      height: 12.5,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                          ),
+                        ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SigninScreen()));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 19, left: 34, right: 34),
+                    child: Text(
+                      'Already have an account ? Sign in',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11.5,
+                          fontFamily: 'Montserrat_SemiBold'),
+                    ),
+                  ),
+                ),
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.bottomRight,
+                      child: Image.asset(
+                        'assets/images/signup_arc.png',
                       ),
-              ),
-            ],
+                    ),
+                    Container(
+                        width: double.infinity,
+                        height: 60,
+                        alignment: Alignment.bottomLeft,
+                        margin:
+                            EdgeInsets.only(left: 66, bottom: 26.5, right: 78),
+                        child: Image.asset(
+                          'assets/images/autofix_logo.png',
+                        )),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

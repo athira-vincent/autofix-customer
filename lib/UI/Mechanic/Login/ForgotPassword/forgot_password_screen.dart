@@ -1,24 +1,25 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+import 'forgot_password_bloc.dart';
+
+class MechanicForgotPasswordScreen extends StatefulWidget {
+  const MechanicForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ForgotPasswordScreenState();
+    return _MechanicForgotPasswordScreenState();
   }
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _MechanicForgotPasswordScreenState extends State<MechanicForgotPasswordScreen> {
   TextEditingController _emailController = TextEditingController();
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
+  final MechanicForgotPasswordBloc _forgotPasswordBloc = MechanicForgotPasswordBloc();
   bool _isLoading = false;
   @override
   void initState() {
@@ -57,11 +58,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-
-          // Navigator.pushReplacement(context,
-          //               MaterialPageRoute(builder: (context) => const HomeScreen()));
-          //           FocusScope.of(context).unfocus();
-
         });
       }
     });
@@ -154,7 +150,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         if (_formKey.currentState!.validate()) {
                           _forgotPasswordBloc
                               .postForgotPasswordRequest(_emailController.text);
-
                         } else {
                           setState(
                               () => _autoValidate = AutovalidateMode.always);

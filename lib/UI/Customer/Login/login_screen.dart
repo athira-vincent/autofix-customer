@@ -28,12 +28,6 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Login",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
       body: NestedScrollView(
         body: TabBarView(
             controller: _tabController,
