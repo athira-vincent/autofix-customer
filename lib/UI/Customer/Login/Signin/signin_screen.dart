@@ -1,11 +1,15 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
+import 'package:auto_fix/UI/Customer/Login/Signin/signin_mdl.dart';
+import 'package:auto_fix/UI/Customer/Login/Signup/signup_mdl.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({Key? key}) : super(key: key);
@@ -75,7 +79,7 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   _getSignInRes() async {
-    _signinBloc.postSignIn.listen((value) {
+    _signinBloc.postSignIn.listen((value) async {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -88,7 +92,17 @@ class _SigninScreenState extends State<SigninScreen> {
           ));
         });
       } else {
-        _signinBloc.userDefault(value.data!.token.toString());
+        _signinBloc.userDefault(value.data!.customerSignIn!.token.toString());
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+        print(
+            "check username ${value.data!.customerSignIn!.customer!.firstName.toString()}");
+        shdPre.setString(
+            SharedPrefKeys.userName,
+            value.data!.customerSignIn!.customer!.firstName.toString() +
+                " " +
+                value.data!.customerSignIn!.customer!.lastName.toString());
+        shdPre.setString(SharedPrefKeys.userEmail,
+            value.data!.customerSignIn!.customer!.emailId.toString());
         setState(() {
           _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");
@@ -98,7 +112,6 @@ class _SigninScreenState extends State<SigninScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
           FocusScope.of(context).unfocus();
