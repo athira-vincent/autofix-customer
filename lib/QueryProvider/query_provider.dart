@@ -58,8 +58,8 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
-
   }
+
   changePassword(String password) {}
   editProfile() {}
   viewProfile(String id) async {
@@ -89,7 +89,39 @@ class QueryProvider {
   viewVehicle() {}
   deleteVehicle() {}
   vehicleDetails() {}
-  addVehicle() {}
+  addVehicle(
+      String year,
+      String latitude,
+      String longitude,
+      String milege,
+      String lastMaintenance,
+      String interval,
+      int makeId,
+      int vehicleModelId,
+      int engineId) async {
+    String _query = """
+      mutation{
+    vehicleCreate(year: "$year", latitude: "$latitude", longitude: "$longitude", milege: "$milege", lastMaintenance: "$lastMaintenance", interval: "$interval", makeId: $makeId, vehicleModelId: $vehicleModelId, engineId: $engineId){
+      id
+      year
+      latitude
+      longitude
+      milege
+      lastMaintenance
+      interval
+      customerId
+      makeId
+      vehicleModelId
+      engineId
+      status
+    }
+  }
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   bookingsList() {}
   bookingDetail() {}
   allModel() {}

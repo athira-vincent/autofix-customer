@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _ProfileScreenState();
+    return _CartScreenState();
   }
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold();

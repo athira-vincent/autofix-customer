@@ -1,31 +1,33 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/SideBar/Profile/EditProfile/edit_profile_bloc.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/View/view_vehicle_bloc.dart';
 import 'package:flutter/material.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class ViewVehicleListScreen extends StatefulWidget {
+  const ViewVehicleListScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return _EditProfileScreenState();
+    return _ViewVehicleListScreenState();
   }
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  final EditProfileBloc _editProfileBloc = EditProfileBloc();
+class _ViewVehicleListScreenState extends State<ViewVehicleListScreen> {
+  final ViewVehicleBloc _viewVehicleBloc = ViewVehicleBloc();
   @override
   void initState() {
     super.initState();
-    _editProfileBloc.postEditProfileRequest();
-    _getEditProfile();
+    _viewVehicleBloc.postViewVehicleRequest();
+    _getViewVehicle();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _editProfileBloc.dispose();
+    _viewVehicleBloc.dispose();
   }
 
-  _getEditProfile() async {
-    _editProfileBloc.postEditProfile.listen((value) {
+  _getViewVehicle() async {
+    _viewVehicleBloc.postViewVehicle.listen((value) {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
