@@ -8,16 +8,16 @@ import 'package:auto_fix/UI/Customer/Home/Profile/ViewProfile/view_profile_api_p
 import 'package:auto_fix/UI/Customer/Home/SearchResult/search_result_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SelectCar/select_car_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/Shops/top_shops_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/Engine/all_engine_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/Make/all_make_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/Model/all_model_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/Add/add_vehicle_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/Delete/delete_vehicle_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/Details/vehicle_details_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/Vehicle/View/view_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/Engine/all_engine_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/Make/all_make_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/Model/all_model_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/add_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Delete/delete_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Details/vehicle_details_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/View/view_vehicle_api_provider.dart';
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();
@@ -45,6 +45,8 @@ class Repository {
           String state, String password, String phone) =>
       _signupApiProvider.getSignUpRequest(
           firstName, userName, email, state, password, phone);
+  // Get State
+  Future<dynamic> getStateList() => _signupApiProvider.getStates();
   //SignIn
   Future<dynamic> getSignIn(String userName, String password) =>
       _signinApiProvider.getSignInRequest(userName, password);
@@ -75,8 +77,18 @@ class Repository {
   Future<dynamic> getVehicleDetails() =>
       _vehicleDetailsApiProvider.getVehicleDetailsRequest();
   //Add Vehicle
-  Future<dynamic> getAddVehicle() =>
-      _addVehicleApiProvider.getAddVehicleRequest();
+  Future<dynamic> getAddVehicle(
+          String year,
+          String latitude,
+          String longitude,
+          String milege,
+          String lastMaintenance,
+          String interval,
+          int makeId,
+          int vehicleModelId,
+          int engineId) =>
+      _addVehicleApiProvider.getAddVehicleRequest(year, latitude, longitude,
+          milege, lastMaintenance, interval, makeId, vehicleModelId, engineId);
   //Bookings List
   Future<dynamic> getBookingsList() =>
       _bookingsListApiProvider.getBookingsListRequest();

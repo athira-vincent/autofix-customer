@@ -1,6 +1,15 @@
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/Cart/cart_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/ChooseLanguage/choose_language_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/Help/help_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyOrders/my_orders_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyServices/my_services_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/View/view_vehicle_list_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyWallet/my_wallet_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/Notification/notification_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/TermsAndConditions/terms_and_conditions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,6 +78,8 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyServicesScreen()));
           },
         ),
         ListTile(
@@ -78,6 +89,8 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyOrdersScreen()));
           },
         ),
         ListTile(
@@ -87,6 +100,10 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ViewVehicleListScreen()));
           },
         ),
         ListTile(
@@ -96,6 +113,8 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => CartScreen()));
           },
         ),
         ListTile(
@@ -105,6 +124,10 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChooseLanguageScreen()));
           },
         ),
         ListTile(
@@ -114,6 +137,8 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()));
           },
         ),
         ListTile(
@@ -123,6 +148,8 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MyWalletScreen()));
           },
         ),
         ListTile(
@@ -132,6 +159,8 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HelpScreen()));
           },
         ),
         ListTile(
@@ -141,6 +170,10 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           leading: const Icon(Icons.favorite),
           onTap: () {
             Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TermsAndConditionsScreen()));
           },
         ),
         ListTile(

@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/json/
   fonts:
     - family: Montserrat_SemiBold
       fonts:
