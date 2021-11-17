@@ -1,11 +1,12 @@
-class SignupMdl {
+
+class MechanicSignupMdl {
   String? status;
   String? message;
   Data? data;
 
-  SignupMdl({required this.status, required this.message, this.data});
+  MechanicSignupMdl({required this.status, required this.message, this.data});
 
-  SignupMdl.fromJson(Map<String, dynamic> json) {
+  MechanicSignupMdl.fromJson(Map<String, dynamic> json) {
     data = (json['data'] != null ? Data.fromJson(json['data']) : null)!;
   }
 
@@ -19,56 +20,56 @@ class SignupMdl {
 class Data {
   //SignUp signUp;
   String? token;
-  CustomerSignUp? customerSignUp;
+  MechanicSignUp? mechanicSignUp;
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    customerSignUp = json['customersSignUp'] != null
+    mechanicSignUp = json[' '] != null
 
-    ? new CustomerSignUp.fromJson(json['customersSignUp'])
+    ? new MechanicSignUp.fromJson(json[' '])
       : null;
     token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.customerSignUp != null) {
-      data['customersSignUp'] = this.customerSignUp!.toJson();
+    if (this.mechanicSignUp != null) {
+      data[' '] = this.mechanicSignUp!.toJson();
     }
     data['token'] = this.token;
     return data;
   }
 }
 
-class CustomerSignUp {
+class MechanicSignUp {
 
-  String? id;
+  /*String? id;
   String? firstName;
   String? lastName;
   String? address;
   String? emailId;
   String? phoneNo;
-  int? status;
+  int? status;*/
 
-  CustomerSignUp.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  MechanicSignUp.fromJson(Map<String, dynamic> json) {
+    /*id = json['id'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     address = json['address'];
     emailId = json['emailId'];
     phoneNo = json['phoneNo'];
-    status = json['status'];
+    status = json['status'];*/
 
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
+    /*data['id'] = this.id;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
     data['address'] = this.address;
     data['emailId'] = this.emailId;
     data['phoneNo'] = this.phoneNo;
-    data['status'] = this.status;
+    data['status'] = this.status;*/
 
     return data;
   }

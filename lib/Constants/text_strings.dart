@@ -12,4 +12,10 @@ class TextStrings {
       "Password must contain atleast 8 characters, one alphabet,one digit,one symbol";
   //* mobile invalid
   static const invalidMobile = "Invalid phone number";
+
+  static const user_customer = "customer";
+
+  static const user_mechanic = "mechanic";
+
+  static const user_vendor = "vendor";
 }
