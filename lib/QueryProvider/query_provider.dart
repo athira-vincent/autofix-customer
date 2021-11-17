@@ -58,8 +58,8 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
-
   }
+
   changePassword(String password) {}
   editProfile() {}
   viewProfile(String id) async {
@@ -89,13 +89,191 @@ class QueryProvider {
   viewVehicle() {}
   deleteVehicle() {}
   vehicleDetails() {}
-  addVehicle() {}
+  addVehicle(
+      String year,
+      String latitude,
+      String longitude,
+      String milege,
+      String lastMaintenance,
+      String interval,
+      int makeId,
+      int vehicleModelId,
+      int engineId) async {
+    String _query = """
+      mutation{
+    vehicleCreate(year: "$year", latitude: "$latitude", longitude: "$longitude", milege: "$milege", lastMaintenance: "$lastMaintenance", interval: "$interval", makeId: $makeId, vehicleModelId: $vehicleModelId, engineId: $engineId){
+      id
+      year
+      latitude
+      longitude
+      milege
+      lastMaintenance
+      interval
+      customerId
+      makeId
+      vehicleModelId
+      engineId
+      status
+    }
+  }
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   bookingsList() {}
   bookingDetail() {}
-  allModel() {}
+  allModel(int id) async {
+    String _query = """
+      query{
+  modelDetails(id: $id) {
+    id
+    modelName
+    description
+    makeId
+    status
+    make {
+      id
+      makeName
+      description
+      status
+    }
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   allMake() {}
-  allEngine() {}
+  allEngine(int id) async {
+    String _query = """
+      query{
+  engineDetails(id: $id) {
+    id
+    engineName
+    description
+    vehicleModelId
+    status
+    vehicleModel {
+      id
+      modelName
+      description
+      makeId
+      status
+    }
+   }
+  }
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   getAds() {}
   topBrands() {}
   topShops() {}
+
+
+  //------------------------------- Mechanic API --------------------------------
+
+
+
+  mechanicSignIn(String userName, String password) async {
+    String _query = """  
+  
+    """;
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  mechanicSignUp(String firstName, String userName, String email, String state,
+      String password, String phoneNo) async {
+    String _query = """ 
+    
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  mechanicForgotPassword(String email) async {
+    String _query = """
+      
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+
+  }
+  mechanicChangePassword(String password) {}
+  mechanicEditProfile() {}
+  mechanicViewProfile(String id) async {
+    String _query = """ 
+    query{
+    customerDetails(id: $id){
+      id
+      firstName
+      lastName
+      address
+      emailId
+      phoneNo
+      status
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  // ---------------------------- Vendor API ------------------------------------
+
+  vendorSignIn(String userName, String password) async {
+    String _query = """  
+    """;
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  vendorSignUp(String firstName, String userName, String email, String state,
+      String password, String phoneNo) async {
+    String _query = """ 
+    
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  vendorForgotPassword(String email) async {
+    String _query = """
+     
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+
+  }
+
+  vendorChangePassword(String password) {}
+  vendorEditProfile() {}
+  vendorViewProfile(String id) async {
+    String _query = """ 
+    
+    """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
 }

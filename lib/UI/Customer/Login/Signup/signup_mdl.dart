@@ -18,19 +18,62 @@ class SignupMdl {
 
 class Data {
   //SignUp signUp;
-
+  String? token;
+  CustomerSignUp? customerSignUp;
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    // signUp =
-    //     json['agentSignUp'] != null ? new SignUp.fromJson(json['agentSignUp']) : null;
+    customerSignUp = json['customersSignUp'] != null
+
+    ? new CustomerSignUp.fromJson(json['customersSignUp'])
+      : null;
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    // if (this.signUp != null) {
-    //   data['agentSignUp'] = this.signUp.toJson();
-    // }
+    if (this.customerSignUp != null) {
+      data['customersSignUp'] = this.customerSignUp!.toJson();
+    }
+    data['token'] = this.token;
     return data;
   }
 }
+
+class CustomerSignUp {
+
+  String? id;
+  String? firstName;
+  String? lastName;
+  String? address;
+  String? emailId;
+  String? phoneNo;
+  int? status;
+
+  CustomerSignUp.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    address = json['address'];
+    emailId = json['emailId'];
+    phoneNo = json['phoneNo'];
+    status = json['status'];
+
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = this.id;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['address'] = this.address;
+    data['emailId'] = this.emailId;
+    data['phoneNo'] = this.phoneNo;
+    data['status'] = this.status;
+
+    return data;
+  }
+
+
+
+
+  }
