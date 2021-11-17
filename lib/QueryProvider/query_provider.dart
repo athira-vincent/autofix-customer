@@ -124,9 +124,54 @@ class QueryProvider {
 
   bookingsList() {}
   bookingDetail() {}
-  allModel() {}
+  allModel(int id) async {
+    String _query = """
+      query{
+  modelDetails(id: $id) {
+    id
+    modelName
+    description
+    makeId
+    status
+    make {
+      id
+      makeName
+      description
+      status
+    }
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   allMake() {}
-  allEngine() {}
+  allEngine(int id) async {
+    String _query = """
+      query{
+  engineDetails(id: $id) {
+    id
+    engineName
+    description
+    vehicleModelId
+    status
+    vehicleModel {
+      id
+      modelName
+      description
+      makeId
+      status
+    }
+   }
+  }
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   getAds() {}
   topBrands() {}
   topShops() {}
