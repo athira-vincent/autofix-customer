@@ -1,31 +1,33 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/SideBar/Profile/EditProfile/edit_profile_bloc.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Details/vehicle_details_bloc.dart';
 import 'package:flutter/material.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class VehicleDetailsScreen extends StatefulWidget {
+  const VehicleDetailsScreen({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return _EditProfileScreenState();
+    return _VehicleDetailsScreenState();
   }
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  final EditProfileBloc _editProfileBloc = EditProfileBloc();
+class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
+  final VehilceDetailsBloc _vehilceDetailsBloc = VehilceDetailsBloc();
   @override
   void initState() {
     super.initState();
-    _editProfileBloc.postEditProfileRequest();
-    _getEditProfile();
+    _vehilceDetailsBloc.postVehicleDetailsRequest();
+    _getVehicleDetails();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _editProfileBloc.dispose();
+    _vehilceDetailsBloc.dispose();
   }
 
-  _getEditProfile() async {
-    _editProfileBloc.postEditProfile.listen((value) {
+  _getVehicleDetails() async {
+    _vehilceDetailsBloc.postVehicleDetails.listen((value) {
       if (value.status == "error") {
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
