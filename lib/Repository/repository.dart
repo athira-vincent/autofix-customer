@@ -96,9 +96,11 @@ class Repository {
   Future<dynamic> getBookingsDetails() =>
       _bookingsDetailsApiProvider.getBookingsDetailRequest();
   //All Model
-  Future<dynamic> getAllModel() => _allModelApiProvider.getAllModelRequest();
+  Future<dynamic> getAllModel(int id) =>
+      _allModelApiProvider.getAllModelRequest(id);
   //All Engine
-  Future<dynamic> getAllEngine() => _allEngineApiProvider.getAllEngineRequest();
+  Future<dynamic> getAllEngine(int id) =>
+      _allEngineApiProvider.getAllEngineRequest(id);
   //All Make
   Future<dynamic> getAllMake() => _allMakeApiProvider.getAllMakeRequest();
   //Ads

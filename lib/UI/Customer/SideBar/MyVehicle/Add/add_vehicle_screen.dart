@@ -19,12 +19,14 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   final AllModelBloc _allModelBloc = AllModelBloc();
   final AllMakeBloc _allMakeBloc = AllMakeBloc();
   final AllEngineBloc _allEngineBloc = AllEngineBloc();
+  int make_id = 0;
+  int model_id = 0;
   @override
   void initState() {
     super.initState();
-    _allModelBloc.postAllModelRequest();
+    _allModelBloc.postAllModelRequest(make_id);
     _allMakeBloc.postAllMakeRequest();
-    _allEngineBloc.postAllEngineRequest();
+    _allEngineBloc.postAllEngineRequest(model_id);
     _getAllModel();
     _getAllMake();
     _getAllEngine();

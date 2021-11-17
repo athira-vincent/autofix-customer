@@ -17,20 +17,80 @@ class AllEngineMdl {
 }
 
 class Data {
-  //SignUp signUp;
+  List<EngineDetails>? engineDetails;
 
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    // signUp =
-    //     json['agentSignUp'] != null ? new SignUp.fromJson(json['agentSignUp']) : null;
+    if (json['engineDetails'] != null) {
+      engineDetails = <EngineDetails>[];
+      json['modelDetails'].forEach((v) {
+        engineDetails!.add(new EngineDetails.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    // if (this.signUp != null) {
-    //   data['agentSignUp'] = this.signUp.toJson();
-    // }
+    if (this.engineDetails != null) {
+      data['engineDetails'] =
+          this.engineDetails!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class EngineDetails {
+  int? id;
+  String? engineName;
+  String? description;
+  int? vehicleModelId;
+  int? status;
+  VehicleModel? vehicleModel;
+  EngineDetails.fromJson(Map<String, dynamic> json) {
+    vehicleModel = json['vehicleModel'] != null
+        ? new VehicleModel.fromJson(json['vehicleModel'])
+        : null;
+    id = json['id'];
+    engineName = json['engineName'];
+    description = json['description'];
+    vehicleModelId = json['vehicleModelId'];
+    status = json['status'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.vehicleModel != null) {
+      data['vehicleModel'] = this.vehicleModel!.toJson();
+    }
+    data['id'] = this.id;
+    data['engineName'] = this.engineName;
+    data['description'] = this.description;
+    data['vehicleModelId'] = this.vehicleModelId;
+    data['status'] = this.status;
+    return data;
+  }
+}
+
+class VehicleModel {
+  int? id;
+  String? modelName;
+  String? description;
+  int? makeId;
+  int? status;
+  VehicleModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    modelName = json['modelName'];
+    description = json['description'];
+    makeId = json['makeId'];
+    status = json['status'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = this.id;
+    data['modelName'] = this.modelName;
+    data['description'] = this.description;
+    data['makeId'] = this.makeId;
+    data['status'] = this.status;
     return data;
   }
 }
