@@ -1,4 +1,4 @@
-import 'package:auto_fix/UI/SideBar/navigation_drawer_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 
 class VendorHomeScreen extends StatefulWidget {
