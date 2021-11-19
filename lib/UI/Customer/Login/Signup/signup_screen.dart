@@ -162,7 +162,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 19.5,
-                          fontFamily: 'Montserrat_SemiBold'),
+                          fontFamily: 'Corbel_Bold'),
                     ),
                   ),
                   Container(
@@ -206,7 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -257,7 +257,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -301,7 +301,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -355,7 +355,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 vertical: 7.8,
                               ),
                               labelStyle: TextStyle(
-                                fontFamily: 'Montserrat_Light',
+                                fontFamily: 'Corbel_Light',
                                 color: Colors.white,
                                 fontSize: 12,
                               )),
@@ -411,7 +411,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       vertical: 7.8,
                                     ),
                                     labelStyle: TextStyle(
-                                      fontFamily: 'Montserrat_Light',
+                                      fontFamily: 'Corbel_Light',
                                       color: Colors.white,
                                       fontSize: 12,
                                     )),
@@ -460,7 +460,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -505,7 +505,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -513,7 +513,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   Container(
                     height: 28,
-                    width: 108,
+                    width: 98,
                     margin: const EdgeInsets.only(top: 25, left: 34, right: 34),
                     child: _isLoading
                         ? const Center(
@@ -549,7 +549,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       'Sign up',
                                       style: TextStyle(
                                         color: CustColors.blue,
-                                        fontFamily: 'Montserrat_SemiBold',
+                                        fontFamily: 'Corbel_Regular',
                                         fontSize: 11.5,
                                       ),
                                     ),
@@ -586,7 +586,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 11.5,
-                            fontFamily: 'Montserrat_SemiBold'),
+                            fontFamily: 'Corbel_Light'),
                       ),
                     ),
                   ),

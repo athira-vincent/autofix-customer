@@ -26,7 +26,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -41,13 +40,11 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? isWalked = _shdPre.getBool(SharedPrefKeys.isWalked);
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
 
-
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
-
 
     if (_token == null || _token == "") {
       GqlClient.I.config(token: "");
@@ -55,34 +52,33 @@ class _SplashScreenState extends State<SplashScreen> {
       GqlClient.I.config(token: _token);
     }
 
-
-    if(_isLoggedin != null || _isLoggedin == true){
-      if(userType == TextStrings.user_customer){
+    if (_isLoggedin != null || _isLoggedin == true) {
+      if (userType == TextStrings.user_customer) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } else if (userType == TextStrings.user_mechanic) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MechanicHomeScreen()));
+      } else if (userType == TextStrings.user_vendor) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
       }
-      else if(userType == TextStrings.user_mechanic){
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const MechanicHomeScreen()));
-      }
-      else if(userType == TextStrings.user_vendor){
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
-      }
-    }else {
-      if(isWalked == null || isWalked == false){
+    } else {
+      if (isWalked == null || isWalked == false) {
         print('WalkThroughPage');
         Timer(
             Duration(seconds: 3),
-                () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
-      }else {
+      } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const UserSelectionScreen()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => const UserSelectionScreen()));
       }
-
     }
-
 
     /*if (isWalked == null || !isWalked) {
       print('WalkThroughPage');
@@ -119,8 +115,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
       }*/
-
-
   }
 
   @override

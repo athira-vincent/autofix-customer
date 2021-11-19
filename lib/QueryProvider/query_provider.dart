@@ -176,10 +176,7 @@ class QueryProvider {
   topBrands() {}
   topShops() {}
 
-
   //------------------------------- Mechanic API --------------------------------
-
-
 
   mechanicSignIn(String userName, String password) async {
     String _query = """  
@@ -206,8 +203,8 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
-
   }
+
   mechanicChangePassword(String password) {}
   mechanicEditProfile() {}
   mechanicViewProfile(String id) async {
@@ -258,7 +255,6 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
-
   }
 
   vendorChangePassword(String password) {}
@@ -275,5 +271,6 @@ class QueryProvider {
     );
   }
 
-
+  getRegularServices() {}
+  getEmeregencyServices() {}
 }
