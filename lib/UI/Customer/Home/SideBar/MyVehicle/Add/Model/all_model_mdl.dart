@@ -40,12 +40,13 @@ class Data {
 }
 
 class ModelDetails {
-  int? id;
+  String? id;
   String? modelName;
   String? description;
   int? makeId;
   int? status;
   Make? make;
+
   ModelDetails.fromJson(Map<String, dynamic> json) {
     make = json['make'] != null ? new Make.fromJson(json['make']) : null;
     modelName = json['modelName'];
@@ -69,10 +70,10 @@ class ModelDetails {
 }
 
 class Make {
-  int? id;
+  String? id;
   String? makeName;
   String? description;
-  String? status;
+  int? status;
   Make.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     makeName = json['makeName'];

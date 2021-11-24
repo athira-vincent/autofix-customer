@@ -83,6 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
+
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()));
           FocusScope.of(context).unfocus();

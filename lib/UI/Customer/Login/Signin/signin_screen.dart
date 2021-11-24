@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
@@ -77,12 +78,27 @@ class _SigninScreenState extends State<SigninScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-          FocusScope.of(context).unfocus();
+
+          if(isDefaultVehicleAvailable() == true ){
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
+            FocusScope.of(context).unfocus();
+          }else{
+            setIsSignedIn();
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddVehicleScreen()));
+          }
         });
       }
     });
+  }
+
+  void setIsSignedIn()async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(SharedPrefKeys.isUserLoggedIn, true);
   }
 
   @override
@@ -361,6 +377,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => SignupScreen()));
+
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 22),
@@ -412,5 +429,12 @@ class _SigninScreenState extends State<SigninScreen> {
         ),
       ),
     );
+  }
+
+  Future<bool?> isDefaultVehicleAvailable() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? _isDefaultVehicleAvailable = prefs.getBool(SharedPrefKeys.isUserLoggedIn);
+   // prefs.setBool(SharedPrefKeys.isWalked, true);
+    return _isDefaultVehicleAvailable;
   }
 }

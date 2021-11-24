@@ -173,6 +173,7 @@ class QueryProvider {
   }
 
   addVehicle(
+      String token,
       String year,
       String latitude,
       String longitude,
@@ -201,13 +202,13 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query01(_query,token,
+        enableDebug: true, isTokenThere: true);
   }
 
   bookingsList() {}
   bookingDetail() {}
-  allModel(int id) async {
+  allModel(int id,String token) async {
     String _query = """
       query{
   modelDetails(id: $id) {
@@ -226,15 +227,29 @@ class QueryProvider {
 }
      """;
     log(_query);
-    return await GqlClient.I.query(
-      _query,
-      enableDebug: true,
-      isTokenThere: false,
-    );
+    return await GqlClient.I.query01(_query, token,
+        enableDebug: true, isTokenThere: true,);
+
   }
 
-  allMake() {}
-  allEngine(int id) async {
+  allMake(String token) async {
+    String _query = """
+    query{
+  makeDetails{
+    id
+    makeName
+    description
+    status
+  }
+}
+""";
+    log(_query);
+    return await GqlClient.I.query01(_query,token,
+        enableDebug: true, isTokenThere: true,);
+
+  }
+
+  allEngine(int id, String token) async {
     String _query = """
       query{
   engineDetails(id: $id) {
@@ -254,11 +269,9 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.query(
-      _query,
-      enableDebug: true,
-      isTokenThere: false,
-    );
+    return await GqlClient.I.query01(_query,token,
+        enableDebug: true, isTokenThere: true, );
+
   }
 
   getAds() {}

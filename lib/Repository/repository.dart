@@ -78,6 +78,7 @@ class Repository {
       _vehicleDetailsApiProvider.getVehicleDetailsRequest();
   //Add Vehicle
   Future<dynamic> getAddVehicle(
+      String token,
           String year,
           String latitude,
           String longitude,
@@ -87,7 +88,7 @@ class Repository {
           int makeId,
           int vehicleModelId,
           int engineId) =>
-      _addVehicleApiProvider.getAddVehicleRequest(year, latitude, longitude,
+      _addVehicleApiProvider.getAddVehicleRequest(token,year, latitude, longitude,
           milege, lastMaintenance, interval, makeId, vehicleModelId, engineId);
   //Bookings List
   Future<dynamic> getBookingsList() =>
@@ -96,13 +97,13 @@ class Repository {
   Future<dynamic> getBookingsDetails() =>
       _bookingsDetailsApiProvider.getBookingsDetailRequest();
   //All Model
-  Future<dynamic> getAllModel(int id) =>
-      _allModelApiProvider.getAllModelRequest(id);
+  Future<dynamic> getAllModel(int id,String token) =>
+      _allModelApiProvider.getAllModelRequest(id,token);
   //All Engine
-  Future<dynamic> getAllEngine(int id) =>
-      _allEngineApiProvider.getAllEngineRequest(id);
+  Future<dynamic> getAllEngine(int id, String token) =>
+      _allEngineApiProvider.getAllEngineRequest(id, token);
   //All Make
-  Future<dynamic> getAllMake() => _allMakeApiProvider.getAllMakeRequest();
+  Future<dynamic> getAllMake(String token) => _allMakeApiProvider.getAllMakeRequest(token);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
   //Top Brands
