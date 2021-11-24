@@ -1,9 +1,9 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Customer/Home/Profile/profile_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/Services/services_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/SpairParts/spair_parts_screen.dart';
-import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/profile_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/services_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/spair_parts_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
   String _userName = "";
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -35,37 +37,147 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-          icon: Icon(
-            Icons.car_rental,
+          icon: Container(
+            margin: EdgeInsets.only(bottom: 12),
+            child: Image.asset(
+              'assets/images/profile_blue.png',
+              width: 29,
+              height: 29,
+            ),
+          ),
+          label: 'Profile'),
+      BottomNavigationBarItem(
+          icon: Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Image.asset(
+              'assets/images/spair_parts.png',
+              width: 29,
+              height: 29,
+            ),
+          ),
+          label: 'Spare Parts'),
+      BottomNavigationBarItem(
+          icon: Container(
+            margin: EdgeInsets.only(bottom: 12),
+            child: Image.asset(
+              'assets/images/services.png',
+              width: 28.4,
+              height: 27.2,
+            ),
           ),
           label: 'Services'),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.room_service_outlined), label: 'Spare Parts'),
-      BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
     ];
     return Scaffold(
       drawer: NavigationDrawerScreen(),
-      appBar: AppBar(
-        actions: [],
-        title: Text("Hi $_userName"),
+      key: scaffoldKey,
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(60.0 + MediaQuery.of(context).padding.top),
+        child: AppBar(
+          actions: [],
+          automaticallyImplyLeading: false,
+          flexibleSpace: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(
+                    left: 21, top: 36 + MediaQuery.of(context).padding.top),
+                child: GestureDetector(
+                    onTap: () {
+                      scaffoldKey.currentState?.openDrawer();
+                    },
+                    child: Image.asset(
+                      'assets/images/drawer.png',
+                      width: 25,
+                      height: 25,
+                    )),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: 32.3 + MediaQuery.of(context).padding.top, left: 44.6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Hi $_userName",
+                      style: TextStyle(
+                          fontFamily: 'Corbel_Light',
+                          fontSize: 17,
+                          color: Colors.white),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 5),
+                      child: Text(
+                        "Enjoy our service",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Light',
+                            fontSize: 17,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+        ),
       ),
-      body: _index == 0
-          ? ServicesScreen()
-          : _index == 1
-              ? SpairPartsScreen()
-              : ProfileScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        items: bottomNavigationBarItems,
-        currentIndex: _index,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: CustColors.blue,
-        unselectedItemColor: CustColors.darkBlue,
-        onTap: (index) {
-          setState(() {
-            _index = index;
-          });
-        },
+      body: Stack(
+        children: [
+          Container(
+              color: Colors.white,
+              margin: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top,
+              ),
+              child: Image.asset('assets/images/app_bar_arc.png')),
+          Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top + 120,
+            ),
+            child: _index == 0
+                ? ServicesScreen()
+                : _index == 1
+                    ? SpairPartsScreen()
+                    : ProfileScreen(),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+          boxShadow: [
+            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(48),
+            topRight: Radius.circular(48),
+          ),
+          child: SizedBox(
+            height: 75,
+            child: BottomNavigationBar(
+              selectedLabelStyle: TextStyle(fontFamily: 'Corbel_Light'),
+              unselectedLabelStyle: TextStyle(fontFamily: 'Corbel_Light'),
+              items: bottomNavigationBarItems,
+              currentIndex: _index,
+              backgroundColor: CustColors.blue,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white,
+              onTap: (index) {
+                setState(() {
+                  _index = index;
+                });
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
