@@ -3,8 +3,8 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/Engine/all_engine_mdl
 
 class AllEngineApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<AllEngineMdl> getAllEngineRequest(int id) async {
-    Map<String, dynamic> _resp = await _queryProvider.allEngine(id);
+  Future<AllEngineMdl> getAllEngineRequest(int id, String token) async {
+    Map<String, dynamic> _resp = await _queryProvider.allEngine(id,token);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

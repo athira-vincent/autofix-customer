@@ -4,6 +4,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/add_vehicle_mdl.dart'
 class AddVehicleApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<AddVehicleMdl> getAddVehicleRequest(
+      String token,
       String year,
       String latitude,
       String longitude,
@@ -14,6 +15,7 @@ class AddVehicleApiProvider {
       int vehicleModelId,
       int engineId) async {
     Map<String, dynamic> _resp = await _queryProvider.addVehicle(
+      token,
         year,
         latitude,
         longitude,

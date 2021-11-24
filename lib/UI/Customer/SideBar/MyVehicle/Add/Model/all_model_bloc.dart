@@ -10,8 +10,8 @@ class AllModelBloc {
     postAllModel.close();
   }
 
-  postAllModelRequest(int id) async {
-    AllModelMdl _allModelMdl = await repository.getAllModel(id);
+  postAllModelRequest(int id,String token) async {
+    AllModelMdl _allModelMdl = await repository.getAllModel(id,token);
     postAllModel.sink.add(_allModelMdl);
   }
 }

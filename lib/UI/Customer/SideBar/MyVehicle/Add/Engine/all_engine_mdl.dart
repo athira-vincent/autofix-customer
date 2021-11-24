@@ -24,7 +24,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     if (json['engineDetails'] != null) {
       engineDetails = <EngineDetails>[];
-      json['modelDetails'].forEach((v) {
+      json['engineDetails'].forEach((v) {
         engineDetails!.add(new EngineDetails.fromJson(v));
       });
     }
@@ -41,12 +41,13 @@ class Data {
 }
 
 class EngineDetails {
-  int? id;
+  String? id;
   String? engineName;
   String? description;
   int? vehicleModelId;
   int? status;
   VehicleModel? vehicleModel;
+
   EngineDetails.fromJson(Map<String, dynamic> json) {
     vehicleModel = json['vehicleModel'] != null
         ? new VehicleModel.fromJson(json['vehicleModel'])
@@ -72,7 +73,7 @@ class EngineDetails {
 }
 
 class VehicleModel {
-  int? id;
+  String? id;
   String? modelName;
   String? description;
   int? makeId;

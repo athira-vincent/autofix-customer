@@ -10,8 +10,8 @@ class AllMakeBloc {
     postAllMake.close();
   }
 
-  postAllMakeRequest() async {
-    AllMakeMdl _allMakeMdl = await repository.getAllMake();
+  postAllMakeRequest(String token) async {
+    AllMakeMdl _allMakeMdl = await repository.getAllMake(token);
     postAllMake.sink.add(_allMakeMdl);
   }
 }

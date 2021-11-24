@@ -11,6 +11,7 @@ class AddVehicleBloc {
   }
 
   postAddVehicleRequest(
+      String token,
       String year,
       String latitude,
       String longitude,
@@ -21,6 +22,7 @@ class AddVehicleBloc {
       int vehicleModelId,
       int engineId) async {
     AddVehicleMdl _addVehicleMdl = await repository.getAddVehicle(
+        token,
         year,
         latitude,
         longitude,

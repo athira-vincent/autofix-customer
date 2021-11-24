@@ -10,8 +10,8 @@ class AllEngineBloc {
     postAllEngine.close();
   }
 
-  postAllEngineRequest(int id) async {
-    AllEngineMdl _allEngineMdl = await repository.getAllEngine(id);
+  postAllEngineRequest(int id,String token) async {
+    AllEngineMdl _allEngineMdl = await repository.getAllEngine(id, token);
     postAllEngine.sink.add(_allEngineMdl);
   }
 }

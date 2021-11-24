@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +35,9 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
             ),
             GestureDetector(
               onTap: (){
+                setUserType(TextStrings.user_customer);
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const SigninScreen()));
+                    MaterialPageRoute(builder: (context) => const SignupScreen()));
               },
               child: Container(
                 color: Colors.pink,

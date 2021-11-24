@@ -3,8 +3,8 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicle/Add/Make/all_make_mdl.dar
 
 class AllMakeApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<AllMakeMdl> getAllMakeRequest() async {
-    Map<String, dynamic> _resp = await _queryProvider.allMake();
+  Future<AllMakeMdl> getAllMakeRequest(String token) async {
+    Map<String, dynamic> _resp = await _queryProvider.allMake(token);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

@@ -104,6 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
+
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()));
           FocusScope.of(context).unfocus();
@@ -111,6 +112,12 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     });
   }
+
+/*  void setIsSignedUp()async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(SharedPrefKeys.isWalked, true);
+  }*/
 
   void onFocusChange() {
     setState(() {
