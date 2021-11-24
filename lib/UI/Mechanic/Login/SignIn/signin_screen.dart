@@ -21,8 +21,6 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
   TextEditingController _passwordController = TextEditingController();
   FocusNode _userNameFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
-  TextStyle _labelStyleUserName = const TextStyle();
-  TextStyle _labelStylePassword = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final MechanicSigninBloc _signinBloc = MechanicSigninBloc();
@@ -31,8 +29,6 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
   @override
   void initState() {
     super.initState();
-    _userNameController.addListener(onFocusChange);
-    _passwordController.addListener(onFocusChange);
     _passwordVisible = false;
     _getSignInRes();
   }
@@ -40,38 +36,9 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
   @override
   void dispose() {
     super.dispose();
-    _userNameFocusNode.removeListener(onFocusChange);
     _userNameController.dispose();
-    _passwordFocusNode.removeListener(onFocusChange);
     _passwordController.dispose();
     _signinBloc.dispose();
-  }
-
-  void onFocusChange() {
-    setState(() {
-      _labelStyleUserName = _userNameFocusNode.hasFocus
-          ? TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            )
-          : TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            );
-      _labelStylePassword = _passwordFocusNode.hasFocus
-          ? TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            )
-          : TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            );
-    });
   }
 
   _getSignInRes() async {
@@ -99,8 +66,10 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
             backgroundColor: CustColors.peaGreen,
           ));
 
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const MechanicHomeScreen()));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MechanicHomeScreen()));
           FocusScope.of(context).unfocus();
         });
       }
@@ -382,7 +351,8 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MechanicSignupScreen()));
+                                        builder: (context) =>
+                                            MechanicSignupScreen()));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 22),

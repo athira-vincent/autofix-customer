@@ -84,12 +84,96 @@ class QueryProvider {
     );
   }
 
-  searchResult() {}
+  searchResult(int page, int size, String searchText) async {
+    String _query = """
+      query{
+  serviceListAll(page: $page, size: $size, search: "$searchText") {
+    totalItems
+    data {
+      id
+      serviceName
+      description
+      icon
+      fee
+      type
+      status
+    }
+    totalPages
+    currentPage
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   selectCar() {}
   viewVehicle() {}
   deleteVehicle() {}
-  vehicleDetails() {}
+  vehicleDetails() async {
+    String _query = """
+      query{
+  vehicleDetails {
+    id
+    year
+    latitude
+    longitude
+    milege
+    lastMaintenance
+    interval
+    customerId
+    makeId
+    vehicleModelId
+    engineId
+    status
+    customer {
+      id
+      firstName
+      lastName
+      address
+      emailId
+      phoneNo
+      profilePic
+      isProfileCompleted
+      status
+    }
+    make {
+      id
+      makeName
+      description
+      status
+    }
+    vehiclemodel {
+      id
+      modelName
+      description
+      makeId
+      status
+    }
+    engine {
+      id
+      engineName
+      description
+      vehicleModelId
+      status
+    }
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   addVehicle(
+      String token,
       String year,
       String latitude,
       String longitude,
@@ -118,13 +202,13 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query01(_query,token,
+        enableDebug: true, isTokenThere: true);
   }
 
   bookingsList() {}
   bookingDetail() {}
-  allModel(int id) async {
+  allModel(int id,String token) async {
     String _query = """
       query{
   modelDetails(id: $id) {
@@ -143,12 +227,29 @@ class QueryProvider {
 }
      """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query01(_query, token,
+        enableDebug: true, isTokenThere: true,);
+
   }
 
-  allMake() {}
-  allEngine(int id) async {
+  allMake(String token) async {
+    String _query = """
+    query{
+  makeDetails{
+    id
+    makeName
+    description
+    status
+  }
+}
+""";
+    log(_query);
+    return await GqlClient.I.query01(_query,token,
+        enableDebug: true, isTokenThere: true,);
+
+  }
+
+  allEngine(int id, String token) async {
     String _query = """
       query{
   engineDetails(id: $id) {
@@ -168,18 +269,80 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query01(_query,token,
+        enableDebug: true, isTokenThere: true, );
+
   }
 
   getAds() {}
   topBrands() {}
   topShops() {}
-
+  getMechanicDetails() async {
+    String _query = """
+      query{
+  mechanicDetails(mechanicId: 1) {
+    mechanicData {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+    }
+    serviceData {
+      id
+      status
+      serviceId
+      mechanicId
+      service {
+        id
+        serviceName
+        description
+        icon
+        fee
+        type
+        status
+      }
+    }
+    vehicleData {
+      id
+      status
+      makeId
+      mechanicId
+      make {
+        id
+        makeName
+        description
+        status
+      }
+    }
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 
   //------------------------------- Mechanic API --------------------------------
-
-
 
   mechanicSignIn(String userName, String password) async {
     String _query = """  
@@ -206,8 +369,8 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
-
   }
+
   mechanicChangePassword(String password) {}
   mechanicEditProfile() {}
   mechanicViewProfile(String id) async {
@@ -258,7 +421,6 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
-
   }
 
   vendorChangePassword(String password) {}
@@ -275,5 +437,47 @@ class QueryProvider {
     );
   }
 
+  getRegularServices(int page, int size) async {
+    String _query = """
+      query{
+          emergencyList(page: $page, size: $size, id: "1"){
+    id
+    serviceName
+    description
+    icon
+    fee
+    type
+    status
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 
+  getEmeregencyServices(int page, int size) async {
+    String _query = """
+      query{
+          emergencyList(page: $page, size: $size, id: "2"){
+    id
+    serviceName
+    description
+    icon
+    fee
+    type
+    status
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 }

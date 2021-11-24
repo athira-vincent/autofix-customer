@@ -6,8 +6,8 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/Vendor/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
@@ -26,7 +26,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -40,14 +39,14 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? _isLoggedin = _shdPre.getBool(SharedPrefKeys.isUserLoggedIn);
     bool? isWalked = _shdPre.getBool(SharedPrefKeys.isWalked);
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
-
+    bool? _isDefaultVehicleAvailable = _shdPre.getBool(SharedPrefKeys.isDefaultVehicleAvailable);
 
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
+    print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
-
 
     if (_token == null || _token == "") {
       GqlClient.I.config(token: "");
@@ -56,10 +55,24 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
 
+  /*  print('WalkThroughPage');
+    Timer(
+        Duration(seconds: 3),
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => WalkThroughPages())));
+*/
+
     if(_isLoggedin != null || _isLoggedin == true){
       if(userType == TextStrings.user_customer){
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+
+        if(_isDefaultVehicleAvailable == null || _isDefaultVehicleAvailable == false){
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const AddVehicleScreen()));
+        }else{
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+        }
+
       }
       else if(userType == TextStrings.user_mechanic){
         Navigator.pushReplacement(
@@ -69,20 +82,22 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
       }
+
     }else {
       if(isWalked == null || isWalked == false){
+
         print('WalkThroughPage');
         Timer(
             Duration(seconds: 3),
-                () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
-      }else {
+      } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const UserSelectionScreen()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => const UserSelectionScreen()));
       }
-
     }
-
 
     /*if (isWalked == null || !isWalked) {
       print('WalkThroughPage');
@@ -119,8 +134,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
       }*/
-
-
   }
 
   @override

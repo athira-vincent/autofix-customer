@@ -29,15 +29,8 @@ class _SignupScreenState extends State<SignupScreen> {
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _stateFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
-  FocusNode _confirmPwdFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
-  TextStyle _labelStyleFirstName = const TextStyle();
-  TextStyle _labelStyleUserName = const TextStyle();
-  TextStyle _labelStyleEmail = const TextStyle();
-  TextStyle _labelStyleState = const TextStyle();
-  TextStyle _labelStylePassword = const TextStyle();
-  TextStyle _labelStyleConfirmPwd = const TextStyle();
-  TextStyle _labelStylePhone = const TextStyle();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SignupBloc _signupBloc = SignupBloc();
@@ -48,13 +41,6 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void initState() {
     super.initState();
-    _firstNameController.addListener(onFocusChange);
-    _userNameController.addListener(onFocusChange);
-    _emailController.addListener(onFocusChange);
-    _stateController.addListener(onFocusChange);
-    _passwordController.addListener(onFocusChange);
-    _confirmPwdController.addListener(onFocusChange);
-    _phoneController.addListener(onFocusChange);
     _getSignUpRes();
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
@@ -63,19 +49,12 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void dispose() {
     super.dispose();
-    _firstNameFocusNode.removeListener(onFocusChange);
     _firstNameController.dispose();
-    _userNameFocusNode.removeListener(onFocusChange);
     _userNameController.dispose();
-    _emailFocusNode.removeListener(onFocusChange);
     _emailController.dispose();
-    _stateFocusNode.removeListener(onFocusChange);
     _stateController.dispose();
-    _passwordFocusNode.removeListener(onFocusChange);
     _passwordController.dispose();
-    _confirmPwdFocusNode.removeListener(onFocusChange);
     _confirmPwdController.dispose();
-    _phoneFocusNode.removeListener(onFocusChange);
     _phoneController.dispose();
     _signupBloc.dispose();
   }
@@ -104,37 +83,12 @@ class _SignupScreenState extends State<SignupScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
+
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()));
           FocusScope.of(context).unfocus();
         });
       }
-    });
-  }
-
-  void onFocusChange() {
-    setState(() {
-      _labelStyleFirstName = _firstNameFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      _labelStyleUserName = _userNameFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      _labelStyleEmail = _emailFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      _labelStyleState = _stateFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      _labelStylePassword = _passwordFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      _labelStyleConfirmPwd = _confirmPwdFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
-      _labelStylePhone = _phoneFocusNode.hasFocus
-          ? const TextStyle(color: CustColors.peaGreen)
-          : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
     });
   }
 
@@ -162,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 19.5,
-                          fontFamily: 'Montserrat_SemiBold'),
+                          fontFamily: 'Corbel_Bold'),
                     ),
                   ),
                   Container(
@@ -206,7 +160,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -257,7 +211,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -301,7 +255,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -355,7 +309,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 vertical: 7.8,
                               ),
                               labelStyle: TextStyle(
-                                fontFamily: 'Montserrat_Light',
+                                fontFamily: 'Corbel_Light',
                                 color: Colors.white,
                                 fontSize: 12,
                               )),
@@ -411,7 +365,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       vertical: 7.8,
                                     ),
                                     labelStyle: TextStyle(
-                                      fontFamily: 'Montserrat_Light',
+                                      fontFamily: 'Corbel_Light',
                                       color: Colors.white,
                                       fontSize: 12,
                                     )),
@@ -460,7 +414,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -505,7 +459,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             vertical: 7.8,
                           ),
                           labelStyle: TextStyle(
-                            fontFamily: 'Montserrat_Light',
+                            fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
                           )),
@@ -513,7 +467,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   Container(
                     height: 28,
-                    width: 108,
+                    width: 98,
                     margin: const EdgeInsets.only(top: 25, left: 34, right: 34),
                     child: _isLoading
                         ? const Center(
@@ -549,7 +503,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       'Sign up',
                                       style: TextStyle(
                                         color: CustColors.blue,
-                                        fontFamily: 'Montserrat_SemiBold',
+                                        fontFamily: 'Corbel_Regular',
                                         fontSize: 11.5,
                                       ),
                                     ),
@@ -586,7 +540,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 11.5,
-                            fontFamily: 'Montserrat_SemiBold'),
+                            fontFamily: 'Corbel_Light'),
                       ),
                     ),
                   ),

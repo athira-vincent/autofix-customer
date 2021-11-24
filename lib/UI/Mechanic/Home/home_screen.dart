@@ -1,5 +1,4 @@
-
-import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 
 class MechanicHomeScreen extends StatefulWidget {

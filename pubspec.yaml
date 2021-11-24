@@ -39,6 +39,10 @@ dependencies:
   webview_flutter: ^2.0.14
   shared_preferences: ^2.0.8
   http: ^0.13.4
+  cached_network_image: ^3.1.0+1
+  google_maps_flutter: ^2.1.1
+  flutter_polyline_points: ^1.0.0
+  location: ^4.3.0
   
 
 dev_dependencies:
@@ -46,6 +50,7 @@ dev_dependencies:
     sdk: flutter
   
   flutter_launcher_icons: ^0.9.1
+  
 
 flutter_icons:
   android: true
@@ -84,6 +89,15 @@ flutter:
     - family: Montserrat_Light
       fonts:
         - asset: assets/fonts/Montserrat_Light.ttf
+    - family: Corbel_Light
+      fonts:
+        - asset: assets/fonts/corbell.ttf
+    - family: Corbel_Bold
+      fonts:
+        - asset: assets/fonts/corbel_bold.ttf
+    - family: Corbel_Regular
+      fonts:
+        - asset: assets/fonts/corbel.ttf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
