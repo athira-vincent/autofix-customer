@@ -3,8 +3,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_mdl.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/signup_mdl.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +23,6 @@ class _SigninScreenState extends State<SigninScreen> {
   TextEditingController _passwordController = TextEditingController();
   FocusNode _userNameFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
-  TextStyle _labelStyleUserName = const TextStyle();
-  TextStyle _labelStylePassword = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SigninBloc _signinBloc = SigninBloc();
@@ -35,8 +31,6 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   void initState() {
     super.initState();
-    _userNameController.addListener(onFocusChange);
-    _passwordController.addListener(onFocusChange);
     _passwordVisible = false;
     _getSignInRes();
   }
@@ -44,38 +38,9 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   void dispose() {
     super.dispose();
-    _userNameFocusNode.removeListener(onFocusChange);
     _userNameController.dispose();
-    _passwordFocusNode.removeListener(onFocusChange);
     _passwordController.dispose();
     _signinBloc.dispose();
-  }
-
-  void onFocusChange() {
-    setState(() {
-      _labelStyleUserName = _userNameFocusNode.hasFocus
-          ? TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            )
-          : TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            );
-      _labelStylePassword = _passwordFocusNode.hasFocus
-          ? TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            )
-          : TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            );
-    });
   }
 
   _getSignInRes() async {
@@ -149,7 +114,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 19.5,
-                                fontFamily: 'Montserrat_SemiBold'),
+                                fontFamily: 'Corbel_Bold'),
                           ),
                         ),
                         Container(
@@ -210,7 +175,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   horizontal: 20.0,
                                 ),
                                 labelStyle: TextStyle(
-                                  fontFamily: 'Montserrat_Light',
+                                  fontFamily: 'Corbel_Light',
                                   color: Colors.white,
                                   fontSize: 12,
                                 )),
@@ -221,8 +186,8 @@ class _SigninScreenState extends State<SigninScreen> {
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
                             obscureText: !_passwordVisible!,
-                            validator:
-                                InputValidator(ch: "Password").passwordChecking,
+                            // validator:
+                            //     InputValidator(ch: "Password").passwordChecking,
                             controller: _passwordController,
                             focusNode: _passwordFocusNode,
                             maxLines: 1,
@@ -296,7 +261,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   horizontal: 20.0,
                                 ),
                                 labelStyle: TextStyle(
-                                  fontFamily: 'Montserrat_Light',
+                                  fontFamily: 'Corbel_Light',
                                   color: Colors.white,
                                   fontSize: 12,
                                 )),
@@ -344,7 +309,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                             'Login',
                                             style: TextStyle(
                                               color: CustColors.blue,
-                                              fontFamily: 'Montserrat_SemiBold',
+                                              fontFamily: 'Corbel_Regular',
                                               fontSize: 11.5,
                                             ),
                                           ),
@@ -385,8 +350,8 @@ class _SigninScreenState extends State<SigninScreen> {
                                   'Forgot password?',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 10,
-                                      fontFamily: 'Montserrat_Light'),
+                                      fontSize: 11.5,
+                                      fontFamily: 'Corbel_Light'),
                                 ),
                               ),
                             ),
@@ -404,7 +369,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 11.5,
-                                      fontFamily: 'Montserrat_SemiBold'),
+                                      fontFamily: 'Corbel_Light'),
                                 ),
                               ),
                             ),

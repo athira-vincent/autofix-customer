@@ -1,3 +1,4 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,15 +12,14 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light
-        //  statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
-        ));
-    return const MaterialApp(
+      statusBarBrightness: Brightness.light,
+      statusBarColor: CustColors.blue, //or set color with: Color(0xFF0000FF)
+    ));
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );
