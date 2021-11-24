@@ -65,8 +65,8 @@ class Repository {
   Future<dynamic> getViewProfile(String id) =>
       _viewProfileApiProvider.getViewProfileRequest(id);
   //Search Result
-  Future<dynamic> getSearchResult() =>
-      _searchResultApiProvider.getSearchResultRequest();
+  Future<dynamic> getSearchResult(int page, int size, String searchText) =>
+      _searchResultApiProvider.getSearchResultRequest(page, size, searchText);
   //View Vehicle
   Future<dynamic> getViewVehicle() =>
       _viewVehicleApiProvider.getViewVehicleRequest();
@@ -110,9 +110,9 @@ class Repository {
   //Top Shops
   Future<dynamic> getTopShops() => _topShopsApiProvider.getTopShopsRequest();
   //Regular Service
-  Future<dynamic> getRegularServices() =>
-      _regularServicesApiProvider.getRegularServicesRequest();
+  Future<dynamic> getRegularServices(int page, int size) =>
+      _regularServicesApiProvider.getRegularServicesRequest(page, size);
   //Emergency Service
-  Future<dynamic> getEmerGencyServices() =>
-      _emergencyServicesApiProvider.getEmergencyServicesRequest();
+  Future<dynamic> getEmerGencyServices(int page, int size) =>
+      _emergencyServicesApiProvider.getEmergencyServicesRequest(page, size);
 }

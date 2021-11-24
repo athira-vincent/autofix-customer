@@ -21,8 +21,6 @@ class _VendorSigninScreenState extends State<VendorSigninScreen> {
   TextEditingController _passwordController = TextEditingController();
   FocusNode _userNameFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
-  TextStyle _labelStyleUserName = const TextStyle();
-  TextStyle _labelStylePassword = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final VendorSigninBloc _signinBloc = VendorSigninBloc();
@@ -31,8 +29,6 @@ class _VendorSigninScreenState extends State<VendorSigninScreen> {
   @override
   void initState() {
     super.initState();
-    _userNameController.addListener(onFocusChange);
-    _passwordController.addListener(onFocusChange);
     _passwordVisible = false;
     _getSignInRes();
   }
@@ -40,38 +36,9 @@ class _VendorSigninScreenState extends State<VendorSigninScreen> {
   @override
   void dispose() {
     super.dispose();
-    _userNameFocusNode.removeListener(onFocusChange);
     _userNameController.dispose();
-    _passwordFocusNode.removeListener(onFocusChange);
     _passwordController.dispose();
     _signinBloc.dispose();
-  }
-
-  void onFocusChange() {
-    setState(() {
-      _labelStyleUserName = _userNameFocusNode.hasFocus
-          ? TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            )
-          : TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            );
-      _labelStylePassword = _passwordFocusNode.hasFocus
-          ? TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            )
-          : TextStyle(
-              fontFamily: 'Montserrat_Light',
-              color: Colors.white,
-              fontSize: 12,
-            );
-    });
   }
 
   _getSignInRes() async {
@@ -99,8 +66,10 @@ class _VendorSigninScreenState extends State<VendorSigninScreen> {
             backgroundColor: CustColors.peaGreen,
           ));
 
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const VendorHomeScreen()));
           FocusScope.of(context).unfocus();
         });
       }
@@ -382,7 +351,8 @@ class _VendorSigninScreenState extends State<VendorSigninScreen> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VendorSignupScreen()));
+                                        builder: (context) =>
+                                            VendorSignupScreen()));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 22),

@@ -84,11 +84,94 @@ class QueryProvider {
     );
   }
 
-  searchResult() {}
+  searchResult(int page, int size, String searchText) async {
+    String _query = """
+      query{
+  serviceListAll(page: $page, size: $size, search: "$searchText") {
+    totalItems
+    data {
+      id
+      serviceName
+      description
+      icon
+      fee
+      type
+      status
+    }
+    totalPages
+    currentPage
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   selectCar() {}
   viewVehicle() {}
   deleteVehicle() {}
-  vehicleDetails() {}
+  vehicleDetails() async {
+    String _query = """
+      query{
+  vehicleDetails {
+    id
+    year
+    latitude
+    longitude
+    milege
+    lastMaintenance
+    interval
+    customerId
+    makeId
+    vehicleModelId
+    engineId
+    status
+    customer {
+      id
+      firstName
+      lastName
+      address
+      emailId
+      phoneNo
+      profilePic
+      isProfileCompleted
+      status
+    }
+    make {
+      id
+      makeName
+      description
+      status
+    }
+    vehiclemodel {
+      id
+      modelName
+      description
+      makeId
+      status
+    }
+    engine {
+      id
+      engineName
+      description
+      vehicleModelId
+      status
+    }
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   addVehicle(
       String year,
       String latitude,
@@ -143,8 +226,11 @@ class QueryProvider {
 }
      """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
   }
 
   allMake() {}
@@ -168,13 +254,80 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
   }
 
   getAds() {}
   topBrands() {}
   topShops() {}
+  getMechanicDetails() async {
+    String _query = """
+      query{
+  mechanicDetails(mechanicId: 1) {
+    mechanicData {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+    }
+    serviceData {
+      id
+      status
+      serviceId
+      mechanicId
+      service {
+        id
+        serviceName
+        description
+        icon
+        fee
+        type
+        status
+      }
+    }
+    vehicleData {
+      id
+      status
+      makeId
+      mechanicId
+      make {
+        id
+        makeName
+        description
+        status
+      }
+    }
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 
   //------------------------------- Mechanic API --------------------------------
 
@@ -271,6 +424,47 @@ class QueryProvider {
     );
   }
 
-  getRegularServices() {}
-  getEmeregencyServices() {}
+  getRegularServices(int page, int size) async {
+    String _query = """
+      query{
+          emergencyList(page: $page, size: $size, id: "1"){
+    id
+    serviceName
+    description
+    icon
+    fee
+    type
+    status
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  getEmeregencyServices(int page, int size) async {
+    String _query = """
+      query{
+          emergencyList(page: $page, size: $size, id: "2"){
+    id
+    serviceName
+    description
+    icon
+    fee
+    type
+    status
+  }
+}
+     """;
+    log(_query);
+    return await GqlClient.I.query(
+      _query,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 }

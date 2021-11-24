@@ -3,8 +3,10 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Regular/regular_ser
 
 class RegularServicesApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<RegularServicesMdl> getRegularServicesRequest() async {
-    Map<String, dynamic> _resp = await _queryProvider.getRegularServices();
+  Future<RegularServicesMdl> getRegularServicesRequest(
+      int page, int size) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.getRegularServices(page, size);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

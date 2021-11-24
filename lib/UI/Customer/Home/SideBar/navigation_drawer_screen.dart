@@ -1,16 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/ChooseLanguage/choose_language_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/Help/help_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/MyOrders/my_orders_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyServices/my_services_screen.dart';
-import 'package:auto_fix/UI/Customer/home/SideBar/MyVehicle/View/view_vehicle_list_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/Notification/notification_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/TermsAndConditions/terms_and_conditions_screen.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,17 +51,6 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserAccountsDrawerHeader drawerHeader = UserAccountsDrawerHeader(
-      accountName: Text(
-        _userName.toString(),
-      ),
-      accountEmail: Text(
-        _userEmail.toString(),
-      ),
-      currentAccountPicture: const CircleAvatar(
-        child: FlutterLogo(size: 42.0),
-      ),
-    );
     final drawerItems = ListView(
       padding: const EdgeInsets.all(0.0),
       children: [

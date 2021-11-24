@@ -7,7 +7,6 @@ import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/Vendor/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';

@@ -1,20 +1,20 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/pre_booking_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_mdl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class SearchResultScreen extends StatefulWidget {
-  const SearchResultScreen({Key? key}) : super(key: key);
-
+class AddMoreServiceScreen extends StatefulWidget {
+  final List<SearchData> searchData;
+  final String type;
+  AddMoreServiceScreen({required this.searchData, required this.type});
   @override
   State<StatefulWidget> createState() {
-    return _SearchResultScreenState();
+    return _AddMoreServiceScreenState();
   }
 }
 
-class _SearchResultScreenState extends State<SearchResultScreen> {
+class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
   final SearchResultBloc _searchResultBloc = SearchResultBloc();
   TextEditingController textEditingController = TextEditingController();
   FocusNode focusNode = FocusNode();
@@ -23,6 +23,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   @override
   void initState() {
     super.initState();
+
     _getSearchResult();
   }
 
@@ -50,10 +51,31 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           _emergencySearchDataList = [];
           for (int i = 0; i < value.data!.serviceListAll!.data!.length; i++) {
             if (value.data!.serviceListAll!.data![i].type == "1") {
-              _regularSearchDataList!.add(value.data!.serviceListAll!.data![i]);
+              int flag = 0;
+              for (int j = 0; j < widget.searchData.length; j++) {
+                if (value.data!.serviceListAll!.data![i].id ==
+                    widget.searchData[j].id) {
+                  flag = 1;
+                  break;
+                }
+              }
+              if (flag == 0) {
+                _regularSearchDataList!
+                    .add(value.data!.serviceListAll!.data![i]);
+              }
             } else if (value.data!.serviceListAll!.data![i].type == "2") {
-              _emergencySearchDataList!
-                  .add(value.data!.serviceListAll!.data![i]);
+              int flag = 0;
+              for (int j = 0; j < widget.searchData.length; j++) {
+                if (value.data!.serviceListAll!.data![i].id ==
+                    widget.searchData[j].id) {
+                  flag = 1;
+                  break;
+                }
+              }
+              if (flag == 0) {
+                _emergencySearchDataList!
+                    .add(value.data!.serviceListAll!.data![i]);
+              }
             }
           }
         });
@@ -73,7 +95,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                List<SearchData> _searchData = [];
+                _searchData = widget.searchData;
+                Navigator.pop(context, _searchData);
               },
               color: Colors.black,
               icon: Icon(Icons.close),
@@ -107,13 +131,23 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
               return Column(
                 children: [
                   _regularSearchDataList!.length != 0
-                      ? _regularServices()
+                      ? widget.type == "1"
+                          ? _regularServices()
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            )
                       : Container(
                           width: 0,
                           height: 0,
                         ),
                   _emergencySearchDataList!.length != 0
-                      ? _emergencyServices()
+                      ? widget.type == "2"
+                          ? _emergencyServices()
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            )
                       : Container(
                           width: 0,
                           height: 0,
@@ -232,14 +266,11 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     return GestureDetector(
       onTap: () {
         List<SearchData> regularList01 = [];
+        List<SearchData> _searchData = [];
+        _searchData = widget.searchData;
         regularList01.add(regularList);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PreBookingScreen(
-                      searchData: regularList01,
-                      type: regularList.type.toString(),
-                    )));
+        _searchData.add(regularList);
+        Navigator.pop(context, _searchData);
       },
       child: Column(
         children: [
@@ -331,38 +362,48 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   }
 
   Widget _emergencyServicesListItem(SearchData emergencyList) {
-    return Column(
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            border: Border.all(color: CustColors.lightGrey, width: 1.3),
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                7.8,
+    return GestureDetector(
+      onTap: () {
+        List<SearchData> regularList01 = [];
+        regularList01.add(emergencyList);
+        List<SearchData> _searchData = [];
+        _searchData = widget.searchData;
+        _searchData.add(emergencyList);
+        Navigator.pop(context, _searchData);
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              border: Border.all(color: CustColors.lightGrey, width: 1.3),
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  7.8,
+                ),
+              ),
+            ),
+            child: Container(
+              margin: EdgeInsets.all(12),
+              child: CachedNetworkImage(
+                imageUrl: "https://picsum.photos/200",
               ),
             ),
           ),
-          child: Container(
-            margin: EdgeInsets.all(12),
-            child: CachedNetworkImage(
-              imageUrl: "https://picsum.photos/200",
+          Container(
+            margin: EdgeInsets.only(top: 9.1),
+            child: Text(
+              emergencyList.serviceName.toString(),
+              style: TextStyle(
+                  fontSize: 9.5,
+                  color: CustColors.blue,
+                  fontFamily: 'Corbel_Light'),
             ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 9.1),
-          child: Text(
-            emergencyList.serviceName.toString(),
-            style: TextStyle(
-                fontSize: 9.5,
-                color: CustColors.blue,
-                fontFamily: 'Corbel_Light'),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

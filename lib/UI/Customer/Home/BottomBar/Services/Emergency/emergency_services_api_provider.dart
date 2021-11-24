@@ -3,8 +3,10 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency
 
 class EmergencyServicesApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<EmergencyServicesMdl> getEmergencyServicesRequest() async {
-    Map<String, dynamic> _resp = await _queryProvider.getEmeregencyServices();
+  Future<EmergencyServicesMdl> getEmergencyServicesRequest(
+      int page, int size) async {
+    Map<String, dynamic> _resp =
+        await _queryProvider.getEmeregencyServices(page, size);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

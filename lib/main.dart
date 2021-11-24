@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       statusBarBrightness: Brightness.light,
       statusBarColor: CustColors.blue, //or set color with: Color(0xFF0000FF)
     ));
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );

@@ -17,20 +17,80 @@ class SearchResultMdl {
 }
 
 class Data {
-  //SignUp signUp;
+  ServiceListAll? serviceListAll;
 
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    // signUp =
-    //     json['agentSignUp'] != null ? new SignUp.fromJson(json['agentSignUp']) : null;
+    serviceListAll = json['serviceListAll'] != null
+        ? new ServiceListAll.fromJson(json['serviceListAll'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    // if (this.signUp != null) {
-    //   data['agentSignUp'] = this.signUp.toJson();
-    // }
+    if (this.serviceListAll != null) {
+      data['serviceListAll'] = this.serviceListAll!.toJson();
+    }
+    return data;
+  }
+}
+
+class ServiceListAll {
+  int? totalItems;
+  List<SearchData>? data;
+  int? totalPages;
+  int? currentPage;
+  ServiceListAll.fromJson(Map<String, dynamic> json) {
+    totalItems = json['totalItems'];
+    if (json['data'] != null) {
+      data = <SearchData>[];
+      json['data'].forEach((v) {
+        data!.add(new SearchData.fromJson(v));
+      });
+    }
+    totalPages = json['totalPages'];
+    currentPage = json['currentPage'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['totalItems'] = this.totalItems;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    data['totalPages'] = this.totalPages;
+    data['currentPage'] = this.currentPage;
+    return data;
+  }
+}
+
+class SearchData {
+  String? id;
+  String? serviceName;
+  String? description;
+  String? icon;
+  String? fee;
+  String? type;
+  int? status;
+  SearchData();
+  SearchData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    serviceName = json['serviceName'];
+    description = json['description'];
+    icon = json['icon'];
+    fee = json['fee'];
+    type = json['type'];
+    status = json['status'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['serviceName'] = this.serviceName;
+    data['description'] = this.description;
+    data['icon'] = this.icon;
+    data['fee'] = this.fee;
+    data['type'] = this.type;
+    data['status'] = this.status;
     return data;
   }
 }

@@ -10,8 +10,9 @@ class SearchResultBloc {
     postSearchResult.close();
   }
 
-  postSearchResultRequest() async {
-    SearchResultMdl _searchResultMdl = await repository.getSearchResult();
+  postSearchResultRequest(int page, int size, String searchText) async {
+    SearchResultMdl _searchResultMdl =
+        await repository.getSearchResult(page, size, searchText);
     postSearchResult.sink.add(_searchResultMdl);
   }
 }

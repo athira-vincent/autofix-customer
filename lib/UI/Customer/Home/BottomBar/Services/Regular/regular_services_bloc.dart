@@ -11,9 +11,9 @@ class RegularServicesBloc {
     postRegularServices.close();
   }
 
-  postRegularServicesRequest() async {
+  postRegularServicesRequest(int page, int size) async {
     RegularServicesMdl _regularServicesMdl =
-        await repository.getRegularServices();
+        await repository.getRegularServices(page, size);
     postRegularServices.sink.add(_regularServicesMdl);
   }
 }
