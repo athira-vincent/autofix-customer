@@ -37,6 +37,7 @@ class Data {
 }
 
 class VehicleCreate {
+
   dynamic id;
   String? year;
   String? latitude;
@@ -49,6 +50,7 @@ class VehicleCreate {
   int? vehicleModelId;
   int? engineId;
   int? status;
+
   VehicleCreate.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     year = json['year'];
@@ -63,6 +65,7 @@ class VehicleCreate {
     engineId = json['engineId'];
     status = json['status'];
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
