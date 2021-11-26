@@ -197,7 +197,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
           FocusScope.of(context).unfocus();
-
         });
       }
     });
@@ -300,8 +299,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                    ))
-                                .toList(),
+                                    ),
+                            ).toList(),
                           ),
                         ),
                       ),
