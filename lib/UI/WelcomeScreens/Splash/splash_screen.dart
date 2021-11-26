@@ -56,16 +56,17 @@ class _SplashScreenState extends State<SplashScreen> {
       GqlClient.I.config(token: _token);
     }
 
-
-  /*  print('WalkThroughPage');
+    /*print('WalkThroughPage');
     Timer(
         Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => WalkThroughPages())));*/
+/*
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const MechanicListScreen()));
+*/
 
-   /* if(_isLoggedin != null || _isLoggedin == true){
+    if(_isLoggedin != null || _isLoggedin == true){
       if(userType == TextStrings.user_customer){
 
         if(_isDefaultVehicleAvailable == null || _isDefaultVehicleAvailable == false){
@@ -100,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen> {
             MaterialPageRoute(
                 builder: (context) => const UserSelectionScreen()));
       }
-    }*/
+    }
 
 
     /*if (isWalked == null || !isWalked) {
