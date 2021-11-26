@@ -9,7 +9,6 @@ class GqlClient {
   static GqlClient get instance => _instance;
   static GqlClient get I => _instance;
 
-
   final HttpLink httpLink = HttpLink(
     "https://api-gateway.techlabz.in/autoconnect-be",
   );
@@ -37,7 +36,8 @@ class GqlClient {
   Future<void> config({required String token}) async {
     if (token == "") {
       HttpClient _httpClient = new HttpClient();
-      _httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      _httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = new IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
         "https://api-gateway.techlabz.in/autoconnect-be",
@@ -54,7 +54,8 @@ class GqlClient {
         getToken: () async => '{x-token: $token"}',
       );
       HttpClient _httpClient = new HttpClient();
-      _httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      _httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = new IOClient(_httpClient);
       final HttpLink httpLink = HttpLink(
         "https://api-gateway.techlabz.in/autoconnect-be",
@@ -77,18 +78,17 @@ class GqlClient {
         print('Query ===========> $query');
       }
       HttpClient _httpClient = new HttpClient();
-      _httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      _httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = new IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink(
-              "https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
               defaultHeaders: <String, String>{
                 'x-token': "",
               },
-              httpClient: _ioClient
-          ));
+              httpClient: _ioClient));
       final QueryResult resp = await _graphClient
           .query(QueryOptions(
               fetchPolicy: FetchPolicy.networkOnly, document: gql(query)))
@@ -134,28 +134,28 @@ class GqlClient {
       };
     }
   }
-  Future<dynamic> query01(String query,String token,
+
+  Future<dynamic> query01(String query, String token,
       {bool enableDebug = false, required bool isTokenThere}) async {
     try {
       if (enableDebug) {
         print('Query ===========> $query');
       }
       HttpClient _httpClient = new HttpClient();
-      _httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      _httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = new IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink(
-              "https://api-gateway.techlabz.in/autoconnect-be",
+          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
               defaultHeaders: <String, String>{
                 'x-token': token,
               },
-              httpClient: _ioClient
-          ));
+              httpClient: _ioClient));
       final QueryResult resp = await _graphClient
           .query(QueryOptions(
-          fetchPolicy: FetchPolicy.networkOnly, document: gql(query)))
+              fetchPolicy: FetchPolicy.networkOnly, document: gql(query)))
           .timeout(const Duration(seconds: 60), onTimeout: () {
         throw NetworkException(
             message: 'Request Timed out, Please check your connection',
@@ -203,7 +203,6 @@ class GqlClient {
       {bool enableDebug = false,
       required Map<String, dynamic> variables,
       required bool isTokenThere}) async {
-
     try {
       if (enableDebug) {
         _showDebugMessage(query, 'GraphQL Query');
@@ -216,22 +215,18 @@ class GqlClient {
 
       // print("variables==========$variables");
 
-
-
       HttpClient _httpClient = new HttpClient();
-      _httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      _httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       IOClient _ioClient = new IOClient(_httpClient);
 
       GraphQLClient _graphClient = GraphQLClient(
           cache: GraphQLCache(store: HiveStore()),
-          link: HttpLink(
-            "https://api-gateway.techlabz.in/autoconnect-be",
-            defaultHeaders: <String, String>{
-              'x-token': "",
-            },
-            httpClient: _ioClient
-          ));
-
+          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+              defaultHeaders: <String, String>{
+                'x-token': "",
+              },
+              httpClient: _ioClient));
 
       final QueryResult resp = await _graphClient
           .mutate(MutationOptions(
@@ -244,7 +239,7 @@ class GqlClient {
             message: 'Request Timed out, Please check your connection',
             uri: null);
       });
-
+      print("hghffkjjk $resp");
       if (resp.exception != null) {
         print("gojogj ${resp.exception}");
         if (resp.exception!.graphqlErrors.isNotEmpty) {

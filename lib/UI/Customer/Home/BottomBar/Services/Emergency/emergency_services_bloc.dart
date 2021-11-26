@@ -11,9 +11,9 @@ class EmergencyServicesBloc {
     postEmergencyServices.close();
   }
 
-  postEmergencyServicesRequest(int page, int size) async {
+  postEmergencyServicesRequest(int page, int size, String token) async {
     EmergencyServicesMdl _emergencyServicesMdl =
-        await repository.getEmerGencyServices(page, size);
+        await repository.getEmerGencyServices(page, size, token);
     postEmergencyServices.sink.add(_emergencyServicesMdl);
   }
 }

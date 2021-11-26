@@ -7,5 +7,5 @@ class SharedPrefKeys {
   static const userEmail = "userEmail";
   static const userProfilePic = "userProfilePic";
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
-
+  static const isCustomerSignUp = "isCustomerSignUp";
 }
