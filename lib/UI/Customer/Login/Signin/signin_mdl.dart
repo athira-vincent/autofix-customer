@@ -38,9 +38,11 @@ class Data {
 
 class CustomerSignIn {
   String? token;
+  int? isProfileCompleted;
   Customer? customer;
   CustomerSignIn.fromJson(Map<String, dynamic> json) {
     token = json['token'];
+    isProfileCompleted = json['isProfileCompleted'];
     customer = json['customer'] != null
         ? new Customer.fromJson(json['customer'])
         : null;
@@ -50,6 +52,8 @@ class CustomerSignIn {
     if (this.customer != null) {
       data['customer'] = this.customer!.toJson();
     }
+    data['token'] = this.token;
+    data['isProfileCompleted'] = this.isProfileCompleted;
     return data;
   }
 }
@@ -61,6 +65,8 @@ class Customer {
   String? address;
   String? emailId;
   String? phoneNo;
+  String? profilePic;
+  int? isProfileCompleted;
   int? status;
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -69,6 +75,8 @@ class Customer {
     address = json['address'];
     emailId = json['emailId'];
     phoneNo = json['phoneNo'];
+    profilePic = json['profilePic'];
+    isProfileCompleted = json['isProfileCompleted'];
     status = json['status'];
   }
   Map<String, dynamic> toJson() {
@@ -80,6 +88,8 @@ class Customer {
     data['emailId'] = this.emailId;
     data['phoneNo'] = this.phoneNo;
     data['status'] = this.status;
+    data['profilePic'] = this.profilePic;
+    data['isProfileCompleted'] = this.isProfileCompleted;
     return data;
   }
 }

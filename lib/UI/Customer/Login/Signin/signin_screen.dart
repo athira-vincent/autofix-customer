@@ -69,6 +69,10 @@ class _SigninScreenState extends State<SigninScreen> {
                 value.data!.customerSignIn!.customer!.lastName.toString());
         shdPre.setString(SharedPrefKeys.userEmail,
             value.data!.customerSignIn!.customer!.emailId.toString());
+        shdPre.setString(SharedPrefKeys.userProfilePic,
+            value.data!.customerSignIn!.customer!.profilePic.toString());
+        shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
+            value.data!.customerSignIn!.customer!.isProfileCompleted!);
         setState(() {
           _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");
@@ -79,24 +83,22 @@ class _SigninScreenState extends State<SigninScreen> {
             backgroundColor: CustColors.peaGreen,
           ));
 
-          if(isDefaultVehicleAvailable() == true ){
+          if (value.data!.customerSignIn!.customer!.isProfileCompleted! == 2) {
+            setIsSignedIn();
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
             FocusScope.of(context).unfocus();
-          }else{
+          } else {
             setIsSignedIn();
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddVehicleScreen()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => AddVehicleScreen()));
           }
         });
       }
     });
   }
 
-  void setIsSignedIn()async {
-
+  void setIsSignedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(SharedPrefKeys.isUserLoggedIn, true);
   }
@@ -143,6 +145,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               color: Colors.white,
                               fontSize: 13,
                             ),
+
                             focusNode: _userNameFocusNode,
                             keyboardType: TextInputType.text,
                             validator:
@@ -152,14 +155,17 @@ class _SigninScreenState extends State<SigninScreen> {
                             // ],
                             controller: _userNameController,
                             decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Container(
                                   width: 5,
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
                                     height: 15,
                                     width: 15,
-                                    child: Image.asset(
-                                      'assets/images/username.png',
+                                    child: Container(
+                                      child: Image.asset(
+                                        'assets/images/username.png',
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -167,7 +173,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   minWidth: 25,
                                   minHeight: 25,
                                 ),
-                                labelText: 'User Name',
+                                hintText: 'User Name',
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.white,
@@ -190,9 +196,9 @@ class _SigninScreenState extends State<SigninScreen> {
                                   vertical: 7.8,
                                   horizontal: 20.0,
                                 ),
-                                labelStyle: TextStyle(
+                                hintStyle: TextStyle(
                                   fontFamily: 'Corbel_Light',
-                                  color: Colors.white,
+                                  color: Colors.white.withOpacity(.60),
                                   fontSize: 12,
                                 )),
                           ),
@@ -213,6 +219,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               fontSize: 13,
                             ),
                             decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Container(
                                   width: 5,
                                   alignment: Alignment.centerLeft,
@@ -234,9 +241,11 @@ class _SigninScreenState extends State<SigninScreen> {
                                 ),
                                 suffixIcon: Container(
                                   width: 5,
+                                  height: 10,
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
                                     iconSize: 15,
+                                    padding: EdgeInsets.zero,
                                     icon: Icon(
                                       // Based on passwordVisible state choose the icon
                                       _passwordVisible!
@@ -252,7 +261,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                     },
                                   ),
                                 ),
-                                labelText: 'Password',
+                                hintText: 'Password',
                                 errorMaxLines: 3,
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -276,9 +285,9 @@ class _SigninScreenState extends State<SigninScreen> {
                                   vertical: 7.8,
                                   horizontal: 20.0,
                                 ),
-                                labelStyle: TextStyle(
+                                hintStyle: TextStyle(
                                   fontFamily: 'Corbel_Light',
-                                  color: Colors.white,
+                                  color: Colors.white.withOpacity(.60),
                                   fontSize: 12,
                                 )),
                           ),
@@ -377,7 +386,6 @@ class _SigninScreenState extends State<SigninScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => SignupScreen()));
-
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 22),
@@ -433,8 +441,9 @@ class _SigninScreenState extends State<SigninScreen> {
 
   Future<bool?> isDefaultVehicleAvailable() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? _isDefaultVehicleAvailable = prefs.getBool(SharedPrefKeys.isUserLoggedIn);
-   // prefs.setBool(SharedPrefKeys.isWalked, true);
+    bool? _isDefaultVehicleAvailable =
+        prefs.getBool(SharedPrefKeys.isUserLoggedIn);
+    // prefs.setBool(SharedPrefKeys.isWalked, true);
     return _isDefaultVehicleAvailable;
   }
 }

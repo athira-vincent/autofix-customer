@@ -61,7 +61,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
            Navigator.pushReplacement(context,
                          MaterialPageRoute(builder: (context) => const SigninScreen()));
-          //           FocusScope.of(context).unfocus();
+                     FocusScope.of(context).unfocus();
         });
       }
     });

@@ -40,13 +40,15 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? _isLoggedin = _shdPre.getBool(SharedPrefKeys.isUserLoggedIn);
     bool? isWalked = _shdPre.getBool(SharedPrefKeys.isWalked);
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
-    bool? _isDefaultVehicleAvailable = _shdPre.getBool(SharedPrefKeys.isDefaultVehicleAvailable);
+    int? _isDefaultVehicleAvailable =
+        _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
 
 
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
-    print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
+    print(
+        "_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
@@ -57,6 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     /*print('WalkThroughPage');
+
     Timer(
         Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -66,30 +69,27 @@ class _SplashScreenState extends State<SplashScreen> {
         context, MaterialPageRoute(builder: (context) => const MechanicListScreen()));
 */
 
-    if(_isLoggedin != null || _isLoggedin == true){
-      if(userType == TextStrings.user_customer){
-
-        if(_isDefaultVehicleAvailable == null || _isDefaultVehicleAvailable == false){
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const AddVehicleScreen()));
-        }else{
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+    if (_isLoggedin != null || _isLoggedin == true) {
+      if (userType == TextStrings.user_customer) {
+        if (_isDefaultVehicleAvailable == null ||
+            _isDefaultVehicleAvailable == 1) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => AddVehicleScreen()));
+        } else {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
         }
-
-      }
-      else if(userType == TextStrings.user_mechanic){
+      } else if (userType == TextStrings.user_mechanic) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const MechanicHomeScreen()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MechanicHomeScreen()));
+      } else if (userType == TextStrings.user_vendor) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
       }
-      else if(userType == TextStrings.user_vendor){
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
-      }
-
-    }else {
-      if(isWalked == null || isWalked == false){
-
+    } else {
+      if (isWalked == null || isWalked == false) {
         print('WalkThroughPage');
         Timer(
             Duration(seconds: 3),
