@@ -9,4 +9,6 @@ class CustColors {
   static const greyText = Color(0xff969696);
   static const lightGrey = Color(0xffe5e5e5);
   static const bgGrey = Color(0xfff1f3f5);
+  static const textgrey = Color(0xff92a1b1);
+  static const red = Color(0xffed1e30);
 }

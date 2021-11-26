@@ -78,7 +78,7 @@ class Repository {
       _vehicleDetailsApiProvider.getVehicleDetailsRequest();
   //Add Vehicle
   Future<dynamic> getAddVehicle(
-      String token,
+          String token,
           String year,
           String latitude,
           String longitude,
@@ -88,8 +88,17 @@ class Repository {
           int makeId,
           int vehicleModelId,
           int engineId) =>
-      _addVehicleApiProvider.getAddVehicleRequest(token,year, latitude, longitude,
-          milege, lastMaintenance, interval, makeId, vehicleModelId, engineId);
+      _addVehicleApiProvider.getAddVehicleRequest(
+          token,
+          year,
+          latitude,
+          longitude,
+          milege,
+          lastMaintenance,
+          interval,
+          makeId,
+          vehicleModelId,
+          engineId);
   //Bookings List
   Future<dynamic> getBookingsList() =>
       _bookingsListApiProvider.getBookingsListRequest();
@@ -97,13 +106,14 @@ class Repository {
   Future<dynamic> getBookingsDetails() =>
       _bookingsDetailsApiProvider.getBookingsDetailRequest();
   //All Model
-  Future<dynamic> getAllModel(int id,String token) =>
-      _allModelApiProvider.getAllModelRequest(id,token);
+  Future<dynamic> getAllModel(int id, String token) =>
+      _allModelApiProvider.getAllModelRequest(id, token);
   //All Engine
   Future<dynamic> getAllEngine(int id, String token) =>
       _allEngineApiProvider.getAllEngineRequest(id, token);
   //All Make
-  Future<dynamic> getAllMake(String token) => _allMakeApiProvider.getAllMakeRequest(token);
+  Future<dynamic> getAllMake(String token) =>
+      _allMakeApiProvider.getAllMakeRequest(token);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
   //Top Brands
@@ -111,9 +121,10 @@ class Repository {
   //Top Shops
   Future<dynamic> getTopShops() => _topShopsApiProvider.getTopShopsRequest();
   //Regular Service
-  Future<dynamic> getRegularServices(int page, int size) =>
-      _regularServicesApiProvider.getRegularServicesRequest(page, size);
+  Future<dynamic> getRegularServices(int page, int size, String token) =>
+      _regularServicesApiProvider.getRegularServicesRequest(page, size, token);
   //Emergency Service
-  Future<dynamic> getEmerGencyServices(int page, int size) =>
-      _emergencyServicesApiProvider.getEmergencyServicesRequest(page, size);
+  Future<dynamic> getEmerGencyServices(int page, int size, String token) =>
+      _emergencyServicesApiProvider.getEmergencyServicesRequest(
+          page, size, token);
 }

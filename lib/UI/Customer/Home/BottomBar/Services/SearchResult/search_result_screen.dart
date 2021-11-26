@@ -67,18 +67,22 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: Container(),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              color: Colors.black,
-              icon: Icon(Icons.close),
+          leading: Container(
+            width: 25,
+            height: 25,
+            margin: EdgeInsets.only(top: 15, bottom: 15, left: 21),
+            child: Image.asset('assets/images/circle_back.png'),
+          ),
+          title: Text(
+            'Find Services',
+            style: TextStyle(
+              color: CustColors.blue,
+              fontSize: 17,
+              fontFamily: 'Corbel_Regular',
             ),
-          ],
+          ),
         ),
       ),
       body: Column(

@@ -20,6 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
   String _userName = "";
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  double per = .10;
+  double _setValue(double value) {
+    return value * per + value;
+  }
 
   @override
   void initState() {
@@ -41,8 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
             margin: EdgeInsets.only(bottom: 12),
             child: Image.asset(
               'assets/images/profile_blue.png',
-              width: 29,
-              height: 29,
+              width: _setValue(22.4),
+              height: _setValue(27.2),
             ),
           ),
           label: 'Profile'),
@@ -51,8 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
             margin: EdgeInsets.only(bottom: 10),
             child: Image.asset(
               'assets/images/spair_parts.png',
-              width: 29,
-              height: 29,
+              width: _setValue(29),
+              height: _setValue(29),
             ),
           ),
           label: 'Spare Parts'),
@@ -61,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
             margin: EdgeInsets.only(bottom: 12),
             child: Image.asset(
               'assets/images/services.png',
-              width: 28.4,
-              height: 27.2,
+              width: _setValue(28.4),
+              height: _setValue(27.2),
             ),
           ),
           label: 'Services'),
@@ -132,7 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
               margin: EdgeInsets.only(
                 top: MediaQuery.of(context).padding.top,
               ),
-              child: Image.asset('assets/images/app_bar_arc.png')),
+              child: Image.asset(
+                'assets/images/app_bar_arc.png',
+              )),
           Container(
             width: double.infinity,
             margin: EdgeInsets.only(
@@ -162,8 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SizedBox(
             height: 75,
             child: BottomNavigationBar(
-              selectedLabelStyle: TextStyle(fontFamily: 'Corbel_Light'),
-              unselectedLabelStyle: TextStyle(fontFamily: 'Corbel_Light'),
+              selectedLabelStyle:
+                  TextStyle(fontFamily: 'Corbel_Light', fontSize: 9.5),
+              unselectedLabelStyle:
+                  TextStyle(fontFamily: 'Corbel_Light', fontSize: 9.5),
               items: bottomNavigationBarItems,
               currentIndex: _index,
               backgroundColor: CustColors.blue,

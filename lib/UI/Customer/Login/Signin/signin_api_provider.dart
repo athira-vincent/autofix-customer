@@ -6,6 +6,7 @@ class SigninApiProvider {
   Future<SigninMdl> getSignInRequest(String userName, String password) async {
     Map<String, dynamic> _resp =
         await _queryProvider.signIn(userName, password);
+    print("hghffkjjk $_resp");
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

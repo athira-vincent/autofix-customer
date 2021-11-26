@@ -4,9 +4,9 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency
 class EmergencyServicesApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<EmergencyServicesMdl> getEmergencyServicesRequest(
-      int page, int size) async {
+      int page, int size, String token) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.getEmeregencyServices(page, size);
+        await _queryProvider.getEmeregencyServices(page, size, token);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

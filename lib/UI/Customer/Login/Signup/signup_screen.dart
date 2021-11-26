@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/states_mdl.dart';
@@ -6,6 +7,7 @@ import 'package:auto_fix/UI/Customer/Login/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -44,6 +46,12 @@ class _SignupScreenState extends State<SignupScreen> {
     _getSignUpRes();
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
+    _setSignUpVisitFlag();
+  }
+
+  _setSignUpVisitFlag() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
   }
 
   @override
@@ -74,9 +82,14 @@ class _SignupScreenState extends State<SignupScreen> {
           ));
         });
       } else {
-        setState(() {
+        setState(() async {
           print("errrrorr 01");
           _isLoading = false;
+          SharedPreferences shdPre = await SharedPreferences.getInstance();
+          shdPre.setString(SharedPrefKeys.userProfilePic,
+              value.data!.customerSignUp!.customer!.profilePic.toString());
+          shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
+              value.data!.customerSignUp!.customer!.isProfileCompleted!);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
@@ -137,7 +150,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       ],
                       controller: _firstNameController,
                       decoration: InputDecoration(
-                          labelText: 'Name',
+                          isDense: true,
+                          hintText: 'Name',
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
@@ -159,7 +173,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 7.8,
                           ),
-                          labelStyle: TextStyle(
+                          hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
@@ -188,7 +202,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       ],
                       controller: _userNameController,
                       decoration: InputDecoration(
-                          labelText: 'User Name',
+                          isDense: true,
+                          hintText: 'User Name',
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
@@ -210,7 +225,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 7.8,
                           ),
-                          labelStyle: TextStyle(
+                          hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
@@ -232,7 +247,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         fontSize: 13,
                       ),
                       decoration: InputDecoration(
-                          labelText: 'Email ID*',
+                          isDense: true,
+                          hintText: 'Email ID*',
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
@@ -254,7 +270,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 7.8,
                           ),
-                          labelStyle: TextStyle(
+                          hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
@@ -286,7 +302,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ],
                           controller: _stateController,
                           decoration: InputDecoration(
-                              labelText: 'State',
+                              isDense: true,
+                              hintText: 'State',
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.white,
@@ -308,7 +325,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               contentPadding: const EdgeInsets.symmetric(
                                 vertical: 7.8,
                               ),
-                              labelStyle: TextStyle(
+                              hintStyle: TextStyle(
                                 fontFamily: 'Corbel_Light',
                                 color: Colors.white,
                                 fontSize: 12,
@@ -342,7 +359,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   fontSize: 13,
                                 ),
                                 decoration: InputDecoration(
-                                    labelText: 'Phone Number*',
+                                    isDense: true,
+                                    hintText: 'Phone Number*',
                                     border: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Colors.white,
@@ -364,7 +382,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     contentPadding: const EdgeInsets.symmetric(
                                       vertical: 7.8,
                                     ),
-                                    labelStyle: TextStyle(
+                                    hintStyle: TextStyle(
                                       fontFamily: 'Corbel_Light',
                                       color: Colors.white,
                                       fontSize: 12,
@@ -390,7 +408,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         fontSize: 13,
                       ),
                       decoration: InputDecoration(
-                          labelText: 'Password*',
+                          isDense: true,
+                          hintText: 'Password*',
                           errorMaxLines: 3,
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(
@@ -413,7 +432,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 7.8,
                           ),
-                          labelStyle: TextStyle(
+                          hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
@@ -435,7 +454,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         fontSize: 13,
                       ),
                       decoration: InputDecoration(
-                          labelText: 'Confirm Password*',
+                          isDense: true,
+                          hintText: 'Confirm Password*',
                           errorMaxLines: 3,
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(
@@ -458,7 +478,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 7.8,
                           ),
-                          labelStyle: TextStyle(
+                          hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
                             color: Colors.white,
                             fontSize: 12,
@@ -549,6 +569,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       Container(
                         width: double.infinity,
+                        margin: EdgeInsets.only(top: 40),
                         alignment: Alignment.bottomRight,
                         child: Image.asset(
                           'assets/images/signup_arc.png',
@@ -556,7 +577,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       Container(
                           width: double.infinity,
-                          height: 60,
                           alignment: Alignment.bottomLeft,
                           margin: EdgeInsets.only(
                               left: 66, bottom: 26.5, right: 78),
