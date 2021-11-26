@@ -48,9 +48,9 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
 
           Positioned(
             height: 50,
-            bottom: 20,
-            left: 20,
-            right: 20,
+            bottom: 33.3,
+            left: 23.5,
+            right: 23.5,
             child: currentIndex != slides.length - 1 ?
 
             Row(
@@ -138,16 +138,15 @@ class SliderTile extends StatelessWidget {
 
   final smallTextStyle = TextStyle(
     color: Colors.white,
-    fontSize: 15,
-    // height: 5,
-    // fontFamily: 'Corbel-Regular',
+    fontSize: 17,
+     height: 1.5,
+     fontFamily: 'Corbel_Regular',
   );
 
   final largeTextStyle = TextStyle(
     color: Colors.white,
-    fontSize: 30,
-    // height: 8,
-    // fontFamily: 'Corbel-Bold',
+    fontSize: 32,
+     fontFamily: 'Corbel_Bold',
     fontWeight: FontWeight.bold,
   );
 
@@ -185,39 +184,49 @@ class SliderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-
+      alignment: Alignment.bottomCenter,
       children: [
         imageAsset,
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: Image.asset("assets/images/walkthrough_blue_filled_arc.png"),
+        Wrap(
+          children: [
+            AspectRatio(
+              aspectRatio: 1.56,
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/walkthrough_blue_filled_arc.png",
+                    ),
+                  ),
+                ),
+                child: Container(
+                  margin: EdgeInsets.only(left: 23.5,right: 23.5,bottom: 33.3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+
+                      Container(
+                        margin: EdgeInsets.only(top: 79.7,),
+                        child: Text(title,style: largeTextStyle,),),
+
+                      Container(
+                        margin: EdgeInsets.only(right: 68,top: 8.5),
+                        child: Text(desc,
+                          style: smallTextStyle,
+                          softWrap: true,
+                          maxLines: 2,),),
+
+                      const SizedBox(height: 17.2,),
+
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        Positioned(
-          height: 150,
-          bottom: 30,
-          left: 20,
-          right: 20,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 4, // 20%
-                child: Text(title,style: largeTextStyle,),
-              ),
 
-              Expanded(
-                flex: 3, // 20%
-                child: Text(desc,style: smallTextStyle,),
-              ),
-
-              Expanded(
-                flex: 3,
-                child: const SizedBox(height: 10,),
-              ),
-
-            ],
-          ),
-        ),
       ],
 
       );

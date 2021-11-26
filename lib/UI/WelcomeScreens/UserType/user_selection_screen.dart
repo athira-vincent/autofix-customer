@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
+import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,10 +57,19 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             await SharedPreferences.getInstance();
                         shdPre.setString(
                             SharedPrefKeys.userType, TextStrings.user_customer);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SigninScreen()));
+                        bool? flag =
+                            shdPre.getBool(SharedPrefKeys.isCustomerSignUp);
+                        if (flag != null) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SigninScreen()));
+                        } else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const SignupScreen()));
+                        }
                       },
                       child: Column(
                         children: [

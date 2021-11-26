@@ -15,7 +15,7 @@ class AddVehicleApiProvider {
       int vehicleModelId,
       int engineId) async {
     Map<String, dynamic> _resp = await _queryProvider.addVehicle(
-      token,
+        token,
         year,
         latitude,
         longitude,
@@ -25,6 +25,7 @@ class AddVehicleApiProvider {
         makeId,
         vehicleModelId,
         engineId);
+    print("cchchc $_resp");
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

@@ -1,4 +1,5 @@
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency_services_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Regular/regular_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Ads/ads_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/Bookings/BookingsDetails/bookings_details_api_provider.dart';
@@ -42,6 +43,7 @@ class Repository {
   final _topShopsApiProvider = TopShopsApiProvider();
   final _regularServicesApiProvider = RegularServicesApiProvider();
   final _emergencyServicesApiProvider = EmergencyServicesApiProvider();
+  final _allMechanicListApiProvider = MechanicListApiProvider();
   //SignUp
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
@@ -78,7 +80,7 @@ class Repository {
       _vehicleDetailsApiProvider.getVehicleDetailsRequest();
   //Add Vehicle
   Future<dynamic> getAddVehicle(
-      String token,
+          String token,
           String year,
           String latitude,
           String longitude,
@@ -88,8 +90,17 @@ class Repository {
           int makeId,
           int vehicleModelId,
           int engineId) =>
-      _addVehicleApiProvider.getAddVehicleRequest(token,year, latitude, longitude,
-          milege, lastMaintenance, interval, makeId, vehicleModelId, engineId);
+      _addVehicleApiProvider.getAddVehicleRequest(
+          token,
+          year,
+          latitude,
+          longitude,
+          milege,
+          lastMaintenance,
+          interval,
+          makeId,
+          vehicleModelId,
+          engineId);
   //Bookings List
   Future<dynamic> getBookingsList() =>
       _bookingsListApiProvider.getBookingsListRequest();
@@ -97,13 +108,17 @@ class Repository {
   Future<dynamic> getBookingsDetails() =>
       _bookingsDetailsApiProvider.getBookingsDetailRequest();
   //All Model
-  Future<dynamic> getAllModel(int id,String token) =>
-      _allModelApiProvider.getAllModelRequest(id,token);
+  Future<dynamic> getAllModel(int id, String token) =>
+      _allModelApiProvider.getAllModelRequest(id, token);
   //All Engine
   Future<dynamic> getAllEngine(int id, String token) =>
       _allEngineApiProvider.getAllEngineRequest(id, token);
   //All Make
   Future<dynamic> getAllMake(String token) => _allMakeApiProvider.getAllMakeRequest(token);
+
+  //All Mechanic List
+  Future<dynamic> getAllMechanicList(String token,int page, int size) =>
+      _allMechanicListApiProvider.getAllMechanicListRequest(token, page, size);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
   //Top Brands
@@ -111,9 +126,10 @@ class Repository {
   //Top Shops
   Future<dynamic> getTopShops() => _topShopsApiProvider.getTopShopsRequest();
   //Regular Service
-  Future<dynamic> getRegularServices(int page, int size) =>
-      _regularServicesApiProvider.getRegularServicesRequest(page, size);
+  Future<dynamic> getRegularServices(int page, int size, String token) =>
+      _regularServicesApiProvider.getRegularServicesRequest(page, size, token);
   //Emergency Service
-  Future<dynamic> getEmerGencyServices(int page, int size) =>
-      _emergencyServicesApiProvider.getEmergencyServicesRequest(page, size);
+  Future<dynamic> getEmerGencyServices(int page, int size, String token) =>
+      _emergencyServicesApiProvider.getEmergencyServicesRequest(
+          page, size, token);
 }

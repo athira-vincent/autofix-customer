@@ -18,30 +18,54 @@ class EmergencyServicesMdl {
 }
 
 class Data {
-  List<EmergencyList>? emergencyList;
+  RegularList? emergencyList;
 
   Data(this.emergencyList);
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['emergencyList'] != null) {
-      emergencyList = <EmergencyList>[];
-      json['emergencyList'].forEach((v) {
-        emergencyList!.add(new EmergencyList.fromJson(v));
-      });
-    }
+    emergencyList = json['emergencyList'] != null
+        ? new RegularList.fromJson(json['emergencyList'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (this.emergencyList != null) {
-      data['emergencyList'] =
-          this.emergencyList!.map((v) => v.toJson()).toList();
+      data['emergencyList'] = this.emergencyList!.toJson();
     }
     return data;
   }
 }
 
-class EmergencyList {
+class RegularList {
+  int? totalItems;
+  int? totalPages;
+  int? currentPage;
+  List<EmergencyData>? regularData;
+  RegularList.fromJson(Map<String, dynamic> json) {
+    totalItems = json['totalItems'];
+    totalPages = json['totalPages'];
+    currentPage = json['currentPage'];
+    if (json['data'] != null) {
+      regularData = <EmergencyData>[];
+      json['data'].forEach((v) {
+        regularData!.add(new EmergencyData.fromJson(v));
+      });
+    }
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['totalItems'] = this.totalItems;
+    data['totalPages'] = this.totalPages;
+    data['currentPage'] = this.currentPage;
+    if (this.regularData != null) {
+      data['data'] = this.regularData!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class EmergencyData {
   int? id;
   String? serviceName;
   String? description;
@@ -49,7 +73,7 @@ class EmergencyList {
   String? fee;
   String? type;
   int? status;
-  EmergencyList.fromJson(Map<String, dynamic> json) {
+  EmergencyData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     serviceName = json['serviceName'];
     description = json['description'];

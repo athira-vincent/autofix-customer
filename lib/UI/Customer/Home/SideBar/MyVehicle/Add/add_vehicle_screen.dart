@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_bl
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,18 +25,16 @@ class AddVehicleScreen extends StatefulWidget {
 }
 
 class _AddVehicleScreenState extends State<AddVehicleScreen> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
-  TextEditingController _yearController =TextEditingController();
+  TextEditingController _yearController = TextEditingController();
   TextEditingController _maintenanceController = TextEditingController();
   TextEditingController _mileageController = TextEditingController();
 
   String token = "";
 
-  //final items = ['item1','item2','item3','item4','item5'];
-  List<MakeDetails>? makeDetails;
+  List<MakeDetails>? makeDetails = [];
   MakeDetails? value;
 
   List<ModelDetails>? modelDetails = [];
@@ -92,28 +91,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   void onFocusChange() {
     setState(() {
-      /*_labelStyleUserName = _userNameFocusNode.hasFocus
-          ? TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      )
-          : TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      );
-      _labelStylePassword = _passwordFocusNode.hasFocus
-          ? TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      )
-          : TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      );*/
+
     });
   }
 
@@ -205,9 +183,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
               "id : " +
               value.data!.vehicleCreate!.id.toString() +
               "Customer Id : " +
-              value.data!.vehicleCreate!.customerId.toString()+
-              "Last Maintenance : "+
-              value.data!.vehicleCreate!.lastMaintenance.toString()+
+              value.data!.vehicleCreate!.customerId.toString() +
+              "Last Maintenance : " +
+              value.data!.vehicleCreate!.lastMaintenance.toString() +
               ">>>>>>>>>");
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
@@ -215,10 +193,10 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.darkBlue,
           ));
-          /*Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
           FocusScope.of(context).unfocus();
-
+          setIsSignedIn();
         });
       }
     });
@@ -280,7 +258,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                     ),
                   ],
                 ),
-
                 Row(
                   children: [
                     Expanded(
@@ -321,15 +298,14 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                    ))
-                                .toList(),
+                                    ),
+                            ).toList(),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-
                 Row(
                   children: [
                     Expanded(
@@ -359,29 +335,32 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 print(engineVal);
                               });
                             },
-                              items: engineDetails!
-                                  .map((e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e.engineName.toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                              ))
-                                  .toList(),
+                            items: engineDetails!
+                                .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(
+                                        e.engineName.toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ))
+                                .toList(),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-
                 Row(
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text("Car Year : ",style: TextStyle(fontSize: 18),),),
+                      child: Text(
+                        "Car Year : ",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
                     Expanded(
                       flex: 5,
                       child: Container(
@@ -422,12 +401,15 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                     ),
                   ],
                 ),
-
                 Row(
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text("Last Maintenance : ",style: TextStyle(fontSize: 18),),),
+                      child: Text(
+                        "Last Maintenance : ",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
                     Expanded(
                       flex: 5,
                       child: TextFormField(
@@ -465,12 +447,15 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                     ),
                   ],
                 ),
-
                 Row(
                   children: [
                     Expanded(
                       flex: 5,
-                      child: Text("Car Mileage : ",style: TextStyle(fontSize: 18),),),
+                      child: Text(
+                        "Car Mileage : ",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
                     Expanded(
                       flex: 5,
                       child: TextFormField(
@@ -508,51 +493,54 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                     ),
                   ],
                 ),
-
                 Container(
                   child: _isLoading
-                   ? Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          CustColors.darkBlue),
-                    ),
-                  )
-                  : Container(
-                      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                      color: Colors.blue,
-                      child: MaterialButton(
-                        onPressed: (){
-                          if (_formKey.currentState!.validate()) {
-                            _addVehicleBloc.postAddVehicleRequest(
-                                token,
-                                _yearController.text,
-                                "10.551123",
-                                "76.066753",
-                                _mileageController.text,
-                                _maintenanceController.text,
-                                "3",
-                                int.parse(value!.id!),
-                                int.parse(modelValue!.id!),
-                                int.parse(engineValue!.id!)
-                                /*_userNameController.text,
-                                _passwordController.text*/);
-                            setState(() {
-                              _isLoading = true;
-                            });
-                          } else {
-                            setState(() => _autoValidate =
-                                AutovalidateMode.always);
-                          }
-                        },
-                        child: Center(
-                          child: Text(
-                            "Save",
-                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color: Colors.white),
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CustColors.darkBlue),
+                          ),
+                        )
+                      : Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          color: Colors.blue,
+                          child: MaterialButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _addVehicleBloc.postAddVehicleRequest(
+                                    token,
+                                    _yearController.text,
+                                    "10.551123",
+                                    "76.066753",
+                                    _mileageController.text,
+                                    _maintenanceController.text,
+                                    "3",
+                                    int.parse(value!.id!),
+                                    int.parse(modelValue!.id!),
+                                    int.parse(engineValue!.id!)
+                                    /*_userNameController.text,
+                                _passwordController.text*/
+                                    );
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                              } else {
+                                setState(() =>
+                                    _autoValidate = AutovalidateMode.always);
+                              }
+                            },
+                            child: Center(
+                              child: Text(
+                                "Save",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-
                 ),
 
                 /* Expanded(child: child
@@ -579,7 +567,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   void setIsSignedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(SharedPrefKeys.isDefaultVehicleAvailable, true);
+    prefs.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
   }
 
   DropdownMenuItem<MakeDetails> buildMenuItem(MakeDetails item) =>

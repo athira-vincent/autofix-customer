@@ -15,10 +15,13 @@ class QueryProvider {
       address
       emailId
       phoneNo
+      profilePic
+      isProfileCompleted
       status
     }
+    isProfileCompleted
+   }  
   }
-}
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
@@ -29,18 +32,21 @@ class QueryProvider {
     String _query = """ 
     mutation{
     customersSignUp(firstName: "$firstName", lastName: "$userName", address: "$state", emailId: "$email", phoneNo: "$phoneNo", password: "$password"){
-      token
-      customer {
-        id
-        firstName
-        lastName
-        address
-        emailId
-        phoneNo
-        status
+    token
+    customer {
+      id
+      firstName
+      lastName
+      address
+      emailId
+      phoneNo
+      profilePic
+      isProfileCompleted
+      status
+      }
+    isProfileCompleted
       }
     }
-  }
     """;
     log(_query);
     return await GqlClient.I.mutation(_query,
@@ -112,7 +118,11 @@ class QueryProvider {
   }
 
   selectCar() {}
-  viewVehicle() {}
+
+  viewVehicle() {
+
+  }
+
   deleteVehicle() {}
   vehicleDetails() async {
     String _query = """
@@ -202,13 +212,13 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.query01(_query,token,
-        enableDebug: true, isTokenThere: true);
+    return await GqlClient.I
+        .query01(_query, token, enableDebug: true, isTokenThere: true);
   }
 
   bookingsList() {}
   bookingDetail() {}
-  allModel(int id,String token) async {
+  allModel(int id, String token) async {
     String _query = """
       query{
   modelDetails(id: $id) {
@@ -227,9 +237,12 @@ class QueryProvider {
 }
      """;
     log(_query);
-    return await GqlClient.I.query01(_query, token,
-        enableDebug: true, isTokenThere: true,);
-
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
 
   allMake(String token) async {
@@ -244,9 +257,12 @@ class QueryProvider {
 }
 """;
     log(_query);
-    return await GqlClient.I.query01(_query,token,
-        enableDebug: true, isTokenThere: true,);
-
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
 
   allEngine(int id, String token) async {
@@ -269,9 +285,12 @@ class QueryProvider {
   }
      """;
     log(_query);
-    return await GqlClient.I.query01(_query,token,
-        enableDebug: true, isTokenThere: true, );
-
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
 
   getAds() {}
@@ -340,6 +359,71 @@ class QueryProvider {
       enableDebug: true,
       isTokenThere: false,
     );
+  }
+
+  getAllMechanicList(String token,int page,int size) async{
+    String _query = """
+    query{
+  mechanicList(page: $page, size: $size){
+    totalItems
+    data {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+      serviceData {
+        id
+        status
+        serviceId
+        mechanicId
+        service {
+          id
+          serviceName
+          description
+          icon
+          fee
+          type
+          status
+        }
+      }
+      vehicleData {
+        id
+        status
+        makeId
+        mechanicId
+        make {
+          id
+          makeName
+          description
+          status
+        }
+      }
+    }
+    totalPages
+    currentPage
+  }
+}
+    """;
+    log(_query);
+    return await GqlClient.I.query01(_query,token,
+      enableDebug: true, isTokenThere: true, );
   }
 
   //------------------------------- Mechanic API --------------------------------
@@ -437,45 +521,57 @@ class QueryProvider {
     );
   }
 
-  getRegularServices(int page, int size) async {
+  getRegularServices(int page, int size, String token) async {
     String _query = """
       query{
           emergencyList(page: $page, size: $size, id: "1"){
-    id
-    serviceName
-    description
-    icon
-    fee
-    type
-    status
-  }
-}
+                  totalItems
+                  data {
+                    id
+                    serviceName
+                    description
+                    icon
+                    fee
+                    type
+                    status
+                  }
+                  totalPages
+                  currentPage
+                }
+      }
      """;
     log(_query);
-    return await GqlClient.I.query(
+    return await GqlClient.I.query01(
       _query,
+      token,
       enableDebug: true,
       isTokenThere: false,
     );
   }
 
-  getEmeregencyServices(int page, int size) async {
+  getEmeregencyServices(int page, int size, String token) async {
     String _query = """
       query{
           emergencyList(page: $page, size: $size, id: "2"){
-    id
-    serviceName
-    description
-    icon
-    fee
-    type
-    status
-  }
-}
+                  totalItems
+                  data {
+                    id
+                    serviceName
+                    description
+                    icon
+                    fee
+                    type
+                    status
+                  }
+                  totalPages
+                  currentPage
+                }
+      }
      """;
     log(_query);
-    return await GqlClient.I.query(
+    return await GqlClient.I.query01(
       _query,
+      token,
       enableDebug: true,
       isTokenThere: false,
     );

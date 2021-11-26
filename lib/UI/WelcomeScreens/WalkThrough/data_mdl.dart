@@ -45,7 +45,8 @@ List<SliderModel> getSlides(){
   List<SliderModel> slides = <SliderModel>[];
 
   SliderModel sliderModel = new SliderModel(
-    desc: "We provide services for Customers,  Mechanics, Spare parts vendors",
+    desc: "We provide services for Customers,  Mechanics, "
+        "Spare parts vendors",
     title: "Our Services",
     imageAsset: Container(
         child: Stack(
