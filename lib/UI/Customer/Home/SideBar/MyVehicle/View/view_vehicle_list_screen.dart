@@ -39,7 +39,9 @@ class _ViewVehicleListScreenState extends State<ViewVehicleListScreen> {
           ));
         });
       } else {
-        setState(() {});
+        setState(() {
+
+        });
       }
     });
   }

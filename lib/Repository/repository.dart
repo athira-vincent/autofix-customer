@@ -1,4 +1,5 @@
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency_services_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Regular/regular_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Ads/ads_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/Bookings/BookingsDetails/bookings_details_api_provider.dart';
@@ -42,6 +43,7 @@ class Repository {
   final _topShopsApiProvider = TopShopsApiProvider();
   final _regularServicesApiProvider = RegularServicesApiProvider();
   final _emergencyServicesApiProvider = EmergencyServicesApiProvider();
+  final _allMechanicListApiProvider = MechanicListApiProvider();
   //SignUp
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
@@ -112,8 +114,11 @@ class Repository {
   Future<dynamic> getAllEngine(int id, String token) =>
       _allEngineApiProvider.getAllEngineRequest(id, token);
   //All Make
-  Future<dynamic> getAllMake(String token) =>
-      _allMakeApiProvider.getAllMakeRequest(token);
+  Future<dynamic> getAllMake(String token) => _allMakeApiProvider.getAllMakeRequest(token);
+
+  //All Mechanic List
+  Future<dynamic> getAllMechanicList(String token,int page, int size) =>
+      _allMechanicListApiProvider.getAllMechanicListRequest(token, page, size);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
   //Top Brands

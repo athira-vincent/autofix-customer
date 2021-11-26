@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_bl
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   String token = "";
 
-  //final items = ['item1','item2','item3','item4','item5'];
   List<MakeDetails>? makeDetails = [];
   MakeDetails? value;
 
@@ -91,28 +91,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   void onFocusChange() {
     setState(() {
-      /*_labelStyleUserName = _userNameFocusNode.hasFocus
-          ? TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      )
-          : TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      );
-      _labelStylePassword = _passwordFocusNode.hasFocus
-          ? TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      )
-          : TextStyle(
-        fontFamily: 'Montserrat_Light',
-        color: Colors.white,
-        fontSize: 12,
-      );*/
+
     });
   }
 
@@ -214,9 +193,10 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.darkBlue,
           ));
-          /*Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
           FocusScope.of(context).unfocus();
+          setIsSignedIn();
         });
       }
     });
@@ -318,8 +298,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                    ))
-                                .toList(),
+                                    ),
+                            ).toList(),
                           ),
                         ),
                       ),
@@ -587,7 +567,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   void setIsSignedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(SharedPrefKeys.isDefaultVehicleAvailable, true);
+    prefs.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
   }
 
   DropdownMenuItem<MakeDetails> buildMenuItem(MakeDetails item) =>

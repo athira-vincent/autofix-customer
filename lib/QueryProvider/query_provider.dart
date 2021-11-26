@@ -118,7 +118,11 @@ class QueryProvider {
   }
 
   selectCar() {}
-  viewVehicle() {}
+
+  viewVehicle() {
+
+  }
+
   deleteVehicle() {}
   vehicleDetails() async {
     String _query = """
@@ -355,6 +359,71 @@ class QueryProvider {
       enableDebug: true,
       isTokenThere: false,
     );
+  }
+
+  getAllMechanicList(String token,int page,int size) async{
+    String _query = """
+    query{
+  mechanicList(page: $page, size: $size){
+    totalItems
+    data {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+      serviceData {
+        id
+        status
+        serviceId
+        mechanicId
+        service {
+          id
+          serviceName
+          description
+          icon
+          fee
+          type
+          status
+        }
+      }
+      vehicleData {
+        id
+        status
+        makeId
+        mechanicId
+        make {
+          id
+          makeName
+          description
+          status
+        }
+      }
+    }
+    totalPages
+    currentPage
+  }
+}
+    """;
+    log(_query);
+    return await GqlClient.I.query01(_query,token,
+      enableDebug: true, isTokenThere: true, );
   }
 
   //------------------------------- Mechanic API --------------------------------
