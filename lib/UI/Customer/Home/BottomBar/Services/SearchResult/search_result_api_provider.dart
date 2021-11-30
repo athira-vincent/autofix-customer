@@ -4,9 +4,9 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search
 class SearchResultApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<SearchResultMdl> getSearchResultRequest(
-      int page, int size, String searchText) async {
+      int page, int size, String searchText, String token, String type) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.searchResult(page, size, searchText);
+        await _queryProvider.searchResult(page, size, searchText, token, type);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

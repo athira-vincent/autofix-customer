@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_authorization_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/services_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/spair_parts_screen.dart';
@@ -21,6 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _userName = "";
   var scaffoldKey = GlobalKey<ScaffoldState>();
   double per = .10;
+  GenerateAuthorizationBloc _generateAuthorizationBloc =
+      GenerateAuthorizationBloc();
   double _setValue(double value) {
     return value * per + value;
   }
@@ -29,12 +32,37 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _getUser();
+    _getToken();
   }
 
   _getUser() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _userName = _shdPre.getString(SharedPrefKeys.userName).toString();
     setState(() {});
+  }
+
+  _getToken() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    _generateAuthorizationBloc.postGenerateAutorizationRequest(
+        _shdPre.getInt(SharedPrefKeys.userID).toString(), 1);
+    _getSignUpRes();
+  }
+
+  _getSignUpRes() {
+    _generateAuthorizationBloc.postGenerateAutorization.listen((value) async {
+      if (value.status == "error") {
+      } else {
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+        shdPre.setString(
+            SharedPrefKeys.token, value.data!.generateAuthorization!.token!);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _generateAuthorizationBloc.dispose();
   }
 
   @override
@@ -107,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Hi $_userName",
                       style: TextStyle(
                           fontFamily: 'Corbel_Light',
+                          fontWeight: FontWeight.w600,
                           fontSize: 17,
                           color: Colors.white),
                     ),
@@ -116,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         "Enjoy our service",
                         style: TextStyle(
                             fontFamily: 'Corbel_Light',
+                            fontWeight: FontWeight.w600,
                             fontSize: 17,
                             color: Colors.white),
                       ),
@@ -168,10 +198,14 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SizedBox(
             height: 75,
             child: BottomNavigationBar(
-              selectedLabelStyle:
-                  TextStyle(fontFamily: 'Corbel_Light', fontSize: 9.5),
-              unselectedLabelStyle:
-                  TextStyle(fontFamily: 'Corbel_Light', fontSize: 9.5),
+              selectedLabelStyle: TextStyle(
+                  fontFamily: 'Corbel_Light',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 9.5),
+              unselectedLabelStyle: TextStyle(
+                  fontFamily: 'Corbel_Light',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 9.5),
               items: bottomNavigationBarItems,
               currentIndex: _index,
               backgroundColor: CustColors.blue,

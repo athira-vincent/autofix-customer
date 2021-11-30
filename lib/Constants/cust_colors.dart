@@ -11,4 +11,5 @@ class CustColors {
   static const bgGrey = Color(0xfff1f3f5);
   static const textgrey = Color(0xff92a1b1);
   static const red = Color(0xffed1e30);
+  static const black01 = Color(0xff363131);
 }
