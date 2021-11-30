@@ -129,6 +129,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 19.5,
+                          fontWeight: FontWeight.w600,
                           fontFamily: 'Corbel_Bold'),
                     ),
                   ),
@@ -140,6 +141,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: TextStyle(
                         fontFamily: 'Montserrat_Semibond',
                         color: Colors.white,
+                        fontWeight: FontWeight.w600,
                         fontSize: 13,
                       ),
                       focusNode: _firstNameFocusNode,
@@ -175,7 +177,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(.60),
+                            fontWeight: FontWeight.w600,
                             fontSize: 12,
                           )),
                     ),
@@ -192,6 +195,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: TextStyle(
                         fontFamily: 'Montserrat_Semibond',
                         color: Colors.white,
+                        fontWeight: FontWeight.w600,
                         fontSize: 13,
                       ),
                       focusNode: _userNameFocusNode,
@@ -227,7 +231,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(.60),
+                            fontWeight: FontWeight.w600,
                             fontSize: 12,
                           )),
                     ),
@@ -243,6 +248,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       maxLines: 1,
                       style: TextStyle(
                         fontFamily: 'Montserrat_Semibond',
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                         fontSize: 13,
                       ),
@@ -272,7 +278,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(.60),
+                            fontWeight: FontWeight.w600,
                             fontSize: 12,
                           )),
                     ),
@@ -290,6 +297,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           enabled: false,
                           style: TextStyle(
                             fontFamily: 'Montserrat_Semibond',
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                             fontSize: 13,
                           ),
@@ -327,7 +335,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               hintStyle: TextStyle(
                                 fontFamily: 'Corbel_Light',
-                                color: Colors.white,
+                                color: Colors.white.withOpacity(.60),
+                                fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               )),
                         ),
@@ -355,6 +364,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 controller: _phoneController,
                                 style: TextStyle(
                                   fontFamily: 'Montserrat_Semibond',
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                   fontSize: 13,
                                 ),
@@ -384,7 +394,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                     hintStyle: TextStyle(
                                       fontFamily: 'Corbel_Light',
-                                      color: Colors.white,
+                                      color: Colors.white.withOpacity(.60),
+                                      fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     )),
                               ),
@@ -404,6 +415,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       maxLines: 1,
                       style: TextStyle(
                         fontFamily: 'Montserrat_Semibond',
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                         fontSize: 13,
                       ),
@@ -434,7 +446,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(.60),
+                            fontWeight: FontWeight.w600,
                             fontSize: 12,
                           )),
                     ),
@@ -450,6 +463,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       style: TextStyle(
                         fontFamily: 'Montserrat_Semibond',
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                         fontSize: 13,
                       ),
@@ -480,7 +494,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           hintStyle: TextStyle(
                             fontFamily: 'Corbel_Light',
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(.60),
+                            fontWeight: FontWeight.w600,
                             fontSize: 12,
                           )),
                     ),
@@ -524,6 +539,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       style: TextStyle(
                                         color: CustColors.blue,
                                         fontFamily: 'Corbel_Regular',
+                                        fontWeight: FontWeight.w600,
                                         fontSize: 11.5,
                                       ),
                                     ),
@@ -560,6 +576,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
                             fontFamily: 'Corbel_Light'),
                       ),
                     ),
@@ -599,7 +616,10 @@ class _SignupScreenState extends State<SignupScreen> {
       //toastMsg.toastMsg(msg: "Passwords are different!");
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Passwords are different!",
-            style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            style: TextStyle(
+                fontFamily: 'Roboto_Regular',
+                fontWeight: FontWeight.w600,
+                fontSize: 14)),
         duration: Duration(seconds: 2),
         backgroundColor: CustColors.peaGreen,
       ));
@@ -709,6 +729,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 .peaGreen,
                                                             fontFamily:
                                                                 'Robot_Regular',
+                                                            fontWeight:
+                                                                FontWeight.w600,
                                                             fontSize: 13),
                                                         maxLines: 4,
                                                         textAlign:

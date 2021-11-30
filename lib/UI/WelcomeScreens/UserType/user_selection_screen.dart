@@ -83,6 +83,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             child: Text("CUSTOMER",
                                 style: TextStyle(
                                     fontSize: 14.5,
+                                    fontWeight: FontWeight.w600,
                                     fontFamily: 'Corbel_Light',
                                     color: CustColors.blue)),
                           ),
@@ -114,6 +115,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                               child: Text("MECHANIC",
                                   style: TextStyle(
                                       fontSize: 14.5,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Corbel_Light',
                                       color: CustColors.blue)),
                             ),
@@ -144,6 +146,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                               child: Text("SAPRE PARTS VENDOR",
                                   style: TextStyle(
                                       fontSize: 14.5,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Corbel_Light',
                                       color: CustColors.blue)),
                             ),

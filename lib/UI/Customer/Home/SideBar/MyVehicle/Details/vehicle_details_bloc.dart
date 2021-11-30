@@ -11,8 +11,9 @@ class VehilceDetailsBloc {
     postVehicleDetails.close();
   }
 
-  postVehicleDetailsRequest() async {
-    VehicleDetailsMdl _vehicleDetails = await repository.getVehicleDetails();
-    postVehicleDetails.sink.add(_vehicleDetails);
+  postVehicleDetailsRequest(String token) async {
+    VehicleDetailsMdl vehicleDetailsMdl =
+        await repository.getVehicleDetails(token);
+    postVehicleDetails.sink.add(vehicleDetailsMdl);
   }
 }

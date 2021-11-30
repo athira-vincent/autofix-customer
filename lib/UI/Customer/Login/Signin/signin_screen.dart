@@ -52,7 +52,9 @@ class _SigninScreenState extends State<SigninScreen> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+                    fontFamily: 'Roboto_Regular',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14)),
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
@@ -73,12 +75,17 @@ class _SigninScreenState extends State<SigninScreen> {
             value.data!.customerSignIn!.customer!.profilePic.toString());
         shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
             value.data!.customerSignIn!.customer!.isProfileCompleted!);
+        shdPre.setInt(SharedPrefKeys.userID,
+            int.parse(value.data!.customerSignIn!.customer!.id!));
         setState(() {
           _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Signed In",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+                style: TextStyle(
+                    fontFamily: 'Roboto_Regular',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14)),
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
@@ -132,6 +139,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 19.5,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: 'Corbel_Bold'),
                           ),
                         ),
@@ -142,6 +150,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             maxLines: 1,
                             style: TextStyle(
                               fontFamily: 'Montserrat_Semibond',
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                               fontSize: 13,
                             ),
@@ -198,6 +207,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                 ),
                                 hintStyle: TextStyle(
                                   fontFamily: 'Corbel_Light',
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white.withOpacity(.60),
                                   fontSize: 12,
                                 )),
@@ -215,6 +225,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             maxLines: 1,
                             style: TextStyle(
                               fontFamily: 'Montserrat_Semibond',
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                               fontSize: 13,
                             ),
@@ -287,6 +298,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                 ),
                                 hintStyle: TextStyle(
                                   fontFamily: 'Corbel_Light',
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white.withOpacity(.60),
                                   fontSize: 12,
                                 )),
@@ -335,6 +347,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                             style: TextStyle(
                                               color: CustColors.blue,
                                               fontFamily: 'Corbel_Regular',
+                                              fontWeight: FontWeight.w600,
                                               fontSize: 11.5,
                                             ),
                                           ),
@@ -376,6 +389,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 11.5,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Corbel_Light'),
                                 ),
                               ),
@@ -394,6 +408,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 11.5,
+                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'Corbel_Light'),
                                 ),
                               ),
