@@ -87,6 +87,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                         'Home',
                         style: TextStyle(
                             fontSize: 17,
+                            fontWeight: FontWeight.w600,
                             fontFamily: 'Corbel_Bold',
                             color: Colors.white),
                       ),
@@ -106,6 +107,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                         'Test',
                         style: TextStyle(
                             fontSize: 17,
+                            fontWeight: FontWeight.w600,
                             fontFamily: 'Corbel_Bold',
                             color: Colors.white),
                       ),
@@ -154,6 +156,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "My Profile",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -180,6 +183,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "My Services",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -206,6 +210,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "My Orders",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -232,6 +237,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "Cart",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -258,6 +264,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "Choose Language",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -284,6 +291,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "Notification",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -310,6 +318,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "My Vehicle",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -336,6 +345,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "My Wallet",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -366,6 +376,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "Help Center",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -384,6 +395,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "Terms and Conditions",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),
@@ -404,6 +416,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
               "Logout",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.w600,
                   fontSize: 14.5,
                   color: CustColors.blue01),
             ),

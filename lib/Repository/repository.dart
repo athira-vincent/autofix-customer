@@ -1,3 +1,4 @@
+import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Regular/regular_services_api_provider.dart';
@@ -44,6 +45,7 @@ class Repository {
   final _regularServicesApiProvider = RegularServicesApiProvider();
   final _emergencyServicesApiProvider = EmergencyServicesApiProvider();
   final _allMechanicListApiProvider = MechanicListApiProvider();
+  final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   //SignUp
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
@@ -67,8 +69,10 @@ class Repository {
   Future<dynamic> getViewProfile(String id) =>
       _viewProfileApiProvider.getViewProfileRequest(id);
   //Search Result
-  Future<dynamic> getSearchResult(int page, int size, String searchText) =>
-      _searchResultApiProvider.getSearchResultRequest(page, size, searchText);
+  Future<dynamic> getSearchResult(
+          int page, int size, String searchText, String token, String type) =>
+      _searchResultApiProvider.getSearchResultRequest(
+          page, size, searchText, token, type);
   //View Vehicle
   Future<dynamic> getViewVehicle() =>
       _viewVehicleApiProvider.getViewVehicleRequest();
@@ -76,8 +80,8 @@ class Repository {
   Future<dynamic> getDeleteVehicle() =>
       _deleteVehicleApiProvider.getDeleteVehicleRequest();
   //Vehicle Details
-  Future<dynamic> getVehicleDetails() =>
-      _vehicleDetailsApiProvider.getVehicleDetailsRequest();
+  Future<dynamic> getVehicleDetails(String token) =>
+      _vehicleDetailsApiProvider.getVehicleDetailsRequest(token);
   //Add Vehicle
   Future<dynamic> getAddVehicle(
           String token,
@@ -114,10 +118,11 @@ class Repository {
   Future<dynamic> getAllEngine(int id, String token) =>
       _allEngineApiProvider.getAllEngineRequest(id, token);
   //All Make
-  Future<dynamic> getAllMake(String token) => _allMakeApiProvider.getAllMakeRequest(token);
+  Future<dynamic> getAllMake(String token) =>
+      _allMakeApiProvider.getAllMakeRequest(token);
 
   //All Mechanic List
-  Future<dynamic> getAllMechanicList(String token,int page, int size) =>
+  Future<dynamic> getAllMechanicList(String token, int page, int size) =>
       _allMechanicListApiProvider.getAllMechanicListRequest(token, page, size);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
@@ -132,4 +137,8 @@ class Repository {
   Future<dynamic> getEmerGencyServices(int page, int size, String token) =>
       _emergencyServicesApiProvider.getEmergencyServicesRequest(
           page, size, token);
+  //get Token
+  Future<dynamic> getToken(String userId, int type) =>
+      _genrateAuthorizationApiProvider.getGenerateAuthorizationRequest(
+          userId, type);
 }

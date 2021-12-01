@@ -127,6 +127,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
             style: TextStyle(
                 fontSize: 17,
                 color: CustColors.blue,
+                fontWeight: FontWeight.w600,
                 fontFamily: 'Corbel_Bold'),
           ),
         ),
@@ -135,6 +136,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
           style: TextStyle(
               fontSize: 17,
               color: CustColors.blue,
+              fontWeight: FontWeight.w600,
               fontFamily: 'Montserrat_Light'),
         ),
         Container(
@@ -149,6 +151,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               style: TextStyle(
                   fontSize: 14.5,
                   color: Colors.white,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Montserrat_Light'),
             ),
           ),
@@ -194,6 +197,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 'Search Your Services…',
                 style: TextStyle(
                     fontFamily: 'Corbel_Light',
+                    fontWeight: FontWeight.w600,
                     fontSize: 12,
                     color: CustColors.greyText),
               ),
@@ -244,19 +248,20 @@ class _ServicesScreenState extends State<ServicesScreen> {
               'Regular Services',
               style: TextStyle(
                   fontSize: 12,
+                  fontWeight: FontWeight.w600,
                   color: CustColors.blue01,
                   fontFamily: 'Corbel_Regular'),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: _setValue(29.1)),
+            margin: EdgeInsets.only(top: _setValue(29.1), left: _setValue(9)),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: _setValue(4.0),
                 mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.4),
+                    (MediaQuery.of(context).size.height / 2.3),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -321,6 +326,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 style: TextStyle(
                     fontSize: 9.5,
                     color: CustColors.blue,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'Corbel_Light'),
               ),
             ),
@@ -334,7 +340,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(top: _setValue(29.1)),
-      padding: EdgeInsets.only(top: _setValue(28.9)),
+      padding: EdgeInsets.only(top: _setValue(28.9), bottom: 10),
       decoration: BoxDecoration(
         color: CustColors.bgGrey,
         borderRadius: BorderRadius.only(
@@ -356,18 +362,19 @@ class _ServicesScreenState extends State<ServicesScreen> {
               style: TextStyle(
                   fontSize: 12,
                   color: CustColors.blue01,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Corbel_Regular'),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: _setValue(29.1)),
+            margin: EdgeInsets.only(top: _setValue(29.1), left: _setValue(9)),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: _setValue(54.0),
                 mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.3),
+                    (MediaQuery.of(context).size.height / 2.1),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -432,6 +439,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               style: TextStyle(
                   fontSize: 9.5,
                   color: CustColors.blue,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Corbel_Light'),
             ),
           ),

@@ -1,6 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.auto_fix">
        <uses-permission android:name="android.permission.INTERNET" />
+       <queries>
+<intent>
+<action android:name="android.media.action.IMAGE_CAPTURE"/>
+</intent>
+</queries>
    <application
         android:label="auto_fix"
         android:usesCleartextTraffic="true"
