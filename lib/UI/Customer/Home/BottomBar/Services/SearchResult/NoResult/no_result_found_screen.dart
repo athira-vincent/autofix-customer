@@ -24,13 +24,18 @@ class _NoResultFoundScreenState extends State<NoResultFoundScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      top: _setValue(26.8), left: _setValue(36.2)),
-                  child: Image.asset(
-                    'assets/images/back.png',
-                    width: _setValue(10.6),
-                    height: _setValue(19.1),
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: _setValue(26.8), left: _setValue(36.2)),
+                    child: Image.asset(
+                      'assets/images/back.png',
+                      width: _setValue(10.6),
+                      height: _setValue(19.1),
+                    ),
                   ),
                 ),
                 Container(

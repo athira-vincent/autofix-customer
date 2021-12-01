@@ -45,8 +45,8 @@ List<SliderModel> getSlides(){
   List<SliderModel> slides = <SliderModel>[];
 
   SliderModel sliderModel = new SliderModel(
-    desc: "We provide services for Customers,  Mechanics, "
-        "Spare parts vendors",
+    desc: "We provide services for Customers, Mechanics, \n"
+        "Spare parts vendors.",
     title: "Our Services",
     imageAsset: Container(
         child: Stack(
@@ -69,7 +69,7 @@ List<SliderModel> getSlides(){
   slides.add(sliderModel);
 
   sliderModel = new SliderModel(
-    desc: "Sign up as a customer and fix your car repair and maintenance. ",
+    desc: "Sign up as a customer and fix your car repair and \nmaintenance. ",
     title: "Customers",
     imageAsset: Stack(
       children: [
@@ -113,17 +113,14 @@ List<SliderModel> getSlides(){
   slides.add(sliderModel);
 
   sliderModel = new SliderModel(
-    desc: "Sign up as a spare parts vendor and provide spare parts for mechanic and customers",
-    title: "Spare parts vendors",
+    desc: "Sign up as a spare parts vendor and provide spare parts for \nmechanic and customers.",
+    title: "Spare parts \nvendors",
    imageAsset: Stack(
      children: [
        Container(
          color: Colors.white,
          child: Column(
            children: [
-             /*Positioned(
-               child: Image.asset("assets/images/walkthrough_s4_background1.png",
-               ),),*/
              Expanded(
                flex: 5,
                child:
@@ -134,14 +131,6 @@ List<SliderModel> getSlides(){
                    width: 125,
                    ),
                ),
-              /* Container(
-                 width: double.infinity,
-                 color: Colors.yellowAccent,
-                 alignment: Alignment.topRight,
-                 padding: EdgeInsets.only(bottom: 20.0,left: 20,),
-                 child: Image.asset("assets/images/walkthrough_s4_background1.png",
-                   alignment: Alignment.topRight,),
-               ),*/
              ),
              Expanded(
                flex: 5,
@@ -165,8 +154,6 @@ List<SliderModel> getSlides(){
          alignment: Alignment.centerLeft,
          padding: EdgeInsets.fromLTRB(0, 0, 125, 125),
          child: Image.asset("assets/images/walkthrough_s4_icon.png",
-           /* height: 200,
-          width: 200,*/
          ),
        ),
      ],

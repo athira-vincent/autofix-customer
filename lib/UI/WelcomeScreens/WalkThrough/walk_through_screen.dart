@@ -20,14 +20,12 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
     // TODO: implement initState
     super.initState();
     slides = getSlides();
-
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-
       body: Stack(
         children: [
           PageView.builder(
@@ -47,12 +45,11 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
           ),
 
           Positioned(
-            height: 50,
+            height: 25,
             bottom: 33.3,
             left: 23.5,
             right: 23.5,
             child: currentIndex != slides.length - 1 ?
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -90,11 +87,8 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                 ),
               ],
             )
-
             :
-
             InkWell(
-
               child: GestureDetector(
                 onTap: (){
                   setIswalked();
@@ -113,11 +107,9 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
         ],
       ),
     );
-
   }
 
   void setIswalked()async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(SharedPrefKeys.isWalked, true);
     Navigator.pushReplacement(
@@ -145,40 +137,9 @@ class SliderTile extends StatelessWidget {
 
   final largeTextStyle = TextStyle(
     color: Colors.white,
-    fontSize: 32,
+    fontSize: 33,
      fontFamily: 'Corbel_Bold',
     fontWeight: FontWeight.bold,
-  );
-
-  Widget isGetStartedFalse = Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-      InkWell(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 5,horizontal: 25),
-          color: Colors.white,
-          child: Text(
-            "Next",
-          ),
-        ),
-      ),
-      InkWell(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 5,horizontal: 25),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.white)
-          ),
-          child: Text(
-            "Skip",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    ],
-  );
-
-  Widget isGetStartedTrue = Container(
-    color: Colors.white,
   );
 
   @override
@@ -193,7 +154,7 @@ class SliderTile extends StatelessWidget {
               aspectRatio: 1.56,
               child: Container(
                 width: double.infinity,
-                alignment: Alignment.bottomCenter,
+                //alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/walkthrough_blue_filled_arc.png",
@@ -201,24 +162,25 @@ class SliderTile extends StatelessWidget {
                   ),
                 ),
                 child: Container(
-                  margin: EdgeInsets.only(left: 23.5,right: 23.5,bottom: 33.3),
+                  //color: Colors.red,
+                  margin: EdgeInsets.only(left: 23.5,right: 20,bottom: 70,top: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-
                       Container(
-                        margin: EdgeInsets.only(top: 79.7,),
-                        child: Text(title,style: largeTextStyle,),),
-
+                        margin: EdgeInsets.only(bottom: 12.5),
+                        child: Text(title,style: largeTextStyle,
+                        ),
+                      ),
                       Container(
-                        margin: EdgeInsets.only(right: 68,top: 8.5),
+                        margin: EdgeInsets.only(bottom: 19,),
                         child: Text(desc,
                           style: smallTextStyle,
                           softWrap: true,
-                          maxLines: 2,),),
-
-                      const SizedBox(height: 17.2,),
-
+                          maxLines: 2,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -226,9 +188,7 @@ class SliderTile extends StatelessWidget {
             ),
           ],
         ),
-
       ],
-
-      );
+     );
   }
 }

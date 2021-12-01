@@ -1,8 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_mdl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddMoreServiceScreen extends StatefulWidget {
   final List<SearchData> searchData;
@@ -170,7 +172,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
         });
   }
 
-  _filter(String searchQuery) {
+  _filter(String searchQuery) async {
     // List<DataItem> _filteredList = dataItem01
     //     .where((DataItem user) =>
     //         user.locationName.toLowerCase().contains(searchQuery.toLowerCase()))
@@ -178,7 +180,9 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
     // _streamController.sink.add(_filteredList);
     //setState(() {});
     if (searchQuery.length > 2) {
-      _searchResultBloc.postSearchResultRequest(1, 100, searchQuery);
+      SharedPreferences shdPre = await SharedPreferences.getInstance();
+      _searchResultBloc.postSearchResultRequest(1, 100, searchQuery,
+          shdPre.getString(SharedPrefKeys.token)!, widget.type);
     }
   }
 

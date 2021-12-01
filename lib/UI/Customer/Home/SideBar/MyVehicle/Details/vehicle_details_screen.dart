@@ -1,6 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VehicleDetailsScreen extends StatefulWidget {
   const VehicleDetailsScreen({Key? key}) : super(key: key);
@@ -16,8 +18,14 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _vehilceDetailsBloc.postVehicleDetailsRequest();
+    _getVehicleList();
     _getVehicleDetails();
+  }
+
+  _getVehicleList() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    String token = _shdPre.getString(SharedPrefKeys.token)!;
+    _vehilceDetailsBloc.postVehicleDetailsRequest(token);
   }
 
   @override

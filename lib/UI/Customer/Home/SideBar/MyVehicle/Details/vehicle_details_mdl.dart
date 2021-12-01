@@ -40,19 +40,18 @@ class Data {
 }
 
 class VehicleDetails {
-  int? id;
+  String? id;
   String? year;
   String? latitude;
   String? longitude;
   String? milege;
   String? lastMaintenance;
   String? interval;
-  String? customerId;
+  int? customerId;
   int? makeId;
   int? vehicleModelId;
   int? engineId;
   int? status;
-  Customer? customer;
   Make? make;
   Vehiclemodel? vehiclemodel;
   Engine? engine;
@@ -69,9 +68,6 @@ class VehicleDetails {
     vehicleModelId = json['vehicleModelId'];
     engineId = json['engineId'];
     status = json['status'];
-    customer = json['customer'] != null
-        ? new Customer.fromJson(json['customer'])
-        : null;
     make = json['make'] != null ? new Make.fromJson(json['make']) : null;
     vehiclemodel = json['vehiclemodel'] != null
         ? new Vehiclemodel.fromJson(json['vehiclemodel'])
@@ -93,9 +89,6 @@ class VehicleDetails {
     data['vehicleModelId'] = this.vehicleModelId;
     data['engineId'] = this.engineId;
     data['status'] = this.status;
-    if (this.customer != null) {
-      data['customer'] = this.customer!.toJson();
-    }
     if (this.make != null) {
       data['make'] = this.make!.toJson();
     }
@@ -146,7 +139,7 @@ class Customer {
 }
 
 class Make {
-  int? id;
+  String? id;
   String? makeName;
   String? description;
   int? status;
@@ -167,7 +160,7 @@ class Make {
 }
 
 class Vehiclemodel {
-  int? id;
+  String? id;
   String? modelName;
   String? description;
   int? makeId;
@@ -191,7 +184,7 @@ class Vehiclemodel {
 }
 
 class Engine {
-  int? id;
+  String? id;
   String? engineName;
   String? description;
   int? vehicleModelId;
