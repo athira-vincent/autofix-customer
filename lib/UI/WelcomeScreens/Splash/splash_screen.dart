@@ -59,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     /*print('WalkThroughPage');
-
     Timer(
         Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -68,6 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const MechanicListScreen()));
 */
+
 
     if (_isLoggedin != null || _isLoggedin == true) {
       if (userType == TextStrings.user_customer) {

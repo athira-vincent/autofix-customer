@@ -11,4 +11,6 @@ class CustColors {
   static const bgGrey = Color(0xfff1f3f5);
   static const textgrey = Color(0xff92a1b1);
   static const red = Color(0xffed1e30);
+  //================= My car colors
+  static const cloudy_blue = Color(0xffd0d5e1);
 }

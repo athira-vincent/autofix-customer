@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,9 +91,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   }
 
   void onFocusChange() {
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   _getAllModel() async {
@@ -202,311 +201,558 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     });
   }
 
+ /* String? _selectedColor;
+  List<String> _animals = ["Dog", "Cat", "Crocodile", "Dragon"];
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.0),
-          child: Form(
-            autovalidateMode: _autoValidate,
-            key: _formKey,
-            child: Column(
-              children: [
-                Center(
-                  child: Text(
-                    "Add Vehicle",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        "Car Brand : ",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<MakeDetails>(
-                            value: value,
-                            iconSize: 30,
-                            icon: (null),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
+        child: Container(
+          padding: EdgeInsets.all(10.0),
+          width: double.infinity,
+          height: double.infinity,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  padding: EdgeInsets.only(right: 5),
+                  //color: Colors.red,
+                  child: Stack(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: Container(
+                              margin: EdgeInsets.all(4),
+                              padding: EdgeInsets.only(
+                                  top: 15, bottom: 5, left: 8, right: 5),
+                              // color: Colors.purple,
+                              child: Column(
+                                children: const [
+                                  Text(
+                                    "Add Your Car",
+                                    style: TextStyle(
+                                      color: CustColors.blue,
+                                      fontSize: 22,
+                                      fontFamily: 'Corbel_Bold',
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            hint: Text("Select Brand"),
-                            onChanged: (val) {
-                              setState(() {
-                                this.value = val;
-                                _allModelBloc.postAllModelRequest(
-                                    int.parse(val!.id!), token);
-                                print(val);
-                              });
-                            },
-                            items: makeDetails!.map(buildMenuItem).toList(),
                           ),
+                          Expanded(
+                            flex: 4,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(4),
+                                  padding: EdgeInsets.only(
+                                      top: 15, bottom: 5, left: 10, right: 5),
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: CustColors.cloudy_blue,
+                                      style: BorderStyle.solid,
+                                      width: 1.0,
+                                    ),
+                                    color: CustColors.cloudy_blue,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: 10, right: 28),
+                                          padding: EdgeInsets.all(1),
+                                          child: const Text(
+                                            "Upload Your \nCar Photos",
+                                            style: TextStyle(
+                                                color: CustColors.blue,
+                                                fontFamily: 'Corbel_Regular',
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: 10, right: 26, bottom: 3),
+                                          padding: EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: CustColors.blue,
+                                              style: BorderStyle.solid,
+                                              width: 1.0,
+                                            ),
+                                            color: CustColors.blue,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          alignment: Alignment.bottomRight,
+                                          margin:
+                                              EdgeInsets.only(top: 1, right: 4),
+                                          padding: EdgeInsets.all(1),
+                                          child: Image.asset(
+                                            "assets/images/icon_add.png",
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(4),
+                        padding: EdgeInsets.only(
+                            top: 55, bottom: 10, left: 20, right: 90),
+                        child: Image.asset(
+                          "assets/images/car_image.png",
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        "Car Model : ",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<ModelDetails>(
-                            value: modelValue,
-                            iconSize: 30,
-                            icon: (null),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
+              ),
+              Expanded(
+                flex: 7,
+                child: Container(
+                  margin: EdgeInsets.only(left: 6, right: 6),
+                  padding: EdgeInsets.all(2),
+                  //color: Colors.green,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: CustColors.cloudy_blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: DropdownButton<MakeDetails>(
+                          onChanged: (value) {
+                            setState(() {
+                              this.value = value;
+                              _allModelBloc.postAllModelRequest(
+                                  int.parse(value!.id!), token);
+                              print(value);
+                            });
+                          },
+                          value: value,
+                          underline: Container(),
+                          hint: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Select Your Brand",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: CustColors.blue,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                            hint: Text("Select Model"),
-                            onChanged: (modelVal) {
-                              setState(() {
-                                this.modelValue = modelVal;
-                                _allEngineBloc.postAllEngineRequest(
-                                    int.parse(modelVal!.id!), token);
-                                print(modelVal);
-                              });
-                            },
-                            items: modelDetails!
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
+                          ),
+                          icon: Image.asset(
+                            "assets/images/icon_dropdown_arrow.png",
+                            height: 30,
+                            width: 30,
+                          ),
+                          isExpanded: true,
+                          items: makeDetails!.map(buildMenuItem).toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              makeDetails!
+                                  .map((e) => Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          e.makeName.toString(),
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: CustColors.blue,
+                                              fontFamily: 'Corbel_Regular',
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ))
+                                  .toList(),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: CustColors.cloudy_blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: DropdownButton<ModelDetails>(
+                          onChanged: (value) {
+                            setState(() {
+                              this.modelValue = value;
+                              _allEngineBloc.postAllEngineRequest(
+                                  int.parse(value!.id!), token);
+                              print(modelValue);
+                            });
+                          },
+                          value: modelValue,
+                          underline: Container(),
+                          hint: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Car Model",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: CustColors.blue,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          icon: Image.asset(
+                            "assets/images/icon_dropdown_arrow.png",
+                            height: 30,
+                            width: 30,
+                          ),
+                          isExpanded: true,
+                          items: modelDetails!
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e.modelName.toString(),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: CustColors.blue,
+                                      fontFamily: 'Corbel_Regular',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              modelDetails!
+                                  .map(
+                                    (e) => Align(
+                                      alignment: Alignment.centerLeft,
                                       child: Text(
                                         e.modelName.toString(),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                                            fontSize: 18,
+                                            color: CustColors.blue,
+                                            fontFamily: 'Corbel_Regular',
+                                            fontWeight: FontWeight.w700),
                                       ),
                                     ),
-                            ).toList(),
-                          ),
+                                  )
+                                  .toList(),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        "Car Engine : ",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: DropdownButtonHideUnderline(
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<EngineDetails>(
-                            value: engineValue,
-                            iconSize: 30,
-                            icon: (null),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: CustColors.cloudy_blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: DropdownButton<EngineDetails>(
+                          onChanged: (value) {
+                            setState(() {
+                              this.engineValue = value;
+                              print(value);
+                            });
+                          },
+                          value: engineValue,
+                          underline: Container(),
+                          hint: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Select Engine Type",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: CustColors.blue,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                            hint: Text("Select Engine"),
-                            onChanged: (engineVal) {
-                              setState(() {
-                                this.engineValue = engineVal;
-                                print(engineVal);
-                              });
-                            },
-                            items: engineDetails!
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
+                          ),
+                          icon: Image.asset(
+                            "assets/images/icon_dropdown_arrow.png",
+                            height: 30,
+                            width: 30,
+                          ),
+                          isExpanded: true,
+                          items: engineDetails!
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e.engineName.toString(),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: CustColors.blue,
+                                      fontFamily: 'Corbel_Regular',
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ).toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              engineDetails!
+                                  .map(
+                                    (e) => Align(
+                                      alignment: Alignment.centerLeft,
                                       child: Text(
                                         e.engineName.toString(),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                                            fontSize: 18,
+                                            color: CustColors.blue,
+                                            fontFamily: 'Corbel_Regular',
+                                            fontWeight: FontWeight.w700),
                                       ),
-                                    ))
-                                .toList(),
-                          ),
+                                    ),
+                                  ).toList(),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        "Car Year : ",
-                        style: TextStyle(fontSize: 18),
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: CustColors.cloudy_blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: DropdownButton<String>(
+                          onChanged: (val) {
+                            setState(() {
+                              //_selectedColor = val;
+                            });
+                          },
+                          //value: _selectedColor,
+                          underline: Container(),
+                          hint: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Select Year",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: CustColors.blue,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          icon: Image.asset(
+                            "assets/images/icon_dropdown_arrow.png",
+                            height: 30,
+                            width: 30,
+                          ),
+                          isExpanded: true,
+                          items: [],
+                          /*items: _animals
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(
+                                      e,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              _animals
+                                  .map((e) => Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: CustColors.blue,
+                                              fontFamily: 'Corbel_Regular',
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ))
+                                  .toList(),*/
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: Container(
-                        //margin: const EdgeInsets.only(top: 17, left: 34, right: 34),
-                        child: TextFormField(
-                          textAlignVertical: TextAlignVertical.center,
-                          maxLines: 1,
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: CustColors.cloudy_blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: DropdownButton<String>(
+                          onChanged: (val) {
+                            setState(() {
+                              //_selectedColor = val;
+                            });
+                          },
+                          //value: _selectedColor,
+                          underline: Container(),
+                          hint: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Last maintenance",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: CustColors.blue,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          icon: Image.asset(
+                            "assets/images/icon_dropdown_arrow.png",
+                            height: 30,
+                            width: 30,
+                          ),
+                          isExpanded: true,
+                          items: [],
+                          /*items: _animals
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(
+                                      e,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          selectedItemBuilder: (BuildContext context) =>
+                              _animals
+                                  .map((e) => Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: CustColors.blue,
+                                              fontFamily: 'Corbel_Regular',
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ))
+                                  .toList(),*/
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        child: Text(
+                          "Approximate Mileage",
                           style: TextStyle(
-                            fontFamily: 'Montserrat_Semibond',
-                            color: Colors.black,
-                            fontSize: 15,
+                            fontSize: 18,
+                            color: CustColors.blue,
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.w700,
                           ),
-                          //focusNode: _firstNameFocusNode,
-                          keyboardType: TextInputType.number,
-                          //validator: InputValidator(ch: "Name").nameChecking,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          controller: _yearController,
-                          decoration: InputDecoration(
-                              labelText: 'Year',
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: .3,
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 7.8,
-                              ),
-                              labelStyle: TextStyle(
-                                fontFamily: 'Montserrat_Light',
-                                color: Colors.black,
-                                fontSize: 12,
-                              )),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        "Last Maintenance : ",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: TextFormField(
-                        textAlignVertical: TextAlignVertical.center,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontFamily: 'Montserrat_Semibond',
-                          color: Colors.black,
-                          fontSize: 15,
+                      Container(
+                        margin: EdgeInsets.all(2),
+                        padding: EdgeInsets.only(
+                            top: 4, bottom: 4, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                            color: CustColors.cloudy_blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        //focusNode: _firstNameFocusNode,
-                        keyboardType: TextInputType.datetime,
-                        //validator: InputValidator(ch: "Name").nameChecking,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.singleLineFormatter,
-                        ],
-                        controller: _maintenanceController,
-                        decoration: InputDecoration(
-                            labelText: 'Maintenance',
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                                width: .3,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 7.8,
-                            ),
-                            labelStyle: TextStyle(
-                              fontFamily: 'Montserrat_Light',
-                              color: Colors.black,
-                              fontSize: 12,
-                            )),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        "Car Mileage : ",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: TextFormField(
-                        textAlignVertical: TextAlignVertical.center,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontFamily: 'Montserrat_Semibond',
-                          color: Colors.black,
-                          fontSize: 15,
-                        ),
-                        //focusNode: _firstNameFocusNode,
-                        keyboardType: TextInputType.number,
-                        //validator: InputValidator(ch: "Name").nameChecking,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        controller: _mileageController,
-                        decoration: InputDecoration(
-                            labelText: 'Mileage',
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                                width: .3,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 7.8,
-                            ),
-                            labelStyle: TextStyle(
-                              fontFamily: 'Montserrat_Light',
-                              color: Colors.black,
-                              fontSize: 12,
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  child: _isLoading
-                      ? Center(
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: _isLoading ?
+                        Center(
                           child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                                 CustColors.darkBlue),
                           ),
                         )
-                      : Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          color: Colors.blue,
+                        :
+                        Container(
+                          margin: EdgeInsets.all(4),
+                          padding: EdgeInsets.only(
+                              top: 7.3, bottom: 7.2, left: 35, right: 35.3),
+                          decoration: BoxDecoration(
+                            color: CustColors.blue,
+                            border: Border.all(
+                              color: CustColors.blue,
+                              style: BorderStyle.solid,
+                              width: 0.70,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                           child: MaterialButton(
-                            onPressed: () {
+                            child: Text(
+                              "Save",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Corbel_Regular',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                            onPressed: (){
                               if (_formKey.currentState!.validate()) {
                                 _addVehicleBloc.postAddVehicleRequest(
                                     token,
@@ -519,46 +765,26 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     int.parse(value!.id!),
                                     int.parse(modelValue!.id!),
                                     int.parse(engineValue!.id!)
-                                    /*_userNameController.text,
+                                  /* _userNameController.text,
                                 _passwordController.text*/
-                                    );
+                                );
                                 setState(() {
                                   _isLoading = true;
                                 });
                               } else {
                                 setState(() =>
-                                    _autoValidate = AutovalidateMode.always);
+                                _autoValidate = AutovalidateMode.always);
                               }
                             },
-                            child: Center(
-                              child: Text(
-                                "Save",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                            ),
                           ),
+
                         ),
+                      ),
+                    ],
+                  ),
                 ),
-
-                /* Expanded(child: child
-                    if (_formKey.currentState!.validate()) {
-                        _signinBloc.postSignInRequest(
-                        _userNameController.text,
-                        _passwordController.text);
-                        setState(() {
-                        _isLoading = true;
-                        });
-                        } else {
-                        setState(() => _autoValidate =
-                        AutovalidateMode.always);
-                        }
-
-                )*/
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -575,7 +801,12 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         value: item,
         child: Text(
           item.makeName.toString(),
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            fontSize: 18,
+            color: CustColors.blue,
+            fontFamily: 'Corbel_Regular',
+            fontWeight: FontWeight.w700,
+          ),
         ),
       );
 }
