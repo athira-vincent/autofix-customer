@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: CustColors.materialBlue,
+        accentColor: CustColors.blue
+    ),
       home: SplashScreen(),
     );
   }

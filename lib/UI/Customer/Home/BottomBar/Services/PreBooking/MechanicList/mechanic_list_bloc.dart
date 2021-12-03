@@ -10,8 +10,8 @@ class MechanicListBloc {
     postViewMechanicList.close();
   }
 
-  postMechanicListRequest(String token, int page, int size) async {
-    MechanicListMdl _mechanicListMdl = await repository.getAllMechanicList(token, page, size);
+  postMechanicListRequest(String token, int page, int size,String serviceId) async {
+    MechanicListMdl _mechanicListMdl = await repository.getAllMechanicList(token, page, size,serviceId);
     postViewMechanicList.sink.add(_mechanicListMdl);
   }
 }

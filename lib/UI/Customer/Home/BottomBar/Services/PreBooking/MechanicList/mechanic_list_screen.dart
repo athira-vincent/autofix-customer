@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_mdl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicListScreen extends StatefulWidget {
@@ -28,9 +29,8 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
   void initState() {
     super.initState();
     _addToken();
-    _mechanicListBloc.postMechanicListRequest(/*token*/
-        """eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjM3ODMwODY4LCJleHAiOjE2Mzc5MTcyNjh9.BeiaYvLKmIhVeBOInXFPuf-cnfiA8s_Takf_aMxpcsk""",
-        1, 10);
+    _mechanicListBloc.postMechanicListRequest(token,
+        1, 10,"1");
     _getViewVehicle();
   }
 
@@ -78,42 +78,163 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Mechanic List"),
+      body: SafeArea(
+          child: Container(
+              margin: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 10, left: 20),
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          //icon: Image.asset("assets/images/icon_back_arrow.png"),
+                          icon: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            color: CustColors.blue,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 25,top: 12),
+                        alignment: Alignment.centerLeft,
+                        child: Text("Mechanics",
+                        style: TextStyle(
+                          fontFamily: "Corbel_Regular",
+                          color: CustColors.blue,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.6,
+                         ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 68,top: 1),
+                    alignment: Alignment.centerLeft,
+                    child: Text("Select a mechanic near you ! ",
+                      style: TextStyle(
+                        fontFamily: "Corbel_Light",
+                        color: CustColors.black01,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 20, right: 20, top: 20,bottom: 2),
+                      padding: EdgeInsets.all(5),
+                      child: buildList(),
+                    ),
+                  ),
+                  //buildList(),
+
+                ],
+              ),
+              //child: buildList(),
+          ),
       ),
-      body: buildList(),
     );
   }
   Widget buildList() => ListView.builder(
+
+    scrollDirection: Axis.vertical,
+    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+    shrinkWrap: true,
     itemCount: mechanicListData.length,
     itemBuilder: (context, index){
       String? mechName = mechanicListData[index].firstName;
       String? address = mechanicListData[index].address;
       String? phone = mechanicListData[index].phoneNo;
       //int imageIndex = index +1;
-      return ListTile(
-        leading: CircleAvatar(
-          radius: 28,
-          backgroundImage: NetworkImage(
-              'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg'
-              //'https://source.unsplash.com/random?sig=$index'
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        /*decoration: BoxDecoration( //                    <-- BoxDecoration
+          border: Border(bottom: BorderSide()),
+        ),*/
+        child:  Card(
+          child: ListTile(
+
+            contentPadding: EdgeInsets.only(top: 4.8,bottom: 4.8,left: 12.5,right: 23),
+            leading: CircleAvatar(
+              radius: 28,
+              backgroundImage: NetworkImage(
+                  'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg'
+                //'https://source.unsplash.com/random?sig=$index'
+              ),
+            ),
+            title: Text(mechName!,
+              style: TextStyle(
+                fontFamily: "Corbel_Regular",
+                fontSize: 14,
+                color: CustColors.black01,
+                fontWeight: FontWeight.w600,
+
+              ),),
+            subtitle: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //Text(mechName!),
+                    _ratingBar,
+                    Text(
+                      "8 Km",
+                      style: TextStyle(
+                        fontFamily: "Corbel-Light",
+                        color: CustColors.white02,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                  //child: Text("sub-title $index")
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //Text(mechName!),
+                    Text("21  Reviews",
+                      style: TextStyle(
+                        fontFamily: "Corbel-Light",
+                        color: CustColors.white02,
+                        fontSize: 12,
+                      ),),
+                    Text("\$123",
+                      style: TextStyle(
+                        fontFamily: "Corbel-Light",
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                  //child: Text("sub-title $index")
+                ),
+              ],
+            ),
+
+            //onTap: () => selectItem(item),
           ),
         ),
-        title: Text(mechName!),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //Text(mechName!),
-            Text(address!),
-            Text(phone!,),
-          ],
-            //child: Text("sub-title $index")
-        ),
-
-        //onTap: () => selectItem(item),
-
       );
     },
+  );
+
+  Widget _ratingBar =  RatingBarIndicator(
+    rating: 2.5,
+    itemBuilder: (context, index) => Icon(
+      Icons.star,
+      color: Colors.amber,
+    ),
+    itemCount: 5,
+    itemSize: 20.0,
+    unratedColor: Colors.amber.withAlpha(50),
+    direction: Axis.horizontal,
   );
 
   void selectItem(String itemSelected){

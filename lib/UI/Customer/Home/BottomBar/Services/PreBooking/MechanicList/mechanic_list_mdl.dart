@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 class MechanicListMdl {
   String? status;
   String? message;
@@ -73,10 +75,11 @@ class MechanicList {
 }
 
 class MechanicListData {
+
   String? id;
   String? displayName;
-  String? password;
   String? userName;
+  String? password;
   String? firstName;
   String? lastName;
   String? emailId;
@@ -88,14 +91,12 @@ class MechanicListData {
   String? licenseNo;
   String? state;
   String? licenseDate;
-  String? latitude;
-  String? longitude;
+  double? latitude;
+  double? longitude;
   int? serviceId;
   String? profilePic;
   String? licenseProof;
   int? status;
-  List<MechanicServiceListData>? serviceListData;
-  List<MechanicVehicleListData>? vehicleListData;
 
   MechanicListData();
 
@@ -122,18 +123,6 @@ class MechanicListData {
     licenseProof = json['licenseProof'];
     status = json['status'];
 
-    if(json['serviceData'] != null){
-      serviceListData = <MechanicServiceListData>[];
-      json['serviceData'].forEach((v){
-        serviceListData!.add(new MechanicServiceListData.fromJson(v));
-      });
-    }
-    if(json['vehicleData'] != null){
-      vehicleListData = <MechanicVehicleListData>[];
-      json['vehicleData'].forEach((v){
-        vehicleListData!.add(new MechanicVehicleListData.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson(){
@@ -160,142 +149,6 @@ class MechanicListData {
     data['licenseProof'] = this.licenseProof;
     data['status'] = this.status;
 
-    if (this.serviceListData != null) {
-      data['serviceData'] =
-          this.serviceListData!.map((v) => v.toJson()).toList();
-    }
-
-    if (this.vehicleListData != null) {
-      data['vehicleData'] =
-          this.vehicleListData!.map((v) => v.toJson()).toList();
-    }
-
     return data;
   }
-}
-
-class MechanicServiceListData {
-  String? id;
-  int? status;
-  int? serviceId;
-  int? mechanicId;
-  ServiceData? service;
-
-  MechanicServiceListData();
-
-  MechanicServiceListData.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    status = json['status'];
-    serviceId = json['serviceId'];
-    mechanicId = json['mechanicId'];
-    service = (json['service'] != null ? ServiceData.fromJson(json['service']) : null)!;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['status'] = this.status;
-    data['serviceId'] = this.serviceId;
-    data['mechanicId'] = this.mechanicId;
-    data['service'] = this.service!.toJson();
-
-    return data;
-  }
-
-}
-
-class ServiceData {
-
-  String? id;
-  String? serviceName;
-  String? description;
-  String? icon;
-  String? fee;
-  String? type;
-  int? status;
-
-  ServiceData();
-
-  ServiceData.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    serviceName = json['serviceName'];
-    description = json['description'];
-    icon = json['icon'];
-    fee = json['fee'];
-    type = json['type'];
-    status = json['status'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['serviceName'] = this.serviceName;
-    data['description'] = this.description;
-    data['icon'] = this.icon;
-    data['fee'] = this.fee;
-    data['type'] = this.type;
-    data['status'] = this.status;
-
-    return data;
-  }
-
-}
-
-class MechanicVehicleListData {
- String? id;
- int? status;
- int? makeId;
- int? mechanicId;
- VehicleMakeData? vehicleMakeData;
-
-  MechanicVehicleListData();
-
-  MechanicVehicleListData.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    status = json['status'];
-    makeId = json['makeId'];
-    mechanicId = json['mechanicId'];
-    vehicleMakeData = (json['make'] != null ? VehicleMakeData.fromJson(json['make']) : null)!;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['id'] = this.id;
-    data['status'] = this.status;
-    data['makeId'] = this.makeId;
-    data['mechanicId'] = this.mechanicId;
-    data['make'] = this.vehicleMakeData!.toJson();
-
-    return data;
-  }
-
-}
-
-class VehicleMakeData {
-
-  String? id;
-  String? makeName;
-  String? description;
-  int? status;
-
-  VehicleMakeData();
-
-  VehicleMakeData.fromJson(Map<String, dynamic> json){
-    id = json['id'];
-    makeName = json['makeName'];
-    description = json['description'];
-    status = json['status'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['makeName'] = this.makeName;
-    data['description'] = this.description;
-    data['status'] = this.status;
-
-    return data;
-  }
-
 }
