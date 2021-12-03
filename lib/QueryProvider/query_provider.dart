@@ -365,8 +365,8 @@ class QueryProvider {
     );
   }
 
-  getAllMechanicList(String token, int page, int size) async {
-    String _query = """
+  getAllMechanicList(String token, int page, int size,String serviceId) async {
+    /*String _query = """
     query{
   mechanicList(page: $page, size: $size){
     totalItems
@@ -424,7 +424,40 @@ class QueryProvider {
     currentPage
   }
 }
+    """;*/
+    String _query = """
+    query{
+  mechanicList(page: $page, size: $size, serviceId:"$serviceId"){
+    totalItems
+    data {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+    }
+    totalPages
+    currentPage
+  }
+}
     """;
+
     log(_query);
     return await GqlClient.I.query01(
       _query,

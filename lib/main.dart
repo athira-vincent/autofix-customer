@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/NoResult/no_result_found_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,10 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: CustColors.materialBlue,
+        accentColor: CustColors.blue
+    ),
       home: SplashScreen(),
     );
   }

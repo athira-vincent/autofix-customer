@@ -22,15 +22,21 @@ class _HomeScreenState extends State<HomeScreen> {
   String _userName = "";
   var scaffoldKey = GlobalKey<ScaffoldState>();
   double per = .10;
+  double perfont = .10;
   GenerateAuthorizationBloc _generateAuthorizationBloc =
       GenerateAuthorizationBloc();
   double _setValue(double value) {
     return value * per + value;
   }
 
+  double _setValueFont(double value) {
+    return value * perfont + value;
+  }
+
   @override
   void initState() {
     super.initState();
+    _index = 2;
     _getUser();
     _getToken();
   }
@@ -70,38 +76,118 @@ class _HomeScreenState extends State<HomeScreen> {
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(bottom: 12),
-            child: Image.asset(
-              'assets/images/profile_blue.png',
-              width: _setValue(22.4),
-              height: _setValue(27.2),
+            margin: EdgeInsets.only(top: 2.3),
+            width: _setValue(65),
+            height: _setValue(65),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: _index == 0
+                    ? Colors.white.withOpacity(.05)
+                    : Colors.transparent),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: _setValue(5.1)),
+                  child: Image.asset(
+                    'assets/images/profile_blue.png',
+                    width: _setValue(22.4),
+                    height: _setValue(27.2),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
+                  child: Text(
+                    'Profile',
+                    style: TextStyle(
+                        fontFamily: 'Corbel_Light',
+                        fontSize: _setValueFont(9.5),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
-          label: 'Profile'),
+          label: ''),
       BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Image.asset(
-              'assets/images/spair_parts.png',
-              width: _setValue(29),
-              height: _setValue(29),
+            margin: EdgeInsets.only(top: 2.3),
+            width: _setValue(65),
+            height: _setValue(65),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: _index == 1
+                    ? Colors.white.withOpacity(.05)
+                    : Colors.transparent),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: _setValue(5.1)),
+                  child: Image.asset(
+                    'assets/images/spair_parts.png',
+                    width: _setValue(29),
+                    height: _setValue(29),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
+                  child: Text(
+                    'Spare Parts',
+                    style: TextStyle(
+                        fontFamily: 'Corbel_Light',
+                        fontSize: _setValueFont(9.5),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
-          label: 'Spare Parts'),
+          label: ''),
       BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(bottom: 12),
-            child: Image.asset(
-              'assets/images/services.png',
-              width: _setValue(28.4),
-              height: _setValue(27.2),
+            margin: EdgeInsets.only(top: 2.3),
+            width: _setValue(65),
+            height: _setValue(65),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: _index == 2
+                  ? Colors.white.withOpacity(.05)
+                  : Colors.transparent,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: _setValue(5.1)),
+                  child: Image.asset(
+                    'assets/images/services.png',
+                    width: _setValue(32.4),
+                    height: _setValue(31.2),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
+                  child: Text(
+                    'Services',
+                    style: TextStyle(
+                        fontFamily: 'Corbel_Light',
+                        fontSize: _setValueFont(9.5),
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
-          label: 'Services'),
+          label: ''),
     ];
     return Scaffold(
       drawer: NavigationDrawerScreen(),
       key: scaffoldKey,
+      extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize:
@@ -175,10 +261,10 @@ class _HomeScreenState extends State<HomeScreen> {
               top: MediaQuery.of(context).padding.top + 120,
             ),
             child: _index == 0
-                ? ServicesScreen()
+                ? ProfileScreen()
                 : _index == 1
                     ? SpairPartsScreen()
-                    : ProfileScreen(),
+                    : ServicesScreen(),
           ),
         ],
       ),
@@ -201,11 +287,11 @@ class _HomeScreenState extends State<HomeScreen> {
               selectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',
                   fontWeight: FontWeight.w600,
-                  fontSize: 9.5),
+                  fontSize: 0),
               unselectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',
                   fontWeight: FontWeight.w600,
-                  fontSize: 9.5),
+                  fontSize: 0),
               items: bottomNavigationBarItems,
               currentIndex: _index,
               backgroundColor: CustColors.blue,
