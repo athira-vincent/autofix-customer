@@ -11,10 +11,16 @@ class SpairPartsScreen extends StatefulWidget {
 class _SpairPartsScreenState extends State<SpairPartsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Spare Parts'),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            47.3,
+          ),
+        ),
       ),
+      child: Center(child: Text('Spare Parts')),
     );
   }
 }

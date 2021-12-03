@@ -25,6 +25,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
   File? _image;
   List<File> _images = [];
   final picker = ImagePicker();
+  bool _selectService = false;
   double per = .10;
   double _setValue(double value) {
     return value * per + value;
@@ -135,29 +136,38 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                           fontFamily: "Corbel_Regular"),
                     ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _selectService = !_selectService;
+                          });
+                        },
                         icon: Icon(
-                          Icons.keyboard_arrow_right,
+                          _selectService
+                              ? Icons.keyboard_arrow_right
+                              : Icons.keyboard_arrow_down,
                           color: CustColors.blue,
                         ))
                   ],
                 ),
               ),
-              GridView.builder(
-                itemCount: _searchData!.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return _serviceListItem(widget.searchData[index], index);
-                },
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  //crossAxisSpacing: 40.0,
-                  // mainAxisSpacing: 13.9,
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 6.5),
-                ),
-              ),
+              _selectService
+                  ? GridView.builder(
+                      itemCount: _searchData!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _serviceListItem(
+                            widget.searchData[index], index);
+                      },
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        //crossAxisSpacing: 40.0,
+                        // mainAxisSpacing: 13.9,
+                        childAspectRatio: MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 6.5),
+                      ),
+                    )
+                  : Container(width: 0, height: 0),
               Divider(
                 height: 20,
               ),
@@ -172,6 +182,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                                   searchData: widget.searchData,
                                   type: widget.type.toString(),
                                 )));
+                    print("checking 0001 ${_searchData!.length}");
                     setState(() {});
                   },
                   child: Container(
@@ -225,98 +236,105 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                       fontFamily: "Corbel_Regular"),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: _setValue(14.4)),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: _setValue(56),
-                      child: ListView.builder(
-                        itemCount: _images.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.only(
-                                    top: _setValue(5.8), right: _setValue(20)),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.circular(_setValue(12)),
-                                  child: Image.file(
-                                    File(_images[index].path),
-                                    fit: BoxFit.cover,
-                                    width: _setValue(50),
-                                    height: _setValue(50),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _images.removeAt(index);
-                                  });
-                                },
-                                child: Container(
-                                  alignment: Alignment.topRight,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  margin: EdgeInsets.only(top: _setValue(14.4)),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: _setValue(56),
+                        child: ListView.builder(
+                          itemCount: _images.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
                                   margin: EdgeInsets.only(
-                                      top: _setValue(2), right: _setValue(16)),
-                                  child: Image.asset(
-                                    'assets/images/close_blue.png',
-                                    width: _setValue(14.1),
-                                    height: _setValue(14.1),
+                                      top: _setValue(5.8),
+                                      right: _setValue(20)),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(_setValue(12)),
+                                    child: Image.file(
+                                      File(_images[index].path),
+                                      fit: BoxFit.cover,
+                                      width: _setValue(50),
+                                      height: _setValue(50),
+                                    ),
                                   ),
                                 ),
-                              )
-                            ],
-                          );
-                        },
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _images.removeAt(index);
+                                    });
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.topRight,
+                                    margin: EdgeInsets.only(
+                                        top: _setValue(2),
+                                        right: _setValue(16)),
+                                    child: Image.asset(
+                                      'assets/images/close_blue.png',
+                                      width: _setValue(14.1),
+                                      height: _setValue(14.1),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        _showDialogSelectPhoto();
-                      },
-                      child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: _setValue(5.8)),
-                          width: _setValue(50),
-                          height: _setValue(50),
-                          decoration: BoxDecoration(
-                            color: Color(0xfff0f2f4),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                _setValue(_setValue(12)),
-                              ),
-                            ),
-                          ),
-                          child: Center(
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: _setValue(30),
-                              height: _setValue(30),
-                              decoration: BoxDecoration(
-                                color: Color(0xffe3e4e5),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(
-                                    _setValue(_setValue(25)),
-                                  ),
+                      InkWell(
+                        onTap: () {
+                          if (_images.length < 4) {
+                            _showDialogSelectPhoto();
+                          }
+                        },
+                        child: Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.only(top: _setValue(5.8)),
+                            width: _setValue(50),
+                            height: _setValue(50),
+                            decoration: BoxDecoration(
+                              color: Color(0xfff0f2f4),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(
+                                  _setValue(_setValue(12)),
                                 ),
                               ),
-                              child: Text('+',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "Corbel-Light",
-                                      fontSize: 29,
-                                      fontWeight: FontWeight.w600,
-                                      color: CustColors.blue)),
                             ),
-                          )),
-                    ),
-                  ],
+                            child: Center(
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: _setValue(30),
+                                height: _setValue(30),
+                                decoration: BoxDecoration(
+                                  color: Color(0xffe3e4e5),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(
+                                      _setValue(_setValue(25)),
+                                    ),
+                                  ),
+                                ),
+                                child: Text('+',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: "Corbel-Light",
+                                        fontSize: 29,
+                                        fontWeight: FontWeight.w600,
+                                        color: CustColors.blue)),
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -418,7 +436,6 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                       Navigator.pop(context);
                       XFile? image = await picker.pickImage(
                           source: ImageSource.camera, imageQuality: 30);
-
                       setState(() {
                         if (image != null) {
                           _images.add(File(image.path));

@@ -201,7 +201,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     });
   }
 
- /* String? _selectedColor;
+  /* String? _selectedColor;
   List<String> _animals = ["Dog", "Cat", "Crocodile", "Dragon"];
 */
   @override
@@ -534,7 +534,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     ),
                                   ),
                                 ),
-                              ).toList(),
+                              )
+                              .toList(),
                           selectedItemBuilder: (BuildContext context) =>
                               engineDetails!
                                   .map(
@@ -549,7 +550,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                             fontWeight: FontWeight.w700),
                                       ),
                                     ),
-                                  ).toList(),
+                                  )
+                                  .toList(),
                         ),
                       ),
                       Container(
@@ -722,63 +724,64 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: _isLoading ?
-                        Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                CustColors.darkBlue),
-                          ),
-                        )
-                        :
-                        Container(
-                          margin: EdgeInsets.all(4),
-                          padding: EdgeInsets.only(
-                              top: 7.3, bottom: 7.2, left: 35, right: 35.3),
-                          decoration: BoxDecoration(
-                            color: CustColors.blue,
-                            border: Border.all(
-                              color: CustColors.blue,
-                              style: BorderStyle.solid,
-                              width: 0.70,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: MaterialButton(
-                            child: Text(
-                              "Save",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Corbel_Regular',
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                            onPressed: (){
-                              if (_formKey.currentState!.validate()) {
-                                _addVehicleBloc.postAddVehicleRequest(
-                                    token,
-                                    _yearController.text,
-                                    "10.551123",
-                                    "76.066753",
-                                    _mileageController.text,
-                                    _maintenanceController.text,
-                                    "3",
-                                    int.parse(value!.id!),
-                                    int.parse(modelValue!.id!),
-                                    int.parse(engineValue!.id!)
-                                  /* _userNameController.text,
+                        child: _isLoading
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      CustColors.darkBlue),
+                                ),
+                              )
+                            : Container(
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.only(
+                                    top: 7.3,
+                                    bottom: 7.2,
+                                    left: 35,
+                                    right: 35.3),
+                                decoration: BoxDecoration(
+                                  color: CustColors.blue,
+                                  border: Border.all(
+                                    color: CustColors.blue,
+                                    style: BorderStyle.solid,
+                                    width: 0.70,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: MaterialButton(
+                                  child: Text(
+                                    "Save",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Corbel_Regular',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      _addVehicleBloc.postAddVehicleRequest(
+                                          token,
+                                          _yearController.text,
+                                          "10.551123",
+                                          "76.066753",
+                                          _mileageController.text,
+                                          _maintenanceController.text,
+                                          "3",
+                                          int.parse(value!.id!),
+                                          int.parse(modelValue!.id!),
+                                          int.parse(engineValue!.id!)
+                                          /* _userNameController.text,
                                 _passwordController.text*/
-                                );
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                              } else {
-                                setState(() =>
-                                _autoValidate = AutovalidateMode.always);
-                              }
-                            },
-                          ),
-
-                        ),
+                                          );
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
+                                    } else {
+                                      setState(() => _autoValidate =
+                                          AutovalidateMode.always);
+                                    }
+                                  },
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -794,6 +797,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   void setIsSignedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
+    prefs.setBool(SharedPrefKeys.isUserLoggedIn, true);
   }
 
   DropdownMenuItem<MakeDetails> buildMenuItem(MakeDetails item) =>

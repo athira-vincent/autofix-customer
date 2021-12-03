@@ -111,7 +111,9 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
                 itemCount: vehicleDetailsList!.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       child: Container(
                           margin: EdgeInsets.only(
                               left: _setValue(34.5),

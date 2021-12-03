@@ -10,7 +10,7 @@
         android:label="auto_fix"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
-     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDaoUiBbmno0IX3xxz7xjarbEX1GCr7Wuw"/>
+     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCOijUnxSdUDHpQWIqJT5y-BklV9pI0Te0"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

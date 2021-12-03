@@ -43,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen> {
     int? _isDefaultVehicleAvailable =
         _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
 
-
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
@@ -68,8 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context, MaterialPageRoute(builder: (context) => const MechanicListScreen()));
 */
 
-
-    if (_isLoggedin != null || _isLoggedin == true) {
+    if (_isLoggedin != null && _isLoggedin == true) {
       if (userType == TextStrings.user_customer) {
         if (_isDefaultVehicleAvailable == null ||
             _isDefaultVehicleAvailable == 1) {
@@ -102,7 +100,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 builder: (context) => const UserSelectionScreen()));
       }
     }
-
 
     /*if (isWalked == null || !isWalked) {
       print('WalkThroughPage');
