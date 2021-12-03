@@ -122,8 +122,8 @@ class Repository {
       _allMakeApiProvider.getAllMakeRequest(token);
 
   //All Mechanic List
-  Future<dynamic> getAllMechanicList(String token, int page, int size) =>
-      _allMechanicListApiProvider.getAllMechanicListRequest(token, page, size);
+  Future<dynamic> getAllMechanicList(String token, int page, int size,String serviceId) =>
+      _allMechanicListApiProvider.getAllMechanicListRequest(token, page, size,serviceId);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
   //Top Brands
