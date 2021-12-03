@@ -29,6 +29,16 @@ class _SigninScreenState extends State<SigninScreen> {
   final SigninBloc _signinBloc = SigninBloc();
   bool _isLoading = false;
   bool? _passwordVisible;
+  double per = .10;
+  double perfont = .10;
+  double _setValue(double value) {
+    return value * per + value;
+  }
+
+  double _setValueFont(double value) {
+    return value * perfont + value;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,7 +106,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
             FocusScope.of(context).unfocus();
           } else {
-            setIsSignedIn();
+            //setIsSignedIn();
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => AddVehicleScreen()));
           }
@@ -128,23 +138,24 @@ class _SigninScreenState extends State<SigninScreen> {
                   autovalidateMode: _autoValidate,
                   key: _formKey,
                   child: Container(
-                    margin: EdgeInsets.only(left: 37.5, right: 37.5),
+                    margin: EdgeInsets.only(
+                        left: _setValue(37.5), right: _setValue(37.5)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 160),
+                          margin: EdgeInsets.only(top: _setValue(160)),
                           child: Text(
                             'Login',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 19.5,
+                                fontSize: _setValueFont(19.5),
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Corbel_Bold'),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 25.5),
+                          margin: EdgeInsets.only(top: _setValue(25.5)),
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
                             maxLines: 1,
@@ -152,7 +163,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               fontFamily: 'Montserrat_Semibond',
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: _setValueFont(13),
                             ),
 
                             focusNode: _userNameFocusNode,
@@ -209,7 +220,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                   fontFamily: 'Corbel_Light',
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white.withOpacity(.60),
-                                  fontSize: 12,
+                                  fontSize: _setValueFont(12),
                                 )),
                           ),
                         ),
@@ -227,7 +238,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               fontFamily: 'Montserrat_Semibond',
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: _setValueFont(13),
                             ),
                             decoration: InputDecoration(
                                 isDense: true,
@@ -300,13 +311,13 @@ class _SigninScreenState extends State<SigninScreen> {
                                   fontFamily: 'Corbel_Light',
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white.withOpacity(.60),
-                                  fontSize: 12,
+                                  fontSize: _setValueFont(12),
                                 )),
                           ),
                         ),
                         Container(
-                          height: 28,
-                          width: 96,
+                          height: _setValue(28),
+                          width: _setValue(96),
                           margin: EdgeInsets.only(top: 31.8),
                           child: _isLoading
                               ? Center(
@@ -348,17 +359,17 @@ class _SigninScreenState extends State<SigninScreen> {
                                               color: CustColors.blue,
                                               fontFamily: 'Corbel_Regular',
                                               fontWeight: FontWeight.w600,
-                                              fontSize: 11.5,
+                                              fontSize: _setValueFont(11.5),
                                             ),
                                           ),
                                           Container(
                                             margin: EdgeInsets.only(
-                                              left: 16.6,
+                                              left: _setValue(16.6),
                                             ),
                                             child: Image.asset(
                                               'assets/images/arrow_forword.png',
-                                              width: 12.5,
-                                              height: 12.5,
+                                              width: _setValue(12.5),
+                                              height: _setValue(12.5),
                                             ),
                                           )
                                         ],
@@ -366,8 +377,8 @@ class _SigninScreenState extends State<SigninScreen> {
                                     ),
                                     color: Colors.white,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16)),
+                                        borderRadius: BorderRadius.circular(
+                                            _setValue(16))),
                                   ),
                                 ),
                         ),
@@ -383,12 +394,12 @@ class _SigninScreenState extends State<SigninScreen> {
                                             ForgotPasswordScreen()));
                               },
                               child: Container(
-                                margin: EdgeInsets.only(top: 22),
+                                margin: EdgeInsets.only(top: _setValue(22)),
                                 child: Text(
                                   'Forgot password?',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 11.5,
+                                      fontSize: _setValueFont(11.5),
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Corbel_Light'),
                                 ),
@@ -402,12 +413,12 @@ class _SigninScreenState extends State<SigninScreen> {
                                         builder: (context) => SignupScreen()));
                               },
                               child: Container(
-                                margin: EdgeInsets.only(top: 22),
+                                margin: EdgeInsets.only(top: _setValue(22)),
                                 child: Text(
                                   'New user ? Sign up',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 11.5,
+                                      fontSize: _setValueFont(11.5),
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Corbel_Light'),
                                 ),
@@ -424,7 +435,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 225,
+                      height: _setValue(225),
                       alignment: Alignment.bottomLeft,
                       child: Image.asset(
                         'assets/images/arc_left.png',
@@ -434,13 +445,15 @@ class _SigninScreenState extends State<SigninScreen> {
                         width: double.infinity,
                         alignment: Alignment.bottomRight,
                         child: Image.asset('assets/images/arc_right.png',
-                            width: 336)),
+                            width: _setValue(336))),
                     Container(
                         width: double.infinity,
-                        height: 60,
+                        height: _setValue(60),
                         alignment: Alignment.bottomLeft,
-                        margin:
-                            EdgeInsets.only(left: 66, bottom: 26.5, right: 78),
+                        margin: EdgeInsets.only(
+                            left: _setValue(66),
+                            bottom: _setValue(26.5),
+                            right: _setValue(78)),
                         child: Image.asset(
                           'assets/images/autofix_logo.png',
                         )),

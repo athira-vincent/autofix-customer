@@ -104,12 +104,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
         ),
       ),
       child: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: _setValue(75)),
         child: Column(
           children: [
             _reminder(),
             _searchBox(),
             _regularServices(),
             _emergencyServices(),
+            _adsList(),
           ],
         ),
       ),
@@ -367,7 +369,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: _setValue(29.1), left: _setValue(9)),
+            margin: EdgeInsets.only(
+                top: _setValue(29.1),
+                left: _setValue(9),
+                bottom: _setValue(15)),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -428,7 +433,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
             child: Container(
               margin: EdgeInsets.all(_setValue(9)),
               child: CachedNetworkImage(
-                imageUrl: "https://picsum.photos/200",
+                imageUrl:
+                    "https://cdn-icons-png.flaticon.com/512/833/833015.png",
               ),
             ),
           ),
@@ -444,6 +450,32 @@ class _ServicesScreenState extends State<ServicesScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _adsList() {
+    return Container(
+      margin: EdgeInsets.only(top: _setValue(10)),
+      height: _setValue(109),
+      child: ListView.builder(
+        itemCount: 5,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          return _adsListItem();
+        },
+      ),
+    );
+  }
+
+  Widget _adsListItem() {
+    return Container(
+      margin: EdgeInsets.only(right: _setValue(4.7)),
+      child: Image.network(
+        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2022-chevrolet-corvette-z06-1607016574.jpg?crop=0.737xw:0.738xh;0.181xw,0.218xh&resize=640:*",
+        fit: BoxFit.cover,
+        width: _setValue(178),
+        height: _setValue(109),
       ),
     );
   }

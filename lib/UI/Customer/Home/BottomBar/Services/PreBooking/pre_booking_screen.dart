@@ -25,6 +25,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
   File? _image;
   List<File> _images = [];
   final picker = ImagePicker();
+  bool _selectService = false;
   double per = .10;
   double _setValue(double value) {
     return value * per + value;
@@ -135,29 +136,38 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                           fontFamily: "Corbel_Regular"),
                     ),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _selectService = !_selectService;
+                          });
+                        },
                         icon: Icon(
-                          Icons.keyboard_arrow_right,
+                          _selectService
+                              ? Icons.keyboard_arrow_right
+                              : Icons.keyboard_arrow_down,
                           color: CustColors.blue,
                         ))
                   ],
                 ),
               ),
-              GridView.builder(
-                itemCount: _searchData!.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  return _serviceListItem(widget.searchData[index], index);
-                },
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  //crossAxisSpacing: 40.0,
-                  // mainAxisSpacing: 13.9,
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 6.5),
-                ),
-              ),
+              _selectService
+                  ? GridView.builder(
+                      itemCount: _searchData!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _serviceListItem(
+                            widget.searchData[index], index);
+                      },
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        //crossAxisSpacing: 40.0,
+                        // mainAxisSpacing: 13.9,
+                        childAspectRatio: MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 6.5),
+                      ),
+                    )
+                  : Container(width: 0, height: 0),
               Divider(
                 height: 20,
               ),
@@ -426,7 +436,6 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                       Navigator.pop(context);
                       XFile? image = await picker.pickImage(
                           source: ImageSource.camera, imageQuality: 30);
-
                       setState(() {
                         if (image != null) {
                           _images.add(File(image.path));

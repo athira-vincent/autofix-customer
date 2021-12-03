@@ -464,7 +464,6 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                     searchData.type = _regularSearchDataList![index].type;
                     regularList01 = widget.searchData;
                     regularList01.add(searchData);
-
                     Navigator.pop(context, regularList01);
                   },
                   child: Column(
@@ -624,6 +623,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
         searchData.serviceName = regularList.serviceName;
         searchData.status = regularList.status;
         searchData.type = regularList.type;
+        regularList01 = widget.searchData;
         regularList01.add(searchData);
         Navigator.pop(context, regularList01);
       },
@@ -728,6 +728,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
         searchData.serviceName = emergencyList.serviceName;
         searchData.status = emergencyList.status;
         searchData.type = emergencyList.type;
+        regularList01 = widget.searchData;
         regularList01.add(searchData);
         Navigator.pop(context, regularList01);
       },
