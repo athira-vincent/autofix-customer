@@ -216,12 +216,32 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                   ),
                   child: Column(
                     children: [
-                      regularServicesListView(),
-                      emergencyServicesListView(),
+                      widget.type == "1"
+                          ? regularServicesListView()
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            ),
+                      widget.type == "2"
+                          ? emergencyServicesListView()
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            ),
                     ],
                   )),
-              _regularServices(),
-              _emergencyServices(),
+              widget.type == "1"
+                  ? _regularServices()
+                  : Container(
+                      width: 0,
+                      height: 0,
+                    ),
+              widget.type == "2"
+                  ? _emergencyServices()
+                  : Container(
+                      width: 0,
+                      height: 0,
+                    ),
             ],
           ),
         ),
@@ -448,44 +468,58 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
               shrinkWrap: true,
               itemCount: _regularSearchDataList!.length,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    List<SearchData> regularList01 = [];
-                    SearchData searchData = SearchData();
-                    searchData.description =
-                        _regularSearchDataList![index].description;
-                    searchData.fee = _regularSearchDataList![index].fee;
-                    searchData.icon = _regularSearchDataList![index].icon;
-                    searchData.id =
-                        _regularSearchDataList![index].id.toString();
-                    searchData.serviceName =
-                        _regularSearchDataList![index].serviceName;
-                    searchData.status = _regularSearchDataList![index].status;
-                    searchData.type = _regularSearchDataList![index].type;
-                    regularList01 = widget.searchData;
-                    regularList01.add(searchData);
-                    Navigator.pop(context, regularList01);
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _regularSearchDataList![index].serviceName!,
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          color: CustColors.black01,
-                          //fontWeight: FontWeight.normal,
-                          fontFamily: 'Corbel_Regular',
-                          fontWeight: FontWeight.w600,
+                bool visible = true;
+                for (int j = 0; j < widget.searchData.length; j++) {
+                  if (_regularSearchDataList![index].id ==
+                      widget.searchData[j].id) {
+                    visible = false;
+                    break;
+                  }
+                }
+                return visible
+                    ? InkWell(
+                        onTap: () {
+                          List<SearchData> regularList01 = [];
+                          SearchData searchData = SearchData();
+                          searchData.description =
+                              _regularSearchDataList![index].description;
+                          searchData.fee = _regularSearchDataList![index].fee;
+                          searchData.icon = _regularSearchDataList![index].icon;
+                          searchData.id =
+                              _regularSearchDataList![index].id.toString();
+                          searchData.serviceName =
+                              _regularSearchDataList![index].serviceName;
+                          searchData.status =
+                              _regularSearchDataList![index].status;
+                          searchData.type = _regularSearchDataList![index].type;
+                          regularList01 = widget.searchData;
+                          regularList01.add(searchData);
+                          Navigator.pop(context, regularList01);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _regularSearchDataList![index].serviceName!,
+                              style: TextStyle(
+                                fontSize: 14.5,
+                                color: CustColors.black01,
+                                //fontWeight: FontWeight.normal,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Divider(
+                              height: 16,
+                              thickness: .4,
+                            )
+                          ],
                         ),
-                      ),
-                      Divider(
-                        height: 16,
-                        thickness: .4,
                       )
-                    ],
-                  ),
-                );
+                    : Container(
+                        width: 0,
+                        height: 0,
+                      );
               })
         ],
       ),
@@ -506,7 +540,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
           Container(
             margin: EdgeInsets.only(bottom: _setValue(7.9)),
             child: Text(
-              'Regular Services',
+              'Emergency Services',
               style: TextStyle(
                 fontSize: 12,
                 color: CustColors.blue01,
@@ -519,43 +553,59 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
               shrinkWrap: true,
               itemCount: _emergencySearchDataList!.length,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    List<SearchData> regularList01 = [];
-                    SearchData searchData = SearchData();
-                    searchData.description =
-                        _emergencySearchDataList![index].description;
-                    searchData.fee = _emergencySearchDataList![index].fee;
-                    searchData.icon = _emergencySearchDataList![index].icon;
-                    searchData.id =
-                        _emergencySearchDataList![index].id.toString();
-                    searchData.serviceName =
-                        _emergencySearchDataList![index].serviceName;
-                    searchData.status = _emergencySearchDataList![index].status;
-                    searchData.type = _emergencySearchDataList![index].type;
-                    regularList01.add(searchData);
-                    Navigator.pop(context, regularList01);
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _emergencySearchDataList![index].serviceName!,
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          color: CustColors.black01,
-                          //fontWeight: FontWeight.normal,
-                          fontFamily: 'Corbel_Regular',
-                          fontWeight: FontWeight.w600,
+                bool visible = true;
+                for (int j = 0; j < widget.searchData.length; j++) {
+                  if (_emergencySearchDataList![index].id ==
+                      widget.searchData[j].id) {
+                    visible = false;
+                    break;
+                  }
+                }
+                return visible
+                    ? InkWell(
+                        onTap: () {
+                          List<SearchData> regularList01 = [];
+                          SearchData searchData = SearchData();
+                          searchData.description =
+                              _emergencySearchDataList![index].description;
+                          searchData.fee = _emergencySearchDataList![index].fee;
+                          searchData.icon =
+                              _emergencySearchDataList![index].icon;
+                          searchData.id =
+                              _emergencySearchDataList![index].id.toString();
+                          searchData.serviceName =
+                              _emergencySearchDataList![index].serviceName;
+                          searchData.status =
+                              _emergencySearchDataList![index].status;
+                          searchData.type =
+                              _emergencySearchDataList![index].type;
+                          regularList01.add(searchData);
+                          Navigator.pop(context, regularList01);
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _emergencySearchDataList![index].serviceName!,
+                              style: TextStyle(
+                                fontSize: 14.5,
+                                color: CustColors.black01,
+                                //fontWeight: FontWeight.normal,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Divider(
+                              height: 16,
+                              thickness: .4,
+                            )
+                          ],
                         ),
-                      ),
-                      Divider(
-                        height: 16,
-                        thickness: .4,
                       )
-                    ],
-                  ),
-                );
+                    : Container(
+                        width: 0,
+                        height: 0,
+                      );
               })
         ],
       ),
@@ -602,7 +652,19 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
               itemCount: _regularList!.length,
               padding: EdgeInsets.all(0),
               itemBuilder: (BuildContext context, int index) {
-                return _regularServicesListItem(_regularList![index]);
+                bool visible = true;
+                for (int j = 0; j < widget.searchData.length; j++) {
+                  if (_regularList![index].id == widget.searchData[j].id) {
+                    visible = false;
+                    break;
+                  }
+                }
+                return visible
+                    ? _regularServicesListItem(_regularList![index])
+                    : Container(
+                        width: 0,
+                        height: 0,
+                      );
               },
             ),
           ),
@@ -707,7 +769,19 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
               itemCount: _emergencyList!.length,
               padding: EdgeInsets.all(0),
               itemBuilder: (BuildContext context, int index) {
-                return _emergencyServicesListItem(_emergencyList![index]);
+                bool visible = true;
+                for (int j = 0; j < widget.searchData.length; j++) {
+                  if (_emergencyList![index].id == widget.searchData[j].id) {
+                    visible = false;
+                    break;
+                  }
+                }
+                return visible
+                    ? _emergencyServicesListItem(_emergencyList![index])
+                    : Container(
+                        width: 0,
+                        height: 0,
+                      );
               },
             ),
           ),

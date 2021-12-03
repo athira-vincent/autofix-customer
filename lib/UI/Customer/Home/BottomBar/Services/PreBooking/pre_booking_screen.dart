@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/AddMoreServices/add_more_services_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/SelectVehicle/select_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_mdl.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,6 +29,8 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
   List<File> _images = [];
   final picker = ImagePicker();
   bool _selectService = false;
+  final VehilceDetailsBloc _vehilceDetailsBloc = VehilceDetailsBloc();
+  List<VehicleDetails>? vehicleDetailsList = [];
   double per = .10;
   double _setValue(double value) {
     return value * per + value;
@@ -35,6 +40,53 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
   void initState() {
     super.initState();
     _searchData = widget.searchData;
+    _getVehicleList();
+    _getVehicleDetails();
+  }
+
+  _getVehicleList() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    String token = _shdPre.getString(SharedPrefKeys.token)!;
+    _vehilceDetailsBloc.postVehicleDetailsRequest(token);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _vehilceDetailsBloc.dispose();
+  }
+
+  _getVehicleDetails() async {
+    _vehilceDetailsBloc.postVehicleDetails.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          vehicleDetailsList = value.data!.vehicleDetailsList;
+          _setDefaultVehicle();
+        });
+      }
+    });
+  }
+
+  _setDefaultVehicle() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String? defaultVehicleID =
+        shdPre.getString(SharedPrefKeys.defaultVehicleID);
+    if (defaultVehicleID == null) {
+      if (vehicleDetailsList!.length > 0) {
+        shdPre.setString(SharedPrefKeys.defaultVehicleID,
+            vehicleDetailsList![0].id.toString());
+      }
+    } else {}
   }
 
   @override
@@ -93,7 +145,8 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SelectVehicleScreen()));
+                                builder: (context) =>
+                                    SelectVehicleScreen(vehicleDetailsList)));
                       },
                       child: Container(
                         alignment: Alignment.bottomRight,
@@ -122,32 +175,39 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: _setValue(17.4)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Select Service",
-                      style: TextStyle(
-                          color: CustColors.blue,
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "Corbel_Regular"),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectService = !_selectService;
-                          });
-                        },
-                        icon: Icon(
-                          _selectService
-                              ? Icons.keyboard_arrow_right
-                              : Icons.keyboard_arrow_down,
-                          color: CustColors.blue,
-                        ))
-                  ],
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectService = !_selectService;
+                  });
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: _setValue(17.4)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Select Service",
+                        style: TextStyle(
+                            color: CustColors.blue,
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Corbel_Regular"),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectService = !_selectService;
+                            });
+                          },
+                          icon: Icon(
+                            _selectService
+                                ? Icons.keyboard_arrow_right
+                                : Icons.keyboard_arrow_down,
+                            color: CustColors.blue,
+                          ))
+                    ],
+                  ),
                 ),
               ),
               _selectService
@@ -370,7 +430,30 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  width: _setValue(84.3),
+                  height: _setValue(24),
+                  margin: EdgeInsets.only(
+                      top: _setValue(23.9), bottom: _setValue(26.4)),
+                  alignment: Alignment.bottomRight,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.3),
+                      color: CustColors.blue),
+                  child: Center(
+                    child: Text(
+                      'Find Mechanic',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Corbel_Regular',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11.5),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
