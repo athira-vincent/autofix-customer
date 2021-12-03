@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/AddMoreServices/add_more_services_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicSearch/mechanic_search_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/SelectVehicle/select_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_bloc.dart';
@@ -433,23 +435,33 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Container(
-                  width: _setValue(84.3),
-                  height: _setValue(24),
-                  margin: EdgeInsets.only(
-                      top: _setValue(23.9), bottom: _setValue(26.4)),
-                  alignment: Alignment.bottomRight,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.3),
-                      color: CustColors.blue),
-                  child: Center(
-                    child: Text(
-                      'Find Mechanic',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Corbel_Regular',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 11.5),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MechanicSearchScreen(
+                                // serviceID: '1',
+                                )));
+                  },
+                  child: Container(
+                    width: _setValue(84.3),
+                    height: _setValue(24),
+                    margin: EdgeInsets.only(
+                        top: _setValue(23.9), bottom: _setValue(26.4)),
+                    alignment: Alignment.bottomRight,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.3),
+                        color: CustColors.blue),
+                    child: Center(
+                      child: Text(
+                        'Find Mechanic',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11.5),
+                      ),
                     ),
                   ),
                 ),
