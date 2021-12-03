@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectVehicleScreen extends StatefulWidget {
+  final List<VehicleDetails>? vehicleDetailsList;
+  SelectVehicleScreen(this.vehicleDetailsList);
   @override
   State<StatefulWidget> createState() {
     return _SelectVehicleScreenState();
@@ -13,50 +15,19 @@ class SelectVehicleScreen extends StatefulWidget {
 }
 
 class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
-  final VehilceDetailsBloc _vehilceDetailsBloc = VehilceDetailsBloc();
-  List<VehicleDetails>? vehicleDetailsList = [];
   double per = .10;
   double _setValue(double value) {
     return value * per + value;
   }
 
-  _getVehicleList() async {
-    SharedPreferences _shdPre = await SharedPreferences.getInstance();
-    String token = _shdPre.getString(SharedPrefKeys.token)!;
-    _vehilceDetailsBloc.postVehicleDetailsRequest(token);
-  }
-
-  _getVehicleDetails() async {
-    _vehilceDetailsBloc.postVehicleDetails.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-        });
-      } else {
-        setState(() {
-          vehicleDetailsList = value.data!.vehicleDetailsList;
-        });
-      }
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
-    _vehilceDetailsBloc.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _getVehicleList();
-    _getVehicleDetails();
   }
 
   @override
@@ -108,7 +79,7 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
           Flexible(
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: vehicleDetailsList!.length,
+                itemCount: widget.vehicleDetailsList!.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                       onTap: () {
@@ -151,11 +122,11 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
                               Container(
                                 margin: EdgeInsets.only(left: _setValue(30.9)),
                                 child: Text(
-                                  vehicleDetailsList![index].make!.makeName! +
+                                  widget.vehicleDetailsList![index].make!
+                                          .makeName! +
                                       " " +
-                                      vehicleDetailsList![index]
-                                          .vehiclemodel!
-                                          .modelName
+                                      widget.vehicleDetailsList![index]
+                                          .vehiclemodel!.modelName
                                           .toString(),
                                   style: TextStyle(
                                       fontSize: 14.5,

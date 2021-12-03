@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -59,9 +60,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             backgroundColor: CustColors.peaGreen,
           ));
 
-           Navigator.pushReplacement(context,
-                         MaterialPageRoute(builder: (context) => const SigninScreen()));
-                     FocusScope.of(context).unfocus();
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const SigninScreen()));
+          FocusScope.of(context).unfocus();
         });
       }
     });
@@ -112,11 +113,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       "Forgot  Password ?",
                       softWrap: true,
                       style: TextStyle(
-                          fontSize: 46,
-                          fontFamily: 'Corbel_Bold',
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          letterSpacing: 1.7,
+                        fontSize: ScreenSize().setValueFont(44),
+                        fontFamily: 'Corbel_Bold',
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 1.7,
+                        height: 1.3,
                       ),
                     ),
                   ),
@@ -126,16 +128,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     alignment: Alignment.centerLeft,
                     //color: Colors.red,
                     child: Text(
-                      "Enter the email address  associated with your \n"
-                      "account, we’ll send an email with instructions \n"
+                      "Enter the email address  associated with your "
+                      "account, we’ll send an email with instructions "
                       "to reset your password. ",
                       //textAlign: TextAlign.justify,
                       softWrap: true,
                       style: TextStyle(
                           height: 1.3,
-                          fontSize: 17,
+                          fontSize: ScreenSize().setValueFont(14.5),
                           fontFamily: 'Corbel_Regular',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           color: Colors.white,
                           letterSpacing: 0.7),
                     ),
@@ -235,7 +237,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(left: 16,),
+                                      margin: EdgeInsets.only(
+                                        left: 16,
+                                      ),
                                       child: Image.asset(
                                         'assets/images/arrow_forword.png',
                                         width: 14,

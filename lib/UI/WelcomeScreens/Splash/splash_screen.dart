@@ -57,17 +57,8 @@ class _SplashScreenState extends State<SplashScreen> {
       GqlClient.I.config(token: _token);
     }
 
-    /*print('WalkThroughPage');
-    Timer(
-        Duration(seconds: 3),
-            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => WalkThroughPages())));*/
-/*
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MechanicListScreen()));
-*/
-
     if (_isLoggedin != null && _isLoggedin == true) {
+      print("chechingggg 01");
       if (userType == TextStrings.user_customer) {
         if (_isDefaultVehicleAvailable == null ||
             _isDefaultVehicleAvailable == 1) {
@@ -100,42 +91,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 builder: (context) => const UserSelectionScreen()));
       }
     }
-
-    /*if (isWalked == null || !isWalked) {
-      print('WalkThroughPage');
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => WalkThroughPages()));
-    }
-    else if(isWalked)
-      {
-        if(userType == "1")
-          {
-
-            if (_isLoggedin == null) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const SigninScreen()));
-            } else if (_isLoggedin) {
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-            } else {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const SigninScreen()));
-            }
-
-          }
-        else if(userType == "2"){
-
-        }
-        else if(userType == "3"){
-
-        }
-        else{
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const UserSelectionScreen()));
-        }
-
-
-      }*/
   }
 
   @override

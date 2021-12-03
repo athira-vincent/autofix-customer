@@ -90,15 +90,15 @@ class _SigninScreenState extends State<SigninScreen> {
         setState(() {
           _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Successfully Signed In",
-                style: TextStyle(
-                    fontFamily: 'Roboto_Regular',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
+          // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          //   content: Text("Successfully Signed In",
+          //       style: TextStyle(
+          //           fontFamily: 'Roboto_Regular',
+          //           fontWeight: FontWeight.w600,
+          //           fontSize: 14)),
+          //   duration: Duration(seconds: 2),
+          //   backgroundColor: CustColors.peaGreen,
+          // ));
 
           if (value.data!.customerSignIn!.customer!.isProfileCompleted! == 2) {
             setIsSignedIn();
