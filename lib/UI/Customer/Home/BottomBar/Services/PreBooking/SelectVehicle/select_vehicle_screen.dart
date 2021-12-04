@@ -82,7 +82,11 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
                 itemCount: widget.vehicleDetailsList!.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        SharedPreferences shdPre =
+                            await SharedPreferences.getInstance();
+                        shdPre.setString(SharedPrefKeys.defaultVehicleID,
+                            widget.vehicleDetailsList![index].id!);
                         Navigator.pop(context);
                       },
                       child: Container(

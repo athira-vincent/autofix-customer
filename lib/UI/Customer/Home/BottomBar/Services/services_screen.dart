@@ -256,14 +256,17 @@ class _ServicesScreenState extends State<ServicesScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: _setValue(29.1), left: _setValue(9)),
+            margin: EdgeInsets.only(
+                top: _setValue(29.1),
+                left: _setValue(21),
+                right: _setValue(21)),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                crossAxisSpacing: _setValue(4.0),
+                crossAxisSpacing: _setValue(22),
                 mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.3),
+                    (MediaQuery.of(context).size.height / 1.50),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -303,21 +306,25 @@ class _ServicesScreenState extends State<ServicesScreen> {
       child: Container(
         child: Column(
           children: [
-            Container(
-              width: _setValue(50),
-              height: _setValue(50),
-              decoration: BoxDecoration(
-                border: Border.all(color: CustColors.lightGrey, width: 1.3),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    _setValue(7.8),
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                width: MediaQuery.of(context).size.width -
+                    ((_setValue(21) + _setValue(21)) + (22 * 3)),
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      _setValue(7.8),
+                    ),
                   ),
                 ),
-              ),
-              child: Container(
-                margin: EdgeInsets.all(_setValue(9)),
-                child: CachedNetworkImage(
-                  imageUrl: "https://picsum.photos/200",
+                child: Container(
+                  margin: EdgeInsets.all(_setValue(9)),
+                  child: CachedNetworkImage(
+                    imageUrl: "https://picsum.photos/200",
+                  ),
                 ),
               ),
             ),
@@ -371,15 +378,16 @@ class _ServicesScreenState extends State<ServicesScreen> {
           Container(
             margin: EdgeInsets.only(
                 top: _setValue(29.1),
-                left: _setValue(9),
+                left: _setValue(21),
+                right: _setValue(21),
                 bottom: _setValue(15)),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: _setValue(54.0),
+                crossAxisSpacing: _setValue(62.0),
                 mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.1),
+                    (MediaQuery.of(context).size.height / 1.5),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -418,23 +426,27 @@ class _ServicesScreenState extends State<ServicesScreen> {
       },
       child: Column(
         children: [
-          Container(
-            width: _setValue(50),
-            height: _setValue(50),
-            decoration: BoxDecoration(
-              border: Border.all(color: CustColors.lightGrey, width: 1.3),
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  _setValue(7.8),
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width -
+                  ((_setValue(21) + _setValue(21)) + (60 * 2)),
+              height: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    _setValue(7.8),
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              margin: EdgeInsets.all(_setValue(9)),
-              child: CachedNetworkImage(
-                imageUrl:
-                    "https://cdn-icons-png.flaticon.com/512/833/833015.png",
+              child: Container(
+                margin: EdgeInsets.all(_setValue(9)),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://cdn-icons-png.flaticon.com/512/833/833015.png",
+                ),
               ),
             ),
           ),

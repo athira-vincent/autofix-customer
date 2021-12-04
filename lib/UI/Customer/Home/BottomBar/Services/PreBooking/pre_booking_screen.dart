@@ -437,12 +437,28 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MechanicSearchScreen(
-                                // serviceID: '1',
-                                )));
+                    String s = "";
+                    for (int i = 0; i < _searchData!.length; i++) {
+                      s = s + "${_searchData![i].id}";
+                      if (i != (_searchData!.length - 1)) {
+                        s = s + ",";
+                      }
+                    }
+                    if (widget.type == "2") {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MechanicSearchScreen(
+                                  // serviceID: '1',
+                                  )));
+                    } else if (widget.type == "1") {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MechanicListScreen(
+                                    serviceID: s,
+                                  )));
+                    }
                   },
                   child: Container(
                     width: _setValue(84.3),
