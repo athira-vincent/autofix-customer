@@ -38,7 +38,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
     token = _shdPre.getString(SharedPrefKeys.token)!;
     print("Token : " + token);
     GqlClient.I.config(token: token);
-    _mechanicListBloc.postMechanicListRequest(token, 1, 10, "1");
+    _mechanicListBloc.postMechanicListRequest(token, 1, 10, widget.serviceID);
     //_allMakeBloc.postAllMakeRequest(token);
   }
 
