@@ -74,7 +74,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     token = _shdPre.getString(SharedPrefKeys.token)!;
     print("Token : " + token);
     GqlClient.I.config(token: token);
-    _allMakeBloc.postAllMakeRequest(token);
+    //_allMakeBloc.postAllMakeRequest(token);
   }
 
   @override
@@ -247,8 +247,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                             onChanged: (val) {
                               setState(() {
                                 this.value = val;
-                                _allModelBloc.postAllModelRequest(
-                                    int.parse(val!.id!), token);
+                                //_allModelBloc.postAllModelRequest(int.parse(val!.id!), token);
                                 print(val);
                               });
                             },
