@@ -90,6 +90,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
         ),
         body: Container(
           margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          alignment: Alignment.centerRight,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,

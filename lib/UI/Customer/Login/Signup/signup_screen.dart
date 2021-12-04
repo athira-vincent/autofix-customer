@@ -104,6 +104,8 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.customerSignUp!.customer!.profilePic.toString());
           shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
               value.data!.customerSignUp!.customer!.isProfileCompleted!);
+          shdPre.setString(
+              SharedPrefKeys.token, value.data!.customerSignUp!.token!);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
@@ -253,7 +255,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     .emptyChecking,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
-                                      RegExp('[a-zA-Z]')),
+                                      RegExp('[a-z0-9]')),
                                 ],
                                 controller: _userNameController,
                                 decoration: InputDecoration(

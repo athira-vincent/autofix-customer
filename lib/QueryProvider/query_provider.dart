@@ -6,7 +6,7 @@ class QueryProvider {
   signIn(String userName, String password) async {
     String _query = """  
   mutation{
-  customerSignIn(emailId: "$userName", password: "$password"){
+  customerSignIn(userName: "$userName", password: "$password") {
     token
     customer {
       id
@@ -17,11 +17,13 @@ class QueryProvider {
       phoneNo
       profilePic
       isProfileCompleted
+      state
+      userName
       status
     }
     isProfileCompleted
-   }  
   }
+}
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
@@ -31,22 +33,24 @@ class QueryProvider {
       String password, String phoneNo) async {
     String _query = """ 
     mutation{
-    customersSignUp(firstName: "$firstName", lastName: "$userName", address: "$state", emailId: "$email", phoneNo: "$phoneNo", password: "$password"){
-    token
-    customer {
-      id
-      firstName
-      lastName
-      address
-      emailId
-      phoneNo
-      profilePic
-      isProfileCompleted
-      status
-      }
-    isProfileCompleted
-      }
-    }
+          customersSignUp(firstName: "$firstName", lastName: "", address: "", emailId: "$email", phoneNo: "$phoneNo", password: "$password",state:"$state",userName:"$userName") {
+            token
+            customer {
+              id
+              firstName
+              lastName
+              address
+              emailId
+              phoneNo
+              profilePic
+              isProfileCompleted
+              tate
+              userNames
+              status
+            }
+            isProfileCompleted
+          } 
+  }
     """;
     log(_query);
     return await GqlClient.I.mutation(_query,
@@ -365,7 +369,7 @@ class QueryProvider {
     );
   }
 
-  getAllMechanicList(String token, int page, int size,String serviceId) async {
+  getAllMechanicList(String token, int page, int size, String serviceId) async {
     /*String _query = """
     query{
   mechanicList(page: $page, size: $size){

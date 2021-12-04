@@ -9,4 +9,5 @@ class SharedPrefKeys {
   static const userProfilePic = "userProfilePic";
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
   static const isCustomerSignUp = "isCustomerSignUp";
+  static const defaultVehicleID = "defaultVehicleID";
 }

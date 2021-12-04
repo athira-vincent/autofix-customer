@@ -68,6 +68,8 @@ class Customer {
   String? profilePic;
   int? isProfileCompleted;
   int? status;
+  String? state;
+  String? userName;
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['firstName'];
@@ -78,6 +80,8 @@ class Customer {
     profilePic = json['profilePic'];
     isProfileCompleted = json['isProfileCompleted'];
     status = json['status'];
+    state = json['state'];
+    userName = json['userName'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -90,6 +94,8 @@ class Customer {
     data['status'] = this.status;
     data['profilePic'] = this.profilePic;
     data['isProfileCompleted'] = this.isProfileCompleted;
+    data['state'] = this.state;
+    data['userName'] = this.userName;
     return data;
   }
 }
