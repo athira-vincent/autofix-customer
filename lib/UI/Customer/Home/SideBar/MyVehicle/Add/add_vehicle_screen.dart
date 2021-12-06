@@ -859,7 +859,10 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     step: FlutterSliderStep(step: 2),
                                     handler: FlutterSliderHandler(
                                         child: Image.asset(
-                                            "assets/images/icon_seekbar.png")
+                                            "assets/images/icon_seekBar.png",
+                                          fit: BoxFit.cover,
+                                          height: double.infinity,
+                                          width: double.infinity,),
                                     ),
                                     trackBar: FlutterSliderTrackBar(
                                       activeTrackBar: BoxDecoration(
@@ -1677,7 +1680,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     child: Stack(
       children: [
         Image.asset("assets/images/icon_seek_bg.png"),
-        Image.asset("assets/images/icon_seek_image.png")
+        Image.asset("assets/images/icon_seek_image.png",height: 10,width: 10,)
       ],
     ),
   );
