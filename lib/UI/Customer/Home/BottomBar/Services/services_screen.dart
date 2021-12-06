@@ -266,7 +266,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 crossAxisSpacing: _setValue(22),
                 mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.50),
+                    (MediaQuery.of(context).size.height / 1.40),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -387,7 +387,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 crossAxisSpacing: _setValue(62.0),
                 mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.5),
+                    (MediaQuery.of(context).size.height / 1.40),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
