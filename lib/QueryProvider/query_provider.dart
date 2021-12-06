@@ -44,8 +44,8 @@ class QueryProvider {
               phoneNo
               profilePic
               isProfileCompleted
-              tate
-              userNames
+              state
+              userName
               status
             }
             isProfileCompleted
@@ -304,10 +304,10 @@ class QueryProvider {
   getAds() {}
   topBrands() {}
   topShops() {}
-  getMechanicDetails() async {
+  getMechanicDetails(String id) async {
     String _query = """
       query{
-  mechanicDetails(mechanicId: 1) {
+  mechanicDetails(mechanicId: $id) {
     mechanicData {
       id
       displayName

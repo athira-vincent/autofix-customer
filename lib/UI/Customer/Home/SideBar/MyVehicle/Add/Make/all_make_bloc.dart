@@ -25,9 +25,9 @@ class AllMakeBloc {
   postAllMakeDataRequest(String token) async{
     AllMakeMdl _allMakeMdl = await repository.getAllMake(token);
     _makeDataList.clear();
-    _makeDataList.addAll(_allMakeMdl!.data!.makeDetails!);
+    _makeDataList.addAll(_allMakeMdl.data!.makeDetails!);
     postAllMake.sink.add(_allMakeMdl);
-    postMakeData.sink.add(_allMakeMdl!.data!.makeDetails!);
+    postMakeData.sink.add(_allMakeMdl.data!.makeDetails!);
   }
 
   void searchMake(String searchText) {

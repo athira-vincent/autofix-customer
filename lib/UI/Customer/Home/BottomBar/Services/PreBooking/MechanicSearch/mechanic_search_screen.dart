@@ -1,15 +1,26 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/grapgh_ql_client.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_screen.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_mdl.dart';
+import 'package:auto_fix/Widgets/shimmer_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class MechanicSearchScreen extends StatefulWidget {
-  const MechanicSearchScreen({Key? key}) : super(key: key);
+  final String serviceID;
+  const MechanicSearchScreen({Key? key, required this.serviceID})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _MechanicSearchScreenState();
@@ -22,10 +33,69 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapController;
   BitmapDescriptor? pinLocationIcon;
+  final MechanicListBloc _mechanicListBloc = MechanicListBloc();
+
+  List<MechanicListData> mechanicListData = [];
+  MechanicListData? mechanicListDataVal;
   bool fail = false;
+  bool _isLoading = false;
   double per = .10;
+  double km = 0;
   double _setValue(double value) {
     return value * per + value;
+  }
+
+  String token = "";
+
+  _addToken() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    token = _shdPre.getString(SharedPrefKeys.token)!;
+    print("Token : " + token);
+    GqlClient.I.config(token: token);
+    _mechanicListBloc.postMechanicListRequest(token, 1, 10, widget.serviceID);
+    //_allMakeBloc.postAllMakeRequest(token);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mechanicListBloc.dispose();
+  }
+
+  _getViewVehicle() async {
+    _mechanicListBloc.postViewMechanicList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+          fail = true;
+        });
+      } else {
+        setState(() {
+          print("errrrorr 01");
+          _isLoading = true;
+          mechanicListData = value.data!.mechanicList!.mechanicListData!;
+          km = calculateDistance(10.1964, 76.3879,
+                  mechanicListData[0].latitude!, mechanicListData[0].longitude!)
+              .roundToDouble();
+          // value.data.mechanicList.mechanicListData[0].id;
+        });
+      }
+    });
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 
   @override
@@ -38,6 +108,8 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
     Future.delayed(Duration.zero, () {
       createMarker(context);
     });
+    _addToken();
+    _getViewVehicle();
   }
 
 // This method will add markers to the map based on the LatLng position
@@ -144,7 +216,11 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
                         Container(
                           margin: EdgeInsets.only(top: _setValue(16.5)),
                           child: Text(
-                            fail ? "Something wrong" : 'Wait a minute!!',
+                            fail
+                                ? "Something wrong"
+                                : _isLoading
+                                    ? "You can choose mechanic"
+                                    : 'Wait a minute!!',
                             style: TextStyle(
                                 color: CustColors.black01,
                                 fontFamily: 'Corbel_Bold',
@@ -153,14 +229,23 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            if (fail) {
+                              _isLoading = false;
+                              setState(() {});
+                              _mechanicListBloc.postMechanicListRequest(
+                                  token, 1, 10, widget.serviceID);
+                            }
+                          },
                           child: Container(
                             margin: EdgeInsets.only(
                                 top: _setValue(11.8), bottom: _setValue(17.5)),
                             child: Text(
                               fail
                                   ? "Try again"
-                                  : """Finding mechanic near you
+                                  : _isLoading
+                                      ? "You can choose mechanic"
+                                      : """Finding mechanic near you
 Almost  there…..""",
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -181,7 +266,11 @@ Almost  there…..""",
                     top: _setValue(36.5), left: _setValue(33.3)),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  fail ? "Oops !!    Mechanic not found!" : 'Mechanic found',
+                  fail
+                      ? "Oops !!    Mechanic not found!"
+                      : _isLoading
+                          ? ""
+                          : 'Mechanic found',
                   style: TextStyle(
                       fontSize: 14.5,
                       color: CustColors.black01,
@@ -199,177 +288,213 @@ Almost  there…..""",
                         height: _setValue(111.3),
                       ),
                     )
-                  : Container(
-                      margin: EdgeInsets.only(
-                          left: _setValue(33.5),
-                          right: _setValue(33.5),
-                          top: _setValue(16.8)),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xffdddddd),
-                              spreadRadius: 0,
-                              blurRadius: 1.5,
-                              offset: Offset(0, .8),
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(_setValue(15.8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                    left: _setValue(11.5),
-                                    right: _setValue(11.5),
-                                    top: _setValue(4.8),
-                                    bottom: _setValue(4.8)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    _setValue(52.5),
-                                  ),
-                                  child: Image.network(
-                                    'https://picsum.photos/200',
-                                    width: _setValue(52.5),
-                                    height: _setValue(52.5),
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Eric',
-                                    style: TextStyle(
-                                        fontSize: 14.5,
-                                        color: CustColors.black01,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Corbel_Regular'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: _setValue(2)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/active_star.png',
-                                          width: _setValue(7.5),
-                                          height: _setValue(7.5),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: _setValue(4)),
-                                        ),
-                                        Image.asset(
-                                          'assets/images/active_star.png',
-                                          width: _setValue(7.5),
-                                          height: _setValue(7.5),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: _setValue(4)),
-                                        ),
-                                        Image.asset(
-                                          'assets/images/active_star.png',
-                                          width: _setValue(7.5),
-                                          height: _setValue(7.5),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: _setValue(4)),
-                                        ),
-                                        Image.asset(
-                                          'assets/images/active_star.png',
-                                          width: _setValue(7.5),
-                                          height: _setValue(7.5),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: _setValue(4)),
-                                        ),
-                                        Image.asset(
-                                          'assets/images/deactive_star.png',
-                                          width: _setValue(7.5),
-                                          height: _setValue(7.5),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 3),
-                                    child: Text(
-                                      '71  Reviews',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xffc1c1c1),
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Corbel_Light'),
-                                    ),
+                  : _isLoading
+                      ? InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MechanicProfileScreen(
+                                          id: mechanicListData[0].id.toString(),
+                                        )));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: _setValue(33.5),
+                                right: _setValue(33.5),
+                                top: _setValue(16.8)),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(0xffdddddd),
+                                    spreadRadius: 0,
+                                    blurRadius: 1.5,
+                                    offset: Offset(0, .8),
                                   ),
                                 ],
-                              )
-                            ],
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(right: _setValue(24.6)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                                borderRadius:
+                                    BorderRadius.circular(_setValue(15.8))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  '8 Km',
-                                  style: TextStyle(
-                                      fontSize: 14.5,
-                                      color: CustColors.black01,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Corbel_Bold'),
+                                Row(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: _setValue(11.5),
+                                          right: _setValue(11.5),
+                                          top: _setValue(4.8),
+                                          bottom: _setValue(4.8)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          _setValue(52.5),
+                                        ),
+                                        child: Image.network(
+                                          'https://picsum.photos/200',
+                                          width: _setValue(52.5),
+                                          height: _setValue(52.5),
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          mechanicListData[0]
+                                              .displayName
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 14.5,
+                                              color: CustColors.black01,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Corbel_Regular'),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: _setValue(2)),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                'assets/images/active_star.png',
+                                                width: _setValue(7.5),
+                                                height: _setValue(7.5),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: _setValue(4)),
+                                              ),
+                                              Image.asset(
+                                                'assets/images/active_star.png',
+                                                width: _setValue(7.5),
+                                                height: _setValue(7.5),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: _setValue(4)),
+                                              ),
+                                              Image.asset(
+                                                'assets/images/active_star.png',
+                                                width: _setValue(7.5),
+                                                height: _setValue(7.5),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: _setValue(4)),
+                                              ),
+                                              Image.asset(
+                                                'assets/images/active_star.png',
+                                                width: _setValue(7.5),
+                                                height: _setValue(7.5),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: _setValue(4)),
+                                              ),
+                                              Image.asset(
+                                                'assets/images/deactive_star.png',
+                                                width: _setValue(7.5),
+                                                height: _setValue(7.5),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 3),
+                                          child: Text(
+                                            '71  Reviews',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xffc1c1c1),
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Corbel_Light'),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: _setValue(5)),
-                                  child: Text(
-                                    '\$88',
-                                    style: TextStyle(
-                                        fontSize: 14.5,
-                                        color: CustColors.black01,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Corbel_Bold'),
+                                  margin:
+                                      EdgeInsets.only(right: _setValue(24.6)),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '$km Km',
+                                        style: TextStyle(
+                                            fontSize: 14.5,
+                                            color: CustColors.black01,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'Corbel_Bold'),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(top: _setValue(5)),
+                                        child: Text(
+                                          '\$88',
+                                          style: TextStyle(
+                                              fontSize: 14.5,
+                                              color: CustColors.black01,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Corbel_Bold'),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
+                        )
+                      : buildShimmerWidget(),
               fail
                   ? SizedBox(
                       width: 0,
                       height: 0,
                     )
-                  : Container(
-                      width: _setValue(89.6),
-                      height: _setValue(24),
-                      margin: EdgeInsets.only(
-                        right: _setValue(33.5),
-                        top: _setValue(33.5),
-                      ),
-                      alignment: Alignment.bottomRight,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.3),
-                          color: CustColors.blue),
-                      child: Center(
-                        child: Text(
-                          'Proceed',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Corbel_Light',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.5),
+                  : _isLoading
+                      ? Container(
+                          width: _setValue(89.6),
+                          height: _setValue(24),
+                          margin: EdgeInsets.only(
+                            right: _setValue(33.5),
+                            top: _setValue(33.5),
+                          ),
+                          alignment: Alignment.bottomRight,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.3),
+                              color: CustColors.blue),
+                          child: Center(
+                            child: Text(
+                              'Proceed',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Corbel_Light',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14.5),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: _setValue(89.6),
+                          height: _setValue(24),
+                          margin: EdgeInsets.only(
+                            right: _setValue(33.5),
+                            top: _setValue(33.5),
+                          ),
+                          alignment: Alignment.bottomRight,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.3),
+                              color: CustColors.blue),
+                          child: ShimmerWidget.rectangular(
+                            width: _setValue(89.6),
+                            height: _setValue(24),
+                          ),
                         ),
-                      ),
-                    ),
             ],
           ),
           Image.asset("assets/images/mechanic_search_bottom.png")
@@ -397,6 +522,122 @@ Almost  there…..""",
       //   });
       // });
     }
+  }
+
+  Widget buildShimmerWidget() {
+    return Container(
+      margin: EdgeInsets.only(
+          left: _setValue(33.5), right: _setValue(33.5), top: _setValue(16.8)),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xffdddddd),
+              spreadRadius: 0,
+              blurRadius: 1.5,
+              offset: Offset(0, .8),
+            ),
+          ],
+          borderRadius: BorderRadius.circular(_setValue(15.8))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(
+                    left: _setValue(11.5),
+                    right: _setValue(11.5),
+                    top: _setValue(4.8),
+                    bottom: _setValue(4.8)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    _setValue(52.5),
+                  ),
+                  child: ShimmerWidget.circular(
+                      width: _setValue(52.5), height: _setValue(52.5)),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerWidget.rectangular(
+                    height: 14.5,
+                    width: 100,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: _setValue(2)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ShimmerWidget.rectangular(
+                          height: _setValue(7.5),
+                          width: _setValue(7.5),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: _setValue(4)),
+                        ),
+                        ShimmerWidget.rectangular(
+                          height: _setValue(7.5),
+                          width: _setValue(7.5),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: _setValue(4)),
+                        ),
+                        ShimmerWidget.rectangular(
+                          height: _setValue(7.5),
+                          width: _setValue(7.5),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: _setValue(4)),
+                        ),
+                        ShimmerWidget.rectangular(
+                          height: _setValue(7.5),
+                          width: _setValue(7.5),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: _setValue(4)),
+                        ),
+                        ShimmerWidget.rectangular(
+                          height: _setValue(7.5),
+                          width: _setValue(7.5),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 3),
+                    child: ShimmerWidget.rectangular(
+                      height: _setValue(12),
+                      width: _setValue(100),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(right: _setValue(24.6)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                ShimmerWidget.rectangular(
+                  height: _setValue(14.5),
+                  width: _setValue(50),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: _setValue(5)),
+                  child: ShimmerWidget.rectangular(
+                    height: _setValue(14.5),
+                    width: _setValue(50),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<Uint8List> getBytesFromAsset(
