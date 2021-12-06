@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_mdl.dart';
 import 'package:flutter/material.dart';
@@ -156,76 +157,87 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
           String? address = mechanicListData[index].address;
           String? phone = mechanicListData[index].phoneNo;
           //int imageIndex = index +1;
-          return Container(
-            margin: EdgeInsets.only(bottom: 10),
-            /*decoration: BoxDecoration( //                    <-- BoxDecoration
-          border: Border(bottom: BorderSide()),
-        ),*/
-            child: Card(
-              child: ListTile(
-                contentPadding: EdgeInsets.only(
-                    top: 4.8, bottom: 4.8, left: 12.5, right: 23),
-                leading: CircleAvatar(
-                  radius: 28,
-                  backgroundImage: NetworkImage(
-                      'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg'
-                      //'https://source.unsplash.com/random?sig=$index'
-                      ),
-                ),
-                title: Text(
-                  mechName!,
-                  style: TextStyle(
-                    fontFamily: "Corbel_Regular",
-                    fontSize: 14,
-                    color: CustColors.black01,
-                    fontWeight: FontWeight.w600,
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MechanicProfileScreen(
+                            // serviceID: '1',
+                            id: mechanicListData[index].id.toString(),
+                          )));
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10),
+              /*decoration: BoxDecoration( //                    <-- BoxDecoration
+            border: Border(bottom: BorderSide()),
+                  ),*/
+              child: Card(
+                child: ListTile(
+                  contentPadding: EdgeInsets.only(
+                      top: 4.8, bottom: 4.8, left: 12.5, right: 23),
+                  leading: CircleAvatar(
+                    radius: 28,
+                    backgroundImage: NetworkImage(
+                        'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg'
+                        //'https://source.unsplash.com/random?sig=$index'
+                        ),
                   ),
-                ),
-                subtitle: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        //Text(mechName!),
-                        _ratingBar,
-                        Text(
-                          "8 Km",
-                          style: TextStyle(
-                            fontFamily: "Corbel-Light",
-                            color: CustColors.white02,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                      //child: Text("sub-title $index")
+                  title: Text(
+                    mechName!,
+                    style: TextStyle(
+                      fontFamily: "Corbel_Regular",
+                      fontSize: 14,
+                      color: CustColors.black01,
+                      fontWeight: FontWeight.w600,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        //Text(mechName!),
-                        Text(
-                          "21  Reviews",
-                          style: TextStyle(
-                            fontFamily: "Corbel-Light",
-                            color: CustColors.white02,
-                            fontSize: 12,
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //Text(mechName!),
+                          _ratingBar,
+                          Text(
+                            "8 Km",
+                            style: TextStyle(
+                              fontFamily: "Corbel-Light",
+                              color: CustColors.white02,
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "\$123",
-                          style: TextStyle(
-                            fontFamily: "Corbel-Light",
-                            color: Colors.black,
-                            fontSize: 14,
+                        ],
+                        //child: Text("sub-title $index")
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //Text(mechName!),
+                          Text(
+                            "21  Reviews",
+                            style: TextStyle(
+                              fontFamily: "Corbel-Light",
+                              color: CustColors.white02,
+                              fontSize: 12,
+                            ),
                           ),
-                        ),
-                      ],
-                      //child: Text("sub-title $index")
-                    ),
-                  ],
-                ),
+                          Text(
+                            "\$123",
+                            style: TextStyle(
+                              fontFamily: "Corbel-Light",
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                        //child: Text("sub-title $index")
+                      ),
+                    ],
+                  ),
 
-                //onTap: () => selectItem(item),
+                  //onTap: () => selectItem(item),
+                ),
               ),
             ),
           );

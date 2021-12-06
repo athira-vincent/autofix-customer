@@ -1,5 +1,7 @@
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency_services_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Regular/regular_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Ads/ads_api_provider.dart';
@@ -46,6 +48,7 @@ class Repository {
   final _emergencyServicesApiProvider = EmergencyServicesApiProvider();
   final _allMechanicListApiProvider = MechanicListApiProvider();
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
+  final _mechanicProfileApiProvider = MechanicProfileApiProvider();
   //SignUp
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
@@ -122,8 +125,10 @@ class Repository {
       _allMakeApiProvider.getAllMakeRequest(token);
 
   //All Mechanic List
-  Future<dynamic> getAllMechanicList(String token, int page, int size,String serviceId) =>
-      _allMechanicListApiProvider.getAllMechanicListRequest(token, page, size,serviceId);
+  Future<dynamic> getAllMechanicList(
+          String token, int page, int size, String serviceId) =>
+      _allMechanicListApiProvider.getAllMechanicListRequest(
+          token, page, size, serviceId);
   //Ads
   Future<dynamic> getAds() => _adsApiProvider.getAdsRequest();
   //Top Brands
@@ -141,4 +146,7 @@ class Repository {
   Future<dynamic> getToken(String userId, int type) =>
       _genrateAuthorizationApiProvider.getGenerateAuthorizationRequest(
           userId, type);
+  //get mechanic profile
+  Future<dynamic> getMechanicProfile(String id) =>
+      _mechanicProfileApiProvider.getMechanicDetailsRequest(id);
 }

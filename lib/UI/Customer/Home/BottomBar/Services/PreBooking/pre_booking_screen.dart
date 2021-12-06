@@ -217,8 +217,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                       itemCount: _searchData!.length,
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
-                        return _serviceListItem(
-                            widget.searchData[index], index);
+                        return _serviceListItem(_searchData![index], index);
                       },
                       padding: EdgeInsets.zero,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -226,7 +225,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                         //crossAxisSpacing: 40.0,
                         // mainAxisSpacing: 13.9,
                         childAspectRatio: MediaQuery.of(context).size.width /
-                            (MediaQuery.of(context).size.height / 6.5),
+                            (MediaQuery.of(context).size.height / 5),
                       ),
                     )
                   : Container(width: 0, height: 0),
@@ -445,19 +444,39 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                       }
                     }
                     if (widget.type == "2") {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MechanicSearchScreen(
-                                  // serviceID: '1',
-                                  )));
+                      if (s == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Please Select Any Service",
+                              style: const TextStyle(
+                                  fontFamily: 'Roboto_Regular', fontSize: 14)),
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: CustColors.peaGreen,
+                        ));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MechanicSearchScreen(
+                                      serviceID: s,
+                                    )));
+                      }
                     } else if (widget.type == "1") {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MechanicListScreen(
-                                    serviceID: s,
-                                  )));
+                      if (s == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Please Select Any Service",
+                              style: const TextStyle(
+                                  fontFamily: 'Roboto_Regular', fontSize: 14)),
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: CustColors.peaGreen,
+                        ));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MechanicListScreen(
+                                      serviceID: s,
+                                    )));
+                      }
                     }
                   },
                   child: Container(
@@ -494,28 +513,44 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
         width: double.infinity,
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(top: 10),
-                  child: Text(
-                    searchData.serviceName!,
-                    style: TextStyle(
-                        color: CustColors.black01,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        fontFamily: "Corbel_Light"),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(top: 10),
+                    child: Text(
+                      searchData.serviceName!,
+                      style: TextStyle(
+                          color: CustColors.black01,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          fontFamily: "Corbel_Light"),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Image.asset('assets/images/close_circle.png',
-                      width: _setValue(9.2), height: _setValue(9.2)),
-                ),
-              ],
+                  InkWell(
+                    onTap: () {
+                      _searchData!.removeAt(index);
+                      setState(() {});
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top: 10),
+                      child: Image.asset('assets/images/close_circle.png',
+                          width: _setValue(9.2), height: _setValue(9.2)),
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 20, right: 10),
+                      height: 10,
+                      child: VerticalDivider(
+                        thickness: 1,
+                        width: 0,
+                      )),
+                ],
+              ),
             ),
           ],
         ));
