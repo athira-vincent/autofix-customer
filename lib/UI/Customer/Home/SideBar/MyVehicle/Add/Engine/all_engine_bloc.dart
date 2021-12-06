@@ -24,9 +24,9 @@ class AllEngineBloc {
   postAllEngineDataRequest(int id,String token) async{
     AllEngineMdl _allEngineMdl = await repository.getAllEngine(id, token);
     _engineDataList.clear();
-    _engineDataList.addAll(_allEngineMdl!.data!.engineDetails!);
+    _engineDataList.addAll(_allEngineMdl.data!.engineDetails!);
     postAllEngine.sink.add(_allEngineMdl);
-    postEngineData.sink.add(_allEngineMdl!.data!.engineDetails!);
+    postEngineData.sink.add(_allEngineMdl.data!.engineDetails!);
   }
   void searchMake(String searchText) {
     List<EngineDetails> _searchList = [];

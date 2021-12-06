@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +13,8 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 class MechanicProfileScreen extends StatefulWidget {
-  const MechanicProfileScreen({Key? key}) : super(key: key);
+  final String id;
+  const MechanicProfileScreen({Key? key, required this.id}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _MechanicProfileScreenState();
@@ -29,7 +33,12 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
   bool loadMore = false;
   BitmapDescriptor? pinLocationIcon;
   BitmapDescriptor? pinLocationIcon1;
+  MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
   double per = .10;
+  MechanicData _mechanicData = MechanicData();
+  List<ServiceData> serviceDataList = [];
+  bool _isLoading = false;
+  double km = 0;
   double _setValue(double value) {
     return value * per + value;
   }
@@ -43,17 +52,52 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
   //   currentPosition = await Geolocator.getCurrentPosition(
   //       desiredAccuracy: LocationAccuracy.bestForNavigation);
   // }
+  _getViewVehicle() async {
+    _mechanicProfileBloc.postViewMechanicDetails.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          print("errrrorr 01");
+          _isLoading = true;
+          serviceDataList = value.data!.mechanicDetails!.serviceDataList!;
+          _mechanicData = value.data!.mechanicDetails!.mechanicData!;
+          _kGooglePlex = CameraPosition(
+            target: LatLng(_mechanicData.latitude!, _mechanicData.longitude!),
+            zoom: 11,
+          );
+          Future.delayed(Duration.zero, () {
+            createMarker(context);
+          });
+          km = calculateDistance(10.1964, 76.3879, _mechanicData.latitude!,
+                  _mechanicData.longitude!)
+              .roundToDouble();
+          // value.data.mechanicList.mechanicListData[0].id;
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _kGooglePlex = CameraPosition(
-      target: LatLng(10.184909, 76.375305),
-      zoom: 11,
-    );
-    Future.delayed(Duration.zero, () {
-      createMarker(context);
-    });
+
+    _mechanicProfileBloc.postMechanicDetailsRequest(widget.id);
+    _getViewVehicle();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mechanicProfileBloc.dispose();
   }
 
   @override
@@ -88,355 +132,367 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
             ),
           ),
         ),
-        body: Container(
-          margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          alignment: Alignment.centerRight,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                IntrinsicHeight(
-                  child: Stack(
+        body: _isLoading
+            ? Container(
+                margin:
+                    EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                alignment: Alignment.centerRight,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Column(
-                        children: [
-                          IntrinsicHeight(
-                            child: Stack(
+                      IntrinsicHeight(
+                        child: Stack(
+                          children: [
+                            Column(
                               children: [
+                                IntrinsicHeight(
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(top: 18.6),
+                                          child: Image.asset(
+                                              'assets/images/rotate_rectangle.png')),
+                                      Container(
+                                        alignment: Alignment.bottomCenter,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              _setValue(60)),
+                                          child: Image.network(
+                                            'https://picsum.photos/200',
+                                            width: _setValue(103.1),
+                                            height: _setValue(103.1),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 Container(
-                                    margin: EdgeInsets.only(top: 18.6),
-                                    child: Image.asset(
-                                        'assets/images/rotate_rectangle.png')),
+                                  margin: EdgeInsets.only(top: _setValue(6.6)),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    _mechanicData.displayName.toString(),
+                                    style: TextStyle(
+                                        color: CustColors.black01,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Corbel_Bold',
+                                        fontSize: 17),
+                                  ),
+                                ),
                                 Container(
-                                  alignment: Alignment.bottomCenter,
-                                  child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(_setValue(60)),
-                                    child: Image.network(
-                                      'https://picsum.photos/200',
-                                      width: _setValue(103.1),
-                                      height: _setValue(103.1),
-                                    ),
+                                  margin: EdgeInsets.only(top: _setValue(4.4)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/active_star.png',
+                                        width: _setValue(7.5),
+                                        height: _setValue(7.5),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(left: _setValue(4)),
+                                      ),
+                                      Image.asset(
+                                        'assets/images/active_star.png',
+                                        width: _setValue(7.5),
+                                        height: _setValue(7.5),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(left: _setValue(4)),
+                                      ),
+                                      Image.asset(
+                                        'assets/images/active_star.png',
+                                        width: _setValue(7.5),
+                                        height: _setValue(7.5),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(left: _setValue(4)),
+                                      ),
+                                      Image.asset(
+                                        'assets/images/active_star.png',
+                                        width: _setValue(7.5),
+                                        height: _setValue(7.5),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.only(left: _setValue(4)),
+                                      ),
+                                      Image.asset(
+                                        'assets/images/deactive_star.png',
+                                        width: _setValue(7.5),
+                                        height: _setValue(7.5),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: _setValue(3)),
+                                  child: Text(
+                                    '21  Reviews',
+                                    style: TextStyle(
+                                        color: Color(0xffc1c1c1),
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Corbel_Light',
+                                        fontSize: 12),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: _setValue(6.6)),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Profile Name',
-                              style: TextStyle(
-                                  color: CustColors.black01,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Corbel_Bold',
-                                  fontSize: 17),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: _setValue(4.4)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/active_star.png',
-                                  width: _setValue(7.5),
-                                  height: _setValue(7.5),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: _setValue(4)),
-                                ),
-                                Image.asset(
-                                  'assets/images/active_star.png',
-                                  width: _setValue(7.5),
-                                  height: _setValue(7.5),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: _setValue(4)),
-                                ),
-                                Image.asset(
-                                  'assets/images/active_star.png',
-                                  width: _setValue(7.5),
-                                  height: _setValue(7.5),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: _setValue(4)),
-                                ),
-                                Image.asset(
-                                  'assets/images/active_star.png',
-                                  width: _setValue(7.5),
-                                  height: _setValue(7.5),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: _setValue(4)),
-                                ),
-                                Image.asset(
-                                  'assets/images/deactive_star.png',
-                                  width: _setValue(7.5),
-                                  height: _setValue(7.5),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: _setValue(3)),
-                            child: Text(
-                              '21  Reviews',
-                              style: TextStyle(
-                                  color: Color(0xffc1c1c1),
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Corbel_Light',
-                                  fontSize: 12),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
                             Container(
-                              margin: EdgeInsets.only(right: 15),
-                              child: Text(
-                                '8 KM',
-                                style: TextStyle(
-                                    color: Color(0xff373232),
-                                    fontFamily: 'Corbel_Bold',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 17),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(right: 15),
                               alignment: Alignment.bottomRight,
-                              child: Text(
-                                'Away',
-                                style: TextStyle(
-                                    color: Color(0xffc1c1c1),
-                                    fontFamily: 'Corbel_Light',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(right: 15),
+                                    child: Text(
+                                      '$km KM',
+                                      style: TextStyle(
+                                          color: Color(0xff373232),
+                                          fontFamily: 'Corbel_Bold',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 17),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(right: 15),
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      'Away',
+                                      style: TextStyle(
+                                          color: Color(0xffc1c1c1),
+                                          fontFamily: 'Corbel_Light',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: _setValue(151),
-                      margin: EdgeInsets.only(
-                          left: _setValue(34),
-                          right: _setValue(34),
-                          top: _setValue(10.1)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(_setValue(14.3)),
-                        child: GoogleMap(
-                          zoomControlsEnabled: true,
-                          myLocationButtonEnabled: true,
-                          myLocationEnabled: true,
-                          initialCameraPosition: _kGooglePlex,
-                          polylines: Set<Polyline>.of(polylines.values),
-                          markers: markers,
-                          onMapCreated: (GoogleMapController controller) {
-                            ///controller.setMapStyle(Utils.mapStyles);
-                            _controller.complete(controller);
-                            mapController = controller;
-                            _getPolyline();
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: _setValue(130.9),
-                          left: _setValue(53),
-                          right: _setValue(53)),
-                      alignment: Alignment.bottomCenter,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xffbcbcbc),
-                              spreadRadius: 0,
-                              blurRadius: 6.5,
-                              offset: Offset(0, .8),
-                            ),
-                          ],
-                          borderRadius: BorderRadius.circular(_setValue(15.8))),
-                      child: Column(
+                      Stack(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(top: _setValue(16.5)),
-                            child: Text(
-                              'Indus Motors ',
-                              style: TextStyle(
-                                  color: CustColors.black01,
-                                  fontFamily: 'Corbel_Bold',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.5),
+                            width: double.infinity,
+                            height: _setValue(151),
+                            margin: EdgeInsets.only(
+                                left: _setValue(34),
+                                right: _setValue(34),
+                                top: _setValue(10.1)),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(_setValue(14.3)),
+                              child: GoogleMap(
+                                zoomControlsEnabled: false,
+                                myLocationButtonEnabled: true,
+                                myLocationEnabled: true,
+                                initialCameraPosition: _kGooglePlex,
+                                polylines: Set<Polyline>.of(polylines.values),
+                                markers: markers,
+                                onMapCreated: (GoogleMapController controller) {
+                                  ///controller.setMapStyle(Utils.mapStyles);
+                                  _controller.complete(controller);
+                                  mapController = controller;
+                                  _getPolyline();
+                                },
+                              ),
                             ),
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(11.8), bottom: _setValue(17.5)),
-                            child: Text(
-                              """406 Garki Abuja-FCT, 
+                                top: _setValue(130.9),
+                                left: _setValue(53),
+                                right: _setValue(53)),
+                            alignment: Alignment.bottomCenter,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(0xffbcbcbc),
+                                    spreadRadius: 0,
+                                    blurRadius: 6.5,
+                                    offset: Offset(0, .8),
+                                  ),
+                                ],
+                                borderRadius:
+                                    BorderRadius.circular(_setValue(15.8))),
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: _setValue(16.5)),
+                                  child: Text(
+                                    'Indus Motors ',
+                                    style: TextStyle(
+                                        color: CustColors.black01,
+                                        fontFamily: 'Corbel_Bold',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.5),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: _setValue(11.8),
+                                      bottom: _setValue(17.5)),
+                                  child: Text(
+                                    """406 Garki Abuja-FCT, 
              Nigeria.""",
-                              style: TextStyle(
-                                  color: Color(0xff848484),
-                                  fontFamily: 'Corbel_Light',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.5),
+                                    style: TextStyle(
+                                        color: Color(0xff848484),
+                                        fontFamily: 'Corbel_Light',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.5),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(
-                      top: _setValue(13.8), left: _setValue(39.3)),
-                  child: Text(
-                    'Reviews',
-                    style: TextStyle(
-                        color: CustColors.blue,
-                        fontFamily: 'Corbel_Regular',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.5),
-                  ),
-                ),
-                ListView.builder(
-                    itemCount: loadMore ? 5 : 5 - (5 - 2),
-                    padding: EdgeInsets.zero,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return _reviewsListItem();
-                    }),
-                Align(
-                  alignment: Alignment.center,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        loadMore = !loadMore;
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: _setValue(74.3),
-                      height: _setValue(24),
-                      margin: EdgeInsets.only(top: _setValue(7.9)),
-                      decoration: BoxDecoration(
-                          color: CustColors.blue,
-                          borderRadius: BorderRadius.circular(_setValue(12.3))),
-                      child: Text(
-                        loadMore ? 'Show Less' : 'Load More',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Corbel_Regular',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 11.5),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: _setValue(17.8),
-                    left: _setValue(39.3),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Selected Service',
-                    style: TextStyle(
-                        color: CustColors.blue,
-                        fontFamily: 'Corbel_Regular',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.5),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: _setValue(2.2)),
-                  child: ListView.builder(
-                      itemCount: 2,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _serviceListItem();
-                      }),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: _setValue(31.1),
-                    left: _setValue(39.3),
-                    right: _setValue(39.3),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
                       Container(
                         alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(
+                            top: _setValue(13.8), left: _setValue(39.3)),
                         child: Text(
-                          'Total Amount',
+                          'Reviews',
                           style: TextStyle(
-                              color: CustColors.black01,
+                              color: CustColors.blue,
+                              fontFamily: 'Corbel_Regular',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14.5),
+                        ),
+                      ),
+                      ListView.builder(
+                          itemCount: loadMore ? 5 : 5 - (5 - 2),
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _reviewsListItem();
+                          }),
+                      Align(
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              loadMore = !loadMore;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: _setValue(74.3),
+                            height: _setValue(24),
+                            margin: EdgeInsets.only(top: _setValue(7.9)),
+                            decoration: BoxDecoration(
+                                color: CustColors.blue,
+                                borderRadius:
+                                    BorderRadius.circular(_setValue(12.3))),
+                            child: Text(
+                              loadMore ? 'Show Less' : 'Load More',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Corbel_Regular',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: _setValue(17.8),
+                          left: _setValue(39.3),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Selected Service',
+                          style: TextStyle(
+                              color: CustColors.blue,
                               fontFamily: 'Corbel_Regular',
                               fontWeight: FontWeight.w600,
                               fontSize: 14.5),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10, left: 15, bottom: 10),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '\$ 350',
-                          style: TextStyle(
-                              color: CustColors.black01,
-                              fontFamily: 'Corbel_Regular',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.5),
+                        margin: EdgeInsets.only(top: _setValue(2.2)),
+                        child: ListView.builder(
+                            itemCount: serviceDataList.length,
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return _serviceListItem(serviceDataList[index]);
+                            }),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: _setValue(31.1),
+                          left: _setValue(39.3),
+                          right: _setValue(39.3),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Total Amount',
+                                style: TextStyle(
+                                    color: CustColors.black01,
+                                    fontFamily: 'Corbel_Regular',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.5),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 10, left: 15, bottom: 10),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '\$ 350',
+                                style: TextStyle(
+                                    color: CustColors.black01,
+                                    fontFamily: 'Corbel_Regular',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.5),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: _setValue(74.3),
+                        height: _setValue(24),
+                        margin: EdgeInsets.only(
+                            right: _setValue(31.8),
+                            top: _setValue(23.9),
+                            bottom: _setValue(26.4)),
+                        alignment: Alignment.bottomRight,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.3),
+                            color: CustColors.blue),
+                        child: Center(
+                          child: Text(
+                            'Next',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Corbel_Regular',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 11.5),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                Container(
-                  width: _setValue(74.3),
-                  height: _setValue(24),
-                  margin: EdgeInsets.only(
-                      right: _setValue(31.8),
-                      top: _setValue(23.9),
-                      bottom: _setValue(26.4)),
-                  alignment: Alignment.bottomRight,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.3),
-                      color: CustColors.blue),
-                  child: Center(
-                    child: Text(
-                      'Next',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Corbel_Regular',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 11.5),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
+              )
+            : Center(child: CircularProgressIndicator()));
   }
 
   Widget _reviewsListItem() {
@@ -507,7 +563,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
     );
   }
 
-  Widget _serviceListItem() {
+  Widget _serviceListItem(ServiceData serviceData) {
     return Container(
       margin: EdgeInsets.only(
           left: _setValue(39.3), right: _setValue(39.3), top: _setValue(18.1)),
@@ -515,7 +571,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'AC Heating',
+            serviceData.service!.serviceName.toString(),
             style: TextStyle(
                 color: Color(0xff848484),
                 fontWeight: FontWeight.w600,
@@ -523,7 +579,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                 fontSize: 14.5),
           ),
           Text(
-            '\$ 200',
+            '\$ ${serviceData.service!.fee}',
             style: TextStyle(
                 color: CustColors.black01,
                 fontFamily: 'Corbel_Regular',
@@ -566,7 +622,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
 
     // Add destination marker
     _addMarker(
-      LatLng(10.196281, 76.457834),
+      LatLng(_mechanicData.latitude!, _mechanicData.longitude!),
       "destination",
       pinLocationIcon1 != null ? pinLocationIcon1! : icon,
     );
@@ -575,7 +631,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       "AIzaSyCOijUnxSdUDHpQWIqJT5y-BklV9pI0Te0",
-      PointLatLng(10.184909, 76.375305),
+      PointLatLng(_mechanicData.latitude!, _mechanicData.longitude!),
       PointLatLng(10.1964, 76.3879),
       travelMode: TravelMode.walking,
     );
@@ -587,6 +643,15 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
       print(result.errorMessage);
     }
     _addPolyLine(polylineCoordinates);
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 
   void setCustomMapPin() async {
@@ -622,7 +687,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
       //         as BitmapDescriptor?;
       // setState(() {});
       pinLocationIcon1 = await getBitmapDescriptorFromAssetBytes(
-          "assets/images/mechanic_marker.png", 40);
+          "assets/images/mechanic_marker.png", 100);
     }
   }
 

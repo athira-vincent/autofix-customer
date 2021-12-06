@@ -67,6 +67,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   bool _isLoading = false;
   bool isloading = false;
+  bool _loadingBrand = false;
+  bool _loadingModel = false;
+  bool _loadingEngineType = false;
   double? _mileageData = 0;
   String brandName = "";
   String modelName = "";
@@ -124,11 +127,12 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   void onFocusChange() {
     setState(() {});
   }
-  _getAllMake() async {
 
+  _getAllMake() async {
     _allMakeBloc.postAllMake.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _loadingBrand = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -140,6 +144,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       } else {
         _allMakeBloc.postMakeData.listen((data) {
           setState(() {
+            _loadingBrand = false;
             makeDetails = data;
             // print("c"+value.data.acceptInvitations.message.toString()+"c");
             print(">>>>>Brand Data" +
@@ -155,6 +160,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     _allModelBloc.postAllModel.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _loadingModel = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -166,6 +172,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       } else {
         _allModelBloc.postModelData.listen((data) {
           setState(() {
+            _loadingModel = false;
             modelDetails = data;
             print(">>>>>Brand Data" +
                 value.data!.modelDetails!.length.toString() +
@@ -180,6 +187,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     _allEngineBloc.postAllEngine.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _loadingEngineType = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -191,6 +199,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       } else {
         _allEngineBloc.postEngineData.listen((data) {
           setState(() {
+            _loadingEngineType = false;
             engineDetails = data;
           });
         });
@@ -233,7 +242,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
           FocusScope.of(context).unfocus();
-
         });
       }
     });
@@ -248,11 +256,11 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
           key: _formKey,
           autovalidateMode: _autoValidate,
           child: Container(
-            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
             child: Column(
               children: [
                 AspectRatio(
-                  aspectRatio: 1.64,
+                  aspectRatio: 1.75,
                   child: Container(
                     padding: EdgeInsets.only(right: 5),
                     width: double.infinity,
@@ -275,7 +283,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                       style: TextStyle(
                                         color: CustColors.blue,
                                         fontSize:
-                                            ScreenSize().setValueFont(19.5),
+                                        ScreenSize().setValueFont(19.5),
                                         fontFamily: 'Corbel_Bold',
                                         fontWeight: FontWeight.w800,
                                       ),
@@ -303,7 +311,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(
@@ -330,16 +338,16 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                             height: double.infinity,
                                             child: ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                               child: _images != null
                                                   ? Image.file(
-                                                      File(_images!.path),
-                                                      fit: BoxFit.cover,
-                                                      /*width: 65,
+                                                File(_images!.path),
+                                                fit: BoxFit.cover,
+                                                /*width: 65,
                                                   height: 65,*/
-                                                    )
+                                              )
                                                   : Container(
-                                                      color: CustColors.blue),
+                                                  color: CustColors.blue),
                                             ),
                                           ),
                                         ),
@@ -396,213 +404,254 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           Container(
-                            margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(5),
-                                right: _setValue(5)),
-                            padding: EdgeInsets.all(1),
                             child: InkWell(
-                              onTap: () {
-                                /*selectedBrandId = 0;
-                                _brandController.clear();*/
+                              onTap: (){
                                 showBrandSelector();
                               },
-                              child: TextFormField(
-                                enabled: false,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: ScreenSize().setValueFont(14.5),
-                                  color: CustColors.blue,
-                                  fontFamily: 'Corbel_Regular',
-                                ),
-                                keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Brand").emptyChecking,
-                                controller: _brandController,
-                                decoration: new InputDecoration(
-                                  suffixIcon: Container(
-                                    width: 5,
-                                    alignment: Alignment.centerLeft,
-                                    child: SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.asset(
-                                        'assets/images/icon_dropdown_arrow.png',
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustColors.cloudy_blue,
+                                          spreadRadius: 0,
+                                          blurRadius: 1.5,
+                                          offset: Offset(0, .8),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    height: 40.8,
+                                  ),
+                                  Container(
+                                    color: Colors.transparent,
+                                    margin: EdgeInsets.only(top: 19),
+                                    padding: EdgeInsets.only(
+                                        left: 17.5, right: 8, top: 8, bottom: 14),
+                                    child: TextFormField(
+                                      textAlignVertical: TextAlignVertical.center,
+                                      maxLines: 1,
+                                      enabled: false,
+                                      style: TextStyle(
+                                        fontSize: ScreenSize().setValueFont(14.5),
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      validator: InputValidator(ch: "Brand").emptyChecking,
+                                      controller: _brandController,
+                                      decoration: InputDecoration(
+                                        suffixIconConstraints: BoxConstraints(
+                                          minWidth: 30,
+                                          minHeight: 30,
+                                        ),
+                                        suffixIcon: Container(
+                                          width: 5,
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            height: 28,
+                                            width: 28,
+                                            child: Image.asset(
+                                              'assets/images/icon_dropdown_arrow.png',
+                                            ),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        hintText: 'Select Your Brand',
+                                        hintStyle: TextStyle(
+                                          fontSize: ScreenSize().setValueFont(14.5),
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        errorStyle: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.red,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0,
+                                        ),
+                                        border: InputBorder.none,
                                       ),
                                     ),
                                   ),
-                                  isDense: true,
-                                  hintText: 'Select Your Brand',
-                                  hintStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(14.5),
-                                    color: CustColors.blue,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  errorStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(10),
-                                    color: Colors.red,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  /* hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                  ),*/
-                                  fillColor: Colors.white,
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(
-                                      color: CustColors.cloudy_blue,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-
                           Container(
-                            margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(5),
-                                right: _setValue(5)),
-                            padding: EdgeInsets.all(1),
                             child: InkWell(
-                              onTap: () {
+                              onTap: (){
                                 showModelSelector();
                               },
-                              child: TextFormField(
-                                enabled: false,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: ScreenSize().setValueFont(14.5),
-                                  color: CustColors.blue,
-                                  fontFamily: 'Corbel_Regular',
-                                ),
-                                keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Model").emptyChecking,
-                                controller: _modelController,
-                                decoration: new InputDecoration(
-                                  suffixIcon: Container(
-                                    width: 5,
-                                    alignment: Alignment.centerLeft,
-                                    child: SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.asset(
-                                        'assets/images/icon_dropdown_arrow.png',
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustColors.cloudy_blue,
+                                          spreadRadius: 0,
+                                          blurRadius: 1.5,
+                                          offset: Offset(0, .8),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    height: 40.8,
+                                  ),
+                                  Container(
+                                    color: Colors.transparent,
+                                    margin: EdgeInsets.only(top: 19),
+                                    padding: EdgeInsets.only(
+                                        left: 17.5, right: 8, top: 8, bottom: 14),
+                                    child: TextFormField(
+                                      textAlignVertical: TextAlignVertical.center,
+                                      maxLines: 1,
+                                      enabled: false,
+                                      style: TextStyle(
+                                        fontSize: ScreenSize().setValueFont(14.5),
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      validator: InputValidator(ch: "Model").emptyChecking,
+                                      controller: _modelController,
+                                      decoration: InputDecoration(
+                                        suffixIconConstraints: BoxConstraints(
+                                          minWidth: 30,
+                                          minHeight: 30,
+                                        ),
+                                        suffixIcon: Container(
+                                          width: 5,
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            height: 28,
+                                            width: 28,
+                                            child: Image.asset(
+                                              'assets/images/icon_dropdown_arrow.png',
+                                            ),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        hintText: 'Car Model',
+                                        hintStyle: TextStyle(
+                                          fontSize: ScreenSize().setValueFont(14.5),
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        errorStyle: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.red,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0,
+                                        ),
+                                        border: InputBorder.none,
                                       ),
                                     ),
                                   ),
-                                  isDense: true,
-                                  hintText: 'Car Model',
-                                  hintStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(14.5),
-                                    color: CustColors.blue,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  errorStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(10),
-                                    color: Colors.red,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  /* hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                  ),*/
-                                  fillColor: Colors.white,
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(
-                                      color: CustColors.cloudy_blue,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-
                           Container(
-                            margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(5),
-                                right: _setValue(5)),
-                            padding: EdgeInsets.all(1),
                             child: InkWell(
-                              onTap: () {
+                              onTap: (){
                                 showEngineSelector();
                               },
-                              child: TextFormField(
-                                enabled: false,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: ScreenSize().setValueFont(14.5),
-                                  color: CustColors.blue,
-                                  fontFamily: 'Corbel_Regular',
-                                ),
-                                keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Engine").emptyChecking,
-                                controller: _engineController,
-                                decoration: new InputDecoration(
-                                  suffixIcon: Container(
-                                    width: 5,
-                                    alignment: Alignment.centerLeft,
-                                    child: SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.asset(
-                                        'assets/images/icon_dropdown_arrow.png',
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustColors.cloudy_blue,
+                                          spreadRadius: 0,
+                                          blurRadius: 1.5,
+                                          offset: Offset(0, .8),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    height: 40.8,
+                                  ),
+                                  Container(
+                                    color: Colors.transparent,
+                                    margin: EdgeInsets.only(top: 19),
+                                    padding: EdgeInsets.only(
+                                        left: 17.5, right: 8, top: 8, bottom: 14),
+                                    child: TextFormField(
+                                      textAlignVertical: TextAlignVertical.center,
+                                      maxLines: 1,
+                                      enabled: false,
+                                      style: TextStyle(
+                                        fontSize: ScreenSize().setValueFont(14.5),
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      validator: InputValidator(ch: "Engine").emptyChecking,
+                                      controller: _engineController,
+                                      decoration: InputDecoration(
+                                        suffixIconConstraints: BoxConstraints(
+                                          minWidth: 30,
+                                          minHeight: 30,
+                                        ),
+                                        suffixIcon: Container(
+                                          width: 5,
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            height: 28,
+                                            width: 28,
+                                            child: Image.asset(
+                                              'assets/images/icon_dropdown_arrow.png',
+                                            ),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        hintText: 'Select Engine Type',
+                                        hintStyle: TextStyle(
+                                          fontSize: ScreenSize().setValueFont(14.5),
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        errorStyle: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.red,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0,
+                                        ),
+                                        border: InputBorder.none,
                                       ),
                                     ),
                                   ),
-                                  isDense: true,
-                                  hintText: 'Select Engine Type',
-                                  hintStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(14.5),
-                                    color: CustColors.blue,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  errorStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(10),
-                                    color: Colors.red,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  /* hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                  ),*/
-                                  fillColor: Colors.white,
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(
-                                      color: CustColors.cloudy_blue,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-
                           Container(
-                            margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(5),
-                                right: _setValue(5)),
-                            padding: EdgeInsets.all(1),
                             child: InkWell(
-                              onTap: () {
+                              onTap: (){
                                 showDatePicker(
                                   context: context,
                                   initialDatePickerMode: DatePickerMode.year,
-                                  firstDate: DateTime(DateTime.now().year -15),
+
+                                  firstDate: DateTime(DateTime.now().year - 15),
                                   initialDate: DateTime(DateTime.now().year),
                                   //initialDate: selectedYear ?? initialYear,
                                   lastDate: DateTime(DateTime.now().year),
@@ -610,73 +659,90 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   if (date != null) {
                                     setState(() {
                                       this.selectedYear = date;
-                                      _yearController.text = selectedYear!.year.toString();
+                                      _yearController.text =
+                                          selectedYear!.year.toString();
                                     });
                                   }
                                 });
                               },
-                              child: TextFormField(
-                                enabled: false,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: ScreenSize().setValueFont(14.5),
-                                  color: CustColors.blue,
-                                  fontFamily: 'Corbel_Regular',
-                                ),
-                                keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Year").emptyChecking,
-                                controller: _yearController,
-                                decoration: new InputDecoration(
-                                  suffixIcon: Container(
-                                    width: 5,
-                                    alignment: Alignment.centerLeft,
-                                    child: SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.asset(
-                                        'assets/images/icon_dropdown_arrow.png',
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustColors.cloudy_blue,
+                                          spreadRadius: 0,
+                                          blurRadius: 1.5,
+                                          offset: Offset(0, .8),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    height: 40.8,
+                                  ),
+                                  Container(
+                                    color: Colors.transparent,
+                                    margin: EdgeInsets.only(top: 19),
+                                    padding: EdgeInsets.only(
+                                        left: 17.5, right: 8, top: 8, bottom: 14),
+                                    child: TextFormField(
+                                      textAlignVertical: TextAlignVertical.center,
+                                      maxLines: 1,
+                                      enabled: false,
+                                      style: TextStyle(
+                                        fontSize: ScreenSize().setValueFont(14.5),
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      validator: InputValidator(ch: "Year").emptyChecking,
+                                      controller: _yearController,
+                                      decoration: InputDecoration(
+                                        suffixIconConstraints: BoxConstraints(
+                                          minWidth: 30,
+                                          minHeight: 30,
+                                        ),
+                                        suffixIcon: Container(
+                                          width: 5,
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            height: 28,
+                                            width: 28,
+                                            child: Image.asset(
+                                              'assets/images/icon_dropdown_arrow.png',
+                                            ),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        hintText: 'Select Year',
+                                        hintStyle: TextStyle(
+                                          fontSize: ScreenSize().setValueFont(14.5),
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        errorStyle: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.red,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0,
+                                        ),
+                                        border: InputBorder.none,
                                       ),
                                     ),
                                   ),
-                                  isDense: true,
-                                  hintText: 'Select Year',
-                                  hintStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(14.5),
-                                    color: CustColors.blue,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  errorStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(10),
-                                    color: Colors.red,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  /* hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                  ),*/
-                                  fillColor: Colors.white,
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(
-                                      color: CustColors.cloudy_blue,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-
                           Container(
-                            margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(5),
-                                right: _setValue(5)),
-                            padding: EdgeInsets.all(1),
                             child: InkWell(
-                              onTap: () {
+                              onTap: (){
                                 showMonthPicker(
                                   context: context,
                                   firstDate: DateTime(
@@ -690,70 +756,93 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     setState(() {
                                       this.selectedDate = date;
                                       _maintenanceController.text =
-                                          selectedDate!.month.toString() + "/"
-                                              + selectedDate!.year.toString();
+                                          selectedDate!.month.toString() +
+                                              "/" +
+                                              selectedDate!.year.toString();
                                     });
                                   }
                                 });
                               },
-                              child: TextFormField(
-                                enabled: false,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: ScreenSize().setValueFont(14.5),
-                                  color: CustColors.blue,
-                                  fontFamily: 'Corbel_Regular',
-                                ),
-                                keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Last maintenance").emptyChecking,
-                                controller: _maintenanceController,
-                                decoration: new InputDecoration(
-                                  suffixIcon: Container(
-                                    width: 5,
-                                    alignment: Alignment.centerLeft,
-                                    child: SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Image.asset(
-                                        'assets/images/icon_dropdown_arrow.png',
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: CustColors.cloudy_blue,
+                                          spreadRadius: 0,
+                                          blurRadius: 1.5,
+                                          offset: Offset(0, .8),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    height: 40.8,
+                                  ),
+                                  Container(
+                                    color: Colors.transparent,
+                                    margin: EdgeInsets.only(top: 19),
+                                    padding: EdgeInsets.only(
+                                        left: 17.5, right: 8, top: 8, bottom: 14),
+                                    child: TextFormField(
+                                      textAlignVertical: TextAlignVertical.center,
+                                      maxLines: 1,
+                                      enabled: false,
+                                      style: TextStyle(
+                                        fontSize: ScreenSize().setValueFont(14.5),
+                                        color: CustColors.blue,
+                                        fontFamily: 'Corbel_Regular',
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      validator: InputValidator(ch: "Last maintenance").emptyChecking,
+                                      controller: _maintenanceController,
+                                      decoration: InputDecoration(
+                                        suffixIconConstraints: BoxConstraints(
+                                          minWidth: 30,
+                                          minHeight: 30,
+                                        ),
+                                        suffixIcon: Container(
+                                          width: 5,
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            height: 28,
+                                            width: 28,
+                                            child: Image.asset(
+                                              'assets/images/icon_dropdown_arrow.png',
+                                            ),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        hintText: 'Last maintenance',
+                                        hintStyle: TextStyle(
+                                          fontSize: ScreenSize().setValueFont(14.5),
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        errorStyle: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.red,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0,
+                                        ),
+                                        border: InputBorder.none,
                                       ),
                                     ),
                                   ),
-                                  isDense: true,
-                                  hintText: 'Last maintenance',
-                                  hintStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(14.5),
-                                    color: CustColors.blue,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  errorStyle: TextStyle(
-                                    fontSize: ScreenSize().setValueFont(10),
-                                    color: Colors.red,
-                                    fontFamily: 'Corbel_Regular',
-                                  ),
-                                  /* hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                  ),*/
-                                  fillColor: Colors.white,
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(
-                                      color: CustColors.cloudy_blue,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(12),),
+                              top: _setValue(18),
+                              left: _setValue(12),
+                            ),
                             padding: EdgeInsets.all(1),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -774,10 +863,17 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     max: 100,
                                     min: 0,
                                     step: FlutterSliderStep(step: 2),
+                                    handlerHeight: _setValue(25),
+                                    handlerWidth: _setValue(25),
                                     handler: FlutterSliderHandler(
-                                        child: Image.asset(
-                                            "assets/images/icon_seekbar.png")),
+                                      child: Image.asset(
+                                        "assets/images/icon_seekBar.png",
+                                        fit: BoxFit.cover,
+                                        height: double.infinity,
+                                        width: double.infinity,),
+                                    ),
                                     trackBar: FlutterSliderTrackBar(
+                                      activeTrackBarHeight: _setValue(5),
                                       activeTrackBar: BoxDecoration(
                                           color: CustColors.blue,
                                           border: Border.all(
@@ -790,11 +886,20 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           )),
                                     ),
                                     tooltip: FlutterSliderTooltip(
-                                      rightSuffix: Text(
-                                        " km / ltr",
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: CustColors.blue),
+                                      alwaysShowTooltip: true,
+                                      boxStyle: FlutterSliderTooltipBox(
+                                          decoration: BoxDecoration(
+                                              color: Colors.transparent)),
+                                      positionOffset:
+                                      FlutterSliderTooltipPositionOffset(
+                                          top: 40),
+                                      rightSuffix: Container(
+                                        child: Text(
+                                          " km / ltr",
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: CustColors.blue),
+                                        ),
                                       ),
                                       textStyle: TextStyle(
                                           fontSize: 10, color: CustColors.blue),
@@ -812,62 +917,61 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ],
                             ),
                           ),
-
                           Align(
                             alignment: Alignment.centerRight,
                             child: _isLoading
                                 ? Center(
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          CustColors.darkBlue),
-                                    ),
-                                  )
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustColors.darkBlue),
+                              ),
+                            )
                                 : Container(
-                                    margin: EdgeInsets.all(4),
-                                    padding: EdgeInsets.only(left: 30, right: 30),
-                                    decoration: BoxDecoration(
-                                      color: CustColors.blue,
-                                      border: Border.all(
-                                        color: CustColors.blue,
-                                        style: BorderStyle.solid,
-                                        width: 0.70,
-                                      ),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: MaterialButton(
-                                      child: Text(
-                                        "Save",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Corbel_Regular',
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-
-                                          _addVehicleBloc.postAddVehicleRequest(
-                                              token,
-                                              _yearController.text,
-                                              "10.551123",
-                                              "76.066753",
-                                              _mileageData.toString(),
-                                              _maintenanceController.text,
-                                              "3",
-                                              selectedBrandId!,
-                                              selectedModelId!,
-                                              selectedEngineId!
-                                              );
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-                                        } else {
-                                          setState(() => _autoValidate =
-                                              AutovalidateMode.always);
-                                        }
-                                      },
-                                    ),
-                                  ),
+                              margin:
+                              EdgeInsets.only(top: _setValue(24.7)),
+                              padding:
+                              EdgeInsets.only(left: 30, right: 30),
+                              decoration: BoxDecoration(
+                                color: CustColors.blue,
+                                border: Border.all(
+                                  color: CustColors.blue,
+                                  style: BorderStyle.solid,
+                                  width: 0.70,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: MaterialButton(
+                                child: Text(
+                                  "Save",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Corbel_Regular',
+                                      fontSize: ScreenSize().setValueFont(14.5),
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _addVehicleBloc.postAddVehicleRequest(
+                                        token,
+                                        _yearController.text,
+                                        "10.551123",
+                                        "76.066753",
+                                        _mileageData.toString(),
+                                        _maintenanceController.text,
+                                        "3",
+                                        selectedBrandId!,
+                                        selectedModelId!,
+                                        selectedEngineId!);
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
+                                  } else {
+                                    setState(() => _autoValidate =
+                                        AutovalidateMode.always);
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -1033,7 +1137,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                 setState(() {
                                                   makeDetails!.clear();
                                                   //_countryData.clear();
-                                                  isloading = true;
+                                                  _loadingBrand = true;
                                                 });
                                                 _allMakeBloc.searchMake(text);
                                               },
@@ -1044,7 +1148,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                   fontWeight: FontWeight.w600,
                                                   color: CustColors.blue),
                                               decoration: InputDecoration(
-                                                hintText: "Search Your  State",
+                                                hintText: "Search Your Brand",
                                                 border: InputBorder.none,
                                                 contentPadding:
                                                 new EdgeInsets.only(
@@ -1101,19 +1205,26 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     shrinkWrap: true,
                                     itemCount: makeDetails!.length,
                                     itemBuilder: (context, index) {
-                                       return InkWell(
+                                      return InkWell(
                                           onTap: () {
-                                            final brandName = makeDetails![index].makeName;
-                                            final brandId = makeDetails![index].id;
+                                            final brandName =
+                                                makeDetails![index]
+                                                    .makeName;
+                                            final brandId =
+                                                makeDetails![index].id;
                                             setState(() {
-                                              _brandController.text = brandName.toString();
-                                              selectedBrandId = int.parse(brandId!);
+                                              _brandController.text =
+                                                  brandName.toString();
+                                              selectedBrandId =
+                                                  int.parse(brandId!);
                                               _modelController.clear();
                                               selectedModelId = 0;
                                               _engineController.clear();
-                                              selectedEngineId=0;
-                                              _allModelBloc.postAllModelDataRequest(selectedBrandId!, token);
-
+                                              selectedEngineId = 0;
+                                              _allModelBloc
+                                                  .postAllModelDataRequest(
+                                                  selectedBrandId!,
+                                                  token);
                                             });
                                             print(">>>>>");
                                             print(selectedBrandId);
@@ -1158,7 +1269,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 ),
                               ])),
                           Center(
-                            child: isloading
+                            child: _loadingBrand
                                 ? CircularProgressIndicator()
                                 : Text(''),
                           )
@@ -1236,7 +1347,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                 setState(() {
                                                   makeDetails!.clear();
                                                   //_countryData.clear();
-                                                  isloading = true;
+                                                  _loadingModel = true;
                                                 });
                                                 _allMakeBloc.searchMake(text);
                                               },
@@ -1247,7 +1358,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                   fontWeight: FontWeight.w600,
                                                   color: CustColors.blue),
                                               decoration: InputDecoration(
-                                                hintText: "Search Your  State",
+                                                hintText: "Search Your  Model",
                                                 border: InputBorder.none,
                                                 contentPadding:
                                                 new EdgeInsets.only(
@@ -1306,16 +1417,24 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                           onTap: () {
-                                            final modelName = modelDetails![index].modelName;
-                                            final modelId = modelDetails![index].id;
+                                            final modelName =
+                                                modelDetails![index]
+                                                    .modelName;
+                                            final modelId =
+                                                modelDetails![index].id;
                                             setState(() {
-                                              _modelController.text = modelName.toString();
-                                              selectedModelId = int.parse(modelId!);
+                                              _modelController.text =
+                                                  modelName.toString();
+                                              selectedModelId =
+                                                  int.parse(modelId!);
                                               //selectedModelId = 0;
                                               //selectedEngineId = 0;
                                               _engineController.clear();
-                                              selectedEngineId=0;
-                                              _allEngineBloc.postAllEngineDataRequest(selectedModelId!, token);
+                                              selectedEngineId = 0;
+                                              _allEngineBloc
+                                                  .postAllEngineDataRequest(
+                                                  selectedModelId!,
+                                                  token);
                                             });
                                             print(">>>>>");
                                             print(selectedModelId);
@@ -1355,12 +1474,12 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     },
                                   )
                                       : Center(
-                                        child: Text('No Results found.'),
+                                    child: Text('No Results found.'),
                                   ),
                                 ),
                               ])),
                           Center(
-                            child: isloading
+                            child: _loadingModel
                                 ? CircularProgressIndicator()
                                 : Text(''),
                           )
@@ -1438,7 +1557,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                 setState(() {
                                                   engineDetails!.clear();
                                                   //_countryData.clear();
-                                                  isloading = true;
+                                                  _loadingEngineType = true;
                                                 });
                                                 _allEngineBloc.searchMake(text);
                                               },
@@ -1449,7 +1568,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                   fontWeight: FontWeight.w600,
                                                   color: CustColors.blue),
                                               decoration: InputDecoration(
-                                                hintText: "Search Your  State",
+                                                hintText: "Search Your Engine Type",
                                                 border: InputBorder.none,
                                                 contentPadding:
                                                 new EdgeInsets.only(
@@ -1508,15 +1627,21 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                           onTap: () {
-                                            final engineName = engineDetails![index].engineName;
-                                            final engineId = engineDetails![index].id;
+                                            final engineName =
+                                                engineDetails![index]
+                                                    .engineName;
+                                            final engineId =
+                                                engineDetails![index].id;
                                             setState(() {
-                                              _engineController.text = engineName.toString();
-                                              selectedEngineId = int.parse(engineId!);
+                                              _engineController.text =
+                                                  engineName.toString();
+                                              selectedEngineId =
+                                                  int.parse(engineId!);
                                               //selectedModelId = 0;
                                               //selectedEngineId = 0;
                                             });
-                                            print("selectedEngineId >>>>>");
+                                            print(
+                                                "selectedEngineId >>>>>");
                                             print(selectedEngineId);
                                             Navigator.pop(context);
                                           },
@@ -1559,7 +1684,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 ),
                               ])),
                           Center(
-                            child: isloading
+                            child: _loadingEngineType
                                 ? CircularProgressIndicator()
                                 : Text(''),
                           )
@@ -1572,7 +1697,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         });
   }
 
-  void showYearSelector(){
+  void showYearSelector() {
     showDatePicker(
       context: context,
       initialDatePickerMode: DatePickerMode.year,
@@ -1590,5 +1715,13 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     });
   }
 
+  Widget seekBarIcon = Container(
+    child: Stack(
+      children: [
+        Image.asset("assets/images/icon_seek_bg.png"),
+        Image.asset("assets/images/icon_seek_image.png",height: 10,width: 10,)
+      ],
+    ),
+  );
 
 }

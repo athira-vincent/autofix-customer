@@ -595,27 +595,35 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             ),
           ),
           Container(
-            padding:
-                EdgeInsets.only(top: _setValue(44), bottom: _setValue(30.5)),
+            padding: EdgeInsets.only(
+              top: _setValue(44),
+              bottom: _setValue(30.5),
+            ),
             margin: EdgeInsets.only(top: _setValue(15)),
             decoration: BoxDecoration(
               color: CustColors.bgGrey,
             ),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 40.0,
-                mainAxisSpacing: 13.9,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.6),
+            child: Container(
+              margin: EdgeInsets.only(
+                left: _setValue(21),
+                right: _setValue(21),
               ),
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: _regularList!.length,
-              padding: EdgeInsets.all(0),
-              itemBuilder: (BuildContext context, int index) {
-                return _regularServicesListItem(_regularList![index]);
-              },
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: _setValue(62.0),
+                  mainAxisSpacing: _setValue(13.9),
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height / 1.5),
+                ),
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: _regularList!.length,
+                padding: EdgeInsets.all(0),
+                itemBuilder: (BuildContext context, int index) {
+                  return _regularServicesListItem(_regularList![index]);
+                },
+              ),
             ),
           ),
         ],
@@ -646,22 +654,26 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
       },
       child: Column(
         children: [
-          Container(
-            width: _setValue(50),
-            height: _setValue(50),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: CustColors.lightGrey, width: 1.3),
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  _setValue(7.8),
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width -
+                  ((_setValue(21) + _setValue(21)) + (60 * 2)),
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    _setValue(7.8),
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              margin: EdgeInsets.all(_setValue(12)),
-              child: CachedNetworkImage(
-                imageUrl: "https://picsum.photos/200",
+              child: Container(
+                margin: EdgeInsets.all(_setValue(12)),
+                child: CachedNetworkImage(
+                  imageUrl: "https://picsum.photos/200",
+                ),
               ),
             ),
           ),
@@ -705,8 +717,11 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             ),
           ),
           Container(
-            padding:
-                EdgeInsets.only(top: _setValue(44), bottom: _setValue(30.5)),
+            padding: EdgeInsets.only(
+                top: _setValue(44),
+                bottom: _setValue(30.5),
+                left: _setValue(21),
+                right: _setValue(21)),
             margin: EdgeInsets.only(top: _setValue(15)),
             decoration: BoxDecoration(
               color: CustColors.bgGrey,
@@ -714,10 +729,10 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 13.9,
+                crossAxisSpacing: _setValue(20),
+                mainAxisSpacing: _setValue(13.9),
                 childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.2),
+                    (MediaQuery.of(context).size.height / 1.50),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -756,22 +771,26 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
       },
       child: Column(
         children: [
-          Container(
-            width: _setValue(50),
-            height: _setValue(50),
-            decoration: BoxDecoration(
-              border: Border.all(color: CustColors.lightGrey, width: 1.3),
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  7.8,
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width -
+                  ((_setValue(21) + _setValue(21)) + (22 * 3)),
+              height: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    7.8,
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              margin: EdgeInsets.all(_setValue(12)),
-              child: CachedNetworkImage(
-                imageUrl: "https://picsum.photos/200",
+              child: Container(
+                margin: EdgeInsets.all(_setValue(12)),
+                child: CachedNetworkImage(
+                  imageUrl: "https://picsum.photos/200",
+                ),
               ),
             ),
           ),
