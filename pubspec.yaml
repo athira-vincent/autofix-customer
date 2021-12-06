@@ -49,6 +49,7 @@ dependencies:
   month_picker_dialog: ^0.4.0
   another_xlider: ^1.0.0
   flutter_rating_bar: ^4.0.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

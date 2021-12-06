@@ -67,6 +67,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   bool _isLoading = false;
   bool isloading = false;
+  bool _loadingBrand = false;
+  bool _loadingModel = false;
+  bool _loadingEngineType = false;
   double? _mileageData = 0;
   String brandName = "";
   String modelName = "";
@@ -124,11 +127,12 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   void onFocusChange() {
     setState(() {});
   }
-  _getAllMake() async {
 
+  _getAllMake() async {
     _allMakeBloc.postAllMake.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _loadingBrand = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -140,6 +144,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       } else {
         _allMakeBloc.postMakeData.listen((data) {
           setState(() {
+            _loadingBrand = false;
             makeDetails = data;
             // print("c"+value.data.acceptInvitations.message.toString()+"c");
             print(">>>>>Brand Data" +
@@ -155,6 +160,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     _allModelBloc.postAllModel.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _loadingModel = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -166,6 +172,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       } else {
         _allModelBloc.postModelData.listen((data) {
           setState(() {
+            _loadingModel = false;
             modelDetails = data;
             print(">>>>>Brand Data" +
                 value.data!.modelDetails!.length.toString() +
@@ -180,6 +187,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
     _allEngineBloc.postAllEngine.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _loadingEngineType = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -191,6 +199,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       } else {
         _allEngineBloc.postEngineData.listen((data) {
           setState(() {
+            _loadingEngineType = false;
             engineDetails = data;
           });
         });
@@ -233,7 +242,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
           FocusScope.of(context).unfocus();
-
         });
       }
     });
@@ -248,7 +256,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
           key: _formKey,
           autovalidateMode: _autoValidate,
           child: Container(
-            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
             child: Column(
               children: [
                 AspectRatio(
@@ -396,7 +404,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           Container(
                             margin: EdgeInsets.only(
                                 top: _setValue(18),
@@ -418,7 +425,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   fontFamily: 'Corbel_Regular',
                                 ),
                                 keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Brand").emptyChecking,
+                                validator:
+                                    InputValidator(ch: "Brand").emptyChecking,
                                 controller: _brandController,
                                 decoration: new InputDecoration(
                                   suffixIcon: Container(
@@ -452,7 +460,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),*/
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
                                     borderSide: new BorderSide(
                                       color: CustColors.cloudy_blue,
                                       style: BorderStyle.solid,
@@ -462,7 +471,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(
                                 top: _setValue(18),
@@ -482,7 +490,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   fontFamily: 'Corbel_Regular',
                                 ),
                                 keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Model").emptyChecking,
+                                validator:
+                                    InputValidator(ch: "Model").emptyChecking,
                                 controller: _modelController,
                                 decoration: new InputDecoration(
                                   suffixIcon: Container(
@@ -516,7 +525,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),*/
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
                                     borderSide: new BorderSide(
                                       color: CustColors.cloudy_blue,
                                       style: BorderStyle.solid,
@@ -526,7 +536,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(
                                 top: _setValue(18),
@@ -546,7 +555,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   fontFamily: 'Corbel_Regular',
                                 ),
                                 keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Engine").emptyChecking,
+                                validator:
+                                    InputValidator(ch: "Engine").emptyChecking,
                                 controller: _engineController,
                                 decoration: new InputDecoration(
                                   suffixIcon: Container(
@@ -580,7 +590,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),*/
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
                                     borderSide: new BorderSide(
                                       color: CustColors.cloudy_blue,
                                       style: BorderStyle.solid,
@@ -590,7 +601,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(
                                 top: _setValue(18),
@@ -602,7 +612,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 showDatePicker(
                                   context: context,
                                   initialDatePickerMode: DatePickerMode.year,
-                                  firstDate: DateTime(DateTime.now().year -15),
+
+                                  firstDate: DateTime(DateTime.now().year - 15),
                                   initialDate: DateTime(DateTime.now().year),
                                   //initialDate: selectedYear ?? initialYear,
                                   lastDate: DateTime(DateTime.now().year),
@@ -610,7 +621,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   if (date != null) {
                                     setState(() {
                                       this.selectedYear = date;
-                                      _yearController.text = selectedYear!.year.toString();
+                                      _yearController.text =
+                                          selectedYear!.year.toString();
                                     });
                                   }
                                 });
@@ -624,7 +636,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   fontFamily: 'Corbel_Regular',
                                 ),
                                 keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Year").emptyChecking,
+                                validator:
+                                    InputValidator(ch: "Year").emptyChecking,
                                 controller: _yearController,
                                 decoration: new InputDecoration(
                                   suffixIcon: Container(
@@ -658,7 +671,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),*/
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
                                     borderSide: new BorderSide(
                                       color: CustColors.cloudy_blue,
                                       style: BorderStyle.solid,
@@ -668,7 +682,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(
                                 top: _setValue(18),
@@ -690,8 +703,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     setState(() {
                                       this.selectedDate = date;
                                       _maintenanceController.text =
-                                          selectedDate!.month.toString() + "/"
-                                              + selectedDate!.year.toString();
+                                          selectedDate!.month.toString() +
+                                              "/" +
+                                              selectedDate!.year.toString();
                                     });
                                   }
                                 });
@@ -705,7 +719,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   fontFamily: 'Corbel_Regular',
                                 ),
                                 keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "Last maintenance").emptyChecking,
+                                validator:
+                                    InputValidator(ch: "Last maintenance")
+                                        .emptyChecking,
                                 controller: _maintenanceController,
                                 decoration: new InputDecoration(
                                   suffixIcon: Container(
@@ -739,7 +755,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),*/
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius:
+                                        new BorderRadius.circular(25.0),
                                     borderSide: new BorderSide(
                                       color: CustColors.cloudy_blue,
                                       style: BorderStyle.solid,
@@ -749,11 +766,11 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(18),
-                                left: _setValue(12),),
+                              top: _setValue(18),
+                              left: _setValue(12),
+                            ),
                             padding: EdgeInsets.all(1),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -774,10 +791,13 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     max: 100,
                                     min: 0,
                                     step: FlutterSliderStep(step: 2),
+                                    handlerHeight: _setValue(25),
+                                    handlerWidth: _setValue(25),
                                     handler: FlutterSliderHandler(
                                         child: Image.asset(
                                             "assets/images/icon_seekbar.png")),
                                     trackBar: FlutterSliderTrackBar(
+                                      activeTrackBarHeight: _setValue(5),
                                       activeTrackBar: BoxDecoration(
                                           color: CustColors.blue,
                                           border: Border.all(
@@ -790,11 +810,20 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           )),
                                     ),
                                     tooltip: FlutterSliderTooltip(
-                                      rightSuffix: Text(
-                                        " km / ltr",
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: CustColors.blue),
+                                      alwaysShowTooltip: true,
+                                      boxStyle: FlutterSliderTooltipBox(
+                                          decoration: BoxDecoration(
+                                              color: Colors.transparent)),
+                                      positionOffset:
+                                          FlutterSliderTooltipPositionOffset(
+                                              top: 40),
+                                      rightSuffix: Container(
+                                        child: Text(
+                                          " km / ltr",
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: CustColors.blue),
+                                        ),
                                       ),
                                       textStyle: TextStyle(
                                           fontSize: 10, color: CustColors.blue),
@@ -812,7 +841,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ],
                             ),
                           ),
-
                           Align(
                             alignment: Alignment.centerRight,
                             child: _isLoading
@@ -823,8 +851,10 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     ),
                                   )
                                 : Container(
-                                    margin: EdgeInsets.all(4),
-                                    padding: EdgeInsets.only(left: 30, right: 30),
+                                    margin:
+                                        EdgeInsets.only(top: _setValue(24.7)),
+                                    padding:
+                                        EdgeInsets.only(left: 30, right: 30),
                                     decoration: BoxDecoration(
                                       color: CustColors.blue,
                                       border: Border.all(
@@ -845,7 +875,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                       ),
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-
                                           _addVehicleBloc.postAddVehicleRequest(
                                               token,
                                               _yearController.text,
@@ -856,8 +885,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                               "3",
                                               selectedBrandId!,
                                               selectedModelId!,
-                                              selectedEngineId!
-                                              );
+                                              selectedEngineId!);
                                           setState(() {
                                             _isLoading = true;
                                           });
@@ -1013,9 +1041,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Container(
@@ -1026,14 +1054,14 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           child: Center(
                                             child: TextFormField(
                                               keyboardType:
-                                              TextInputType.visiblePassword,
+                                                  TextInputType.visiblePassword,
                                               textAlignVertical:
-                                              TextAlignVertical.center,
+                                                  TextAlignVertical.center,
                                               onChanged: (text) {
                                                 setState(() {
                                                   makeDetails!.clear();
                                                   //_countryData.clear();
-                                                  isloading = true;
+                                                  _loadingBrand = true;
                                                 });
                                                 _allMakeBloc.searchMake(text);
                                               },
@@ -1044,11 +1072,11 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                   fontWeight: FontWeight.w600,
                                                   color: CustColors.blue),
                                               decoration: InputDecoration(
-                                                hintText: "Search Your  State",
+                                                hintText: "Search Your Brand",
                                                 border: InputBorder.none,
                                                 contentPadding:
-                                                new EdgeInsets.only(
-                                                    bottom: 15),
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
                                                 hintStyle: TextStyle(
                                                   color: CustColors.greyText,
                                                   fontSize: 12,
@@ -1094,71 +1122,78 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 Container(
                                   height: 421 - 108,
                                   padding:
-                                  EdgeInsets.only(top: _setValue(22.4)),
+                                      EdgeInsets.only(top: _setValue(22.4)),
                                   child: makeDetails!.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: makeDetails!.length,
-                                    itemBuilder: (context, index) {
-                                       return InkWell(
-                                          onTap: () {
-                                            final brandName = makeDetails![index].makeName;
-                                            final brandId = makeDetails![index].id;
-                                            setState(() {
-                                              _brandController.text = brandName.toString();
-                                              selectedBrandId = int.parse(brandId!);
-                                              _modelController.clear();
-                                              selectedModelId = 0;
-                                              _engineController.clear();
-                                              selectedEngineId=0;
-                                              _allModelBloc.postAllModelDataRequest(selectedBrandId!, token);
-
-                                            });
-                                            print(">>>>>");
-                                            print(selectedBrandId);
-                                            Navigator.pop(context);
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: makeDetails!.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final brandName =
+                                                      makeDetails![index]
+                                                          .makeName;
+                                                  final brandId =
+                                                      makeDetails![index].id;
+                                                  setState(() {
+                                                    _brandController.text =
+                                                        brandName.toString();
+                                                    selectedBrandId =
+                                                        int.parse(brandId!);
+                                                    _modelController.clear();
+                                                    selectedModelId = 0;
+                                                    _engineController.clear();
+                                                    selectedEngineId = 0;
+                                                    _allModelBloc
+                                                        .postAllModelDataRequest(
+                                                            selectedBrandId!,
+                                                            token);
+                                                  });
+                                                  print(">>>>>");
+                                                  print(selectedBrandId);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${makeDetails![index].makeName}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            _setValueFont(12),
+                                                        fontFamily:
+                                                            'Corbel-Light',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${makeDetails![index].makeName}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                  int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
-                                    child: Text('No Results found.'),
-                                  ),
+                                          child: Text('No Results found.'),
+                                        ),
                                 ),
                               ])),
                           Center(
-                            child: isloading
+                            child: _loadingBrand
                                 ? CircularProgressIndicator()
                                 : Text(''),
                           )
@@ -1216,9 +1251,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Container(
@@ -1229,14 +1264,14 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           child: Center(
                                             child: TextFormField(
                                               keyboardType:
-                                              TextInputType.visiblePassword,
+                                                  TextInputType.visiblePassword,
                                               textAlignVertical:
-                                              TextAlignVertical.center,
+                                                  TextAlignVertical.center,
                                               onChanged: (text) {
                                                 setState(() {
                                                   makeDetails!.clear();
                                                   //_countryData.clear();
-                                                  isloading = true;
+                                                  _loadingModel = true;
                                                 });
                                                 _allMakeBloc.searchMake(text);
                                               },
@@ -1250,8 +1285,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                 hintText: "Search Your  State",
                                                 border: InputBorder.none,
                                                 contentPadding:
-                                                new EdgeInsets.only(
-                                                    bottom: 15),
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
                                                 hintStyle: TextStyle(
                                                   color: CustColors.greyText,
                                                   fontSize: 12,
@@ -1297,70 +1332,78 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 Container(
                                   height: 421 - 108,
                                   padding:
-                                  EdgeInsets.only(top: _setValue(22.4)),
+                                      EdgeInsets.only(top: _setValue(22.4)),
                                   child: modelDetails!.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: modelDetails!.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final modelName = modelDetails![index].modelName;
-                                            final modelId = modelDetails![index].id;
-                                            setState(() {
-                                              _modelController.text = modelName.toString();
-                                              selectedModelId = int.parse(modelId!);
-                                              //selectedModelId = 0;
-                                              //selectedEngineId = 0;
-                                              _engineController.clear();
-                                              selectedEngineId=0;
-                                              _allEngineBloc.postAllEngineDataRequest(selectedModelId!, token);
-                                            });
-                                            print(">>>>>");
-                                            print(selectedModelId);
-                                            Navigator.pop(context);
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: modelDetails!.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final modelName =
+                                                      modelDetails![index]
+                                                          .modelName;
+                                                  final modelId =
+                                                      modelDetails![index].id;
+                                                  setState(() {
+                                                    _modelController.text =
+                                                        modelName.toString();
+                                                    selectedModelId =
+                                                        int.parse(modelId!);
+                                                    //selectedModelId = 0;
+                                                    //selectedEngineId = 0;
+                                                    _engineController.clear();
+                                                    selectedEngineId = 0;
+                                                    _allEngineBloc
+                                                        .postAllEngineDataRequest(
+                                                            selectedModelId!,
+                                                            token);
+                                                  });
+                                                  print(">>>>>");
+                                                  print(selectedModelId);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${modelDetails![index].modelName}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            _setValueFont(12),
+                                                        fontFamily:
+                                                            'Corbel-Light',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${modelDetails![index].modelName}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                  int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
-                                        child: Text('No Results found.'),
-                                  ),
+                                          child: Text('No Results found.'),
+                                        ),
                                 ),
                               ])),
                           Center(
-                            child: isloading
+                            child: _loadingModel
                                 ? CircularProgressIndicator()
                                 : Text(''),
                           )
@@ -1418,9 +1461,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Container(
@@ -1431,14 +1474,14 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           child: Center(
                                             child: TextFormField(
                                               keyboardType:
-                                              TextInputType.visiblePassword,
+                                                  TextInputType.visiblePassword,
                                               textAlignVertical:
-                                              TextAlignVertical.center,
+                                                  TextAlignVertical.center,
                                               onChanged: (text) {
                                                 setState(() {
                                                   engineDetails!.clear();
                                                   //_countryData.clear();
-                                                  isloading = true;
+                                                  _loadingEngineType = true;
                                                 });
                                                 _allEngineBloc.searchMake(text);
                                               },
@@ -1452,8 +1495,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                 hintText: "Search Your  State",
                                                 border: InputBorder.none,
                                                 contentPadding:
-                                                new EdgeInsets.only(
-                                                    bottom: 15),
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
                                                 hintStyle: TextStyle(
                                                   color: CustColors.greyText,
                                                   fontSize: 12,
@@ -1499,67 +1542,73 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 Container(
                                   height: 421 - 108,
                                   padding:
-                                  EdgeInsets.only(top: _setValue(22.4)),
+                                      EdgeInsets.only(top: _setValue(22.4)),
                                   child: engineDetails!.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: engineDetails!.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final engineName = engineDetails![index].engineName;
-                                            final engineId = engineDetails![index].id;
-                                            setState(() {
-                                              _engineController.text = engineName.toString();
-                                              selectedEngineId = int.parse(engineId!);
-                                              //selectedModelId = 0;
-                                              //selectedEngineId = 0;
-                                            });
-                                            print("selectedEngineId >>>>>");
-                                            print(selectedEngineId);
-                                            Navigator.pop(context);
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: engineDetails!.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final engineName =
+                                                      engineDetails![index]
+                                                          .engineName;
+                                                  final engineId =
+                                                      engineDetails![index].id;
+                                                  setState(() {
+                                                    _engineController.text =
+                                                        engineName.toString();
+                                                    selectedEngineId =
+                                                        int.parse(engineId!);
+                                                    //selectedModelId = 0;
+                                                    //selectedEngineId = 0;
+                                                  });
+                                                  print(
+                                                      "selectedEngineId >>>>>");
+                                                  print(selectedEngineId);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${engineDetails![index].engineName}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            _setValueFont(12),
+                                                        fontFamily:
+                                                            'Corbel-Light',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${engineDetails![index].engineName}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                  int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
-                                    child: Text('No Results found.'),
-                                  ),
+                                          child: Text('No Results found.'),
+                                        ),
                                 ),
                               ])),
                           Center(
-                            child: isloading
+                            child: _loadingEngineType
                                 ? CircularProgressIndicator()
                                 : Text(''),
                           )
@@ -1572,7 +1621,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         });
   }
 
-  void showYearSelector(){
+  void showYearSelector() {
     showDatePicker(
       context: context,
       initialDatePickerMode: DatePickerMode.year,
@@ -1589,6 +1638,4 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       }
     });
   }
-
-
 }
