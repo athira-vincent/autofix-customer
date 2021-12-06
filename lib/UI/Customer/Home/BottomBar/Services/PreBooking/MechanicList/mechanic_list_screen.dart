@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_mdl.dart';
+import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -251,8 +252,8 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
       color: Colors.amber,
     ),
     itemCount: 5,
-    itemSize: 20.0,
-    unratedColor: Colors.amber.withAlpha(50),
+    itemSize: ScreenSize().setValue(12.5),
+    unratedColor: Color(0xffdfe0e2),
     direction: Axis.horizontal,
   );
 
