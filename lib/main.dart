@@ -24,9 +24,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionHandleColor: Colors.white,
+        ),
         primarySwatch: CustColors.materialBlue,
-        accentColor: CustColors.blue
-    ),
+      ),
       home: SplashScreen(),
     );
   }

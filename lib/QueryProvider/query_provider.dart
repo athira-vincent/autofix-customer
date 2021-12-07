@@ -582,7 +582,7 @@ class QueryProvider {
   getRegularServices(int page, int size, String token) async {
     String _query = """
       query{
-          emergencyList(page: $page, size: $size, id: "1"){
+          emergencyList(page: $page, size: $size, id: "2"){
                   totalItems
                   data {
                     id
@@ -610,7 +610,7 @@ class QueryProvider {
   getEmeregencyServices(int page, int size, String token) async {
     String _query = """
       query{
-          emergencyList(page: $page, size: $size, id: "2"){
+          emergencyList(page: $page, size: $size, id: "1"){
                   totalItems
                   data {
                     id

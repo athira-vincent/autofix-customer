@@ -23,6 +23,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   EmergencyServicesBloc _emergencyServicesBloc = EmergencyServicesBloc();
   List<EmergencyData>? _emergencyList = [];
   List<RegularData>? _regularList = [];
+
   double per = .10;
   double _setValue(double value) {
     return value * per + value;
@@ -40,16 +41,15 @@ class _ServicesScreenState extends State<ServicesScreen> {
     super.initState();
     _getAllServices();
     _getRegularServices();
-
     _getEmergencyServices();
   }
 
   _getAllServices() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     _regularServicesBloc.postRegularServicesRequest(
-        1, 100, shdPre.getString(SharedPrefKeys.token)!);
+        1, 12, shdPre.getString(SharedPrefKeys.token)!);
     _emergencyServicesBloc.postEmergencyServicesRequest(
-        1, 100, shdPre.getString(SharedPrefKeys.token)!);
+        1, 12, shdPre.getString(SharedPrefKeys.token)!);
   }
 
   _getRegularServices() async {
@@ -107,7 +107,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
         padding: EdgeInsets.only(bottom: _setValue(75)),
         child: Column(
           children: [
-            _reminder(),
+            //_reminder(),
             _searchBox(),
             _regularServices(),
             _emergencyServices(),
@@ -173,7 +173,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       child: Container(
         height: _setValue(36.3),
         margin: EdgeInsets.only(
-            left: _setValue(41), right: _setValue(41), top: _setValue(17.3)),
+            left: _setValue(41), right: _setValue(41), top: _setValue(26.5)),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -237,6 +237,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Widget _regularServices() {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 4;
+    final double itemWidth = size.width / 4;
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(top: _setValue(33.9)),
@@ -263,10 +266,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                crossAxisSpacing: _setValue(22),
-                mainAxisSpacing: _setValue(13.9),
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.40),
+                crossAxisSpacing: 21,
+                childAspectRatio: (itemWidth / itemHeight),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -314,6 +315,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                  color: Colors.white,
                   borderRadius: BorderRadius.all(
                     Radius.circular(
                       _setValue(7.8),
@@ -323,7 +325,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 child: Container(
                   margin: EdgeInsets.all(_setValue(9)),
                   child: CachedNetworkImage(
-                    imageUrl: "https://picsum.photos/200",
+                    imageUrl: regularList.icon.toString(),
                   ),
                 ),
               ),
@@ -346,10 +348,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   Widget _emergencyServices() {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
+    final double itemWidth = size.width / 3;
     return Container(
       alignment: Alignment.topLeft,
-      margin: EdgeInsets.only(top: _setValue(29.1)),
-      padding: EdgeInsets.only(top: _setValue(28.9), bottom: 10),
+      padding: EdgeInsets.only(
+        top: _setValue(28.9),
+      ),
       decoration: BoxDecoration(
         color: CustColors.bgGrey,
         borderRadius: BorderRadius.only(
@@ -377,17 +383,15 @@ class _ServicesScreenState extends State<ServicesScreen> {
           ),
           Container(
             margin: EdgeInsets.only(
-                top: _setValue(29.1),
-                left: _setValue(21),
-                right: _setValue(21),
-                bottom: _setValue(15)),
+              top: _setValue(29.1),
+              left: _setValue(21),
+              right: _setValue(21),
+            ),
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: _setValue(62.0),
-                mainAxisSpacing: _setValue(13.9),
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.40),
+                childAspectRatio: (itemWidth / itemHeight),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -442,10 +446,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 ),
               ),
               child: Container(
-                margin: EdgeInsets.all(_setValue(9)),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://cdn-icons-png.flaticon.com/512/833/833015.png",
+                margin: EdgeInsets.all(_setValue(6)),
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: CustColors.blue),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Padding(
+                    padding: EdgeInsets.all(9),
+                    child: CachedNetworkImage(
+                      imageUrl: emergencyList.icon.toString(),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -469,25 +484,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget _adsList() {
     return Container(
       margin: EdgeInsets.only(top: _setValue(10)),
-      height: _setValue(109),
+      height: _setValue(140),
       child: ListView.builder(
         itemCount: 5,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
-          return _adsListItem();
+          return _adsListItem(index);
         },
       ),
     );
   }
 
-  Widget _adsListItem() {
+  Widget _adsListItem(int index) {
     return Container(
       margin: EdgeInsets.only(right: _setValue(4.7)),
-      child: Image.network(
-        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/2022-chevrolet-corvette-z06-1607016574.jpg?crop=0.737xw:0.738xh;0.181xw,0.218xh&resize=640:*",
-        fit: BoxFit.cover,
-        width: _setValue(178),
-        height: _setValue(109),
+      child: Image.asset(
+        index % 2 == 0 ? "assets/images/ad01.png" : "assets/images/ad02.jpg",
+        fit: BoxFit.fitWidth,
+        width: MediaQuery.of(context).size.width,
       ),
     );
   }
