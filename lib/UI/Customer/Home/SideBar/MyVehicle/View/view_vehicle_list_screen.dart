@@ -16,7 +16,7 @@ class _ViewVehicleListScreenState extends State<ViewVehicleListScreen> {
   @override
   void initState() {
     super.initState();
-    _viewVehicleBloc.postViewVehicleRequest();
+    _viewVehicleBloc.postViewVehicleRequest("");
     _getViewVehicle();
   }
 

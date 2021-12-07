@@ -3,8 +3,8 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehilce_md
 
 class ViewVehicleApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<ViewVehicleMdl> getViewVehicleRequest() async {
-    Map<String, dynamic> _resp = await _queryProvider.viewVehicle();
+  Future<ViewVehicleMdl> getViewVehicleRequest(String token) async {
+    Map<String, dynamic> _resp = await _queryProvider.viewVehicle(token);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

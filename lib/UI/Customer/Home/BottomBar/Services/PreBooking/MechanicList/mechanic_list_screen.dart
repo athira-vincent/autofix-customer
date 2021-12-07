@@ -1,9 +1,13 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_mdl.dart';
+import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +30,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
   MechanicListData? mechanicListDataVal;
 
   String token = "";
+  double km = 0;
 
   @override
   void initState() {
@@ -156,6 +161,9 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
           String? mechName = mechanicListData[index].firstName;
           String? address = mechanicListData[index].address;
           String? phone = mechanicListData[index].phoneNo;
+          double? mechanic_lat = mechanicListData[index].latitude;
+          double? mechanic_lng = mechanicListData[index].longitude;
+
           //int imageIndex = index +1;
           return InkWell(
             onTap: () {
@@ -200,7 +208,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                           //Text(mechName!),
                           _ratingBar,
                           Text(
-                            "8 Km",
+                            calculateDistance(10.1964, 76.3879, mechanic_lat, mechanic_lng).toString(),
                             style: TextStyle(
                               fontFamily: "Corbel-Light",
                               color: CustColors.white02,
@@ -235,7 +243,6 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                       ),
                     ],
                   ),
-
                   //onTap: () => selectItem(item),
                 ),
               ),
@@ -251,8 +258,8 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
       color: Colors.amber,
     ),
     itemCount: 5,
-    itemSize: 20.0,
-    unratedColor: Colors.amber.withAlpha(50),
+    itemSize: ScreenSize().setValue(12.5),
+    unratedColor: Color(0xffdfe0e2),
     direction: Axis.horizontal,
   );
 
@@ -267,5 +274,14 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
       ..showSnackBar(snackBar);
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 }
