@@ -106,6 +106,15 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.customerSignUp!.customer!.isProfileCompleted!);
           shdPre.setString(
               SharedPrefKeys.token, value.data!.customerSignUp!.token!);
+          shdPre.setString(
+              SharedPrefKeys.userName,
+              value.data!.customerSignUp!.customer!.firstName.toString() +
+                  " " +
+                  value.data!.customerSignUp!.customer!.lastName.toString());
+          shdPre.setString(SharedPrefKeys.userEmail,
+              value.data!.customerSignUp!.customer!.emailId.toString());
+          shdPre.setInt(SharedPrefKeys.userID,
+              int.parse(value.data!.customerSignUp!.customer!.id!));
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
@@ -350,63 +359,62 @@ class _SignupScreenState extends State<SignupScreen> {
                                 onTap: () {
                                   showDialCodeSelector();
                                 },
-                                child: Container(
-                                  child: TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    maxLines: 1,
-                                    enabled: false,
-                                    style: TextStyle(
-                                      fontFamily: 'Corbel_Light',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontSize: _setValueFont(13),
-                                    ),
-                                    focusNode: _stateFocusNode,
-                                    keyboardType: TextInputType.text,
-                                    validator: InputValidator(ch: "State")
-                                        .emptyChecking,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[a-zA-Z]')),
-                                    ],
-                                    controller: _stateController,
-                                    decoration: InputDecoration(
-                                        disabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.white,
-                                            width: .3,
-                                          ),
-                                        ),
-                                        isDense: true,
-                                        hintText: 'State',
-                                        border: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.white,
-                                            width: .3,
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.white,
-                                            width: .3,
-                                          ),
-                                        ),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.white,
-                                            width: .3,
-                                          ),
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical: _setValue(7.8),
-                                        ),
-                                        hintStyle: TextStyle(
-                                          fontFamily: 'Corbel_Light',
-                                          color: Colors.white.withOpacity(.60),
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: _setValueFont(12),
-                                        )),
+                                child: TextFormField(
+                                  textAlignVertical: TextAlignVertical.center,
+                                  maxLines: 1,
+                                  enabled: false,
+                                  autofocus: false,
+                                  style: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontSize: _setValueFont(13),
                                   ),
+                                  focusNode: _stateFocusNode,
+                                  keyboardType: TextInputType.text,
+                                  validator:
+                                      InputValidator(ch: "State").emptyChecking,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('[a-zA-Z]')),
+                                  ],
+                                  controller: _stateController,
+                                  decoration: InputDecoration(
+                                      disabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      isDense: true,
+                                      hintText: 'State',
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        vertical: _setValue(7.8),
+                                      ),
+                                      hintStyle: TextStyle(
+                                        fontFamily: 'Corbel_Light',
+                                        color: Colors.white.withOpacity(.60),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: _setValueFont(12),
+                                      )),
                                 ),
                               ),
                             ),

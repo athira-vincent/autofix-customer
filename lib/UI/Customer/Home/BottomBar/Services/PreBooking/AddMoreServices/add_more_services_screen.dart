@@ -216,13 +216,13 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                   ),
                   child: Column(
                     children: [
-                      widget.type == "1"
+                      widget.type == "2"
                           ? regularServicesListView()
                           : Container(
                               width: 0,
                               height: 0,
                             ),
-                      widget.type == "2"
+                      widget.type == "1"
                           ? emergencyServicesListView()
                           : Container(
                               width: 0,
@@ -230,13 +230,13 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                             ),
                     ],
                   )),
-              widget.type == "1"
+              widget.type == "2"
                   ? _regularServices()
                   : Container(
                       width: 0,
                       height: 0,
                     ),
-              widget.type == "2"
+              widget.type == "1"
                   ? _emergencyServices()
                   : Container(
                       width: 0,
@@ -613,6 +613,9 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
   }
 
   Widget _regularServices() {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
+    final double itemWidth = size.width / 3;
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(top: _setValue(13.9)),
@@ -633,8 +636,8 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
             ),
           ),
           Container(
-            padding:
-                EdgeInsets.only(top: _setValue(44), bottom: _setValue(30.5)),
+            padding: EdgeInsets.only(
+                top: _setValue(44), left: _setValue(21), right: _setValue(21)),
             margin: EdgeInsets.only(top: _setValue(15)),
             decoration: BoxDecoration(
               color: CustColors.bgGrey,
@@ -642,10 +645,8 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 40.0,
-                mainAxisSpacing: 13.9,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.6),
+                crossAxisSpacing: _setValue(62.0),
+                childAspectRatio: (itemWidth / itemHeight),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -691,22 +692,26 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
       },
       child: Column(
         children: [
-          Container(
-            width: _setValue(50),
-            height: _setValue(50),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: CustColors.lightGrey, width: 1.3),
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  _setValue(7.8),
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width -
+                  ((_setValue(21) + _setValue(21)) + (22 * 3)),
+              height: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    _setValue(7.8),
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              margin: EdgeInsets.all(_setValue(12)),
-              child: CachedNetworkImage(
-                imageUrl: "https://picsum.photos/200",
+              child: Container(
+                margin: EdgeInsets.all(_setValue(9)),
+                child: CachedNetworkImage(
+                  imageUrl: regularList.icon.toString(),
+                ),
               ),
             ),
           ),
@@ -715,11 +720,10 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
             child: Text(
               regularList.serviceName.toString(),
               style: TextStyle(
-                fontSize: 9.5,
-                color: CustColors.blue,
-                fontFamily: 'Corbel_Light',
-                fontWeight: FontWeight.w600,
-              ),
+                  fontSize: 9.5,
+                  color: CustColors.blue,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Corbel_Light'),
             ),
           ),
         ],
@@ -728,6 +732,9 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
   }
 
   Widget _emergencyServices() {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 4;
+    final double itemWidth = size.width / 4;
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(top: _setValue(26.4)),
@@ -750,8 +757,8 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
             ),
           ),
           Container(
-            padding:
-                EdgeInsets.only(top: _setValue(44), bottom: _setValue(30.5)),
+            padding: EdgeInsets.only(
+                top: _setValue(44), left: _setValue(21), right: _setValue(21)),
             margin: EdgeInsets.only(top: _setValue(15)),
             decoration: BoxDecoration(
               color: CustColors.bgGrey,
@@ -759,10 +766,8 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 13.9,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.2),
+                crossAxisSpacing: 21,
+                childAspectRatio: (itemWidth / itemHeight),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -808,22 +813,38 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
       },
       child: Column(
         children: [
-          Container(
-            width: _setValue(50),
-            height: _setValue(50),
-            decoration: BoxDecoration(
-              border: Border.all(color: CustColors.lightGrey, width: 1.3),
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  7.8,
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              width: MediaQuery.of(context).size.width -
+                  ((_setValue(21) + _setValue(21)) + (60 * 2)),
+              height: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: CustColors.lightGrey, width: 1.3),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    _setValue(7.8),
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              margin: EdgeInsets.all(_setValue(12)),
-              child: CachedNetworkImage(
-                imageUrl: "https://picsum.photos/200",
+              child: Container(
+                margin: EdgeInsets.all(_setValue(6)),
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: CustColors.blue),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Padding(
+                    padding: EdgeInsets.all(9),
+                    child: CachedNetworkImage(
+                      imageUrl: emergencyList.icon.toString(),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -832,11 +853,10 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
             child: Text(
               emergencyList.serviceName.toString(),
               style: TextStyle(
-                fontSize: 9.5,
-                color: CustColors.blue,
-                fontFamily: 'Corbel_Light',
-                fontWeight: FontWeight.w600,
-              ),
+                  fontSize: 9.5,
+                  color: CustColors.blue,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Corbel_Light'),
             ),
           ),
         ],
