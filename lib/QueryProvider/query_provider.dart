@@ -139,7 +139,20 @@ class QueryProvider {
 
   selectCar() {}
 
-  viewVehicle() {}
+  viewVehicle(String token) async {
+    String _query = """
+      
+     """;
+    log(_query);
+
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+
+  }
 
   deleteVehicle() {}
   vehicleDetails(String token) async {

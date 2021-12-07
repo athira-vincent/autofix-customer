@@ -10,8 +10,8 @@ class ViewVehicleBloc {
     postViewVehicle.close();
   }
 
-  postViewVehicleRequest() async {
-    ViewVehicleMdl _viewVehicleMdl = await repository.getViewVehicle();
+  postViewVehicleRequest(String token) async {
+    ViewVehicleMdl _viewVehicleMdl = await repository.getViewVehicle(token);
     postViewVehicle.sink.add(_viewVehicleMdl);
   }
 }
