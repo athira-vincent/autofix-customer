@@ -412,7 +412,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 20),
+                                    margin: EdgeInsets.only(top: 19),
                                     //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -430,7 +430,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   Container(
                                     color: Colors.transparent,
-                                    margin: EdgeInsets.only(top: 19),
+                                    margin: EdgeInsets.only(top: 18),
                                     padding: EdgeInsets.only(
                                         left: 17.5,
                                         right: 8,
@@ -499,7 +499,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 20),
+                                    margin: EdgeInsets.only(top: 19),
                                     //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -517,7 +517,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   Container(
                                     color: Colors.transparent,
-                                    margin: EdgeInsets.only(top: 19),
+                                    margin: EdgeInsets.only(top: 18),
                                     padding: EdgeInsets.only(
                                         left: 17.5,
                                         right: 8,
@@ -586,7 +586,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 20),
+                                    margin: EdgeInsets.only(top: 19),
                                     //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -604,7 +604,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   Container(
                                     color: Colors.transparent,
-                                    margin: EdgeInsets.only(top: 19),
+                                    margin: EdgeInsets.only(top: 18),
                                     padding: EdgeInsets.only(
                                         left: 17.5,
                                         right: 8,
@@ -689,7 +689,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 20),
+                                    margin: EdgeInsets.only(top: 19),
                                     //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -707,7 +707,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   Container(
                                     color: Colors.transparent,
-                                    margin: EdgeInsets.only(top: 19),
+                                    margin: EdgeInsets.only(top: 18),
                                     padding: EdgeInsets.only(
                                         left: 17.5,
                                         right: 8,
@@ -794,7 +794,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               child: Stack(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 20),
+                                    margin: EdgeInsets.only(top: 19),
                                     //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -812,7 +812,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   ),
                                   Container(
                                     color: Colors.transparent,
-                                    margin: EdgeInsets.only(top: 19),
+                                    margin: EdgeInsets.only(top: 18),
                                     padding: EdgeInsets.only(
                                         left: 17.5,
                                         right: 8,
@@ -876,7 +876,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                              top: _setValue(18),
+                              top: _setValue(15),
                               left: _setValue(12),
                             ),
                             padding: EdgeInsets.all(1),
@@ -939,6 +939,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                         ),
                                       ),
                                       textStyle: TextStyle(
+                                        fontFamily: "Corbel_Regular",
                                           fontSize: 10, color: CustColors.blue),
                                     ),
                                     onDragging:
@@ -964,10 +965,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     ),
                                   )
                                 : Container(
-                                    margin:
-                                        EdgeInsets.only(top: _setValue(24.7)),
-                                    padding:
-                                        EdgeInsets.only(left: 30, right: 30),
+                                    margin: EdgeInsets.only(top: _setValue(12),bottom: _setValue(8)),
+                                    padding: EdgeInsets.only(left: 30, right: 30),
                                     decoration: BoxDecoration(
                                       color: CustColors.blue,
                                       border: Border.all(
@@ -1029,7 +1028,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         context: context,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+                topRight: Radius.circular(20),
+                topLeft: Radius.circular(20))),
         builder: (builder) {
           return Container(
               height: 115.0,
@@ -1058,10 +1058,6 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                       });
                     },
                   ),
-                  // Divider(
-                  //   height: 1.0,
-                  //   color: Colors.grey,
-                  // ),
                   ListTile(
                     leading: Icon(
                       Icons.image,
@@ -1753,17 +1749,4 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
       }
     });
   }
-
-  Widget seekBarIcon = Container(
-    child: Stack(
-      children: [
-        Image.asset("assets/images/icon_seek_bg.png"),
-        Image.asset(
-          "assets/images/icon_seek_image.png",
-          height: 10,
-          width: 10,
-        )
-      ],
-    ),
-  );
 }

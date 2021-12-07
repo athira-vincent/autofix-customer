@@ -77,8 +77,8 @@ class Repository {
       _searchResultApiProvider.getSearchResultRequest(
           page, size, searchText, token, type);
   //View Vehicle
-  Future<dynamic> getViewVehicle() =>
-      _viewVehicleApiProvider.getViewVehicleRequest();
+  Future<dynamic> getViewVehicle(String token) =>
+      _viewVehicleApiProvider.getViewVehicleRequest(token);
   //Delete Vehicle
   Future<dynamic> getDeleteVehicle() =>
       _deleteVehicleApiProvider.getDeleteVehicleRequest();
