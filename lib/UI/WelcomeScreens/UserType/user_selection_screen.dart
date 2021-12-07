@@ -143,7 +143,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 7.8),
-                              child: Text("SAPRE PARTS VENDOR",
+                              child: Text("SPARE PARTS VENDOR",
                                   style: TextStyle(
                                       fontSize: 14.5,
                                       fontWeight: FontWeight.w600,

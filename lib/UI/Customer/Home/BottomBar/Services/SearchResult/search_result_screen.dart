@@ -185,42 +185,55 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
       ),
       body: Container(
         height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              searchTextBox(),
-              Container(
-                  margin: EdgeInsets.only(
-                    left: _setValue(31),
-                    right: _setValue(31),
-                    top: _setValue(8.8),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black38,
-                        spreadRadius: 0,
-                        blurRadius: 1.5,
-                        offset: Offset(0, .5),
+        child: Column(
+          children: [
+            Container(
+              child: searchTextBox(),
+              margin: EdgeInsets.only(
+                bottom: _setValue(8.8),
+              ),
+            ),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: _setValue(31),
+                        right: _setValue(31),
                       ),
-                    ],
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        _setValue(5.8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            spreadRadius: 0,
+                            blurRadius: 1.5,
+                            offset: Offset(0, .5),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            _setValue(5.8),
+                          ),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          regularServicesListView(),
+                          emergencyServicesListView(),
+                        ],
                       ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      regularServicesListView(),
-                      emergencyServicesListView(),
-                    ],
-                  )),
-              _regularServices(),
-              _emergencyServices(),
-            ],
-          ),
+                    _regularServices(),
+                    Container(
+                        margin: EdgeInsets.only(bottom: 41.5),
+                        child: _emergencyServices()),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -474,7 +487,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _regularSearchDataList![index].serviceName!,
+                        _regularSearchDataList![index]
+                            .serviceName!
+                            .replaceAll('\n', ""),
                         style: TextStyle(
                           fontSize: 14.5,
                           color: CustColors.black01,
@@ -575,6 +590,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   }
 
   Widget _regularServices() {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 4;
+    final double itemWidth = size.width / 4;
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(top: _setValue(13.9)),
@@ -597,7 +615,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           Container(
             padding: EdgeInsets.only(
               top: _setValue(44),
-              bottom: _setValue(30.5),
             ),
             margin: EdgeInsets.only(top: _setValue(15)),
             decoration: BoxDecoration(
@@ -612,9 +629,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: _setValue(62.0),
-                  mainAxisSpacing: _setValue(13.9),
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 1.5),
+                  childAspectRatio: (itemWidth / itemHeight),
                 ),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -670,9 +685,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                 ),
               ),
               child: Container(
-                margin: EdgeInsets.all(_setValue(12)),
+                margin: EdgeInsets.all(_setValue(6)),
                 child: CachedNetworkImage(
-                  imageUrl: "https://picsum.photos/200",
+                  imageUrl: regularList.icon.toString(),
                 ),
               ),
             ),
@@ -695,6 +710,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   }
 
   Widget _emergencyServices() {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
+    final double itemWidth = size.width / 3;
     return Container(
       alignment: Alignment.topLeft,
       margin: EdgeInsets.only(top: _setValue(26.4)),
@@ -730,9 +748,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: _setValue(20),
-                mainAxisSpacing: _setValue(13.9),
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.50),
+                childAspectRatio: (itemWidth / itemHeight),
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -787,9 +803,20 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                 ),
               ),
               child: Container(
-                margin: EdgeInsets.all(_setValue(12)),
-                child: CachedNetworkImage(
-                  imageUrl: "https://picsum.photos/200",
+                margin: EdgeInsets.all(_setValue(6)),
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: CustColors.blue),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Padding(
+                    padding: EdgeInsets.all(9),
+                    child: CachedNetworkImage(
+                      imageUrl: emergencyList.icon.toString(),
+                    ),
+                  ),
                 ),
               ),
             ),

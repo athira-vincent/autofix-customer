@@ -168,12 +168,15 @@ class _SigninScreenState extends State<SigninScreen> {
 
                             focusNode: _userNameFocusNode,
                             keyboardType: TextInputType.text,
+
                             validator:
                                 InputValidator(ch: "User name").emptyChecking,
                             // inputFormatters: [
                             //   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                             // ],
                             controller: _userNameController,
+                            cursorColor: Colors.white,
+
                             decoration: InputDecoration(
                                 isDense: true,
                                 prefixIcon: Container(
@@ -229,6 +232,8 @@ class _SigninScreenState extends State<SigninScreen> {
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
                             obscureText: !_passwordVisible!,
+                            validator:
+                                InputValidator(ch: "User name").emptyChecking,
                             // validator:
                             //     InputValidator(ch: "Password").passwordChecking,
                             controller: _passwordController,
@@ -321,9 +326,13 @@ class _SigninScreenState extends State<SigninScreen> {
                           margin: EdgeInsets.only(top: 31.8),
                           child: _isLoading
                               ? Center(
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        CustColors.peaGreen),
+                                  child: Container(
+                                    height: _setValue(28),
+                                    width: _setValue(28),
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          CustColors.peaGreen),
+                                    ),
                                   ),
                                 )
                               : Container(

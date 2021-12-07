@@ -443,7 +443,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                         s = s + ",";
                       }
                     }
-                    if (widget.type == "2") {
+                    if (widget.type == "1") {
                       if (s == "") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text("Please Select Any Service",
@@ -460,7 +460,7 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                                       serviceID: s,
                                     )));
                       }
-                    } else if (widget.type == "1") {
+                    } else if (widget.type == "2") {
                       if (s == "") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text("Please Select Any Service",
@@ -518,16 +518,20 @@ class _PreBookingScreenState extends State<PreBookingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Text(
-                      searchData.serviceName!,
-                      style: TextStyle(
-                          color: CustColors.black01,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          fontFamily: "Corbel_Light"),
+                  Flexible(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(top: 10),
+                      child: Text(
+                        searchData.serviceName!.replaceAll('\n', ""),
+                        softWrap: true,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: CustColors.black01,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontFamily: "Corbel_Light"),
+                      ),
                     ),
                   ),
                   InkWell(
