@@ -112,6 +112,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
             _regularServices(),
             _emergencyServices(),
             _adsList(),
+            _topBrands(),
           ],
         ),
       ),
@@ -502,6 +503,159 @@ class _ServicesScreenState extends State<ServicesScreen> {
         index % 2 == 0 ? "assets/images/ad01.png" : "assets/images/ad02.jpg",
         fit: BoxFit.fitWidth,
         width: MediaQuery.of(context).size.width,
+      ),
+    );
+  }
+
+  Widget _topBrands() {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: 10),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: AspectRatio(
+              aspectRatio: .8,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      spreadRadius: 0,
+                      blurRadius: 1.5,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset("assets/images/01.jpg"),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: AspectRatio(
+              aspectRatio: .8,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      spreadRadius: 0,
+                      blurRadius: 1.5,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    "assets/images/02.jpg",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: AspectRatio(
+              aspectRatio: .8,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      spreadRadius: 0,
+                      blurRadius: 1.5,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    "assets/images/03.jpg",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: AspectRatio(
+              aspectRatio: .8,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      spreadRadius: 0,
+                      blurRadius: 1.5,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    "assets/images/04.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: AspectRatio(
+              aspectRatio: .8,
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      spreadRadius: 0,
+                      blurRadius: 1.5,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    "assets/images/05.jpg",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

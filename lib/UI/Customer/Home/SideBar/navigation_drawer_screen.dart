@@ -22,11 +22,17 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, "");
     shdPre.setBool(SharedPrefKeys.isUserLoggedIn, false);
+    shdPre.setString(SharedPrefKeys.userName, "");
+    shdPre.setString(SharedPrefKeys.userEmail, "");
+    shdPre.setString(SharedPrefKeys.userID, "");
+    shdPre.setString(SharedPrefKeys.userProfilePic, "");
+    shdPre.setString(SharedPrefKeys.defaultVehicleID, "");
     GqlClient.I
         .config(token: shdPre.getString(SharedPrefKeys.token).toString());
     Navigator.pop(context);
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.clear();
+    // SharedPreferences preferences = await SharedPreferences.getInstance();
+    // await preferences.clear();
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -101,15 +107,19 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 12.8),
-                      child: Text(
-                        'Test',
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Corbel_Bold',
-                            color: Colors.white),
+                    Flexible(
+                      child: Container(
+                        margin: EdgeInsets.only(right: 12.8),
+                        child: Text(
+                          _userName.toString(),
+                          softWrap: true,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Corbel_Bold',
+                              color: Colors.white),
+                        ),
                       ),
                     ),
                     Stack(
@@ -131,7 +141,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                           child: Container(
                             color: Colors.white,
                             child: Image.network(
-                              "https://i.picsum.photos/id/255/200/200.jpg?hmac=IYQV36UT5-F1dbK_CQXF7PDfLfwcnwKijqeBCo3yMlc",
+                              'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg',
                               fit: BoxFit.cover,
                               width: 88,
                               height: 88,

@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     if (_isLoggedin != null && _isLoggedin == true) {
-      print("chechingggg 01");
+      print("chechingggg 01 $userType");
       if (userType == TextStrings.user_customer) {
         if (_isDefaultVehicleAvailable == null ||
             _isDefaultVehicleAvailable == 1) {
