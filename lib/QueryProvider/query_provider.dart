@@ -141,8 +141,43 @@ class QueryProvider {
 
   viewVehicle(String token) async {
     String _query = """
-      
-     """;
+      query{
+  vehicleDetails{
+    id
+    year
+    latitude
+    longitude
+    milege
+    lastMaintenance
+    interval
+    customerId
+    makeId
+    vehicleModelId
+    engineId
+    status
+    make {
+      id
+      makeName
+      description
+      status
+    }
+    vehiclemodel {
+      id
+      modelName
+      description
+      makeId
+      status
+    }
+    engine {
+      id
+      engineName
+      description
+      vehicleModelId
+      status
+    }
+    defaultVehicle
+  }
+}""";
     log(_query);
 
     return await GqlClient.I.query01(
@@ -442,7 +477,7 @@ class QueryProvider {
   }
 }
     """;*/
-    String _query = """
+   /* String _query = """
     query{
   mechanicList(page: $page, size: $size, serviceId:"$serviceId"){
     totalItems
@@ -473,7 +508,58 @@ class QueryProvider {
     currentPage
   }
 }
-    """;
+    """;*/
+
+    String _query = """
+    query{
+  mechanicList(page: $page, size: $size, serviceId: "$serviceId") {
+    totalItems
+    data {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+      mechanicService {
+        service {
+          id
+          serviceName
+          description
+          icon
+          fee
+          type
+          status
+        }
+      }
+      mechanicVehicle {
+        make {
+          id
+          makeName
+          description
+          status
+        }
+      }
+    }
+    totalPages
+    currentPage
+  } 
+}""";
 
     log(_query);
     return await GqlClient.I.query01(
@@ -582,7 +668,7 @@ class QueryProvider {
   getRegularServices(int page, int size, String token) async {
     String _query = """
       query{
-          emergencyList(page: $page, size: $size, id: "1"){
+          emergencyList(page: $page, size: $size, id: "2"){
                   totalItems
                   data {
                     id
@@ -610,7 +696,7 @@ class QueryProvider {
   getEmeregencyServices(int page, int size, String token) async {
     String _query = """
       query{
-          emergencyList(page: $page, size: $size, id: "2"){
+          emergencyList(page: $page, size: $size, id: "1"){
                   totalItems
                   data {
                     id

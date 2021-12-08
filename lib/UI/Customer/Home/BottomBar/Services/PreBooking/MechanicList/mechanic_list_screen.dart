@@ -181,9 +181,13 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
             border: Border(bottom: BorderSide()),
                   ),*/
               child: Card(
+
+
+
                 child: ListTile(
                   contentPadding: EdgeInsets.only(
                       top: 4.8, bottom: 4.8, left: 12.5, right: 23),
+
                   leading: CircleAvatar(
                     radius: 28,
                     backgroundImage: NetworkImage(
@@ -208,7 +212,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                           //Text(mechName!),
                           _ratingBar,
                           Text(
-                            calculateDistance(10.1964, 76.3879, mechanic_lat, mechanic_lng).toString(),
+                            calculateDistance(10.1964, 76.3879, mechanic_lat, mechanic_lng).round().toString() + " Km",
                             style: TextStyle(
                               fontFamily: "Corbel-Light",
                               color: CustColors.white02,
