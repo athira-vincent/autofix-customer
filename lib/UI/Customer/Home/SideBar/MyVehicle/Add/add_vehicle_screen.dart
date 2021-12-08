@@ -70,7 +70,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   bool _loadingBrand = false;
   bool _loadingModel = false;
   bool _loadingEngineType = false;
-  double? _mileageData = 0;
+  double _mileageData = 1000;
   String brandName = "";
   String modelName = "";
   int? selectedBrandId;
@@ -895,10 +895,10 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                   width: double.infinity,
                                   // padding: EdgeInsets.all(5),
                                   child: FlutterSlider(
-                                    values: [_mileageData!],
-                                    max: 100,
-                                    min: 0,
-                                    step: FlutterSliderStep(step: 2),
+                                    values: [_mileageData],
+                                    max: 150000,
+                                    min: 1000,
+                                    step: FlutterSliderStep(step: 1000),
                                     handlerHeight: _setValue(25),
                                     handlerWidth: _setValue(25),
                                     handler: FlutterSliderHandler(
@@ -923,21 +923,36 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           )),
                                     ),
                                     tooltip: FlutterSliderTooltip(
+                                      custom: (value){
+                                        int intVal = double.parse(value.toString()).round();
+                                        if(intVal <= 99000){
+                                          int data = (intVal/1000).round();
+                                          return Text('$data' +" K",
+                                              style: TextStyle(
+                                                fontFamily: "Montserrat_SemiBold",
+                                                  fontSize: 10,
+                                                  color: CustColors.blue
+                                              ),
+                                          );
+                                        }else{
+                                          var data = (intVal/100000).toStringAsFixed(0);
+                                          return Text(
+                                              '$data' + " L",
+                                            style: TextStyle(
+                                                fontFamily: "Montserrat_SemiBold",
+                                                fontSize: 10,
+                                                color: CustColors.blue
+                                            ),
+                                          );
+                                        }
+                                      },
                                       alwaysShowTooltip: true,
                                       boxStyle: FlutterSliderTooltipBox(
                                           decoration: BoxDecoration(
                                               color: Colors.transparent)),
                                       positionOffset:
                                           FlutterSliderTooltipPositionOffset(
-                                              top: 40),
-                                      rightSuffix: Container(
-                                        child: Text(
-                                          " km / ltr",
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              color: CustColors.blue),
-                                        ),
-                                      ),
+                                              top: 41),
                                       textStyle: TextStyle(
                                         fontFamily: "Corbel_Regular",
                                           fontSize: 10, color: CustColors.blue),

@@ -98,6 +98,8 @@ class MechanicListData {
   String? licenseProof;
   int? status;
 
+
+
   MechanicListData();
 
   MechanicListData.fromJson(Map<String, dynamic> json){
