@@ -61,6 +61,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
     _setSignUpVisitFlag();
+    // _stateFocusNode.unfocus();
+    // _stateFocusNode.canRequestFocus = false;
   }
 
   _setSignUpVisitFlag() async {
@@ -154,558 +156,563 @@ class _SignupScreenState extends State<SignupScreen> {
             disabledColor: Colors.white,
           ),
           child: Container(
+            height: MediaQuery.of(context).size.height,
+            color: Colors.white,
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               controller: _scrollController,
-              child: Form(
-                autovalidateMode: _autoValidate,
-                key: _formKey,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(
-                    height: MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.top,
-                  ),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height + 1000,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(26),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Sign up',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: _setValueFont(19.5),
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Corbel_Bold'),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(17),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              child: TextFormField(
-                                textAlignVertical: TextAlignVertical.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontFamily: 'Corbel_Light',
+              child: Container(
+                // height: double.infinity,
+                child: Form(
+                  autovalidateMode: _autoValidate,
+                  key: _formKey,
+                  // child: ConstrainedBox(
+                  //   constraints: BoxConstraints.tightFor(
+                  //       height: MediaQuery.of(context).size.height),
+                  child: IntrinsicHeight(
+                    child: Container(
+                      color: CustColors.blue,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(26),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(
                                   color: Colors.white,
+                                  fontSize: _setValueFont(19.5),
                                   fontWeight: FontWeight.w600,
-                                  fontSize: _setValueFont(13),
-                                ),
-                                focusNode: _firstNameFocusNode,
-                                keyboardType: TextInputType.text,
-                                validator:
-                                    InputValidator(ch: "Name").nameChecking,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[a-zA-Z ]')),
-                                ],
-                                controller: _firstNameController,
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    hintText: 'Name',
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      vertical: _setValue(7.8),
-                                    ),
-                                    hintStyle: TextStyle(
-                                      fontFamily: 'Corbel_Light',
-                                      color: Colors.white.withOpacity(.60),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: _setValueFont(12),
-                                    )),
-                              ),
+                                  fontFamily: 'Corbel_Bold'),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(17),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            child: TextFormField(
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: _setValueFont(13),
+                              ),
+                              focusNode: _firstNameFocusNode,
+                              keyboardType: TextInputType.text,
+                              validator:
+                                  InputValidator(ch: "Name").nameChecking,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[a-zA-Z ]')),
+                              ],
+                              controller: _firstNameController,
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: 'Name',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: _setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color: Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: _setValueFont(12),
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: _setValue(20),
+                              left: _setValue(34),
+                              right: _setValue(34),
+                            ),
+                            child: TextFormField(
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: _setValueFont(13),
+                              ),
+                              focusNode: _userNameFocusNode,
+                              keyboardType: TextInputType.text,
+                              validator:
+                                  InputValidator(ch: "User name").emptyChecking,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[a-z0-9]')),
+                              ],
+                              controller: _userNameController,
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: 'User Name',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: _setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color: Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: _setValueFont(12),
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
                                 top: _setValue(20),
                                 left: _setValue(34),
-                                right: _setValue(34),
+                                right: _setValue(34)),
+                            child: TextFormField(
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.emailAddress,
+                              validator:
+                                  InputValidator(ch: "Email ID").emailValidator,
+                              focusNode: _emailFocusNode,
+                              controller: _emailController,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: _setValueFont(13),
                               ),
-                              child: TextFormField(
-                                textAlignVertical: TextAlignVertical.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontFamily: 'Corbel_Light',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: _setValueFont(13),
-                                ),
-                                focusNode: _userNameFocusNode,
-                                keyboardType: TextInputType.text,
-                                validator: InputValidator(ch: "User name")
-                                    .emptyChecking,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[a-z0-9]')),
-                                ],
-                                controller: _userNameController,
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    hintText: 'User Name',
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: 'Email ID*',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
                                     ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      vertical: _setValue(7.8),
-                                    ),
-                                    hintStyle: TextStyle(
-                                      fontFamily: 'Corbel_Light',
-                                      color: Colors.white.withOpacity(.60),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: _setValueFont(12),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(20),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              child: TextFormField(
-                                textAlignVertical: TextAlignVertical.center,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: InputValidator(ch: "Email ID")
-                                    .emailValidator,
-                                focusNode: _emailFocusNode,
-                                controller: _emailController,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontFamily: 'Corbel_Light',
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: _setValueFont(13),
-                                ),
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    hintText: 'Email ID*',
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      vertical: _setValue(7.8),
-                                    ),
-                                    hintStyle: TextStyle(
-                                      fontFamily: 'Corbel_Light',
-                                      color: Colors.white.withOpacity(.60),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: _setValueFont(12),
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(20),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              child: InkWell(
-                                onTap: () {
-                                  showDialCodeSelector();
-                                },
-                                child: TextFormField(
-                                  textAlignVertical: TextAlignVertical.center,
-                                  maxLines: 1,
-                                  enabled: false,
-                                  autofocus: false,
-                                  style: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: _setValueFont(13),
                                   ),
-                                  focusNode: _stateFocusNode,
-                                  keyboardType: TextInputType.text,
-                                  validator:
-                                      InputValidator(ch: "State").emptyChecking,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp('[a-zA-Z]')),
-                                  ],
-                                  controller: _stateController,
-                                  decoration: InputDecoration(
-                                      disabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      isDense: true,
-                                      hintText: 'State',
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        vertical: _setValue(7.8),
-                                      ),
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Corbel_Light',
-                                        color: Colors.white.withOpacity(.60),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: _setValueFont(12),
-                                      )),
-                                ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: _setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color: Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: _setValueFont(12),
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(20),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            child: TextFormField(
+                              textAlignVertical: TextAlignVertical.center,
+                              maxLines: 1,
+                              onTap: () {
+                                showDialCodeSelector();
+                              },
+                              readOnly: true,
+                              autofocus: false,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: _setValueFont(13),
                               ),
+                              focusNode: _stateFocusNode,
+                              keyboardType: TextInputType.text,
+                              validator:
+                                  InputValidator(ch: "State").emptyChecking,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[a-zA-Z]')),
+                              ],
+                              controller: _stateController,
+                              decoration: InputDecoration(
+                                  disabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  isDense: true,
+                                  hintText: 'State',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: _setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color: Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: _setValueFont(12),
+                                  )),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(20),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              alignment: Alignment.center,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Flexible(
-                                      flex: 8,
-                                      child: Container(
-                                        width: double.infinity,
-                                        child: TextFormField(
-                                          validator:
-                                              InputValidator(ch: "Phone number")
-                                                  .phoneNumChecking,
-                                          maxLines: 1,
-                                          focusNode: _phoneFocusNode,
-                                          textAlignVertical:
-                                              TextAlignVertical.center,
-                                          keyboardType: TextInputType.phone,
-                                          controller: _phoneController,
-                                          style: TextStyle(
-                                            fontFamily: 'Corbel_Light',
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: _setValueFont(13),
-                                          ),
-                                          decoration: InputDecoration(
-                                              isDense: true,
-                                              hintText: 'Phone Number*',
-                                              border: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                  width: .3,
-                                                ),
-                                              ),
-                                              focusedBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                  width: .3,
-                                                ),
-                                              ),
-                                              enabledBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                  width: .3,
-                                                ),
-                                              ),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                vertical: _setValue(7.8),
-                                              ),
-                                              hintStyle: TextStyle(
-                                                fontFamily: 'Corbel_Light',
-                                                color: Colors.white
-                                                    .withOpacity(.60),
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: _setValueFont(12),
-                                              )),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(20),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            alignment: Alignment.center,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 8,
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: TextFormField(
+                                        validator:
+                                            InputValidator(ch: "Phone number")
+                                                .phoneNumChecking,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(15),
+                                        ],
+                                        maxLines: 1,
+                                        focusNode: _phoneFocusNode,
+                                        textAlignVertical:
+                                            TextAlignVertical.center,
+                                        keyboardType: TextInputType.phone,
+                                        controller: _phoneController,
+                                        style: TextStyle(
+                                          fontFamily: 'Corbel_Light',
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: _setValueFont(13),
                                         ),
+                                        enableSuggestions: false,
+                                        decoration: InputDecoration(
+                                            isDense: true,
+                                            hintText: 'Phone Number*',
+                                            border: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                              vertical: _setValue(7.8),
+                                            ),
+                                            hintStyle: TextStyle(
+                                              fontFamily: 'Corbel_Light',
+                                              color:
+                                                  Colors.white.withOpacity(.60),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: _setValueFont(12),
+                                            )),
                                       ),
                                     ),
-                                  ]),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(20),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              child: TextFormField(
-                                textAlignVertical: TextAlignVertical.center,
-                                obscureText: true,
-                                validator: InputValidator(ch: "Password")
-                                    .passwordChecking,
-                                controller: _passwordController,
-                                focusNode: _passwordFocusNode,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontFamily: 'Corbel_Light',
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: _setValueFont(13),
-                                ),
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    hintText: 'Password*',
-                                    errorMaxLines: 3,
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      vertical: _setValue(7.8),
-                                    ),
-                                    hintStyle: TextStyle(
-                                      fontFamily: 'Corbel_Light',
-                                      color: Colors.white.withOpacity(.60),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: _setValueFont(12),
-                                    )),
+                                  ),
+                                ]),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(20),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            child: TextFormField(
+                              textAlignVertical: TextAlignVertical.center,
+                              obscureText: true,
+                              validator: InputValidator(ch: "Password")
+                                  .passwordChecking,
+                              controller: _passwordController,
+                              focusNode: _passwordFocusNode,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: _setValueFont(13),
                               ),
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: 'Password*',
+                                  errorMaxLines: 3,
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: _setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color: Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: _setValueFont(12),
+                                  )),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: _setValue(20),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              child: TextFormField(
-                                obscureText: true,
-                                validator:
-                                    InputValidator(ch: "Confirm Password")
-                                        .passwordChecking,
-                                maxLines: 1,
-                                controller: _confirmPwdController,
-                                textAlignVertical: TextAlignVertical.center,
-                                style: TextStyle(
-                                  fontFamily: 'Corbel_Light',
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  fontSize: _setValueFont(13),
-                                ),
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    hintText: 'Confirm Password*',
-                                    errorMaxLines: 3,
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: .3,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.symmetric(
-                                      vertical: _setValue(7.8),
-                                    ),
-                                    hintStyle: TextStyle(
-                                      fontFamily: 'Corbel_Light',
-                                      color: Colors.white.withOpacity(.60),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: _setValueFont(12),
-                                    )),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(20),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            child: TextFormField(
+                              obscureText: true,
+                              validator: InputValidator(ch: "Confirm Password")
+                                  .passwordChecking,
+                              maxLines: 1,
+                              controller: _confirmPwdController,
+                              textAlignVertical: TextAlignVertical.center,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: _setValueFont(13),
                               ),
+                              decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: 'Confirm Password*',
+                                  errorMaxLines: 3,
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: _setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color: Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: _setValueFont(12),
+                                  )),
                             ),
-                            Container(
-                              height: _setValue(28),
-                              width: _setValue(98),
-                              margin: EdgeInsets.only(
-                                  top: _setValue(25),
-                                  left: _setValue(34),
-                                  right: _setValue(34)),
-                              child: _isLoading
-                                  ? const Center(
+                          ),
+                          Container(
+                            height: _setValue(28),
+                            width: _setValue(98),
+                            margin: EdgeInsets.only(
+                                top: _setValue(25),
+                                left: _setValue(34),
+                                right: _setValue(34)),
+                            child: _isLoading
+                                ? Center(
+                                    child: Container(
+                                      height: _setValue(28),
+                                      width: _setValue(28),
                                       child: CircularProgressIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                                 CustColors.peaGreen),
                                       ),
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                            color: CustColors.darkBlue,
-                                            blurRadius: 5,
-                                            offset: Offset(0, 3.3),
-                                          ),
-                                        ],
-                                      ),
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            checkPassWord(
-                                                _passwordController.text,
-                                                _confirmPwdController.text);
-                                          } else {
-                                            setState(() => _autoValidate =
-                                                AutovalidateMode.always);
-                                          }
-                                        },
-                                        child: Container(
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                'Sign up',
-                                                style: TextStyle(
-                                                  color: CustColors.blue,
-                                                  fontFamily: 'Corbel_Regular',
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: _setValueFont(11.5),
-                                                ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                  left: _setValue(16.6),
-                                                ),
-                                                child: Image.asset(
-                                                  'assets/images/arrow_forword.png',
-                                                  width: _setValue(12.5),
-                                                  height: _setValue(12.5),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        color: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                _setValue(16))),
-                                      ),
                                     ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SigninScreen()));
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  top: _setValue(21.3),
-                                  left: _setValue(36),
-                                ),
-                                child: Text(
-                                  'Already have an account ? Sign in',
-                                  style: TextStyle(
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                          color: CustColors.darkBlue,
+                                          blurRadius: 5,
+                                          offset: Offset(0, 3.3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate()) {
+                                          checkPassWord(
+                                              _passwordController.text,
+                                              _confirmPwdController.text);
+                                        } else {
+                                          setState(() => _autoValidate =
+                                              AutovalidateMode.always);
+                                        }
+                                      },
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Sign up',
+                                              style: TextStyle(
+                                                color: CustColors.blue,
+                                                fontFamily: 'Corbel_Regular',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: _setValueFont(11.5),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                left: _setValue(16.6),
+                                              ),
+                                              child: Image.asset(
+                                                'assets/images/arrow_forword.png',
+                                                width: _setValue(12.5),
+                                                height: _setValue(12.5),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                       color: Colors.white,
-                                      fontSize: _setValueFont(11.5),
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Corbel_Light'),
-                                ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              _setValue(16))),
+                                    ),
+                                  ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SigninScreen()));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                top: _setValue(21.3),
+                                left: _setValue(36),
+                              ),
+                              child: Text(
+                                'Already have an account ? Sign in',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: _setValueFont(11.5),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Corbel_Light'),
                               ),
                             ),
-                          ],
-                        ),
-                        Flexible(
-                          child: SingleChildScrollView(
-                            physics: NeverScrollableScrollPhysics(),
+                          ),
+                          IntrinsicHeight(
                             child: Stack(
                               alignment: Alignment.bottomRight,
+                              fit: StackFit.expand,
                               children: [
                                 Container(
                                   width: MediaQuery.of(context).size.width,
                                   //margin: EdgeInsets.only(top: 40),
-                                  alignment: Alignment.bottomRight,
-                                  child: Image.asset(
-                                    'assets/images/signup_arc.png',
-                                    fit: BoxFit.cover,
-                                    width: MediaQuery.of(context).size.width,
+                                  alignment: Alignment.topCenter,
+
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/signup_arc.png',
+                                        fit: BoxFit.fitHeight,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Container(
                                     width: double.infinity,
-                                    alignment: Alignment.bottomLeft,
+                                    alignment: Alignment.topCenter,
                                     margin: EdgeInsets.only(
                                         left: _setValue(66),
-                                        bottom: _setValue(24.5),
+                                        top: _setValue(119.6),
                                         right: _setValue(78)),
                                     child: Image.asset(
                                       'assets/images/autofix_logo.png',
@@ -713,8 +720,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               ],
                             ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -723,6 +730,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
+      // ),
     );
   }
 

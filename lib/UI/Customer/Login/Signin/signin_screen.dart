@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
@@ -42,6 +43,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   void initState() {
     super.initState();
+    _setUserType();
     _passwordVisible = false;
     _getSignInRes();
   }
@@ -52,6 +54,11 @@ class _SigninScreenState extends State<SigninScreen> {
     _userNameController.dispose();
     _passwordController.dispose();
     _signinBloc.dispose();
+  }
+
+  _setUserType() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.userType, TextStrings.user_customer);
   }
 
   _getSignInRes() async {
@@ -233,7 +240,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             textAlignVertical: TextAlignVertical.center,
                             obscureText: !_passwordVisible!,
                             validator:
-                                InputValidator(ch: "User name").emptyChecking,
+                                InputValidator(ch: "Password").emptyChecking,
                             // validator:
                             //     InputValidator(ch: "Password").passwordChecking,
                             controller: _passwordController,
