@@ -1,12 +1,12 @@
 
-class VendorSignupMdl {
+class MechanicWorkSelectionMdl {
   String? status;
   String? message;
   Data? data;
 
-  VendorSignupMdl({required this.status, required this.message, this.data});
+  MechanicWorkSelectionMdl({required this.status, required this.message, this.data});
 
-  VendorSignupMdl.fromJson(Map<String, dynamic> json) {
+  MechanicWorkSelectionMdl.fromJson(Map<String, dynamic> json) {
     data = (json['data'] != null ? Data.fromJson(json['data']) : null)!;
   }
 
@@ -20,28 +20,28 @@ class VendorSignupMdl {
 class Data {
   //SignUpScreen1 signUp;
   String? token;
-  VendorSignUp? vendorSignUp;
+  MechanicSignUp? mechanicSignUp;
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    vendorSignUp = json[' '] != null
+    mechanicSignUp = json[' '] != null
 
-    ? new VendorSignUp.fromJson(json[' '])
+    ? new MechanicSignUp.fromJson(json[' '])
       : null;
     token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.vendorSignUp != null) {
-      data[' '] = this.vendorSignUp!.toJson();
+    if (this.mechanicSignUp != null) {
+      data[' '] = this.mechanicSignUp!.toJson();
     }
     data['token'] = this.token;
     return data;
   }
 }
 
-class VendorSignUp {
+class MechanicSignUp {
 
   /*String? id;
   String? firstName;
@@ -51,7 +51,7 @@ class VendorSignUp {
   String? phoneNo;
   int? status;*/
 
-  VendorSignUp.fromJson(Map<String, dynamic> json) {
+  MechanicSignUp.fromJson(Map<String, dynamic> json) {
     /*id = json['id'];
     firstName = json['firstName'];
     lastName = json['lastName'];

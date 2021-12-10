@@ -1,7 +1,6 @@
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Regular/regular_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Ads/ads_api_provider.dart';
@@ -23,6 +22,10 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_api_
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Delete/delete_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_api_provider.dart';
+import 'package:auto_fix/UI/Vendor/Login/SignIn/signin_api_provider.dart';
+import 'package:auto_fix/UI/Vendor/Login/SignUp/signup_api_provider.dart';
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();
@@ -49,7 +52,13 @@ class Repository {
   final _allMechanicListApiProvider = MechanicListApiProvider();
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   final _mechanicProfileApiProvider = MechanicProfileApiProvider();
-  //SignUp
+
+  final _mechanicSignupApiProvider = MechanicSignupRegistrationApiProvider();
+  final _mechanicSignInApiProvider = MechanicSigninApiProvider();
+
+  final _vendorSignupApiProvider = VendorSignupApiProvider();
+  final _vendorSignInApiProvider = VendorSigninApiProvider();
+  // Customer SignUpScreen1
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
       _signupApiProvider.getSignUpRequest(
@@ -149,4 +158,23 @@ class Repository {
   //get mechanic profile
   Future<dynamic> getMechanicProfile(String id) =>
       _mechanicProfileApiProvider.getMechanicDetailsRequest(id);
+
+  //---------------------Mechanic
+  //Mechanic SignUpScreen1
+  Future<dynamic> getMechanicSignUp(
+      String name,
+      String email,
+      String phoneNo,
+      String address,
+      double lat,
+      double lng ,
+      String walletId,
+      String password) =>
+      _mechanicSignupApiProvider.getMechanicSignUpRequest(name, email, phoneNo, address, lat, lng, walletId, password);
+
+  //---------------------Vendor
+  //Vendor SignUpScreen1
+  /*Future<dynamic> getVendorSignUp(String firstName, String userName, String email,
+      String state, String password, String phone) =>
+      _vendorSignupApiProvider.getVendorSignUpRequest();*/
 }

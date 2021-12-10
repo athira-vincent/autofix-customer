@@ -16,6 +16,7 @@ import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -668,7 +669,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                           Container(
                             child: InkWell(
                               onTap: () {
-                                showDatePicker(
+                                /*showDatePicker(
                                   context: context,
                                   initialDatePickerMode: DatePickerMode.year,
 
@@ -685,6 +686,53 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     });
                                   }
                                 });
+                                */
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      backgroundColor: CustColors.blue,
+                                      title: Text(
+                                        " Select Year",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      titlePadding: EdgeInsets.all(20),
+                                      contentPadding: EdgeInsets.only(left: 0,right: 0,bottom: 0),
+                                      content: Container(
+                                        color: Colors.white,
+                                        height: 300,
+                                        width: 300,
+                                        // Need to use container to add size constraint.
+                                        //width: MediaQuery.of(context).size.width - 20,
+                                       // height: MediaQuery.of(context).size.width - 30,
+                                        child: YearPicker(
+                                          firstDate: DateTime(
+                                              DateTime.now().year - 25, 1),
+                                          lastDate:
+                                              DateTime(DateTime.now().year, 1),
+                                          initialDate: selectedYear,
+                                          // save the selected date to _selectedDate DateTime variable.
+                                          // It's used to set the previous selected date when
+                                          // re-showing the dialog.
+                                          selectedDate: selectedYear!,
+                                          onChanged: (DateTime dateTime) {
+                                            // close the dialog when year is selected.
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              this.selectedYear = dateTime;
+                                              _yearController.text =
+                                                  selectedYear!.year
+                                                      .toString();
+                                            });
+                                          },
+                                        ),
+                                      ),
+
+                                    );
+                                  },
+                                );
                               },
                               child: Stack(
                                 children: [
@@ -923,26 +971,30 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           )),
                                     ),
                                     tooltip: FlutterSliderTooltip(
-                                      custom: (value){
-                                        int intVal = double.parse(value.toString()).round();
-                                        if(intVal <= 99000){
-                                          int data = (intVal/1000).round();
-                                          return Text('$data' +" K",
-                                              style: TextStyle(
-                                                fontFamily: "Montserrat_SemiBold",
-                                                  fontSize: 10,
-                                                  color: CustColors.blue
-                                              ),
-                                          );
-                                        }else{
-                                          var data = (intVal/100000).toStringAsFixed(0);
+                                      custom: (value) {
+                                        int intVal =
+                                            double.parse(value.toString())
+                                                .round();
+                                        if (intVal <= 99000) {
+                                          int data = (intVal / 1000).round();
                                           return Text(
-                                              '$data' + " L",
+                                            '$data' + " K",
                                             style: TextStyle(
-                                                fontFamily: "Montserrat_SemiBold",
+                                                fontFamily:
+                                                    "Montserrat_SemiBold",
                                                 fontSize: 10,
-                                                color: CustColors.blue
-                                            ),
+                                                color: CustColors.blue),
+                                          );
+                                        } else {
+                                          var data = (intVal / 100000)
+                                              .toStringAsFixed(1);
+                                          return Text(
+                                            '$data' + " L",
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    "Montserrat_SemiBold",
+                                                fontSize: 10,
+                                                color: CustColors.blue),
                                           );
                                         }
                                       },
@@ -954,8 +1006,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           FlutterSliderTooltipPositionOffset(
                                               top: 41),
                                       textStyle: TextStyle(
-                                        fontFamily: "Corbel_Regular",
-                                          fontSize: 10, color: CustColors.blue),
+                                          fontFamily: "Corbel_Regular",
+                                          fontSize: 10,
+                                          color: CustColors.blue),
                                     ),
                                     onDragging:
                                         (handlerIndex, lowerValue, upperValue) {
@@ -980,8 +1033,11 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     ),
                                   )
                                 : Container(
-                                    margin: EdgeInsets.only(top: _setValue(12),bottom: _setValue(8)),
-                                    padding: EdgeInsets.only(left: 30, right: 30),
+                                    margin: EdgeInsets.only(
+                                        top: _setValue(12),
+                                        bottom: _setValue(8)),
+                                    padding:
+                                        EdgeInsets.only(left: 30, right: 30),
                                     decoration: BoxDecoration(
                                       color: CustColors.blue,
                                       border: Border.all(
@@ -1043,8 +1099,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         context: context,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20))),
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
         builder: (builder) {
           return Container(
               height: 115.0,
