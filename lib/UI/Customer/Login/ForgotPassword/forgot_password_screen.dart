@@ -110,10 +110,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     padding: EdgeInsets.all(5),
                     //color: Colors.red,
                     child: Text(
-                      "Forgot  Password ?",
+                      "Forgot  Password?",
                       softWrap: true,
                       style: TextStyle(
-                        fontSize: ScreenSize().setValueFont(44),
+                        fontSize: ScreenSize().setValueFont(40),
                         fontFamily: 'Corbel_Bold',
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
