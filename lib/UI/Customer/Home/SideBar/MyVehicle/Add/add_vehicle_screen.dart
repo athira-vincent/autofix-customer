@@ -923,26 +923,30 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           )),
                                     ),
                                     tooltip: FlutterSliderTooltip(
-                                      custom: (value){
-                                        int intVal = double.parse(value.toString()).round();
-                                        if(intVal <= 99000){
-                                          int data = (intVal/1000).round();
-                                          return Text('$data' +" K",
-                                              style: TextStyle(
-                                                fontFamily: "Montserrat_SemiBold",
-                                                  fontSize: 10,
-                                                  color: CustColors.blue
-                                              ),
-                                          );
-                                        }else{
-                                          var data = (intVal/100000).toStringAsFixed(0);
+                                      custom: (value) {
+                                        int intVal =
+                                            double.parse(value.toString())
+                                                .round();
+                                        if (intVal <= 99000) {
+                                          int data = (intVal / 1000).round();
                                           return Text(
-                                              '$data' + " L",
+                                            '$data' + " K",
                                             style: TextStyle(
-                                                fontFamily: "Montserrat_SemiBold",
+                                                fontFamily:
+                                                    "Montserrat_SemiBold",
                                                 fontSize: 10,
-                                                color: CustColors.blue
-                                            ),
+                                                color: CustColors.blue),
+                                          );
+                                        } else {
+                                          var data = (intVal / 100000)
+                                              .toStringAsFixed(1);
+                                          return Text(
+                                            '$data' + " L",
+                                            style: TextStyle(
+                                                fontFamily:
+                                                    "Montserrat_SemiBold",
+                                                fontSize: 10,
+                                                color: CustColors.blue),
                                           );
                                         }
                                       },
@@ -954,8 +958,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           FlutterSliderTooltipPositionOffset(
                                               top: 41),
                                       textStyle: TextStyle(
-                                        fontFamily: "Corbel_Regular",
-                                          fontSize: 10, color: CustColors.blue),
+                                          fontFamily: "Corbel_Regular",
+                                          fontSize: 10,
+                                          color: CustColors.blue),
                                     ),
                                     onDragging:
                                         (handlerIndex, lowerValue, upperValue) {
@@ -980,8 +985,11 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                     ),
                                   )
                                 : Container(
-                                    margin: EdgeInsets.only(top: _setValue(12),bottom: _setValue(8)),
-                                    padding: EdgeInsets.only(left: 30, right: 30),
+                                    margin: EdgeInsets.only(
+                                        top: _setValue(12),
+                                        bottom: _setValue(8)),
+                                    padding:
+                                        EdgeInsets.only(left: 30, right: 30),
                                     decoration: BoxDecoration(
                                       color: CustColors.blue,
                                       border: Border.all(
@@ -1043,8 +1051,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
         context: context,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20))),
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
         builder: (builder) {
           return Container(
               height: 115.0,
