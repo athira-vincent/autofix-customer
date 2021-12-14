@@ -17,13 +17,13 @@ class ChangePasswordMdl {
 }
 
 class Data {
-  //SignUp signUp;
+  //SignUpScreen1 signUp;
 
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
     // signUp =
-    //     json['agentSignUp'] != null ? new SignUp.fromJson(json['agentSignUp']) : null;
+    //     json['agentSignUp'] != null ? new SignUpScreen1.fromJson(json['agentSignUp']) : null;
   }
 
   Map<String, dynamic> toJson() {

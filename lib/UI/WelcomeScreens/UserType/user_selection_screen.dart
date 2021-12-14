@@ -3,6 +3,8 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -96,10 +98,20 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             await SharedPreferences.getInstance();
                         shdPre.setString(
                             SharedPrefKeys.userType, TextStrings.user_mechanic);
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const SigninScreen()));
+                        bool? flag = shdPre.getBool(SharedPrefKeys.isMechanicSignUp);
+
+                        if(flag != null){
+                          //check sign up stage 1 - basic,2 - skill,3 - work
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MechanicSigninScreen()));
+                        }else{
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MechanicSignupRegistrationScreen()));
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(top: 41.2),

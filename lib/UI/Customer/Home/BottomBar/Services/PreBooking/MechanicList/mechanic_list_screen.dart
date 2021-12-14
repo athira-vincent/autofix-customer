@@ -182,8 +182,6 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                   ),*/
               child: Card(
 
-
-
                 child: ListTile(
                   contentPadding: EdgeInsets.only(
                       top: 4.8, bottom: 4.8, left: 12.5, right: 23),
@@ -227,7 +225,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                         children: [
                           //Text(mechName!),
                           Text(
-                            "21  Reviews",
+                            "21 Reviews",
                             style: TextStyle(
                               fontFamily: "Corbel-Light",
                               color: CustColors.white02,
@@ -242,8 +240,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                               fontSize: 14,
                             ),
                           ),
-                        ],
-                        //child: Text("sub-title $index")
+                        ], //child: Text("sub-title $index")
                       ),
                     ],
                   ),

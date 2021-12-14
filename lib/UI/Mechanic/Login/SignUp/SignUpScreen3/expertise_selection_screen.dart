@@ -1,86 +1,68 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/signup_bloc.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/states_mdl.dart';
-import 'package:auto_fix/UI/Customer/Login/login_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/expertise_selection_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+class MechanicExpertiseSelectionScreen extends StatefulWidget {
+  const MechanicExpertiseSelectionScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _SignupScreenState();
+    return _MechanicExpertiseSelectionScreenState();
   }
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _MechanicExpertiseSelectionScreenState extends State<MechanicExpertiseSelectionScreen> {
   TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _walletIdController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _stateController = TextEditingController();
+  //TextEditingController _stateController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPwdController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+
   FocusNode _firstNameFocusNode = FocusNode();
-  FocusNode _userNameFocusNode = FocusNode();
+  FocusNode _walletIdFocusNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
-  FocusNode _stateFocusNode = FocusNode();
+  //FocusNode _stateFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _addressFocusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final SignupBloc _signupBloc = SignupBloc();
+  final MechanicExpertiseSelectionBloc _signupBloc = MechanicExpertiseSelectionBloc();
   bool _isLoading = false;
-  List<StateDetails> _countryData = [];
-  bool isloading = false;
-  String? countryCode;
-  double per = .10;
-  double perfont = .10;
-  double height = 0;
   final ScrollController _scrollController = ScrollController();
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
     super.initState();
     _getSignUpRes();
-    _signupBloc.dialStatesListRequest();
-    _populateCountryList();
-    _setSignUpVisitFlag();
-    // _stateFocusNode.unfocus();
-    // _stateFocusNode.canRequestFocus = false;
   }
 
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
-    _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
+    _shdPre.setBool(SharedPrefKeys.isMechanicSignUp, true);
   }
 
   @override
   void dispose() {
     super.dispose();
     _firstNameController.dispose();
-    _userNameController.dispose();
+    _walletIdController.dispose();
     _emailController.dispose();
-    _stateController.dispose();
+    //_stateController.dispose();
     _passwordController.dispose();
     _confirmPwdController.dispose();
     _phoneController.dispose();
     _signupBloc.dispose();
+    _addressController.dispose();
   }
 
   _getSignUpRes() {
@@ -101,8 +83,26 @@ class _SignupScreenState extends State<SignupScreen> {
         setState(() async {
           print("errrrorr 01");
           _isLoading = false;
-          SharedPreferences shdPre = await SharedPreferences.getInstance();
-          shdPre.setString(SharedPrefKeys.userProfilePic,
+
+          setSignUpData();
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Successfully Registered",
+                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+          // Navigator.pushReplacement(context,
+          //     MaterialPageRoute(builder: (context) => const LoginScreen()));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+  }
+  void setSignUpData() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setInt(SharedPrefKeys.mechanicSignUpStatus, 1);
+    /*shdPre.setString(SharedPrefKeys.userProfilePic,
               value.data!.customerSignUp!.customer!.profilePic.toString());
           shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
               value.data!.customerSignUp!.customer!.isProfileCompleted!);
@@ -116,34 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
           shdPre.setString(SharedPrefKeys.userEmail,
               value.data!.customerSignUp!.customer!.emailId.toString());
           shdPre.setInt(SharedPrefKeys.userID,
-              int.parse(value.data!.customerSignUp!.customer!.id!));
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Successfully Registered",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-          if (value.data!.customerSignUp!.customer!.isProfileCompleted! == 2) {
-            setIsSignedIn();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
-            FocusScope.of(context).unfocus();
-          } else {
-            //setIsSignedIn();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => AddVehicleScreen()));
-          }
-          // Navigator.pushReplacement(context,
-          //     MaterialPageRoute(builder: (context) => const LoginScreen()));
-          // FocusScope.of(context).unfocus();
-        });
-      }
-    });
-  }
-
-  void setIsSignedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(SharedPrefKeys.isUserLoggedIn, true);
+              int.parse(value.data!.customerSignUp!.customer!.id!));*/
   }
 
   @override
@@ -177,24 +150,24 @@ class _SignupScreenState extends State<SignupScreen> {
                         children: [
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(26),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(26),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Sign up',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: _setValueFont(19.5),
+                                  fontSize: ScreenSize().setValueFont(19.5),
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Corbel_Bold'),
                             ),
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(17),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(17),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
@@ -202,12 +175,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontFamily: 'Corbel_Light',
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
-                                fontSize: _setValueFont(13),
+                                fontSize: ScreenSize().setValueFont(13),
                               ),
                               focusNode: _firstNameFocusNode,
                               keyboardType: TextInputType.text,
                               validator:
-                                  InputValidator(ch: "Name").nameChecking,
+                              InputValidator(ch: "Name").nameChecking,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                     RegExp('[a-zA-Z ]')),
@@ -235,21 +208,93 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
-                                    vertical: _setValue(7.8),
+                                    vertical: ScreenSize().setValue(7.8),
                                   ),
                                   hintStyle: TextStyle(
                                     fontFamily: 'Corbel_Light',
                                     color: Colors.white.withOpacity(.60),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: _setValueFont(12),
+                                    fontSize: ScreenSize().setValueFont(12),
                                   )),
                             ),
                           ),
+
                           Container(
                             margin: EdgeInsets.only(
-                              top: _setValue(20),
-                              left: _setValue(34),
-                              right: _setValue(34),
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
+                            alignment: Alignment.center,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 8,
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: TextFormField(
+                                        validator:
+                                        InputValidator(ch: "Address")
+                                            .emptyChecking,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(30),
+                                        ],
+                                        maxLines: 1,
+                                        focusNode: _addressFocusNode,
+                                        textAlignVertical:
+                                        TextAlignVertical.center,
+                                        keyboardType: TextInputType.streetAddress,
+                                        controller: _addressController,
+                                        style: TextStyle(
+                                          fontFamily: 'Corbel_Light',
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: ScreenSize().setValueFont(13),
+                                        ),
+                                        enableSuggestions: false,
+                                        decoration: InputDecoration(
+                                            isDense: true,
+                                            hintText: 'Address',
+                                            border: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            contentPadding:
+                                            EdgeInsets.symmetric(
+                                              vertical: ScreenSize().setValue(7.8),
+                                            ),
+                                            hintStyle: TextStyle(
+                                              fontFamily: 'Corbel_Light',
+                                              color: Colors.white.withOpacity(.60),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: ScreenSize().setValueFont(12),
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                          ),
+
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34),
                             ),
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
@@ -258,20 +303,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontFamily: 'Corbel_Light',
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
-                                fontSize: _setValueFont(13),
+                                fontSize: ScreenSize().setValueFont(13),
                               ),
-                              focusNode: _userNameFocusNode,
+                              focusNode: _walletIdFocusNode,
                               keyboardType: TextInputType.text,
                               validator:
-                                  InputValidator(ch: "User name").emptyChecking,
+                              InputValidator(ch: "Wallet Id").emptyChecking,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
-                                    RegExp('[a-z0-9]')),
+                                    RegExp('[A-Za-z0-9]')),
                               ],
-                              controller: _userNameController,
+                              controller: _walletIdController,
                               decoration: InputDecoration(
                                   isDense: true,
-                                  hintText: 'User Name',
+                                  hintText: 'Wallet Id*',
                                   border: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.white,
@@ -291,26 +336,99 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
-                                    vertical: _setValue(7.8),
+                                    vertical: ScreenSize().setValue(7.8),
                                   ),
                                   hintStyle: TextStyle(
                                     fontFamily: 'Corbel_Light',
                                     color: Colors.white.withOpacity(.60),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: _setValueFont(12),
+                                    fontSize: ScreenSize().setValueFont(12),
                                   )),
                             ),
                           ),
+
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(20),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
+                            alignment: Alignment.center,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 8,
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: TextFormField(
+                                        validator:
+                                        InputValidator(ch: "Phone number")
+                                            .phoneNumChecking,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(15),
+                                        ],
+                                        maxLines: 1,
+                                        focusNode: _phoneFocusNode,
+                                        textAlignVertical:
+                                        TextAlignVertical.center,
+                                        keyboardType: TextInputType.phone,
+                                        controller: _phoneController,
+                                        style: TextStyle(
+                                          fontFamily: 'Corbel_Light',
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: ScreenSize().setValueFont(13),
+                                        ),
+                                        enableSuggestions: false,
+                                        decoration: InputDecoration(
+                                            isDense: true,
+                                            hintText: 'Phone Number*',
+                                            border: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            contentPadding:
+                                            EdgeInsets.symmetric(
+                                              vertical: ScreenSize().setValue(7.8),
+                                            ),
+                                            hintStyle: TextStyle(
+                                              fontFamily: 'Corbel_Light',
+                                              color:
+                                              Colors.white.withOpacity(.60),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: ScreenSize().setValueFont(12),
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                          ),
+
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               keyboardType: TextInputType.emailAddress,
                               validator:
-                                  InputValidator(ch: "Email ID").emailValidator,
+                              InputValidator(ch: "Email ID").emailValidator,
                               focusNode: _emailFocusNode,
                               controller: _emailController,
                               maxLines: 1,
@@ -318,7 +436,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontFamily: 'Corbel_Light',
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                fontSize: _setValueFont(13),
+                                fontSize: ScreenSize().setValueFont(13),
                               ),
                               decoration: InputDecoration(
                                   isDense: true,
@@ -342,26 +460,28 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
-                                    vertical: _setValue(7.8),
+                                    vertical: ScreenSize().setValue(7.8),
                                   ),
                                   hintStyle: TextStyle(
                                     fontFamily: 'Corbel_Light',
                                     color: Colors.white.withOpacity(.60),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: _setValueFont(12),
+                                    fontSize: ScreenSize().setValueFont(12),
                                   )),
                             ),
                           ),
-                          Container(
+
+                         // State
+                         /* Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(20),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
                               onTap: () {
-                                showDialCodeSelector();
+                                //showDialCodeSelector();
                               },
                               readOnly: true,
                               autofocus: false,
@@ -369,12 +489,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontFamily: 'Corbel_Light',
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                fontSize: _setValueFont(13),
+                                fontSize: ScreenSize().setValueFont(13),
                               ),
                               focusNode: _stateFocusNode,
                               keyboardType: TextInputType.text,
                               validator:
-                                  InputValidator(ch: "State").emptyChecking,
+                              InputValidator(ch: "State").emptyChecking,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                     RegExp('[a-zA-Z]')),
@@ -408,92 +528,22 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
-                                    vertical: _setValue(7.8),
+                                    vertical: ScreenSize().setValue(7.8),
                                   ),
                                   hintStyle: TextStyle(
                                     fontFamily: 'Corbel_Light',
                                     color: Colors.white.withOpacity(.60),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: _setValueFont(12),
+                                    fontSize: ScreenSize().setValueFont(12),
                                   )),
                             ),
-                          ),
+                          ),*/
+
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(20),
-                                left: _setValue(34),
-                                right: _setValue(34)),
-                            alignment: Alignment.center,
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 8,
-                                    child: Container(
-                                      width: double.infinity,
-                                      child: TextFormField(
-                                        validator:
-                                            InputValidator(ch: "Phone number")
-                                                .phoneNumChecking,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(15),
-                                        ],
-                                        maxLines: 1,
-                                        focusNode: _phoneFocusNode,
-                                        textAlignVertical:
-                                            TextAlignVertical.center,
-                                        keyboardType: TextInputType.phone,
-                                        controller: _phoneController,
-                                        style: TextStyle(
-                                          fontFamily: 'Corbel_Light',
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: _setValueFont(13),
-                                        ),
-                                        enableSuggestions: false,
-                                        decoration: InputDecoration(
-                                            isDense: true,
-                                            hintText: 'Phone Number*',
-                                            border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                              vertical: _setValue(7.8),
-                                            ),
-                                            hintStyle: TextStyle(
-                                              fontFamily: 'Corbel_Light',
-                                              color:
-                                                  Colors.white.withOpacity(.60),
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: _setValueFont(12),
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: _setValue(20),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               obscureText: true,
@@ -506,7 +556,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontFamily: 'Corbel_Light',
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                fontSize: _setValueFont(13),
+                                fontSize: ScreenSize().setValueFont(13),
                               ),
                               decoration: InputDecoration(
                                   isDense: true,
@@ -531,21 +581,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
-                                    vertical: _setValue(7.8),
+                                    vertical: ScreenSize().setValue(7.8),
                                   ),
                                   hintStyle: TextStyle(
                                     fontFamily: 'Corbel_Light',
                                     color: Colors.white.withOpacity(.60),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: _setValueFont(12),
+                                    fontSize: ScreenSize().setValueFont(12),
                                   )),
                             ),
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                                top: _setValue(20),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             child: TextFormField(
                               obscureText: true,
                               validator: InputValidator(ch: "Confirm Password")
@@ -557,7 +607,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fontFamily: 'Corbel_Light',
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
-                                fontSize: _setValueFont(13),
+                                fontSize: ScreenSize().setValueFont(13),
                               ),
                               decoration: InputDecoration(
                                   isDense: true,
@@ -582,105 +632,105 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
-                                    vertical: _setValue(7.8),
+                                    vertical: ScreenSize().setValue(7.8),
                                   ),
                                   hintStyle: TextStyle(
                                     fontFamily: 'Corbel_Light',
                                     color: Colors.white.withOpacity(.60),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: _setValueFont(12),
+                                    fontSize: ScreenSize().setValueFont(12),
                                   )),
                             ),
                           ),
                           Container(
-                            height: _setValue(28),
-                            width: _setValue(98),
+                            height: ScreenSize().setValue(28),
+                            width: ScreenSize().setValue(98),
                             margin: EdgeInsets.only(
-                                top: _setValue(25),
-                                left: _setValue(34),
-                                right: _setValue(34)),
+                                top: ScreenSize().setValue(25),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
                             child: _isLoading
                                 ? Center(
-                                    child: Container(
-                                      height: _setValue(28),
-                                      width: _setValue(28),
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                CustColors.peaGreen),
-                                      ),
-                                    ),
-                                  )
+                              child: Container(
+                                height: ScreenSize().setValue(28),
+                                width: ScreenSize().setValue(28),
+                                child: CircularProgressIndicator(
+                                  valueColor:
+                                  AlwaysStoppedAnimation<Color>(
+                                      CustColors.peaGreen),
+                                ),
+                              ),
+                            )
                                 : Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                          color: CustColors.darkBlue,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 3.3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: MaterialButton(
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          checkPassWord(
-                                              _passwordController.text,
-                                              _confirmPwdController.text);
-                                        } else {
-                                          setState(() => _autoValidate =
-                                              AutovalidateMode.always);
-                                        }
-                                      },
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Sign up',
-                                              style: TextStyle(
-                                                color: CustColors.blue,
-                                                fontFamily: 'Corbel_Regular',
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: _setValueFont(11.5),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left: _setValue(16.6),
-                                              ),
-                                              child: Image.asset(
-                                                'assets/images/arrow_forword.png',
-                                                width: _setValue(12.5),
-                                                height: _setValue(12.5),
-                                              ),
-                                            )
-                                          ],
+                              decoration: BoxDecoration(
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: CustColors.darkBlue,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 3.3),
+                                  ),
+                                ],
+                              ),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    checkPassWord(
+                                        _passwordController.text,
+                                        _confirmPwdController.text);
+                                  } else {
+                                    setState(() => _autoValidate =
+                                        AutovalidateMode.always);
+                                  }
+                                },
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Sign up',
+                                        style: TextStyle(
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: ScreenSize().setValueFont(11.5),
                                         ),
                                       ),
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              _setValue(16))),
-                                    ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          left: ScreenSize().setValue(16.6),
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/arrow_forword.png',
+                                          width: ScreenSize().setValue(12.5),
+                                          height: ScreenSize().setValue(12.5),
+                                        ),
+                                      )
+                                    ],
                                   ),
+                                ),
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        ScreenSize().setValue(16))),
+                              ),
+                            ),
                           ),
                           InkWell(
                             onTap: () {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SigninScreen()));
+                                      builder: (context) => MechanicExpertiseSelectionScreen()));
                             },
                             child: Container(
                               margin: EdgeInsets.only(
-                                top: _setValue(21.3),
-                                left: _setValue(36),
+                                top: ScreenSize().setValue(21.3),
+                                left: ScreenSize().setValue(36),
                               ),
                               child: Text(
                                 'Already have an account ? Sign in',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: _setValueFont(11.5),
+                                    fontSize: ScreenSize().setValueFont(11.5),
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Corbel_Light'),
                               ),
@@ -702,7 +752,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                         'assets/images/signup_arc.png',
                                         fit: BoxFit.fitHeight,
                                         width:
-                                            MediaQuery.of(context).size.width,
+                                        MediaQuery.of(context).size.width,
                                       ),
                                     ],
                                   ),
@@ -711,9 +761,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                     width: double.infinity,
                                     alignment: Alignment.topCenter,
                                     margin: EdgeInsets.only(
-                                        left: _setValue(66),
-                                        top: _setValue(119.6),
-                                        right: _setValue(78)),
+                                        left: ScreenSize().setValue(66),
+                                        top: ScreenSize().setValue(119.6),
+                                        right: ScreenSize().setValue(78)),
                                     child: Image.asset(
                                       'assets/images/autofix_logo.png',
                                     )),
@@ -730,7 +780,6 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
-      // ),
     );
   }
 
@@ -739,10 +788,7 @@ class _SignupScreenState extends State<SignupScreen> {
       //toastMsg.toastMsg(msg: "Passwords are different!");
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Passwords are different!",
-            style: TextStyle(
-                fontFamily: 'Roboto_Regular',
-                fontWeight: FontWeight.w600,
-                fontSize: 14)),
+            style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
         duration: Duration(seconds: 2),
         backgroundColor: CustColors.peaGreen,
       ));
@@ -751,20 +797,26 @@ class _SignupScreenState extends State<SignupScreen> {
         _confirmPwdController.text = "";
       });
     } else {
+      print("firstNameController.text : "+ _firstNameController.text+
+            "emailController.text : " + _emailController.text +
+            "phoneController.text : " + _phoneController.text +
+            "address : " + _addressController.text +
+            "passwordController.text : " + _passwordController.text);
       _signupBloc.postSignUpRequest(
-          _firstNameController.text,
-          _userNameController.text,
+        _firstNameController.text,
           _emailController.text,
-          _stateController.text,
-          _passwordController.text,
-          _phoneController.text);
+          _phoneController.text,
+          _addressController.text,
+          10.397118,76.140387,
+          _walletIdController.text,
+          _passwordController.text
+      );
       setState(() {
         _isLoading = true;
       });
     }
   }
-
-  void showDialCodeSelector() {
+  /*void showDialCodeSelector() {
     _signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
@@ -786,16 +838,16 @@ class _SignupScreenState extends State<SignupScreen> {
                               width: double.maxFinite,
                               child: Column(children: [
                                 Container(
-                                  height: _setValue(36.3),
+                                  height: ScreenSize().setValue(36.3),
                                   margin: EdgeInsets.only(
-                                      left: _setValue(41.3),
-                                      right: _setValue(41.3),
-                                      top: _setValue(20.3)),
+                                      left: ScreenSize().setValue(41.3),
+                                      right: ScreenSize().setValue(41.3),
+                                      top: ScreenSize().setValue(20.3)),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(
-                                        _setValue(20),
+                                        ScreenSize().setValue(20),
                                       ),
                                     ),
                                     boxShadow: [
@@ -809,9 +861,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Container(
@@ -822,9 +874,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                           child: Center(
                                             child: TextFormField(
                                               keyboardType:
-                                                  TextInputType.visiblePassword,
+                                              TextInputType.visiblePassword,
                                               textAlignVertical:
-                                                  TextAlignVertical.center,
+                                              TextAlignVertical.center,
                                               onChanged: (text) {
                                                 setState(() {
                                                   _countryData.clear();
@@ -842,8 +894,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 hintText: "Search Your  State",
                                                 border: InputBorder.none,
                                                 contentPadding:
-                                                    new EdgeInsets.only(
-                                                        bottom: 15),
+                                                new EdgeInsets.only(
+                                                    bottom: 15),
                                                 hintStyle: TextStyle(
                                                   color: CustColors.greyText,
                                                   fontSize: 12,
@@ -889,61 +941,61 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Container(
                                   height: 421 - 108,
                                   padding:
-                                      EdgeInsets.only(top: _setValue(22.4)),
+                                  EdgeInsets.only(top: _setValue(22.4)),
                                   child: _countryData.length != 0
                                       ? ListView.separated(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: _countryData.length,
-                                          itemBuilder: (context, index) {
-                                            return InkWell(
-                                                onTap: () {
-                                                  final dial_Code =
-                                                      _countryData[index].name;
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: _countryData.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          onTap: () {
+                                            final dial_Code =
+                                                _countryData[index].name;
 
-                                                  setState(() {
-                                                    _stateController.text =
-                                                        dial_Code.toString();
-                                                  });
+                                            setState(() {
+                                              _stateController.text =
+                                                  dial_Code.toString();
+                                            });
 
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Container(
-                                                  margin: EdgeInsets.only(
-                                                    left: _setValue(41.3),
-                                                    right: _setValue(41.3),
-                                                  ),
-                                                  child: Text(
-                                                    '${_countryData[index].name}',
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            _setValueFont(12),
-                                                        fontFamily:
-                                                            'Corbel-Light',
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color:
-                                                            Color(0xff0b0c0d)),
-                                                  ),
-                                                ));
+                                            Navigator.pop(context);
                                           },
-                                          separatorBuilder:
-                                              (BuildContext context,
-                                                  int index) {
-                                            return Container(
-                                                margin: EdgeInsets.only(
-                                                    top: _setValue(12.7),
-                                                    left: _setValue(41.3),
-                                                    right: _setValue(41.3),
-                                                    bottom: _setValue(12.9)),
-                                                child: Divider(
-                                                  height: 0,
-                                                ));
-                                          },
-                                        )
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              left: _setValue(41.3),
+                                              right: _setValue(41.3),
+                                            ),
+                                            child: Text(
+                                              '${_countryData[index].name}',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                  _setValueFont(12),
+                                                  fontFamily:
+                                                  'Corbel-Light',
+                                                  fontWeight:
+                                                  FontWeight.w600,
+                                                  color:
+                                                  Color(0xff0b0c0d)),
+                                            ),
+                                          ));
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context,
+                                        int index) {
+                                      return Container(
+                                          margin: EdgeInsets.only(
+                                              top: _setValue(12.7),
+                                              left: _setValue(41.3),
+                                              right: _setValue(41.3),
+                                              bottom: _setValue(12.9)),
+                                          child: Divider(
+                                            height: 0,
+                                          ));
+                                    },
+                                  )
                                       : Center(
-                                          child: Text('No Results found.'),
-                                        ),
+                                    child: Text('No Results found.'),
+                                  ),
                                 ),
                               ])),
                           Center(
@@ -958,14 +1010,5 @@ class _SignupScreenState extends State<SignupScreen> {
                 });
           });
         });
-  }
-
-  _populateCountryList() {
-    _signupBloc.statesCode.listen((value) {
-      setState(() {
-        isloading = false;
-        _countryData = value.cast<StateDetails>();
-      });
-    });
-  }
+  }*/
 }
