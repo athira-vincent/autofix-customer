@@ -1,12 +1,12 @@
 
-class MechanicSignupMdl {
+class MechanicExpertiseSelectionMdl {
   String? status;
   String? message;
   Data? data;
 
-  MechanicSignupMdl({required this.status, required this.message, this.data});
+  MechanicExpertiseSelectionMdl({required this.status, required this.message, this.data});
 
-  MechanicSignupMdl.fromJson(Map<String, dynamic> json) {
+  MechanicExpertiseSelectionMdl.fromJson(Map<String, dynamic> json) {
     data = (json['data'] != null ? Data.fromJson(json['data']) : null)!;
   }
 
@@ -18,7 +18,7 @@ class MechanicSignupMdl {
 }
 
 class Data {
-  //SignUp signUp;
+  //SignUpScreen1 signUp;
   String? token;
   MechanicSignUp? mechanicSignUp;
   Data();

@@ -1,8 +1,11 @@
 class SharedPrefKeys {
-  static const isUserLoggedIn = "is_Logged_In";
+  //---------------------Common
   static const token = "token_data";
   static const isWalked = "isWalked";
   static const userType = "userType";
+
+  //---------------------Customer
+  static const isUserLoggedIn = "is_Logged_In";
   static const userName = "userName";
   static const userEmail = "userEmail";
   static const userID = "userID";
@@ -10,4 +13,16 @@ class SharedPrefKeys {
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
   static const isCustomerSignUp = "isCustomerSignUp";
   static const defaultVehicleID = "defaultVehicleID";
+
+  //------------------------Mechanic
+
+  static const isMechanicSignUp = "isMechanicSignUp";
+  static const mechanicSignUpStatus = "mechanicSignUpStatus";
+  static const isMechanicLoggedIn = "isMechanicLoggedIn";
+
+
+  //------------------------Vendor
+
+  static const isVendorSignUp = "isVendorSignUp";
+  static const isVendorLoggedIn = "isVendorLoggedIn";
 }
