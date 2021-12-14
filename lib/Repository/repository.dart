@@ -24,6 +24,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_deta
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_api_provider.dart';
 import 'package:auto_fix/UI/Vendor/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Vendor/Login/SignUp/signup_api_provider.dart';
 
@@ -54,6 +55,7 @@ class Repository {
   final _mechanicProfileApiProvider = MechanicProfileApiProvider();
 
   final _mechanicSignupApiProvider = MechanicSignupRegistrationApiProvider();
+  final _mechanicWorkSelectionApiProvider = MechanicWorkSelectionApiProvider();
   final _mechanicSignInApiProvider = MechanicSigninApiProvider();
 
   final _vendorSignupApiProvider = VendorSignupApiProvider();
@@ -74,10 +76,10 @@ class Repository {
   //Change Password
   Future<dynamic> getChangePassword(String password) =>
       _changePasswordApiProvider.getChangePasswordRequest(password);
-  //EditPrfile
+  //EditProfile
   Future<dynamic> getEditProfile() =>
       _editProfileApiProvider.getEditProfileRequest();
-  //ViewPrfile
+  //ViewProfile
   Future<dynamic> getViewProfile(String id) =>
       _viewProfileApiProvider.getViewProfileRequest(id);
   //Search Result
@@ -171,6 +173,13 @@ class Repository {
       String walletId,
       String password) =>
       _mechanicSignupApiProvider.getMechanicSignUpRequest(name, email, phoneNo, address, lat, lng, walletId, password);
+
+  Future<dynamic> getMechanicSignUpWorkSelection(
+      String yearOfExperience,
+      bool isEmergencyEnabled,
+      String serviceIdList) =>
+      _mechanicWorkSelectionApiProvider.getMechanicWorkSelectionRequest(yearOfExperience,isEmergencyEnabled,serviceIdList);
+
 
   //---------------------Vendor
   //Vendor SignUpScreen1

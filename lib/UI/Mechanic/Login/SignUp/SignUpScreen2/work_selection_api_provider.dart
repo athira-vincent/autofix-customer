@@ -6,17 +6,14 @@ import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_m
 
 class MechanicWorkSelectionApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<MechanicWorkSelectionMdl> getMechanicSignUpRequest(
-      String name,
-      String email,
-      String phoneNo,
-      String address,
-      double lat,
-      double lng ,
-      String walletId,
-      String password) async {
-    Map<String, dynamic> _resp = await _queryProvider.mechanicSignUp(
-      name,email,phoneNo,address,lat,lng,walletId, password );
+  Future<MechanicWorkSelectionMdl> getMechanicWorkSelectionRequest(
+      String yearOfExperience,
+      bool isEmergencyEnabled,
+      String serviceIdList
+      ) async {
+    Map<String, dynamic> _resp = await _queryProvider.mechanicSignUpWorkSelection(
+      yearOfExperience, isEmergencyEnabled, serviceIdList
+       );
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

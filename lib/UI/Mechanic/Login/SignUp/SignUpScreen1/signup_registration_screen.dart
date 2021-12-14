@@ -261,7 +261,7 @@ class _MechanicSignupRegistrationScreenState
                                           LengthLimitingTextInputFormatter(40),
                                         ],
                                         //minLines: 3,
-                                        maxLines: 3,
+                                        //maxLines: 3,
                                         focusNode: _addressFocusNode,
                                         textAlignVertical:
                                             TextAlignVertical.center,

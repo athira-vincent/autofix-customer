@@ -667,6 +667,18 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  mechanicSignUpWorkSelection(
+      String yearOfExperience,
+      bool isEmergencyEnabled,
+      String serviceIdList
+      ) async {
+    String _query = """ 
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   mechanicForgotPassword(String email) async {
     String _query = """
       

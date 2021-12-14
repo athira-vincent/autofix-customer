@@ -10,22 +10,11 @@ class MechanicWorkSelectionBloc {
     postSignUp.close();
   }
 
-  postSignUpRequest(String name,
-      String email,
-      String phoneNo,
-      String address,
-      double lat,
-      double lng ,
-      String walletId,
-      String password) async {
-    MechanicWorkSelectionMdl _signUpMdl = await repository.getMechanicSignUp(name,
-      email,
-      phoneNo,
-      address,
-      lat,
-      lng,
-      walletId,
-      password
+  postSignUpRequest(String yearOfExperience,
+      bool isEmergencyEnabled,
+      String serviceIdList) async {
+    MechanicWorkSelectionMdl _signUpMdl = await repository.getMechanicSignUpWorkSelection(
+      yearOfExperience,isEmergencyEnabled,serviceIdList
     );
     postSignUp.sink.add(_signUpMdl);
   }

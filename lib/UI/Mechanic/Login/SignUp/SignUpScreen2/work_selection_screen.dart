@@ -30,8 +30,11 @@ class _MechanicWorkSelectionScreenState
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
 
-  List<String> regularServiceList = [];
-  List<String> emergencyServiceList = [];
+  List<String> regularServiceDataList = ['abc', 'bcd', 'cde', 'def'];
+  List<String> emergencyServiceDataList = ['abcd', 'bcde', 'cdef', 'defg'];
+
+  List<String> regularServiceSelectedList = [];
+  List<String> emergencyServiceSelectedList = [];
   bool isEmergencyEnabled = false;
 
   @override
@@ -78,7 +81,7 @@ class _MechanicWorkSelectionScreenState
           print("errrrorr 01");
           _isLoading = false;
 
-          setSignUpData();
+          setSignUpWorkSelectionData();
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
@@ -94,7 +97,7 @@ class _MechanicWorkSelectionScreenState
     });
   }
 
-  void setSignUpData() async {
+  void setSignUpWorkSelectionData() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setInt(SharedPrefKeys.mechanicSignUpStatus, 1);
     /*shdPre.setString(SharedPrefKeys.userProfilePic,
@@ -115,24 +118,23 @@ class _MechanicWorkSelectionScreenState
   }
 
   void toggleIsEmergencyEnabled(bool value) {
-
-    if(isEmergencyEnabled == false)
-    {
+    if (isEmergencyEnabled == false) {
       setState(() {
         isEmergencyEnabled = true;
+        regularServiceSelectedList = [];
         //textValue = 'Switch Button is ON';
       });
       print('Switch Button is ON');
-    }
-    else
-    {
+    } else {
       setState(() {
+        emergencyServiceSelectedList = [];
         isEmergencyEnabled = false;
         //textValue = 'Switch Button is OFF';
       });
       print('Switch Button is OFF');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -153,543 +155,458 @@ class _MechanicWorkSelectionScreenState
                 child: Form(
                   autovalidateMode: _autoValidate,
                   key: _formKey,
-                  // child: ConstrainedBox(
-                  //   constraints: BoxConstraints.tightFor(
-                  //       height: MediaQuery.of(context).size.height),
-                  child: IntrinsicHeight(
-                    child: Container(
-                      color: CustColors.blue,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(26),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Work Selection',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenSize().setValueFont(19.5),
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Corbel_Bold'),
-                            ),
-                          ),
-
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: TextFormField(
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 1,
-                              onTap: () {
-                                showYearSelectionDialog();
-                              },
-                              readOnly: true,
-                              autofocus: false,
-                              style: TextStyle(
-                                fontFamily: 'Corbel_Light',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: ScreenSize().setValueFont(13),
-                              ),
-                              focusNode: _mechanicExperienceFocusNode,
-                              keyboardType: TextInputType.text,
-                              validator: InputValidator(ch: "Experience")
-                                  .emptyChecking,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp('[a-zA-Z]')),
-                              ],
-                              controller: _mechanicExperienceController,
-                              decoration: InputDecoration(
-                                  disabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  isDense: true,
-                                  hintText: 'Year of Experience',
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize().setValue(7.8),
-                                  ),
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: ScreenSize().setValueFont(12),
-                                  )),
-                            ),
-                          ),
-
-                          Container(
-                                margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                                child: Row(
-                                  children: [
-                                    /*child: TextFormField(
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 1,
-                              onTap: () {
-                                showYearSelectionDialog();
-                              },
-                              readOnly: true,
-                              autofocus: false,
-                              style: TextStyle(
-                                fontFamily: 'Corbel_Light',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: ScreenSize().setValueFont(13),
-                              ),
-                              focusNode: _mechanicExperienceFocusNode,
-                              keyboardType: TextInputType.text,
-                              validator: InputValidator(ch: "Experience")
-                                  .emptyChecking,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp('[a-zA-Z]')),
-                              ],
-                              controller: _mechanicExperienceController,
-                              decoration: InputDecoration(
-                                  disabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  isDense: true,
-                                  hintText: 'Year of Experience',
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize().setValue(7.8),
-                                  ),
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: ScreenSize().setValueFont(12),
-                                  )),
-                            ),*/
-                                    Text(
-                                    "Do you wish to provide Emergency Services ?",
-                                    style: TextStyle(
-                                        color: CustColors.blue,
-                                        fontSize: 14.5,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: "Corbel_Regular"),
-                                    ),
-                                    Switch(
-                                      onChanged: toggleIsEmergencyEnabled,
-                                      value: isEmergencyEnabled,
-                                      activeColor: Colors.blue,
-                                      activeTrackColor: Colors.yellow,
-                                      inactiveThumbColor: Colors.redAccent,
-                                      inactiveTrackColor: Colors.orange,
-
-                                    ),
-                              ],
-                            ),
-                          ),
-
-                          isEmergencyEnabled
-                              ? ( emergencyServiceList.isNotEmpty
-                                  ? GridView.builder(
-                            itemCount: regularServiceList.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container();/*_generalServiceListItem(generalServiceList![index], index);*/
-                            },
-                            padding: EdgeInsets.zero,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              //crossAxisSpacing: 40.0,
-                              // mainAxisSpacing: 13.9,
-                              childAspectRatio: MediaQuery.of(context).size.width /
-                                  (MediaQuery.of(context).size.height / 5),
-                            ),
-                          )
-                                  : Container()
-                                )
-                              : Container(),
-
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: TextFormField(
-                              textAlignVertical: TextAlignVertical.center,
-                              maxLines: 1,
-                              onTap: () {
-                                showYearSelectionDialog();
-                              },
-                              readOnly: true,
-                              autofocus: false,
-                              style: TextStyle(
-                                fontFamily: 'Corbel_Light',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: ScreenSize().setValueFont(13),
-                              ),
-                              focusNode: _mechanicExperienceFocusNode,
-                              keyboardType: TextInputType.text,
-                              validator: InputValidator(ch: "Experience")
-                                  .emptyChecking,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp('[a-zA-Z]')),
-                              ],
-                              controller: _mechanicExperienceController,
-                              decoration: InputDecoration(
-                                  disabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  isDense: true,
-                                  hintText: 'Year of Experience',
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize().setValue(7.8),
-                                  ),
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: ScreenSize().setValueFont(12),
-                                  )),
-                            ),
-                          ),
-
-                          Text(
-                            "Select Your Services",
+                  child: Container(
+                    color: CustColors.blue,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(26),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Work Selection',
                             style: TextStyle(
-                                color: CustColors.blue,
-                                fontSize: 14.5,
+                                color: Colors.white,
+                                fontSize: ScreenSize().setValueFont(19.5),
                                 fontWeight: FontWeight.w600,
-                                fontFamily: "Corbel_Regular"),
+                                fontFamily: 'Corbel_Bold'),
                           ),
-
-                          regularServiceList.isNotEmpty
-                              ? GridView.builder(
-                            itemCount: regularServiceList.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container();/*_generalServiceListItem(generalServiceList![index], index);*/
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            onTap: () {
+                              showYearSelectionDialog();
                             },
-                            padding: EdgeInsets.zero,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              //crossAxisSpacing: 40.0,
-                              // mainAxisSpacing: 13.9,
-                              childAspectRatio: MediaQuery.of(context).size.width /
-                                  (MediaQuery.of(context).size.height / 5),
+                            readOnly: true,
+                            autofocus: false,
+                            style: TextStyle(
+                              fontFamily: 'Corbel_Light',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: ScreenSize().setValueFont(13),
                             ),
-                          )
-                              : Container(width: 0, height: 0),
-
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: TextFormField(
-                              textAlignVertical: TextAlignVertical.center,
-                              obscureText: true,
-                              validator:
-                                  InputValidator(ch: "data")
-                                      .emptyChecking,
-                              // controller: _passwordController,
-                              //focusNode: _passwordFocusNode,
-                              maxLines: 1,
-                              style: TextStyle(
-                                fontFamily: 'Corbel_Light',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: ScreenSize().setValueFont(13),
-                              ),
-                              decoration: InputDecoration(
-                                  isDense: true,
-                                  hintText: 'Password*',
-                                  errorMaxLines: 3,
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
+                            focusNode: _mechanicExperienceFocusNode,
+                            keyboardType: TextInputType.text,
+                            validator:
+                                InputValidator(ch: "Experience").emptyChecking,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9]')),
+                            ],
+                            controller: _mechanicExperienceController,
+                            decoration: InputDecoration(
+                                disabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
                                   ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
+                                ),
+                                isDense: true,
+                                hintText: 'Year of Experience',
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
                                   ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize().setValue(7.8),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
                                   ),
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: ScreenSize().setValueFont(12),
-                                  )),
-                            ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: ScreenSize().setValue(7.8),
+                                ),
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Corbel_Light',
+                                  color: Colors.white.withOpacity(.60),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: ScreenSize().setValueFont(12),
+                                )),
                           ),
-
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: TextFormField(
-                              obscureText: true,
-                              validator:
-                                  InputValidator(ch: "data").passwordChecking,
-                              maxLines: 1,
-                              //controller: _confirmPwdController,
-                              textAlignVertical: TextAlignVertical.center,
-                              style: TextStyle(
-                                fontFamily: 'Corbel_Light',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontSize: ScreenSize().setValueFont(13),
-                              ),
-                              decoration: InputDecoration(
-                                  isDense: true,
-                                  hintText: 'Confirm Password*',
-                                  errorMaxLines: 3,
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.white,
-                                      width: .3,
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: ScreenSize().setValue(7.8),
-                                  ),
-                                  hintStyle: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    color: Colors.white.withOpacity(.60),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Do you wish to provide Emergency Services ?",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.5,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: ScreenSize().setValueFont(12),
-                                  )),
-                            ),
+                                    fontFamily: "Corbel_Regular"),
+                              ),
+                              Switch(
+                                onChanged: toggleIsEmergencyEnabled,
+                                value: isEmergencyEnabled,
+                                activeColor: Colors.white,
+                                activeTrackColor: Colors.white70,
+                                inactiveThumbColor: Colors.black26,
+                                inactiveTrackColor: Colors.black12,
+                              ),
+                            ],
                           ),
-
-                          Container(
-                            height: ScreenSize().setValue(28),
-                            width: ScreenSize().setValue(98),
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(25),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: _isLoading
-                                ? Center(
+                        ),
+                        isEmergencyEnabled
+                            ? (emergencyServiceSelectedList.isEmpty
+                                ? Container(
                                     child: Container(
-                                      height: ScreenSize().setValue(28),
-                                      width: ScreenSize().setValue(28),
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                CustColors.peaGreen),
+                                      margin: EdgeInsets.only(
+                                          top: ScreenSize().setValue(20),
+                                          left: ScreenSize().setValue(34),
+                                          right: ScreenSize().setValue(34)),
+                                      child: TextFormField(
+                                        textAlignVertical:
+                                            TextAlignVertical.center,
+                                        maxLines: 1,
+                                        onTap: () {
+                                          showAllServicesSelectionDialog();
+                                        },
+                                        readOnly: true,
+                                        autofocus: false,
+                                        style: TextStyle(
+                                          fontFamily: 'Corbel_Light',
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize:
+                                              ScreenSize().setValueFont(13),
+                                        ),
+                                        //focusNode: _mechanicExperienceFocusNode,
+                                        keyboardType: TextInputType.text,
+                                        validator: InputValidator(
+                                                ch: "Select Services")
+                                            .emptyChecking,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp('[a-zA-Z]')),
+                                        ],
+                                        //controller: _mechanicExperienceController,
+                                        decoration: InputDecoration(
+                                            disabledBorder:
+                                                UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            isDense: true,
+                                            hintText: 'Select Services',
+                                            border: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Colors.white,
+                                                width: .3,
+                                              ),
+                                            ),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                              vertical:
+                                                  ScreenSize().setValue(7.8),
+                                            ),
+                                            hintStyle: TextStyle(
+                                              fontFamily: 'Corbel_Light',
+                                              color:
+                                                  Colors.white.withOpacity(.60),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize:
+                                                  ScreenSize().setValueFont(12),
+                                            )),
                                       ),
                                     ),
                                   )
                                 : Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                          color: CustColors.darkBlue,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 3.3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: MaterialButton(
-                                      onPressed: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          // checkPassWord(
-                                          // _passwordController.text,
-                                          //_confirmPwdController.text);
-                                        } else {
-                                          setState(() => _autoValidate =
-                                              AutovalidateMode.always);
-                                        }
+                                    margin: EdgeInsets.only(
+                                        top: ScreenSize().setValue(20),
+                                        left: ScreenSize().setValue(34),
+                                        right: ScreenSize().setValue(34)),
+                                    child: GridView.builder(
+                                      itemCount:
+                                          emergencyServiceSelectedList.length,
+                                      shrinkWrap: true,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        //return Text(emergencyServiceSelectedList[index]);
+                                        return _serviceDataItem(
+                                            emergencyServiceSelectedList[index],
+                                            index);
+                                        //return _generalServiceListItem(generalServiceList![index], index);
                                       },
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Sign up',
-                                              style: TextStyle(
-                                                color: CustColors.blue,
-                                                fontFamily: 'Corbel_Regular',
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: ScreenSize()
-                                                    .setValueFont(11.5),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                left:
-                                                    ScreenSize().setValue(16.6),
-                                              ),
-                                              child: Image.asset(
-                                                'assets/images/arrow_forword.png',
-                                                width:
-                                                    ScreenSize().setValue(12.5),
-                                                height:
-                                                    ScreenSize().setValue(12.5),
-                                              ),
-                                            )
-                                          ],
+                                      padding: EdgeInsets.zero,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        //crossAxisSpacing: 40.0,
+                                        // mainAxisSpacing: 13.9,
+                                        childAspectRatio:
+                                            MediaQuery.of(context).size.width /
+                                                (MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    5),
+                                      ),
+                                    ),
+                                  )
+                              )
+                            : (regularServiceSelectedList.isEmpty
+                                ? Container(
+                                    child: Container(
+                                margin: EdgeInsets.only(
+                                    top: ScreenSize().setValue(20),
+                                    left: ScreenSize().setValue(34),
+                                    right: ScreenSize().setValue(34)),
+                                child: TextFormField(
+                                  textAlignVertical:
+                                  TextAlignVertical.center,
+                                  maxLines: 1,
+                                  onTap: () {
+                                    showRegularServicesSelectionDialog();
+                                  },
+                                  readOnly: true,
+                                  autofocus: false,
+                                  style: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontSize:
+                                    ScreenSize().setValueFont(13),
+                                  ),
+                                  //focusNode: _mechanicExperienceFocusNode,
+                                  keyboardType: TextInputType.text,
+                                  validator: InputValidator(
+                                      ch: "Services List")
+                                      .emptyChecking,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp('[a-zA-Z]')),
+                                  ],
+                                  //controller: _mechanicExperienceController,
+                                  decoration: InputDecoration(
+                                      disabledBorder:
+                                      UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
                                         ),
                                       ),
-                                      color: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              ScreenSize().setValue(16))),
-                                    ),
-                                  ),
-                          ),
-
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          MechanicWorkSelectionScreen()));
+                                      isDense: true,
+                                      hintText: 'Select Services',
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white,
+                                          width: .3,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                      EdgeInsets.symmetric(
+                                        vertical:
+                                        ScreenSize().setValue(7.8),
+                                      ),
+                                      hintStyle: TextStyle(
+                                        fontFamily: 'Corbel_Light',
+                                        color:
+                                        Colors.white.withOpacity(.60),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize:
+                                        ScreenSize().setValueFont(12),
+                                      )),
+                                ),
+                              ),
+                                  )
+                                : Container(
+                                    margin: EdgeInsets.only(
+                                        top: ScreenSize().setValue(20),
+                                        left: ScreenSize().setValue(34),
+                                        right: ScreenSize().setValue(34)),
+                                    child: GridView.builder(
+                            itemCount:
+                            regularServiceSelectedList.length,
+                            shrinkWrap: true,
+                            itemBuilder:
+                                (BuildContext context, int index) {
+                              //return Text(emergencyServiceSelectedList[index]);
+                              return _serviceDataItem(
+                                  regularServiceSelectedList[index],
+                                  index);
+                              //return _generalServiceListItem(generalServiceList![index], index);
                             },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(21.3),
-                                left: ScreenSize().setValue(36),
-                              ),
-                              child: Text(
-                                'Already have an account ? Sign in',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenSize().setValueFont(11.5),
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Corbel_Light'),
-                              ),
+                            padding: EdgeInsets.zero,
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              //crossAxisSpacing: 40.0,
+                              // mainAxisSpacing: 13.9,
+                              childAspectRatio:
+                              MediaQuery.of(context).size.width /
+                                  (MediaQuery.of(context)
+                                      .size
+                                      .height /
+                                      5),
                             ),
                           ),
-                          IntrinsicHeight(
-                            child: Stack(
-                              alignment: Alignment.bottomRight,
-                              fit: StackFit.expand,
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  //margin: EdgeInsets.only(top: 40),
-                                  alignment: Alignment.topCenter,
+                        )
+                               ),
 
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/signup_arc.png',
-                                        fit: BoxFit.fitHeight,
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                        Container(
+                          height: ScreenSize().setValue(28),
+                          width: ScreenSize().setValue(98),
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(25),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: _isLoading
+                              ? Center(
+                                  child: Container(
+                                    height: ScreenSize().setValue(28),
+                                    width: ScreenSize().setValue(28),
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          CustColors.peaGreen),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: CustColors.darkBlue,
+                                        blurRadius: 5,
+                                        offset: Offset(0, 3.3),
                                       ),
                                     ],
                                   ),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        /*validateForm(
+
+                                        );*/
+                                        // checkPassWord(
+                                        // _passwordController.text,
+                                        //_confirmPwdController.text);
+                                        _signupBloc.postSignUpRequest(
+                                          _mechanicExperienceController.text,
+                                          isEmergencyEnabled,
+                                          "abcd"
+                                        );
+                                      } else {
+                                        setState(() => _autoValidate =
+                                            AutovalidateMode.always);
+                                      }
+                                    },
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Save',
+                                            style: TextStyle(
+                                              color: CustColors.blue,
+                                              fontFamily: 'Corbel_Regular',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: ScreenSize()
+                                                  .setValueFont(11.5),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              left: ScreenSize().setValue(16.6),
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/arrow_forword.png',
+                                              width:
+                                                  ScreenSize().setValue(12.5),
+                                              height:
+                                                  ScreenSize().setValue(12.5),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            ScreenSize().setValue(16))),
+                                  ),
                                 ),
-                                Container(
-                                    width: double.infinity,
-                                    alignment: Alignment.topCenter,
-                                    margin: EdgeInsets.only(
-                                        left: ScreenSize().setValue(66),
-                                        top: ScreenSize().setValue(119.6),
-                                        right: ScreenSize().setValue(78)),
-                                    child: Image.asset(
-                                      'assets/images/autofix_logo.png',
-                                    )),
-                              ],
-                            ),
+                        ),
+
+                        IntrinsicHeight(
+                          child: Stack(
+                            alignment: Alignment.bottomRight,
+                            fit: StackFit.expand,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                //margin: EdgeInsets.only(top: 40),
+                                alignment: Alignment.topCenter,
+
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/signup_arc.png',
+                                      fit: BoxFit.fitHeight,
+                                      width: MediaQuery.of(context).size.width,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  width: double.infinity,
+                                  alignment: Alignment.topCenter,
+                                  margin: EdgeInsets.only(
+                                      left: ScreenSize().setValue(66),
+                                      top: ScreenSize().setValue(119.6),
+                                      right: ScreenSize().setValue(78)),
+                                  child: Image.asset(
+                                    'assets/images/autofix_logo.png',
+                                  )),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -706,42 +623,96 @@ class _MechanicWorkSelectionScreenState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            backgroundColor: CustColors.blue,
-            title: Text(
-              " Select Year",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            titlePadding: EdgeInsets.all(20),
-            contentPadding: EdgeInsets.only(left: 0, right: 0, bottom: 0),
-            content: Container(
+          backgroundColor: CustColors.blue,
+          title: Text(
+            " Select Year",
+            style: TextStyle(
               color: Colors.white,
-              height: 400,
-              width: 400,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _mechanicYearList.length,
-                  itemBuilder: ( context, index) {
-                    return InkWell(
-                      child: ListTile(
-                          title: Text(_mechanicYearList[index]),
-                          onTap: () {
-                            final yearSelected =
-                            _mechanicYearList[index].toString();
-                            setState(() {
-                              _mechanicExperienceController.text =
-                                 " " + yearSelected.toString() + " Year";
-                            });
-                            Navigator.pop(context);
-                          }),
-                    );
-                  },),
             ),
+          ),
+          titlePadding: EdgeInsets.all(20),
+          contentPadding: EdgeInsets.only(left: 0, right: 0, bottom: 0),
+          content: Container(
+            color: Colors.white,
+            height: 400,
+            width: 400,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _mechanicYearList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  child: ListTile(
+                      title: Text(_mechanicYearList[index]),
+                      onTap: () {
+                        final yearSelected =
+                            _mechanicYearList[index].toString();
+                        setState(() {
+                          _mechanicExperienceController.text =
+                              " " + yearSelected.toString() + " Year";
+                        });
+                        Navigator.pop(context);
+                      }),
+                );
+              },
+            ),
+          ),
         );
       },
     );
   }
+
+  void showAllServicesSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Select Services"),
+          content: MultiSelectChip(
+            emergencyServiceDataList,
+            onSelectionChanged: (selectedList) {
+              setState(() {
+                emergencyServiceSelectedList = selectedList;
+                //emergencyServiceSelectedList.add(selectedList.toString());
+              });
+            },
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void showRegularServicesSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Select Services"),
+          content: MultiSelectChip(
+            regularServiceDataList,
+            onSelectionChanged: (selectedList) {
+              setState(() {
+                regularServiceSelectedList = selectedList;
+                //emergencyServiceSelectedList.add(selectedList.toString());
+              });
+            },
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
+  }
+
 
   /*void checkPassWord(String pwds, String cndpwd) {
     if (pwds != cndpwd) {
@@ -1024,4 +995,103 @@ class _MechanicWorkSelectionScreenState
           ],
         ));
   }*/
+
+  Widget _serviceDataItem(String serviceData, int index) {
+    return Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(top: 10),
+                      child: Text(
+                        serviceData.replaceAll(' , ', ""),
+                        style: TextStyle(
+                          fontFamily: 'Corbel_Light',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontSize: ScreenSize().setValueFont(13),
+                        ),
+                        // serviceData.serviceName!.replaceAll('\n', ""),
+                        softWrap: true,
+                        maxLines: 2,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      emergencyServiceSelectedList.removeAt(index);
+                      setState(() {});
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top: 10),
+                      child: Image.asset('assets/images/close_circle.png',
+                          //width: _setValue(9.2), height: _setValue(9.2)),
+                          width: 9.2,
+                          height: 9.2),
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 20, right: 10),
+                      height: 10,
+                      child: VerticalDivider(
+                        thickness: 1,
+                        width: 0,
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}
+
+class MultiSelectChip extends StatefulWidget {
+  final List<String> reportList;
+  final Function(List<String>) onSelectionChanged; // +added
+  MultiSelectChip(this.reportList, {required this.onSelectionChanged} // +added
+      );
+
+  @override
+  _MultiSelectChipState createState() => _MultiSelectChipState();
+}
+
+class _MultiSelectChipState extends State<MultiSelectChip> {
+  // String selectedChoice = "";
+  List<String> selectedChoices = [];
+  _buildChoiceList() {
+    List<Widget> choices = [];
+    widget.reportList.forEach((item) {
+      choices.add(Container(
+        padding: const EdgeInsets.all(2.0),
+        child: ChoiceChip(
+          label: Text(item),
+          selected: selectedChoices.contains(item),
+          onSelected: (selected) {
+            setState(() {
+              selectedChoices.contains(item)
+                  ? selectedChoices.remove(item)
+                  : selectedChoices.add(item);
+              widget.onSelectionChanged(selectedChoices); // +added
+            });
+          },
+        ),
+      ));
+    });
+    return choices;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: _buildChoiceList(),
+    );
+  }
 }
