@@ -1,23 +1,28 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_mdl.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MechanicWorkSelectionScreen extends StatefulWidget {
-  const MechanicWorkSelectionScreen({Key? key}) : super(key: key);
+class MechanicSpecializationSelectionScreen extends StatefulWidget {
+  const MechanicSpecializationSelectionScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicWorkSelectionScreenState();
+    return _MechanicSpecializationSelectionScreenState();
   }
 }
 
-class _MechanicWorkSelectionScreenState
-    extends State<MechanicWorkSelectionScreen> {
+class _MechanicSpecializationSelectionScreenState
+    extends State<MechanicSpecializationSelectionScreen> {
   List<String> _mechanicYearList = [];
 
   TextEditingController _mechanicExperienceController = TextEditingController();
@@ -26,20 +31,24 @@ class _MechanicWorkSelectionScreenState
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final MechanicWorkSelectionBloc _signupBloc = MechanicWorkSelectionBloc();
+  final MechanicSpecializationSelectionBloc _signupBloc = MechanicSpecializationSelectionBloc();
+  final AllMakeBloc _allMakeBloc = AllMakeBloc();
+  final AllModelBloc _allModelBloc = AllModelBloc();
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
 
-  List<String> regularServiceDataList = ['abc', 'bcd', 'cde', 'def'];
-  List<String> emergencyServiceDataList = ['abcd', 'bcde', 'cdef', 'defg'];
+  List<MakeDetails>? makeDetailsList = [];
+  List<MakeDetails>? selectedMakeList = [];
 
-  List<String> regularServiceSelectedList = [];
-  List<String> emergencyServiceSelectedList = [];
-  bool isEmergencyEnabled = false;
+  List<ModelDetails>? modelDetailsList = [];
+  List<ModelDetails>? selectedModelList = [];
+
 
   @override
   void initState() {
     super.initState();
+    _getAllModel();
+    _getAllMake();
     _getSignUpRes();
     for (int i = 1; i <= 10; i++) {
       i <= 9
@@ -58,8 +67,60 @@ class _MechanicWorkSelectionScreenState
   void dispose() {
     super.dispose();
     _mechanicExperienceController.dispose();
-
+    _allModelBloc.dispose();
+    _allMakeBloc.dispose();
     _signupBloc.dispose();
+  }
+
+  _getAllMake() async {
+    _allMakeBloc.postAllMake.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        _allMakeBloc.postMakeData.listen((data) {
+          setState(() {
+            makeDetailsList = data;
+            // print("c"+value.data.acceptInvitations.message.toString()+"c");
+            print(">>>>>Brand Data" +
+                value.data!.makeDetails!.length.toString() +
+                ">>>>>>>>>");
+          });
+        });
+      }
+    });
+  }
+
+  _getAllModel() async {
+    _allModelBloc.postAllModel.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        _allModelBloc.postModelData.listen((data) {
+          setState(() {
+            modelDetailsList = data;
+            print(">>>>>Brand Data" +
+                value.data!.modelDetails!.length.toString() +
+                ">>>>>>>>>");
+          });
+        });
+      }
+    });
   }
 
   _getSignUpRes() {
@@ -117,23 +178,6 @@ class _MechanicWorkSelectionScreenState
               int.parse(value.data!.customerSignUp!.customer!.id!));*/
   }
 
-  void toggleIsEmergencyEnabled(bool value) {
-    if (isEmergencyEnabled == false) {
-      setState(() {
-        isEmergencyEnabled = true;
-        regularServiceSelectedList = [];
-        //textValue = 'Switch Button is ON';
-      });
-      print('Switch Button is ON');
-    } else {
-      setState(() {
-        emergencyServiceSelectedList = [];
-        isEmergencyEnabled = false;
-        //textValue = 'Switch Button is OFF';
-      });
-      print('Switch Button is OFF');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +211,7 @@ class _MechanicWorkSelectionScreenState
                               right: ScreenSize().setValue(34)),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Work Selection',
+                            'Expertize Selection',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: ScreenSize().setValueFont(19.5),
@@ -196,7 +240,7 @@ class _MechanicWorkSelectionScreenState
                             ),
                             focusNode: _mechanicExperienceFocusNode,
                             keyboardType: TextInputType.text,
-                            validator:
+                            validator: 
                                 InputValidator(ch: "Experience").emptyChecking,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -241,7 +285,101 @@ class _MechanicWorkSelectionScreenState
                                 )),
                           ),
                         ),
-                        Container(
+
+                       /*  FilterChip(
+                          label: Text("text"),
+                          backgroundColor: Colors.transparent,
+                          shape: StadiumBorder(side: BorderSide()),
+                          onSelected: (bool value) {print("selected");},
+
+                        ),*/
+
+                       /* Chip(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.yellow, width: 1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.red,
+                          deleteIcon: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                          label: Text("searchController.recentSearchesList[index]", style: TextStyle(color: Colors.white),),
+                          deleteButtonTooltipMessage: 'erase',
+                          onDeleted: () {
+                            print("deleted");
+                          },
+                        ),*/
+
+                        /*Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            onTap: () {
+                              //showYearSelectionDialog();
+                            },
+                            readOnly: true,
+                            autofocus: false,
+                            style: TextStyle(
+                              fontFamily: 'Corbel_Light',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: ScreenSize().setValueFont(13),
+                            ),
+                            //focusNode: _mechanicExperienceFocusNode,
+                            keyboardType: TextInputType.text,
+                            validator:
+                            InputValidator(ch: "Experience").emptyChecking,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9]')),
+                            ],
+                            //controller: _mechanicExperienceController,
+                            decoration: InputDecoration(
+                                disabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                isDense: true,
+                                hintText: 'Select Car brands',
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: ScreenSize().setValue(7.8),
+                                ),
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Corbel_Light',
+                                  color: Colors.white.withOpacity(.60),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: ScreenSize().setValueFont(12),
+                                )),
+                          ),
+                        ),*/
+
+                        /*Container(
                           margin: EdgeInsets.only(
                               top: ScreenSize().setValue(20),
                               left: ScreenSize().setValue(34),
@@ -268,6 +406,7 @@ class _MechanicWorkSelectionScreenState
                             ],
                           ),
                         ),
+
                         isEmergencyEnabled
                             ? (emergencyServiceSelectedList.isEmpty
                                 ? Container(
@@ -488,7 +627,7 @@ class _MechanicWorkSelectionScreenState
                             ),
                           ),
                         )
-                               ),
+                               ),*/
 
                         Container(
                           height: ScreenSize().setValue(28),
@@ -527,10 +666,15 @@ class _MechanicWorkSelectionScreenState
                                         // checkPassWord(
                                         // _passwordController.text,
                                         //_confirmPwdController.text);
-                                        _signupBloc.postSignUpRequest(
-                                          _mechanicExperienceController.text,
-                                          isEmergencyEnabled,
-                                          "abcd"
+
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const MechanicWorkSelectionScreen()));
+
+                                        _signupBloc.postSignUpSpecializationSelectionRequest(
+                                          "1 year","1,2", "1,2","workshop"
                                         );
                                       } else {
                                         setState(() => _autoValidate =
@@ -661,437 +805,5 @@ class _MechanicWorkSelectionScreenState
     );
   }
 
-  void showAllServicesSelectionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Select Services"),
-          content: MultiSelectChip(
-            emergencyServiceDataList,
-            onSelectionChanged: (selectedList) {
-              setState(() {
-                emergencyServiceSelectedList = selectedList;
-                //emergencyServiceSelectedList.add(selectedList.toString());
-              });
-            },
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text("OK"),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        );
-      },
-    );
-  }
 
-  void showRegularServicesSelectionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Select Services"),
-          content: MultiSelectChip(
-            regularServiceDataList,
-            onSelectionChanged: (selectedList) {
-              setState(() {
-                regularServiceSelectedList = selectedList;
-                //emergencyServiceSelectedList.add(selectedList.toString());
-              });
-            },
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text("OK"),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-
-  /*void checkPassWord(String pwds, String cndpwd) {
-    if (pwds != cndpwd) {
-      //toastMsg.toastMsg(msg: "Passwords are different!");
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Passwords are different!",
-            style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-        duration: Duration(seconds: 2),
-        backgroundColor: CustColors.peaGreen,
-      ));
-      setState(() {
-        _passwordController.text = "";
-        _confirmPwdController.text = "";
-      });
-    } else {
-      print("firstNameController.text : "+ _firstNameController.text+
-            "emailController.text : " + _emailController.text +
-            "phoneController.text : " + _phoneController.text +
-            "address : " + _addressController.text +
-            "passwordController.text : " + _passwordController.text);
-      _signupBloc.postSignUpRequest(
-        _firstNameController.text,
-          _emailController.text,
-          _phoneController.text,
-          _addressController.text,
-          10.397118,76.140387,
-          _walletIdController.text,
-          _passwordController.text
-      );
-      setState(() {
-        _isLoading = true;
-      });
-    }
-  }*/
-
-  /*void showDialCodeSelector() {
-    _signupBloc.searchStates("");
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return BottomSheet(
-                onClosing: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(20),
-                        topLeft: Radius.circular(20))),
-                builder: (BuildContext context) {
-                  return SingleChildScrollView(
-                    child: Container(
-                      height: 421,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                              width: double.maxFinite,
-                              child: Column(children: [
-                                Container(
-                                  height: ScreenSize().setValue(36.3),
-                                  margin: EdgeInsets.only(
-                                      left: ScreenSize().setValue(41.3),
-                                      right: ScreenSize().setValue(41.3),
-                                      top: ScreenSize().setValue(20.3)),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        ScreenSize().setValue(20),
-                                      ),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black38,
-                                        spreadRadius: 0,
-                                        blurRadius: 1.5,
-                                        offset: Offset(0, 1),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                              left: _setValue(23.4)),
-                                          alignment: Alignment.center,
-                                          height: _setValue(36.3),
-                                          child: Center(
-                                            child: TextFormField(
-                                              keyboardType:
-                                              TextInputType.visiblePassword,
-                                              textAlignVertical:
-                                              TextAlignVertical.center,
-                                              onChanged: (text) {
-                                                setState(() {
-                                                  _countryData.clear();
-                                                  isloading = true;
-                                                });
-                                                _signupBloc.searchStates(text);
-                                              },
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: 'Corbel_Regular',
-                                                  fontWeight: FontWeight.w600,
-                                                  color: CustColors.blue),
-                                              decoration: InputDecoration(
-                                                hintText: "Search Your  State",
-                                                border: InputBorder.none,
-                                                contentPadding:
-                                                new EdgeInsets.only(
-                                                    bottom: 15),
-                                                hintStyle: TextStyle(
-                                                  color: CustColors.greyText,
-                                                  fontSize: 12,
-                                                  fontFamily: 'Corbel-Light',
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Container(
-                                            width: _setValue(25),
-                                            height: _setValue(25),
-                                            margin: EdgeInsets.only(
-                                                right: _setValue(19)),
-                                            decoration: BoxDecoration(
-                                              color: CustColors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(
-                                                  20,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                right: _setValue(19)),
-                                            child: Image.asset(
-                                              'assets/images/search.png',
-                                              width: _setValue(10.4),
-                                              height: _setValue(10.4),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 421 - 108,
-                                  padding:
-                                  EdgeInsets.only(top: _setValue(22.4)),
-                                  child: _countryData.length != 0
-                                      ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: _countryData.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final dial_Code =
-                                                _countryData[index].name;
-
-                                            setState(() {
-                                              _stateController.text =
-                                                  dial_Code.toString();
-                                            });
-
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${_countryData[index].name}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
-                                      : Center(
-                                    child: Text('No Results found.'),
-                                  ),
-                                ),
-                              ])),
-                          Center(
-                            child: isloading
-                                ? CircularProgressIndicator()
-                                : Text(''),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                });
-          });
-        });
-  }*/
-
-  /*Widget _generalServiceListItem(String data, int index) {
-    return Container(
-        width: double.infinity,
-        child: Column(
-          children: [
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(top: 10),
-                      child: Text(
-                        searchData.serviceName!.replaceAll('\n', ""),
-                        softWrap: true,
-                        maxLines: 2,
-                        style: TextStyle(
-                            color: CustColors.black01,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            fontFamily: "Corbel_Light"),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _searchData!.removeAt(index);
-                      setState(() {});
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(top: 10),
-                      child: Image.asset('assets/images/close_circle.png',
-                          width: _setValue(9.2), height: _setValue(9.2)),
-                    ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 20, right: 10),
-                      height: 10,
-                      child: VerticalDivider(
-                        thickness: 1,
-                        width: 0,
-                      )),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }*/
-
-  Widget _serviceDataItem(String serviceData, int index) {
-    return Container(
-        width: double.infinity,
-        child: Column(
-          children: [
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(top: 10),
-                      child: Text(
-                        serviceData.replaceAll(' , ', ""),
-                        style: TextStyle(
-                          fontFamily: 'Corbel_Light',
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          fontSize: ScreenSize().setValueFont(13),
-                        ),
-                        // serviceData.serviceName!.replaceAll('\n', ""),
-                        softWrap: true,
-                        maxLines: 2,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      emergencyServiceSelectedList.removeAt(index);
-                      setState(() {});
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(top: 10),
-                      child: Image.asset('assets/images/close_circle.png',
-                          //width: _setValue(9.2), height: _setValue(9.2)),
-                          width: 9.2,
-                          height: 9.2),
-                    ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 20, right: 10),
-                      height: 10,
-                      child: VerticalDivider(
-                        thickness: 1,
-                        width: 0,
-                      )),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }
-}
-
-class MultiSelectChip extends StatefulWidget {
-  final List<String> reportList;
-  final Function(List<String>) onSelectionChanged; // +added
-  MultiSelectChip(this.reportList, {required this.onSelectionChanged} // +added
-      );
-
-  @override
-  _MultiSelectChipState createState() => _MultiSelectChipState();
-}
-
-class _MultiSelectChipState extends State<MultiSelectChip> {
-  // String selectedChoice = "";
-  List<String> selectedChoices = [];
-  _buildChoiceList() {
-    List<Widget> choices = [];
-    widget.reportList.forEach((item) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(2.0),
-        child: ChoiceChip(
-          label: Text(item),
-          selected: selectedChoices.contains(item),
-          onSelected: (selected) {
-            setState(() {
-              selectedChoices.contains(item)
-                  ? selectedChoices.remove(item)
-                  : selectedChoices.add(item);
-              widget.onSelectionChanged(selectedChoices); // +added
-            });
-          },
-        ),
-      ));
-    });
-    return choices;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: _buildChoiceList(),
-    );
-  }
 }

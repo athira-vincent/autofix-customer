@@ -121,7 +121,7 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
                             focusNode: _userNameFocusNode,
                             keyboardType: TextInputType.text,
                             validator:
-                                InputValidator(ch: "User name").emptyChecking,
+                                InputValidator(ch: "Email").emptyChecking,
                             // inputFormatters: [
                             //   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
                             // ],
@@ -142,7 +142,7 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
                                   minWidth: 25,
                                   minHeight: 25,
                                 ),
-                                labelText: 'User Name',
+                                labelText: 'Email Id',
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.white,

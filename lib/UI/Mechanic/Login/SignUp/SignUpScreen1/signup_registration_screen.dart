@@ -4,7 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_bloc.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,6 @@ class _MechanicSignupRegistrationScreenState
   TextEditingController _walletIdController = TextEditingController();
   TextEditingController _walletTypeController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  //TextEditingController _stateController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPwdController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
@@ -36,15 +35,13 @@ class _MechanicSignupRegistrationScreenState
   FocusNode _walletIdFocusNode = FocusNode();
   FocusNode _walletTypeFocusNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
-  //FocusNode _stateFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
   FocusNode _addressFocusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final MechanicSignupRegistrationBloc _signupBloc =
-      MechanicSignupRegistrationBloc();
+  final MechanicSignupRegistrationBloc _signupBloc = MechanicSignupRegistrationBloc();
   List<String> _walletTypeList = ['National ID Card','Driving License', 'Voter’s card',
      'Passport','Certificate of Origin','Refugee ID card',];
   bool _isLoading = false;
@@ -55,6 +52,7 @@ class _MechanicSignupRegistrationScreenState
   void initState() {
     super.initState();
     _getSignUpRes();
+    _setSignUpVisitFlag();
   }
 
   _setSignUpVisitFlag() async {
@@ -66,15 +64,14 @@ class _MechanicSignupRegistrationScreenState
   void dispose() {
     super.dispose();
     _firstNameController.dispose();
+    _addressController.dispose();
     _walletTypeController.dispose();
     _walletIdController.dispose();
     _emailController.dispose();
-    //_stateController.dispose();
     _passwordController.dispose();
     _confirmPwdController.dispose();
     _phoneController.dispose();
     _signupBloc.dispose();
-    _addressController.dispose();
   }
 
   _getSignUpRes() {
@@ -99,20 +96,9 @@ class _MechanicSignupRegistrationScreenState
 
           shdPre.setString(SharedPrefKeys.token, value.data!.mechanicSignUp!.token!);
           shdPre.setInt(SharedPrefKeys.mechanicSignUpStatus, value.data!.mechanicSignUp!.mechanicSignUpData!.verified!);
-
-          /*shdPre.setString(SharedPrefKeys.userProfilePic,
-              value.data!.customerSignUp!.customer!.profilePic.toString());
-          shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
-              value.data!.customerSignUp!.customer!.isProfileCompleted!);
-          shdPre.setString(
-              SharedPrefKeys.userName,
-              value.data!.customerSignUp!.customer!.firstName.toString() +
-                  " " +
-                  value.data!.customerSignUp!.customer!.lastName.toString());
-          shdPre.setString(SharedPrefKeys.userEmail,
-              value.data!.customerSignUp!.customer!.emailId.toString());
-          shdPre.setInt(SharedPrefKeys.userID,
-              int.parse(value.data!.customerSignUp!.customer!.id!));*/
+          shdPre.setString(SharedPrefKeys.userEmail, value.data!.mechanicSignUp!.mechanicSignUpData!.emailId!);
+          shdPre.setString(SharedPrefKeys.mechanicCode, value.data!.mechanicSignUp!.mechanicSignUpData!.mechanicCode!);
+          shdPre.setString(SharedPrefKeys.mechanicID, value.data!.mechanicSignUp!.mechanicSignUpData!.id!);
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
@@ -120,6 +106,15 @@ class _MechanicSignupRegistrationScreenState
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
+
+          setIsSignedIn();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  const MechanicSpecializationSelectionScreen()));
+          FocusScope.of(context).unfocus();
+
           /*if (value.data!.customerSignUp!.customer!.isProfileCompleted! == 2) {
             setIsSignedIn();
             Navigator.pushReplacement(context,
@@ -137,7 +132,10 @@ class _MechanicSignupRegistrationScreenState
       }
     });
   }
-
+  void setIsSignedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(SharedPrefKeys.isMechanicLoggedIn, false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,9 +157,6 @@ class _MechanicSignupRegistrationScreenState
                 child: Form(
                   autovalidateMode: _autoValidate,
                   key: _formKey,
-                  // child: ConstrainedBox(
-                  //   constraints: BoxConstraints.tightFor(
-                  //       height: MediaQuery.of(context).size.height),
                   child: IntrinsicHeight(
                     child: Container(
                       color: CustColors.blue,
@@ -619,6 +614,7 @@ class _MechanicSignupRegistrationScreenState
                                   )),
                             ),
                           ),
+
                           Container(
                             margin: EdgeInsets.only(
                                 top: ScreenSize().setValue(20),
@@ -670,6 +666,7 @@ class _MechanicSignupRegistrationScreenState
                                   )),
                             ),
                           ),
+
                           Container(
                             height: ScreenSize().setValue(28),
                             width: ScreenSize().setValue(98),
@@ -702,11 +699,7 @@ class _MechanicSignupRegistrationScreenState
                                     child: MaterialButton(
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const MechanicWorkSelectionScreen()));
+
                                           checkPassWord(
                                               _passwordController.text,
                                               _confirmPwdController.text);
@@ -751,6 +744,7 @@ class _MechanicSignupRegistrationScreenState
                                     ),
                                   ),
                           ),
+
                           InkWell(
                             onTap: () {
                               Navigator.pushReplacement(
@@ -836,17 +830,17 @@ class _MechanicSignupRegistrationScreenState
       });
     } else {
 
-      var walletData = {};
-      walletData["docType"] = _walletTypeController.text;
-      walletData["docId"] = _walletIdController.text;
-      String strWalletData = json.encode(walletData);
-
+     /* var walletData = {};
+      walletData['docType'] = _walletTypeController.text;
+      walletData['docId'] = _walletIdController.text;
+      String strWalletData = json.encode(walletData);*/
+      String walletDataString = "docType : " + _walletTypeController.text + ", docId : " + _walletIdController.text;
       print("firstNameController.text : " + _firstNameController.text +
           "emailController.text : " + _emailController.text +
           "phoneController.text : " + _phoneController.text +
           "address : " + _addressController.text +
           "passwordController.text : " + _passwordController.text +
-          "Wallet Data : " +strWalletData
+          "Wallet Data : " +walletDataString
       );
 
       _signupBloc.postSignUpRequest(
@@ -856,8 +850,7 @@ class _MechanicSignupRegistrationScreenState
           _addressController.text,
           10.397118,
           76.140387,
-          //_walletIdController.text,
-          strWalletData,
+          walletDataString,
           _passwordController.text);
       setState(() {
         _isLoading = true;
@@ -865,7 +858,6 @@ class _MechanicSignupRegistrationScreenState
     }
   }
   void showWalletTypeSelector() {
-    //_signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -885,107 +877,6 @@ class _MechanicSignupRegistrationScreenState
                           Container(
                               width: double.maxFinite,
                               child: Column(children: [
-                                /*Container(
-                                  height: ScreenSize().setValue(36.3),
-                                  margin: EdgeInsets.only(
-                                      left: ScreenSize().setValue(41.3),
-                                      right: ScreenSize().setValue(41.3),
-                                      top: ScreenSize().setValue(20.3)),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                        ScreenSize().setValue(20),
-                                      ),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black38,
-                                        spreadRadius: 0,
-                                        blurRadius: 1.5,
-                                        offset: Offset(0, 1),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                              left: _setValue(23.4)),
-                                          alignment: Alignment.center,
-                                          height: _setValue(36.3),
-                                          child: Center(
-                                            child: TextFormField(
-                                              keyboardType:
-                                              TextInputType.visiblePassword,
-                                              textAlignVertical:
-                                              TextAlignVertical.center,
-                                              onChanged: (text) {
-                                                setState(() {
-                                                  _countryData.clear();
-                                                  isloading = true;
-                                                });
-                                                _signupBloc.searchStates(text);
-                                              },
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: 'Corbel_Regular',
-                                                  fontWeight: FontWeight.w600,
-                                                  color: CustColors.blue),
-                                              decoration: InputDecoration(
-                                                hintText: "Search Your  State",
-                                                border: InputBorder.none,
-                                                contentPadding:
-                                                new EdgeInsets.only(
-                                                    bottom: 15),
-                                                hintStyle: TextStyle(
-                                                  color: CustColors.greyText,
-                                                  fontSize: 12,
-                                                  fontFamily: 'Corbel-Light',
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Container(
-                                            width: _setValue(25),
-                                            height: _setValue(25),
-                                            margin: EdgeInsets.only(
-                                                right: _setValue(19)),
-                                            decoration: BoxDecoration(
-                                              color: CustColors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(
-                                                  20,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                right: _setValue(19)),
-                                            child: Image.asset(
-                                              'assets/images/search.png',
-                                              width: _setValue(10.4),
-                                              height: _setValue(10.4),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),*/
                                 Container(
                                   height: 350 - 108,
                                   padding:
@@ -1046,11 +937,6 @@ class _MechanicSignupRegistrationScreenState
                                   ),
                                 ),
                               ])),
-                         /* Center(
-                            child: isloading
-                                ? CircularProgressIndicator()
-                                : Text(''),
-                          )*/
                         ],
                       ),
                     ),

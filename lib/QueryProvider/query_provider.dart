@@ -630,8 +630,30 @@ class QueryProvider {
   //------------------------------- Mechanic API --------------------------------
 
   mechanicSignIn(String userName, String password) async {
-    String _query = """  
-  
+    String _query = """
+        mutation{
+      signIn(emailId: "$userName", password: "$password"){
+        token
+        mechanic {
+          id
+          mechanicCode
+          mechanicName
+          emailId
+          phoneNo
+          address
+          latitude
+          longitude
+          walletId
+          verified
+          enable
+          isEmailverified
+          jobType
+          startTime
+          endTime
+          status
+        }
+      }
+    }
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
@@ -645,7 +667,7 @@ class QueryProvider {
       double lng ,
       String walletId,
       String password ) async {
-    String _query = """ 
+    /*String _query = """
     mutation{
   signUp(
   mechanicName: "$name", 
@@ -661,19 +683,110 @@ class QueryProvider {
     mechanic{id}
   }
 }
-    """;
+    """;*/
+    String _query = """
+          mutation{
+        signUp(mechanicName: "$name", 
+        emailId: "$email", 
+        phoneNo: "$phoneNo", 
+        address: "$address", 
+        latitude: $lat, 
+        longitude: $lng, 
+        walletId: "$walletId", 
+        password: "$password"){
+          token
+          mechanic {
+            id
+            mechanicCode
+            mechanicName
+            emailId
+            phoneNo
+            address
+            latitude
+            longitude
+            walletId
+            verified
+            enable
+            isEmailverified
+            status
+          }
+        }
+      }
+      """;
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
   mechanicSignUpWorkSelection(
-      String yearOfExperience,
-      bool isEmergencyEnabled,
-      String serviceIdList
+      int isEmergencyEnabled,
+      String serviceIdList,
+      String serviceFeeList,
+      String startTime,
+      String endTime
       ) async {
-    String _query = """ 
+    String _query = """
+          mutation{
+        skillsAdd(enable: $isEmergencyEnabled,
+         serviceId: "$serviceIdList", 
+         startTime: "$startTime", 
+         endTime: "$endTime", 
+         fee: "$serviceFeeList"){
+          id
+          mechanicCode
+          mechanicName
+          emailId
+          phoneNo
+          address
+          latitude
+          longitude
+          walletId
+          verified
+          enable
+          isEmailverified
+          jobType
+          startTime
+          endTime
+          status
+        }
+      }
     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  mechanicSignUpExpertizeSelection(
+      String yearOfExperience,
+      String brandIdList,
+      String modelIdList,
+      String jobType
+      ) async {
+    String _query = """
+        mutation{
+      vehicleAdd(experience: "$yearOfExperience", 
+      makeId: "$brandIdList", 
+      vehicleModelId: "$modelIdList", 
+      jobType: "$jobType"){
+        id
+        mechanicCode
+        mechanicName
+        emailId
+        phoneNo
+        address
+        latitude
+        longitude
+        walletId
+        verified
+        enable
+        isEmailverified
+        jobType
+        startTime
+        endTime
+        status
+      }
+    }
+  """;
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});

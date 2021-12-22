@@ -14,14 +14,14 @@ class MechanicSigninBloc {
   }
 
   postSignInRequest(String userName, String password) async {
-    MechanicSigninMdl _signInMdl = await repository.getSignIn(userName, password);
+    MechanicSigninMdl _signInMdl = await repository.getMechanicSignIn(userName, password);
     postSignIn.sink.add(_signInMdl);
   }
 
   void userDefault(String token) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
-    shdPre.setBool(SharedPrefKeys.isUserLoggedIn, true);
+    //shdPre.setBool(SharedPrefKeys.isUserLoggedIn, true);
     GqlClient.I
         .config(token: shdPre.getString(SharedPrefKeys.token).toString());
     print(

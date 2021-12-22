@@ -18,40 +18,54 @@ class MechanicSigninMdl {
 }
 
 class Data {
-  String? token;
+
   MechanicSignIn? mechanicSignIn;
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    mechanicSignIn = json['customerSignIn'] != null
-        ? new MechanicSignIn.fromJson(json['customerSignIn'])
+    mechanicSignIn = json['signIn'] != null
+        ? new MechanicSignIn.fromJson(json['signIn'])
         : null;
-    token = json['token'];
+
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (this.mechanicSignIn != null) {
-      data['customerSignIn'] = this.mechanicSignIn!.toJson();
+      data['signIn'] = this.mechanicSignIn!.toJson();
     }
-    data['token'] = this.token;
+
     return data;
   }
 }
 
 class MechanicSignIn {
 
-
+  String? token;
+  MechanicSignInData mechanicSignInData;
 
   MechanicSignIn.fromJson(Map<String, dynamic> json) {
 
+    token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     // data[''] = this.id;
-
+    data['token'] = this.token;
     return data;
   }
 
+}
+class MechanicSignInData{
+
+  MechanicSignInData.fromJson(Map<String, dynamic> json){
+
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    // data[''] = this.id;
+    //data['token'] = this.token;
+    return data;
+  }
 }
