@@ -384,13 +384,14 @@ class QueryProvider {
       id
       status
       serviceId
-      mechanicId
       service {
         id
         serviceName
         description
         icon
         fee
+        minAmount
+        maxAmount
         type
         status
       }
@@ -419,99 +420,63 @@ class QueryProvider {
   }
 
   getAllMechanicList(String token, int page, int size, String serviceId) async {
-    /*String _query = """
-    query{
-  mechanicList(page: $page, size: $size){
-    totalItems
-    data {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-      serviceData {
-        id
-        status
-        serviceId
-        mechanicId
-        service {
-          id
-          serviceName
-          description
-          icon
-          fee
-          type
-          status
-        }
-      }
-      vehicleData {
-        id
-        status
-        makeId
-        mechanicId
-        make {
-          id
-          makeName
-          description
-          status
-        }
-      }
-    }
-    totalPages
-    currentPage
-  }
-}
-    """;*/
-   /* String _query = """
-    query{
-  mechanicList(page: $page, size: $size, serviceId:"$serviceId"){
-    totalItems
-    data {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-    }
-    totalPages
-    currentPage
-  }
-}
-    """;*/
+
 
     String _query = """
+    query{
+   mechanicList(page: 1, size: 10, serviceId: "6"){
+    totalItems
+    data
+    {
+    id,
+    mechanicCode,
+    mechanicName,
+    emailId,
+    phoneNo,
+    address,
+    latitude,
+    longitude,
+    walletId,
+    verified,
+    enable,
+    isEmailverified,
+    jobType,
+    startTime,
+    endTime,
+    status,
+    demoMechanicService{id,
+    fee,
+    status,
+    serviceId,
+    demoMechanicId,
+    service
+    {
+      id,
+      serviceName,
+      icon,
+      type,
+      fee,
+      minAmount,
+      maxAmount,
+      status
+    }
+    },
+    demoMechanicVehicle{id,
+    status,
+    makeId,
+    mechanicId,
+    make{id
+     id,
+    makeName,
+    description,
+    status,}}}
+    totalPages
+    currentPage
+  }
+}
+""";
+
+    /*String _query = """
     query{
   mechanicList(page: $page, size: $size, serviceId: "$serviceId") {
     totalItems
@@ -544,6 +509,8 @@ class QueryProvider {
           description
           icon
           fee
+          minAmount
+          maxAmount
           type
           status
         }
@@ -560,7 +527,7 @@ class QueryProvider {
     totalPages
     currentPage
   } 
-}""";
+}""";*/
 
     log(_query);
     return await GqlClient.I.query01(
@@ -581,7 +548,6 @@ class QueryProvider {
                     serviceName
                     description
                     icon
-                    fee
                     type
                     status
                   }
@@ -609,7 +575,6 @@ class QueryProvider {
                     serviceName
                     description
                     icon
-                    fee
                     type
                     status
                   }
@@ -647,20 +612,20 @@ class QueryProvider {
       String password ) async {
     String _query = """ 
     mutation{
-  signUp(
-  mechanicName: "$name", 
-  emailId: "$email", 
-  phoneNo: "$phoneNo", 
-  address: "$address", 
-  latitude: $lat, 
-  longitude: $lng, 
-  walletId:"$walletId", 
-  password: "$password")
-  {
-    token
-    mechanic{id}
-  }
-}
+        signUp(
+        mechanicName: "$name", 
+        emailId: "$email", 
+        phoneNo: "$phoneNo", 
+        address: "$address", 
+        latitude: $lat, 
+        longitude: $lng, 
+        walletId:"$walletId", 
+        password: "$password")
+        {
+          token
+          mechanic{id}
+        }
+      }
     """;
     log(_query);
     return await GqlClient.I.mutation(_query,

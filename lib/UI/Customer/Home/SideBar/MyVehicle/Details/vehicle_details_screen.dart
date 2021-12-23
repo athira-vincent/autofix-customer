@@ -54,6 +54,13 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return  Scaffold(
+      body: Container(
+        height: 20,
+        width: 100,
+        color: CustColors.red,
+        child: Text('VehicleDetailsScreen'),
+      ),
+    );
   }
 }

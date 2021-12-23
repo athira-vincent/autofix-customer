@@ -66,6 +66,7 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
     _mechanicListBloc.postViewMechanicList.listen((value) {
       if (value.status == "error") {
         setState(() {
+          print("errrrorr 01");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -77,7 +78,7 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
         });
       } else {
         setState(() {
-          print("errrrorr 01");
+          print("Success 01");
           _isLoading = true;
           mechanicListData = value.data!.mechanicList!.mechanicListData!;
           km = calculateDistance(10.1964, 76.3879,
@@ -245,8 +246,7 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
                                   ? "Try again"
                                   : _isLoading
                                       ? "You can choose mechanic"
-                                      : """Finding mechanic near you
-Almost  there…..""",
+                                      : """Finding mechanic near you Almost  there…..""",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   color: Color(0xff848484),

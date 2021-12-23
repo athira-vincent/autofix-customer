@@ -325,7 +325,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           title: Align(
             alignment: Alignment(-1.18, 0),
             child: Text(
-              "My Vehicle",
+              "My Vehicles",
               style: TextStyle(
                   fontFamily: 'Corbel_Regular',
                   fontWeight: FontWeight.w600,

@@ -158,7 +158,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
         shrinkWrap: true,
         itemCount: mechanicListData.length,
         itemBuilder: (context, index) {
-          String? mechName = mechanicListData[index].firstName;
+          String? mechName = mechanicListData[index].firstName.toString();
           String? address = mechanicListData[index].address;
           String? phone = mechanicListData[index].phoneNo;
           double? mechanic_lat = mechanicListData[index].latitude;

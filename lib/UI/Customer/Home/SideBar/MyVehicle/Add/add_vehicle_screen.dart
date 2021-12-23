@@ -280,7 +280,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "Add Your Car",
+                                      "Add Your Vechicle",
                                       style: TextStyle(
                                         color: CustColors.blue,
                                         fontSize:
@@ -320,7 +320,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                               right: 34.8,
                                               top: 18.5),
                                           child: Text(
-                                            "Upload Your Car Photos",
+                                            "Upload Your Vechicle Photos",
                                             style: TextStyle(
                                                 color: CustColors.blue,
                                                 fontFamily: 'Corbel_Regular',
@@ -556,7 +556,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           ),
                                         ),
                                         isDense: true,
-                                        hintText: 'Car Model',
+                                        hintText: 'Vechicle Model',
                                         hintStyle: TextStyle(
                                           fontSize:
                                               ScreenSize().setValueFont(14.5),
