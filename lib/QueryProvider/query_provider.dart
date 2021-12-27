@@ -358,24 +358,24 @@ class QueryProvider {
   getMechanicDetails(String id) async {
     String _query = """
          query{
-      mechanicDetails(mechanicId:1){
+      mechanicDetails(mechanicId:$id){
         mechanicData{id,
           mechanicCode,
-        mechanicName,
-        emailId,
-        phoneNo,
-        address,
-        latitude,
-        longitude,
-        walletId,
-        verified,
-        enable,
-        isEmailverified,
-        jobType,
-        startTime,
-        endTime,
-        status,
-        }
+          mechanicName,
+          emailId,
+          phoneNo,
+          address,
+          latitude,
+          longitude,
+          walletId,
+          verified,
+          enable,
+          isEmailverified,
+          jobType,
+          startTime,
+          endTime,
+          status,
+          }
         serviceData{id,
         status,
           fee,
