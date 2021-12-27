@@ -172,7 +172,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                                   margin: EdgeInsets.only(top: _setValue(6.6)),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    _mechanicData.displayName.toString(),
+                                    _mechanicData.mechanicName.toString(),
                                     style: TextStyle(
                                         color: CustColors.black01,
                                         fontWeight: FontWeight.w600,

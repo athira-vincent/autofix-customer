@@ -64,6 +64,8 @@ class MechanicDetails {
 class MechanicData {
   String? id;
   String? displayName;
+  String? mechanicCode;
+  String? mechanicName;
   String? userName;
   String? password;
   String? firstName;
@@ -89,6 +91,8 @@ class MechanicData {
   MechanicData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     displayName = json['displayName'];
+    mechanicCode = json['mechanicCode'];
+    mechanicName = json['mechanicName'];
     password = json['password'];
     userName = json['userName'];
     firstName = json['firstName'];
@@ -114,6 +118,8 @@ class MechanicData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = this.id;
     data['displayName'] = this.displayName;
+    data['mechanicCode'] = this.mechanicCode;
+    data['mechanicName'] = this.mechanicName;
     data['userName'] = this.userName;
     data['password'] = this.password;
     data['firstName'] = this.firstName;

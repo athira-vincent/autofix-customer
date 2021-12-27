@@ -84,7 +84,9 @@ class QueryProvider {
   }
 
   changePassword(String password) {}
+
   editProfile() {}
+
   viewProfile(String id) async {
     String _query = """ 
     query{
@@ -355,60 +357,48 @@ class QueryProvider {
   topShops() {}
   getMechanicDetails(String id) async {
     String _query = """
-      query{
-  mechanicDetails(mechanicId: $id) {
-    mechanicData {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-    }
-    serviceData {
-      id
-      status
-      serviceId
-      service {
-        id
-        serviceName
-        description
-        icon
-        fee
-        minAmount
-        maxAmount
-        type
-        status
+         query{
+      mechanicDetails(mechanicId:1){
+        mechanicData{id,
+          mechanicCode,
+        mechanicName,
+        emailId,
+        phoneNo,
+        address,
+        latitude,
+        longitude,
+        walletId,
+        verified,
+        enable,
+        isEmailverified,
+        jobType,
+        startTime,
+        endTime,
+        status,
+        }
+        serviceData{id,
+        status,
+          fee,
+        serviceId,
+        demoMechanicId,
+        service{id,
+    serviceName,
+    icon,
+    type,
+    fee,
+    minAmount,
+    maxAmount,
+    status}}
+        vehicleData{id,
+          status,
+        mechanicId,
+        make{
+          id,
+        makeName,
+        description,
+        status,
+        }}
       }
-    }
-    vehicleData {
-      id
-      status
-      makeId
-      mechanicId
-      make {
-        id
-        makeName
-        description
-        status
-      }
-    }
-  }
 }
      """;
     log(_query);
@@ -476,58 +466,6 @@ class QueryProvider {
 }
 """;
 
-    /*String _query = """
-    query{
-  mechanicList(page: $page, size: $size, serviceId: "$serviceId") {
-    totalItems
-    data {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-      mechanicService {
-        service {
-          id
-          serviceName
-          description
-          icon
-          fee
-          minAmount
-          maxAmount
-          type
-          status
-        }
-      }
-      mechanicVehicle {
-        make {
-          id
-          makeName
-          description
-          status
-        }
-      }
-    }
-    totalPages
-    currentPage
-  } 
-}""";*/
 
     log(_query);
     return await GqlClient.I.query01(

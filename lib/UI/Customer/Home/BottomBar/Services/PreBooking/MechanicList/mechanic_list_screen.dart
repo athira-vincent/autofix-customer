@@ -35,6 +35,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
   @override
   void initState() {
     super.initState();
+    print('MechanicListScreen');
     _addToken();
     _getViewVehicle();
   }
