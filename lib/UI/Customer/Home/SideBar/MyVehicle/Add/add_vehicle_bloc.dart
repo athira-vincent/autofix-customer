@@ -18,6 +18,7 @@ class AddVehicleBloc {
       String milege,
       String lastMaintenance,
       String interval,
+      String numberPlate,
       int makeId,
       int vehicleModelId,
       int engineId) async {
@@ -29,6 +30,7 @@ class AddVehicleBloc {
         milege,
         lastMaintenance,
         interval,
+        numberPlate,
         makeId,
         vehicleModelId,
         engineId);

@@ -105,6 +105,7 @@ class Repository {
           String milege,
           String lastMaintenance,
           String interval,
+          String numberPlate,
           int makeId,
           int vehicleModelId,
           int engineId) =>
@@ -116,6 +117,7 @@ class Repository {
           milege,
           lastMaintenance,
           interval,
+          numberPlate,
           makeId,
           vehicleModelId,
           engineId);

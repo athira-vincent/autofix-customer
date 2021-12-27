@@ -249,12 +249,25 @@ class QueryProvider {
       String milege,
       String lastMaintenance,
       String interval,
+      String numberPlate,
       int makeId,
       int vehicleModelId,
       int engineId) async {
     String _query = """
       mutation{
-    vehicleCreate(year: "$year", latitude: "$latitude", longitude: "$longitude", milege: "$milege", lastMaintenance: "$lastMaintenance", interval: "$interval", makeId: $makeId, vehicleModelId: $vehicleModelId, engineId: $engineId){
+    vehicleCreate
+    (
+    year: "$year",
+    latitude: "$latitude",
+    longitude: "$longitude", 
+    milege: "$milege", 
+    lastMaintenance: "$lastMaintenance",
+    interval: "$interval",
+    makeId: $makeId, 
+    vehicleModelId: $vehicleModelId,
+     numberPlate: "$numberPlate"
+   engineId: $engineId
+     ){
       id
       year
       latitude
@@ -414,7 +427,7 @@ class QueryProvider {
 
     String _query = """
     query{
-   mechanicList(page: 1, size: 10, serviceId: "6"){
+   mechanicList(page: $page, size: $size, serviceId: "$serviceId"){
     totalItems
     data
     {
