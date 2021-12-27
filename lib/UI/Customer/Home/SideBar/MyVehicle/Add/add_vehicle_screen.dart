@@ -1325,6 +1325,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                     selectedModelId = 0;
                                                     _engineController.clear();
                                                     selectedEngineId = 0;
+                                                    print("$selectedBrandId>>>>>>>>>>>>>>>");
                                                     _allModelBloc
                                                         .postAllModelDataRequest(
                                                             selectedBrandId!,

@@ -280,7 +280,7 @@ class QueryProvider {
   allModel(int id, String token) async {
     String _query = """
       query{
-  modelDetails(id: $id) {
+  modelDetails(type: "$id") {
     id
     modelName
     description
