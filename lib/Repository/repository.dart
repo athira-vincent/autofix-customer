@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/EditProfile/edit_pro
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/ViewProfile/view_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Shops/top_shops_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Login/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_api_provider.dart';
@@ -32,6 +33,7 @@ class Repository {
   final _signupApiProvider = SignupApiProvider();
   final _signinApiProvider = SigninApiProvider();
   final _forgotPasswordApiProvider = ForgotPasswordApiProvider();
+  final _fcmTokenUpdateApiProvider = FcmTokenUpdateApiProvider();
   final _changePasswordApiProvider = ChangePasswordApiProvider();
   final _editProfileApiProvider = EditProfileApiProvider();
   final _viewProfileApiProvider = ViewProfileApiProvider();
@@ -70,15 +72,20 @@ class Repository {
   //SignIn
   Future<dynamic> getSignIn(String userName, String password) =>
       _signinApiProvider.getSignInRequest(userName, password);
+
+  //EditProfile
+  Future<dynamic> getEditProfile() =>
+      _editProfileApiProvider.getEditProfileRequest();
+
   //Forgot Password
   Future<dynamic> getForgotPassword(String email) =>
       _forgotPasswordApiProvider.getForgotPasswordRequest(email);
   //Change Password
   Future<dynamic> getChangePassword(String password) =>
       _changePasswordApiProvider.getChangePasswordRequest(password);
-  //EditProfile
-  Future<dynamic> getEditProfile() =>
-      _editProfileApiProvider.getEditProfileRequest();
+  //FcmTokenUpdate
+  Future<dynamic> getcmTokenUpdateRequest(String fcm,String Authtoken) =>
+      _fcmTokenUpdateApiProvider.getfcmTokenUpdateRequest(fcm,Authtoken);
   //ViewProfile
   Future<dynamic> getViewProfile(String id) =>
       _viewProfileApiProvider.getViewProfileRequest(id);

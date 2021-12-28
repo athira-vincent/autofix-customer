@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "54966987696",
+    "project_id": "autofix-336509",
+    "storage_bucket": "autofix-336509.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54966987696:android:96f910e016709a2ca84475",
+        "android_client_info": {
+          "package_name": "com.example.auto_fix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54966987696-hc5rilh7ts4gsra2vg4kd0t80c6544s4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54966987696-hc5rilh7ts4gsra2vg4kd0t80c6544s4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

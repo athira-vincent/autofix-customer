@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/NoResult/no_result_found_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -9,6 +10,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 void main() async {
   await initHiveForFlutter();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 

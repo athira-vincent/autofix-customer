@@ -70,6 +70,19 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  fcmTokenUpdate(String fcmToken,String Authtoken) async {
+    String _query = """
+      mutation {
+        fcm_token_update(fcmToken: "$fcmToken") {
+          message
+        }
+      }
+     """;
+    log(_query);
+    return await GqlClient.I
+        .query01(_query, Authtoken, enableDebug: true, isTokenThere: true);
+  }
+
   getToken(String userId, int type) async {
     String _query = """
       mutation{
