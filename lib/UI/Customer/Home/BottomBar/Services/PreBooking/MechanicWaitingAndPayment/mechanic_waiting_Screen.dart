@@ -95,118 +95,174 @@ class _MeachanicWaitingScreenState extends State<MeachanicWaitingScreen> {
         ),
         body: Container(
               margin:
-              EdgeInsets.only(top: 100),
+              EdgeInsets.only(top: 80),
               alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-
-                              width: double.infinity,
-                              height: _setValue(200),
-                              margin: EdgeInsets.only(
-                                  left: _setValue(34),
-                                  right: _setValue(34),
-                                  top: _setValue(10.1)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(_setValue(14.3)),
-                                child: GoogleMap(
-                                  zoomControlsEnabled: false,
-                                  myLocationButtonEnabled: true,
-                                  myLocationEnabled: true,
-                                  initialCameraPosition: _kGooglePlex,
-                                  markers: markers,
-                                  onMapCreated: (GoogleMapController controller) {
-                                    ///controller.setMapStyle(Utils.mapStyles);
-                                    _controller.complete(controller);
-                                    mapController = controller;
-                                    _getPolyline();
-                                  },
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Image.asset(
-                                "assets/images/waitingMchanicGif.gif",
-                                height: 150.0,
-                                width: 150.0,
-                              ),
-                            ),
-                            Container(
-                              child: Image.asset(
-                                "assets/images/mechanic_search.png",
-                                height: 35.0,
-                                width: 35.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: _setValue(170.9),
-                              left: _setValue(53),
-                              right: _setValue(53)),
-                          alignment: Alignment.bottomCenter,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xffbcbcbc),
-                                  spreadRadius: 0,
-                                  blurRadius: 6.5,
-                                  offset: Offset(0, .8),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(_setValue(15.8))),
-                          child: Column(
+              child: ScrollConfiguration(
+                behavior: MyBehavior(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
                             children: [
                               Container(
-                                margin: EdgeInsets.only(top: _setValue(16.5)),
-                                child: Text(
-                                  'Wait a minute!!',
-                                  style: TextStyle(
-                                      color: CustColors.black01,
-                                      fontFamily: 'Corbel_Bold',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14.5),
+
+                                width: double.infinity,
+                                height: _setValue(200),
+                                margin: EdgeInsets.only(
+                                    left: _setValue(34),
+                                    right: _setValue(34),
+                                    top: _setValue(10.1)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(_setValue(14.3)),
+                                  child: GoogleMap(
+                                    zoomControlsEnabled: false,
+                                    myLocationButtonEnabled: true,
+                                    myLocationEnabled: true,
+                                    initialCameraPosition: _kGooglePlex,
+                                    markers: markers,
+                                    onMapCreated: (GoogleMapController controller) {
+                                      ///controller.setMapStyle(Utils.mapStyles);
+                                      _controller.complete(controller);
+                                      mapController = controller;
+                                      _getPolyline();
+                                    },
+                                  ),
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {
-
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      top: _setValue(11.8), bottom: _setValue(17.5)),
-                                  child: Text(
-                                    fail
-                                        ? "Try again"
-                                        : _isLoading
-                                        ? "You can choose mechanic"
-                                        : """waiting for a response from 
-<b>Mr.Eric</b>""",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Color(0xff848484),
-                                        fontFamily: 'Corbel_Light',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14.5),
-                                  ),
+                              Container(
+                                child: Image.asset(
+                                  "assets/images/waitingMchanicGif.gif",
+                                  height: 150.0,
+                                  width: 150.0,
+                                ),
+                              ),
+                              Container(
+                                child: Image.asset(
+                                  "assets/images/mechanic_search.png",
+                                  height: 35.0,
+                                  width: 35.0,
                                 ),
                               ),
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  ],
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: _setValue(170.9),
+                                left: _setValue(53),
+                                right: _setValue(53)),
+                            alignment: Alignment.bottomCenter,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(0xffbcbcbc),
+                                    spreadRadius: 0,
+                                    blurRadius: 6.5,
+                                    offset: Offset(0, .8),
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(_setValue(15.8))),
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: _setValue(16.5)),
+                                  child: Text(
+                                    'Wait a minute!!',
+                                    style: TextStyle(
+                                        color: CustColors.black01,
+                                        fontFamily: 'Corbel_Bold',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.5),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        top: _setValue(11.8), bottom: _setValue(17.5)),
+                                    child: Text(
+                                      fail
+                                          ? "Try again"
+                                          : _isLoading
+                                          ? "You can choose mechanic"
+                                          : """waiting for a response from 
+Mr.Eric""",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          color: Color(0xff848484),
+                                          fontFamily: 'Corbel_Light',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14.5),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Image.asset(
+                              "assets/images/waitingMechanic.png",
+                              height: 200.0,
+                              width: 200.0,
+                            ),
+                          ),
+                        ],
+                      ),
+
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              setState(() {
+
+
+                              });
+                            },
+                            child: Container(
+                              width: _setValue(74.3),
+                              height: _setValue(24),
+                              margin: EdgeInsets.only(
+                                  right: _setValue(31.8),
+                                  top: _setValue(5.9),
+                                  bottom: _setValue(20.4)),
+                              alignment: Alignment.bottomRight,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.3),
+                                  color: CustColors.blue),
+                              child: Center(
+                                child: Text(
+                                  TextStrings.proceed,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Corbel_Regular',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 11.5),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ));
@@ -395,4 +451,13 @@ class _MeachanicWaitingScreenState extends State<MeachanicWaitingScreen> {
     markers.add(marker);
   }
 
+}
+
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
 }

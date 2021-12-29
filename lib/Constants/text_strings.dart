@@ -20,4 +20,6 @@ class TextStrings {
   static const user_vendor = "vendor";
 
   static const waiting_for_mechanic = "Waiting For a mechanic";
+
+  static const proceed = "Proceed";
 }
