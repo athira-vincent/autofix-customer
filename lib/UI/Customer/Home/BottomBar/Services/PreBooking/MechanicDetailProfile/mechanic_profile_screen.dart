@@ -14,7 +14,8 @@ import 'dart:ui' as ui;
 
 class MechanicProfileScreen extends StatefulWidget {
   final String id;
-  const MechanicProfileScreen({Key? key, required this.id}) : super(key: key);
+  final String serviceId;
+  const MechanicProfileScreen({Key? key, required this.id,required this.serviceId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _MechanicProfileScreenState();
@@ -90,7 +91,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
   void initState() {
     super.initState();
 
-    _mechanicProfileBloc.postMechanicDetailsRequest(widget.id);
+    _mechanicProfileBloc.postMechanicDetailsRequest(widget.id,widget.serviceId);
     _getViewVehicle();
   }
 

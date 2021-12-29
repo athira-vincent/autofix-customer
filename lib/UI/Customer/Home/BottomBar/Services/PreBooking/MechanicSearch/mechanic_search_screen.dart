@@ -296,6 +296,7 @@ Almost  there…..""",
                                 MaterialPageRoute(
                                     builder: (context) => MechanicProfileScreen(
                                           id: mechanicListData[0].id.toString(),
+                                           serviceId: widget.serviceID,
                                         )));
                           },
                           child: Container(

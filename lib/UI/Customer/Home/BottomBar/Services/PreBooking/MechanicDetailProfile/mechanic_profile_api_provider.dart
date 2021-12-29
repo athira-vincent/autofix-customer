@@ -3,8 +3,8 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/Mechanic
 
 class MechanicProfileApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<MechanicProfileMdl> getMechanicDetailsRequest(String id) async {
-    Map<String, dynamic> _resp = await _queryProvider.getMechanicDetails(id);
+  Future<MechanicProfileMdl> getMechanicDetailsRequest(String id,String serviceId) async {
+    Map<String, dynamic> _resp = await _queryProvider.getMechanicDetails(id, serviceId);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

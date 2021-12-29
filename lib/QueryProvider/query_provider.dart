@@ -381,10 +381,10 @@ class QueryProvider {
   getAds() {}
   topBrands() {}
   topShops() {}
-  getMechanicDetails(String id) async {
+  getMechanicDetails(String id,String serviceId) async {
     String _query = """
          query{
-      mechanicDetails(mechanicId:$id){
+      mechanicDetails(mechanicId:$id,serviceId: "$serviceId"){
         mechanicData{id,
           mechanicCode,
           mechanicName,
@@ -417,7 +417,6 @@ class QueryProvider {
     status}}
         vehicleData{id,
           status,
-        mechanicId,
         make{
           id,
         makeName,
@@ -480,7 +479,6 @@ class QueryProvider {
     demoMechanicVehicle{id,
     status,
     makeId,
-    mechanicId,
     make{id
      id,
     makeName,

@@ -174,6 +174,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                       builder: (context) => MechanicProfileScreen(
                             // serviceID: '1',
                             id: mechanicListData[index].id.toString(),
+                            serviceId: "",
                           )));
             },
             child: Container(

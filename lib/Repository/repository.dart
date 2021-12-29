@@ -167,8 +167,8 @@ class Repository {
       _genrateAuthorizationApiProvider.getGenerateAuthorizationRequest(
           userId, type);
   //get mechanic profile
-  Future<dynamic> getMechanicProfile(String id) =>
-      _mechanicProfileApiProvider.getMechanicDetailsRequest(id);
+  Future<dynamic> getMechanicProfile(String id,String serviceId) =>
+      _mechanicProfileApiProvider.getMechanicDetailsRequest(id, serviceId);
 
   //---------------------Mechanic
   //Mechanic SignUpScreen1
