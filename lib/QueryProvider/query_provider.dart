@@ -100,25 +100,31 @@ class QueryProvider {
 
   editProfile() {}
 
-  viewProfile(String id) async {
+  viewProfile(String id,String token, ) async {
     String _query = """ 
-    query{
-    customerDetails(id: $id){
-      id
-      firstName
-      lastName
-      address
-      emailId
-      phoneNo
-      status
+    query
+    {
+      customerDetails(id: "$id") {
+        id
+        firstName
+        lastName
+        address
+        emailId
+        phoneNo
+        profilePic
+        isProfileCompleted
+        state
+        userName
+        status
       }
     }
     """;
     log(_query);
-    return await GqlClient.I.query(
+    return await GqlClient.I.query01(
       _query,
+      token,
       enableDebug: true,
-      isTokenThere: false,
+      isTokenThere: true,
     );
   }
 

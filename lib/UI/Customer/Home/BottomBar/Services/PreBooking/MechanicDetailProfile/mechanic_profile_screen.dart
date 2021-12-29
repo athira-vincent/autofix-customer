@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_mdl.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicWaitingAndPayment/mechanic_waiting_Screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -466,25 +467,41 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: _setValue(74.3),
-                        height: _setValue(24),
-                        margin: EdgeInsets.only(
-                            right: _setValue(31.8),
-                            top: _setValue(23.9),
-                            bottom: _setValue(26.4)),
-                        alignment: Alignment.bottomRight,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.3),
-                            color: CustColors.blue),
-                        child: Center(
-                          child: Text(
-                            'Next',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Corbel_Regular',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 11.5),
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+
+                           Navigator.pop(context);
+                           Navigator.push(
+                           context,
+                           MaterialPageRoute(
+                           builder: (context) => MeachanicWaitingScreen(
+                            id:'1',
+                            serviceId: '1',
+                            )));
+
+                          });
+                        },
+                        child: Container(
+                          width: _setValue(74.3),
+                          height: _setValue(24),
+                          margin: EdgeInsets.only(
+                              right: _setValue(31.8),
+                              top: _setValue(23.9),
+                              bottom: _setValue(26.4)),
+                          alignment: Alignment.bottomRight,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.3),
+                              color: CustColors.blue),
+                          child: Center(
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Corbel_Regular',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11.5),
+                            ),
                           ),
                         ),
                       ),
@@ -706,4 +723,6 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
     final Uint8List imageData = await getBytesFromAsset(path, width);
     return BitmapDescriptor.fromBytes(imageData);
   }
+
+
 }

@@ -87,8 +87,8 @@ class Repository {
   Future<dynamic> getcmTokenUpdateRequest(String fcm,String Authtoken) =>
       _fcmTokenUpdateApiProvider.getfcmTokenUpdateRequest(fcm,Authtoken);
   //ViewProfile
-  Future<dynamic> getViewProfile(String id) =>
-      _viewProfileApiProvider.getViewProfileRequest(id);
+  Future<dynamic> getViewProfile(String id,String token, ) =>
+      _viewProfileApiProvider.getViewProfileRequest(id, token, );
   //Search Result
   Future<dynamic> getSearchResult(
           int page, int size, String searchText, String token, String type) =>

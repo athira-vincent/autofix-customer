@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/ViewProfile/view_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/Help/help_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyServices/my_services_screen.dart';
@@ -181,7 +182,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyServicesScreen()));
+                MaterialPageRoute(builder: (context) => ViewProfileScreen(id: '1',)));
           },
         ),
         ListTile(
