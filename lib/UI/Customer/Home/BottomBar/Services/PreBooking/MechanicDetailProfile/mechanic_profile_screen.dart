@@ -342,8 +342,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                                       top: _setValue(11.8),
                                       bottom: _setValue(17.5)),
                                   child: Text(
-                                    """406 Garki Abuja-FCT, 
-             Nigeria.""",
+                                    """406 Garki Abuja-FCT, Nigeria.""",
                                     style: TextStyle(
                                         color: Color(0xff848484),
                                         fontFamily: 'Corbel_Light',
