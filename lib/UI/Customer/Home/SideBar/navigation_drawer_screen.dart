@@ -9,6 +9,8 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/TermsAndConditions/terms_and_c
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'MyVehicle/Details/vehicle_details_screen.dart';
+
 class NavigationDrawerScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -344,7 +346,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyServicesScreen()));
+                MaterialPageRoute(builder: (context) => VehicleDetailsScreen()));
           },
         ),
         ListTile(
