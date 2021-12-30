@@ -37,10 +37,12 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
   BitmapDescriptor? pinLocationIcon1;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
   double per = .10;
-  MechanicData _mechanicData = MechanicData();
+  late MechanicData _mechanicData;
   List<ServiceData> serviceDataList = [];
   bool _isLoading = false;
   double km = 0;
+  String totalAmount = "";
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -70,8 +72,9 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
         setState(() {
           print("errrrorr 01");
           _isLoading = true;
-          serviceDataList = value.data!.mechanicDetails!.serviceDataList!;
+          serviceDataList = value.data!.mechanicDetails!.serviceData!;
           _mechanicData = value.data!.mechanicDetails!.mechanicData!;
+          totalAmount = value.data!.mechanicDetails!.totalAmount.toString();
           _kGooglePlex = CameraPosition(
             target: LatLng(_mechanicData.latitude!, _mechanicData.longitude!),
             zoom: 11,
@@ -456,7 +459,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                                   top: 10, left: 15, bottom: 10),
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                '\$ 350',
+                                totalAmount,
                                 style: TextStyle(
                                     color: CustColors.black01,
                                     fontFamily: 'Corbel_Regular',

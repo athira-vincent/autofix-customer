@@ -429,6 +429,7 @@ class QueryProvider {
         description,
         status,
         }}
+        totalAmount
       }
 }
      """;

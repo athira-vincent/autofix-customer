@@ -1,5 +1,13 @@
+// To parse this JSON data, do
+//
+//     final mechanicListMdl = mechanicListMdlFromJson(jsonString);
 
-import 'dart:ffi';
+import 'package:meta/meta.dart';
+import 'dart:convert';
+
+MechanicListMdl mechanicListMdlFromJson(String str) => MechanicListMdl.fromJson(json.decode(str));
+
+String mechanicListMdlToJson(MechanicListMdl data) => json.encode(data.toJson());
 
 class MechanicListMdl {
   String? status;
@@ -20,7 +28,6 @@ class MechanicListMdl {
 }
 
 
-
 class Data {
   Data({
     required this.mechanicList,
@@ -33,7 +40,7 @@ class Data {
   );
 
   Map<String, dynamic> toJson() => {
-    "mechanicList": mechanicList.toJson(),
+    "mechanicList": mechanicList == null ? null : mechanicList.toJson(),
   };
 }
 
@@ -51,17 +58,17 @@ class MechanicList {
   int currentPage;
 
   factory MechanicList.fromJson(Map<String, dynamic> json) => MechanicList(
-    totalItems: json["totalItems"],
+    totalItems: json["totalItems"] == null ? null : json["totalItems"],
     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    totalPages: json["totalPages"],
-    currentPage: json["currentPage"],
+    totalPages: json["totalPages"] == null ? null : json["totalPages"],
+    currentPage: json["currentPage"] == null ? null : json["currentPage"],
   );
 
   Map<String, dynamic> toJson() => {
-    "totalItems": totalItems,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    "totalPages": totalPages,
-    "currentPage": currentPage,
+    "totalItems": totalItems == null ? null : totalItems,
+    "data": data == null ? null : List<dynamic>.from(data.map((x) => x.toJson())),
+    "totalPages": totalPages == null ? null : totalPages,
+    "currentPage": currentPage == null ? null : currentPage,
   };
 }
 
@@ -87,65 +94,65 @@ class Datum {
     required this.demoMechanicVehicle,
   });
 
-  String id;
-  String mechanicCode;
-  String mechanicName;
-  String emailId;
-  String phoneNo;
-  String address;
-  double latitude;
-  double longitude;
-  String walletId;
-  int verified;
-  int enable;
-  int isEmailverified;
-  String jobType;
-  String startTime;
-  String endTime;
-  int status;
-  List<DemoMechanicService> demoMechanicService;
-  List<DemoMechanicVehicle> demoMechanicVehicle;
+  String? id;
+  String? mechanicCode;
+  String? mechanicName;
+  String? emailId;
+  String? phoneNo;
+  String? address;
+  double? latitude;
+  double? longitude;
+  String? walletId;
+  int? verified;
+  int? enable;
+  int? isEmailverified;
+  String? jobType;
+  String? startTime;
+  String? endTime;
+  int? status;
+  List<DemoMechanicService>? demoMechanicService;
+  List<DemoMechanicVehicle>? demoMechanicVehicle;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    mechanicCode: json["mechanicCode"],
-    mechanicName: json["mechanicName"],
-    emailId: json["emailId"],
-    phoneNo: json["phoneNo"],
-    address: json["address"],
-    latitude: json["latitude"].toDouble(),
-    longitude: json["longitude"].toDouble(),
-    walletId: json["walletId"],
-    verified: json["verified"],
-    enable: json["enable"],
-    isEmailverified: json["isEmailverified"],
-    jobType: json["jobType"],
-    startTime: json["startTime"],
-    endTime: json["endTime"],
-    status: json["status"],
+    id: json["id"] == null ? null : json["id"],
+    mechanicCode: json["mechanicCode"] == null ? null : json["mechanicCode"],
+    mechanicName: json["mechanicName"] == null ? null : json["mechanicName"],
+    emailId: json["emailId"] == null ? null : json["emailId"],
+    phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    address: json["address"] == null ? null : json["address"],
+    latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
+    longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
+    walletId: json["walletId"] == null ? null : json["walletId"],
+    verified: json["verified"] == null ? null : json["verified"],
+    enable: json["enable"] == null ? null : json["enable"],
+    isEmailverified: json["isEmailverified"] == null ? null : json["isEmailverified"],
+    jobType: json["jobType"] == null ? null : json["jobType"],
+    startTime: json["startTime"] == null ? null : json["startTime"],
+    endTime: json["endTime"] == null ? null : json["endTime"],
+    status: json["status"] == null ? null : json["status"],
     demoMechanicService: List<DemoMechanicService>.from(json["demoMechanicService"].map((x) => DemoMechanicService.fromJson(x))),
     demoMechanicVehicle: List<DemoMechanicVehicle>.from(json["demoMechanicVehicle"].map((x) => DemoMechanicVehicle.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "mechanicCode": mechanicCode,
-    "mechanicName": mechanicName,
-    "emailId": emailId,
-    "phoneNo": phoneNo,
-    "address": address,
-    "latitude": latitude,
-    "longitude": longitude,
-    "walletId": walletId,
-    "verified": verified,
-    "enable": enable,
-    "isEmailverified": isEmailverified,
-    "jobType": jobType,
-    "startTime": startTime,
-    "endTime": endTime,
-    "status": status,
-    "demoMechanicService": List<dynamic>.from(demoMechanicService.map((x) => x.toJson())),
-    "demoMechanicVehicle": List<dynamic>.from(demoMechanicVehicle.map((x) => x.toJson())),
+    "id": id == null ? null : id,
+    "mechanicCode": mechanicCode == null ? null : mechanicCode,
+    "mechanicName": mechanicName == null ? null : mechanicName,
+    "emailId": emailId == null ? null : emailId,
+    "phoneNo": phoneNo == null ? null : phoneNo,
+    "address": address == null ? null : address,
+    "latitude": latitude == null ? null : latitude,
+    "longitude": longitude == null ? null : longitude,
+    "walletId": walletId == null ? null : walletId,
+    "verified": verified == null ? null : verified,
+    "enable": enable == null ? null : enable,
+    "isEmailverified": isEmailverified == null ? null : isEmailverified,
+    "jobType": jobType == null ? null : jobType,
+    "startTime": startTime == null ? null : startTime,
+    "endTime": endTime == null ? null : endTime,
+    "status": status == null ? null : status,
+    "demoMechanicService": demoMechanicService == null ? null : List<dynamic>.from(demoMechanicService!.map((x) => x.toJson())),
+    "demoMechanicVehicle": demoMechanicVehicle == null ? null : List<dynamic>.from(demoMechanicVehicle!.map((x) => x.toJson())),
   };
 }
 
@@ -167,21 +174,21 @@ class DemoMechanicService {
   Service service;
 
   factory DemoMechanicService.fromJson(Map<String, dynamic> json) => DemoMechanicService(
-    id: json["id"],
-    fee: json["fee"],
-    status: json["status"],
-    serviceId: json["serviceId"],
-    demoMechanicId: json["demoMechanicId"],
+    id: json["id"] == null ? null : json["id"],
+    fee: json["fee"] == null ? null : json["fee"],
+    status: json["status"] == null ? null : json["status"],
+    serviceId: json["serviceId"] == null ? null : json["serviceId"],
+    demoMechanicId: json["demoMechanicId"] == null ? null : json["demoMechanicId"],
     service: Service.fromJson(json["service"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "fee": fee,
-    "status": status,
-    "serviceId": serviceId,
-    "demoMechanicId": demoMechanicId,
-    "service": service.toJson(),
+    "id": id == null ? null : id,
+    "fee": fee == null ? null : fee,
+    "status": status == null ? null : status,
+    "serviceId": serviceId == null ? null : serviceId,
+    "demoMechanicId": demoMechanicId == null ? null : demoMechanicId,
+    "service": service == null ? null : service.toJson(),
   };
 }
 
@@ -207,25 +214,25 @@ class Service {
   int status;
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
-    id: json["id"],
-    serviceName: json["serviceName"],
+    id: json["id"] == null ? null : json["id"],
+    serviceName: json["serviceName"] == null ? null : json["serviceName"],
     icon: json["icon"],
-    type: json["type"],
-    fee: json["fee"],
-    minAmount: json["minAmount"],
-    maxAmount: json["maxAmount"],
-    status: json["status"],
+    type: json["type"] == null ? null : json["type"],
+    fee: json["fee"] == null ? null : json["fee"],
+    minAmount: json["minAmount"] == null ? null : json["minAmount"],
+    maxAmount: json["maxAmount"] == null ? null : json["maxAmount"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "serviceName": serviceName,
+    "id": id == null ? null : id,
+    "serviceName": serviceName == null ? null : serviceName,
     "icon": icon,
-    "type": type,
-    "fee": fee,
-    "minAmount": minAmount,
-    "maxAmount": maxAmount,
-    "status": status,
+    "type": type == null ? null : type,
+    "fee": fee == null ? null : fee,
+    "minAmount": minAmount == null ? null : minAmount,
+    "maxAmount": maxAmount == null ? null : maxAmount,
+    "status": status == null ? null : status,
   };
 }
 
@@ -234,32 +241,29 @@ class DemoMechanicVehicle {
     required this.id,
     required this.status,
     required this.makeId,
-    required this.mechanicId,
     required this.make,
   });
 
-  String id;
-  int status;
-  int makeId;
-  dynamic mechanicId;
-  Make make;
+  String? id;
+  int? status;
+  int? makeId;
+  Make? make;
 
   factory DemoMechanicVehicle.fromJson(Map<String, dynamic> json) => DemoMechanicVehicle(
-    id: json["id"],
-    status: json["status"],
-    makeId: json["makeId"],
-    mechanicId: json["mechanicId"],
-    make: Make.fromJson(json["make"]),
+    id: json["id"] == null ? null : json["id"],
+    status: json["status"] == null ? null : json["status"],
+    makeId: json["makeId"] == null ? null : json["makeId"],
+    make: json["make"] == null ? null : Make.fromJson(json["make"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "status": status,
-    "makeId": makeId,
-    "mechanicId": mechanicId,
-    "make": make.toJson(),
+    "id": id == null ? null : id,
+    "status": status == null ? null : status,
+    "makeId": makeId == null ? null : makeId,
+    "make": make == null ? null : make!.toJson(),
   };
 }
+
 
 class Make {
   Make({
@@ -275,17 +279,16 @@ class Make {
   int status;
 
   factory Make.fromJson(Map<String, dynamic> json) => Make(
-    id: json["id"],
-    makeName: json["makeName"],
-    description: json["description"],
-    status: json["status"],
+    id: json["id"] == null ? null : json["id"],
+    makeName: json["makeName"] == null ? null : json["makeName"],
+    description: json["description"] == null ? null : json["description"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "makeName": makeName,
-    "description": description,
-    "status": status,
+    "id": id == null ? null : id,
+    "makeName": makeName == null ? null : makeName,
+    "description": description == null ? null : description,
+    "status": status == null ? null : status,
   };
 }
-
