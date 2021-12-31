@@ -15,7 +15,10 @@ class VehicleDetailsScreen extends StatefulWidget {
 }
 
 class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
+
   final VehilceDetailsBloc _vehilceDetailsBloc = VehilceDetailsBloc();
+
+
   @override
   void initState() {
     super.initState();
@@ -103,7 +106,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     print('errorrrrrrr');
                     return Container(child:Center(child: Text("Something Went Wrong")));
 
-                  } else
+                  }
+                  else
                   if (snapshot.data!.data!.vehicleDetailsList!.length == 0) {
                     print('error');
                     return Center(
@@ -186,8 +190,6 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     );
               }),
         ),
-
-
       ),
       ),
     );
