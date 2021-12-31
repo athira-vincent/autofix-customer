@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_mdl.dart';
@@ -6,8 +7,12 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/Widgets/select_brand_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/Widgets/select_model_screen.dart';
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,10 +33,13 @@ class _MechanicSpecializationSelectionScreenState
   TextEditingController _mechanicExperienceController = TextEditingController();
 
   FocusNode _mechanicExperienceFocusNode = FocusNode();
+  FocusNode _mechanicBrandFocusNode = FocusNode();
+  FocusNode _mechanicModelFocusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final MechanicSpecializationSelectionBloc _signupBloc = MechanicSpecializationSelectionBloc();
+  final MechanicSpecializationSelectionBloc _signupBloc =
+      MechanicSpecializationSelectionBloc();
   final AllMakeBloc _allMakeBloc = AllMakeBloc();
   final AllModelBloc _allModelBloc = AllModelBloc();
   bool _isLoading = false;
@@ -43,10 +51,19 @@ class _MechanicSpecializationSelectionScreenState
   List<ModelDetails>? modelDetailsList = [];
   List<ModelDetails>? selectedModelList = [];
 
+  String token = "";
+  String selectedBrandId = "";
+  String selectedModelId = "";
+
+  var jobValues = {
+    'Freelancer': false,
+    'Work shop': false,
+  };
 
   @override
   void initState() {
     super.initState();
+    _addToken();
     _getAllModel();
     _getAllMake();
     _getSignUpRes();
@@ -58,6 +75,13 @@ class _MechanicSpecializationSelectionScreenState
     }
   }
 
+  _addToken() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    token = _shdPre.getString(SharedPrefKeys.token)!;
+    print("Token : " + token);
+    GqlClient.I.config(token: token);
+  }
+
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isMechanicSignUp, true);
@@ -67,6 +91,8 @@ class _MechanicSpecializationSelectionScreenState
   void dispose() {
     super.dispose();
     _mechanicExperienceController.dispose();
+    //_mechanicBrandController.dispose();
+    //_mechanicModelController.dispose();
     _allModelBloc.dispose();
     _allMakeBloc.dispose();
     _signupBloc.dispose();
@@ -89,7 +115,7 @@ class _MechanicSpecializationSelectionScreenState
           setState(() {
             makeDetailsList = data;
             // print("c"+value.data.acceptInvitations.message.toString()+"c");
-            print(">>>>>Brand Data" +
+            print(">>>>>Brand Data length" +
                 value.data!.makeDetails!.length.toString() +
                 ">>>>>>>>>");
           });
@@ -137,6 +163,13 @@ class _MechanicSpecializationSelectionScreenState
             backgroundColor: CustColors.peaGreen,
           ));
         });
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                const MechanicWorkSelectionScreen()));
+
       } else {
         setState(() async {
           print("errrrorr 01");
@@ -150,8 +183,8 @@ class _MechanicSpecializationSelectionScreenState
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-          // Navigator.pushReplacement(context,
-          //     MaterialPageRoute(builder: (context) => const LoginScreen()));
+
+
           FocusScope.of(context).unfocus();
         });
       }
@@ -178,12 +211,10 @@ class _MechanicSpecializationSelectionScreenState
               int.parse(value.data!.customerSignUp!.customer!.id!));*/
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        //backgroundColor: CustColors.blue,
         body: Theme(
           data: ThemeData(
             disabledColor: Colors.white,
@@ -204,14 +235,19 @@ class _MechanicSpecializationSelectionScreenState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        IndicatorWidget(
+                          isFirst: true,
+                          isSecond: true,
+                          isThird: false,
+                        ),
                         Container(
                           margin: EdgeInsets.only(
-                              top: ScreenSize().setValue(26),
+                              top: ScreenSize().setValue(10),
                               left: ScreenSize().setValue(34),
                               right: ScreenSize().setValue(34)),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Expertize Selection',
+                            'Sign up',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: ScreenSize().setValueFont(19.5),
@@ -222,6 +258,21 @@ class _MechanicSpecializationSelectionScreenState
                         Container(
                           margin: EdgeInsets.only(
                               top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'YOUR SPECIALIZATION',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenSize().setValueFont(18),
+                                fontWeight: FontWeight.w200,
+                                fontFamily: 'Corbel_Bold'),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(15),
                               left: ScreenSize().setValue(34),
                               right: ScreenSize().setValue(34)),
                           child: TextFormField(
@@ -240,7 +291,7 @@ class _MechanicSpecializationSelectionScreenState
                             ),
                             focusNode: _mechanicExperienceFocusNode,
                             keyboardType: TextInputType.text,
-                            validator: 
+                            validator:
                                 InputValidator(ch: "Experience").emptyChecking,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -255,6 +306,25 @@ class _MechanicSpecializationSelectionScreenState
                                   ),
                                 ),
                                 isDense: true,
+
+                                //suffixIcon: Image.asset("assets/images/arrow_down.png",height: 1,width: 1,),
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 30,
+                                  minHeight: 30,
+                                ),
+                                suffixIcon: Container(
+                                  width: 3,
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    iconSize: 20,
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
                                 hintText: 'Year of Experience',
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -285,43 +355,34 @@ class _MechanicSpecializationSelectionScreenState
                                 )),
                           ),
                         ),
-
-                       /*  FilterChip(
-                          label: Text("text"),
-                          backgroundColor: Colors.transparent,
-                          shape: StadiumBorder(side: BorderSide()),
-                          onSelected: (bool value) {print("selected");},
-
-                        ),*/
-
-                       /* Chip(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.yellow, width: 1),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          backgroundColor: Colors.red,
-                          deleteIcon: Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                          label: Text("searchController.recentSearchesList[index]", style: TextStyle(color: Colors.white),),
-                          deleteButtonTooltipMessage: 'erase',
-                          onDeleted: () {
-                            print("deleted");
-                          },
-                        ),*/
-
-                        /*Container(
+                        Container(
                           margin: EdgeInsets.only(
-                              top: ScreenSize().setValue(20),
+                              top: ScreenSize().setValue(12),
                               left: ScreenSize().setValue(34),
                               right: ScreenSize().setValue(34)),
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
                             maxLines: 1,
-                            onTap: () {
-                              //showYearSelectionDialog();
+                            onTap: () async {
+                              _allMakeBloc.postAllMakeDataRequest(token);
+
+                              print("checking 0001 ${makeDetailsList!.length}");
+
+                              selectedMakeList = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectBrandScreen(
+                                            brandData: makeDetailsList!,
+                                            type: "1",
+                                          )));
+                              print(
+                                  "checking 0002 ${selectedMakeList!.length}");
+                              setState(() {
+                                selectedBrandId = "";
+                                selectedModelId = "";
+                                modelDetailsList = [];
+                                selectedModelList = [];
+                              });
                             },
                             readOnly: true,
                             autofocus: false,
@@ -331,15 +392,14 @@ class _MechanicSpecializationSelectionScreenState
                               color: Colors.white,
                               fontSize: ScreenSize().setValueFont(13),
                             ),
-                            //focusNode: _mechanicExperienceFocusNode,
+                            focusNode: _mechanicBrandFocusNode,
                             keyboardType: TextInputType.text,
-                            validator:
-                            InputValidator(ch: "Experience").emptyChecking,
+                            /*validator: InputValidator(ch: "Brand").emptyChecking,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp('[a-zA-Z0-9]')),
                             ],
-                            //controller: _mechanicExperienceController,
+                            controller: _mechanicBrandController,*/
                             decoration: InputDecoration(
                                 disabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -348,7 +408,24 @@ class _MechanicSpecializationSelectionScreenState
                                   ),
                                 ),
                                 isDense: true,
-                                hintText: 'Select Car brands',
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 30,
+                                  minHeight: 30,
+                                ),
+                                suffixIcon: Container(
+                                  width: 3,
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    iconSize: 20,
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                                hintText: 'Specialized brand',
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.white,
@@ -377,258 +454,379 @@ class _MechanicSpecializationSelectionScreenState
                                   fontSize: ScreenSize().setValueFont(12),
                                 )),
                           ),
-                        ),*/
+                        ),
+                        selectedMakeList!.isNotEmpty
+                            ? Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: ScreenSize().setValue(12),
+                                        left: ScreenSize().setValue(34),
+                                        right: ScreenSize().setValue(34)),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Selected Brand',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              ScreenSize().setValueFont(15),
+                                          fontWeight: FontWeight.w200,
+                                          fontFamily: 'Corbel_Regular'),
+                                    ),
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Container(
+                                      height: selectedMakeList!.length > 8
+                                          ? 70
+                                          : selectedMakeList!.length > 4
+                                              ? 70
+                                              : 35,
+                                      margin: EdgeInsets.only(
+                                          top: ScreenSize().setValue(12),
+                                          left: ScreenSize().setValue(33),
+                                          right: ScreenSize().setValue(33)),
+                                      child: GridView.builder(
+                                        itemCount: selectedMakeList!.length,
+                                        shrinkWrap: true,
+                                        //semanticChildCount: 5,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          selectedBrandId += index + 1 <
+                                                  selectedMakeList!.length
+                                              ? selectedMakeList![index].id! +
+                                                  ","
+                                              : selectedMakeList![index].id!;
 
-                        /*Container(
+                                          return Stack(
+                                            children: [
+                                              Chip(
+                                                shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                      color: Colors.white,
+                                                      width: .3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                backgroundColor:
+                                                    CustColors.blue,
+                                                label: Center(
+                                                    child: Text(
+                                                  " " +
+                                                      selectedMakeList![index]
+                                                          .makeName! +
+                                                      " ",
+                                                  style: TextStyle(
+                                                    color: CustColors.blue,
+                                                  ),
+                                                )),
+                                              ),
+                                              Center(
+                                                  child: Text(
+                                                " " +
+                                                    selectedMakeList![index]
+                                                        .makeName!,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                            ],
+                                          );
+                                        },
+                                        padding: EdgeInsets.zero,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: 8,
+                                          mainAxisSpacing: 10,
+                                          childAspectRatio:
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  (MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      8),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(
+                                height: 5,
+                              ),
+                        Container(
                           margin: EdgeInsets.only(
-                              top: ScreenSize().setValue(20),
+                              top: ScreenSize().setValue(12),
                               left: ScreenSize().setValue(34),
                               right: ScreenSize().setValue(34)),
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            onTap: () async {
+                              _allModelBloc.postAllModelDataRequest(
+                                  selectedBrandId, token);
+                              selectedBrandId = "";
+                              print(
+                                  "checking model 0001 : ${modelDetailsList!.length}");
+
+                              selectedModelList = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectModelScreen(
+                                            modelData: modelDetailsList!,
+                                            type: "1",
+                                          )));
+                              print(
+                                  "checking model 0002 ${selectedModelList!.length}");
+
+                              setState(() {
+                                selectedModelId = "";
+                              });
+                            },
+                            readOnly: true,
+                            autofocus: false,
+                            style: TextStyle(
+                              fontFamily: 'Corbel_Light',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: ScreenSize().setValueFont(13),
+                            ),
+                            focusNode: _mechanicModelFocusNode,
+                            /*keyboardType: TextInputType.text,
+                             validator:
+                            InputValidator(ch: "Model").emptyChecking,
+                            controller: _mechanicModelController,*/
+                            decoration: InputDecoration(
+                                disabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                isDense: true,
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 30,
+                                  minHeight: 30,
+                                ),
+                                suffixIcon: Container(
+                                  width: 3,
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    iconSize: 20,
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                                hintText: 'Specialized model',
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.white,
+                                    width: .3,
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: ScreenSize().setValue(7.8),
+                                ),
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Corbel_Light',
+                                  color: Colors.white.withOpacity(.60),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: ScreenSize().setValueFont(12),
+                                )),
+                          ),
+                        ),
+                        selectedModelList!.isNotEmpty
+                            ? Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: ScreenSize().setValue(12),
+                                        left: ScreenSize().setValue(34),
+                                        right: ScreenSize().setValue(34)),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Selected Brand',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              ScreenSize().setValueFont(15),
+                                          fontWeight: FontWeight.w200,
+                                          fontFamily: 'Corbel_Regular'),
+                                    ),
+                                  ),
+                                  SingleChildScrollView(
+                                    child: Container(
+                                      height: selectedModelList!.length > 8
+                                          ? 65
+                                          : selectedModelList!.length > 4
+                                              ? 65
+                                              : 35,
+                                      margin: EdgeInsets.only(
+                                          top: ScreenSize().setValue(12),
+                                          left: ScreenSize().setValue(33),
+                                          right: ScreenSize().setValue(33)),
+                                      child: GridView.builder(
+                                        itemCount: selectedModelList!.length,
+                                        shrinkWrap: true,
+                                        semanticChildCount: 5,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          selectedModelId += index + 1 <
+                                                  selectedModelList!.length
+                                              ? selectedModelList![index].id! +
+                                                  ","
+                                              : selectedModelList![index].id!;
+                                          return Stack(
+                                            children: [
+                                              Chip(
+                                                shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                      color: Colors.white,
+                                                      width: .3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                backgroundColor:
+                                                    CustColors.blue,
+                                                label: Center(
+                                                    child: Text(
+                                                  " " +
+                                                      selectedModelList![index]
+                                                          .modelName! +
+                                                      " ",
+                                                  style: TextStyle(
+                                                    color: CustColors.blue,
+                                                  ),
+                                                )),
+                                              ),
+                                              Center(
+                                                  child: Text(
+                                                " " +
+                                                    selectedModelList![index]
+                                                        .modelName!,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                            ],
+                                          );
+                                        },
+                                        padding: EdgeInsets.zero,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 4,
+                                          crossAxisSpacing: 8,
+                                          mainAxisSpacing: 10,
+                                          childAspectRatio:
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  (MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      6),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(
+                                height: 20,
+                              ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(15),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'JOB TYPE',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenSize().setValueFont(18),
+                                fontWeight: FontWeight.w200,
+                                fontFamily: 'Corbel_Bold'),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(6),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(30)),
+                          alignment: Alignment.centerLeft,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Do you wish to provide Emergency Services ?",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.5,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: "Corbel_Regular"),
-                              ),
-                              Switch(
-                                onChanged: toggleIsEmergencyEnabled,
-                                value: isEmergencyEnabled,
-                                activeColor: Colors.white,
-                                activeTrackColor: Colors.white70,
-                                inactiveThumbColor: Colors.black26,
-                                inactiveTrackColor: Colors.black12,
+                              Row(
+                                  children: [
+                                    Text(jobValues.keys.elementAt(0),style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Corbel_Regular'
+                                    ),),
+                                    Theme(
+                                      data: ThemeData(unselectedWidgetColor: Colors.white),
+                                      child: Checkbox(
+                                        //activeColor: CustColors.blue,
+                                        value: jobValues.values.elementAt(0),
+                                        onChanged: (bool? val){
+                                          setState(() {
+                                            //jobValues.values.elementAt(0) = val!;
+                                            if(jobValues.values.elementAt(1)){
+                                              jobValues['Work shop'] = false;
+                                            }
+                                            jobValues['Freelancer'] = val!;
+                                            print(">>>>>>>>> Freelancer " + val.toString());
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              Row(
+                                children: [
+                                  Text(jobValues.keys.elementAt(1),style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Corbel_Regular'
+                                  ),),
+                                  Theme(
+                                    data: ThemeData(unselectedWidgetColor: Colors.white),
+                                    child: Checkbox(
+                                      value: jobValues.values.elementAt(1),
+                                      onChanged: (bool? val){
+                                        setState(() {
+                                          if(jobValues.values.elementAt(0)){
+                                            jobValues['Freelancer'] = false;
+                                          }
+                                          jobValues['Work shop'] = val!;
+                                        });
+                                        print(">>>>>>>>> Work shop " + val.toString());
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
-
-                        isEmergencyEnabled
-                            ? (emergencyServiceSelectedList.isEmpty
-                                ? Container(
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          top: ScreenSize().setValue(20),
-                                          left: ScreenSize().setValue(34),
-                                          right: ScreenSize().setValue(34)),
-                                      child: TextFormField(
-                                        textAlignVertical:
-                                            TextAlignVertical.center,
-                                        maxLines: 1,
-                                        onTap: () {
-                                          showAllServicesSelectionDialog();
-                                        },
-                                        readOnly: true,
-                                        autofocus: false,
-                                        style: TextStyle(
-                                          fontFamily: 'Corbel_Light',
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize:
-                                              ScreenSize().setValueFont(13),
-                                        ),
-                                        //focusNode: _mechanicExperienceFocusNode,
-                                        keyboardType: TextInputType.text,
-                                        validator: InputValidator(
-                                                ch: "Select Services")
-                                            .emptyChecking,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp('[a-zA-Z]')),
-                                        ],
-                                        //controller: _mechanicExperienceController,
-                                        decoration: InputDecoration(
-                                            disabledBorder:
-                                                UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            isDense: true,
-                                            hintText: 'Select Services',
-                                            border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                              vertical:
-                                                  ScreenSize().setValue(7.8),
-                                            ),
-                                            hintStyle: TextStyle(
-                                              fontFamily: 'Corbel_Light',
-                                              color:
-                                                  Colors.white.withOpacity(.60),
-                                              fontWeight: FontWeight.w600,
-                                              fontSize:
-                                                  ScreenSize().setValueFont(12),
-                                            )),
-                                      ),
-                                    ),
-                                  )
-                                : Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenSize().setValue(20),
-                                        left: ScreenSize().setValue(34),
-                                        right: ScreenSize().setValue(34)),
-                                    child: GridView.builder(
-                                      itemCount:
-                                          emergencyServiceSelectedList.length,
-                                      shrinkWrap: true,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        //return Text(emergencyServiceSelectedList[index]);
-                                        return _serviceDataItem(
-                                            emergencyServiceSelectedList[index],
-                                            index);
-                                        //return _generalServiceListItem(generalServiceList![index], index);
-                                      },
-                                      padding: EdgeInsets.zero,
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        //crossAxisSpacing: 40.0,
-                                        // mainAxisSpacing: 13.9,
-                                        childAspectRatio:
-                                            MediaQuery.of(context).size.width /
-                                                (MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    5),
-                                      ),
-                                    ),
-                                  )
-                              )
-                            : (regularServiceSelectedList.isEmpty
-                                ? Container(
-                                    child: Container(
-                                margin: EdgeInsets.only(
-                                    top: ScreenSize().setValue(20),
-                                    left: ScreenSize().setValue(34),
-                                    right: ScreenSize().setValue(34)),
-                                child: TextFormField(
-                                  textAlignVertical:
-                                  TextAlignVertical.center,
-                                  maxLines: 1,
-                                  onTap: () {
-                                    showRegularServicesSelectionDialog();
-                                  },
-                                  readOnly: true,
-                                  autofocus: false,
-                                  style: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize:
-                                    ScreenSize().setValueFont(13),
-                                  ),
-                                  //focusNode: _mechanicExperienceFocusNode,
-                                  keyboardType: TextInputType.text,
-                                  validator: InputValidator(
-                                      ch: "Services List")
-                                      .emptyChecking,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp('[a-zA-Z]')),
-                                  ],
-                                  //controller: _mechanicExperienceController,
-                                  decoration: InputDecoration(
-                                      disabledBorder:
-                                      UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      isDense: true,
-                                      hintText: 'Select Services',
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      contentPadding:
-                                      EdgeInsets.symmetric(
-                                        vertical:
-                                        ScreenSize().setValue(7.8),
-                                      ),
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Corbel_Light',
-                                        color:
-                                        Colors.white.withOpacity(.60),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize:
-                                        ScreenSize().setValueFont(12),
-                                      )),
-                                ),
-                              ),
-                                  )
-                                : Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenSize().setValue(20),
-                                        left: ScreenSize().setValue(34),
-                                        right: ScreenSize().setValue(34)),
-                                    child: GridView.builder(
-                            itemCount:
-                            regularServiceSelectedList.length,
-                            shrinkWrap: true,
-                            itemBuilder:
-                                (BuildContext context, int index) {
-                              //return Text(emergencyServiceSelectedList[index]);
-                              return _serviceDataItem(
-                                  regularServiceSelectedList[index],
-                                  index);
-                              //return _generalServiceListItem(generalServiceList![index], index);
-                            },
-                            padding: EdgeInsets.zero,
-                            gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              //crossAxisSpacing: 40.0,
-                              // mainAxisSpacing: 13.9,
-                              childAspectRatio:
-                              MediaQuery.of(context).size.width /
-                                  (MediaQuery.of(context)
-                                      .size
-                                      .height /
-                                      5),
-                            ),
-                          ),
-                        )
-                               ),*/
-
                         Container(
                           height: ScreenSize().setValue(28),
                           width: ScreenSize().setValue(98),
@@ -660,53 +858,30 @@ class _MechanicSpecializationSelectionScreenState
                                   child: MaterialButton(
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
-                                        /*validateForm(
 
-                                        );*/
-                                        // checkPassWord(
-                                        // _passwordController.text,
-                                        //_confirmPwdController.text);
-
+                                        validateForm();
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                 const MechanicWorkSelectionScreen()));
-
-                                        _signupBloc.postSignUpSpecializationSelectionRequest(
-                                          "1 year","1,2", "1,2","workshop"
-                                        );
                                       } else {
                                         setState(() => _autoValidate =
                                             AutovalidateMode.always);
                                       }
                                     },
                                     child: Container(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Save',
-                                            style: TextStyle(
-                                              color: CustColors.blue,
-                                              fontFamily: 'Corbel_Regular',
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: ScreenSize()
-                                                  .setValueFont(11.5),
-                                            ),
+                                      child: Center(
+                                        child: Text(
+                                          'Next',
+                                          style: TextStyle(
+                                            color: CustColors.blue,
+                                            fontFamily: 'Corbel_Regular',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize:
+                                                ScreenSize().setValueFont(11.5),
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                              left: ScreenSize().setValue(16.6),
-                                            ),
-                                            child: Image.asset(
-                                              'assets/images/arrow_forword.png',
-                                              width:
-                                                  ScreenSize().setValue(12.5),
-                                              height:
-                                                  ScreenSize().setValue(12.5),
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                     ),
                                     color: Colors.white,
@@ -716,7 +891,6 @@ class _MechanicSpecializationSelectionScreenState
                                   ),
                                 ),
                         ),
-
                         IntrinsicHeight(
                           child: Stack(
                             alignment: Alignment.bottomRight,
@@ -791,7 +965,7 @@ class _MechanicSpecializationSelectionScreenState
                         final yearSelected =
                             _mechanicYearList[index].toString();
                         setState(() {
-                          _mechanicExperienceController.text =
+                            _mechanicExperienceController.text =
                               " " + yearSelected.toString() + " Year";
                         });
                         Navigator.pop(context);
@@ -805,5 +979,49 @@ class _MechanicSpecializationSelectionScreenState
     );
   }
 
+  void validateForm(){
 
+    if(selectedMakeList!.isEmpty){
+      setSnackBar("Brand is required");
+    }else if(selectedModelList!.isEmpty){
+      setSnackBar("Model is required");
+    }else if(!jobValues.values.contains(true)){
+      setSnackBar("Select Job Type");
+    }else{
+
+      SnackBarWidget().setSnackBar("Success.... !", context);
+
+      var brandId;var modelId;
+      brandId = selectedMakeList!.map((e) => e.id);
+      modelId = selectedModelList!.map((e) => e.id);
+
+      var data = jobValues.entries.firstWhere((element) => element.value == true);
+      print(">>>>>>>>>>> Data " +data.key);
+      brandId = brandId.toString().replaceAll("(", "") ;
+      brandId = brandId.toString().replaceAll(")", "") ;
+      modelId = modelId.toString().replaceAll("(", "");
+      modelId = modelId.toString().replaceAll(")", "");
+
+      _signupBloc
+          .postSignUpSpecializationSelectionRequest(
+           token,
+          _mechanicExperienceController.text,
+          brandId, modelId,
+          data.key);
+      setState(() {
+        _isLoading = true;
+      });
+
+    }
+
+  }
+
+  void setSnackBar(String msg){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('$msg',
+          style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+      duration: Duration(seconds: 2),
+      backgroundColor: CustColors.peaGreen,
+    ));
+  }
 }

@@ -25,6 +25,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_ap
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/services_fee_list/service_fee_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_api_provider.dart';
 import 'package:auto_fix/UI/Vendor/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Vendor/Login/SignUp/signup_api_provider.dart';
@@ -59,10 +60,11 @@ class Repository {
   final _mechanicSignupApiProvider = MechanicSignupRegistrationApiProvider();
   final _mechanicWorkSelectionApiProvider = MechanicWorkSelectionApiProvider();
   final _mechanicExpertizeSelectionApiProvider = MechanicSpecializationSelectionApiProvider();
-
+  final _allServiceFeeApiProvider = AllServiceFeeApiProvider();
 
   final _vendorSignupApiProvider = VendorSignupApiProvider();
   final _vendorSignInApiProvider = VendorSigninApiProvider();
+
   // Customer SignUpScreen1
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
@@ -129,7 +131,7 @@ class Repository {
   Future<dynamic> getBookingsDetails() =>
       _bookingsDetailsApiProvider.getBookingsDetailRequest();
   //All Model
-  Future<dynamic> getAllModel(int id, String token) =>
+  Future<dynamic> getAllModel(String id, String token) =>
       _allModelApiProvider.getAllModelRequest(id, token);
   //All Engine
   Future<dynamic> getAllEngine(int id, String token) =>
@@ -194,17 +196,20 @@ class Repository {
           isEmergencyEnabled, serviceIdList, serviceFeeList, startTime,endTime);
 
   //Mechanic - Sign up - expertizeSelection
-  Future<dynamic> getMechanicSignUpExpertizeSelection(String yearOfExperience,
+  Future<dynamic> getMechanicSignUpExpertizeSelection(String token, String yearOfExperience,
       String brandIdList,
       String modelIdList,
       String jobType) =>
       _mechanicExpertizeSelectionApiProvider.getMechanicExpertizeSelectionRequest(
+          token,
         yearOfExperience,
         brandIdList,
         modelIdList,
         jobType
       );
 
+  Future<dynamic> getAllServiceFee(int page, int size, int enable,String token) =>
+      _allServiceFeeApiProvider.getAllServiceFeeRequest(page,size,enable,token);
 //---------------------Vendor
   //Vendor SignUpScreen1
   /*Future<dynamic> getVendorSignUp(String firstName, String userName, String email,

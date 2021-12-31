@@ -55,7 +55,7 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
           ));
         });
       } else {
-        _signinBloc.userDefault(value.data!.token.toString());
+        _signinBloc.userDefault(value.data!.mechanicSignIn!.token.toString());
         setState(() {
           _isLoading = false;
           //toastMsg.toastMsg(msg: "Successfully Signed In");

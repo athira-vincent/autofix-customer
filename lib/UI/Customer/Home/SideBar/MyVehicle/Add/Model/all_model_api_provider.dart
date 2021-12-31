@@ -3,7 +3,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_
 
 class AllModelApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<AllModelMdl> getAllModelRequest(int id,String token) async {
+  Future<AllModelMdl> getAllModelRequest(String id,String token) async {
     Map<String, dynamic> _resp = await _queryProvider.allModel(id,token);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {

@@ -73,6 +73,9 @@ class MechanicSignUpData {
   int? verified;
   int? enable;
   int? isEmailverified;
+  String? jobType;
+  String? startTime;
+  String? endTime;
   int? status;
 
 
@@ -91,6 +94,9 @@ class MechanicSignUpData {
     verified = json['verified'];
     enable = json['enable'];
     isEmailverified = json['isEmailverified'];
+    jobType = json['jobType'];
+    startTime = json['startTime'];
+    endTime = json['endTime'];
     status =json['status'];
 
   }
@@ -109,6 +115,9 @@ class MechanicSignUpData {
     data['verified'] = this.verified;
     data['enable'] = this.enable;
     data['isEmailverified'] = this.isEmailverified;
+    data['jobType'] = this.jobType;
+    data['startTime'] = this.startTime;
+    data['endTime'] = this.endTime;
     data['status'] = this.status;
 
     return data;

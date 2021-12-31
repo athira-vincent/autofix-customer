@@ -4,7 +4,9 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_screen.dart';
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -92,13 +94,8 @@ class _MechanicSignupRegistrationScreenState
         setState(() async {
           print("errrrorr 01");
           _isLoading = false;
-          SharedPreferences shdPre = await SharedPreferences.getInstance();
 
-          shdPre.setString(SharedPrefKeys.token, value.data!.mechanicSignUp!.token!);
-          shdPre.setInt(SharedPrefKeys.mechanicSignUpStatus, value.data!.mechanicSignUp!.mechanicSignUpData!.verified!);
-          shdPre.setString(SharedPrefKeys.userEmail, value.data!.mechanicSignUp!.mechanicSignUpData!.emailId!);
-          shdPre.setString(SharedPrefKeys.mechanicCode, value.data!.mechanicSignUp!.mechanicSignUpData!.mechanicCode!);
-          shdPre.setString(SharedPrefKeys.mechanicID, value.data!.mechanicSignUp!.mechanicSignUpData!.id!);
+          setSignUp1Data(value);
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
@@ -107,7 +104,6 @@ class _MechanicSignupRegistrationScreenState
             backgroundColor: CustColors.peaGreen,
           ));
 
-          setIsSignedIn();
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -132,9 +128,16 @@ class _MechanicSignupRegistrationScreenState
       }
     });
   }
-  void setIsSignedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(SharedPrefKeys.isMechanicLoggedIn, false);
+  void setSignUp1Data(MechanicSignupRegistrationMdl value) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+
+    shdPre.setString(SharedPrefKeys.token, value.data!.mechanicSignUp!.token!);
+    shdPre.setInt(SharedPrefKeys.mechanicSignUpStatus, value.data!.mechanicSignUp!.mechanicSignUpData!.verified!);
+    shdPre.setString(SharedPrefKeys.userEmail, value.data!.mechanicSignUp!.mechanicSignUpData!.emailId!);
+    shdPre.setString(SharedPrefKeys.mechanicCode, value.data!.mechanicSignUp!.mechanicSignUpData!.mechanicCode!);
+    shdPre.setString(SharedPrefKeys.mechanicID, value.data!.mechanicSignUp!.mechanicSignUpData!.id!);
+
+    shdPre.setBool(SharedPrefKeys.isMechanicLoggedIn, true);
   }
 
   @override
@@ -163,9 +166,12 @@ class _MechanicSignupRegistrationScreenState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+                          IndicatorWidget(isFirst: true,isSecond: false, isThird: false,),
+
                           Container(
                             margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(26),
+                                top: ScreenSize().setValue(22),
                                 left: ScreenSize().setValue(34),
                                 right: ScreenSize().setValue(34)),
                             alignment: Alignment.centerLeft,
@@ -699,7 +705,6 @@ class _MechanicSignupRegistrationScreenState
                                     child: MaterialButton(
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-
                                           checkPassWord(
                                               _passwordController.text,
                                               _confirmPwdController.text);
@@ -768,6 +773,7 @@ class _MechanicSignupRegistrationScreenState
                               ),
                             ),
                           ),
+
                           IntrinsicHeight(
                             child: Stack(
                               alignment: Alignment.bottomRight,
@@ -829,18 +835,17 @@ class _MechanicSignupRegistrationScreenState
         _confirmPwdController.text = "";
       });
     } else {
-
      /* var walletData = {};
       walletData['docType'] = _walletTypeController.text;
       walletData['docId'] = _walletIdController.text;
       String strWalletData = json.encode(walletData);*/
-      String walletDataString = "docType : " + _walletTypeController.text + ", docId : " + _walletIdController.text;
-      print("firstNameController.text : " + _firstNameController.text +
-          "emailController.text : " + _emailController.text +
-          "phoneController.text : " + _phoneController.text +
-          "address : " + _addressController.text +
-          "passwordController.text : " + _passwordController.text +
-          "Wallet Data : " +walletDataString
+      String walletDataString = " docType : " + _walletTypeController.text + ", docId : " + _walletIdController.text;
+      print(" firstNameController.text : " + _firstNameController.text +
+          " emailController.text : " + _emailController.text +
+          " phoneController.text : " + _phoneController.text +
+          " address : " + _addressController.text +
+          " passwordController.text : " + _passwordController.text +
+          " Wallet Data : " +walletDataString
       );
 
       _signupBloc.postSignUpRequest(
@@ -945,4 +950,5 @@ class _MechanicSignupRegistrationScreenState
           });
         });
   }
+
 }

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
           selectionHandleColor: Colors.white,
         ),
         primarySwatch: CustColors.materialBlue,
+        unselectedWidgetColor: CustColors.borderColor,
       ),
       home: SplashScreen(),
     );

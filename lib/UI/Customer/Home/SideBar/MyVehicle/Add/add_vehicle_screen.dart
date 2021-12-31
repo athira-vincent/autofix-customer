@@ -1327,7 +1327,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                     selectedEngineId = 0;
                                                     _allModelBloc
                                                         .postAllModelDataRequest(
-                                                            selectedBrandId!,
+                                                            selectedBrandId!.toString(),
                                                             token);
                                                   });
                                                   print(">>>>>");

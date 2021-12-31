@@ -1,8 +1,14 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/services_fee_list/service_fee_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/services_fee_list/service_fee_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/Widgets/select_brand_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/Widgets/select_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/admin_approval_screen.dart';
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +35,7 @@ class _MechanicWorkSelectionScreenState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final MechanicWorkSelectionBloc _signupBloc = MechanicWorkSelectionBloc();
+  final AllServiceFeeBloc _allServiceBloc = AllServiceFeeBloc();
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
 
@@ -37,11 +44,40 @@ class _MechanicWorkSelectionScreenState
 
   List<String> regularServiceSelectedList = [];
   List<String> emergencyServiceSelectedList = [];
+
+  List<AllServiceFeeData> serviceList =[];
+  List<AllServiceFeeData> selectedRegularServiceList =[];
+  List<AllServiceFeeData> selectedEmergencyServiceList =[];
+
+  /*List<MakeDetails>? makeDetailsList = [];
+  List<MakeDetails>? selectedMakeList = [];
+
+  List<ModelDetails>? modelDetailsList = [];
+  List<ModelDetails>? selectedModelList = [];*/
+
+  String token = "";
   bool isEmergencyEnabled = false;
+
+  TimeOfDay _time = TimeOfDay(hour: 7, minute: 15);
+
+  void _selectTime() async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _time,
+      initialEntryMode: TimePickerEntryMode.input,
+    );
+    if (newTime != null) {
+      setState(() {
+        _time = newTime;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _addToken();
+    _getAllService();
     _getSignUpRes();
     for (int i = 1; i <= 10; i++) {
       i <= 9
@@ -49,8 +85,15 @@ class _MechanicWorkSelectionScreenState
           : _mechanicYearList.add(i.toString() + "+");
       // _walletTypeList.add(i.toString());
     }
+    _allServiceBloc.postAllServiceDataRequest(1, 25, 1, token);
   }
 
+  _addToken() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
+    token = _shdPre.getString(SharedPrefKeys.token)!;
+    print("Token : " + token);
+    GqlClient.I.config(token: token);
+  }
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isMechanicSignUp, true);
@@ -60,8 +103,36 @@ class _MechanicWorkSelectionScreenState
   void dispose() {
     super.dispose();
     _mechanicExperienceController.dispose();
-
+    _allServiceBloc.dispose();
     _signupBloc.dispose();
+  }
+
+  _getAllService() async {
+    _allServiceBloc.postAllServiceFee.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        _allServiceBloc.postServiceData.listen((data) {
+          setState(() {
+            serviceList = data;
+            // print("c"+value.data.acceptInvitations.message.toString()+"c");
+            print(">>>>>Brand Data length" +
+                value.data!.serviceList!.allServiceFeeData!.length.toString() +
+                //value.data!.makeDetails!.length.toString() +
+                ">>>>>>>>>");
+            print(serviceList.length);
+          });
+        });
+      }
+    });
   }
 
   _getSignUpRes() {
@@ -144,14 +215,14 @@ class _MechanicWorkSelectionScreenState
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        //backgroundColor: CustColors.blue,
+        backgroundColor: CustColors.blue,
         body: Theme(
           data: ThemeData(
             disabledColor: Colors.white,
           ),
           child: Container(
             height: MediaQuery.of(context).size.height,
-            color: Colors.white,
+            //color: Colors.white,
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               controller: _scrollController,
@@ -165,14 +236,20 @@ class _MechanicWorkSelectionScreenState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        IndicatorWidget(
+                          isFirst: true,
+                          isSecond: true,
+                          isThird: true,
+                        ),
+
                         Container(
                           margin: EdgeInsets.only(
-                              top: ScreenSize().setValue(26),
+                              top: ScreenSize().setValue(10),
                               left: ScreenSize().setValue(34),
                               right: ScreenSize().setValue(34)),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Work Selection',
+                            'Sign up',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: ScreenSize().setValueFont(19.5),
@@ -180,6 +257,51 @@ class _MechanicWorkSelectionScreenState
                                 fontFamily: 'Corbel_Bold'),
                           ),
                         ),
+
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'YOUR SERVICE SKILLS',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenSize().setValueFont(18),
+                                fontWeight: FontWeight.w200,
+                                fontFamily: 'Corbel_Bold'),
+                          ),
+                        ),
+
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Do you wish to enable emergency service",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Corbel_Regular"),
+                              ),
+                              Switch(
+                                onChanged: toggleIsEmergencyEnabled,
+                                value: isEmergencyEnabled,
+                                activeColor: Colors.white,
+                                activeTrackColor: Colors.white70,
+                                inactiveThumbColor: Colors.white70,
+                                inactiveTrackColor: CustColors.borderColor,
+                              ),
+                            ],
+                          ),
+                        ),
+
                         Container(
                           margin: EdgeInsets.only(
                               top: ScreenSize().setValue(20),
@@ -188,8 +310,40 @@ class _MechanicWorkSelectionScreenState
                           child: TextFormField(
                             textAlignVertical: TextAlignVertical.center,
                             maxLines: 1,
-                            onTap: () {
-                              showYearSelectionDialog();
+                            onTap: () async {
+
+                              print("checking 0001 Regular ${serviceList.length}");
+
+                              SelectedData data = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectServiceScreen(
+                                        serviceList: serviceList,
+                                        type: "2",
+                                      )));
+
+                              selectedRegularServiceList = data.services!;
+                              print("checking 0002 Regular ${data.services!.length}");
+
+                              /*_allMakeBloc.postAllMakeDataRequest(token);
+
+                              print("checking 0001 ${makeDetailsList!.length}");
+
+                              selectedMakeList = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectBrandScreen(
+                                        brandData: makeDetailsList!,
+                                        type: "1",
+                                      )));
+                              print(
+                                  "checking 0002 ${selectedMakeList!.length}");
+                              setState(() {
+                                selectedBrandId = "";
+                                selectedModelId = "";
+                                modelDetailsList = [];
+                                selectedModelList = [];
+                              });*/
                             },
                             readOnly: true,
                             autofocus: false,
@@ -199,15 +353,8 @@ class _MechanicWorkSelectionScreenState
                               color: Colors.white,
                               fontSize: ScreenSize().setValueFont(13),
                             ),
-                            focusNode: _mechanicExperienceFocusNode,
+                            //focusNode: _mechanicBrandFocusNode,
                             keyboardType: TextInputType.text,
-                            validator: 
-                                InputValidator(ch: "Experience").emptyChecking,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[a-zA-Z0-9]')),
-                            ],
-                            controller: _mechanicExperienceController,
                             decoration: InputDecoration(
                                 disabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -216,7 +363,24 @@ class _MechanicWorkSelectionScreenState
                                   ),
                                 ),
                                 isDense: true,
-                                hintText: 'Year of Experience',
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 30,
+                                  minHeight: 30,
+                                ),
+                                suffixIcon: Container(
+                                  width: 3,
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    iconSize: 20,
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                                hintText: 'Select Emergency Services',
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.white,
@@ -246,235 +410,22 @@ class _MechanicWorkSelectionScreenState
                                 )),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: ScreenSize().setValue(20),
-                              left: ScreenSize().setValue(34),
-                              right: ScreenSize().setValue(34)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Do you wish to provide Emergency Services ?",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.5,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: "Corbel_Regular"),
-                              ),
-                              Switch(
-                                onChanged: toggleIsEmergencyEnabled,
-                                value: isEmergencyEnabled,
-                                activeColor: Colors.white,
-                                activeTrackColor: Colors.white70,
-                                inactiveThumbColor: Colors.black26,
-                                inactiveTrackColor: Colors.black12,
-                              ),
-                            ],
-                          ),
-                        ),
-                        isEmergencyEnabled
-                            ? (emergencyServiceSelectedList.isEmpty
-                                ? Container(
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          top: ScreenSize().setValue(20),
-                                          left: ScreenSize().setValue(34),
-                                          right: ScreenSize().setValue(34)),
-                                      child: TextFormField(
-                                        textAlignVertical:
-                                            TextAlignVertical.center,
-                                        maxLines: 1,
-                                        onTap: () {
-                                          showAllServicesSelectionDialog();
-                                        },
-                                        readOnly: true,
-                                        autofocus: false,
-                                        style: TextStyle(
-                                          fontFamily: 'Corbel_Light',
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize:
-                                              ScreenSize().setValueFont(13),
-                                        ),
-                                        //focusNode: _mechanicExperienceFocusNode,
-                                        keyboardType: TextInputType.text,
-                                        validator: InputValidator(
-                                                ch: "Select Services")
-                                            .emptyChecking,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp('[a-zA-Z]')),
-                                        ],
-                                        //controller: _mechanicExperienceController,
-                                        decoration: InputDecoration(
-                                            disabledBorder:
-                                                UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            isDense: true,
-                                            hintText: 'Select Services',
-                                            border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color: Colors.white,
-                                                width: .3,
-                                              ),
-                                            ),
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                              vertical:
-                                                  ScreenSize().setValue(7.8),
-                                            ),
-                                            hintStyle: TextStyle(
-                                              fontFamily: 'Corbel_Light',
-                                              color:
-                                                  Colors.white.withOpacity(.60),
-                                              fontWeight: FontWeight.w600,
-                                              fontSize:
-                                                  ScreenSize().setValueFont(12),
-                                            )),
-                                      ),
-                                    ),
-                                  )
-                                : Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenSize().setValue(20),
-                                        left: ScreenSize().setValue(34),
-                                        right: ScreenSize().setValue(34)),
-                                    child: GridView.builder(
-                                      itemCount:
-                                          emergencyServiceSelectedList.length,
-                                      shrinkWrap: true,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        //return Text(emergencyServiceSelectedList[index]);
-                                        return _serviceDataItem(
-                                            emergencyServiceSelectedList[index],
-                                            index);
-                                        //return _generalServiceListItem(generalServiceList![index], index);
-                                      },
-                                      padding: EdgeInsets.zero,
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        //crossAxisSpacing: 40.0,
-                                        // mainAxisSpacing: 13.9,
-                                        childAspectRatio:
-                                            MediaQuery.of(context).size.width /
-                                                (MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    5),
-                                      ),
-                                    ),
-                                  )
-                              )
-                            : (regularServiceSelectedList.isEmpty
-                                ? Container(
-                                    child: Container(
-                                margin: EdgeInsets.only(
-                                    top: ScreenSize().setValue(20),
-                                    left: ScreenSize().setValue(34),
-                                    right: ScreenSize().setValue(34)),
-                                child: TextFormField(
-                                  textAlignVertical:
-                                  TextAlignVertical.center,
-                                  maxLines: 1,
-                                  onTap: () {
-                                    showRegularServicesSelectionDialog();
-                                  },
-                                  readOnly: true,
-                                  autofocus: false,
-                                  style: TextStyle(
-                                    fontFamily: 'Corbel_Light',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize:
-                                    ScreenSize().setValueFont(13),
-                                  ),
-                                  //focusNode: _mechanicExperienceFocusNode,
-                                  keyboardType: TextInputType.text,
-                                  validator: InputValidator(
-                                      ch: "Services List")
-                                      .emptyChecking,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp('[a-zA-Z]')),
-                                  ],
-                                  //controller: _mechanicExperienceController,
-                                  decoration: InputDecoration(
-                                      disabledBorder:
-                                      UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      isDense: true,
-                                      hintText: 'Select Services',
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                          width: .3,
-                                        ),
-                                      ),
-                                      contentPadding:
-                                      EdgeInsets.symmetric(
-                                        vertical:
-                                        ScreenSize().setValue(7.8),
-                                      ),
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Corbel_Light',
-                                        color:
-                                        Colors.white.withOpacity(.60),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize:
-                                        ScreenSize().setValueFont(12),
-                                      )),
-                                ),
-                              ),
-                                  )
-                                : Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenSize().setValue(20),
-                                        left: ScreenSize().setValue(34),
-                                        right: ScreenSize().setValue(34)),
-                                    child: GridView.builder(
-                            itemCount:
-                            regularServiceSelectedList.length,
-                            shrinkWrap: true,
-                            itemBuilder:
+
+                        selectedRegularServiceList.isNotEmpty
+                            ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenSize().setValue(20),
+                                  left: ScreenSize().setValue(34),
+                                  right: ScreenSize().setValue(34)),
+                              child: GridView.builder(
+                                itemCount:
+                                selectedRegularServiceList.length,
+                                shrinkWrap: true,
+                                itemBuilder:
                                 (BuildContext context, int index) {
                               //return Text(emergencyServiceSelectedList[index]);
                               return _serviceDataItem(
-                                  regularServiceSelectedList[index],
+                                  selectedRegularServiceList[index].serviceName.toString(),
                                   index);
                               //return _generalServiceListItem(generalServiceList![index], index);
                             },
@@ -493,7 +444,183 @@ class _MechanicWorkSelectionScreenState
                             ),
                           ),
                         )
-                               ),
+                            : Container(),
+
+                        isEmergencyEnabled ? Container(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
+                            child: TextFormField(
+                              textAlignVertical:
+                              TextAlignVertical.center,
+                              maxLines: 1,
+                              onTap: () async {
+                                print("checking 0001 Regular ${serviceList.length}");
+
+                                SelectedData data = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SelectServiceScreen(
+                                          serviceList: serviceList,
+                                          type: "1",
+                                        )));
+
+                                selectedEmergencyServiceList = data.services!;
+                                print("checking 0002 Regular ${data.services!.length}");
+                              },
+                              readOnly: true,
+                              autofocus: false,
+                              style: TextStyle(
+                                fontFamily: 'Corbel_Light',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize:
+                                ScreenSize().setValueFont(13),
+                              ),
+                              //focusNode: _mechanicExperienceFocusNode,
+                              keyboardType: TextInputType.text,
+                              /*validator: InputValidator(
+                                  ch: "Select Services")
+                                  .emptyChecking,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[a-zA-Z]')),
+                              ],*/
+                              //controller: _mechanicExperienceController,
+                              decoration: InputDecoration(
+                                  disabledBorder:
+                                  UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  isDense: true,
+                                  hintText: 'Select Emergency Services',
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.white,
+                                      width: .3,
+                                    ),
+                                  ),
+                                  contentPadding:
+                                  EdgeInsets.symmetric(
+                                    vertical:
+                                    ScreenSize().setValue(7.8),
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Corbel_Light',
+                                    color:
+                                    Colors.white.withOpacity(.60),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize:
+                                    ScreenSize().setValueFont(12),
+                                  )),
+                            ),
+                          ),
+                        ) : Container(),
+                        selectedEmergencyServiceList.isNotEmpty
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                    top: ScreenSize().setValue(20),
+                                    left: ScreenSize().setValue(34),
+                                    right: ScreenSize().setValue(34)),
+                                child: GridView.builder(
+                            itemCount:
+                            selectedEmergencyServiceList.length,
+                            shrinkWrap: true,
+                            itemBuilder:
+                                (BuildContext context, int index) {
+                              //return Text(emergencyServiceSelectedList[index]);
+                              return _serviceDataItem(
+                                  selectedEmergencyServiceList[index].serviceName.toString(),
+                                  index);
+                              //return _generalServiceListItem(generalServiceList![index], index);
+                            },
+                            padding: EdgeInsets.zero,
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              //crossAxisSpacing: 40.0,
+                              // mainAxisSpacing: 13.9,
+                              childAspectRatio:
+                              MediaQuery.of(context).size.width /
+                                  (MediaQuery.of(context)
+                                      .size
+                                      .height /
+                                      5),
+                            ),
+                          ),
+                        )
+                            : Container(),
+
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: Text(
+                            "Set Your Regular Working Time",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Corbel_Regular"),
+                          ),
+                        ),
+
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Start Time",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Corbel_Regular"),
+                              ),
+                              Text(
+                                "End Time",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Corbel_Regular"),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        ElevatedButton(
+                          onPressed: _selectTime,
+                          child: Text('SELECT TIME'),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Selected time: ${_time.format(context)}',
+                        ),
+
+
 
                         Container(
                           height: ScreenSize().setValue(28),
@@ -585,39 +712,7 @@ class _MechanicWorkSelectionScreenState
                                 ),
                         ),
 
-                        IntrinsicHeight(
-                          child: Stack(
-                            alignment: Alignment.bottomRight,
-                            fit: StackFit.expand,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                //margin: EdgeInsets.only(top: 40),
-                                alignment: Alignment.topCenter,
 
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/signup_arc.png',
-                                      fit: BoxFit.fitHeight,
-                                      width: MediaQuery.of(context).size.width,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  width: double.infinity,
-                                  alignment: Alignment.topCenter,
-                                  margin: EdgeInsets.only(
-                                      left: ScreenSize().setValue(66),
-                                      top: ScreenSize().setValue(119.6),
-                                      right: ScreenSize().setValue(78)),
-                                  child: Image.asset(
-                                    'assets/images/autofix_logo.png',
-                                  )),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -706,7 +801,7 @@ class _MechanicWorkSelectionScreenState
         return AlertDialog(
           title: const Text("Select Services"),
           content: MultiSelectChip(
-            regularServiceDataList,
+            regularServiceSelectedList,
             onSelectionChanged: (selectedList) {
               setState(() {
                 regularServiceSelectedList = selectedList;
@@ -834,6 +929,35 @@ class _MechanicWorkSelectionScreenState
         ));
   }
 }
+
+
+
+/*  FilterChip(
+                          label: Text("text"),
+                          backgroundColor: Colors.transparent,
+                          shape: StadiumBorder(side: BorderSide()),
+                          onSelected: (bool value) {print("selected");},
+
+                        ),*/
+
+/* Chip(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.yellow, width: 1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.red,
+                          deleteIcon: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                          label: Text("searchController.recentSearchesList[index]", style: TextStyle(color: Colors.white),),
+                          deleteButtonTooltipMessage: 'erase',
+                          onDeleted: () {
+                            print("deleted");
+                          },
+                        ),*/
+
 
 class MultiSelectChip extends StatefulWidget {
   final List<String> reportList;

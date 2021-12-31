@@ -1,3 +1,4 @@
+
 class MechanicForgotPasswordMdl {
   String? status;
   String? message;
@@ -17,20 +18,32 @@ class MechanicForgotPasswordMdl {
 }
 
 class Data {
-  //SignUpScreen1 signUp;
+  ForgotPassword? forgotPassword;
 
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    // signUp =
-    //     json['agentSignUp'] != null ? new SignUpScreen1.fromJson(json['agentSignUp']) : null;
+    forgotPassword = (json['mechanicForgotPassword'] != null ? ForgotPassword.fromJson(json['mechanicForgotPassword']) : null)!;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    // if (this.signUp != null) {
-    //   data['agentSignUp'] = this.signUp.toJson();
-    // }
+    data['mechanicForgotPassword'] = this.forgotPassword!.toJson();
+    return data;
+  }
+}
+class ForgotPassword {
+  String? resetToken;
+
+  ForgotPassword();
+
+  ForgotPassword.fromJson(Map<String, dynamic> json) {
+    resetToken = json['resetToken'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['resetToken'] = this.resetToken;
     return data;
   }
 }

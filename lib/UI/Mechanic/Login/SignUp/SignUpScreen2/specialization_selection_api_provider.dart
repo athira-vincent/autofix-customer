@@ -7,11 +7,13 @@ import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_s
 class MechanicSpecializationSelectionApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<MechanicSpecializationSelectionMdl> getMechanicExpertizeSelectionRequest(
+      String token,
       String yearOfExperience,
       String brandIdList,
       String modelIdList,
       String jobType ) async {
     Map<String, dynamic> _resp = await _queryProvider.mechanicSignUpExpertizeSelection(
+        token,
       yearOfExperience, brandIdList,modelIdList,jobType
        );
     // ignore: unnecessary_null_comparison

@@ -10,11 +10,12 @@ class MechanicSpecializationSelectionBloc {
     postSignUp.close();
   }
 
-  postSignUpSpecializationSelectionRequest(String yearOfExperience,
+  postSignUpSpecializationSelectionRequest(String token, String yearOfExperience,
       String brandIdList,
       String modelIdList,
       String jobType) async {
     MechanicSpecializationSelectionMdl _signUpMdl = await repository.getMechanicSignUpExpertizeSelection(
+      token,
       yearOfExperience,brandIdList,modelIdList,jobType
     );
     postSignUp.sink.add(_signUpMdl);
