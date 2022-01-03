@@ -78,7 +78,7 @@ class _MechanicSpecializationSelectionScreenState
   _addToken() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     token = _shdPre.getString(SharedPrefKeys.token)!;
-    print("Token : " + token);
+    print("Token : +++++ " + token);
     GqlClient.I.config(token: token);
   }
 
@@ -165,18 +165,15 @@ class _MechanicSpecializationSelectionScreenState
           ));
         });
 
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                const MechanicWorkSelectionScreen()));
+
 
       } else {
-        setState(() async {
-          print("errrrorr 01");
+        setState(()  {
+          print("success 01");
           _isLoading = false;
 
           setSignUpWorkSelectionData();
+
 
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Registered",
@@ -185,7 +182,11 @@ class _MechanicSpecializationSelectionScreenState
             backgroundColor: CustColors.peaGreen,
           ));
 
-
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  const MechanicWorkSelectionScreen()));
           FocusScope.of(context).unfocus();
         });
       }
@@ -858,7 +859,10 @@ class _MechanicSpecializationSelectionScreenState
                                   ),
                                   child: MaterialButton(
                                     onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
+
+                                      validateForm();
+
+                                      /*if (_formKey.currentState!.validate()) {
 
                                         validateForm();
                                         Navigator.pushReplacement(
@@ -869,7 +873,7 @@ class _MechanicSpecializationSelectionScreenState
                                       } else {
                                         setState(() => _autoValidate =
                                             AutovalidateMode.always);
-                                      }
+                                      }*/
                                     },
                                     child: Container(
                                       child: Center(

@@ -224,139 +224,141 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                           width: mediaQueryData.size.width / 100 * 25,
                                         ),
 
-                                        Container(
-                                          height: ScreenSize().setValue(25),
-                                          width: mediaQueryData.size.width / 100 * 20,
-                                          margin: EdgeInsets.only(left: ScreenSize().setValue(5)),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(
-                                                ScreenSize().setValue(5),
+                                        Expanded(
+                                          child: Container(
+                                            height: ScreenSize().setValue(25),
+                                            width: mediaQueryData.size.width / 100 * 20,
+                                            margin: EdgeInsets.only(left: ScreenSize().setValue(5)),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  ScreenSize().setValue(5),
+                                                ),
                                               ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: CustColors.border_grey,
+                                                  spreadRadius: .5,
+                                                  blurRadius: 1.5,
+                                                ),
+                                              ],
                                             ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: CustColors.border_grey,
-                                                spreadRadius: .5,
-                                                blurRadius: 1.5,
-                                              ),
-                                            ],
-                                          ),
-                                          child:
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                top: ScreenSize().setValue(2),
-                                                left: ScreenSize().setValue(2),
-                                                right: ScreenSize().setValue(2)),
-                                            alignment: Alignment.center,
-                                            child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Flexible(
-                                                    flex: 8,
-                                                    child:  Container(
-                                                      width: double.infinity,
-                                                      child: TextFormField(
-                                                        //initialValue: regularServiceList![index].minAmount.toString(),
-                                                        /*validator:
-                                                        InputValidator(ch: "Phone number")
-                                                            .phoneNumChecking,
-                                                        inputFormatters: [
-                                                          LengthLimitingTextInputFormatter(15),
-                                                        ],*/
-                                                        maxLines: 1,
-                                                        //focusNode: _phoneFocusNode,
-                                                        textAlignVertical:
-                                                        TextAlignVertical.center,
-                                                        keyboardType: TextInputType.phone,
-                                                        controller: _rateController,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Corbel_Light',
-                                                          fontWeight: FontWeight.w600,
-                                                          color: Colors.black,
-                                                          fontSize:
-                                                          ScreenSize().setValueFont(10
+                                            child:
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top: ScreenSize().setValue(2),
+                                                  left: ScreenSize().setValue(2),
+                                                  right: ScreenSize().setValue(2)),
+                                              alignment: Alignment.center,
+                                              child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Flexible(
+                                                      flex: 8,
+                                                      child:  Container(
+                                                        width: double.infinity,
+                                                        child: TextFormField(
+                                                          //initialValue: regularServiceList![index].minAmount.toString(),
+                                                          /*validator:
+                                                          InputValidator(ch: "Phone number")
+                                                              .phoneNumChecking,
+                                                          inputFormatters: [
+                                                            LengthLimitingTextInputFormatter(15),
+                                                          ],*/
+                                                          maxLines: 1,
+                                                          //focusNode: _phoneFocusNode,
+                                                          textAlignVertical:
+                                                          TextAlignVertical.center,
+                                                          keyboardType: TextInputType.phone,
+                                                          controller: _rateController,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Corbel_Light',
+                                                            fontWeight: FontWeight.w600,
+                                                            color: Colors.black,
+                                                            fontSize:
+                                                            ScreenSize().setValueFont(10
+                                                            ),
                                                           ),
+                                                          enableSuggestions: false,
+                                                          decoration: InputDecoration(
+                                                              prefixIcon: Icon(
+                                                                Icons.attach_money_sharp,
+                                                                size: 20,
+                                                                color: Colors.black,
+                                                              ),
+                                                              suffixIcon: Icon(
+                                                                Icons.edit_outlined,
+                                                                size: 18,
+                                                                color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                              ),
+                                                              isDense: true,
+                                                              contentPadding:
+                                                              EdgeInsets.symmetric(
+                                                                vertical:
+                                                                ScreenSize().setValue(7.8),
+                                                              ),
+                                                              hintStyle: TextStyle(
+                                                                fontFamily: 'Corbel_Light',
+                                                                //color: Colors.white.withOpacity(.60),
+                                                                color: Colors.black,
+                                                                fontWeight: FontWeight.w600,
+                                                                fontSize:
+                                                                ScreenSize().setValueFont(12),
+                                                              )),
                                                         ),
-                                                        enableSuggestions: false,
-                                                        decoration: InputDecoration(
-                                                            prefixIcon: Icon(
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+
+                                             /*
+                                             * Row(
+
+                                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+
+                                                          Container(
+                                                            //margin: EdgeInsets.only(left: ScreenSize().setValue(8)),
+                                                            child: Icon(
                                                               Icons.attach_money_sharp,
                                                               size: 20,
                                                               color: Colors.black,
                                                             ),
-                                                            suffixIcon: Icon(
+                                                          ),
+
+                                                          Container(
+                                                            margin: EdgeInsets.only(left: 1,right: 1),
+                                                            child: TextFormField(
+                                                              initialValue: '${regularServiceList![index].minAmount.toString()}',
+                                                              controller: _rateController,
+                                                              decoration: InputDecoration(
+                                                                  hintText: '${regularServiceList![index].fee}',
+                                                                  hintStyle: TextStyle(
+                                                                      color: Colors.black
+                                                                  )
+                                                              ),
+                                                              style: TextStyle(
+                                                                  fontSize: ScreenSize().setValueFont(14),
+                                                                  fontFamily: 'Corbel_Regular',
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: Color(0xff0b0c0d)),
+                                                            ),),
+
+                                                          Container(
+                                                            margin: EdgeInsets.only(left: ScreenSize().setValue(1)),
+                                                            child: Icon(
                                                               Icons.edit_outlined,
                                                               size: 18,
                                                               color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
                                                             ),
-                                                            isDense: true,
-                                                            contentPadding:
-                                                            EdgeInsets.symmetric(
-                                                              vertical:
-                                                              ScreenSize().setValue(7.8),
-                                                            ),
-                                                            hintStyle: TextStyle(
-                                                              fontFamily: 'Corbel_Light',
-                                                              //color: Colors.white.withOpacity(.60),
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.w600,
-                                                              fontSize:
-                                                              ScreenSize().setValueFont(12),
-                                                            )),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]),
+                                                          ),
+                                                        ],
+                                                      )*/
+
                                           ),
-
-                                           /*
-                                           * Row(
-
-                                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      children: [
-
-                                                        Container(
-                                                          //margin: EdgeInsets.only(left: ScreenSize().setValue(8)),
-                                                          child: Icon(
-                                                            Icons.attach_money_sharp,
-                                                            size: 20,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ),
-
-                                                        Container(
-                                                          margin: EdgeInsets.only(left: 1,right: 1),
-                                                          child: TextFormField(
-                                                            initialValue: '${regularServiceList![index].minAmount.toString()}',
-                                                            controller: _rateController,
-                                                            decoration: InputDecoration(
-                                                                hintText: '${regularServiceList![index].fee}',
-                                                                hintStyle: TextStyle(
-                                                                    color: Colors.black
-                                                                )
-                                                            ),
-                                                            style: TextStyle(
-                                                                fontSize: ScreenSize().setValueFont(14),
-                                                                fontFamily: 'Corbel_Regular',
-                                                                fontWeight: FontWeight.w600,
-                                                                color: Color(0xff0b0c0d)),
-                                                          ),),
-
-                                                        Container(
-                                                          margin: EdgeInsets.only(left: ScreenSize().setValue(1)),
-                                                          child: Icon(
-                                                            Icons.edit_outlined,
-                                                            size: 18,
-                                                            color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )*/
-
                                         ),
 
                                      /*   _regularIsChecked![index] ?

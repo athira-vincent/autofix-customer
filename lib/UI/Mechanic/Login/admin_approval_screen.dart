@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _AdminApprovalScreenState extends State<AdminApprovalScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: CustColors.blue,
       body: Center(
         child: Text("Your Reference ID is : " + referenceId + "Wait for admin approval",
           style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold),),

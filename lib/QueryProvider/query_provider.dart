@@ -688,8 +688,8 @@ class QueryProvider {
     }
   """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: true, variables: {});
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
   allServiceFee(int page, int size, int enable,String token) async {
