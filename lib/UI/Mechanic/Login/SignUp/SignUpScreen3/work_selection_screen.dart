@@ -338,7 +338,7 @@ class _MechanicWorkSelectionScreenState
                                 MaterialPageRoute(
                                     builder: (context) => SelectServiceScreen(
                                       serviceList: serviceList,
-                                      type: "2",
+                                      type: "1",
                                     )));
 
                               setState(() {
@@ -477,6 +477,8 @@ class _MechanicWorkSelectionScreenState
                             TextAlignVertical.center,
                             maxLines: 1,
                             onTap: () async {
+
+                              print("checking 0001 Regular ${serviceList.length}");
                               print("checking 0001 Regular ${serviceList.length}");
 
                               SelectedData data = await Navigator.push(
@@ -484,7 +486,7 @@ class _MechanicWorkSelectionScreenState
                                   MaterialPageRoute(
                                       builder: (context) => SelectServiceScreen(
                                         serviceList: serviceList,
-                                        type: "1",
+                                        type: "2",
                                       )));
 
                               setState(() {
@@ -521,6 +523,23 @@ class _MechanicWorkSelectionScreenState
                                   ),
                                 ),
                                 isDense: true,
+                                suffixIconConstraints: BoxConstraints(
+                                  minWidth: 30,
+                                  minHeight: 30,
+                                ),
+                                suffixIcon: Container(
+                                  width: 3,
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    iconSize: 20,
+                                    icon: Icon(
+                                      // Based on passwordVisible state choose the icon
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                ),
                                 hintText: 'Select Emergency Services',
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -1021,14 +1040,31 @@ class _MechanicWorkSelectionScreenState
 
                               String endTimeFinal = "${_controllerEndHour.text}:${_controllerEndMin.text} $_endAmPm";
 
-
                               print("$startTimeFinal");
 
                               print("$endTimeFinal");
 
-                              if (_formKey.currentState!.validate()) {
-                                /*validateForm(
-                                    );*/
+                              regularServiceSelectedList.clear();
+                              emergencyServiceSelectedList.clear();
+
+                              for(int i=0;i<selectedRegularServiceList.length;i++)
+                                {
+                                  regularServiceSelectedList.add(i.toString());
+                                }
+
+                              print("${regularServiceSelectedList.toString()} +++++++++++");
+
+                              for(int i=0;i<selectedEmergencyServiceList.length;i++)
+                              {
+                                emergencyServiceSelectedList.add(i.toString());
+                              }
+
+
+                              print("$emergencyServiceSelectedList ++++++++++");
+
+                             /* if (_formKey.currentState!.validate()) {
+                                *//*validateForm(
+                                    );*//*
                                 // checkPassWord(
                                 // _passwordController.text,
                                 //_confirmPwdController.text);
@@ -1048,7 +1084,7 @@ class _MechanicWorkSelectionScreenState
                               } else {
                                 setState(() => _autoValidate =
                                     AutovalidateMode.always);
-                              }
+                              }*/
                             },
                             child: Container(
                               child: Row(
