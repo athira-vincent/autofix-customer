@@ -268,7 +268,11 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                                         child:
                                                           _regularIsChecked![index]==true
                                                               ? regularServiceList![index].isEditable == false
-                                                                        ? Text('${regularServiceList![index].minAmount.toString()}')
+                                                                        ? Row(
+                                                                          children: [
+                                                                            Expanded(child: Text('\$ ${regularServiceList![index].minAmount.toString()}')),
+                                                                          ],
+                                                                        )
                                                                         : TextFormField(
                                                                         initialValue: '${regularServiceList![index].minAmount.toString()}',
                                                                         textInputAction: TextInputAction.done,
@@ -279,7 +283,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                                                             regularServiceList![index].minAmount = value;
                                                                           });
                                                                         })
-                                                              :Text('${regularServiceList![index].minAmount.toString()}')
+                                                              :Text('\$ ${regularServiceList![index].minAmount.toString()}')
 
                                                     ),
                                                     InkWell(
@@ -551,7 +555,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                                         child:
                                                         _emergencyIsChecked![index]==true
                                                             ? emergencyServiceList![index].isEditable == false
-                                                            ? Text('${emergencyServiceList![index].minAmount.toString()}')
+                                                            ? Text('\$ ${emergencyServiceList![index].minAmount.toString()}')
                                                             : TextFormField(
                                                             initialValue: '${regularServiceList![index].minAmount.toString()}',
                                                             textInputAction: TextInputAction.done,
@@ -562,7 +566,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                                                 emergencyServiceList![index].minAmount = value;
                                                               });
                                                             })
-                                                            :Text('${emergencyServiceList![index].minAmount.toString()}')
+                                                            :Text('\$ ${emergencyServiceList![index].minAmount.toString()}')
 
                                                     ),
                                                     InkWell(

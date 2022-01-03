@@ -379,7 +379,7 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            MechanicWorkSelectionScreen()));
+                                            MechanicSignupRegistrationScreen()));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 22),

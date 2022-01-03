@@ -53,6 +53,8 @@ class _MechanicWorkSelectionScreenState
 
   List<String> regularServiceSelectedList = [];
   List<String> emergencyServiceSelectedList = [];
+  List<String> regularServiceSelectedListAmt = [];
+  List<String> emergencyServiceSelectedListAmt = [];
 
   List<AllServiceFeeData> serviceList =[];
   List<AllServiceFeeData> selectedRegularServiceList =[];
@@ -1049,22 +1051,30 @@ class _MechanicWorkSelectionScreenState
 
                               for(int i=0;i<selectedRegularServiceList.length;i++)
                                 {
-                                  regularServiceSelectedList.add(i.toString());
+                                  regularServiceSelectedList.add(selectedRegularServiceList[i].id.toString());
+                                  regularServiceSelectedListAmt.add(selectedRegularServiceList[i].minAmount.toString());
                                 }
 
-                              print("${regularServiceSelectedList.toString()} +++++++++++");
+                              print("${regularServiceSelectedList.toString()} +++++++++++ regularServiceSelectedList");
 
                               for(int i=0;i<selectedEmergencyServiceList.length;i++)
                               {
-                                emergencyServiceSelectedList.add(i.toString());
+                                emergencyServiceSelectedList.add(selectedEmergencyServiceList[i].id.toString());
+                                emergencyServiceSelectedListAmt.add(selectedEmergencyServiceList[i].minAmount.toString());
+
                               }
 
 
-                              print("$emergencyServiceSelectedList ++++++++++");
+                              print("$emergencyServiceSelectedList ++++++++++ emergencyServiceSelectedList");
 
-                             /* if (_formKey.currentState!.validate()) {
-                                *//*validateForm(
-                                    );*//*
+
+                              print(regularServiceSelectedListAmt.join(", ")+' ,'+emergencyServiceSelectedListAmt.join(", "));
+
+                              print(regularServiceSelectedList.join(", ")+' ,'+emergencyServiceSelectedList.join(", "));
+
+                              if (_formKey.currentState!.validate()) {
+                                // validateForm(
+                                //     );
                                 // checkPassWord(
                                 // _passwordController.text,
                                 //_confirmPwdController.text);
@@ -1077,14 +1087,14 @@ class _MechanicWorkSelectionScreenState
 
                                 _signupBloc.postSignUpWorkSelectionRequest(
                                     isEmergencyEnabled?1:0,
-                                    "1,2,3",
-                                    "100,150,120",
+                                    regularServiceSelectedList.join(", ")+' ,'+emergencyServiceSelectedList.join(", "),
+                                    regularServiceSelectedListAmt.join(", ")+' ,'+emergencyServiceSelectedListAmt.join(", "),
                                     startTimeFinal.toString(), endTimeFinal.toString()
                                 );
                               } else {
                                 setState(() => _autoValidate =
                                     AutovalidateMode.always);
-                              }*/
+                              }
                             },
                             child: Container(
                               child: Row(
