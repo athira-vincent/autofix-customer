@@ -344,6 +344,7 @@ class _MechanicWorkSelectionScreenState
                               setState(() {
 
                                 selectedRegularServiceList = data.services!;
+                                print("checking 0002 Regular ${data.services![0].minAmount.toString()}");
                                 print("checking 0002 Regular ${data.services!.length}");
                               });
 
@@ -558,33 +559,33 @@ class _MechanicWorkSelectionScreenState
                       isEmergencyEnabled ?
                       selectedEmergencyServiceList.isNotEmpty
                           ? Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: GridView.builder(
-                          itemCount:
-                          selectedEmergencyServiceList.length,
-                          shrinkWrap: true,
-                          itemBuilder:
-                              (BuildContext context, int index) {
-                            //return Text(emergencyServiceSelectedList[index]);
-                            return _serviceDataItem(
-                                selectedEmergencyServiceList[index].serviceName.toString(),
-                                index);
-                            //return _generalServiceListItem(generalServiceList![index], index);
-                          },
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            //crossAxisSpacing: 40.0,
-                            // mainAxisSpacing: 13.9,
-                            childAspectRatio:
-                            MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 4),
-                          ),
-                        ),
-                      )
+                            margin: EdgeInsets.only(
+                                top: ScreenSize().setValue(20),
+                                left: ScreenSize().setValue(34),
+                                right: ScreenSize().setValue(34)),
+                            child: GridView.builder(
+                              itemCount:
+                              selectedEmergencyServiceList.length,
+                              shrinkWrap: true,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
+                                //return Text(emergencyServiceSelectedList[index]);
+                                return _serviceDataItem(
+                                    selectedEmergencyServiceList[index].serviceName.toString(),
+                                    index);
+                                //return _generalServiceListItem(generalServiceList![index], index);
+                              },
+                              padding: EdgeInsets.zero,
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                //crossAxisSpacing: 40.0,
+                                // mainAxisSpacing: 13.9,
+                                childAspectRatio:
+                                MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 4),
+                              ),
+                            ),
+                          )
                           : Container()
                       : Container(),
 
@@ -631,7 +632,7 @@ class _MechanicWorkSelectionScreenState
                         ),
                       ),
 
-                      Container(
+                     /* Container(
                         margin: EdgeInsets.only(
                             top: ScreenSize().setValue(20),
                             left: ScreenSize().setValue(34),
@@ -649,7 +650,7 @@ class _MechanicWorkSelectionScreenState
                             ),
                           ],
                         ),
-                      ),
+                      ),*/
 
                       Padding(
                         padding:  EdgeInsets.only(
@@ -914,7 +915,7 @@ class _MechanicWorkSelectionScreenState
                         ),
                       ),
 
-                      Container(
+                      /*Container(
                         margin: EdgeInsets.only(
                             top: ScreenSize().setValue(15),
                             left: ScreenSize().setValue(5),
@@ -922,12 +923,12 @@ class _MechanicWorkSelectionScreenState
                         ),
                         child: TextFormField(
                           //initialValue: regularServiceList![index].minAmount.toString(),
-                          /*validator:
+                          *//*validator:
                                                 InputValidator(ch: "Phone number")
                                                     .phoneNumChecking,
                                                 inputFormatters: [
                                                   LengthLimitingTextInputFormatter(15),
-                                                ],*/
+                                                ],*//*
                           maxLines: 1,
                           //focusNode: _phoneFocusNode,
                           textAlignVertical:
@@ -959,7 +960,7 @@ class _MechanicWorkSelectionScreenState
                                 ScreenSize().setValueFont(12),
                               )),
                         ),
-                      ),
+                      ),*/
 
                       Container(
                         margin: EdgeInsets.only(

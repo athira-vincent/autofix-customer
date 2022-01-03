@@ -25,6 +25,9 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
   List<bool>? _emergencyIsChecked;
   List<bool>? _regularIsChecked;
 
+  String title = "";
+  bool isEditable=false;
+
   @override
   void initState() {
     super.initState();
@@ -163,6 +166,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                             itemCount: regularServiceList!.length,
                             itemBuilder: (context, index) {
                               print(regularServiceList![index].minAmount.toString() + ">>>Min amt");
+                              print(regularServiceList![index].isEditable.toString() + ">>>isEditable amt");
                               _rateController.text = regularServiceList![index].minAmount.toString();
                               return InkWell(
                                   onTap: () {
@@ -214,10 +218,13 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                         Text(
                                           '${regularServiceList![index].serviceName}',
                                           style: TextStyle(
-                                              fontSize: ScreenSize().setValueFont(14),
-                                              fontFamily: 'Corbel_Regular',
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xff0b0c0d)),
+                                            fontFamily: 'Corbel_Light',
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                            fontSize:
+                                            ScreenSize().setValueFont(10
+                                            ),
+                                          ),
                                         ),
 
                                         SizedBox(
@@ -255,18 +262,59 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    Flexible(
-                                                      flex: 8,
+                                                    Expanded(
+                                                        child:
+                                                          _regularIsChecked![index]==true
+                                                              ? regularServiceList![index].isEditable == false
+                                                                        ? Text('${regularServiceList![index].minAmount.toString()}')
+                                                                        : TextFormField(
+                                                                        initialValue: '${regularServiceList![index].minAmount.toString()}',
+                                                                        textInputAction: TextInputAction.done,
+                                                                        onFieldSubmitted: (value) {
+                                                                          setState(() {
+                                                                            regularServiceList![index].isEditable = false;
+                                                                            title = value;
+                                                                            regularServiceList![index].minAmount = value;
+                                                                          });
+                                                                        })
+                                                              :Text('${regularServiceList![index].minAmount.toString()}')
+
+                                                    ),
+                                                    InkWell(
+                                                      onTap: (){
+                                                        if( _regularIsChecked![index]==true)
+                                                          {
+                                                            setState(() {
+                                                              regularServiceList![index].isEditable=true;
+                                                            });
+                                                          }
+                                                        else
+                                                          {
+                                                            setState(() {
+                                                              regularServiceList![index].isEditable=false;
+                                                            });
+                                                          }
+
+                                                      },
+                                                      child: Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 18,
+                                                        color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                      ),
+                                                    ),
+                                                    /*Expanded(
                                                       child:  Container(
                                                         width: double.infinity,
                                                         child: TextFormField(
                                                           //initialValue: regularServiceList![index].minAmount.toString(),
-                                                          /*validator:
+                                                          */
+                                                    /*validator:
                                                           InputValidator(ch: "Phone number")
                                                               .phoneNumChecking,
                                                           inputFormatters: [
                                                             LengthLimitingTextInputFormatter(15),
                                                           ],*/
+                                                    /*
                                                           maxLines: 1,
                                                           //focusNode: _phoneFocusNode,
                                                           textAlignVertical:
@@ -309,7 +357,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                                               )),
                                                         ),
                                                       ),
-                                                    ),
+                                                    ),*/
                                                   ]),
                                             ),
 

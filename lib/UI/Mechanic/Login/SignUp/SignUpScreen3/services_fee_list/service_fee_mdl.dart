@@ -78,6 +78,7 @@ class AllServiceFeeData {
   String? type;
   String? minAmount;
   String? maxAmount;
+  bool? isEditable;
   int? status;
 
   AllServiceFeeData();
@@ -91,6 +92,7 @@ class AllServiceFeeData {
     type = json['type'];
     minAmount = json['minAmount'];
     maxAmount = json['maxAmount'];
+    isEditable = json['isEditable']!= null ? true:false ;
     status = json['status'];
   }
 
