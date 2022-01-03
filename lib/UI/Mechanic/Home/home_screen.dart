@@ -1,10 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_authorization_bloc.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/profile_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/services_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/spair_parts_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/navigation_drawer_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Home/BottomBar/CompletedSevice/completed_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Home/BottomBar/TodaysService/todays_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Home/BottomBar/UpcomingService/upcoming_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Home/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,7 +35,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _index = 2;
+    _index = 1;
     _getUser();
     _getToken();
   }
@@ -97,7 +97,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
-                    'Profile',
+                    'Upcoming ',
                     style: TextStyle(
                         fontFamily: 'Corbel_Light',
                         fontSize: _setValueFont(9.5),
@@ -133,7 +133,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
-                    'Past',
+                    'Today\'s',
                     style: TextStyle(
                         fontFamily: 'Corbel_Light',
                         fontSize: _setValueFont(9.5),
@@ -170,7 +170,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
-                    'Today',
+                    'Completed',
                     style: TextStyle(
                         fontFamily: 'Corbel_Light',
                         fontSize: _setValueFont(9.5),
@@ -184,7 +184,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           label: ''),
     ];
     return Scaffold(
-      drawer: NavigationDrawerScreen(),
+      drawer: MechanicNavigationDrawerScreen(),
       key: scaffoldKey,
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -227,7 +227,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     Container(
                       margin: EdgeInsets.only(top: 5),
                       child: Text(
-                        "Enjoy our service",
+                        "Welcome",
                         style: TextStyle(
                             fontFamily: 'Corbel_Light',
                             fontWeight: FontWeight.w600,
@@ -260,10 +260,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
               top: MediaQuery.of(context).padding.top + 120,
             ),
             child: _index == 0
-                ? ProfileScreen()
+                ? UpcomingServiceScreen()
                 : _index == 1
-                    ? SpairPartsScreen()
-                    : ServicesScreen(),
+                    ? TodayServiceScreen()
+                    : CompletedServiceScreen(),
           ),
         ],
       ),

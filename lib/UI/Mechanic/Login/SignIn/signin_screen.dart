@@ -1,4 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registrat
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicSigninScreen extends StatefulWidget {
   const MechanicSigninScreen({Key? key}) : super(key: key);
@@ -29,20 +32,18 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
   @override
   void initState() {
     super.initState();
+    _setUserType();
     _passwordVisible = false;
     _getSignInRes();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _userNameController.dispose();
-    _passwordController.dispose();
-    _signinBloc.dispose();
+  _setUserType() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.userType, TextStrings.user_mechanic);
   }
 
   _getSignInRes() async {
-    _signinBloc.postSignIn.listen((value) {
+    _signinBloc.postSignIn.listen((value) async {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -56,8 +57,20 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
         });
       } else {
         _signinBloc.userDefault(value.data!.mechanicSignIn!.token.toString());
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+
+        print(
+            "check username ${value.data!.mechanicSignIn!.mechanicSignInData!.mechanicName.toString()}");
+        shdPre.setString(
+            SharedPrefKeys.userName,
+                value.data!.mechanicSignIn!.mechanicSignInData!.mechanicName.toString());
+        shdPre.setString(SharedPrefKeys.userEmail,
+            value.data!.mechanicSignIn!.mechanicSignInData!.emailId.toString());
+        shdPre.setString(SharedPrefKeys.mechanicID, value.data!.mechanicSignIn!.mechanicSignInData!.mechanicCode.toString());
+
         setState(() {
           _isLoading = false;
+          setIsSignedIn();
           //toastMsg.toastMsg(msg: "Successfully Signed In");
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Successfully Signed In",
@@ -74,6 +87,18 @@ class _MechanicSigninScreenState extends State<MechanicSigninScreen> {
         });
       }
     });
+  }
+
+  void setIsSignedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(SharedPrefKeys.isUserLoggedIn, true);
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _userNameController.dispose();
+    _passwordController.dispose();
+    _signinBloc.dispose();
   }
 
   @override

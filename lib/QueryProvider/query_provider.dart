@@ -540,29 +540,31 @@ class QueryProvider {
 
   mechanicSignIn(String userName, String password) async {
     String _query = """
-        mutation{
-      signIn(emailId: "$userName", password: "$password"){
-        token
-        mechanic {
-          id
-          mechanicCode
-          mechanicName
-          emailId
-          phoneNo
-          address
-          latitude
-          longitude
-          walletId
-          verified
-          enable
-          isEmailverified
-          jobType
-          startTime
-          endTime
-          status
+                mutation{
+          signIn(emailId: "$userName"
+            password: "$password"){
+            token
+            mechanic {
+              id
+              mechanicCode
+              mechanicName
+              emailId
+              phoneNo
+              address
+              latitude
+              longitude
+              walletId
+              verified
+              enable
+              isEmailverified
+              jobType
+              startTime
+              endTime
+              currentState
+              status
+            }
+          }
         }
-      }
-    }
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});

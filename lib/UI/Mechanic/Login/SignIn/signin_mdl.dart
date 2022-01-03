@@ -64,7 +64,7 @@ class MechanicSignIn {
 }
 class MechanicSignInData{
 
-  int? id;
+  String? id;
   String? mechanicCode;
   String? mechanicName;
   String? emailId;

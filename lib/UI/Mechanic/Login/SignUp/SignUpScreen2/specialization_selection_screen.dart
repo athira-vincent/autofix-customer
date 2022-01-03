@@ -111,14 +111,13 @@ class _MechanicSpecializationSelectionScreenState
           ));
         });
       } else {
-        _allMakeBloc.postMakeData.listen((data) {
-          setState(() {
-            makeDetailsList = data;
-            // print("c"+value.data.acceptInvitations.message.toString()+"c");
-            print(">>>>>Brand Data length" +
-                value.data!.makeDetails!.length.toString() +
-                ">>>>>>>>>");
-          });
+        /*_allMakeBloc.postMakeData.listen((data) {});*/
+        setState(() {
+          makeDetailsList = value.data!.makeDetails!.toList();
+          // print("c"+value.data.acceptInvitations.message.toString()+"c");
+          print(">>>>>Brand Data length" +
+              value.data!.makeDetails!.length.toString() +
+              ">>>>>>>>>");
         });
       }
     });
@@ -137,14 +136,16 @@ class _MechanicSpecializationSelectionScreenState
           ));
         });
       } else {
-        _allModelBloc.postModelData.listen((data) {
-          setState(() {
-            modelDetailsList = data;
-            print(">>>>>Brand Data" +
-                value.data!.modelDetails!.length.toString() +
-                ">>>>>>>>>");
-          });
+
+        setState(() {
+          modelDetailsList = value.data!.modelDetails;
+          print(">>>>>Brand Data" +
+              value.data!.modelDetails!.length.toString() +
+              ">>>>>>>>>");
         });
+
+        /*_allModelBloc.postModelData.listen((data) {
+        });*/
       }
     });
   }

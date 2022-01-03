@@ -58,21 +58,35 @@ class _MechanicWorkSelectionScreenState
   String token = "";
   bool isEmergencyEnabled = false;
 
-  TimeOfDay _time = TimeOfDay(hour: 7, minute: 15);
+  TimeOfDay _startTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay _endTime = TimeOfDay(hour: 00, minute: 00);
 
-  void _selectTime() async {
+  void _selectStartTime() async {
     final TimeOfDay? newTime = await showTimePicker(
       context: context,
-      initialTime: _time,
+      initialTime: _startTime,
       initialEntryMode: TimePickerEntryMode.input,
     );
     if (newTime != null) {
       setState(() {
-        _time = newTime;
+        _startTime = newTime;
       });
     }
   }
 
+  void _selectEndTime() async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _startTime,
+      initialEntryMode: TimePickerEntryMode.input,
+    );
+    if (newTime != null) {
+      setState(() {
+        //_startTime = newTime;
+        _endTime = newTime;
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -539,32 +553,32 @@ class _MechanicWorkSelectionScreenState
                                     top: ScreenSize().setValue(20),
                                     left: ScreenSize().setValue(34),
                                     right: ScreenSize().setValue(34)),
-                                child: GridView.builder(
-                            itemCount:
-                            selectedEmergencyServiceList.length,
-                            shrinkWrap: true,
-                            itemBuilder:
-                                (BuildContext context, int index) {
-                              //return Text(emergencyServiceSelectedList[index]);
-                              return _serviceDataItem(
-                                  selectedEmergencyServiceList[index].serviceName.toString(),
-                                  index);
-                              //return _generalServiceListItem(generalServiceList![index], index);
-                            },
-                            padding: EdgeInsets.zero,
-                            gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              //crossAxisSpacing: 40.0,
-                              // mainAxisSpacing: 13.9,
-                              childAspectRatio:
-                              MediaQuery.of(context).size.width /
-                                  (MediaQuery.of(context)
-                                      .size
-                                      .height /
+                                  child: GridView.builder(
+                                    itemCount:
+                                    selectedEmergencyServiceList.length,
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      //return Text(emergencyServiceSelectedList[index]);
+                                      return _serviceDataItem(
+                                          selectedEmergencyServiceList[index].serviceName.toString(),
+                                          index);
+                                      //return _generalServiceListItem(generalServiceList![index], index);
+                                    },
+                                    padding: EdgeInsets.zero,
+                                    gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  //crossAxisSpacing: 40.0,
+                                  // mainAxisSpacing: 13.9,
+                                  childAspectRatio:
+                                  MediaQuery.of(context).size.width /
+                                      (MediaQuery.of(context)
+                                          .size
+                                          .height /
                                       5),
+                              ),
                             ),
-                          ),
                         )
                             : Container(),
 
@@ -611,16 +625,140 @@ class _MechanicWorkSelectionScreenState
                           ),
                         ),
 
-                        ElevatedButton(
-                          onPressed: _selectTime,
-                          child: Text('SELECT TIME'),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Selected time: ${_time.format(context)}',
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: _selectStartTime,
+                                child: Text('SELECT TIME'),
+                              ),
+                              ElevatedButton(
+                                onPressed: _selectEndTime,
+                                child: Text('SELECT TIME'),
+                              ),
+                            ],
+                          ),
                         ),
 
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(15),
+                              left: ScreenSize().setValue(5),
+                              right: ScreenSize().setValue(5)
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFormField(
+                                //initialValue: regularServiceList![index].minAmount.toString(),
+                                /*validator:
+                                                        InputValidator(ch: "Phone number")
+                                                            .phoneNumChecking,
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(15),
+                                                        ],*/
+                                maxLines: 1,
+                                //focusNode: _phoneFocusNode,
+                                textAlignVertical:
+                                TextAlignVertical.center,
+                                keyboardType: TextInputType.number,
+                                //controller: _rateController,
+                                style: TextStyle(
+                                  fontFamily: 'Corbel_Light',
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontSize:
+                                  ScreenSize().setValueFont(10
+                                  ),
+                                ),
+                                enableSuggestions: false,
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding:
+                                    EdgeInsets.symmetric(
+                                      vertical:
+                                      ScreenSize().setValue(7.8),
+                                    ),
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'Corbel_Light',
+                                      //color: Colors.white.withOpacity(.60),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize:
+                                      ScreenSize().setValueFont(12),
+                                    )),
+                              ),
+                              /*TextFormField(
+                                //initialValue: regularServiceList![index].minAmount.toString(),
+                                *//*validator:
+                                                        InputValidator(ch: "Phone number")
+                                                            .phoneNumChecking,
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(15),
+                                                        ],*//*
+                                maxLines: 1,
+                                //focusNode: _phoneFocusNode,
+                                textAlignVertical:
+                                TextAlignVertical.center,
+                                keyboardType: TextInputType.phone,
+                                //controller: _rateController,
+                                style: TextStyle(
+                                  fontFamily: 'Corbel_Light',
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontSize:
+                                  ScreenSize().setValueFont(10
+                                  ),
+                                ),
+                                enableSuggestions: false,
+                                decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding:
+                                    EdgeInsets.symmetric(
+                                      vertical:
+                                      ScreenSize().setValue(7.8),
+                                    ),
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'Corbel_Light',
+                                      //color: Colors.white.withOpacity(.60),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize:
+                                      ScreenSize().setValueFont(12),
+                                    )),
+                              )*/
+                            ],
+                          ),
+                        ),
 
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenSize().setValue(20),
+                              left: ScreenSize().setValue(34),
+                              right: ScreenSize().setValue(34)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${_startTime.format(context)}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '${_endTime.format(context)}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
                         Container(
                           height: ScreenSize().setValue(28),
@@ -654,7 +792,6 @@ class _MechanicWorkSelectionScreenState
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         /*validateForm(
-
                                         );*/
                                         // checkPassWord(
                                         // _passwordController.text,
@@ -667,9 +804,9 @@ class _MechanicWorkSelectionScreenState
                                                 const AdminApprovalScreen()));
 
                                         _signupBloc.postSignUpWorkSelectionRequest(
-                                         0, "1,2,3",
+                                            isEmergencyEnabled?1:0, "1,2,3",
                                           "100,150,120",
-                                          "09.00", "05.00"
+                                          _startTime.toString(), _endTime.toString()
                                         );
                                       } else {
                                         setState(() => _autoValidate =
@@ -711,8 +848,6 @@ class _MechanicWorkSelectionScreenState
                                   ),
                                 ),
                         ),
-
-
                       ],
                     ),
                   ),
