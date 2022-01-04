@@ -21,7 +21,7 @@ class AllModelBloc {
     postAllModel.sink.add(_allModelMdl);
   }*/
 
-  postAllModelDataRequest(int id, String token) async{
+  postAllModelDataRequest(String id, String token) async{
     AllModelMdl _allModelMdl = await repository.getAllModel(id,token);
     _modelDataList.clear();
     _modelDataList.addAll(_allModelMdl.data!.modelDetails!);

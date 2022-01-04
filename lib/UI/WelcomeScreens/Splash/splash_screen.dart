@@ -6,7 +6,6 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
@@ -92,6 +91,9 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

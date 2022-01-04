@@ -67,8 +67,8 @@ List<SliderModel> getSlides() {
   slides.add(sliderModel);
 
   sliderModel = new SliderModel(
-    desc: "Sign up as a customer and fix your car, repair and \nmaintenance. ",
-    title: "Customers",
+    desc: "Connecting drivers to customers",
+    title: "RELEX RIDE",
     imageAsset: Stack(
       children: [
         Image.asset(
@@ -92,8 +92,8 @@ List<SliderModel> getSlides() {
   slides.add(sliderModel);
 
   sliderModel = new SliderModel(
-    desc: "Sign up as a mechanic and find customers near you. ",
-    title: "Mechanic",
+    desc: "We connect automobile mechanic to customers.",
+    title: "RESOL MECH",
     imageAsset: Stack(
       children: [
         Image.asset(
@@ -117,8 +117,8 @@ List<SliderModel> getSlides() {
 
   sliderModel = new SliderModel(
     desc:
-        "Sign up as a spare parts vendor to enjoy auto-fix connecting services",
-    title: "Spare parts \nvendors",
+        "We connect automobile vendor to customers.",
+    title: "RELEX",
     imageAsset: Stack(
       children: [
         Container(

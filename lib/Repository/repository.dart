@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/EditProfile/edit_pro
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/ViewProfile/view_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Shops/top_shops_api_provider.dart';
+import 'package:auto_fix/UI/Customer/Login/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_api_provider.dart';
@@ -24,7 +25,9 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_deta
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/services_fee_list/service_fee_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_api_provider.dart';
 import 'package:auto_fix/UI/Vendor/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Vendor/Login/SignUp/signup_api_provider.dart';
 
@@ -32,6 +35,7 @@ class Repository {
   final _signupApiProvider = SignupApiProvider();
   final _signinApiProvider = SigninApiProvider();
   final _forgotPasswordApiProvider = ForgotPasswordApiProvider();
+  final _fcmTokenUpdateApiProvider = FcmTokenUpdateApiProvider();
   final _changePasswordApiProvider = ChangePasswordApiProvider();
   final _editProfileApiProvider = EditProfileApiProvider();
   final _viewProfileApiProvider = ViewProfileApiProvider();
@@ -54,12 +58,15 @@ class Repository {
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   final _mechanicProfileApiProvider = MechanicProfileApiProvider();
 
+  final _mechanicSignInApiProvider = MechanicSigninApiProvider();
   final _mechanicSignupApiProvider = MechanicSignupRegistrationApiProvider();
   final _mechanicWorkSelectionApiProvider = MechanicWorkSelectionApiProvider();
-  final _mechanicSignInApiProvider = MechanicSigninApiProvider();
+  final _mechanicExpertizeSelectionApiProvider = MechanicSpecializationSelectionApiProvider();
+  final _allServiceFeeApiProvider = AllServiceFeeApiProvider();
 
   final _vendorSignupApiProvider = VendorSignupApiProvider();
   final _vendorSignInApiProvider = VendorSigninApiProvider();
+
   // Customer SignUpScreen1
   Future<dynamic> getSignUp(String firstName, String userName, String email,
           String state, String password, String phone) =>
@@ -70,18 +77,23 @@ class Repository {
   //SignIn
   Future<dynamic> getSignIn(String userName, String password) =>
       _signinApiProvider.getSignInRequest(userName, password);
+
+  //EditProfile
+  Future<dynamic> getEditProfile() =>
+      _editProfileApiProvider.getEditProfileRequest();
+
   //Forgot Password
   Future<dynamic> getForgotPassword(String email) =>
       _forgotPasswordApiProvider.getForgotPasswordRequest(email);
   //Change Password
   Future<dynamic> getChangePassword(String password) =>
       _changePasswordApiProvider.getChangePasswordRequest(password);
-  //EditProfile
-  Future<dynamic> getEditProfile() =>
-      _editProfileApiProvider.getEditProfileRequest();
+  //FcmTokenUpdate
+  Future<dynamic> getcmTokenUpdateRequest(String fcm,String Authtoken) =>
+      _fcmTokenUpdateApiProvider.getfcmTokenUpdateRequest(fcm,Authtoken);
   //ViewProfile
-  Future<dynamic> getViewProfile(String id) =>
-      _viewProfileApiProvider.getViewProfileRequest(id);
+  Future<dynamic> getViewProfile(String id,String token, ) =>
+      _viewProfileApiProvider.getViewProfileRequest(id, token, );
   //Search Result
   Future<dynamic> getSearchResult(
           int page, int size, String searchText, String token, String type) =>
@@ -105,6 +117,7 @@ class Repository {
           String milege,
           String lastMaintenance,
           String interval,
+          String numberPlate,
           int makeId,
           int vehicleModelId,
           int engineId) =>
@@ -116,6 +129,7 @@ class Repository {
           milege,
           lastMaintenance,
           interval,
+          numberPlate,
           makeId,
           vehicleModelId,
           engineId);
@@ -126,7 +140,7 @@ class Repository {
   Future<dynamic> getBookingsDetails() =>
       _bookingsDetailsApiProvider.getBookingsDetailRequest();
   //All Model
-  Future<dynamic> getAllModel(int id, String token) =>
+  Future<dynamic> getAllModel(String id, String token) =>
       _allModelApiProvider.getAllModelRequest(id, token);
   //All Engine
   Future<dynamic> getAllEngine(int id, String token) =>
@@ -158,10 +172,15 @@ class Repository {
       _genrateAuthorizationApiProvider.getGenerateAuthorizationRequest(
           userId, type);
   //get mechanic profile
-  Future<dynamic> getMechanicProfile(String id) =>
-      _mechanicProfileApiProvider.getMechanicDetailsRequest(id);
+  Future<dynamic> getMechanicProfile(String id,String serviceId) =>
+      _mechanicProfileApiProvider.getMechanicDetailsRequest(id, serviceId);
 
   //---------------------Mechanic
+
+  //SignIn
+  Future<dynamic> getMechanicSignIn(String userName, String password) =>
+      _mechanicSignInApiProvider.getSignInRequest(userName, password);
+
   //Mechanic SignUpScreen1
   Future<dynamic> getMechanicSignUp(
       String name,
@@ -172,16 +191,35 @@ class Repository {
       double lng ,
       String walletId,
       String password) =>
-      _mechanicSignupApiProvider.getMechanicSignUpRequest(name, email, phoneNo, address, lat, lng, walletId, password);
+      _mechanicSignupApiProvider.getMechanicSignUpRequest(
+          name, email, phoneNo, address, lat, lng, walletId, password);
 
+  //Mechanic - Sign up - WorkSelection
   Future<dynamic> getMechanicSignUpWorkSelection(
-      String yearOfExperience,
-      bool isEmergencyEnabled,
-      String serviceIdList) =>
-      _mechanicWorkSelectionApiProvider.getMechanicWorkSelectionRequest(yearOfExperience,isEmergencyEnabled,serviceIdList);
+      int isEmergencyEnabled,
+      String serviceIdList,
+      String serviceFeeList,
+      String startTime,
+      String endTime) =>
+      _mechanicWorkSelectionApiProvider.getMechanicWorkSelectionRequest(
+          isEmergencyEnabled, serviceIdList, serviceFeeList, startTime,endTime);
 
+  //Mechanic - Sign up - expertizeSelection
+  Future<dynamic> getMechanicSignUpExpertizeSelection(String token, String yearOfExperience,
+      String brandIdList,
+      String modelIdList,
+      String jobType) =>
+      _mechanicExpertizeSelectionApiProvider.getMechanicExpertizeSelectionRequest(
+          token,
+        yearOfExperience,
+        brandIdList,
+        modelIdList,
+        jobType
+      );
 
-  //---------------------Vendor
+  Future<dynamic> getAllServiceFee(int page, int size, int enable,String token) =>
+      _allServiceFeeApiProvider.getAllServiceFeeRequest(page,size,enable,token);
+//---------------------Vendor
   //Vendor SignUpScreen1
   /*Future<dynamic> getVendorSignUp(String firstName, String userName, String email,
       String state, String password, String phone) =>

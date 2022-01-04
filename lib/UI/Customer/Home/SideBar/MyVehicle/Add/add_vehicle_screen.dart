@@ -41,6 +41,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   TextEditingController _brandController = TextEditingController();
   TextEditingController _modelController = TextEditingController();
+  TextEditingController _numberPlateController = TextEditingController();
+
   TextEditingController _engineController = TextEditingController();
   TextEditingController _yearController = TextEditingController();
   TextEditingController _maintenanceController = TextEditingController();
@@ -280,7 +282,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "Add Your Car",
+                                      "Add Your Vechicle",
                                       style: TextStyle(
                                         color: CustColors.blue,
                                         fontSize:
@@ -320,7 +322,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                               right: 34.8,
                                               top: 18.5),
                                           child: Text(
-                                            "Upload Your Car Photos",
+                                            "Upload Your Vechicle Photos",
                                             style: TextStyle(
                                                 color: CustColors.blue,
                                                 fontFamily: 'Corbel_Regular',
@@ -556,7 +558,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                           ),
                                         ),
                                         isDense: true,
-                                        hintText: 'Car Model',
+                                        hintText: 'Vechicle Model',
                                         hintStyle: TextStyle(
                                           fontSize:
                                               ScreenSize().setValueFont(14.5),
@@ -922,6 +924,82 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ),
                             ),
                           ),
+
+                          Container(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 19),
+                                  //padding: EdgeInsets.only(left: 17.5, right: 7.3, top: 10, bottom: 14),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: CustColors.cloudy_blue,
+                                        spreadRadius: 0,
+                                        blurRadius: 1.5,
+                                        offset: Offset(0, .8),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  height: 40.8,
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: TextFormField(
+                                        controller: _numberPlateController,
+                                        keyboardType: TextInputType.text,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontSize:
+                                          ScreenSize().setValueFont(14.5),
+                                          color: CustColors.blue,
+                                          fontFamily: 'Corbel_Regular',
+                                        ),
+                                        decoration:InputDecoration(
+                                          hintText: 'Number Plate',
+                                          hintStyle: TextStyle(
+                                            fontSize:
+                                            ScreenSize().setValueFont(14.5),
+                                            color: CustColors.blue,
+                                            fontFamily: 'Corbel_Regular',
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(25.0),
+                                            borderSide: BorderSide(
+                                                color: Colors.transparent,
+                                                width: 1.5
+                                            ),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(25.0),
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                          enabledBorder:OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(25.0),
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                              width: 1.5,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+
+
+
                           Container(
                             margin: EdgeInsets.only(
                               top: _setValue(15),
@@ -1023,6 +1101,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                               ],
                             ),
                           ),
+
                           Align(
                             alignment: Alignment.centerRight,
                             child: _isLoading
@@ -1067,6 +1146,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                               _mileageData.toString(),
                                               _maintenanceController.text,
                                               "3",
+                                              _numberPlateController.text.toString(),
                                               selectedBrandId!,
                                               selectedModelId!,
                                               selectedEngineId!);
@@ -1325,9 +1405,10 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                     selectedModelId = 0;
                                                     _engineController.clear();
                                                     selectedEngineId = 0;
+                                                    print("$selectedBrandId>>>>>>>>>>>>>>>");
                                                     _allModelBloc
                                                         .postAllModelDataRequest(
-                                                            selectedBrandId!,
+                                                            selectedBrandId!.toString(),
                                                             token);
                                                   });
                                                   print(">>>>>");

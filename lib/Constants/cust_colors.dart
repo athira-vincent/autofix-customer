@@ -14,6 +14,8 @@ class CustColors {
 
   static const cloudy_blue = Color(0xffd0d5e1);
   static const black01 = Color(0xff363131);
+  static const border_grey= Color(0xffC7C0C0);
+
   static const light_blue_grey = Color(0xffd0e5f0);
   static const white01 = Color(0xffe2e2e2);
   static const white02 = Color(0xffc1c1c1);

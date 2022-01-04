@@ -35,8 +35,8 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
   BitmapDescriptor? pinLocationIcon;
   final MechanicListBloc _mechanicListBloc = MechanicListBloc();
 
-  List<MechanicListData> mechanicListData = [];
-  MechanicListData? mechanicListDataVal;
+  List<Datum> mechanicListData = [];
+  Datum? mechanicListDataVal;
   bool fail = false;
   bool _isLoading = false;
   double per = .10;
@@ -79,7 +79,7 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
         setState(() {
           print("errrrorr 01");
           _isLoading = true;
-          mechanicListData = value.data!.mechanicList!.mechanicListData!;
+          mechanicListData = value.data!.mechanicList!.data!;
           km = calculateDistance(10.1964, 76.3879,
                   mechanicListData[0].latitude!, mechanicListData[0].longitude!)
               .roundToDouble();
@@ -296,6 +296,7 @@ Almost  there…..""",
                                 MaterialPageRoute(
                                     builder: (context) => MechanicProfileScreen(
                                           id: mechanicListData[0].id.toString(),
+                                           serviceId: widget.serviceID,
                                         )));
                           },
                           child: Container(
@@ -343,7 +344,7 @@ Almost  there…..""",
                                       children: [
                                         Text(
                                           mechanicListData[0]
-                                              .displayName
+                                              .mechanicName
                                               .toString(),
                                           style: TextStyle(
                                               fontSize: 14.5,
