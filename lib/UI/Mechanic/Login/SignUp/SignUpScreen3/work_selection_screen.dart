@@ -247,111 +247,111 @@ class _MechanicWorkSelectionScreenState
 
         SingleChildScrollView(
           child: Container(
-              color: Colors.white,
-              child: Form(
-                autovalidateMode: _autoValidate,
-                key: _formKey,
-                child: Container(
-                  color: CustColors.blue,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IndicatorWidget(
-                        isFirst: true,
-                        isSecond: true,
-                        isThird: true,
-                      ),
+            color: Colors.white,
+            child: Form(
+              autovalidateMode: _autoValidate,
+              key: _formKey,
+              child: Container(
+                color: CustColors.blue,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IndicatorWidget(
+                      isFirst: true,
+                      isSecond: true,
+                      isThird: true,
+                    ),
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(10),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Sign up',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenSize().setValueFont(19.5),
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Corbel_Bold'),
-                        ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(10),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Sign up',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ScreenSize().setValueFont(19.5),
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Corbel_Bold'),
                       ),
+                    ),
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'YOUR SERVICE SKILLS',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenSize().setValueFont(18),
-                              fontWeight: FontWeight.w200,
-                              fontFamily: 'Corbel_Bold'),
-                        ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'YOUR SERVICE SKILLS',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ScreenSize().setValueFont(18),
+                            fontWeight: FontWeight.w200,
+                            fontFamily: 'Corbel_Bold'),
                       ),
+                    ),
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Do you wish to enable emergency service",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Corbel_Regular"),
-                              ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Do you wish to enable emergency service",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Corbel_Regular"),
                             ),
-                            Switch(
-                              onChanged: toggleIsEmergencyEnabled,
-                              value: isEmergencyEnabled,
-                              activeColor: Colors.white,
-                              activeTrackColor: Colors.white70,
-                              inactiveThumbColor: Colors.white70,
-                              inactiveTrackColor: CustColors.borderColor,
-                            ),
-                          ],
-                        ),
+                          ),
+                          Switch(
+                            onChanged: toggleIsEmergencyEnabled,
+                            value: isEmergencyEnabled,
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.white70,
+                            inactiveThumbColor: Colors.white70,
+                            inactiveTrackColor: CustColors.borderColor,
+                          ),
+                        ],
                       ),
+                    ),
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: TextFormField(
-                          textAlignVertical: TextAlignVertical.center,
-                          maxLines: 1,
-                          onTap: () async {
-                            await _allServiceBloc.postAllServiceDataRequest(1, 25, 1, token);
-                            print("checking 0001 Regular ${serviceList.length}");
-                            SelectedData data = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SelectServiceScreen(
-                                      serviceList: serviceList,
-                                      type: "1",
-                                    )));
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: TextFormField(
+                        textAlignVertical: TextAlignVertical.center,
+                        maxLines: 1,
+                        onTap: () async {
+                          await _allServiceBloc.postAllServiceDataRequest(1, 25, 1, token);
+                          print("checking 0001 Regular ${serviceList.length}");
+                          SelectedData data = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SelectServiceScreen(
+                                    serviceList: serviceList,
+                                    type: "1",
+                                  )));
 
-                              setState(() {
+                          setState(() {
 
-                                selectedRegularServiceList = data.services!;
-                                print("checking 0002 Regular ${data.services![0].minAmount.toString()}");
-                                print("checking 0002 Regular ${data.services!.length}");
-                              });
+                            selectedRegularServiceList = data.services!;
+                            print("checking 0002 Regular ${data.services![0].minAmount.toString()}");
+                            print("checking 0002 Regular ${data.services!.length}");
+                          });
 
 
-                            /*_allMakeBloc.postAllMakeDataRequest(token);
+                          /*_allMakeBloc.postAllMakeDataRequest(token);
 
                           print("checking 0001 ${makeDetailsList!.length}");
 
@@ -370,6 +370,132 @@ class _MechanicWorkSelectionScreenState
                             modelDetailsList = [];
                             selectedModelList = [];
                           });*/
+                        },
+                        readOnly: true,
+                        autofocus: false,
+                        style: TextStyle(
+                          fontFamily: 'Corbel_Light',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontSize: ScreenSize().setValueFont(13),
+                        ),
+                        //focusNode: _mechanicBrandFocusNode,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                                width: .3,
+                              ),
+                            ),
+                            isDense: true,
+                            suffixIconConstraints: BoxConstraints(
+                              minWidth: 30,
+                              minHeight: 30,
+                            ),
+                            suffixIcon: Container(
+                              width: 3,
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                iconSize: 20,
+                                icon: Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
+                            ),
+                            hintText: 'Select Regular Services',
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                                width: .3,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                                width: .3,
+                              ),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                                width: .3,
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: ScreenSize().setValue(7.8),
+                            ),
+                            hintStyle: TextStyle(
+                              fontFamily: 'Corbel_Light',
+                              color: Colors.white.withOpacity(.60),
+                              fontWeight: FontWeight.w600,
+                              fontSize: ScreenSize().setValueFont(12),
+                            )),
+                      ),
+                    ),
+
+                    selectedRegularServiceList.isNotEmpty
+                        ? Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: GridView.builder(
+                        itemCount:
+                        selectedRegularServiceList.length,
+                        shrinkWrap: true,
+                        itemBuilder:
+                            (BuildContext context, int index) {
+                          //return Text(emergencyServiceSelectedList[index]);
+                          return _serviceDataItem(
+                              selectedRegularServiceList[index].serviceName.toString(),
+                              index);
+                          //return _generalServiceListItem(generalServiceList![index], index);
+                        },
+                        padding: EdgeInsets.zero,
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          //crossAxisSpacing: 40.0,
+                          // mainAxisSpacing: 13.9,
+                          childAspectRatio:
+                          MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 4),
+                        ),
+                      ),
+                    )
+                        : Container(),
+
+                    isEmergencyEnabled ? Container(
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: ScreenSize().setValue(20),
+                            left: ScreenSize().setValue(34),
+                            right: ScreenSize().setValue(34)),
+                        child: TextFormField(
+                          textAlignVertical:
+                          TextAlignVertical.center,
+                          maxLines: 1,
+                          onTap: () async {
+
+                            print("checking 0001 Regular ${serviceList.length}");
+                            print("checking 0001 Regular ${serviceList.length}");
+
+                            SelectedData data = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectServiceScreen(
+                                      serviceList: serviceList,
+                                      type: "2",
+                                    )));
+
+                            setState(() {
+                              selectedEmergencyServiceList = data.services!;
+                              print("checking 0002 Regular ${data.services!.length}");
+                            });
+
                           },
                           readOnly: true,
                           autofocus: false,
@@ -377,12 +503,22 @@ class _MechanicWorkSelectionScreenState
                             fontFamily: 'Corbel_Light',
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
-                            fontSize: ScreenSize().setValueFont(13),
+                            fontSize:
+                            ScreenSize().setValueFont(13),
                           ),
-                          //focusNode: _mechanicBrandFocusNode,
+                          //focusNode: _mechanicExperienceFocusNode,
                           keyboardType: TextInputType.text,
+                          /*validator: InputValidator(
+                              ch: "Select Services")
+                              .emptyChecking,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z]')),
+                          ],*/
+                          //controller: _mechanicExperienceController,
                           decoration: InputDecoration(
-                              disabledBorder: UnderlineInputBorder(
+                              disabledBorder:
+                              UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.white,
                                   width: .3,
@@ -406,7 +542,7 @@ class _MechanicWorkSelectionScreenState
                                   onPressed: () {},
                                 ),
                               ),
-                              hintText: 'Select Regular Services',
+                              hintText: 'Select Emergency Services',
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.white,
@@ -425,235 +561,99 @@ class _MechanicWorkSelectionScreenState
                                   width: .3,
                                 ),
                               ),
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: ScreenSize().setValue(7.8),
+                              contentPadding:
+                              EdgeInsets.symmetric(
+                                vertical:
+                                ScreenSize().setValue(7.8),
                               ),
                               hintStyle: TextStyle(
                                 fontFamily: 'Corbel_Light',
-                                color: Colors.white.withOpacity(.60),
+                                color:
+                                Colors.white.withOpacity(.60),
                                 fontWeight: FontWeight.w600,
-                                fontSize: ScreenSize().setValueFont(12),
+                                fontSize:
+                                ScreenSize().setValueFont(12),
                               )),
                         ),
                       ),
+                    ) : Container(),
+                    isEmergencyEnabled ?
+                    selectedEmergencyServiceList.isNotEmpty
+                        ? Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: GridView.builder(
+                        itemCount:
+                        selectedEmergencyServiceList.length,
+                        shrinkWrap: true,
+                        itemBuilder:
+                            (BuildContext context, int index) {
+                          //return Text(emergencyServiceSelectedList[index]);
+                          return _serviceDataItem(
+                              selectedEmergencyServiceList[index].serviceName.toString(),
+                              index);
+                          //return _generalServiceListItem(generalServiceList![index], index);
+                        },
+                        padding: EdgeInsets.zero,
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          //crossAxisSpacing: 40.0,
+                          // mainAxisSpacing: 13.9,
+                          childAspectRatio:
+                          MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 4),
+                        ),
+                      ),
+                    )
+                        : Container()
+                        : Container(),
 
-                      selectedRegularServiceList.isNotEmpty
-                          ? Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: GridView.builder(
-                              itemCount:
-                              selectedRegularServiceList.length,
-                              shrinkWrap: true,
-                              itemBuilder:
-                                  (BuildContext context, int index) {
-                                //return Text(emergencyServiceSelectedList[index]);
-                                return _serviceDataItem(
-                                    selectedRegularServiceList[index].serviceName.toString(),
-                                    index);
-                                //return _generalServiceListItem(generalServiceList![index], index);
-                              },
-                              padding: EdgeInsets.zero,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                //crossAxisSpacing: 40.0,
-                                // mainAxisSpacing: 13.9,
-                                childAspectRatio:
-                                MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 4),
-                              ),
-                            ),
-                          )
-                          : Container(),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: Text(
+                        "Set Your Regular Working Time",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Corbel_Regular"),
+                      ),
+                    ),
 
-                      isEmergencyEnabled ? Container(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: ScreenSize().setValue(20),
-                              left: ScreenSize().setValue(34),
-                              right: ScreenSize().setValue(34)),
-                          child: TextFormField(
-                            textAlignVertical:
-                            TextAlignVertical.center,
-                            maxLines: 1,
-                            onTap: () async {
-
-                              print("checking 0001 Regular ${serviceList.length}");
-                              print("checking 0001 Regular ${serviceList.length}");
-
-                              SelectedData data = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SelectServiceScreen(
-                                        serviceList: serviceList,
-                                        type: "2",
-                                      )));
-
-                              setState(() {
-                                selectedEmergencyServiceList = data.services!;
-                                print("checking 0002 Regular ${data.services!.length}");
-                              });
-
-                            },
-                            readOnly: true,
-                            autofocus: false,
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Start Time",
                             style: TextStyle(
-                              fontFamily: 'Corbel_Light',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              fontSize:
-                              ScreenSize().setValueFont(13),
-                            ),
-                            //focusNode: _mechanicExperienceFocusNode,
-                            keyboardType: TextInputType.text,
-                            /*validator: InputValidator(
-                              ch: "Select Services")
-                              .emptyChecking,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp('[a-zA-Z]')),
-                          ],*/
-                            //controller: _mechanicExperienceController,
-                            decoration: InputDecoration(
-                                disabledBorder:
-                                UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: .3,
-                                  ),
-                                ),
-                                isDense: true,
-                                suffixIconConstraints: BoxConstraints(
-                                  minWidth: 30,
-                                  minHeight: 30,
-                                ),
-                                suffixIcon: Container(
-                                  width: 3,
-                                  alignment: Alignment.centerRight,
-                                  child: IconButton(
-                                    iconSize: 20,
-                                    icon: Icon(
-                                      // Based on passwordVisible state choose the icon
-                                      Icons.keyboard_arrow_down,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ),
-                                hintText: 'Select Emergency Services',
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: .3,
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: .3,
-                                  ),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                    width: .3,
-                                  ),
-                                ),
-                                contentPadding:
-                                EdgeInsets.symmetric(
-                                  vertical:
-                                  ScreenSize().setValue(7.8),
-                                ),
-                                hintStyle: TextStyle(
-                                  fontFamily: 'Corbel_Light',
-                                  color:
-                                  Colors.white.withOpacity(.60),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize:
-                                  ScreenSize().setValueFont(12),
-                                )),
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Corbel_Regular"),
                           ),
-                        ),
-                      ) : Container(),
-                      isEmergencyEnabled ?
-                      selectedEmergencyServiceList.isNotEmpty
-                          ? Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(20),
-                                left: ScreenSize().setValue(34),
-                                right: ScreenSize().setValue(34)),
-                            child: GridView.builder(
-                              itemCount:
-                              selectedEmergencyServiceList.length,
-                              shrinkWrap: true,
-                              itemBuilder:
-                                  (BuildContext context, int index) {
-                                //return Text(emergencyServiceSelectedList[index]);
-                                return _serviceDataItem(
-                                    selectedEmergencyServiceList[index].serviceName.toString(),
-                                    index);
-                                //return _generalServiceListItem(generalServiceList![index], index);
-                              },
-                              padding: EdgeInsets.zero,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                //crossAxisSpacing: 40.0,
-                                // mainAxisSpacing: 13.9,
-                                childAspectRatio:
-                                MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 4),
-                              ),
-                            ),
-                          )
-                          : Container()
-                      : Container(),
-
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: Text(
-                          "Set Your Regular Working Time",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Corbel_Regular"),
-                        ),
+                          Text(
+                            "End Time",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Corbel_Regular"),
+                          ),
+                        ],
                       ),
+                    ),
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Start Time",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Corbel_Regular"),
-                            ),
-                            Text(
-                              "End Time",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Corbel_Regular"),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                     /* Container(
+                    /* Container(
                         margin: EdgeInsets.only(
                             top: ScreenSize().setValue(20),
                             left: ScreenSize().setValue(34),
@@ -673,270 +673,270 @@ class _MechanicWorkSelectionScreenState
                         ),
                       ),*/
 
-                      Padding(
-                        padding:  EdgeInsets.only(
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34),
-                            top: 10,
-                            bottom: 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 100,
-                                  child: Row(
-                                    // Hour/minutes should not change positions in RTL locales.
-                                    textDirection: TextDirection.ltr,
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          width: 45,
-                                          height: 45,
-                                          color: CustColors.white01,
-                                          child: TextFormField(
+                    Padding(
+                      padding:  EdgeInsets.only(
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34),
+                          top: 10,
+                          bottom: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 100,
+                                child: Row(
+                                  // Hour/minutes should not change positions in RTL locales.
+                                  textDirection: TextDirection.ltr,
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        width: 45,
+                                        height: 45,
+                                        color: CustColors.white01,
+                                        child: TextFormField(
                                           controller: _controllerStartHour,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 11.5,
-                                                fontFamily: 'Montserrat_SemiBold'),
-                                      ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                            ':',
-                                            style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 11.5,
-                                            fontFamily: 'Montserrat_SemiBold'),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          width: 45,
-                                          height: 45,
-                                          color: CustColors.white01,
-                                          child: TextFormField(
-                                            controller: _controllerStartMin,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 11.5,
-                                                fontFamily: 'Montserrat_SemiBold'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  width: 100,
-                                  child: Row(
-                                    // Hour/minutes should not change positions in RTL locales.
-                                    textDirection: TextDirection.ltr,
-                                    children: <Widget>[
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          width: 45,
-                                          height: 45,
-                                          color: CustColors.white01,
-                                          child: TextFormField(
-                                            controller: _controllerEndHour,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 11.5,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: 'Montserrat_SemiBold'),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          ':',
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               fontSize: 11.5,
                                               fontFamily: 'Montserrat_SemiBold'),
                                         ),
                                       ),
-                                      Expanded(
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        ':',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11.5,
+                                            fontFamily: 'Montserrat_SemiBold'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        width: 45,
+                                        height: 45,
+                                        color: CustColors.white01,
+                                        child: TextFormField(
+                                          controller: _controllerStartMin,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 11.5,
+                                              fontFamily: 'Montserrat_SemiBold'),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Spacer(),
+                              Container(
+                                width: 100,
+                                child: Row(
+                                  // Hour/minutes should not change positions in RTL locales.
+                                  textDirection: TextDirection.ltr,
+                                  children: <Widget>[
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        width: 45,
+                                        height: 45,
+                                        color: CustColors.white01,
+                                        child: TextFormField(
+                                          controller: _controllerEndHour,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 11.5,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Montserrat_SemiBold'),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        ':',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11.5,
+                                            fontFamily: 'Montserrat_SemiBold'),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        width: 45,
+                                        height: 45,
+                                        color: CustColors.white01,
+                                        child: TextFormField(
+                                          controller: _controllerEndMin,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 11.5,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Montserrat_SemiBold'),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white
+                                    ),
+                                    borderRadius: BorderRadius.all(Radius.circular(1))
+                                ),
+                                child: Row(
+                                  // Hour/minutes should not change positions in RTL locales.
+                                  textDirection: TextDirection.ltr,
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          _startAmPm = "am";
+                                        });
+                                      },
+                                      child: Expanded(
                                         flex: 1,
                                         child: Container(
                                           width: 45,
                                           height: 45,
-                                          color: CustColors.white01,
-                                          child: TextFormField(
-                                            controller: _controllerEndMin,
-                                            textAlign: TextAlign.center,
+                                          color: Colors.transparent,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'am',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: _startAmPm=="am"?Colors.white:Colors.grey,
                                                 fontSize: 11.5,
-                                                fontWeight: FontWeight.w500,
                                                 fontFamily: 'Montserrat_SemiBold'),
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 100,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.white
-                                      ),
-                                      borderRadius: BorderRadius.all(Radius.circular(1))
-                                  ),
-                                  child: Row(
-                                    // Hour/minutes should not change positions in RTL locales.
-                                    textDirection: TextDirection.ltr,
-                                    children: <Widget>[
-                                      InkWell(
-                                        onTap: (){
-                                          setState(() {
-                                            _startAmPm = "am";
-                                          });
-                                        },
-                                        child: Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            width: 45,
-                                            height: 45,
-                                            color: Colors.transparent,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'am',
-                                              style: TextStyle(
-                                                  color: _startAmPm=="am"?Colors.white:Colors.grey,
-                                                  fontSize: 11.5,
-                                                  fontFamily: 'Montserrat_SemiBold'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
+                                    ),
+                                    Container(
                                         height: 30,
                                         width: 1,
                                         color: Colors.white
-                                      ),
-                                      InkWell(
-                                        onTap: (){
-                                          setState(() {
-                                            _startAmPm = "pm";
-                                          });
-                                        },
-                                        child: Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            width: 45,
-                                            height: 45,
-                                            alignment: Alignment.center,
-                                            color: Colors.transparent,
-                                            child: Text(
-                                              'pm',
-                                              style: TextStyle(
-                                                  color: _startAmPm=="pm"?Colors.white:Colors.grey,
-                                                  fontSize: 11.5,
-                                                  fontFamily: 'Montserrat_SemiBold'),
-                                            ),
+                                    ),
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          _startAmPm = "pm";
+                                        });
+                                      },
+                                      child: Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          width: 45,
+                                          height: 45,
+                                          alignment: Alignment.center,
+                                          color: Colors.transparent,
+                                          child: Text(
+                                            'pm',
+                                            style: TextStyle(
+                                                color: _startAmPm=="pm"?Colors.white:Colors.grey,
+                                                fontSize: 11.5,
+                                                fontFamily: 'Montserrat_SemiBold'),
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Spacer(),
-                                Container(
-                                  width: 100,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.white
-                                      ),
-                                      borderRadius: BorderRadius.all(Radius.circular(1))
-                                  ),
-                                  child: Row(
-                                    // Hour/minutes should not change positions in RTL locales.
-                                    textDirection: TextDirection.ltr,
-                                    children: <Widget>[
-                                      InkWell(
-                                        onTap: (){
-                                          setState(() {
-                                            _endAmPm = "am";
-                                          });
-                                        },
-                                        child: Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            width: 45,
-                                            height: 45,
-                                            color: Colors.transparent,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'am',
-                                              style: TextStyle(
-                                                  color: _endAmPm == "am"?Colors.white:Colors.grey,
-                                                  fontSize: 11.5,
-                                                  fontFamily: 'Montserrat_SemiBold'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                          height: 30,
-                                          width: 1,
-                                          color: Colors.white
-                                      ),
-                                      InkWell(
-                                        onTap: (){
-                                          setState(() {
-                                            _endAmPm = "pm";
-                                          });
-                                        },
-                                        child: Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            width: 45,
-                                            height: 45,
-                                            alignment: Alignment.center,
-                                            color: Colors.transparent,
-                                            child: Text(
-                                              'pm',
-                                              style: TextStyle(
-                                                  color: _endAmPm == "pm"?Colors.white:Colors.grey,
-                                                  fontSize: 11.5,
-                                                  fontFamily: 'Montserrat_SemiBold'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              ),
+                              Spacer(),
+                              Container(
+                                width: 100,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.white
+                                    ),
+                                    borderRadius: BorderRadius.all(Radius.circular(1))
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                child: Row(
+                                  // Hour/minutes should not change positions in RTL locales.
+                                  textDirection: TextDirection.ltr,
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          _endAmPm = "am";
+                                        });
+                                      },
+                                      child: Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          width: 45,
+                                          height: 45,
+                                          color: Colors.transparent,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'am',
+                                            style: TextStyle(
+                                                color: _endAmPm == "am"?Colors.white:Colors.grey,
+                                                fontSize: 11.5,
+                                                fontFamily: 'Montserrat_SemiBold'),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                        height: 30,
+                                        width: 1,
+                                        color: Colors.white
+                                    ),
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          _endAmPm = "pm";
+                                        });
+                                      },
+                                      child: Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          width: 45,
+                                          height: 45,
+                                          alignment: Alignment.center,
+                                          color: Colors.transparent,
+                                          child: Text(
+                                            'pm',
+                                            style: TextStyle(
+                                                color: _endAmPm == "pm"?Colors.white:Colors.grey,
+                                                fontSize: 11.5,
+                                                fontFamily: 'Montserrat_SemiBold'),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
+                    ),
 
-                      /*Container(
+                    /*Container(
                         margin: EdgeInsets.only(
                             top: ScreenSize().setValue(15),
                             left: ScreenSize().setValue(5),
@@ -983,161 +983,161 @@ class _MechanicWorkSelectionScreenState
                         ),
                       ),*/
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(20),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${_startTime.format(context)}',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(20),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${_startTime.format(context)}',
+                            style: TextStyle(
+                              color: Colors.white,
                             ),
-                            Text(
-                              '${_endTime.format(context)}',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                          ),
+                          Text(
+                            '${_endTime.format(context)}',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      height: ScreenSize().setValue(28),
+                      width: ScreenSize().setValue(98),
+                      margin: EdgeInsets.only(
+                          top: ScreenSize().setValue(25),
+                          left: ScreenSize().setValue(34),
+                          right: ScreenSize().setValue(34)),
+                      child: _isLoading
+                          ? Center(
+                        child: Container(
+                          height: ScreenSize().setValue(28),
+                          width: ScreenSize().setValue(28),
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CustColors.peaGreen),
+                          ),
+                        ),
+                      )
+                          : Container(
+                        decoration: BoxDecoration(
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: CustColors.darkBlue,
+                              blurRadius: 5,
+                              offset: Offset(0, 3.3),
                             ),
                           ],
                         ),
-                      ),
+                        child: MaterialButton(
+                          onPressed: () {
 
-                      Container(
-                        height: ScreenSize().setValue(28),
-                        width: ScreenSize().setValue(98),
-                        margin: EdgeInsets.only(
-                            top: ScreenSize().setValue(25),
-                            left: ScreenSize().setValue(34),
-                            right: ScreenSize().setValue(34)),
-                        child: _isLoading
-                            ? Center(
+                            String startTimeFinal = "${_controllerStartHour.text}:${_controllerStartMin.text} $_startAmPm";
+
+                            String endTimeFinal = "${_controllerEndHour.text}:${_controllerEndMin.text} $_endAmPm";
+
+                            print("$startTimeFinal");
+
+                            print("$endTimeFinal");
+
+                            regularServiceSelectedList.clear();
+                            emergencyServiceSelectedList.clear();
+
+                            for(int i=0;i<selectedRegularServiceList.length;i++)
+                            {
+                              regularServiceSelectedList.add(selectedRegularServiceList[i].id.toString());
+                              regularServiceSelectedListAmt.add(selectedRegularServiceList[i].minAmount.toString());
+                            }
+
+                            print("${regularServiceSelectedList.toString()} +++++++++++ regularServiceSelectedList");
+
+                            for(int i=0;i<selectedEmergencyServiceList.length;i++)
+                            {
+                              emergencyServiceSelectedList.add(selectedEmergencyServiceList[i].id.toString());
+                              emergencyServiceSelectedListAmt.add(selectedEmergencyServiceList[i].minAmount.toString());
+
+                            }
+
+
+                            print("$emergencyServiceSelectedList ++++++++++ emergencyServiceSelectedList");
+
+
+                            print(regularServiceSelectedListAmt.join(", ")+' ,'+emergencyServiceSelectedListAmt.join(", "));
+
+                            print(regularServiceSelectedList.join(", ")+' ,'+emergencyServiceSelectedList.join(", "));
+
+                            if (_formKey.currentState!.validate()) {
+                              // validateForm(
+                              //     );
+                              // checkPassWord(
+                              // _passwordController.text,
+                              //_confirmPwdController.text);
+
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const AdminApprovalScreen()));
+
+                              _signupBloc.postSignUpWorkSelectionRequest(
+                                  isEmergencyEnabled?1:0,
+                                  regularServiceSelectedList.join(", ")+' ,'+emergencyServiceSelectedList.join(", "),
+                                  regularServiceSelectedListAmt.join(", ")+' ,'+emergencyServiceSelectedListAmt.join(", "),
+                                  startTimeFinal.toString(), endTimeFinal.toString()
+                              );
+                            } else {
+                              setState(() => _autoValidate =
+                                  AutovalidateMode.always);
+                            }
+                          },
                           child: Container(
-                            height: ScreenSize().setValue(28),
-                            width: ScreenSize().setValue(28),
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  CustColors.peaGreen),
-                            ),
-                          ),
-                        )
-                            : Container(
-                          decoration: BoxDecoration(
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                color: CustColors.darkBlue,
-                                blurRadius: 5,
-                                offset: Offset(0, 3.3),
-                              ),
-                            ],
-                          ),
-                          child: MaterialButton(
-                            onPressed: () {
-
-                              String startTimeFinal = "${_controllerStartHour.text}:${_controllerStartMin.text} $_startAmPm";
-
-                              String endTimeFinal = "${_controllerEndHour.text}:${_controllerEndMin.text} $_endAmPm";
-
-                              print("$startTimeFinal");
-
-                              print("$endTimeFinal");
-
-                              regularServiceSelectedList.clear();
-                              emergencyServiceSelectedList.clear();
-
-                              for(int i=0;i<selectedRegularServiceList.length;i++)
-                                {
-                                  regularServiceSelectedList.add(selectedRegularServiceList[i].id.toString());
-                                  regularServiceSelectedListAmt.add(selectedRegularServiceList[i].minAmount.toString());
-                                }
-
-                              print("${regularServiceSelectedList.toString()} +++++++++++ regularServiceSelectedList");
-
-                              for(int i=0;i<selectedEmergencyServiceList.length;i++)
-                              {
-                                emergencyServiceSelectedList.add(selectedEmergencyServiceList[i].id.toString());
-                                emergencyServiceSelectedListAmt.add(selectedEmergencyServiceList[i].minAmount.toString());
-
-                              }
-
-
-                              print("$emergencyServiceSelectedList ++++++++++ emergencyServiceSelectedList");
-
-
-                              print(regularServiceSelectedListAmt.join(", ")+' ,'+emergencyServiceSelectedListAmt.join(", "));
-
-                              print(regularServiceSelectedList.join(", ")+' ,'+emergencyServiceSelectedList.join(", "));
-
-                              if (_formKey.currentState!.validate()) {
-                                // validateForm(
-                                //     );
-                                // checkPassWord(
-                                // _passwordController.text,
-                                //_confirmPwdController.text);
-
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                        const AdminApprovalScreen()));
-
-                                _signupBloc.postSignUpWorkSelectionRequest(
-                                    isEmergencyEnabled?1:0,
-                                    regularServiceSelectedList.join(", ")+' ,'+emergencyServiceSelectedList.join(", "),
-                                    regularServiceSelectedListAmt.join(", ")+' ,'+emergencyServiceSelectedListAmt.join(", "),
-                                    startTimeFinal.toString(), endTimeFinal.toString()
-                                );
-                              } else {
-                                setState(() => _autoValidate =
-                                    AutovalidateMode.always);
-                              }
-                            },
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Save',
-                                    style: TextStyle(
-                                      color: CustColors.blue,
-                                      fontFamily: 'Corbel_Regular',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: ScreenSize()
-                                          .setValueFont(11.5),
-                                    ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: CustColors.blue,
+                                    fontFamily: 'Corbel_Regular',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: ScreenSize()
+                                        .setValueFont(11.5),
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      left: ScreenSize().setValue(16.6),
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/arrow_forword.png',
-                                      width:
-                                      ScreenSize().setValue(12.5),
-                                      height:
-                                      ScreenSize().setValue(12.5),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: ScreenSize().setValue(16.6),
+                                  ),
+                                  child: Image.asset(
+                                    'assets/images/arrow_forword.png',
+                                    width:
+                                    ScreenSize().setValue(12.5),
+                                    height:
+                                    ScreenSize().setValue(12.5),
+                                  ),
+                                )
+                              ],
                             ),
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    ScreenSize().setValue(16))),
                           ),
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  ScreenSize().setValue(16))),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
         ),
-        ),
+      ),
     );
   }
 
@@ -1168,7 +1168,7 @@ class _MechanicWorkSelectionScreenState
                       title: Text(_mechanicYearList[index]),
                       onTap: () {
                         final yearSelected =
-                            _mechanicYearList[index].toString();
+                        _mechanicYearList[index].toString();
                         setState(() {
                           _mechanicExperienceController.text =
                               " " + yearSelected.toString() + " Year";

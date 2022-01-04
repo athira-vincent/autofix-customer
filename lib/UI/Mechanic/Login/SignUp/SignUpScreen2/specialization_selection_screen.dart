@@ -144,8 +144,7 @@ class _MechanicSpecializationSelectionScreenState
               ">>>>>>>>>");
         });
 
-        /*_allModelBloc.postModelData.listen((data) {
-        });*/
+        /*_allModelBloc.postModelData.listen((data) { });*/
       }
     });
   }
