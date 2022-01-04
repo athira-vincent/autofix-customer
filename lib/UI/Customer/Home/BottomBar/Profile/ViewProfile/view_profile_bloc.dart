@@ -10,8 +10,8 @@ class ViewProfileBloc {
     postViewProfile.close();
   }
 
-  postViewProfileRequest(String id) async {
-    ViewProfileMdl _viewProfileMdl = await repository.getViewProfile(id);
+  postViewProfileRequest(String id,String token, ) async {
+    ViewProfileMdl _viewProfileMdl = await repository.getViewProfile(id, token, );
     postViewProfile.sink.add(_viewProfileMdl);
   }
 }

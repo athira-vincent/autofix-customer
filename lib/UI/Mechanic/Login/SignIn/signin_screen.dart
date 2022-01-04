@@ -5,6 +5,8 @@ import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

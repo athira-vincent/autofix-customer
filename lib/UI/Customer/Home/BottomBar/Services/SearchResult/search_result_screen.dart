@@ -325,9 +325,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     if (searchQuery.length > 2) {
       SharedPreferences shdPre = await SharedPreferences.getInstance();
       _searchResultBlocRegular.postSearchResultRequest(1, 100, searchQuery,
-          shdPre.getString(SharedPrefKeys.token).toString(), "1");
-      _searchResultBlocEmergency.postSearchResultRequest(1, 100, searchQuery,
           shdPre.getString(SharedPrefKeys.token).toString(), "2");
+      _searchResultBlocEmergency.postSearchResultRequest(1, 100, searchQuery,
+          shdPre.getString(SharedPrefKeys.token).toString(), "1");
     }
   }
 
@@ -525,7 +525,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           Container(
             margin: EdgeInsets.only(bottom: _setValue(7.9)),
             child: Text(
-              'Regular Services',
+              'Emergency Services',
               style: TextStyle(
                 fontSize: 12,
                 color: CustColors.blue01,

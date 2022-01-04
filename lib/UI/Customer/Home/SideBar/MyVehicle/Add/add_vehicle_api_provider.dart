@@ -11,6 +11,7 @@ class AddVehicleApiProvider {
       String milege,
       String lastMaintenance,
       String interval,
+      String numberPlate,
       int makeId,
       int vehicleModelId,
       int engineId) async {
@@ -22,6 +23,7 @@ class AddVehicleApiProvider {
         milege,
         lastMaintenance,
         interval,
+        numberPlate,
         makeId,
         vehicleModelId,
         engineId);

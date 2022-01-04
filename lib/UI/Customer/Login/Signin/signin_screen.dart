@@ -3,10 +3,12 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
+import 'package:auto_fix/UI/Customer/Login/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +30,9 @@ class _SigninScreenState extends State<SigninScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SigninBloc _signinBloc = SigninBloc();
+
+  FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+
   bool _isLoading = false;
   bool? _passwordVisible;
   double per = .10;
@@ -61,6 +66,19 @@ class _SigninScreenState extends State<SigninScreen> {
     shdPre.setString(SharedPrefKeys.userType, TextStrings.user_customer);
   }
 
+  Future<void> setFcmToken(String Authtoken) async {
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
+
+      _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
+    });
+
+
+
+  }
+
+
   _getSignInRes() async {
     _signinBloc.postSignIn.listen((value) async {
       if (value.status == "error") {
@@ -78,6 +96,7 @@ class _SigninScreenState extends State<SigninScreen> {
         });
       } else {
         _signinBloc.userDefault(value.data!.customerSignIn!.token.toString());
+        setFcmToken(value.data!.customerSignIn!.token.toString());
         SharedPreferences shdPre = await SharedPreferences.getInstance();
         print(
             "check username ${value.data!.customerSignIn!.customer!.firstName.toString()}");

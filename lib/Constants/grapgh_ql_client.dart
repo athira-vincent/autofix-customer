@@ -280,6 +280,88 @@ class GqlClient {
     }
   }
 
+  Future<dynamic> mutation11(String query,
+      {bool enableDebug = false,
+        required Map<String, dynamic> variables,
+        required String token,
+        required bool isTokenThere}) async {
+    try {
+      if (enableDebug) {
+        _showDebugMessage(query, 'GraphQL Query');
+      }
+
+      // if (isTokenThere) {
+      // } else {
+      // _clientQuery = clientToQuery();
+      // }
+
+      // print("variables==========$variables");
+
+      HttpClient _httpClient = new HttpClient();
+      _httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      IOClient _ioClient = new IOClient(_httpClient);
+
+      GraphQLClient _graphClient = GraphQLClient(
+          cache: GraphQLCache(store: HiveStore()),
+          link: HttpLink("https://api-gateway.techlabz.in/autoconnect-be",
+              defaultHeaders: <String, String>{
+                'x-token': token,
+              },
+              httpClient: _ioClient));
+
+      final QueryResult resp = await _graphClient
+          .mutate(MutationOptions(
+          document: gql(query),
+          fetchPolicy: FetchPolicy.networkOnly,
+          //variables: variables,
+          errorPolicy: ErrorPolicy.all))
+          .timeout(const Duration(seconds: 600), onTimeout: () {
+        throw NetworkException(
+            message: 'Request Timed out, Please check your connection',
+            uri: null);
+      });
+      print("hghffkjjk $resp");
+      if (resp.exception != null) {
+        print("gojogj ${resp.exception}");
+        if (resp.exception!.graphqlErrors.isNotEmpty) {
+          print(resp.exception);
+          if (enableDebug) {
+            _showDebugMessage(
+                resp.exception!.graphqlErrors[0].message, 'GraphQL Errors ');
+          }
+          return <String, dynamic>{
+            'status': 'error',
+            'message': resp.exception!.graphqlErrors[0].message
+          };
+        } else {
+          if (enableDebug) {
+            _showDebugMessage(resp.exception!.linkException!.originalException,
+                'GraphQL Client Exception Errors ');
+          }
+          return <String, dynamic>{
+            'status': 'error',
+            'message':
+            /*resp.exception.linkException.originalException ??*/ 'Something went wrong'
+          };
+        }
+      }
+
+      if (enableDebug) {
+        _showDebugMessage(resp.data, 'GraphQL Response Data');
+      }
+      return resp.data;
+    } catch (e) {
+      if (enableDebug) {
+        _showDebugMessage(e, 'GraphQL Client Exception');
+      }
+      return <String, dynamic>{
+        'status': 'error',
+        'message': 'Something Went wrong'
+      };
+    }
+  }
+
   Future<dynamic> mutation01(String query,
       {bool enableDebug = false,
       required Map<String, dynamic> variables,

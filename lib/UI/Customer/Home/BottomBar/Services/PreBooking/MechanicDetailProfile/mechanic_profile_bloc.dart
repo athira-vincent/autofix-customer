@@ -12,10 +12,10 @@ class MechanicProfileBloc {
   }
 
   postMechanicDetailsRequest(
-    String id,
+    String id,String serviceId
   ) async {
     MechanicProfileMdl _mechanicProfileMdl =
-        await repository.getMechanicProfile(id);
+        await repository.getMechanicProfile(id, serviceId);
     postViewMechanicDetails.sink.add(_mechanicProfileMdl);
   }
 }

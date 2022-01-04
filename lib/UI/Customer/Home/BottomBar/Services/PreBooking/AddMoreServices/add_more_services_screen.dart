@@ -335,9 +335,9 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
     if (searchQuery.length > 2) {
       SharedPreferences shdPre = await SharedPreferences.getInstance();
       _searchResultBlocRegular.postSearchResultRequest(1, 100, searchQuery,
-          shdPre.getString(SharedPrefKeys.token).toString(), "1");
-      _searchResultBlocEmergency.postSearchResultRequest(1, 100, searchQuery,
           shdPre.getString(SharedPrefKeys.token).toString(), "2");
+      _searchResultBlocEmergency.postSearchResultRequest(1, 100, searchQuery,
+          shdPre.getString(SharedPrefKeys.token).toString(), "1");
     }
   }
 
@@ -579,6 +579,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                               _emergencySearchDataList![index].status;
                           searchData.type =
                               _emergencySearchDataList![index].type;
+                          regularList01 = widget.searchData;
                           regularList01.add(searchData);
                           Navigator.pop(context, regularList01);
                         },
@@ -879,7 +880,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
               return Column(
                 children: [
                   _regularSearchDataList!.length != 0
-                      ? widget.type == "1"
+                      ? widget.type == "2"
                           ? _regularServices()
                           : Container(
                               width: 0,
@@ -890,7 +891,7 @@ class _AddMoreServiceScreenState extends State<AddMoreServiceScreen> {
                           height: 0,
                         ),
                   _emergencySearchDataList!.length != 0
-                      ? widget.type == "2"
+                      ? widget.type == "1"
                           ? _emergencyServices()
                           : Container(
                               width: 0,

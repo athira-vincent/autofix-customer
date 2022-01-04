@@ -3,8 +3,8 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/ViewProfile/view_pro
 
 class ViewProfileApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<ViewProfileMdl> getViewProfileRequest(String id) async {
-    Map<String, dynamic> _resp = await _queryProvider.viewProfile(id);
+  Future<ViewProfileMdl> getViewProfileRequest(String id,String token, ) async {
+    Map<String, dynamic> _resp = await _queryProvider.viewProfile(id, token, );
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

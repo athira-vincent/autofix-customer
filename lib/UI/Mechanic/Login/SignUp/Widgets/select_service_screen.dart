@@ -25,6 +25,9 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
   List<bool>? _emergencyIsChecked;
   List<bool>? _regularIsChecked;
 
+  String title = "";
+  bool isEditable=false;
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +36,8 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
     emergencyServiceList = serviceList.emergency;
     _emergencyIsChecked = List<bool>.filled(emergencyServiceList!.length, false);
     _regularIsChecked = List<bool>.filled(regularServiceList!.length, false);
+    _emergencyIsChecked = List<bool>.filled(emergencyServiceList!.length, false);
+
   }
 
 
@@ -163,6 +168,7 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                             itemCount: regularServiceList!.length,
                             itemBuilder: (context, index) {
                               print(regularServiceList![index].minAmount.toString() + ">>>Min amt");
+                              print(regularServiceList![index].isEditable.toString() + ">>>isEditable amt");
                               _rateController.text = regularServiceList![index].minAmount.toString();
                               return InkWell(
                                   onTap: () {
@@ -214,149 +220,199 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                                         Text(
                                           '${regularServiceList![index].serviceName}',
                                           style: TextStyle(
-                                              fontSize: ScreenSize().setValueFont(14),
-                                              fontFamily: 'Corbel_Regular',
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xff0b0c0d)),
+                                            fontFamily: 'Corbel_Light',
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                            fontSize:
+                                            ScreenSize().setValueFont(10
+                                            ),
+                                          ),
                                         ),
 
                                         SizedBox(
                                           width: mediaQueryData.size.width / 100 * 25,
                                         ),
 
-                                        Container(
-                                          height: ScreenSize().setValue(25),
-                                          width: mediaQueryData.size.width / 100 * 20,
-                                          margin: EdgeInsets.only(left: ScreenSize().setValue(5)),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(
-                                                ScreenSize().setValue(5),
+                                        Expanded(
+                                          child: Container(
+                                            height: ScreenSize().setValue(25),
+                                            width: mediaQueryData.size.width / 100 * 20,
+                                            margin: EdgeInsets.only(left: ScreenSize().setValue(5)),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  ScreenSize().setValue(5),
+                                                ),
                                               ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: CustColors.border_grey,
+                                                  spreadRadius: .5,
+                                                  blurRadius: 1.5,
+                                                ),
+                                              ],
                                             ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: CustColors.border_grey,
-                                                spreadRadius: .5,
-                                                blurRadius: 1.5,
-                                              ),
-                                            ],
-                                          ),
-                                          child:
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                                top: ScreenSize().setValue(2),
-                                                left: ScreenSize().setValue(2),
-                                                right: ScreenSize().setValue(2)),
-                                            alignment: Alignment.center,
-                                            child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Flexible(
-                                                    flex: 8,
-                                                    child:  Container(
-                                                      width: double.infinity,
-                                                      child: TextFormField(
-                                                        //initialValue: regularServiceList![index].minAmount.toString(),
-                                                        /*validator:
-                                                        InputValidator(ch: "Phone number")
-                                                            .phoneNumChecking,
-                                                        inputFormatters: [
-                                                          LengthLimitingTextInputFormatter(15),
-                                                        ],*/
-                                                        maxLines: 1,
-                                                        //focusNode: _phoneFocusNode,
-                                                        textAlignVertical:
-                                                        TextAlignVertical.center,
-                                                        keyboardType: TextInputType.phone,
-                                                        controller: _rateController,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Corbel_Light',
-                                                          fontWeight: FontWeight.w600,
-                                                          color: Colors.black,
-                                                          fontSize:
-                                                          ScreenSize().setValueFont(10
+                                            child:
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top: ScreenSize().setValue(2),
+                                                  left: ScreenSize().setValue(2),
+                                                  right: ScreenSize().setValue(2)),
+                                              alignment: Alignment.center,
+                                              child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                        child:
+                                                          _regularIsChecked![index]==true
+                                                              ? regularServiceList![index].isEditable == false
+                                                                        ? Row(
+                                                                          children: [
+                                                                            Expanded(child: Text('\$ ${regularServiceList![index].minAmount.toString()}')),
+                                                                          ],
+                                                                        )
+                                                                        : TextFormField(
+                                                                        initialValue: '${regularServiceList![index].minAmount.toString()}',
+                                                                        textInputAction: TextInputAction.done,
+                                                                        onFieldSubmitted: (value) {
+                                                                          setState(() {
+                                                                            regularServiceList![index].isEditable = false;
+                                                                            title = value;
+                                                                            regularServiceList![index].minAmount = value;
+                                                                          });
+                                                                        })
+                                                              :Text('\$ ${regularServiceList![index].minAmount.toString()}')
+
+                                                    ),
+                                                    InkWell(
+                                                      onTap: (){
+                                                        if( _regularIsChecked![index]==true)
+                                                          {
+                                                            setState(() {
+                                                              regularServiceList![index].isEditable=true;
+                                                            });
+                                                          }
+                                                        else
+                                                          {
+                                                            setState(() {
+                                                              regularServiceList![index].isEditable=false;
+                                                            });
+                                                          }
+
+                                                      },
+                                                      child: Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 18,
+                                                        color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                      ),
+                                                    ),
+                                                    /*Expanded(
+                                                      child:  Container(
+                                                        width: double.infinity,
+                                                        child: TextFormField(
+                                                          //initialValue: regularServiceList![index].minAmount.toString(),
+                                                          */
+                                                    /*validator:
+                                                          InputValidator(ch: "Phone number")
+                                                              .phoneNumChecking,
+                                                          inputFormatters: [
+                                                            LengthLimitingTextInputFormatter(15),
+                                                          ],*/
+                                                    /*
+                                                          maxLines: 1,
+                                                          //focusNode: _phoneFocusNode,
+                                                          textAlignVertical:
+                                                          TextAlignVertical.center,
+                                                          keyboardType: TextInputType.phone,
+                                                          controller: _rateController,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Corbel_Light',
+                                                            fontWeight: FontWeight.w600,
+                                                            color: Colors.black,
+                                                            fontSize:
+                                                            ScreenSize().setValueFont(10
+                                                            ),
                                                           ),
+                                                          enableSuggestions: false,
+                                                          decoration: InputDecoration(
+                                                              prefixIcon: Icon(
+                                                                Icons.attach_money_sharp,
+                                                                size: 20,
+                                                                color: Colors.black,
+                                                              ),
+                                                              suffixIcon: Icon(
+                                                                Icons.edit_outlined,
+                                                                size: 18,
+                                                                color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                              ),
+                                                              isDense: true,
+                                                              contentPadding:
+                                                              EdgeInsets.symmetric(
+                                                                vertical:
+                                                                ScreenSize().setValue(7.8),
+                                                              ),
+                                                              hintStyle: TextStyle(
+                                                                fontFamily: 'Corbel_Light',
+                                                                //color: Colors.white.withOpacity(.60),
+                                                                color: Colors.black,
+                                                                fontWeight: FontWeight.w600,
+                                                                fontSize:
+                                                                ScreenSize().setValueFont(12),
+                                                              )),
                                                         ),
-                                                        enableSuggestions: false,
-                                                        decoration: InputDecoration(
-                                                            prefixIcon: Icon(
+                                                      ),
+                                                    ),*/
+                                                  ]),
+                                            ),
+
+                                             /*
+                                             * Row(
+
+                                                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+
+                                                          Container(
+                                                            //margin: EdgeInsets.only(left: ScreenSize().setValue(8)),
+                                                            child: Icon(
                                                               Icons.attach_money_sharp,
                                                               size: 20,
                                                               color: Colors.black,
                                                             ),
-                                                            suffixIcon: Icon(
+                                                          ),
+
+                                                          Container(
+                                                            margin: EdgeInsets.only(left: 1,right: 1),
+                                                            child: TextFormField(
+                                                              initialValue: '${regularServiceList![index].minAmount.toString()}',
+                                                              controller: _rateController,
+                                                              decoration: InputDecoration(
+                                                                  hintText: '${regularServiceList![index].fee}',
+                                                                  hintStyle: TextStyle(
+                                                                      color: Colors.black
+                                                                  )
+                                                              ),
+                                                              style: TextStyle(
+                                                                  fontSize: ScreenSize().setValueFont(14),
+                                                                  fontFamily: 'Corbel_Regular',
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: Color(0xff0b0c0d)),
+                                                            ),),
+
+                                                          Container(
+                                                            margin: EdgeInsets.only(left: ScreenSize().setValue(1)),
+                                                            child: Icon(
                                                               Icons.edit_outlined,
                                                               size: 18,
                                                               color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
                                                             ),
-                                                            isDense: true,
-                                                            contentPadding:
-                                                            EdgeInsets.symmetric(
-                                                              vertical:
-                                                              ScreenSize().setValue(7.8),
-                                                            ),
-                                                            hintStyle: TextStyle(
-                                                              fontFamily: 'Corbel_Light',
-                                                              //color: Colors.white.withOpacity(.60),
-                                                              color: Colors.black,
-                                                              fontWeight: FontWeight.w600,
-                                                              fontSize:
-                                                              ScreenSize().setValueFont(12),
-                                                            )),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]),
+                                                          ),
+                                                        ],
+                                                      )*/
+
                                           ),
-
-                                           /*
-                                           * Row(
-
-                                                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      children: [
-
-                                                        Container(
-                                                          //margin: EdgeInsets.only(left: ScreenSize().setValue(8)),
-                                                          child: Icon(
-                                                            Icons.attach_money_sharp,
-                                                            size: 20,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ),
-
-                                                        Container(
-                                                          margin: EdgeInsets.only(left: 1,right: 1),
-                                                          child: TextFormField(
-                                                            initialValue: '${regularServiceList![index].minAmount.toString()}',
-                                                            controller: _rateController,
-                                                            decoration: InputDecoration(
-                                                                hintText: '${regularServiceList![index].fee}',
-                                                                hintStyle: TextStyle(
-                                                                    color: Colors.black
-                                                                )
-                                                            ),
-                                                            style: TextStyle(
-                                                                fontSize: ScreenSize().setValueFont(14),
-                                                                fontFamily: 'Corbel_Regular',
-                                                                fontWeight: FontWeight.w600,
-                                                                color: Color(0xff0b0c0d)),
-                                                          ),),
-
-                                                        Container(
-                                                          margin: EdgeInsets.only(left: ScreenSize().setValue(1)),
-                                                          child: Icon(
-                                                            Icons.edit_outlined,
-                                                            size: 18,
-                                                            color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )*/
-
                                         ),
 
                                      /*   _regularIsChecked![index] ?
@@ -398,83 +454,282 @@ class _SelectServiceScreenState extends State<SelectServiceScreen> {
                             shrinkWrap: true,
                             itemCount: emergencyServiceList!.length,
                             itemBuilder: (context, index) {
+                              print(emergencyServiceList![index].minAmount.toString() + ">>>Min amt");
+                              print(emergencyServiceList![index].isEditable.toString() + ">>>isEditable amt");
+                              _rateController.text = emergencyServiceList![index].minAmount.toString();
                               return InkWell(
                                   onTap: () {
-                                    final brandName =
-                                        emergencyServiceList![index].serviceName;
+                                    final brandName = emergencyServiceList![index].serviceName;
                                     final brandId = emergencyServiceList![index].id;
                                     /* setState(() {
                                                _brandController.text =
-                                             brandName.toString();
-                                         selectedBrandId =
-                                             int.parse(brandId!);
-                                         _modelController.clear();
-                                         selectedModelId = 0;
-                                         _engineController.clear();
-                                         selectedEngineId = 0;
-                                         _allModelBloc
-                                             .postAllModelDataRequest(
-                                             selectedBrandId!,
-                                             token);
-                                       });*/
-                              print(">>>>>");
-                              print(brandId);
-                              //Navigator.pop(context);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: 5,
-                                right: 5,
-                              ),
-                              child: Row(
-                                children: [
-
-                                  Transform.scale(
-                                    scale: .8,
-                                    child: Checkbox(
-                                      value: _emergencyIsChecked![index],
-                                      onChanged: (bool? val){
-                                        setState(() {
-                                          this._emergencyIsChecked![index] = val!;
-                                          //isChecked ? false : true;
-                                          val ?
-                                          selectedServiceList!.add(emergencyServiceList![index])
-                                              :
-                                          selectedServiceList!.remove(emergencyServiceList![index]);
-                                          print(">>>>>>>>> Selected Make List data " + selectedServiceList!.length.toString());
-                                        });
-                                      },
+                                                   brandName.toString();
+                                               selectedBrandId =
+                                                   int.parse(brandId!);
+                                               _modelController.clear();
+                                               selectedModelId = 0;
+                                               _engineController.clear();
+                                               selectedEngineId = 0;
+                                               _allModelBloc
+                                                   .postAllModelDataRequest(
+                                                   selectedBrandId!,
+                                                   token);
+                                             });*/
+                                    print(">>>>>");
+                                    print(brandId);
+                                    //Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      left: 5,
+                                      right: 5,
                                     ),
-                                  ),
+                                    child: Row(
+                                      children: [
+                                        Transform.scale(
+                                          scale: .8,
+                                          child: Checkbox(
+                                            value: _emergencyIsChecked![index],
+                                            onChanged: (bool? val){
+                                              setState(() {
+                                                this._emergencyIsChecked![index] = val!;
+                                                //isChecked ? false : true;
+                                                val ?
+                                                selectedServiceList!.add(emergencyServiceList![index])
+                                                    :
+                                                selectedServiceList!.remove(emergencyServiceList![index]);
+                                                print(">>>>>>>>> Selected Make List data " + emergencyServiceList!.length.toString());
+                                              });
+                                            },
+                                          ),
+                                        ),
 
-                                  Text(
-                                    '${emergencyServiceList![index].serviceName}',
-                                    style: TextStyle(
-                                        fontSize: ScreenSize().setValueFont(14),
-                                        fontFamily: 'Corbel_Regular',
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xff0b0c0d)),
-                                  ),
+                                        Text(
+                                          '${emergencyServiceList![index].serviceName}',
+                                          style: TextStyle(
+                                            fontFamily: 'Corbel_Light',
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                            fontSize:
+                                            ScreenSize().setValueFont(10
+                                            ),
+                                          ),
+                                        ),
 
-                                ],
-                              ),
-                            ));
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenSize().setValue(10),
-                                left: 5,
-                                right: 5,
-                                bottom: ScreenSize().setValue(10)),
-                            child: Divider(
-                              height: 0,
-                            ));
-                      },
-                    )
+                                        SizedBox(
+                                          width: mediaQueryData.size.width / 100 * 25,
+                                        ),
+
+                                        Expanded(
+                                          child: Container(
+                                            height: ScreenSize().setValue(25),
+                                            width: mediaQueryData.size.width / 100 * 20,
+                                            margin: EdgeInsets.only(left: ScreenSize().setValue(5)),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  ScreenSize().setValue(5),
+                                                ),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: CustColors.border_grey,
+                                                  spreadRadius: .5,
+                                                  blurRadius: 1.5,
+                                                ),
+                                              ],
+                                            ),
+                                            child:
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top: ScreenSize().setValue(2),
+                                                  left: ScreenSize().setValue(2),
+                                                  right: ScreenSize().setValue(2)),
+                                              alignment: Alignment.center,
+                                              child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                        child:
+                                                        _emergencyIsChecked![index]==true
+                                                            ? emergencyServiceList![index].isEditable == false
+                                                            ? Text('\$ ${emergencyServiceList![index].minAmount.toString()}')
+                                                            : TextFormField(
+                                                            initialValue: '${regularServiceList![index].minAmount.toString()}',
+                                                            textInputAction: TextInputAction.done,
+                                                            onFieldSubmitted: (value) {
+                                                              setState(() {
+                                                                emergencyServiceList![index].isEditable = false;
+                                                                title = value;
+                                                                emergencyServiceList![index].minAmount = value;
+                                                              });
+                                                            })
+                                                            :Text('\$ ${emergencyServiceList![index].minAmount.toString()}')
+
+                                                    ),
+                                                    InkWell(
+                                                      onTap: (){
+                                                        if( _emergencyIsChecked![index]==true)
+                                                        {
+                                                          setState(() {
+                                                            emergencyServiceList![index].isEditable=true;
+                                                          });
+                                                        }
+                                                        else
+                                                        {
+                                                          setState(() {
+                                                            emergencyServiceList![index].isEditable=false;
+                                                          });
+                                                        }
+
+                                                      },
+                                                      child: Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 18,
+                                                        color: _emergencyIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                      ),
+                                                    ),
+                                                    /*Expanded(
+                                                            child:  Container(
+                                                              width: double.infinity,
+                                                              child: TextFormField(
+                                                                //initialValue: regularServiceList![index].minAmount.toString(),
+                                                                */
+                                                    /*validator:
+                                                                InputValidator(ch: "Phone number")
+                                                                    .phoneNumChecking,
+                                                                inputFormatters: [
+                                                                  LengthLimitingTextInputFormatter(15),
+                                                                ],*/
+                                                    /*
+                                                                maxLines: 1,
+                                                                //focusNode: _phoneFocusNode,
+                                                                textAlignVertical:
+                                                                TextAlignVertical.center,
+                                                                keyboardType: TextInputType.phone,
+                                                                controller: _rateController,
+                                                                style: TextStyle(
+                                                                  fontFamily: 'Corbel_Light',
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: Colors.black,
+                                                                  fontSize:
+                                                                  ScreenSize().setValueFont(10
+                                                                  ),
+                                                                ),
+                                                                enableSuggestions: false,
+                                                                decoration: InputDecoration(
+                                                                    prefixIcon: Icon(
+                                                                      Icons.attach_money_sharp,
+                                                                      size: 20,
+                                                                      color: Colors.black,
+                                                                    ),
+                                                                    suffixIcon: Icon(
+                                                                      Icons.edit_outlined,
+                                                                      size: 18,
+                                                                      color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                                    ),
+                                                                    isDense: true,
+                                                                    contentPadding:
+                                                                    EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                      ScreenSize().setValue(7.8),
+                                                                    ),
+                                                                    hintStyle: TextStyle(
+                                                                      fontFamily: 'Corbel_Light',
+                                                                      //color: Colors.white.withOpacity(.60),
+                                                                      color: Colors.black,
+                                                                      fontWeight: FontWeight.w600,
+                                                                      fontSize:
+                                                                      ScreenSize().setValueFont(12),
+                                                                    )),
+                                                              ),
+                                                            ),
+                                                          ),*/
+                                                  ]),
+                                            ),
+
+                                            /*
+                                                   * Row(
+
+                                                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+
+                                                                Container(
+                                                                  //margin: EdgeInsets.only(left: ScreenSize().setValue(8)),
+                                                                  child: Icon(
+                                                                    Icons.attach_money_sharp,
+                                                                    size: 20,
+                                                                    color: Colors.black,
+                                                                  ),
+                                                                ),
+
+                                                                Container(
+                                                                  margin: EdgeInsets.only(left: 1,right: 1),
+                                                                  child: TextFormField(
+                                                                    initialValue: '${regularServiceList![index].minAmount.toString()}',
+                                                                    controller: _rateController,
+                                                                    decoration: InputDecoration(
+                                                                        hintText: '${regularServiceList![index].fee}',
+                                                                        hintStyle: TextStyle(
+                                                                            color: Colors.black
+                                                                        )
+                                                                    ),
+                                                                    style: TextStyle(
+                                                                        fontSize: ScreenSize().setValueFont(14),
+                                                                        fontFamily: 'Corbel_Regular',
+                                                                        fontWeight: FontWeight.w600,
+                                                                        color: Color(0xff0b0c0d)),
+                                                                  ),),
+
+                                                                Container(
+                                                                  margin: EdgeInsets.only(left: ScreenSize().setValue(1)),
+                                                                  child: Icon(
+                                                                    Icons.edit_outlined,
+                                                                    size: 18,
+                                                                    color: _regularIsChecked![index] ? Colors.black : CustColors.border_grey,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )*/
+
+                                          ),
+                                        ),
+
+                                        /*   _regularIsChecked![index] ?
+                                              Container(
+                                                margin: EdgeInsets.only(right: 0),
+                                                child: Text(
+                                                  '${regularServiceList![index].fee}',
+                                                  style: TextStyle(
+                                                      fontSize: ScreenSize().setValueFont(14),
+                                                      fontFamily: 'Corbel_Regular',
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff0b0c0d)),
+                                                ),
+                                              ) :Container(),*/
+
+                                      ],
+                                    ),
+                                  ));
+                            },
+                            separatorBuilder: (BuildContext context, int index) {
+                              return Container(
+                                  margin: EdgeInsets.only(
+                                      top: ScreenSize().setValue(10),
+                                      left: 5,
+                                      right: 5,
+                                      bottom: ScreenSize().setValue(10)),
+                                  child: Divider(
+                                    height: 0,
+                                  ));
+                            },
+                          )
                         : Center(
-                      child: Text('No Results found.'),
-                    )
+                          child: Text('No Results found.'),
+                        )
               ),
             ),
 
