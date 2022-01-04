@@ -255,7 +255,6 @@ class _MechanicWorkSelectionScreenState
                           isSecond: true,
                           isThird: true,
                         ),
-
                         Container(
                           margin: EdgeInsets.only(
                               top: ScreenSize().setValue(10),
@@ -657,10 +656,10 @@ class _MechanicWorkSelectionScreenState
                               TextFormField(
                                 //initialValue: regularServiceList![index].minAmount.toString(),
                                 /*validator:
-                                                        InputValidator(ch: "Phone number")
-                                                            .phoneNumChecking,
-                                                        inputFormatters: [
-                                                          LengthLimitingTextInputFormatter(15),
+                                                    InputValidator(ch: "Phone number")
+                                                           .phoneNumChecking,
+                                                    inputFormatters: [
+                                                     LengthLimitingTextInputFormatter(15),
                                                         ],*/
                                 maxLines: 1,
                                 //focusNode: _phoneFocusNode,
