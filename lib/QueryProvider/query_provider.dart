@@ -33,7 +33,13 @@ class QueryProvider {
       String password, String phoneNo) async {
     String _query = """ 
     mutation{
-          customersSignUp(firstName: "$firstName", lastName: "", address: "", emailId: "$email", phoneNo: "$phoneNo", password: "$password",state:"$state",userName:"$userName") {
+          customersSignUp(firstName: "$firstName",
+           lastName: "", address: "", 
+           emailId: "$email", 
+           phoneNo: "$phoneNo", 
+           password: "$password", 
+           state:"$state", 
+           userName:"$userName") {
             token
             customer {
               id
@@ -772,6 +778,41 @@ class QueryProvider {
       _query,
       enableDebug: true,
       isTokenThere: false,
+    );
+  }
+
+  mechanicCompletedServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  mechanicUpcomingServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+  mechanicTodaysServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
     );
   }
 

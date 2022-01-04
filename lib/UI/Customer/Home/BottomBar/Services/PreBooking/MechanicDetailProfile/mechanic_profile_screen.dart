@@ -76,14 +76,14 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
           _mechanicData = value.data!.mechanicDetails!.mechanicData!;
           totalAmount = value.data!.mechanicDetails!.totalAmount.toString();
           _kGooglePlex = CameraPosition(
-            target: LatLng(_mechanicData.latitude!, _mechanicData.longitude!),
+            target: LatLng(_mechanicData.latitude, _mechanicData.longitude),
             zoom: 11,
           );
           Future.delayed(Duration.zero, () {
             createMarker(context);
           });
-          km = calculateDistance(10.1964, 76.3879, _mechanicData.latitude!,
-                  _mechanicData.longitude!)
+          km = calculateDistance(10.1964, 76.3879, _mechanicData.latitude,
+                  _mechanicData.longitude)
               .roundToDouble();
           // value.data.mechanicList.mechanicListData[0].id;
         });
@@ -642,7 +642,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
 
     // Add destination marker
     _addMarker(
-      LatLng(_mechanicData.latitude!, _mechanicData.longitude!),
+      LatLng(_mechanicData.latitude, _mechanicData.longitude),
       "destination",
       pinLocationIcon1 != null ? pinLocationIcon1! : icon,
     );
@@ -651,7 +651,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       "AIzaSyCOijUnxSdUDHpQWIqJT5y-BklV9pI0Te0",
-      PointLatLng(_mechanicData.latitude!, _mechanicData.longitude!),
+      PointLatLng(_mechanicData.latitude, _mechanicData.longitude),
       PointLatLng(10.1964, 76.3879),
       travelMode: TravelMode.walking,
     );

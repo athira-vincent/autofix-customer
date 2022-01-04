@@ -5,7 +5,6 @@ import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/states_mdl.dart';
-import 'package:auto_fix/UI/Customer/Login/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

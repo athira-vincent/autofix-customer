@@ -79,7 +79,7 @@ class _MechanicSearchScreenState extends State<MechanicSearchScreen> {
         setState(() {
           print("errrrorr 01");
           _isLoading = true;
-          mechanicListData = value.data!.mechanicList!.data!;
+          mechanicListData = value.data!.mechanicList.data;
           km = calculateDistance(10.1964, 76.3879,
                   mechanicListData[0].latitude!, mechanicListData[0].longitude!)
               .roundToDouble();
