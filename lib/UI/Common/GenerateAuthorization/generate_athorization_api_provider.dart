@@ -6,7 +6,7 @@ class GenerateAuthorizationApiProvider {
   Future<GenerateAutorizationMdl> getGenerateAuthorizationRequest(
       String userId, int type) async {
     Map<String, dynamic> _resp = await _queryProvider.getToken(userId, type);
-    print("hghffkjjk $_resp");
+    print("HHHHHHHHHHHH minnu $_resp");
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
