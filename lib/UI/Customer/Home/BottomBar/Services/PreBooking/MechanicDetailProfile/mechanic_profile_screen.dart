@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_mdl.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicWaitingAndPayment/mechanic_waiting_Screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,8 @@ import 'dart:ui' as ui;
 
 class MechanicProfileScreen extends StatefulWidget {
   final String id;
-  const MechanicProfileScreen({Key? key, required this.id}) : super(key: key);
+  final String serviceId;
+  const MechanicProfileScreen({Key? key, required this.id,required this.serviceId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _MechanicProfileScreenState();
@@ -35,10 +37,12 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
   BitmapDescriptor? pinLocationIcon1;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
   double per = .10;
-  MechanicData _mechanicData = MechanicData();
+  late MechanicData _mechanicData;
   List<ServiceData> serviceDataList = [];
   bool _isLoading = false;
   double km = 0;
+  String totalAmount = "";
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -68,8 +72,9 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
         setState(() {
           print("errrrorr 01");
           _isLoading = true;
-          serviceDataList = value.data!.mechanicDetails!.serviceDataList!;
+          serviceDataList = value.data!.mechanicDetails!.serviceData!;
           _mechanicData = value.data!.mechanicDetails!.mechanicData!;
+          totalAmount = value.data!.mechanicDetails!.totalAmount.toString();
           _kGooglePlex = CameraPosition(
             target: LatLng(_mechanicData.latitude!, _mechanicData.longitude!),
             zoom: 11,
@@ -90,7 +95,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
   void initState() {
     super.initState();
 
-    _mechanicProfileBloc.postMechanicDetailsRequest(widget.id);
+    _mechanicProfileBloc.postMechanicDetailsRequest(widget.id,widget.serviceId);
     _getViewVehicle();
   }
 
@@ -172,7 +177,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                                   margin: EdgeInsets.only(top: _setValue(6.6)),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    _mechanicData.displayName.toString(),
+                                    _mechanicData.mechanicName.toString(),
                                     style: TextStyle(
                                         color: CustColors.black01,
                                         fontWeight: FontWeight.w600,
@@ -341,8 +346,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                                       top: _setValue(11.8),
                                       bottom: _setValue(17.5)),
                                   child: Text(
-                                    """406 Garki Abuja-FCT, 
-             Nigeria.""",
+                                    """406 Garki Abuja-FCT, Nigeria.""",
                                     style: TextStyle(
                                         color: Color(0xff848484),
                                         fontFamily: 'Corbel_Light',
@@ -455,7 +459,7 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                                   top: 10, left: 15, bottom: 10),
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                '\$ 350',
+                                totalAmount,
                                 style: TextStyle(
                                     color: CustColors.black01,
                                     fontFamily: 'Corbel_Regular',
@@ -466,25 +470,41 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: _setValue(74.3),
-                        height: _setValue(24),
-                        margin: EdgeInsets.only(
-                            right: _setValue(31.8),
-                            top: _setValue(23.9),
-                            bottom: _setValue(26.4)),
-                        alignment: Alignment.bottomRight,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.3),
-                            color: CustColors.blue),
-                        child: Center(
-                          child: Text(
-                            'Next',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Corbel_Regular',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 11.5),
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+
+                           Navigator.pop(context);
+                           Navigator.push(
+                           context,
+                           MaterialPageRoute(
+                           builder: (context) => MeachanicWaitingScreen(
+                            id:'1',
+                            serviceId: '1',
+                            )));
+
+                          });
+                        },
+                        child: Container(
+                          width: _setValue(74.3),
+                          height: _setValue(24),
+                          margin: EdgeInsets.only(
+                              right: _setValue(31.8),
+                              top: _setValue(23.9),
+                              bottom: _setValue(26.4)),
+                          alignment: Alignment.bottomRight,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.3),
+                              color: CustColors.blue),
+                          child: Center(
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Corbel_Regular',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 11.5),
+                            ),
                           ),
                         ),
                       ),
@@ -706,4 +726,6 @@ class _MechanicProfileScreenState extends State<MechanicProfileScreen> {
     final Uint8List imageData = await getBytesFromAsset(path, width);
     return BitmapDescriptor.fromBytes(imageData);
   }
+
+
 }

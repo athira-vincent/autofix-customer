@@ -1,5 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/Profile/EditProfile/edit_profile_bloc.dart';
+import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/EditProfile/edit_profile_bloc.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {

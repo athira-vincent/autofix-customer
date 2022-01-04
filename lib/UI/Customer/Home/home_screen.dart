@@ -8,6 +8,8 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/navigation_drawer_screen.dart'
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'BottomBar/Profile/ViewProfile/view_profile_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -261,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
               top: MediaQuery.of(context).padding.top + 120,
             ),
             child: _index == 0
-                ? ProfileScreen()
+                ?  ViewProfileScreen(id: '1',)
                 : _index == 1
                     ? SpairPartsScreen()
                     : ServicesScreen(),

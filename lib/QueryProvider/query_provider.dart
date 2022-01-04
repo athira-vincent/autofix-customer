@@ -70,6 +70,19 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  fcmTokenUpdate(String fcmToken,String Authtoken) async {
+    String _query = """
+      mutation {
+        fcm_token_update(fcmToken: "$fcmToken") {
+          message
+        }
+      }
+     """;
+    log(_query);
+    return await GqlClient.I
+        .query01(_query, Authtoken, enableDebug: true, isTokenThere: true);
+  }
+
   getToken(String userId, int type) async {
     String _query = """
       mutation{
@@ -84,26 +97,34 @@ class QueryProvider {
   }
 
   changePassword(String password) {}
+
   editProfile() {}
-  viewProfile(String id) async {
+
+  viewProfile(String id,String token, ) async {
     String _query = """ 
-    query{
-    customerDetails(id: $id){
-      id
-      firstName
-      lastName
-      address
-      emailId
-      phoneNo
-      status
+    query
+    {
+      customerDetails(id: "$id") {
+        id
+        firstName
+        lastName
+        address
+        emailId
+        phoneNo
+        profilePic
+        isProfileCompleted
+        state
+        userName
+        status
       }
     }
     """;
     log(_query);
-    return await GqlClient.I.query(
+    return await GqlClient.I.query01(
       _query,
+      token,
       enableDebug: true,
-      isTokenThere: false,
+      isTokenThere: true,
     );
   }
 
@@ -247,12 +268,25 @@ class QueryProvider {
       String milege,
       String lastMaintenance,
       String interval,
+      String numberPlate,
       int makeId,
       int vehicleModelId,
       int engineId) async {
     String _query = """
       mutation{
-    vehicleCreate(year: "$year", latitude: "$latitude", longitude: "$longitude", milege: "$milege", lastMaintenance: "$lastMaintenance", interval: "$interval", makeId: $makeId, vehicleModelId: $vehicleModelId, engineId: $engineId){
+    vehicleCreate
+    (
+    year: "$year",
+    latitude: "$latitude",
+    longitude: "$longitude", 
+    milege: "$milege", 
+    lastMaintenance: "$lastMaintenance",
+    interval: "$interval",
+    makeId: $makeId, 
+    vehicleModelId: $vehicleModelId,
+     numberPlate: "$numberPlate"
+   engineId: $engineId
+     ){
       id
       year
       latitude
@@ -353,61 +387,50 @@ class QueryProvider {
   getAds() {}
   topBrands() {}
   topShops() {}
-  getMechanicDetails(String id) async {
+  getMechanicDetails(String id,String serviceId) async {
     String _query = """
-      query{
-  mechanicDetails(mechanicId: $id) {
-    mechanicData {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-    }
-    serviceData {
-      id
-      status
-      serviceId
-      mechanicId
-      service {
-        id
-        serviceName
-        description
-        icon
-        fee
-        type
-        status
+         query{
+      mechanicDetails(mechanicId:$id,serviceId: "$serviceId"){
+        mechanicData{id,
+          mechanicCode,
+          mechanicName,
+          emailId,
+          phoneNo,
+          address,
+          latitude,
+          longitude,
+          walletId,
+          verified,
+          enable,
+          isEmailverified,
+          jobType,
+          startTime,
+          endTime,
+          status,
+          }
+        serviceData{id,
+        status,
+          fee,
+        serviceId,
+        demoMechanicId,
+        service{id,
+    serviceName,
+    icon,
+    type,
+    fee,
+    minAmount,
+    maxAmount,
+    status}}
+        vehicleData{id,
+          status,
+        make{
+          id,
+        makeName,
+        description,
+        status,
+        }}
+        totalAmount
       }
-    }
-    vehicleData {
-      id
-      status
-      makeId
-      mechanicId
-      make {
-        id
-        makeName
-        description
-        status
-      }
-    }
-  }
 }
      """;
     log(_query);
@@ -420,56 +443,6 @@ class QueryProvider {
 
   getAllMechanicList(String token, int page, int size, String serviceId) async {
 
-    String _query = """
-    query{
-  mechanicList(page: $page, size: $size, serviceId: "$serviceId") {
-    totalItems
-    data {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-      mechanicService {
-        service {
-          id
-          serviceName
-          description
-          icon
-          fee
-          type
-          status
-        }
-      }
-      mechanicVehicle {
-        make {
-          id
-          makeName
-          description
-          status
-        }
-      }
-    }
-    totalPages
-    currentPage
-  } 
-}""";
 
     log(_query);
     return await GqlClient.I.query01(
@@ -490,7 +463,6 @@ class QueryProvider {
                     serviceName
                     description
                     icon
-                    fee
                     type
                     status
                   }
@@ -518,7 +490,6 @@ class QueryProvider {
                     serviceName
                     description
                     icon
-                    fee
                     type
                     status
                   }

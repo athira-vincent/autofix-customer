@@ -26,8 +26,8 @@ class MechanicListScreen extends StatefulWidget {
 class _MechanicListScreenState extends State<MechanicListScreen> {
   final MechanicListBloc _mechanicListBloc = MechanicListBloc();
 
-  List<MechanicListData> mechanicListData = [];
-  MechanicListData? mechanicListDataVal;
+  List<Datum> mechanicListData = [];
+  Datum? mechanicListDataVal;
 
   String token = "";
   double km = 0;
@@ -35,6 +35,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
   @override
   void initState() {
     super.initState();
+    print('MechanicListScreen');
     _addToken();
     _getViewVehicle();
   }
@@ -74,7 +75,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
               "id : " +
               value.data!.mechanicList!.totalItems.toString() +
               " >>>>>>>>>");
-          mechanicListData = value.data!.mechanicList!.mechanicListData!;
+          mechanicListData = value.data!.mechanicList!.data!;
           // value.data.mechanicList.mechanicListData[0].id;
         });
       }
@@ -158,7 +159,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
         shrinkWrap: true,
         itemCount: mechanicListData.length,
         itemBuilder: (context, index) {
-          String? mechName = mechanicListData[index].firstName;
+          String? mechName = mechanicListData[index].mechanicName;
           String? address = mechanicListData[index].address;
           String? phone = mechanicListData[index].phoneNo;
           double? mechanic_lat = mechanicListData[index].latitude;
@@ -173,6 +174,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                       builder: (context) => MechanicProfileScreen(
                             // serviceID: '1',
                             id: mechanicListData[index].id.toString(),
+                            serviceId: widget.serviceID,
                           )));
             },
             child: Container(
