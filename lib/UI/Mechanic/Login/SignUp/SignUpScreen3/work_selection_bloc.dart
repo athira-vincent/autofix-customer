@@ -1,5 +1,5 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MechanicWorkSelectionBloc {
@@ -10,11 +10,14 @@ class MechanicWorkSelectionBloc {
     postSignUp.close();
   }
 
-  postSignUpRequest(String yearOfExperience,
-      bool isEmergencyEnabled,
-      String serviceIdList) async {
+  postSignUpWorkSelectionRequest(
+      int isEmergencyEnabled,
+      String serviceIdList,
+      String serviceFeeList,
+      String startTime,
+      String endTime) async {
     MechanicWorkSelectionMdl _signUpMdl = await repository.getMechanicSignUpWorkSelection(
-      yearOfExperience,isEmergencyEnabled,serviceIdList
+        isEmergencyEnabled, serviceIdList, serviceFeeList, startTime,endTime
     );
     postSignUp.sink.add(_signUpMdl);
   }

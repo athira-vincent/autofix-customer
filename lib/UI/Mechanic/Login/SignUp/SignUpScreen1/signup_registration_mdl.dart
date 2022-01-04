@@ -61,7 +61,6 @@ class MechanicSignUp {
   }
 
 class MechanicSignUpData {
-  //SignUpScreen1 signUp;
   String? id;
   String? mechanicCode;
   String? mechanicName;
@@ -72,7 +71,11 @@ class MechanicSignUpData {
   double? longitude;
   String? walletId;
   int? verified;
+  int? enable;
   int? isEmailverified;
+  String? jobType;
+  String? startTime;
+  String? endTime;
   int? status;
 
 
@@ -89,7 +92,11 @@ class MechanicSignUpData {
     longitude = json['longitude'];
     walletId = json['walletId'];
     verified = json['verified'];
+    enable = json['enable'];
     isEmailverified = json['isEmailverified'];
+    jobType = json['jobType'];
+    startTime = json['startTime'];
+    endTime = json['endTime'];
     status =json['status'];
 
   }
@@ -106,7 +113,11 @@ class MechanicSignUpData {
     data['longitude'] = this.longitude;
     data['walletId'] = this.walletId;
     data['verified'] = this.verified;
+    data['enable'] = this.enable;
     data['isEmailverified'] = this.isEmailverified;
+    data['jobType'] = this.jobType;
+    data['startTime'] = this.startTime;
+    data['endTime'] = this.endTime;
     data['status'] = this.status;
 
     return data;

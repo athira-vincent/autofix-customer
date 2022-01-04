@@ -1,12 +1,12 @@
 
-class MechanicSigninMdl {
+class MechanicWorkSelectionMdl {
   String? status;
   String? message;
   Data? data;
 
-  MechanicSigninMdl({required this.status, required this.message, this.data});
+  MechanicWorkSelectionMdl({required this.status, required this.message, this.data});
 
-  MechanicSigninMdl.fromJson(Map<String, dynamic> json) {
+  MechanicWorkSelectionMdl.fromJson(Map<String, dynamic> json) {
     data = (json['data'] != null ? Data.fromJson(json['data']) : null)!;
   }
 
@@ -19,50 +19,27 @@ class MechanicSigninMdl {
 
 class Data {
 
-  MechanicSignIn? mechanicSignIn;
+  MechanicSignUpWorkSelection? mechanicSignUpWorkSelection;
   Data();
 
   Data.fromJson(Map<String, dynamic> json) {
-    mechanicSignIn = json['signIn'] != null
-        ? new MechanicSignIn.fromJson(json['signIn'])
-        : null;
+    mechanicSignUpWorkSelection = json['skillsAdd'] != null
 
+    ? new MechanicSignUpWorkSelection.fromJson(json['skillsAdd'])
+      : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.mechanicSignIn != null) {
-      data['signIn'] = this.mechanicSignIn!.toJson();
+    if (this.mechanicSignUpWorkSelection != null) {
+      data['skillsAdd'] = this.mechanicSignUpWorkSelection!.toJson();
     }
 
     return data;
   }
 }
 
-class MechanicSignIn {
-
-  String? token;
-  MechanicSignInData? mechanicSignInData;
-  MechanicSignIn();
-
-  MechanicSignIn.fromJson(Map<String, dynamic> json) {
-    mechanicSignInData = json['mechanic'] != null
-        ? new MechanicSignInData.fromJson(json['mechanic'])
-        : null;
-    token = json['token'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (this.mechanicSignInData != null) {
-      data['mechanic'] = this.mechanicSignInData!.toJson();
-    }
-    data['token'] = this.token;
-    return data;
-  }
-
-}
-class MechanicSignInData{
+class MechanicSignUpWorkSelection {
 
   String? id;
   String? mechanicCode;
@@ -81,8 +58,7 @@ class MechanicSignInData{
   String? endTime;
   int? status;
 
-  MechanicSignInData();
-  MechanicSignInData.fromJson(Map<String, dynamic> json){
+  MechanicSignUpWorkSelection.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     mechanicCode = json['mechanicCode'];
     mechanicName = json['mechanicName'];
@@ -98,12 +74,10 @@ class MechanicSignInData{
     jobType = json['jobType'];
     startTime = json['startTime'];
     endTime = json['endTime'];
-    status =json['status'];
+    status = json['status'];
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-
     data['id'] = this.id;
     data['mechanicCode'] = this.mechanicCode;
     data['mechanicName'] = this.mechanicName;
@@ -123,5 +97,5 @@ class MechanicSignInData{
 
     return data;
   }
-}
 
+  }

@@ -1408,7 +1408,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
                                                     print("$selectedBrandId>>>>>>>>>>>>>>>");
                                                     _allModelBloc
                                                         .postAllModelDataRequest(
-                                                            selectedBrandId!,
+                                                            selectedBrandId!.toString(),
                                                             token);
                                                   });
                                                   print(">>>>>");

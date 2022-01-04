@@ -1,18 +1,20 @@
 // ignore_for_file: avoid_print
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/work_selection_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_mdl.dart';
 
 
 class MechanicWorkSelectionApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<MechanicWorkSelectionMdl> getMechanicWorkSelectionRequest(
-      String yearOfExperience,
-      bool isEmergencyEnabled,
-      String serviceIdList
+      int isEmergencyEnabled,
+      String serviceIdList,
+      String serviceFeeList,
+      String startTime,
+      String endTime
       ) async {
     Map<String, dynamic> _resp = await _queryProvider.mechanicSignUpWorkSelection(
-      yearOfExperience, isEmergencyEnabled, serviceIdList
+        isEmergencyEnabled, serviceIdList, serviceFeeList, startTime,endTime
        );
     // ignore: unnecessary_null_comparison
     if (_resp != null) {

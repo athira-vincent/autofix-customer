@@ -19,6 +19,8 @@ class SharedPrefKeys {
   static const isMechanicSignUp = "isMechanicSignUp";
   static const mechanicSignUpStatus = "mechanicSignUpStatus";
   static const isMechanicLoggedIn = "isMechanicLoggedIn";
+  static const mechanicCode = "mechanicCode";
+  static const mechanicID = "mechanicID";
 
 
   //------------------------Vendor

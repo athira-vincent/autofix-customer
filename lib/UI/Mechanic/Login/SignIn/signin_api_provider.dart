@@ -6,7 +6,7 @@ class MechanicSigninApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<MechanicSigninMdl> getSignInRequest(String userName, String password) async {
     Map<String, dynamic> _resp =
-        await _queryProvider.signIn(userName, password);
+        await _queryProvider.mechanicSignIn(userName, password);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
