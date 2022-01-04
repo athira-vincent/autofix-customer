@@ -444,6 +444,60 @@ class QueryProvider {
   getAllMechanicList(String token, int page, int size, String serviceId) async {
 
 
+    String _query = """
+    query{
+   mechanicList(page: $page, size: $size, serviceId: "$serviceId"){
+    totalItems
+    data
+    {
+    id,
+    mechanicCode,
+    mechanicName,
+    emailId,
+    phoneNo,
+    address,
+    latitude,
+    longitude,
+    walletId,
+    verified,
+    enable,
+    isEmailverified,
+    jobType,
+    startTime,
+    endTime,
+    status,
+    demoMechanicService{id,
+    fee,
+    status,
+    serviceId,
+    demoMechanicId,
+    service
+    {
+      id,
+      serviceName,
+      icon,
+      type,
+      fee,
+      minAmount,
+      maxAmount,
+      status
+    }
+    },
+    demoMechanicVehicle{id,
+    status,
+    makeId,
+    make{id
+     id,
+    makeName,
+    description,
+    status,}}}
+    totalPages
+    currentPage
+  }
+}
+""";
+
+
     log(_query);
     return await GqlClient.I.query01(
       _query,
@@ -452,6 +506,8 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+
 
   getRegularServices(int page, int size, String token) async {
     String _query = """
