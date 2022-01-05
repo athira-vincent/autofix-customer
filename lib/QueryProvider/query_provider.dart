@@ -513,8 +513,6 @@ class QueryProvider {
     );
   }
 
-
-
   getRegularServices(int page, int size, String token) async {
     String _query = """
       query{
@@ -525,6 +523,7 @@ class QueryProvider {
                     serviceName
                     description
                     icon
+                    fee
                     type
                     status
                   }
@@ -552,6 +551,7 @@ class QueryProvider {
                     serviceName
                     description
                     icon
+                    fee
                     type
                     status
                   }
@@ -769,21 +769,12 @@ class QueryProvider {
   }
 
   mechanicChangePassword(String password) {}
-  mechanicEditProfile() {}
-  mechanicViewProfile(String id) async {
-    String _query = """
-    """;
-    log(_query);
-    return await GqlClient.I.query(
-      _query,
-      enableDebug: true,
-      isTokenThere: false,
-    );
-  }
 
-  mechanicCompletedServicesList(String token) async {
-    String _query = """
-     """;
+  mechanicEditProfile() {}
+
+  mechanicViewProfile(String id,String token, ) async {
+    String _query = """ 
+    """;
     log(_query);
     return await GqlClient.I.query01(
       _query,
@@ -804,7 +795,20 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
   mechanicTodaysServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  mechanicCompletedServicesList(String token) async {
     String _query = """
      """;
     log(_query);

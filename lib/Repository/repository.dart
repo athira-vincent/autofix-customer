@@ -26,6 +26,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_ap
 import 'package:auto_fix/UI/Mechanic/Home/BottomBar/CompletedSevice/completed_service_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Home/BottomBar/TodaysService/todays_service_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Home/BottomBar/UpcomingService/upcoming_service_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/Home/SideBar/MyProfile/ViewProfile/view_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_api_provider.dart';
@@ -69,6 +70,7 @@ class Repository {
   final _completedServicesApiProvider = CompletedServicesApiProvider();
   final _upcomingServicesApiProvider = UpcomingServicesApiProvider();
   final _todaysServicesApiProvider = TodaysServicesApiProvider();
+  final _viewMechanicProfileApiProvider = MechanicViewProfileApiProvider();
 
   final _vendorSignupApiProvider = VendorSignupApiProvider();
   final _vendorSignInApiProvider = VendorSigninApiProvider();
@@ -222,6 +224,9 @@ class Repository {
         modelIdList,
         jobType
       );
+
+  Future<dynamic> getViewMechanicProfile(String id,String token, ) =>
+      _viewMechanicProfileApiProvider.getViewProfileRequest(id, token, );
 
   Future<dynamic> getAllServiceFee(int page, int size, int enable,String token) =>
       _allServiceFeeApiProvider.getAllServiceFeeRequest(page,size,enable,token);
