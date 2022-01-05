@@ -23,17 +23,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_api_
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Delete/delete_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Home/BottomBar/CompletedSevice/completed_service_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Home/BottomBar/TodaysService/todays_service_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Home/BottomBar/UpcomingService/upcoming_service_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Home/SideBar/MyProfile/ViewProfile/view_profile_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignIn/signin_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen1/signup_registration_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen2/specialization_selection_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/services_fee_list/service_fee_api_provider.dart';
-import 'package:auto_fix/UI/Mechanic/Login/SignUp/SignUpScreen3/work_selection_api_provider.dart';
-import 'package:auto_fix/UI/Vendor/Login/SignIn/signin_api_provider.dart';
-import 'package:auto_fix/UI/Vendor/Login/SignUp/signup_api_provider.dart';
+
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();
@@ -62,18 +52,7 @@ class Repository {
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   final _mechanicProfileApiProvider = MechanicProfileApiProvider();
 
-  final _mechanicSignInApiProvider = MechanicSigninApiProvider();
-  final _mechanicSignupApiProvider = MechanicSignupRegistrationApiProvider();
-  final _mechanicWorkSelectionApiProvider = MechanicWorkSelectionApiProvider();
-  final _mechanicExpertizeSelectionApiProvider = MechanicSpecializationSelectionApiProvider();
-  final _allServiceFeeApiProvider = AllServiceFeeApiProvider();
-  final _completedServicesApiProvider = CompletedServicesApiProvider();
-  final _upcomingServicesApiProvider = UpcomingServicesApiProvider();
-  final _todaysServicesApiProvider = TodaysServicesApiProvider();
-  final _viewMechanicProfileApiProvider = MechanicViewProfileApiProvider();
 
-  final _vendorSignupApiProvider = VendorSignupApiProvider();
-  final _vendorSignInApiProvider = VendorSigninApiProvider();
 
   // Customer SignUpScreen1
   Future<dynamic> getSignUp(String firstName, String userName, String email,
@@ -183,69 +162,5 @@ class Repository {
   Future<dynamic> getMechanicProfile(String id,String serviceId) =>
       _mechanicProfileApiProvider.getMechanicDetailsRequest(id, serviceId);
 
-  //----------------------------Mechanic--------------------------------------------
 
-  //SignIn
-  Future<dynamic> getMechanicSignIn(String userName, String password) =>
-      _mechanicSignInApiProvider.getSignInRequest(userName, password);
-
-  //Mechanic SignUpScreen1
-  Future<dynamic> getMechanicSignUp(
-      String name,
-      String email,
-      String phoneNo,
-      String address,
-      double lat,
-      double lng ,
-      String walletId,
-      String password) =>
-      _mechanicSignupApiProvider.getMechanicSignUpRequest(
-          name, email, phoneNo, address, lat, lng, walletId, password);
-
-  //Mechanic - Sign up - WorkSelection
-  Future<dynamic> getMechanicSignUpWorkSelection(
-      int isEmergencyEnabled,
-      String serviceIdList,
-      String serviceFeeList,
-      String startTime,
-      String endTime) =>
-      _mechanicWorkSelectionApiProvider.getMechanicWorkSelectionRequest(
-          isEmergencyEnabled, serviceIdList, serviceFeeList, startTime,endTime);
-
-  //Mechanic - Sign up - expertizeSelection
-  Future<dynamic> getMechanicSignUpExpertizeSelection(String token, String yearOfExperience,
-      String brandIdList,
-      String modelIdList,
-      String jobType) =>
-      _mechanicExpertizeSelectionApiProvider.getMechanicExpertizeSelectionRequest(
-          token,
-        yearOfExperience,
-        brandIdList,
-        modelIdList,
-        jobType
-      );
-
-  Future<dynamic> getViewMechanicProfile(String id,String token, ) =>
-      _viewMechanicProfileApiProvider.getViewProfileRequest(id, token, );
-
-  Future<dynamic> getAllServiceFee(int page, int size, int enable,String token) =>
-      _allServiceFeeApiProvider.getAllServiceFeeRequest(page,size,enable,token);
-
-  //Mechanic complete services list
-  Future<dynamic> getCompletedServices(String token) =>
-      _completedServicesApiProvider.getCompletedServicesRequest(token);
-
-  // Mechanic upcoming service list
-  Future<dynamic> getUpcomingServices(String token) =>
-      _upcomingServicesApiProvider.getUpcomingServicesRequest(token);
-
-  // Mechanic Today's service list
-  Future<dynamic> getTodaysServices(String token) =>
-      _todaysServicesApiProvider.getTodaysServicesRequest(token);
-
-//---------------------Vendor
-  //Vendor SignUpScreen1
-  /*Future<dynamic> getVendorSignUp(String firstName, String userName, String email,
-      String state, String password, String phone) =>
-      _vendorSignupApiProvider.getVendorSignUpRequest();*/
 }

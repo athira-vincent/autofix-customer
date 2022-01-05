@@ -8,8 +8,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
-import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
-import 'package:auto_fix/UI/Vendor/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
@@ -67,14 +65,6 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()));
         }
-      } else if (userType == TextStrings.user_mechanic) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const MechanicHomeScreen()));
-      } else if (userType == TextStrings.user_vendor) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const VendorHomeScreen()));
       }
     } else {
       if (isWalked == null || isWalked == false) {
