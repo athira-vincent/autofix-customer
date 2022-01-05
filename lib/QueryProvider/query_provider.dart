@@ -33,7 +33,13 @@ class QueryProvider {
       String password, String phoneNo) async {
     String _query = """ 
     mutation{
-          customersSignUp(firstName: "$firstName", lastName: "", address: "", emailId: "$email", phoneNo: "$phoneNo", password: "$password",state:"$state",userName:"$userName") {
+          customersSignUp(firstName: "$firstName",
+           lastName: "", address: "", 
+           emailId: "$email", 
+           phoneNo: "$phoneNo", 
+           password: "$password", 
+           state:"$state", 
+           userName:"$userName") {
             token
             customer {
               id
@@ -507,8 +513,6 @@ class QueryProvider {
     );
   }
 
-
-
   getRegularServices(int page, int size, String token) async {
     String _query = """
       query{
@@ -519,6 +523,7 @@ class QueryProvider {
                     serviceName
                     description
                     icon
+                    fee
                     type
                     status
                   }
@@ -546,6 +551,7 @@ class QueryProvider {
                     serviceName
                     description
                     icon
+                    fee
                     type
                     status
                   }
@@ -763,15 +769,54 @@ class QueryProvider {
   }
 
   mechanicChangePassword(String password) {}
+
   mechanicEditProfile() {}
-  mechanicViewProfile(String id) async {
-    String _query = """
+
+  mechanicViewProfile(String id,String token, ) async {
+    String _query = """ 
     """;
     log(_query);
-    return await GqlClient.I.query(
+    return await GqlClient.I.query01(
       _query,
+      token,
       enableDebug: true,
-      isTokenThere: false,
+      isTokenThere: true,
+    );
+  }
+
+  mechanicUpcomingServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  mechanicTodaysServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  mechanicCompletedServicesList(String token) async {
+    String _query = """
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
     );
   }
 

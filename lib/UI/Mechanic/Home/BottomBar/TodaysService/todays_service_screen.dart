@@ -1,3 +1,5 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Mechanic/Home/BottomBar/TodaysService/todays_service_bloc.dart';
 import 'package:flutter/material.dart';
 
 class TodayServiceScreen extends StatefulWidget {
@@ -8,6 +10,46 @@ class TodayServiceScreen extends StatefulWidget {
 }
 
 class _TodayServiceScreenState extends State<TodayServiceScreen> {
+
+  final TodaysServicesBloc _todaysServicesBloc = TodaysServicesBloc();
+
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _todaysServicesBloc.dispose();
+  }
+
+  _getTodaysServiceList() {
+    _todaysServicesBloc.postTodaysServiceList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Password Reset Enabled.\nCheck Your mail",
+                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

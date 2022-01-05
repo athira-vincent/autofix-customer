@@ -1,7 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_authorization_bloc.dart';
-import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/profile_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/services_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/spair_parts_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/navigation_drawer_screen.dart';
