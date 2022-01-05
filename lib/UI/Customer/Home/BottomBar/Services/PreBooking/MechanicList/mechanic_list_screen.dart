@@ -73,9 +73,9 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
           //_isLoading = false;
           print(">>>>>mechanic Api Data >>> " +
               "id : " +
-              value.data!.mechanicList!.totalItems.toString() +
+              value.data!.mechanicList.totalItems.toString() +
               " >>>>>>>>>");
-          mechanicListData = value.data!.mechanicList!.data!;
+          mechanicListData = value.data!.mechanicList.data;
           // value.data.mechanicList.mechanicListData[0].id;
         });
       }
