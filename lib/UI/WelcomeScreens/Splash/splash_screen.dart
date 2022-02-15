@@ -15,11 +15,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
+
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     return _SplashScreenState();
+    
   }
 }
 
@@ -28,7 +30,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
+
       _changeScreen();
+
     });
   }
 
@@ -43,8 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
-    print(
-        "_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
+    print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
