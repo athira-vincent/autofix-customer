@@ -35,6 +35,12 @@ class CustColors {
     },
   );
 
+  //-------------------------------------------------- Rewamp Autofix ------------------------------------
+
+  static const greyish_purple = Color(0xff847f9e);
+  static const azure = Color(0xff00afef);
+
+
 
 
 }

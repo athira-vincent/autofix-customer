@@ -9,19 +9,19 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
-
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
+
+import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
-
+  
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     return _SplashScreenState();
-    
   }
 }
 
@@ -87,33 +87,63 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
 
-
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
-      backgroundColor: CustColors.blue,
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            image: DecorationImage(
-              image: AssetImage("assets/images/splash_background.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Center(
-            child: Container(
-              margin: EdgeInsets.only(left: 72, right: 72),
+      backgroundColor: Colors.white,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.326,
+              //margin: EdgeInsets.only(left: 0, right:  0, top: 0, bottom: 0),
               child: Image.asset(
-                "assets/images/auto_fix_logo.png",
+                "assets/image/splash_bg_top.png",
                 width: double.infinity,
-                height: 100,
+                height: double.infinity,
                 fit: BoxFit.contain,
               ),
             ),
-          ),
+
+            Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.562,
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.053,bottom: 0),
+                  child: Image.asset(
+                    "assets/image/splash_bg_bottom.png",
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.232,
+                    right: MediaQuery.of(context).size.width * 0.198
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.118,
+                  width: MediaQuery.of(context).size.height * 0.569,
+                  child: Image.asset(
+                    "assets/image/splash_icon.png",
+                    width: double.infinity,
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
   }
+
 }
