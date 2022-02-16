@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -110,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      'Login',
+                                      AppLocalizations.of(context)!.login,
                                       style: Styles.textHeadLogin,
                                     ),
                                   ),
