@@ -17,6 +17,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../main.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -49,6 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
   double _setValueFont(double value) {
     return value * perfont + value;
   }
+
+
+  bool language_en_ar=true;
 
   @override
   void initState() {
@@ -110,10 +115,29 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    child: Text(
-                                      AppLocalizations.of(context)!.login,
-                                      style: Styles.textHeadLogin,
+                                  InkWell(
+                                    onTap: (){
+                                      if(language_en_ar==true)
+                                        {
+                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ar'));
+                                          setState(() {
+                                            language_en_ar=false;
+                                          });
+                                        }
+                                      else
+                                        {
+                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                          setState(() {
+                                            language_en_ar=true;
+                                          });
+                                        }
+
+                                    },
+                                    child: Container(
+                                      child: Text(
+                                        AppLocalizations.of(context)!.login,
+                                        style: Styles.textHeadLogin,
+                                      ),
                                     ),
                                   ),
                                   Padding(
