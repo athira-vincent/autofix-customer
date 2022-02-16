@@ -8,6 +8,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
+import 'package:auto_fix/UI/Customer/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 
@@ -75,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Timer(
             Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => WalkThroughPages())));
+                builder: (BuildContext context) => LoginScreen())));
       } else {
         Navigator.pushReplacement(
             context,

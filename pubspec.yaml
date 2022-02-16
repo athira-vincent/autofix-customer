@@ -61,6 +61,8 @@ dependencies:
   firebase_storage: ^8.1.0
   firebase_messaging: 10.0.4
 
+  flutter_svg: 0.23.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -116,6 +118,17 @@ flutter:
     - family: Corbel_Regular
       fonts:
         - asset: assets/fonts/corbel.ttf
+    - family: Samsung_SharpSans_Bold
+      fonts:
+          - asset: assets/fonts/samsungsharpsans-bold.otf
+    - family: Samsung_SharpSans_Regular
+      fonts:
+          - asset: assets/fonts/samsungsharpsans.otf
+    - family: Samsung_SharpSans_Medium
+      fonts:
+          - asset: assets/fonts/samsungsharpsans-medium.otf
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
