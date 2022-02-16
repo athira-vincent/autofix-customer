@@ -41,6 +41,7 @@ class CustColors {
   static const azure = Color(0xff00afef);
 
   static const whiteBlueish = Color(0xfff5f4f7);
+  static const blackishgrey= Color(0xff232121);
   static const greyish= Color(0xffa7a7a7);
 
 

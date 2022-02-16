@@ -66,9 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.only(top: 50, bottom: 10),
+                  padding: const EdgeInsets.only(top: 50, bottom: 0),
                   child: Align(
-                    alignment: Alignment.topCenter,
+                    alignment: Alignment.bottomCenter,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 0),
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 210,
+                    height: MediaQuery.of(context).size.height - 200,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(30),
@@ -101,7 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           autovalidateMode: _autoValidate,
                           key: _formKey,
                           child: Container(
-                            color: CustColors.white01,
                             margin: EdgeInsets.only(
                                 left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
                             child: Column(
@@ -114,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding:  EdgeInsets.only(left: _setValue(20.5), right: _setValue(20.5)),
+                                  padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                   child: Column(
                                     children: [
                                       Container(
@@ -162,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                   hintStyle: Styles.textLabelSubTitle,),
                                             ),
+
                                           ],
                                         ),
                                       ),
@@ -238,13 +238,33 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                   hintStyle: Styles.textLabelSubTitle,),
                                             ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ForgotPasswordScreen()));
+                                                  },
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(top: _setValue(10)),
+                                                    child: Text(
+                                                      'Forgot password?',
+                                                      style: Styles.textLabelSubTitle,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
                                       ),
                                       Container(
-                                        height: _setValue(28),
-                                        width: _setValue(96),
-                                        margin: EdgeInsets.only(top: 31.8),
+                                        margin: EdgeInsets.only(top: 20.8),
                                         child: _isLoading
                                             ? Center(
                                           child: Container(
@@ -257,15 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         )
                                             : Container(
-                                          decoration: BoxDecoration(
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                color: CustColors.darkBlue,
-                                                blurRadius: 5,
-                                                offset: Offset(0, 3.3),
-                                              ),
-                                            ],
-                                          ),
+
                                           child: MaterialButton(
                                             onPressed: () {
                                               if (_formKey.currentState!.validate()) {
@@ -281,81 +293,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                               }
                                             },
                                             child: Container(
+                                              height: 45,
                                               child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     'Login',
-                                                    style: TextStyle(
-                                                      color: CustColors.blue,
-                                                      fontFamily: 'Corbel_Regular',
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: _setValueFont(11.5),
-                                                    ),
+                                                    textAlign: TextAlign.center,
+                                                    style: Styles.textButtonLabelSubTitle,
                                                   ),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                      left: _setValue(16.6),
-                                                    ),
-                                                    child: Image.asset(
-                                                      'assets/images/arrow_forword.png',
-                                                      width: _setValue(12.5),
-                                                      height: _setValue(12.5),
-                                                    ),
-                                                  )
                                                 ],
                                               ),
                                             ),
-                                            color: Colors.white,
+                                            color: CustColors.materialBlue,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(
-                                                    _setValue(16))),
+                                                    _setValue(13))),
                                           ),
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ForgotPasswordScreen()));
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.only(top: _setValue(22)),
-                                              child: Text(
-                                                'Forgot password?',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: _setValueFont(11.5),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'Corbel_Light'),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => SignupScreen()));
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.only(top: _setValue(22)),
-                                              child: Text(
-                                                'New user ? Sign up',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: _setValueFont(11.5),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'Corbel_Light'),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
+
                                     ],
                                   ),
                                 ),

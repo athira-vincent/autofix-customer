@@ -20,9 +20,16 @@ class Styles {
 
   static const textLabelSubTitle = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
-    fontWeight: FontWeight.w600,
-    color: Colors.black,
-    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: CustColors.blackishgrey,
+    fontSize: 10,
+  );
+
+  static const textButtonLabelSubTitle = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+    fontSize: 15,
   );
 
 }
