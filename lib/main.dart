@@ -11,7 +11,6 @@ void main() async {
   await initHiveForFlutter();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   runApp( MyApp());
 }
 
