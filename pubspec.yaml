@@ -30,6 +30,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -61,6 +64,9 @@ dependencies:
   firebase_storage: ^8.1.0
   firebase_messaging: 10.0.4
 
+  flutter_svg: 0.23.0+1
+  intl: ^0.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,6 +95,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -97,6 +104,7 @@ flutter:
   assets:
     - assets/images/
     - assets/image/
+    - assets/image/login/
     - assets/fonts/
     - assets/json/
   fonts:
@@ -115,6 +123,26 @@ flutter:
     - family: Corbel_Regular
       fonts:
         - asset: assets/fonts/corbel.ttf
+    - family: Samsung_SharpSans_Bold
+      fonts:
+          - asset: assets/fonts/samsungsharpsans-bold.otf
+    - family: Samsung_SharpSans_Regular
+      fonts:
+          - asset: assets/fonts/samsungsharpsans.otf
+    - family: Samsung_SharpSans_Medium
+      fonts:
+          - asset: assets/fonts/samsungsharpsans-medium.otf
+    - family: harpSans_Medium
+      fonts:
+          - asset: assets/fonts/Sharp Sans Medium.otf
+    - family: SharpSans_Semibold
+      fonts:
+          - asset: assets/fonts/Sharp Sans Semibold.otf
+    - family: SharpSans_Bold
+      fonts:
+          - asset: assets/fonts/SharpSansBold.otf
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
