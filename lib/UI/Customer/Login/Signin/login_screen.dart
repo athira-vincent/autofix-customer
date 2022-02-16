@@ -10,6 +10,7 @@ import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -94,235 +95,295 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       color: Colors.white,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Form(
-                          autovalidateMode: _autoValidate,
-                          key: _formKey,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Text(
-                                    'Login',
-                                    style: Styles.textHeadLogin,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Form(
+                            autovalidateMode: _autoValidate,
+                            key: _formKey,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      'Login',
+                                      style: Styles.textHeadLogin,
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(top: _setValue(15.5)),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Email',
-                                              style: Styles.textLabelTitle,
-                                            ),
-                                            TextFormField(
-                                              textAlignVertical: TextAlignVertical.center,
-                                              maxLines: 1,
-                                              style: Styles.textLabelSubTitle,
-                                              focusNode: _userNameFocusNode,
-                                              keyboardType: TextInputType.text,
-                                              validator:
-                                              InputValidator(ch: "User name").emptyChecking,
-                                              controller: _userNameController,
-                                              cursorColor: CustColors.whiteBlueish,
-                                              decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText: 'User Name',
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                            ),
-
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 20.5),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Password',
-                                              style: Styles.textLabelTitle,
-                                            ),
-                                            TextFormField(
-                                              textAlignVertical: TextAlignVertical.center,
-                                              obscureText: !_passwordVisible!,
-                                              validator:
-                                              InputValidator(ch: "Password").emptyChecking,
-                                              // validator:
-                                              //     InputValidator(ch: "Password").passwordChecking,
-                                              controller: _passwordController,
-                                              focusNode: _passwordFocusNode,
-                                              maxLines: 1,
-                                              style: Styles.textLabelSubTitle,
-                                              decoration: InputDecoration(
-                                                  isDense: true,
-                                                  suffixIconConstraints: BoxConstraints(
-                                                    minWidth: 25,
-                                                    minHeight: 25,
-                                                  ),
-                                                  suffixIcon: Container(
-                                                    width: 5,
-                                                    height: 10,
-                                                    alignment: Alignment.centerRight,
-                                                    child: IconButton(
-                                                      iconSize: 15,
-                                                      padding: EdgeInsets.zero,
-                                                      icon: Icon(
-                                                        // Based on passwordVisible state choose the icon
-                                                        _passwordVisible!
-                                                            ? Icons.visibility
-                                                            : Icons.visibility_off,
-                                                        color: Colors.grey,
+                                  Padding(
+                                    padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: _setValue(15.5)),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Email',
+                                                style: Styles.textLabelTitle,
+                                              ),
+                                              TextFormField(
+                                                textAlignVertical: TextAlignVertical.center,
+                                                maxLines: 1,
+                                                style: Styles.textLabelSubTitle,
+                                                focusNode: _userNameFocusNode,
+                                                keyboardType: TextInputType.text,
+                                                validator:
+                                                InputValidator(ch: "User name").emptyChecking,
+                                                controller: _userNameController,
+                                                cursorColor: CustColors.whiteBlueish,
+                                                decoration: InputDecoration(
+                                                    isDense: true,
+                                                    hintText: 'User Name',
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      onPressed: () {
-                                                        // Update the state i.e. toogle the state of passwordVisible variable
-                                                        setState(() {
-                                                          _passwordVisible = !_passwordVisible!;
-                                                        });
-                                                      },
                                                     ),
-                                                  ),
-                                                  hintText: 'Password',
-                                                  errorMaxLines: 3,
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
                                                     ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ForgotPasswordScreen()));
-                                                  },
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(top: _setValue(10)),
-                                                    child: Text(
-                                                      'Forgot password?',
-                                                      style: Styles.textLabelSubTitle,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 20.8),
-                                        child: _isLoading
-                                            ? Center(
-                                          child: Container(
-                                            height: _setValue(28),
-                                            width: _setValue(28),
-                                            child: CircularProgressIndicator(
-                                              valueColor: AlwaysStoppedAnimation<Color>(
-                                                  CustColors.peaGreen),
-                                            ),
-                                          ),
-                                        )
-                                            : Container(
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                              ),
 
-                                          child: MaterialButton(
-                                            onPressed: () {
-                                              if (_formKey.currentState!.validate()) {
-                                                _signinBloc.postSignInRequest(
-                                                    _userNameController.text,
-                                                    _passwordController.text);
-                                                setState(() {
-                                                  _isLoading = true;
-                                                });
-                                              } else {
-                                                setState(() => _autoValidate =
-                                                    AutovalidateMode.always);
-                                              }
-                                            },
-                                            child: Container(
-                                              height: 45,
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 20.5),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Password',
+                                                style: Styles.textLabelTitle,
+                                              ),
+                                              TextFormField(
+                                                textAlignVertical: TextAlignVertical.center,
+                                                obscureText: !_passwordVisible!,
+                                                validator:
+                                                InputValidator(ch: "Password").emptyChecking,
+                                                // validator:
+                                                //     InputValidator(ch: "Password").passwordChecking,
+                                                controller: _passwordController,
+                                                focusNode: _passwordFocusNode,
+                                                maxLines: 1,
+                                                style: Styles.textLabelSubTitle,
+                                                decoration: InputDecoration(
+                                                    isDense: true,
+                                                    suffixIconConstraints: BoxConstraints(
+                                                      minWidth: 25,
+                                                      minHeight: 25,
+                                                    ),
+                                                    suffixIcon: Container(
+                                                      width: 5,
+                                                      height: 10,
+                                                      alignment: Alignment.centerRight,
+                                                      child: IconButton(
+                                                        iconSize: 15,
+                                                        padding: EdgeInsets.zero,
+                                                        icon: Icon(
+                                                          // Based on passwordVisible state choose the icon
+                                                          _passwordVisible!
+                                                              ? Icons.visibility
+                                                              : Icons.visibility_off,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        onPressed: () {
+                                                          // Update the state i.e. toogle the state of passwordVisible variable
+                                                          setState(() {
+                                                            _passwordVisible = !_passwordVisible!;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    hintText: 'Password',
+                                                    errorMaxLines: 3,
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
-                                                  Text(
-                                                    'Login',
-                                                    textAlign: TextAlign.center,
-                                                    style: Styles.textButtonLabelSubTitle,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ForgotPasswordScreen()));
+                                                    },
+                                                    child: Container(
+                                                      margin: EdgeInsets.only(top: _setValue(10)),
+                                                      child: Text(
+                                                        'Forgot password?',
+                                                        style: Styles.textLabelSubTitle,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ],
-                                              ),
-                                            ),
-                                            color: CustColors.materialBlue,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    _setValue(13))),
+                                              )
+                                            ],
                                           ),
                                         ),
-                                      ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 20.8),
+                                          child: _isLoading
+                                              ? Center(
+                                            child: Container(
+                                              height: _setValue(28),
+                                              width: _setValue(28),
+                                              child: CircularProgressIndicator(
+                                                valueColor: AlwaysStoppedAnimation<Color>(
+                                                    CustColors.peaGreen),
+                                              ),
+                                            ),
+                                          )
+                                              : Container(
 
-                                    ],
+                                            child: MaterialButton(
+                                              onPressed: () {
+                                                if (_formKey.currentState!.validate()) {
+                                                  _signinBloc.postSignInRequest(
+                                                      _userNameController.text,
+                                                      _passwordController.text);
+                                                  setState(() {
+                                                    _isLoading = true;
+                                                  });
+                                                } else {
+                                                  setState(() => _autoValidate =
+                                                      AutovalidateMode.always);
+                                                }
+                                              },
+                                              child: Container(
+                                                height: 45,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Login',
+                                                      textAlign: TextAlign.center,
+                                                      style: Styles.textButtonLabelSubTitle,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              color: CustColors.materialBlue,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(
+                                                      _setValue(13))),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 15.8),
+                                          child: RichText(
+                                            maxLines: 2,
+                                            text: TextSpan(
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: "Don't have account?  ",
+                                                  style: Styles.textLabelSubTitle,
+                                                ),
+                                                TextSpan(
+                                                    text: 'Sign Up',
+                                                    style: Styles.textLabelTitle_10,
+                                                    recognizer: TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SignupScreen()),
+                                                        );
+                                                      }),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 15.8),
+                                          child: Text(
+                                            'Or login with',
+                                            style: Styles.textLabelSubTitle,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.only(top: 20, bottom: 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            // ignore: prefer_const_literals_to_create_immutables
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                child: SvgPicture.asset('assets/image/login/login_fb.svg',height: 30,width: 30,),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                child: SvgPicture.asset('assets/image/login/login_phone.svg',height: 30,width: 30,),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+
+
+                                      ],
+                                    ),
                                   ),
-                                ),
 
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
