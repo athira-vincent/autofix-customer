@@ -74,18 +74,18 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.only(top: 50, bottom: 0),
+                  height: MediaQuery.of(context).size.height *0.40 ,
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       // ignore: prefer_const_literals_to_create_immutables
                       children: [
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: SvgPicture.asset('assets/image/login/login_bgCar.svg',height: 150,width: 150,),
+                          child: SvgPicture.asset('assets/image/login/login_bgCar.svg',height: MediaQuery.of(context).size.height *0.23,),
                         ),
                       ],
                     ),
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 0),
                   child: Container(
-                    height: MediaQuery.of(context).size.height - 200,
+                    height: MediaQuery.of(context).size.height *0.60 ,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(30),
