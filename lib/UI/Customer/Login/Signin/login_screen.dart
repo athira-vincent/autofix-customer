@@ -345,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           margin: EdgeInsets.only(top: 15.8),
                                           child: Text(
                                             'Or login with',
-                                            style: Styles.textLabelSubTitle,
+                                            style: Styles.textLabelSubTitleAzure,
                                           ),
                                         ),
                                         Container(

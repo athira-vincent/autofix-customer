@@ -127,6 +127,15 @@ flutter:
     - family: Samsung_SharpSans_Medium
       fonts:
           - asset: assets/fonts/samsungsharpsans-medium.otf
+    - family: harpSans_Medium
+      fonts:
+          - asset: assets/fonts/Sharp Sans Medium.otf
+    - family: SharpSans_Semibold
+      fonts:
+          - asset: assets/fonts/Sharp Sans Semibold.otf
+    - family: SharpSans_Bold
+      fonts:
+          - asset: assets/fonts/SharpSansBold.otf
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
