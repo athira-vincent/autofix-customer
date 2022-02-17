@@ -1,3 +1,4 @@
+
 class TextStrings {
   //* Intro title
   static const introTitle = "Cook at home";
@@ -22,4 +23,22 @@ class TextStrings {
   static const waiting_for_mechanic = "Waiting For a mechanic";
 
   static const proceed = "Proceed";
+
+
+  static const app_language_name_english = "English";
+
+  static const app_language_name_igbo = "Igbo";
+
+  static const app_language_name_hausa = "Hausa";
+
+  static const app_language_name_yoruba = "Yoruba";
+
+  static const app_language_code_english = "en";
+
+  static const app_language_code_igbo = "ig";
+
+  static const app_language_code_hausa = "ha";
+
+  static const app_language_code_yoruba = "yo";
+
 }
