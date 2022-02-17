@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Customer/Login/FcmTokenUpdate/fcm_token_update_bloc.
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
@@ -92,17 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height *0.60 ,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          topLeft: Radius.circular(30),
-                        ),
-                        color: Colors.white,
-                      ),
+                  CurvedBottomSheetContainer(
+                      percentage:0.60,
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -112,26 +104,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               key: _formKey,
                               child: Container(
                                 margin: EdgeInsets.only(
-                                    left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                                  left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     InkWell(
                                       onTap: (){
                                         if(language_en_ar==true)
-                                          {
-                                            MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                            setState(() {
-                                              language_en_ar=false;
-                                            });
-                                          }
+                                        {
+                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
+                                          setState(() {
+                                            language_en_ar=false;
+                                          });
+                                        }
                                         else
-                                          {
-                                            MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                            setState(() {
-                                              language_en_ar=true;
-                                            });
-                                          }
+                                        {
+                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                          setState(() {
+                                            language_en_ar=true;
+                                          });
+                                        }
 
                                       },
                                       child: Container(
@@ -164,31 +156,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   controller: _userNameController,
                                                   cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
-                                                      isDense: true,
-                                                      hintText: 'Your emailid',
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
+                                                    isDense: true,
+                                                    hintText: 'Your emailid',
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
                                                 ),
 
                                               ],
@@ -214,58 +206,58 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   maxLines: 1,
                                                   style: Styles.textLabelSubTitle,
                                                   decoration: InputDecoration(
-                                                      isDense: true,
-                                                      suffixIconConstraints: BoxConstraints(
-                                                        minWidth: 25,
-                                                        minHeight: 25,
-                                                      ),
-                                                      suffixIcon: Container(
-                                                        width: 5,
-                                                        height: 10,
-                                                        alignment: Alignment.centerRight,
-                                                        child: IconButton(
-                                                          iconSize: 15,
-                                                          padding: EdgeInsets.zero,
-                                                          icon: Icon(
-                                                            // Based on passwordVisible state choose the icon
-                                                            _passwordVisible!
-                                                                ? Icons.visibility
-                                                                : Icons.visibility_off,
-                                                            color: Colors.grey,
-                                                          ),
-                                                          onPressed: () {
-                                                            // Update the state i.e. toogle the state of passwordVisible variable
-                                                            setState(() {
-                                                              _passwordVisible = !_passwordVisible!;
-                                                            });
-                                                          },
+                                                    isDense: true,
+                                                    suffixIconConstraints: BoxConstraints(
+                                                      minWidth: 25,
+                                                      minHeight: 25,
+                                                    ),
+                                                    suffixIcon: Container(
+                                                      width: 5,
+                                                      height: 10,
+                                                      alignment: Alignment.centerRight,
+                                                      child: IconButton(
+                                                        iconSize: 15,
+                                                        padding: EdgeInsets.zero,
+                                                        icon: Icon(
+                                                          // Based on passwordVisible state choose the icon
+                                                          _passwordVisible!
+                                                              ? Icons.visibility
+                                                              : Icons.visibility_off,
+                                                          color: Colors.grey,
                                                         ),
+                                                        onPressed: () {
+                                                          // Update the state i.e. toogle the state of passwordVisible variable
+                                                          setState(() {
+                                                            _passwordVisible = !_passwordVisible!;
+                                                          });
+                                                        },
                                                       ),
-                                                      hintText: 'Password',
-                                                      errorMaxLines: 3,
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
+                                                    ),
+                                                    hintText: 'Password',
+                                                    errorMaxLines: 3,
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
                                                       ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
                                                 ),
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -408,7 +400,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                    ),
                   ),
                 ],
               ),
