@@ -8,6 +8,9 @@ import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class WalkThroughPages extends StatefulWidget {
   @override
   WalkThroughPagesState createState() => WalkThroughPagesState();
@@ -76,7 +79,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                               child: Text(language,
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 9,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Samsung_SharpSans_Bold'
                               ),),
@@ -86,6 +89,26 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                             setState(() {
                               print(newVal);
                               selectedItem = newVal.toString();
+                              if(newVal=="English")
+                              {
+                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                              }
+                              else if(newVal=="Igbo")
+                              {
+                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
+                              }
+                              else if(newVal=="Hausa")
+                              {
+                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
+                              }
+                              else if(newVal=="Yoruba")
+                              {
+                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
+                              }
+                              else
+                              {
+                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                              }
                             });
                           },
                         ),
@@ -136,7 +159,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                           },
                           child: Center(
                             child: Text(
-                              "Next",
+                              AppLocalizations.of(context)!.next,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,

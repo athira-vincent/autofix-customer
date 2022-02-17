@@ -1,6 +1,8 @@
 {
   "helloWorld": "Hello World!",
   "login": "Login",
+  "welcome_to": "WELCOME TO",
+  "next": "Next",
   "forgot_password": "Forgot password",
   "itsmemaria": "It's Me Maria!"
 }
