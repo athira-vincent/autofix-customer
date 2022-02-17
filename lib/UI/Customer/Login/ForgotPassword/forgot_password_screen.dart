@@ -228,7 +228,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                   ),
                                                   hintStyle: Styles.textLabelSubTitle,),
                                               ),
-
                                             ],
                                           ),
                                         ),
