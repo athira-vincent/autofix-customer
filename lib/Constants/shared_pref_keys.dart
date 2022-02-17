@@ -3,6 +3,7 @@ class SharedPrefKeys {
   static const token = "token_data";
   static const isWalked = "isWalked";
   static const userType = "userType";
+  static const userLanguage = "userLanguage";
 
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";
