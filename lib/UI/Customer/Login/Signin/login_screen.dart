@@ -159,12 +159,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 focusNode: _userNameFocusNode,
                                                 keyboardType: TextInputType.text,
                                                 validator:
-                                                InputValidator(ch: "User name").emptyChecking,
+                                                InputValidator(ch: "Your emailid").emptyChecking,
                                                 controller: _userNameController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText: 'User Name',
+                                                    hintText: 'Your emailid',
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -272,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 children: [
                                                   InkWell(
                                                     onTap: () {
-                                                      Navigator.push(
+                                                      Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>

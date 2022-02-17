@@ -25,6 +25,13 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelSubTitle12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w400,
+    color: CustColors.blackishgrey,
+    fontSize: 12,
+  );
+
   static const textLabelSubTitleAzure = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w600,

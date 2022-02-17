@@ -105,6 +105,7 @@ flutter:
     - assets/images/
     - assets/image/
     - assets/image/login/
+    - assets/image/forgotPwd/
     - assets/fonts/
     - assets/json/
   fonts:
