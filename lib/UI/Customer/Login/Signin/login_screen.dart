@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Customer/Login/FcmTokenUpdate/fcm_token_update_bloc.
 import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
@@ -65,66 +66,58 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: CustColors.whiteBlueish,
-        body: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            // ignore: avoid_unnecessary_containers
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 50, bottom: 0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: SvgPicture.asset('assets/image/login/login_bgCar.svg',height: 150,width: 150,),
-                        ),
-                      ],
+    return MaterialApp(
+      home: Scaffold(
+          backgroundColor: CustColors.whiteBlueish,
+          body: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              // ignore: avoid_unnecessary_containers
+              child: Column(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height *0.40 ,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: SvgPicture.asset('assets/image/login/login_bgCar.svg',height: MediaQuery.of(context).size.height *0.23,),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - 200,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        topLeft: Radius.circular(30),
-                      ),
-                      color: Colors.white,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Form(
-                            autovalidateMode: _autoValidate,
-                            key: _formKey,
-                            child: Container(
-                              margin: EdgeInsets.only(
+                  CurvedBottomSheetContainer(
+                      percentage:0.60,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Form(
+                              autovalidateMode: _autoValidate,
+                              key: _formKey,
+                              child: Container(
+                                margin: EdgeInsets.only(
                                   left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  InkWell(
-                                    onTap: (){
-                                      if(language_en_ar==true)
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        if(language_en_ar==true)
                                         {
-                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ar'));
+                                          MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
                                           setState(() {
                                             language_en_ar=false;
                                           });
                                         }
-                                      else
+                                        else
                                         {
                                           MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
                                           setState(() {
@@ -132,39 +125,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                           });
                                         }
 
-                                    },
-                                    child: Container(
-                                      child: Text(
-                                        AppLocalizations.of(context)!.login,
-                                        style: Styles.textHeadLogin,
+                                      },
+                                      child: Container(
+                                        child: Text(
+                                          AppLocalizations.of(context)!.login,
+                                          style: Styles.textHeadLogin,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Email',
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _userNameFocusNode,
-                                                keyboardType: TextInputType.text,
-                                                validator:
-                                                InputValidator(ch: "User name").emptyChecking,
-                                                controller: _userNameController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Email',
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  focusNode: _userNameFocusNode,
+                                                  keyboardType: TextInputType.text,
+                                                  validator:
+                                                  InputValidator(ch: "Your emailid").emptyChecking,
+                                                  controller: _userNameController,
+                                                  cursorColor: CustColors.whiteBlueish,
+                                                  decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText: 'User Name',
+                                                    hintText: 'Your emailid',
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -188,31 +181,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       horizontal: 0.0,
                                                     ),
                                                     hintStyle: Styles.textLabelSubTitle,),
-                                              ),
+                                                ),
 
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 20.5),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Password',
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                obscureText: !_passwordVisible!,
-                                                validator:
-                                                InputValidator(ch: "Password").emptyChecking,
-                                                // validator:
-                                                //     InputValidator(ch: "Password").passwordChecking,
-                                                controller: _passwordController,
-                                                focusNode: _passwordFocusNode,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                decoration: InputDecoration(
+                                          Container(
+                                            margin: EdgeInsets.only(top: 20.5),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Password',
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  obscureText: !_passwordVisible!,
+                                                  validator:
+                                                  InputValidator(ch: "Password").emptyChecking,
+                                                  // validator:
+                                                  //     InputValidator(ch: "Password").passwordChecking,
+                                                  controller: _passwordController,
+                                                  focusNode: _passwordFocusNode,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  decoration: InputDecoration(
                                                     isDense: true,
                                                     suffixIconConstraints: BoxConstraints(
                                                       minWidth: 25,
@@ -265,154 +258,154 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       horizontal: 0.0,
                                                     ),
                                                     hintStyle: Styles.textLabelSubTitle,),
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ForgotPasswordScreen()));
-                                                    },
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(top: _setValue(10)),
-                                                      child: Text(
-                                                        'Forgot password?',
-                                                        style: Styles.textLabelSubTitle,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ForgotPasswordScreen()));
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(top: _setValue(10)),
+                                                        child: Text(
+                                                          'Forgot password?',
+                                                          style: Styles.textLabelSubTitle,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 20.8),
-                                          child: _isLoading
-                                              ? Center(
-                                            child: Container(
-                                              height: _setValue(28),
-                                              width: _setValue(28),
-                                              child: CircularProgressIndicator(
-                                                valueColor: AlwaysStoppedAnimation<Color>(
-                                                    CustColors.peaGreen),
-                                              ),
-                                            ),
-                                          )
-                                              : Container(
-
-                                            child: MaterialButton(
-                                              onPressed: () {
-                                                if (_formKey.currentState!.validate()) {
-                                                  _signinBloc.postSignInRequest(
-                                                      _userNameController.text,
-                                                      _passwordController.text);
-                                                  setState(() {
-                                                    _isLoading = true;
-                                                  });
-                                                } else {
-                                                  setState(() => _autoValidate =
-                                                      AutovalidateMode.always);
-                                                }
-                                              },
-                                              child: Container(
-                                                height: 45,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      'Login',
-                                                      textAlign: TextAlign.center,
-                                                      style: Styles.textButtonLabelSubTitle,
-                                                    ),
                                                   ],
-                                                ),
-                                              ),
-                                              color: CustColors.materialBlue,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      _setValue(13))),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 15.8),
-                                          child: RichText(
-                                            maxLines: 2,
-                                            text: TextSpan(
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: "Don't have account?  ",
-                                                  style: Styles.textLabelSubTitle,
-                                                ),
-                                                TextSpan(
-                                                    text: 'Sign Up',
-                                                    style: Styles.textLabelTitle_10,
-                                                    recognizer: TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  SignupScreen()),
-                                                        );
-                                                      }),
+                                                )
                                               ],
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 15.8),
-                                          child: Text(
-                                            'Or login with',
-                                            style: Styles.textLabelSubTitleAzure,
+                                          Container(
+                                            margin: EdgeInsets.only(top: 20.8),
+                                            child: _isLoading
+                                                ? Center(
+                                              child: Container(
+                                                height: _setValue(28),
+                                                width: _setValue(28),
+                                                child: CircularProgressIndicator(
+                                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                                      CustColors.peaGreen),
+                                                ),
+                                              ),
+                                            )
+                                                : Container(
+
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  if (_formKey.currentState!.validate()) {
+                                                    _signinBloc.postSignInRequest(
+                                                        _userNameController.text,
+                                                        _passwordController.text);
+                                                    setState(() {
+                                                      _isLoading = true;
+                                                    });
+                                                  } else {
+                                                    setState(() => _autoValidate =
+                                                        AutovalidateMode.always);
+                                                  }
+                                                },
+                                                child: Container(
+                                                  height: 45,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        'Login',
+                                                        textAlign: TextAlign.center,
+                                                        style: Styles.textButtonLabelSubTitle,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                color: CustColors.materialBlue,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        _setValue(13))),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.only(top: 20, bottom: 0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            // ignore: prefer_const_literals_to_create_immutables
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                          Container(
+                                            margin: EdgeInsets.only(top: 15.8),
+                                            child: RichText(
+                                              maxLines: 2,
+                                              text: TextSpan(
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: "Don't have account?  ",
+                                                    style: Styles.textLabelSubTitle,
+                                                  ),
+                                                  TextSpan(
+                                                      text: 'Sign Up',
+                                                      style: Styles.textLabelTitle_10,
+                                                      recognizer: TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    SignupScreen()),
+                                                          );
+                                                        }),
+                                                ],
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                child: SvgPicture.asset('assets/image/login/login_fb.svg',height: 30,width: 30,),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: SvgPicture.asset('assets/image/login/login_phone.svg',height: 30,width: 30,),
-                                              ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          Container(
+                                            margin: EdgeInsets.only(top: 15.8),
+                                            child: Text(
+                                              'Or login with',
+                                              style: Styles.textLabelSubTitleAzure,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(top: 20, bottom: 0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              // ignore: prefer_const_literals_to_create_immutables
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                  child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                  child: SvgPicture.asset('assets/image/login/login_fb.svg',height: 30,width: 30,),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                  child: SvgPicture.asset('assets/image/login/login_phone.svg',height: 30,width: 30,),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   @override
