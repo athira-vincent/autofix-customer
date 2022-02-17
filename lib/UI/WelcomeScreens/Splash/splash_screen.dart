@@ -12,7 +12,7 @@ import 'package:auto_fix/UI/Customer/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 
-import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen1.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

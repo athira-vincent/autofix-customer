@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,82 +19,133 @@ class UserSelectionScreen extends StatefulWidget {
 class _UserSelectionScreenState extends State<UserSelectionScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustColors.blue,
-      body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: Image.asset(
-                      'assets/images/image01.png',
-                      width: 117.3,
-                      height: 74.9,
-                    ),
+
+    Size size = MediaQuery.of(context).size;
+
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Container(
+            width: size.width,
+            height: size.height,
+
+            child: Column(
+              children: [
+
+                IndicatorWidget(isFirst: true,isSecond: true,isThird: false,isFourth: false,),
+
+                Container(
+                  margin: EdgeInsets.only(
+                    top: size.height * 0.069,
+                    right: size.width * 0.181,
+                    left: size.width * 0.172
                   ),
-                  Container(
-                    alignment: Alignment.bottomLeft,
-                    margin: EdgeInsets.only(bottom: 4.8),
-                    child: Image.asset(
-                      'assets/images/image02.png',
-                      width: 45,
-                      height: 45,
-                    ),
-                  )
-                ],
-              ),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  color: Colors.red,
+                  //child: Text(),
+                ),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    GestureDetector(
-                      onTap: () async {
-                        SharedPreferences shdPre =
-                            await SharedPreferences.getInstance();
-                        shdPre.setString(
-                            SharedPrefKeys.userType, TextStrings.user_customer);
-                        bool? flag =
-                            shdPre.getBool(SharedPrefKeys.isCustomerSignUp);
-                        if (flag != null) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SigninScreen()));
-                        } else {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignupScreen()));
-                        }
-                      },
+                    Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            'assets/images/customer.png',
-                            width: 96.8,
-                            height: 96.8,
+                          GestureDetector(
+                            onTap: () async {
+                              SharedPreferences shdPre =
+                              await SharedPreferences.getInstance();
+                              shdPre.setString(
+                                  SharedPrefKeys.userType, TextStrings.user_customer);
+                              bool? flag =
+                              shdPre.getBool(SharedPrefKeys.isCustomerSignUp);
+                              if (flag != null) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const SigninScreen()));
+                              } else {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const SignupScreen()));
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/images/customer.png',
+                                  width: 96.8,
+                                  height: 96.8,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 7.8),
+                                  child: Text("CUSTOMER",
+                                      style: TextStyle(
+                                          fontSize: 14.5,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'Corbel_Light',
+                                          color: CustColors.blue)),
+                                ),
+                              ],
+                            ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 7.8),
-                            child: Text("CUSTOMER",
-                                style: TextStyle(
-                                    fontSize: 14.5,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Corbel_Light',
-                                    color: CustColors.blue)),
+                        ],
+                      ),
+                    ),
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              SharedPreferences shdPre =
+                              await SharedPreferences.getInstance();
+                              shdPre.setString(
+                                  SharedPrefKeys.userType, TextStrings.user_customer);
+                              bool? flag =
+                              shdPre.getBool(SharedPrefKeys.isCustomerSignUp);
+                              if (flag != null) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const SigninScreen()));
+                              } else {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const SignupScreen()));
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/images/customer.png',
+                                  width: 96.8,
+                                  height: 96.8,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 7.8),
+                                  child: Text("CUSTOMER",
+                                      style: TextStyle(
+                                          fontSize: 14.5,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'Corbel_Light',
+                                          color: CustColors.blue)),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
+
+              ],
+            )
           ),
         ),
       ),
