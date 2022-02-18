@@ -11,7 +11,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (Platform.isIOS) {
+    await Firebase.initializeApp();
+  } else {
+    await Firebase.initializeApp();
+  }
+  //await Firebase.initializeApp();
   await initHiveForFlutter();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
