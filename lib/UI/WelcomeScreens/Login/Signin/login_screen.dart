@@ -379,8 +379,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               // ignore: prefer_const_literals_to_create_immutables
                                               children: [
                                                 InkWell(
-                                                  onTap: (){
-                                                    signInWithGoogle().then((result) {
+                                                  onTap: () async {
+                                                    await signInWithGoogle().then((result) {
                                                       print(result);
                                                       if (result != null) {
                                                         print("result sucess  $result");
@@ -508,10 +508,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     final UserCredential authResult = await auth.signInWithCredential(credential);
     final User? user = authResult.user;
+    print("result sucess  $user");
     setState(() {
       socialLoginIsLoading = false;
     });
     if (user != null) {
+      print("result sucess user ${user.uid}");
       setState(() {
         socialLoginIsLoading = true;
       });
