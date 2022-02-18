@@ -59,11 +59,61 @@ class Styles {
     color: CustColors.rusty_red,
     fontSize: 12.7,
   );
+
   static const textLabelSubTitleBlue = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
     color: CustColors.light_navy,
     fontSize: 12.7,
   );
+
+  static const smallTitleStyle = TextStyle(
+    color: CustColors.greyish_purple,
+    fontSize: 23.3,
+    height: 1.5,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Samsung_SharpSans_Regular',
+  );
+
+  static const largeTitleStyle = TextStyle(
+    color: CustColors.azure,
+    fontSize: 36.7,
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.bold,
+  );
+
+  static const descriptionStyle = TextStyle(
+    color: CustColors.greyish_purple,
+    fontSize: 13.3,
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w200,
+  );
+
+  static const nextWalkThroughStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Corbel_Bold');
+
+  static const skipWalkThroughStyle = TextStyle(
+      color: CustColors.azure,
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Corbel_Bold');
+
+  static const SelectLanguageWalkThroughStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 10,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Samsung_SharpSans_Medium');
+
+  static const LanguageWalkThroughStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 10,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Samsung_SharpSans_Bold'
+  );
+
+
 
 }

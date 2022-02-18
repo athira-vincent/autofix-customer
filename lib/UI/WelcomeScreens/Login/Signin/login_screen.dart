@@ -3,8 +3,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
-import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
@@ -353,7 +351,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                             context,
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
-                                                                    SignupScreen()),
+                                                                    SignupScreen( userType: '1', userCategory: '1',)),
                                                           );
                                                         }),
                                                 ],
@@ -481,7 +479,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //   backgroundColor: CustColors.peaGreen,
           // ));
 
-          if (value.data!.customerSignIn!.customer!.isProfileCompleted! == 2) {
+         /* if (value.data!.customerSignIn!.customer!.isProfileCompleted! == 2) {
             setIsSignedIn();
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
@@ -490,7 +488,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //setIsSignedIn();
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => AddVehicleScreen()));
-          }
+          }*/
         });
       }
     });

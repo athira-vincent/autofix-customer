@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/data_mdl.dart';
@@ -64,11 +65,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                         child: Container(
                           child: Text(
                             "SELECT LANGUAGE",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Samsung_SharpSans_Medium'),
+                            style: Styles.SelectLanguageWalkThroughStyle,
                           ),
                         ),
                       ),
@@ -91,38 +88,39 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                                 return DropdownMenuItem(
                                   value: language,
                                   child: Text(language,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Samsung_SharpSans_Bold'
-                                  ),),
+                                    style: Styles.LanguageWalkThroughStyle,),
                                 );
                               }).toList(),
-                              onChanged: (var newVal){
+                              onChanged: (var newVal) async {
+                                SharedPreferences shdPre = await SharedPreferences.getInstance();
+                                if(newVal=="English")
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'en');
+                                }
+                                else if(newVal=="Igbo")
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
+                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'ig');
+                                }
+                                else if(newVal=="Hausa")
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
+                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'ha');
+                                }
+                                else if(newVal=="Yoruba")
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
+                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'yo');
+                                }
+                                else
+                                {
+                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'en');
+                                }
                                 setState(() {
                                   print(newVal);
                                   selectedItem = newVal.toString();
-                                  if(newVal=="English")
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                  }
-                                  else if(newVal=="Igbo")
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                  }
-                                  else if(newVal=="Hausa")
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
-                                  }
-                                  else if(newVal=="Yoruba")
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
-                                  }
-                                  else
-                                  {
-                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                  }
                                 });
                               },
                             ),
@@ -180,11 +178,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                           child: Center(
                             child: Text(
                               AppLocalizations.of(context)!.next,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Corbel_Bold'),
+                              style: Styles.nextWalkThroughStyle,
                             ),
                           ),
                         ),
@@ -198,11 +192,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                           child: Center(
                             child: Text(
                               "Skip",
-                              style: TextStyle(
-                                  color: CustColors.azure,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Corbel_Bold'),
+                              style: Styles.skipWalkThroughStyle,
                             ),
                           ),
                         ),
@@ -223,11 +213,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                         height: 20.5,
                         child: Text(
                           "Get Started",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Corbel_Bold'),
+                          style: Styles.nextWalkThroughStyle,
                         ),
                       ),
                     ),
@@ -266,27 +252,6 @@ class SliderTile extends StatelessWidget {
     required this.description,
   }) : super(key: key);
 
-  final smallTitleStyle = TextStyle(
-    color: CustColors.greyish_purple,
-    fontSize: 23.3,
-    height: 1.5,
-    fontWeight: FontWeight.w300,
-    fontFamily: 'Samsung_SharpSans_Regular',
-  );
-
-  final largeTitleStyle = TextStyle(
-    color: CustColors.azure,
-    fontSize: 36.7,
-    fontFamily: 'Samsung_SharpSans_Medium',
-    fontWeight: FontWeight.bold,
-  );
-
-  final descriptionStyle = TextStyle(
-    color: CustColors.greyish_purple,
-    fontSize: 13.3,
-    fontFamily: 'Samsung_SharpSans_Regular',
-    fontWeight: FontWeight.w200,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -305,17 +270,17 @@ class SliderTile extends StatelessWidget {
 
         Container(
           margin: EdgeInsets.only(top: size.width * 0.060),
-          child: Text(smallTitle,style: smallTitleStyle,),
+          child: Text(smallTitle,style: Styles.smallTitleStyle,),
         ),
 
         Container(
             margin: EdgeInsets.only(top: size.width * 0.018),
-            child: Text(largeTitle,style: largeTitleStyle,)
+            child: Text(largeTitle,style: Styles.largeTitleStyle,)
         ),
 
         Container(
             margin: EdgeInsets.only(top: size.width * 0.018),
-            child: Text(description,style: descriptionStyle,))
+            child: Text(description,style: Styles.descriptionStyle,))
 
       ],
     );

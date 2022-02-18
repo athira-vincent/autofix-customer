@@ -1,4 +1,5 @@
 import 'package:auto_fix/Widgets/indicator_widget.dart';
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/user_category.dart';
 import 'package:flutter/material.dart';
 
