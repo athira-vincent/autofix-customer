@@ -376,22 +376,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                               mainAxisSize: MainAxisSize.min,
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.center,
-                                              // ignore: prefer_const_literals_to_create_immutables
                                               children: [
-                                                InkWell(
-                                                  onTap: () async {
-                                                    await signInWithGoogle().then((result) {
-                                                      print(result);
-                                                      if (result != null) {
-                                                        print("result sucess  $result");
-                                                      } else if (result == null) {
-                                                        print("result sucess  0");
-                                                      }
-                                                    });
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                    child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                                Material(
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      print('result');
+                                                      await signInWithGoogle().then((result) {
+                                                        print(result);
+                                                        if (result != null) {
+                                                          print("result sucess  $result");
+                                                        } else if (result == null) {
+                                                          print("result sucess  0");
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                      child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                                    ),
                                                   ),
                                                 ),
                                                 InkWell(
