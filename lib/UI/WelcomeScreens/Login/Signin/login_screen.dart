@@ -371,15 +371,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                           Container(
-                                            padding: const EdgeInsets.only(top: 20, bottom: 0),
+                                            padding: const EdgeInsets.only(top: 20, bottom: 10),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                Material(
-                                                  child: InkWell(
-                                                    onTap: () async {
+                                                Container(
+                                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                  child: IconButton(
+                                                    icon: SvgPicture.asset(
+                                                      'assets/image/login/login_gmail.svg',height: 30,width: 30,
+                                                      fit: BoxFit.fill,
+                                                      allowDrawingOutsideViewBox: true,
+                                                    ),
+                                                    onPressed: () async {
                                                       print('result');
                                                       await signInWithGoogle().then((result) {
                                                         print(result);
@@ -390,10 +396,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         }
                                                       });
                                                     },
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                      child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
-                                                    ),
                                                   ),
                                                 ),
                                                 InkWell(
