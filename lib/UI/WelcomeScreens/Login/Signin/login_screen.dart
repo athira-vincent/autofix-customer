@@ -8,11 +8,12 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -53,6 +54,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   bool language_en_ar=true;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  UserCredential? userCredential;
+  User? user;
+  bool socialLoginIsLoading = false;
 
   @override
   void initState() {
@@ -300,9 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               child: MaterialButton(
                                                 onPressed: () {
                                                   if (_formKey.currentState!.validate()) {
-                                                    _signinBloc.postSignInRequest(
-                                                        _userNameController.text,
-                                                        _passwordController.text);
+
                                                     setState(() {
                                                       _isLoading = true;
                                                     });
@@ -373,17 +378,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               // ignore: prefer_const_literals_to_create_immutables
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                  child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                                InkWell(
+                                                  onTap: (){
+                                                    signInWithGoogle().then((result) {
+                                                      print(result);
+                                                      if (result != null) {
+                                                        print("result sucess  $result");
+                                                      } else if (result == null) {
+                                                        print("result sucess  0");
+                                                      }
+                                                    });
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                    child: SvgPicture.asset('assets/image/login/login_gmail.svg',height: 30,width: 30,),
+                                                  ),
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                  child: SvgPicture.asset('assets/image/login/login_fb.svg',height: 30,width: 30,),
+                                                InkWell(
+                                                  onTap: (){
+
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                    child: SvgPicture.asset('assets/image/login/login_fb.svg',height: 30,width: 30,),
+                                                  ),
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                  child: SvgPicture.asset('assets/image/login/login_phone.svg',height: 30,width: 30,),
+                                                InkWell(
+                                                  onTap: (){
+
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                    child: SvgPicture.asset('assets/image/login/login_phone.svg',height: 30,width: 30,),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -420,12 +447,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> setFcmToken(String Authtoken) async {
-    FirebaseMessaging.instance.getToken().then((value) {
+    /*FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
       print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
 
       _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
-    });
+    });*/
 
 
 
@@ -448,48 +475,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ));
         });
       } else {
-        _signinBloc.userDefault(value.data!.customerSignIn!.token.toString());
-        setFcmToken(value.data!.customerSignIn!.token.toString());
-        SharedPreferences shdPre = await SharedPreferences.getInstance();
-        print(
-            "check username ${value.data!.customerSignIn!.customer!.firstName.toString()}");
-        shdPre.setString(
-            SharedPrefKeys.userName,
-            value.data!.customerSignIn!.customer!.firstName.toString() +
-                " " +
-                value.data!.customerSignIn!.customer!.lastName.toString());
-        shdPre.setString(SharedPrefKeys.userEmail,
-            value.data!.customerSignIn!.customer!.emailId.toString());
-        shdPre.setString(SharedPrefKeys.userProfilePic,
-            value.data!.customerSignIn!.customer!.profilePic.toString());
-        shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable,
-            value.data!.customerSignIn!.customer!.isProfileCompleted!);
-        shdPre.setInt(SharedPrefKeys.userID,
-            int.parse(value.data!.customerSignIn!.customer!.id!));
-        setState(() {
-          _isLoading = false;
-          //toastMsg.toastMsg(msg: "Successfully Signed In");
-          // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //   content: Text("Successfully Signed In",
-          //       style: TextStyle(
-          //           fontFamily: 'Roboto_Regular',
-          //           fontWeight: FontWeight.w600,
-          //           fontSize: 14)),
-          //   duration: Duration(seconds: 2),
-          //   backgroundColor: CustColors.peaGreen,
-          // ));
 
-         /* if (value.data!.customerSignIn!.customer!.isProfileCompleted! == 2) {
-            setIsSignedIn();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
-            FocusScope.of(context).unfocus();
-          } else {
-            //setIsSignedIn();
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => AddVehicleScreen()));
-          }*/
-        });
       }
     });
   }
@@ -507,6 +493,35 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.getBool(SharedPrefKeys.isUserLoggedIn);
     // prefs.setBool(SharedPrefKeys.isWalked, true);
     return _isDefaultVehicleAvailable;
+  }
+
+  Future signInWithGoogle() async {
+    setState(() {
+      socialLoginIsLoading = true;
+    });
+
+    final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication? googleSignInAuthentication = await googleSignInAccount?.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication?.accessToken,
+      idToken: googleSignInAuthentication?.idToken,
+    );
+    final UserCredential authResult = await auth.signInWithCredential(credential);
+    final User? user = authResult.user;
+    setState(() {
+      socialLoginIsLoading = false;
+    });
+    if (user != null) {
+      setState(() {
+        socialLoginIsLoading = true;
+      });
+    } else {
+
+      setState(() {
+        socialLoginIsLoading = false;
+      });
+
+    }
   }
 }
 
