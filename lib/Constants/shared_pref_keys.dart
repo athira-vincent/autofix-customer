@@ -4,6 +4,7 @@ class SharedPrefKeys {
   static const isWalked = "isWalked";
   static const userType = "userType";
   static const userLanguage = "userLanguage";
+  static const userLanguageCode = "userLanguageCode";
 
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";

@@ -43,7 +43,10 @@ class CustColors {
   static const whiteBlueish = Color(0xfff5f4f7);
   static const blackishgrey= Color(0xff232121);
   static const greyish= Color(0xffa7a7a7);
-
+  static const warm_grey= Color(0xffa0a0a0);
+  static const rusty_red= Color(0xffbf1d14);
+  static const light_navy= Color(0xff173a8d);
+  static const pale_grey= Color(0xfff5f4f7);
 
 
 

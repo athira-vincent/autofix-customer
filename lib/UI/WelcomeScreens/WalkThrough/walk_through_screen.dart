@@ -51,66 +51,82 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
               Positioned(
                 top: size.height * 0.134,
                 left: size.width * 0.115,
-                right: size.width * 0.115,
+                right: size.width * 0.06,
                 child: Container(
-                  width: size.width - 20,
+                  //width: size.width - 200,
                   //margin: EdgeInsets.only(left: size.width * 0.115,right: size.width * 0.115),
                   child: currentIndex == 0
                       ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Container(
-                        child: Text(
-                          "SELECT LANGUAGE",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 9,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Samsung_SharpSans_Medium'),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          child: Text(
+                            "SELECT LANGUAGE",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Samsung_SharpSans_Medium'),
+                          ),
                         ),
                       ),
-                      Container(
-                        child: DropdownButton(
-                          value: selectedItem,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: language_list.map((String language){
-                            return DropdownMenuItem(
-                              value: language,
-                              child: Text(language,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Samsung_SharpSans_Bold'
-                              ),),
-                            );
-                          }).toList(),
-                          onChanged: (var newVal){
-                            setState(() {
-                              print(newVal);
-                              selectedItem = newVal.toString();
-                              if(newVal=="English")
-                              {
-                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                              }
-                              else if(newVal=="Igbo")
-                              {
-                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                              }
-                              else if(newVal=="Hausa")
-                              {
-                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
-                              }
-                              else if(newVal=="Yoruba")
-                              {
-                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
-                              }
-                              else
-                              {
-                                MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                              }
-                            });
-                          },
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          height: size.height * 0.038,
+                          width: size.width * 0.554,
+                          padding: EdgeInsets.only(left: 5,right: 2),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2.7),
+                              border: Border.all(width: 0.3, color: CustColors.warm_grey),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              value: selectedItem,
+                              isExpanded: true,
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              items: language_list.map((String language){
+                                return DropdownMenuItem(
+                                  value: language,
+                                  child: Text(language,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Samsung_SharpSans_Bold'
+                                  ),),
+                                );
+                              }).toList(),
+                              onChanged: (var newVal){
+                                setState(() {
+                                  print(newVal);
+                                  selectedItem = newVal.toString();
+                                  if(newVal=="English")
+                                  {
+                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                  }
+                                  else if(newVal=="Igbo")
+                                  {
+                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
+                                  }
+                                  else if(newVal=="Hausa")
+                                  {
+                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
+                                  }
+                                  else if(newVal=="Yoruba")
+                                  {
+                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
+                                  }
+                                  else
+                                  {
+                                    MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                  }
+                                });
+                              },
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -120,7 +136,10 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
               ),
 
               Container(
-                margin: EdgeInsets.only(top: size.height * 0.15,left: size.width * 0.115,right: size.width * 0.115),
+                margin: EdgeInsets.only(
+                    top: size.height * 0.160,
+                    left: size.width * 0.115,
+                    right: size.width * 0.117),
                 child: PageView.builder(
                   controller: pageController,
                   itemCount: slides.length,
@@ -141,7 +160,8 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
               ),
 
               Positioned(
-                bottom: size.width * 0.06,
+                //top: ,
+                bottom: size.height * 0.06,
                 left: size.width * 0.12,
                 right: size.width * 0.12,
                 child: Container(
@@ -196,7 +216,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                       },
                       child: Container(
                         width: 10,
-                        alignment: Alignment.centerLeft,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(.5),
                             border: Border.all(color: Colors.white, width: .3)),
@@ -226,6 +246,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(SharedPrefKeys.isWalked, true);
     prefs.setString(SharedPrefKeys.userLanguage, selectedItem);
+
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => UserSelectionScreen()));
   }
@@ -278,22 +299,22 @@ class SliderTile extends StatelessWidget {
         Container(
             height: size.height * 0.43,
             width: size.width * 0.734,
-            margin: EdgeInsets.only(top: size.width * 0.04),
+           // margin: EdgeInsets.only(top: size.width * 0.04),
             child: Image.asset(iconPath)
         ),
 
         Container(
-          margin: EdgeInsets.only(top: size.width * 0.049),
+          margin: EdgeInsets.only(top: size.width * 0.060),
           child: Text(smallTitle,style: smallTitleStyle,),
         ),
 
         Container(
-            margin: EdgeInsets.only(top: size.width * 0.011),
+            margin: EdgeInsets.only(top: size.width * 0.018),
             child: Text(largeTitle,style: largeTitleStyle,)
         ),
 
         Container(
-            margin: EdgeInsets.only(top: size.width * 0.016),
+            margin: EdgeInsets.only(top: size.width * 0.018),
             child: Text(description,style: descriptionStyle,))
 
       ],
