@@ -3,6 +3,7 @@ class SharedPrefKeys {
   static const token = "token_data";
   static const isWalked = "isWalked";
   static const userType = "userType";
+  static const userCategory = "userCategory";
   static const userLanguage = "userLanguage";
   static const userLanguageCode = "userLanguageCode";
 
@@ -24,9 +25,4 @@ class SharedPrefKeys {
   static const mechanicCode = "mechanicCode";
   static const mechanicID = "mechanicID";
 
-
-  //------------------------Vendor
-
-  static const isVendorSignUp = "isVendorSignUp";
-  static const isVendorLoggedIn = "isVendorLoggedIn";
 }

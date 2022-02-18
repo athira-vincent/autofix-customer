@@ -1,7 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
-import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
@@ -12,7 +10,12 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+
+  final String userType;
+  final String userCategory;
+
+
+  SignupScreen({required this.userType,required this.userCategory});
 
   @override
   State<StatefulWidget> createState() {
@@ -86,6 +89,8 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+
+
 
       ),
       // ),
