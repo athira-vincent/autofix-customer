@@ -11,7 +11,7 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_bl
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_bloc.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_mdl.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_bloc.dart';
-import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';

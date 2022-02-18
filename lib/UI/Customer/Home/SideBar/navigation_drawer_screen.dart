@@ -2,10 +2,10 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/ViewProfile/view_profile_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/Help/help_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyServices/my_services_screen.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/TermsAndConditions/terms_and_conditions_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +39,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => SigninScreen(),
+        builder: (BuildContext context) => LoginScreen(),
       ),
       (route) => false,
     );

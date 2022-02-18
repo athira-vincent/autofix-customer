@@ -1,3 +1,4 @@
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/user_category.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,8 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
             height: size.height,
             child: Column(
               children: [
+                IndicatorWidget(isFirst: true,isSecond: true,isThird: false,isFourth: false,),
+
                 UserCategorySelectionWidget(titleText: "Individual",
                   imagePath: "assets/image/MechanicType/img_individual.png",),
                 UserCategorySelectionWidget(titleText: "Corporate",

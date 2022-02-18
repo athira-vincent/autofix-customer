@@ -1,5 +1,4 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_mdl.dart';
 
 import 'fcm_token_update_mdl.dart';
 

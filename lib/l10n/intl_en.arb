@@ -4,5 +4,7 @@
   "welcome_to": "WELCOME TO",
   "next": "Next",
   "forgot_password": "Forgot password",
-  "itsmemaria": "It's Me Maria!"
+  "itsmemaria": "It's Me Maria!",
+  "text_select_language": "SELECT LANGUAGE",
+  "select": "Select ! "
 }

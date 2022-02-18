@@ -1,5 +1,4 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'fcm_token_update_mdl.dart';

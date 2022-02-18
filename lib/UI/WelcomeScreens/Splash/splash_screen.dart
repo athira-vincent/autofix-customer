@@ -2,14 +2,11 @@
 
 import 'dart:async';
 
-import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_screen.dart';
-import 'package:auto_fix/UI/Customer/Home/home_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/login_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/phone_login_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Home/home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 

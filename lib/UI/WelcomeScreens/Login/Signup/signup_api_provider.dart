@@ -3,8 +3,9 @@
 import 'dart:convert';
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/signup_mdl.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+
 import 'package:flutter/services.dart';
 
 class SignupApiProvider {

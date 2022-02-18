@@ -1,6 +1,7 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/signup_mdl.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+
 import 'package:rxdart/rxdart.dart';
 
 class SignupBloc {

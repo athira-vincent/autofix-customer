@@ -2,14 +2,13 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/CustomerType/customer_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/MechanicType/mechanic_selection_screen.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/user_type_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSelectionScreen extends StatefulWidget {
   const UserSelectionScreen({Key? key}) : super(key: key);
@@ -47,7 +46,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                   ),
                   child: Row(
                     children: [
-                      Text("Select ! ",style: Styles.textLabelSubTitleRed,),
+                      Text( AppLocalizations.of(context)!.select,style: Styles.textLabelSubTitleRed,),
                       Text("What type of user are you ?",style: Styles.textLabelSubTitleBlue,),
                     ],
                   ),
@@ -100,7 +99,6 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                     ),
                   ),
                 ),
-
               ],
             )
           ),

@@ -1,5 +1,6 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_mdl.dart';
+
 
 class SigninApiProvider {
   final QueryProvider _queryProvider = QueryProvider();

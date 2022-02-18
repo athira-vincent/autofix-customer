@@ -1,5 +1,5 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_mdl.dart';
 
 class ForgotPasswordApiProvider {
   final QueryProvider _queryProvider = QueryProvider();

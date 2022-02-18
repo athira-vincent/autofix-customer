@@ -1,8 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_bloc.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/login_screen.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
@@ -13,19 +13,21 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../main.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+class PhoneLoginScreen extends StatefulWidget {
+  const PhoneLoginScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ForgotPasswordScreenState();
+    return _PhoneLoginScreenState();
   }
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  TextEditingController _emailController = TextEditingController();
-  FocusNode _emailFocusNode = FocusNode();
-  TextStyle _labelStyleEmail = const TextStyle();
+class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
+
+  TextEditingController _phoneNoController = TextEditingController();
+  FocusNode _phoneNoFocusNode = FocusNode();
+  TextStyle _labelStylePhoneNo = TextStyle();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
@@ -46,15 +48,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(onFocusChange);
+    _phoneNoController.addListener(onFocusChange);
     _getForgotPwd();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _emailFocusNode.removeListener(onFocusChange);
-    _emailController.dispose();
+    _phoneNoFocusNode.removeListener(onFocusChange);
+    _phoneNoController.dispose();
     _forgotPasswordBloc.dispose();
   }
 
@@ -82,7 +84,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ));
 
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const SigninScreen()));
+              MaterialPageRoute(builder: (context) => const LoginScreen()));
           FocusScope.of(context).unfocus();
         });
       }
@@ -91,7 +93,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void onFocusChange() {
     setState(() {
-      _labelStyleEmail = _emailFocusNode.hasFocus
+      _labelStylePhoneNo = _phoneNoFocusNode.hasFocus
           ? const TextStyle(color: CustColors.peaGreen)
           : const TextStyle(color: Color.fromARGB(52, 3, 43, 80));
     });
@@ -161,7 +163,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     },
                                     child: Container(
                                       child: Text(
-                                        AppLocalizations.of(context)!.forgot_password,
+                                        'Enter Your Phone',
                                         style: Styles.textHeadLogin,
                                       ),
                                     ),
@@ -172,10 +174,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     alignment: Alignment.centerLeft,
                                     //color: Colors.red,
                                     child: Text(
-                                      "Enter the email address  associated with your "
-                                          "account, we’ll send an email with instructions "
-                                          "to reset your password. ",
-                                      textAlign: TextAlign.justify,
+                                      "Enter your phone number ,you will receive a 4 digit code for  phone number varification. Select your country code before enter your Number.",
+                                      textAlign: TextAlign.left,
                                       softWrap: true,
                                       style: Styles.textLabelSubTitle12,
                                     ),
@@ -189,21 +189,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('Email',
+                                              Text('Phone Number',
                                                 style: Styles.textLabelTitle,
                                               ),
                                               TextFormField(
                                                 textAlignVertical: TextAlignVertical.center,
                                                 maxLines: 1,
                                                 style: Styles.textLabelSubTitle,
-                                                focusNode: _emailFocusNode,
-                                                keyboardType: TextInputType.text,
-                                                validator: InputValidator(ch: "Email ").emailValidator,
-                                                controller: _emailController,
+                                                focusNode: _phoneNoFocusNode,
+                                                keyboardType: TextInputType.phone,
+                                                validator: InputValidator(ch: "Phone number").phoneNumChecking,
+                                                controller: _phoneNoController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
-                                                  hintText: 'Your emailid',
+                                                  hintText: 'Enter your phone Number',
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
@@ -248,17 +248,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                if (_formKey.currentState!.validate()) {
-                                                  _forgotPasswordBloc.postForgotPasswordRequest(
-                                                      _emailController.text);
 
-                                                  setState(() {
-                                                    _isLoading = true;
-                                                  });
-                                                } else {
-                                                  setState(() =>
-                                                  _autoValidate = AutovalidateMode.always);
-                                                }
                                               },
                                               child: Container(
                                                 height: 45,
@@ -292,7 +282,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                   style: Styles.textLabelSubTitle,
                                                 ),
                                                 TextSpan(
-                                                    text: 'Login',
+                                                    text: 'SignUp',
                                                     style: Styles.textLabelTitle_10,
                                                     recognizer: TapGestureRecognizer()
                                                       ..onTap = () {
@@ -300,7 +290,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  LoginScreen()),
+                                                                  SignupScreen()),
                                                         );
                                                       }),
                                               ],

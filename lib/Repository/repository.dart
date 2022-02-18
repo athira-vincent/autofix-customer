@@ -1,3 +1,4 @@
+import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/Emergency/emergency_services_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/PreBooking/MechanicDetailProfile/mechanic_profile_api_provider.dart';
@@ -12,10 +13,6 @@ import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/EditProfile/edit_pro
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Profile/ViewProfile/view_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/Services/SearchResult/search_result_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/BottomBar/SpairParts/Shops/top_shops_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/FcmTokenUpdate/fcm_token_update_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/ForgotPassword/forgot_password_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/Signin/signin_api_provider.dart';
-import 'package:auto_fix/UI/Customer/Login/Signup/signup_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Engine/all_engine_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Make/all_make_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/Model/all_model_api_provider.dart';
@@ -23,6 +20,9 @@ import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Add/add_vehicle_api_
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Delete/delete_vehicle_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/Details/vehicle_details_api_provider.dart';
 import 'package:auto_fix/UI/Customer/Home/SideBar/MyVehicle/View/view_vehicle_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 
 
 class Repository {
