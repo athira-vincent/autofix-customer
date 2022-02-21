@@ -174,31 +174,27 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       InkWell(
-                        child: GestureDetector(
-                          onTap: () {
-                            pageController.animateToPage(currentIndex + 1,
-                                duration: Duration(milliseconds: 400),
-                                curve: Curves.linear);
-                          },
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.next,
-                              style: Styles.nextWalkThroughStyle,
-                            ),
+                        onTap: () {
+                          pageController.animateToPage(currentIndex + 1,
+                              duration: Duration(milliseconds: 400),
+                              curve: Curves.linear);
+                        },
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.next,
+                            style: Styles.nextWalkThroughStyle,
                           ),
                         ),
                       ),
                       InkWell(
-                        child: GestureDetector(
-                          onTap: () {
-                            //pageController.animateToPage(currentIndex - 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
-                            setIswalked();
-                          },
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.text_skip,
-                              style: Styles.skipWalkThroughStyle,
-                            ),
+                        onTap: () {
+                          //pageController.animateToPage(currentIndex - 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
+                          setIswalked();
+                        },
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.text_skip,
+                            style: Styles.skipWalkThroughStyle,
                           ),
                         ),
                       ),
