@@ -18,7 +18,11 @@ class TextStrings {
 
   static const user_mechanic = "mechanic";
 
-  static const user_vendor = "vendor";
+  static const user_category_individual = "individual";
+
+  static const user_category_corporate = "corporate";
+
+  static const user_category_government = "government";
 
   static const waiting_for_mechanic = "Waiting For a mechanic";
 

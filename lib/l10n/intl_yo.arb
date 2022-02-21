@@ -4,7 +4,26 @@
   "forgot_password": "Forgot password!!",
   "welcome_to": "WELCOME TO",
   "next": "Itele",
+
+  "text_customer": "Onibara",
+  "text_mechanic": "Mekaniki",
+  "text_individual": "Olukuluku",
+  "text_corporate": "Ajọpọ",
+  "text_govt_bodies": "Awọn ara ijọba",
+
   "itsmemaria": "It's Me M¡Hola Mundo!maria!",
   "text_select_language": "YAN EDE",
-  "select": "Select ! "
+  "text_walk_through1_small_title": "KAABO SI",
+  "text_walk_through1_large_title": "RESOLMECH",
+  "text_walk_through1_description": "A so ọ pọ pẹlu awọn olupese iṣẹ",
+  "text_walk_through2_small_title": "Ọkọ ayọkẹlẹ WA NINU Wahala",
+  "text_walk_through2_large_title": "NILO IRANLOWO ? ",
+  "text_walk_through2_description": "A mekaniki IN rẹ ọpẹ! ",
+  "text_walk_through3_small_title": "SE IWO A",
+  "text_walk_through3_large_title": "EKANKAN ? ",
+  "text_walk_through3_description": "ỌPỌLỌPỌ awọn onibara nduro dè ọ",
+  "text_skip": "Rekọja",
+  "text_get_started": "Bẹrẹ",
+  "text_user_selection_red": "Yan! ",
+  "text_user_selection_blue": "Iru olumulo wo ni iwọ ? "
 }

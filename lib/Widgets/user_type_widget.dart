@@ -3,7 +3,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:flutter/material.dart';
 
 class UserTypeSelectionWidget extends StatelessWidget {
-  String titleText;
+  Widget titleText;
   String imagePath;
   UserTypeSelectionWidget({
     Key? key,
@@ -24,8 +24,7 @@ class UserTypeSelectionWidget extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.only(top: size.height * 0.038),
-            child: Text(titleText,
-                style: titleTextStyle),
+            child: titleText,
           ),
           Container(
             margin: EdgeInsets.only(
@@ -42,11 +41,6 @@ class UserTypeSelectionWidget extends StatelessWidget {
     );
   }
 
-  final titleTextStyle = TextStyle(
-    color: Colors.black,
-    fontSize: 20,
-    fontFamily: 'Samsung_SharpSans_Medium',
-    fontWeight: FontWeight.bold,
-  );
+
 
 }

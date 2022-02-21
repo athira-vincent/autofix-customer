@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -355,7 +356,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                             context,
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
-                                                                    SignupScreen( userType: '1', userCategory: '1',)),
+                                                                    UserSelectionScreen()),
                                                           );
                                                         }),
                                                 ],

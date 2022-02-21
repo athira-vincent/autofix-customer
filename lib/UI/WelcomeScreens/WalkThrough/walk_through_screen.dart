@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/data_mdl.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class WalkThroughPages extends StatefulWidget {
   @override
   WalkThroughPagesState createState() => WalkThroughPagesState();
+
 }
 
 class WalkThroughPagesState extends State<WalkThroughPages> {
@@ -31,17 +33,19 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
   ];
 
  late String selectedItem = language_list[0];
-
   @override
   void initState() {
     super.initState();
-    slides = getSlides();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    slides = getSlides(context);
+
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+
       home: Scaffold(
         body: SafeArea(
           child: Stack(
@@ -64,7 +68,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                         flex: 1,
                         child: Container(
                           child: Text(
-                            "SELECT LANGUAGE",
+                            AppLocalizations.of(context)!.text_select_language,
                             style: Styles.SelectLanguageWalkThroughStyle,
                           ),
                         ),
@@ -152,6 +156,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                       smallTitle: slides[index].smallTitle,
                       largeTitle: slides[index].largeTitle,
                       description: slides[index].description,
+
                     );
                   },
                 ),
@@ -191,7 +196,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                           },
                           child: Center(
                             child: Text(
-                              "Skip",
+                              AppLocalizations.of(context)!.text_skip,
                               style: Styles.skipWalkThroughStyle,
                             ),
                           ),
@@ -212,7 +217,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                             border: Border.all(color: Colors.white, width: .3)),
                         height: 20.5,
                         child: Text(
-                          "Get Started",
+                          AppLocalizations.of(context)!.text_get_started,
                           style: Styles.nextWalkThroughStyle,
                         ),
                       ),
@@ -234,7 +239,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
     prefs.setString(SharedPrefKeys.userLanguage, selectedItem);
 
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => UserSelectionScreen()));
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
 }
