@@ -5,6 +5,25 @@
   "next": "Next",
   "forgot_password": "Forgot password",
   "itsmemaria": "It's Me Maria!",
+
+  "text_customer": "Customer",
+  "text_mechanic": "Mechanic",
+  "text_individual": "Individual",
+  "text_corporate": "Corporate",
+  "text_govt_bodies": "Government Bodies",
+
   "text_select_language": "SELECT LANGUAGE",
-  "select": "Select ! "
+  "text_walk_through1_small_title": "WELCOME TO",
+  "text_walk_through1_large_title": "RESOLMECH",
+  "text_walk_through1_description": "WE CONNECT YOU WITH SERVICE PROVIDERS",
+  "text_walk_through2_small_title": "CAR IS IN TROUBLE",
+  "text_walk_through2_large_title": "NEED HELP ? ",
+  "text_walk_through2_description": "A MECHANIC IN YOUR PALM! ",
+  "text_walk_through3_small_title": "ARE YOU A ",
+  "text_walk_through3_large_title": "MECHANIC ? ",
+  "text_walk_through3_description": "LOTS OF CUSTOMERS WAITING FOR YOU ",
+  "text_skip": "Skip",
+  "text_get_started": "Get Started",
+  "text_user_selection_red": "Select ! ",
+  "text_user_selection_blue": "What type of user are you ?"
 }

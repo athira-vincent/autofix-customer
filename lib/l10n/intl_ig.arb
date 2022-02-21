@@ -4,6 +4,25 @@
   "welcome_to": "Nnọọ",
   "next": "Osote",
   "forgot_password": "Forgot password!!!",
+
+  "text_customer": "Onye ahịa",
+  "text_mechanic": "Mekaniki",
+  "text_individual": "Onye ọ bụla",
+  "text_corporate": "Ụlọọrụ",
+  "text_govt_bodies": "Ndị otu gọọmentị",
+
   "text_select_language": "Họrọ Asụsụ",
-  "select": "họrọ"
+  "text_walk_through1_small_title": "Nnọọ",
+  "text_walk_through1_large_title": "Kpebie",
+  "text_walk_through1_description": "ANYỊ jikọọ gị na ndị na-enye ọrụ",
+  "text_walk_through2_small_title": "Ụgbọ ala nọ na nsogbu",
+  "text_walk_through2_large_title": "Achọrọ enyemaka? ",
+  "text_walk_through2_description": "Otu igwe na nkwụ gị! ",
+  "text_walk_through3_small_title": "Ị bụ A",
+  "text_walk_through3_large_title": "Maka igwe? ",
+  "text_walk_through3_description": "Ọtụtụ ndị ahịa na-echere gị",
+  "text_skip": "Mafee",
+  "text_get_started": "Malite",
+  "text_user_selection_red": "Họrọ! ",
+  "text_user_selection_blue": "Kedu ụdị onye ọrụ ị bụ ? "
 }

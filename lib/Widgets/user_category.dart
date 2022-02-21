@@ -15,10 +15,11 @@ class UserCategorySelectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.only(top: 20,),
+      margin: const EdgeInsets.only(top: 18,),
       child: Container(
         height: size.height * 0.163,
         width: size.width * 0.757,
+        color: Colors.white,
         margin: EdgeInsets.only(
             top: size.height * 0.074
         ),
@@ -26,7 +27,6 @@ class UserCategorySelectionWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-
             Container(
               /*margin: EdgeInsets.only(
                 top: size.height * 0.153,
@@ -35,8 +35,8 @@ class UserCategorySelectionWidget extends StatelessWidget {
                 right: size.width * 0.625,
               ),*/
                 child: Image.asset(imagePath,
-                width: size.width * 0.220,
-                height: size.height * 0.630,)
+                width: size.width * 0.210,
+                height: size.height * 0.620,)
             ),
 
             Text(titleText,style: titleTextStyle,)

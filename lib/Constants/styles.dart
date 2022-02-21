@@ -116,4 +116,25 @@ class Styles {
 
 
 
+  //Athira
+  static const hiddenTextBlack = TextStyle(
+      fontSize: 18,
+      color:CustColors.black_01,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const TitleTextBlack = TextStyle(
+      fontSize: 20,
+      color:Colors.black,
+      fontFamily:'Samsung_SharpSans_Medium',
+      fontWeight: FontWeight.bold
+  );
+
+  static const titleTextStyle = TextStyle(
+    color: Colors.black,
+    fontSize: 20,
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.bold,
+  );
+
 }
