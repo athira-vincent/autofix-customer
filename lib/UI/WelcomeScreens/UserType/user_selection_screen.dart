@@ -2,10 +2,12 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/CustomerType/customer_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/MechanicType/mechanic_selection_screen.dart';
 import 'package:auto_fix/Widgets/custom_page_route.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
+import 'package:auto_fix/Widgets/user_category.dart';
 import 'package:auto_fix/Widgets/user_type_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,49 +85,57 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                         left: size.width * 0.06,
                         bottom: size.height * 0.035
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
 
-                        Center(
-                          child: InkWell(
+                          Center(
+                            child: InkWell(
 
-                            onTap: () async {
-                              setUserType(TextStrings.user_customer);
-                              /*Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute( builder: (context) => const CustomerSelectionScreen()));*/
-                            },
-                            child: UserTypeSelectionWidget(
-                              imagePath: 'assets/image/UserType/img_user_customer.png',
-                              titleText: Hero(
-                                tag: "customer",
-                                child: Text(AppLocalizations.of(context)!.text_customer,
-                                  style: Styles.titleTextStyle),
-                              ),
-                              //titleText: ,
-                            ),
-                          ),
-                        ),
-
-
-                        Center(
-                          child: InkWell(
-                            onTap: () async {
-                              setUserType( TextStrings.user_mechanic);
-                            },
-                            child: UserTypeSelectionWidget(
-                              imagePath: 'assets/image/UserType/img_user_mechanic.png',
-                              titleText: Hero(
-                                tag: "mechanic",
-                                child: Text(AppLocalizations.of(context)!.text_mechanic,
+                              onTap: () async {
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        transitionDuration: Duration(milliseconds: 2000),
+                                        pageBuilder: (_, __, ___) =>
+                                            _getExpandedPage(context, 'customer')));
+                                //setUserType(TextStrings.user_customer);
+                                /*Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute( builder: (context) => const CustomerSelectionScreen()));*/
+                              },
+                              child: UserTypeSelectionWidget(
+                                imagePath: 'assets/image/UserType/img_user_customer.png',
+                                titleText: Hero(
+                                  tag: "customer",
+                                  child: Text(AppLocalizations.of(context)!.text_customer,
                                     style: Styles.titleTextStyle),
+                                ),
+                                //titleText: ,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+
+
+                          Center(
+                            child: InkWell(
+                              onTap: () async {
+                                setUserType( TextStrings.user_mechanic);
+                              },
+                              child: UserTypeSelectionWidget(
+                                imagePath: 'assets/image/UserType/img_user_mechanic.png',
+                                titleText: Hero(
+                                  tag: "mechanic",
+                                  child: Text(AppLocalizations.of(context)!.text_mechanic,
+                                      style: Styles.titleTextStyle),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -135,6 +145,102 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
         ),
       ),
     );
+  }
+
+
+  _getExpandedPage(context, id) {
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: MaterialApp(
+        home: Scaffold(
+          body: SafeArea(
+            child: Container(
+              width: size.width,
+              height: size.height,
+              child: Column(
+                children: [
+                  IndicatorWidget(isFirst: true,isSecond: true,isThird: false,isFourth: false,),
+
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: size.height * 0.033,
+                        right: size.width * 0.181,
+                        left: size.width * 0.172
+                    ),
+                    child: InkWell(
+                      onTap: ()
+                      {
+                        Navigator.pop(context);
+                      },
+                      child: Text(AppLocalizations.of(context)!.text_customer,
+                          style: Styles.hiddenTextBlack
+                      ),
+                    ),
+                    //child: Text("Select ! What type of user are you ?"),
+                  ),
+
+                  Container(
+                    color: CustColors.pale_grey,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: size.height * 0.033,
+                              right: size.width * 0.181,
+                              left: size.width * 0.172
+                          ),
+                          child: Hero(
+                              tag: "customer",
+                              child: Text(AppLocalizations.of(context)!.text_mechanic,
+                                  style: Styles.TitleTextBlack
+                              )),
+                          //child: Text("Select ! What type of user are you ?"),
+                        ),
+
+                        InkWell(
+                          onTap: () async {
+                            startNextPage(TextStrings.user_category_individual);
+                          },
+                          child: Hero(
+                            tag: "customer",
+                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
+                              imagePath: "assets/image/MechanicType/img_individual.png",),
+                          ),
+                        ),
+
+                        InkWell(
+                          onTap: () async {
+                            startNextPage(TextStrings.user_category_corporate);
+                          },
+                          child: Hero(
+                            tag: "customer",
+                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
+                              imagePath: "assets/image/MechanicType/img_corporate.png",),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      )
+    );
+  }
+
+  void startNextPage(String userCategory) async {
+    print(">>>>userCategory" + userCategory);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(SharedPrefKeys.userCategory, userCategory);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SignupScreen(
+              userCategory: userCategory,
+              userType: prefs.getString(SharedPrefKeys.userType).toString(),
+            )));
   }
 
   void setUserType(String userType) async {
