@@ -54,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   bool language_en_ar=true;
-
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
   UserCredential? userCredential;
