@@ -29,8 +29,8 @@ class CustColors {
   static const rusty_red= Color(0xffbf1d14);
   static const light_navy= Color(0xff173a8d);
   static const pale_grey= Color(0xfff5f4f7);
-  static const black_01= Color(0xff090909);
-
+  static const black_01= Color(0xffd6d6d6);
+  static const black_02= Color(0xffdbdbdb);
 
 
 }

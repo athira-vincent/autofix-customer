@@ -25,5 +25,9 @@
   "text_skip": "Tsallake",
   "text_get_started": "Fara",
   "text_user_selection_red": "Zaɓi! ",
-  "text_user_selection_blue": "Wane irin mai amfani ne kai ? "
+  "text_user_selection_blue": "Wane irin mai amfani ne kai ? ",
+
+  "text_sign_up": "Yi rajista",
+  "text_name": "Name",
+  "text_hint_name": "Your Name"
 }

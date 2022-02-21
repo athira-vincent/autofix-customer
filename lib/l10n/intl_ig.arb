@@ -24,5 +24,9 @@
   "text_skip": "Mafee",
   "text_get_started": "Malite",
   "text_user_selection_red": "Họrọ! ",
-  "text_user_selection_blue": "Kedu ụdị onye ọrụ ị bụ ? "
+  "text_user_selection_blue": "Kedu ụdị onye ọrụ ị bụ ? ",
+
+  "text_sign_up": "debanye aha",
+  "text_name": "Name",
+  "text_hint_name": "Your Name"
 }

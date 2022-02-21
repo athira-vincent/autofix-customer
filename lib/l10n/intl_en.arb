@@ -25,5 +25,11 @@
   "text_skip": "Skip",
   "text_get_started": "Get Started",
   "text_user_selection_red": "Select ! ",
-  "text_user_selection_blue": "What type of user are you ?"
+  "text_user_selection_blue": "What type of user are you ?",
+
+  "text_sign_up": "Sign up",
+  "text_name": "Name",
+  "text_hint_name": "Your Name"
+
+
 }

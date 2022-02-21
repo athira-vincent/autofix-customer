@@ -1,13 +1,18 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
+import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupScreen extends StatefulWidget {
 
@@ -87,11 +92,75 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    Size size = MediaQuery.of(context).size;
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: CustColors.whiteBlueish,
+        body: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                children: [
 
+                  IndicatorWidget(isFirst: true,isSecond: true,isThird: true,isFourth: false,),
 
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.40 ,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: SvgPicture.asset('assets/image/login/login_bgCar.svg',
+                              height: MediaQuery.of(context).size.height * 0.23,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
+                  CurvedBottomSheetContainer(
+                    percentage:0.60,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Form(
+                              autovalidateMode: _autoValidate,
+                              key: _formKey,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                      Container(
+                                          child: Text(
+                                          AppLocalizations.of(context)!.text_sign_up,
+                                          style: Styles.textHeadLogin,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              )
+                          )
+
+                        ],
+                      ),
+                    )
+                  )
+
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
       // ),
     );
