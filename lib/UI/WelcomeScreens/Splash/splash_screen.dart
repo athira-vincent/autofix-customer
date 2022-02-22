@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/phone_login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
@@ -70,12 +71,12 @@ class _SplashScreenState extends State<SplashScreen> {
         Timer(
             Duration(seconds: 3),
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => OtpVerificationScreen())));
+                builder: (BuildContext context) => PhoneLoginScreen())));
       } else {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  OtpVerificationScreen()));
+                builder: (context) =>  PhoneLoginScreen()));
       }
     }
   }

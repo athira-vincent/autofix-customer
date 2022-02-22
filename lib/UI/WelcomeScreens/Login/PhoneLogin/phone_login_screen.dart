@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -193,41 +194,63 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                               Text('Phone Number',
                                                 style: Styles.textLabelTitle,
                                               ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _phoneNoFocusNode,
-                                                keyboardType: TextInputType.phone,
-                                                validator: InputValidator(ch: "Phone number").phoneNumChecking,
-                                                controller: _phoneNoController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText: 'Enter your phone Number',
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
+                                              Row(
+                                                children: [
+                                                  Center(
+                                                    child: CountryCodePicker(
+
+                                                      onChanged: _onCountryChange,
+                                                      // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                                      initialSelection: 'IT',
+                                                      favorite: ['+234','FR'],
+                                                      // optional. Shows only country name and flag
+                                                      showCountryOnly: false,
+                                                      // optional. Shows only country name and flag when popup is closed.
+                                                      showOnlyCountryWhenClosed: false,
+                                                      // optional. aligns the flag and the Text left
+                                                      alignLeft: false,
+
                                                     ),
                                                   ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
+                                                  Expanded(
+                                                    child: TextFormField(
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      maxLines: 1,
+                                                      style: Styles.textLabelSubTitle,
+                                                      focusNode: _phoneNoFocusNode,
+                                                      keyboardType: TextInputType.phone,
+                                                      validator: InputValidator(ch: "Phone number").phoneNumChecking,
+                                                      controller: _phoneNoController,
+                                                      cursorColor: CustColors.whiteBlueish,
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        hintText: 'Enter your phone Number',
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                          vertical: 12.8,
+                                                          horizontal: 0.0,
+                                                        ),
+                                                        hintStyle: Styles.textLabelSubTitle,),
                                                     ),
                                                   ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
+                                                ],
                                               ),
                                             ],
                                           ),
@@ -321,6 +344,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           )),
     );
   }
+
+  void _onCountryChange(CountryCode countryCode) {
+    //TODO : manipulate the selected country code here
+    print("New Country selected: " + countryCode.toString());
+    print("New Country selected: " + countryCode.toString());
+  }
+
 }
 
 class MyBehavior extends ScrollBehavior {
