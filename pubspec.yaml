@@ -61,12 +61,14 @@ dependencies:
   firebase_core: 1.11.0
   firebase_auth: 2.0.0
   animations: ^2.0.0
-
+  pin_input_text_field: ^4.1.1
+  sms_autofill: ^2.2.0
 
 
 
   flutter_svg: 0.23.0+1
   intl: ^0.17.0
+
 
 dev_dependencies:
   flutter_test:
@@ -110,6 +112,7 @@ flutter:
     - assets/image/UserType/
     - assets/image/CustomerType/
     - assets/image/MechanicType/
+    - assets/image/phoneLogin/
     - assets/fonts/
     - assets/json/
   fonts:

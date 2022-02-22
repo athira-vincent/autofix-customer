@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
@@ -10,23 +12,30 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pin_input_text_field/pin_input_text_field.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../../../../main.dart';
 
-class PhoneLoginScreen extends StatefulWidget {
-  const PhoneLoginScreen({Key? key}) : super(key: key);
+class OtpVerificationScreen extends StatefulWidget {
+  const OtpVerificationScreen({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _PhoneLoginScreenState();
+    return _OtpVerificationScreenState();
   }
 }
 
-class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
+class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   TextEditingController _phoneNoController = TextEditingController();
   FocusNode _phoneNoFocusNode = FocusNode();
   TextStyle _labelStylePhoneNo = TextStyle();
+
+  int _otpCodeLength = 4;
+  bool _isLoadingButton = false;
+  bool _enableButton = false;
+  String _otpCode ="";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -43,6 +52,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
     return value * perfont + value;
   }
   bool language_en_ar=true;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
 
   @override
@@ -102,7 +113,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       home: Scaffold(
+          key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
             behavior: MyBehavior(),
@@ -122,7 +135,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/forgotPwd/forgotPwd_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                            child: SvgPicture.asset('assets/image/phoneLogin/phoneLogin_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
                           ),
                         ],
                       ),
@@ -143,29 +156,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  InkWell(
-                                    onTap: (){
-                                      if(language_en_ar==true)
-                                      {
-                                        MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                        setState(() {
-                                          language_en_ar=false;
-                                        });
-                                      }
-                                      else
-                                      {
-                                        MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                        setState(() {
-                                          language_en_ar=true;
-                                        });
-                                      }
-
-                                    },
-                                    child: Container(
-                                      child: Text(
-                                        'Enter Your Phone',
-                                        style: Styles.textHeadLogin,
-                                      ),
+                                  Container(
+                                    child: Text(
+                                      'Enter your code',
+                                      style: Styles.textHeadLogin,
                                     ),
                                   ),
                                   Container(
@@ -174,7 +168,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                     alignment: Alignment.centerLeft,
                                     //color: Colors.red,
                                     child: Text(
-                                      "Enter your phone number ,you will receive a 4 digit code for  phone number varification. Select your country code before enter your Number.",
+                                      "Enter your code number to verify your phone "
+                                      "Enter the 4 digit code .",
                                       textAlign: TextAlign.left,
                                       softWrap: true,
                                       style: Styles.textLabelSubTitle12,
@@ -189,45 +184,25 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('Phone Number',
+                                              Text('4 digit Code',
                                                 style: Styles.textLabelTitle,
                                               ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _phoneNoFocusNode,
-                                                keyboardType: TextInputType.phone,
-                                                validator: InputValidator(ch: "Phone number").phoneNumChecking,
-                                                controller: _phoneNoController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText: 'Enter your phone Number',
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
+                                              Container(
+                                                child:  PinFieldAutoFill(
+                                                  decoration: UnderlineDecoration(
+                                                    textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                                                    colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
                                                   ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                              ),
+                                                  codeLength: 4,
+                                                  onCodeSubmitted: (code) {},
+                                                  onCodeChanged: (code) {
+                                                    print(code);
+                                                    if (code?.length == 6) {
+                                                      FocusScope.of(context).requestFocus(FocusNode());
+                                                    }
+                                                  },
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -314,6 +289,12 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           )),
     );
   }
+
+  _listOPT()
+  async {
+    await SmsAutoFill().listenForCode;
+  }
+
 }
 
 class MyBehavior extends ScrollBehavior {
