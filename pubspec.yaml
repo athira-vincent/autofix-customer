@@ -110,6 +110,7 @@ flutter:
     - assets/image/UserType/
     - assets/image/CustomerType/
     - assets/image/MechanicType/
+    - assets/image/SignUp/
     - assets/fonts/
     - assets/json/
   fonts:

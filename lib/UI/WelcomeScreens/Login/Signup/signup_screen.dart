@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
@@ -8,6 +9,7 @@ import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -146,6 +148,192 @@ class _SignupScreenState extends State<SignupScreen> {
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
+
+                                    Padding(
+                                      padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Name',
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  focusNode: _userNameFocusNode,
+                                                  keyboardType: TextInputType.text,
+                                                  validator:
+                                                  InputValidator(ch: "Your Name").emptyChecking,
+                                                  controller: _userNameController,
+                                                  cursorColor: CustColors.whiteBlueish,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    hintText: 'Your Name',
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                                ),
+
+
+
+                                              ],
+                                            ),
+                                          ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Email',
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  focusNode: _userNameFocusNode,
+                                                  keyboardType: TextInputType.text,
+                                                  validator:
+                                                  InputValidator(ch: "Your emailid").emptyChecking,
+                                                  controller: _userNameController,
+                                                  cursorColor: CustColors.whiteBlueish,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    hintText: 'Your emailid',
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                                ),
+
+                                              ],
+                                            ),
+                                          ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: 20.8),
+                                            child: _isLoading
+                                                ? Center(
+                                              child: Container(
+                                                height: _setValue(28),
+                                                width: _setValue(28),
+                                                child: CircularProgressIndicator(
+                                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                                      CustColors.peaGreen),
+                                                ),
+                                              ),
+                                            )
+                                                : Container(
+
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  if (_formKey.currentState!.validate()) {
+
+                                                    setState(() {
+                                                      _isLoading = true;
+                                                    });
+                                                  } else {
+                                                    setState(() => _autoValidate =
+                                                        AutovalidateMode.always);
+                                                  }
+                                                },
+                                                child: Container(
+                                                  height: 45,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        'Sign up',
+                                                        textAlign: TextAlign.center,
+                                                        style: Styles.textButtonLabelSubTitle,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                color: CustColors.materialBlue,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        _setValue(13))),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(top: 15.8),
+                                            child: RichText(
+                                              maxLines: 2,
+                                              text: TextSpan(
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: "Already have an account ? ",
+                                                    style: Styles.textLabelSubTitle,
+                                                  ),
+                                                  TextSpan(
+                                                      text: 'Sign in',
+                                                      style: Styles.textLabelTitle_10,
+                                                      recognizer: TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    LoginScreen()),
+                                                          );
+                                                        }),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )

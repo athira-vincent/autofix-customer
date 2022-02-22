@@ -16,8 +16,9 @@ class UserTypeSelectionWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       width: size.width * 0.88,
-      height: size.height * 0.39,
+      height: size.height * 0.38,
       color: CustColors.pale_grey,
+
       child: Column(
         /*mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,*/

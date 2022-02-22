@@ -21,7 +21,9 @@ class UserCategorySelectionWidget extends StatelessWidget {
         width: size.width * 0.757,
         color: Colors.white,
         margin: EdgeInsets.only(
-            top: size.height * 0.074
+            top: size.height * 0.074,
+            left: size.width * 0.10,
+            right: size.width * 0.10,
         ),
 
         child: Row(
