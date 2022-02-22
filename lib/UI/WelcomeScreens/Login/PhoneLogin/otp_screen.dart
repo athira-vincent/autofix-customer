@@ -328,11 +328,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 
-  _listOPT()
-  async {
-    await SmsAutoFill().listenForCode;
-  }
-
   /// get signature code
   _getSignatureCode() async {
     String? signature = await SmsVerification.getAppSignature();
