@@ -135,7 +135,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/phoneLogin/phoneLogin_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                            child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
                           ),
                         ],
                       ),
@@ -253,21 +253,34 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             text: TextSpan(
                                               children: <TextSpan>[
                                                 TextSpan(
-                                                  text: "Back to ",
+                                                  text: "Didn’t receive code? ",
                                                   style: Styles.textLabelSubTitle,
                                                 ),
                                                 TextSpan(
-                                                    text: 'SignUp',
+                                                    text: 'Try again',
                                                     style: Styles.textLabelTitle_10,
                                                     recognizer: TapGestureRecognizer()
                                                       ..onTap = () {
-                                                        Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  SignupScreen( userType: '1', userCategory: '1',)),
-                                                        );
+
                                                       }),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 15.8),
+                                          child: RichText(
+                                            maxLines: 2,
+                                            text: TextSpan(
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text: "Code via call? ",
+                                                    style: Styles.textLabelTitle_10,
+                                                recognizer: TapGestureRecognizer()
+                                                  ..onTap = () {
+
+                                                  }
+                                                ),
                                               ],
                                             ),
                                           ),

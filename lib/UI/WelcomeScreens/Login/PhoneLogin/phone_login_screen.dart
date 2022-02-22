@@ -124,7 +124,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/forgotPwd/forgotPwd_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                            child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
                           ),
                         ],
                       ),
