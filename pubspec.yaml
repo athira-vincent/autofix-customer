@@ -62,8 +62,7 @@ dependencies:
   firebase_auth: 2.0.0
   animations: ^2.0.0
   country_code_picker: ^2.0.2
-  pin_input_text_field: ^4.1.1
-  sms_autofill: ^2.2.0
+  sms_otp_auto_verify: ^2.1.0
 
 
 

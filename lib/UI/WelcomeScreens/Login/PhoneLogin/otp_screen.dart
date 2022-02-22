@@ -12,8 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pin_input_text_field/pin_input_text_field.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 
 import '../../../../../main.dart';
 
@@ -55,12 +54,32 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
+  final intRegex = RegExp(r'\d+', multiLine: true);
+  TextEditingController textEditingController = new TextEditingController(text: "");
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      color:CustColors.whiteBlueish,
+      borderRadius: BorderRadius.circular(15.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 2,
+          blurRadius: 7,
+          offset: Offset(0, 3), // changes position of shadow
+        ),
+      ],
+    );
+  }
+
 
   @override
   void initState() {
     super.initState();
     _phoneNoController.addListener(onFocusChange);
     _getForgotPwd();
+
+    _getSignatureCode();
+    _startListeningSms();
   }
 
   @override
@@ -69,6 +88,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _phoneNoFocusNode.removeListener(onFocusChange);
     _phoneNoController.dispose();
     _forgotPasswordBloc.dispose();
+    SmsVerification.stopListening();
   }
 
   _getForgotPwd() {
@@ -176,7 +196,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                    padding:  EdgeInsets.only(left: _setValue(0.5), right: _setValue(0.5)),
                                     child: Column(
                                       children: [
                                         Container(
@@ -184,30 +204,35 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('4 digit Code',
-                                                style: Styles.textLabelTitle,
+                                              Padding(
+                                                padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                                child: Text('4 digit Code',
+                                                  style: Styles.textLabelTitle,
+                                                ),
                                               ),
                                               Container(
-                                                child:  PinFieldAutoFill(
-                                                  decoration: UnderlineDecoration(
-                                                    textStyle: TextStyle(fontSize: 20, color: Colors.black),
-                                                    colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
-                                                  ),
-                                                  codeLength: 4,
-                                                  onCodeSubmitted: (code) {},
-                                                  onCodeChanged: (code) {
-                                                    print(code);
-                                                    if (code?.length == 6) {
-                                                      FocusScope.of(context).requestFocus(FocusNode());
-                                                    }
-                                                  },
-                                                ),
-                                              )
+                                                padding:  EdgeInsets.only(top: _setValue(15.5), bottom: _setValue(0.5)),
+                                                child: TextFieldPin(
+                                                    textController: textEditingController,
+                                                    autoFocus: true,
+                                                    codeLength: _otpCodeLength,
+                                                    alignment: MainAxisAlignment.center,
+                                                    defaultBoxSize: 50.0,
+                                                    margin: 16,
+                                                    selectedBoxSize: 50.0,
+                                                    textStyle: TextStyle(fontSize: 16),
+                                                    defaultDecoration: _pinPutDecoration,
+                                                    selectedDecoration: _pinPutDecoration,
+                                                    onChange: (code) {
+                                                      _onOtpCallBack(code,false);
+                                                    }),
+                                              ),
                                             ],
                                           ),
                                         ),
                                         Container(
-                                          margin: EdgeInsets.only(top: 20.8),
+                                          padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                          margin: EdgeInsets.only(top: 10.8),
                                           child: _isLoading
                                               ? Center(
                                             child: Container(
@@ -232,7 +257,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      'Send',
+                                                      'Verify',
                                                       textAlign: TextAlign.center,
                                                       style: Styles.textButtonLabelSubTitle,
                                                     ),
@@ -306,6 +331,63 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   _listOPT()
   async {
     await SmsAutoFill().listenForCode;
+  }
+
+  /// get signature code
+  _getSignatureCode() async {
+    String? signature = await SmsVerification.getAppSignature();
+    print("signature $signature");
+  }
+
+  /// listen sms
+  _startListeningSms()  {
+    SmsVerification.startListeningSms().then((message) {
+      setState(() {
+        _otpCode = SmsVerification.getCode(message, intRegex);
+        textEditingController.text = _otpCode;
+        _onOtpCallBack(_otpCode, true);
+      });
+    });
+  }
+
+  _onSubmitOtp() {
+    setState(() {
+      _isLoadingButton = !_isLoadingButton;
+      _verifyOtpCode();
+    });
+  }
+
+  _onClickRetry() {
+    _startListeningSms();
+  }
+
+  _onOtpCallBack(String otpCode, bool isAutofill) {
+    setState(() {
+      this._otpCode = otpCode;
+      if (otpCode.length == _otpCodeLength && isAutofill) {
+        _enableButton = false;
+        _isLoadingButton = true;
+        _verifyOtpCode();
+      } else if (otpCode.length == _otpCodeLength && !isAutofill) {
+        _enableButton = true;
+        _isLoadingButton = false;
+      }else{
+        _enableButton = false;
+      }
+    });
+  }
+
+  _verifyOtpCode() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    Timer(Duration(milliseconds: 4000), () {
+      setState(() {
+        _isLoadingButton = false;
+        _enableButton = false;
+      });
+
+      _scaffoldKey.currentState?.showSnackBar(
+          SnackBar(content: Text("Verification OTP Code $_otpCode Success")));
+    });
   }
 
 }
