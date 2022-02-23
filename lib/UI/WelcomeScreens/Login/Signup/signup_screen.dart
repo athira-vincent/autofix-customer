@@ -331,7 +331,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ),
 
 
-
                                           Container(
                                             margin: EdgeInsets.only(top: _setValue(15.5)),
                                             child: Column(
@@ -497,6 +496,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                             ),
                                           ),
 
+
+
                                           Container(
                                             margin: EdgeInsets.only(top: _setValue(15.5)),
                                             child: Column(
@@ -565,8 +566,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   textAlignVertical: TextAlignVertical.center,
                                                   obscureText: !_passwordVisible!,
                                                   validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
-                                                  // validator:
-                                                  //     InputValidator(ch: "Password").passwordChecking,
                                                   controller: _passwordController,
                                                   focusNode: _passwordFocusNode,
                                                   maxLines: 1,
