@@ -33,5 +33,8 @@ class CustColors {
   static const black_02= Color(0xffdbdbdb);
   static const grey_02= Color(0xffbebebe);
 
+  static const black_03= Color(0xff120d0d);
+  static const pinkish_grey= Color(0xffc7c0c0);
+
 
 }

@@ -28,6 +28,21 @@
   "text_user_selection_blue": "Wane irin mai amfani ne kai ? ",
 
   "text_sign_up": "Yi rajista",
-  "text_name": "Name",
-  "text_hint_name": "Your Name"
+  "text_name": "Suna",
+  "text_hint_name": "Sunan ku",
+  "text_email": "Imel",
+  "text_hint_email": "Id ɗin imel ɗin ku",
+  "text_phone": "Lambar tarho",
+  "text_hint_phone": "Shigar da lambar wayar ku",
+  "text_state": "Jiha/FCT",
+  "text_hint_state": "Zaɓi jihar ku/FCT",
+  "text_upload_photo": "Loda hoto",
+  "text_photo": "Hoto",
+  "text_hint_upload_photo": "Loda hoton bayanin ku",
+  "text_password": "Kalmar wucewa",
+  "text_confirm_password": "Tabbata kalmar shiga",
+
+  "text_already_have_account": "Kuna da asusu ? ",
+  "text_sign_in": "Shiga"
+
 }

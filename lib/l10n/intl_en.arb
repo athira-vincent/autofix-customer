@@ -27,9 +27,25 @@
   "text_user_selection_red": "Select ! ",
   "text_user_selection_blue": "What type of user are you ?",
 
-  "text_sign_up": "Sign up",
+  "text_sign_up": "Sign Up",
   "text_name": "Name",
-  "text_hint_name": "Your Name"
+  "text_hint_name": "Your Name",
+  "text_email": "Email",
+  "text_hint_email": "Your email id",
+  "text_phone": "Phone Number",
+  "text_hint_phone": "Enter your Phone number",
+  "text_state": "State/FCT",
+  "text_hint_state": "Select your state/ FCT",
+  "text_upload_photo": "Upload photo",
+  "text_photo": "Photo",
+  "text_hint_upload_photo": "Upload your profile photo",
+  "text_password": "Password",
+  "text_confirm_password": "Confirm password",
+
+  "text_already_have_account": "Already have an account ? ",
+  "text_sign_in": "Sign in"
+
+
 
 
 }

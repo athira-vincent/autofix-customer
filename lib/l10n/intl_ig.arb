@@ -26,7 +26,22 @@
   "text_user_selection_red": "Họrọ! ",
   "text_user_selection_blue": "Kedu ụdị onye ọrụ ị bụ ? ",
 
-  "text_sign_up": "debanye aha",
-  "text_name": "Name",
-  "text_hint_name": "Your Name"
+  "text_sign_up": "Debanye aha",
+  "text_name": "Aha",
+  "text_hint_name": "Aha gị",
+  "text_email": "Imeeli",
+  "text_hint_email": "Id email gị",
+  "text_phone": "Nọmba ekwentị",
+  "text_hint_phone": "Tinye nọmba ekwentị gị",
+  "text_state": "Steeti/FCT",
+  "text_hint_state": "Họrọ steeti / FCT gị",
+  "text_photo": "Foto",
+  "text_upload_photo": "Bulite foto",
+  "text_hint_upload_photo": "Bulite foto profaịlụ gị",
+  "text_password": "Okwuntughe",
+  "text_confirm_password": "Kwenye Na Okwuntughe",
+
+  "text_already_have_account": "Ị nwere akaụntụ ? ",
+  "text_sign_in": "Banye"
+
 }

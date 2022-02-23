@@ -53,6 +53,7 @@ dependencies:
   another_xlider: ^1.0.0
   flutter_rating_bar: ^4.0.0
   shimmer: ^2.0.0
+  connectivity_plus: ^1.2.0
 
   # FACEBOOK PACKAGE
   flutter_facebook_login: 3.0.0
@@ -113,6 +114,7 @@ flutter:
     - assets/image/CustomerType/
     - assets/image/MechanicType/
     - assets/image/phoneLogin/
+    - assets/image/SignUp/
     - assets/fonts/
     - assets/json/
   fonts:

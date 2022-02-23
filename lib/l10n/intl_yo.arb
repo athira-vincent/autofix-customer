@@ -27,7 +27,23 @@
   "text_user_selection_red": "Yan! ",
   "text_user_selection_blue": "Iru olumulo wo ni iwọ ? ",
 
-  "text_sign_up": "forukọsilẹ",
-  "text_name": "Name",
-  "text_hint_name": "Your Name"
+  "text_sign_up": "Forukọsilẹ",
+  "text_name": "Oruko",
+  "text_hint_name": "Orukọ rẹ",
+  "text_email": "Email",
+  "text_hint_email": "Imeeli rẹ id",
+  "text_phone": "Nomba fonu",
+  "text_hint_phone": "Tẹ nọmba foonu rẹ sii",
+  "text_state": "Ipinle/FCT",
+  "text_hint_state": "Yan ipinlẹ rẹ / FCT",
+  "text_photo": "aworan",
+  "text_upload_photo": "Ṣe igbasilẹ fọto",
+  "text_hint_upload_photo": "Po si rẹ profaili Fọto",
+  "text_password": "Ọrọigbaniwọle",
+  "text_confirm_password": "So ni pato orukoabawole re",
+
+  "text_already_have_account": "Ti ni iroyin tẹlẹ ? ",
+  "text_sign_in": "Wọle"
+
+
 }
