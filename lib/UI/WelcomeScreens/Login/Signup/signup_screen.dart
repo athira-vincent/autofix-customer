@@ -445,14 +445,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   onTap: () async {
                                                     print("on tap state ");
                                                     //showDialCodeSelector();
-                                                    String userSelectedState = await Navigator.push(
+                                                    /*String userSelectedState = await Navigator.push(
                                                       context,
                                                         MaterialPageRoute(
                                                         builder: (context) => SelectStateScreen(),
                                                         ),
-                                                    );
-                                                    selectedState = userSelectedState;
-                                                    print ("Selected state @ sign up: " + selectedState );
+                                                    );*/
+                                                    _awaitReturnValueFromSecondScreen(context);
+
                                                   },
                                                   child: TextFormField(
                                                     readOnly: true,
@@ -848,6 +848,19 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  void _awaitReturnValueFromSecondScreen(BuildContext context) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectStateScreen(),
+        ));
+    setState(() {
+      selectedState = result;
+      print ("Selected state @ sign up: " + selectedState );
+    });
+  }
 
   void showDialCodeSelector() {
     _signupBloc.searchStates("");
