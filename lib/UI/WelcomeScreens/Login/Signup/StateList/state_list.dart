@@ -4,6 +4,8 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SelectStateScreen extends StatefulWidget {
 
@@ -20,9 +22,7 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
   final SignupBloc _signupBloc = SignupBloc();
   List<StateDetails> _countryData = [];
   String? countryCode;
-
   String selectedState = "";
-
   bool isloading = false;
 
 
@@ -45,8 +45,7 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: AppBar(
@@ -65,7 +64,7 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
               )
             ],
             title: Text(
-              ' Select your state/FCT',
+              AppLocalizations.of(context)!.text_hint_state,
               style: Styles.titleTextSelectStateStyle,
             ),
           ),
@@ -192,8 +191,7 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
 
