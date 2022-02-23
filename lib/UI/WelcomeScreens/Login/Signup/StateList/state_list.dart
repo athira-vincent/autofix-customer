@@ -24,7 +24,6 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
   String? countryCode;
 
   String selectedState = "";
-
   bool isloading = false;
 
 
