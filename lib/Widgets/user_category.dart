@@ -15,13 +15,13 @@ class UserCategorySelectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.only(top: 18,),
+      //margin: EdgeInsets.only(top: size.height * 0.037,),
       child: Container(
         height: size.height * 0.163,
         width: size.width * 0.757,
         color: Colors.white,
         margin: EdgeInsets.only(
-            top: size.height * 0.074,
+            top: size.height * 0.070,
             left: size.width * 0.10,
             right: size.width * 0.10,
         ),

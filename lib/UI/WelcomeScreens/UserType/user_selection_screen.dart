@@ -85,12 +85,14 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                         Center(
                           child: InkWell(
                             onTap: () async {
-                              Navigator.push(
+                              /*Navigator.push(
                                   context,
                                   PageRouteBuilder(
                                       transitionDuration: Duration(milliseconds: 3000),
                                       pageBuilder: (_, __, ___) =>
-                                          _getCustomerExpandedPage(context, 'customer')));
+                                          _getCustomerExpandedPage(context, 'customer',TextStrings.user_customer)));*/
+
+                              setUserType(TextStrings.user_customer);
                               //setUserType(TextStrings.user_customer);
                               /*Navigator.pushReplacement(
                                   context,
@@ -98,11 +100,8 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             },
                             child: UserTypeSelectionWidget(
                               imagePath: 'assets/image/UserType/img_user_customer.png',
-                              titleText: Hero(
-                                tag: "customer",
-                                child: Text(AppLocalizations.of(context)!.text_customer,
-                                  style: Styles.titleTextStyle),
-                              ),
+                              titleText: Text(AppLocalizations.of(context)!.text_customer,
+                                style: Styles.titleTextStyle),
                               //titleText: ,
                             ),
                           ),
@@ -111,22 +110,19 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                         Center(
                           child: InkWell(
                             onTap: () async {
-                              Navigator.push(
+                              /*Navigator.push(
                                   context,
                                   PageRouteBuilder(
                                       transitionDuration: Duration(milliseconds: 20),
                                       pageBuilder: (_, __, ___) =>
-                                          _getMechanicExpandedPage(context, 'mechanic')));
-
-                              //setUserType( TextStrings.user_mechanic);
+                                          _getMechanicExpandedPage(context, 'mechanic', TextStrings.user_mechanic)));
+*/
+                              setUserType( TextStrings.user_mechanic);
                             },
                             child: UserTypeSelectionWidget(
                               imagePath: 'assets/image/UserType/img_user_mechanic.png',
-                              titleText: Hero(
-                                tag: "mechanic",
-                                child: Text(AppLocalizations.of(context)!.text_mechanic,
-                                    style: Styles.titleTextStyle),
-                              ),
+                              titleText: Text(AppLocalizations.of(context)!.text_mechanic,
+                                  style: Styles.titleTextStyle),
                             ),
                           ),
                         ),
@@ -143,7 +139,8 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
   }
 
 
-  _getCustomerExpandedPage(context, id) {
+ /* _getCustomerExpandedPage(context, id,userType) {
+    setUserType(userType);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: MaterialApp(
@@ -191,11 +188,8 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                                 right: size.width * 0.181,
                                 left: size.width * 0.172
                             ),
-                            child: Hero(
-                              tag: "customer",
-                              child: Text(AppLocalizations.of(context)!.text_customer,
-                                  style: Styles.TitleTextBlack
-                              ),
+                            child: Text(AppLocalizations.of(context)!.text_customer,
+                                style: Styles.TitleTextBlack
                             ),
                           ),
 
@@ -227,7 +221,8 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
     );
   }
 
-  _getMechanicExpandedPage(context, id) {
+  _getMechanicExpandedPage(context, id,userType) {
+    setUserType(userType);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: SafeArea(
@@ -268,12 +263,9 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             right: size.width * 0.181,
                             left: size.width * 0.172
                         ),
-                        child: Hero(
-                            tag: "mechanic",
-                            child: Text(AppLocalizations.of(context)!.text_mechanic,
-                                style: Styles.TitleTextBlack
-                            )),
-                        //child: Text("Select ! What type of user are you ?"),
+                        child: Text(AppLocalizations.of(context)!.text_mechanic,
+                            style: Styles.TitleTextBlack
+                        ),
                       ),
 
                       InkWell(
@@ -302,7 +294,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
   }
 
   void startNextPage(String userCategory) async {
-    print(">>>>userCategory" + userCategory);
+    print(">>>> userCategory" + userCategory);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(SharedPrefKeys.userCategory, userCategory);
     Navigator.pushReplacement(
@@ -313,9 +305,10 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
               userType: prefs.getString(SharedPrefKeys.userType).toString(),
             )));
   }
+*/
 
   void setUserType(String userType) async {
-    print(">>>>userCategory " + userType);
+    print(">>>>userType " + userType);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(SharedPrefKeys.userType, userType);
     if (userType == TextStrings.user_mechanic) {

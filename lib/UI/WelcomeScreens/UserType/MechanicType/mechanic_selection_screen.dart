@@ -30,6 +30,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
           child: Container(
             width: size.width,
             height: size.height,
+            color: Colors.white,
             child: Column(
               children: [
                 IndicatorWidget(isFirst: true,isSecond: true,isThird: false,isFourth: false,),
@@ -46,40 +47,47 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                   //child: Text("Select ! What type of user are you ?"),
                 ),
 
-                Container(
-                  color: CustColors.pale_grey,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: size.height * 0.033,
-                            right: size.width * 0.181,
-                            left: size.width * 0.172
+                Expanded(
+                  child: Container(
+                    color: CustColors.pale_grey,
+                    margin: EdgeInsets.only(
+                        top: size.height * 0.026,
+                        right: size.width * 0.05,
+                        left: size.width * 0.05,
+                        bottom: size.height * 0.041
+                    ),
+                    //padding: EdgeInsets.only(bottom: size.height * 0.101),
+                    height: size.height * 0.850,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: size.height * 0.033,
+                              right: size.width * 0.181,
+                              left: size.width * 0.172
+                          ),
+                          child: Text(AppLocalizations.of(context)!.text_mechanic,
+                              style: Styles.TitleTextBlack
+                          ),
                         ),
-                        child: Hero(
-                            tag: "mechanic",
-                            child: Text(AppLocalizations.of(context)!.text_mechanic,
-                                style: Styles.TitleTextBlack
-                            )),
-                        //child: Text("Select ! What type of user are you ?"),
-                      ),
 
-                      InkWell(
-                        onTap: () async {
-                          startNextPage(TextStrings.user_category_individual);
-                        },
-                        child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
-                          imagePath: "assets/image/MechanicType/img_individual.png",),
-                      ),
+                        InkWell(
+                          onTap: () async {
+                            setUserCategory(TextStrings.user_category_individual);
+                          },
+                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
+                            imagePath: "assets/image/MechanicType/img_individual.png",),
+                        ),
 
-                      InkWell(
-                        onTap: () async {
-                          startNextPage(TextStrings.user_category_corporate);
-                        },
-                        child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
-                          imagePath: "assets/image/MechanicType/img_corporate.png",),
-                      ),
-                    ],
+                        InkWell(
+                          onTap: () async {
+                            setUserCategory(TextStrings.user_category_corporate);
+                          },
+                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
+                            imagePath: "assets/image/MechanicType/img_corporate.png",),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -90,8 +98,8 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
     );
   }
 
-  void startNextPage(String userCategory) async {
-    print(">>>>userCategory" + userCategory);
+  void setUserCategory(String userCategory) async {
+    print(">>>> userCategory " + userCategory);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(SharedPrefKeys.userCategory, userCategory);
     Navigator.pushReplacement(
@@ -101,6 +109,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
               userCategory: userCategory,
               userType: prefs.getString(SharedPrefKeys.userType).toString(),
             )));
+    print(">>>>> userCategory " + userCategory + " SharedPrefKeys.userType " + prefs.getString(SharedPrefKeys.userType).toString());
   }
 
 

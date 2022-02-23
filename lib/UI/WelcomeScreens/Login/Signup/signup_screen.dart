@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
@@ -13,6 +16,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -31,19 +35,23 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _userNameController = TextEditingController();
+
+  TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
+  TextEditingController _photoController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPwdController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  FocusNode _firstNameFocusNode = FocusNode();
-  FocusNode _userNameFocusNode = FocusNode();
+
+  FocusNode _nameFocusNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
-  FocusNode _stateFocusNode = FocusNode();
-  FocusNode _passwordFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _stateFocusNode = FocusNode();
+  FocusNode _photoFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+  FocusNode _confirmPswdFocusNode = FocusNode();
+
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -55,6 +63,14 @@ class _SignupScreenState extends State<SignupScreen> {
   double per = .10;
   double perfont = .10;
   double height = 0;
+
+  bool? _passwordVisible;
+  bool? _confirmPasswordVisible;
+
+  String selectedState = "";
+  final picker = ImagePicker();
+  File? _images;
+
   final ScrollController _scrollController = ScrollController();
   double _setValue(double value) {
     return value * per + value;
@@ -70,6 +86,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
     _setSignUpVisitFlag();
+    _passwordVisible = false;
+    _confirmPasswordVisible = false;
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
   }
@@ -82,13 +100,14 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void dispose() {
     super.dispose();
-    _firstNameController.dispose();
-    _userNameController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _stateController.dispose();
+    _photoController.dispose();
     _passwordController.dispose();
     _confirmPwdController.dispose();
-    _phoneController.dispose();
+
     _signupBloc.dispose();
   }
 
@@ -108,9 +127,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   IndicatorWidget(isFirst: true,isSecond: true,isThird: true,isFourth: false,),
 
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.40 ,
+                    height: size.height * 0.223,
                     child: Align(
-                      alignment: Alignment.bottomCenter,
+                      alignment: Alignment.topCenter,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -118,9 +137,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/login/login_bgCar.svg',
-                              height: MediaQuery.of(context).size.height * 0.23,),
+                            padding: EdgeInsets.fromLTRB(0, size.height * 0.020, 0, size.height * 0.010),
+                            child: Image.asset('assets/image/SignUp/img_sign_up_customer.png',
+                              height: size.height * 0.23,),
                           ),
                         ],
                       ),
@@ -128,7 +147,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   CurvedBottomSheetContainer(
-                    percentage:0.60,
+                    percentage:0.90,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -148,7 +167,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
-
                                     Padding(
                                       padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                       child: Column(
@@ -159,22 +177,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Name',
+                                                  AppLocalizations.of(context)!.text_name,
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
                                                   textAlignVertical: TextAlignVertical.center,
                                                   maxLines: 1,
                                                   style: Styles.textLabelSubTitle,
-                                                  focusNode: _userNameFocusNode,
-                                                  keyboardType: TextInputType.text,
-                                                  validator:
-                                                  InputValidator(ch: "Your Name").emptyChecking,
-                                                  controller: _userNameController,
+                                                  focusNode: _nameFocusNode,
+                                                  keyboardType: TextInputType.name,
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_name,).emptyChecking,
+                                                  controller: _nameController,
                                                   cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText: 'Your Name',
+                                                    hintText:  AppLocalizations.of(context)!.text_hint_name,
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -199,8 +216,102 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     ),
                                                     hintStyle: Styles.textLabelSubTitle,),
                                                 ),
+                                              ],
+                                            ),
+                                          ),
 
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(context)!.text_email,
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  focusNode: _emailFocusNode,
+                                                  keyboardType: TextInputType.emailAddress,
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emptyChecking,
+                                                  controller: _emailController,
+                                                  cursorColor: CustColors.whiteBlueish,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    hintText: AppLocalizations.of(context)!.text_hint_email,
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
 
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(context)!.text_phone,
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  focusNode: _phoneFocusNode,
+                                                  keyboardType: TextInputType.phone,
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).emptyChecking,
+                                                  controller: _phoneController,
+                                                  cursorColor: CustColors.whiteBlueish,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    hintText: AppLocalizations.of(context)!.text_hint_phone,
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                                ),
 
                                               ],
                                             ),
@@ -211,22 +322,170 @@ class _SignupScreenState extends State<SignupScreen> {
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Email',
+
+                                                Text(AppLocalizations.of(context)!.text_state,
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    print("on tap state ");
+                                                    //showDialCodeSelector();
+                                                    String userSelectedState = await Navigator.push(
+                                                      context,
+                                                        MaterialPageRoute(
+                                                        builder: (context) => SelectStateScreen(),
+                                                        ),
+                                                    );
+                                                    selectedState = userSelectedState;
+                                                    print ("Selected state @ sign up: " + selectedState );
+                                                  },
+                                                  child: TextFormField(
+                                                    readOnly: true,
+                                                    enabled: false,
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _stateFocusNode,
+                                                    //keyboardType: TextInputType.phone,
+                                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
+                                                    controller: _stateController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: AppLocalizations.of(context)!.text_hint_state,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(context)!.text_upload_photo,
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                InkWell(
+                                                  onTap: (){
+                                                    _showDialogSelectPhoto();
+                                                    print("on tap photo ");
+                                                  },
+                                                  child: TextFormField(
+                                                    enabled: false,
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _photoFocusNode,
+                                                    keyboardType: TextInputType.text,
+                                                    validator:
+                                                    InputValidator(ch: AppLocalizations.of(context)!.text_photo).emptyChecking,
+                                                    controller: _photoController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: AppLocalizations.of(context)!.text_hint_upload_photo,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: 20.5),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(context)!.text_password,
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
                                                   textAlignVertical: TextAlignVertical.center,
+                                                  obscureText: !_passwordVisible!,
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).emptyChecking,
+                                                  // validator:
+                                                  //     InputValidator(ch: "Password").passwordChecking,
+                                                  controller: _passwordController,
+                                                  focusNode: _passwordFocusNode,
                                                   maxLines: 1,
                                                   style: Styles.textLabelSubTitle,
-                                                  focusNode: _userNameFocusNode,
-                                                  keyboardType: TextInputType.text,
-                                                  validator:
-                                                  InputValidator(ch: "Your emailid").emptyChecking,
-                                                  controller: _userNameController,
-                                                  cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText: 'Your emailid',
+                                                    suffixIconConstraints: BoxConstraints(
+                                                      minWidth: 25,
+                                                      minHeight: 25,
+                                                    ),
+                                                    suffixIcon: Container(
+                                                      width: 5,
+                                                      height: 10,
+                                                      alignment: Alignment.centerRight,
+                                                      child: IconButton(
+                                                        iconSize: 15,
+                                                        padding: EdgeInsets.zero,
+                                                        icon: Icon(
+                                                          // Based on passwordVisible state choose the icon
+                                                          _passwordVisible!
+                                                              ? Icons.visibility
+                                                              : Icons.visibility_off,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        onPressed: () {
+                                                          // Update the state i.e. toogle the state of passwordVisible variable
+                                                          setState(() {
+                                                            _passwordVisible = !_passwordVisible!;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    hintText: AppLocalizations.of(context)!.text_password,
+                                                    errorMaxLines: 3,
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -251,7 +510,127 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     ),
                                                     hintStyle: Styles.textLabelSubTitle,),
                                                 ),
+                                                /*Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ForgotPasswordScreen()));
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(top: _setValue(10)),
+                                                        child: Text(
+                                                          'Forgot password?',
+                                                          style: Styles.textLabelSubTitle,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )*/
+                                              ],
+                                            ),
+                                          ),
 
+                                          Container(
+                                            margin: EdgeInsets.only(top: 20.5),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(AppLocalizations.of(context)!.text_confirm_password,
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                TextFormField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  obscureText: !_confirmPasswordVisible!,
+                                                  validator:
+                                                  InputValidator(ch: AppLocalizations.of(context)!.text_password).emptyChecking,
+                                                  // validator:
+                                                  //     InputValidator(ch: "Password").passwordChecking,
+                                                  controller: _confirmPwdController,
+                                                  focusNode: _confirmPswdFocusNode,
+                                                  maxLines: 1,
+                                                  style: Styles.textLabelSubTitle,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    suffixIconConstraints: BoxConstraints(
+                                                      minWidth: 25,
+                                                      minHeight: 25,
+                                                    ),
+                                                    suffixIcon: Container(
+                                                      width: 5,
+                                                      height: 10,
+                                                      alignment: Alignment.centerRight,
+                                                      child: IconButton(
+                                                        iconSize: 15,
+                                                        padding: EdgeInsets.zero,
+                                                        icon: Icon(
+                                                          // Based on passwordVisible state choose the icon
+                                                          _confirmPasswordVisible!
+                                                              ? Icons.visibility
+                                                              : Icons.visibility_off,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        onPressed: () {
+                                                          // Update the state i.e. toogle the state of passwordVisible variable
+                                                          setState(() {
+                                                            _confirmPasswordVisible = !_confirmPasswordVisible!;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    hintText: AppLocalizations.of(context)!.text_password,
+                                                    errorMaxLines: 3,
+                                                    border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    enabledBorder: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: CustColors.greyish,
+                                                        width: .5,
+                                                      ),
+                                                    ),
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      vertical: 12.8,
+                                                      horizontal: 0.0,
+                                                    ),
+                                                    hintStyle: Styles.textLabelSubTitle,),
+                                                ),
+                                                /*Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ForgotPasswordScreen()));
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(top: _setValue(10)),
+                                                        child: Text(
+                                                          'Forgot password?',
+                                                          style: Styles.textLabelSubTitle,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )*/
                                               ],
                                             ),
                                           ),
@@ -290,7 +669,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        'Sign up',
+                                                        AppLocalizations.of(context)!.text_sign_up,
                                                         textAlign: TextAlign.center,
                                                         style: Styles.textButtonLabelSubTitle,
                                                       ),
@@ -304,6 +683,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                               ),
                                             ),
                                           ),
+
                                           Container(
                                             margin: EdgeInsets.only(top: 15.8),
                                             child: RichText(
@@ -311,17 +691,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                               text: TextSpan(
                                                 children: <TextSpan>[
                                                   TextSpan(
-                                                    text: "Already have an account ? ",
+                                                    text: AppLocalizations.of(context)!.text_already_have_account,
                                                     style: Styles.textLabelSubTitle,
                                                   ),
                                                   TextSpan(
-                                                      text: 'Sign in',
+                                                      text: AppLocalizations.of(context)!.text_sign_in,
                                                       style: Styles.textLabelTitle_10,
                                                       recognizer: TapGestureRecognizer()
                                                         ..onTap = () {
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(
+                                                            new MaterialPageRoute(
                                                                 builder: (context) =>
                                                                     LoginScreen()),
                                                           );
@@ -337,20 +717,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                 ),
                               )
-                          )
-
+                          ),
                         ],
                       ),
                     )
                   )
-
                 ],
               ),
             ),
           ),
         ),
       ),
-      // ),
     );
   }
 
@@ -558,5 +935,67 @@ class _SignupScreenState extends State<SignupScreen> {
         _countryData = value.cast<StateDetails>();
       });
     });
+  }
+
+  _showDialogSelectPhoto() async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+              height: 115.0,
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.camera_alt,
+                      color: CustColors.blue,
+                    ),
+                    title: Text("Camera",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      XFile? image = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 30);
+
+                      setState(() {
+                        if (image != null) {
+                          _images = File(image.path);
+                        }
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.image,
+                      color: CustColors.blue,
+                    ),
+                    title: Text("Gallery",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      XFile? image = (await picker.pickImage(
+                          source: ImageSource.gallery, imageQuality: 30));
+
+                      setState(() {
+                        if (image != null) {
+                          _images = (File(image.path));
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ));
+        });
   }
 }

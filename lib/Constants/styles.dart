@@ -137,4 +137,19 @@ class Styles {
     fontWeight: FontWeight.bold,
   );
 
+  static const titleTextSelectStateStyle = TextStyle(
+    color: CustColors.black_03,
+    fontSize: 17,
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w700,
+  );
+
+  static const textLabelSubTitle10 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w500,
+    color: CustColors.blackishgrey,
+    fontSize: 12,
+  );
+
+
 }
