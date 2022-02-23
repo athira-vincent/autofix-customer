@@ -218,7 +218,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                     codeLength: _otpCodeLength,
                                                     alignment: MainAxisAlignment.center,
                                                     defaultBoxSize: 50.0,
-                                                    margin: 16,
+                                                    margin: 14,
                                                     selectedBoxSize: 50.0,
                                                     textStyle: TextStyle(fontSize: 16),
                                                     defaultDecoration: _pinPutDecoration,
