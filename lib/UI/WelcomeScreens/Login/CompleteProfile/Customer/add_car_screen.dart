@@ -30,14 +30,6 @@ class AddCarScreen extends StatefulWidget {
 
 class _AddCarScreenState extends State<AddCarScreen> {
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _stateController = TextEditingController();
-  TextEditingController _photoController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPwdController = TextEditingController();
-
   TextEditingController _workSelectionController = TextEditingController();
   FocusNode _workSelectionFocusNode = FocusNode();
 
@@ -55,47 +47,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   TextEditingController _addressController = TextEditingController();
   FocusNode _addressFocusNode = FocusNode();
-
-
-  FocusNode _nameFocusNode = FocusNode();
-  FocusNode _emailFocusNode = FocusNode();
-  FocusNode _phoneFocusNode = FocusNode();
-  FocusNode _stateFocusNode = FocusNode();
-  FocusNode _photoFocusNode = FocusNode();
-  FocusNode _passwordFocusNode = FocusNode();
-  FocusNode _confirmPswdFocusNode = FocusNode();
-  List<StateDetails> _countryData = [];
   File? _images;
-
   bool isloading = false;
   String? countryCode;
   double per = .10;
   double perfont = .10;
   double height = 0;
-
-  bool? _passwordVisible;
-  bool? _confirmPasswordVisible;
-
   String selectedState = "";
   final picker = ImagePicker();
-
   double _setValue(double value) {
     return value * per + value;
   }
-
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-
   CheckInternet _checkInternet = CheckInternet();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final SignupBloc _signupBloc = SignupBloc();
-  bool _isLoading = false;
-
-  File? _img;
-  List<String>? _uploadFilePathList;
   String userProfilePic = '';
 
 
