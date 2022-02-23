@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +55,7 @@ class _SignupScreenState extends State<SignupScreen> {
   FocusNode _passwordFocusNode = FocusNode();
   FocusNode _confirmPswdFocusNode = FocusNode();
 
+  CheckInternet _checkInternet = CheckInternet();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -88,6 +92,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _setSignUpVisitFlag();
     _passwordVisible = false;
     _confirmPasswordVisible = false;
+    _getSignUpResponse();
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
   }
@@ -95,6 +100,40 @@ class _SignupScreenState extends State<SignupScreen> {
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
+  }
+
+  _getSignUpResponse() {
+    _signupBloc.postSignUp.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("errrrorr 02");
+          _isLoading = false;
+          SnackBarWidget().setSnackBar(value.message.toString(), context);
+
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  const AddCarScreen()));
+        });
+      } else {
+        setState(()  {
+          print("errrrorr 01");
+          _isLoading = false;
+
+          //setSignUp1Data(value);
+          SnackBarWidget().setSnackBar("Successfully Registered", context);
+
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                  const AddCarScreen()));
+          FocusScope.of(context).unfocus();
+
+        });
+      }
+    });
   }
 
   @override
@@ -168,16 +207,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                         ),
                                       ),
                                     Padding(
-                                      padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                      padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                       child: Column(
                                         children: [
+
+                                          widget.userCategory == TextStrings.user_category_government ?
+                                          Container() :
                                           Container(
                                             margin: EdgeInsets.only(top: _setValue(15.5)),
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  AppLocalizations.of(context)!.text_name,
+                                                  widget.userCategory == TextStrings.user_category_individual ?
+                                                   AppLocalizations.of(context)!.text_name :
+                                                  "Name of organization",
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
@@ -186,12 +230,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   style: Styles.textLabelSubTitle,
                                                   focusNode: _nameFocusNode,
                                                   keyboardType: TextInputType.name,
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_name,).emptyChecking,
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(
+                                                        RegExp('[a-zA-Z ]')),
+                                                  ],
+                                                  validator: InputValidator(
+                                                    ch : widget.userCategory == TextStrings.user_category_individual ?
+                                                          AppLocalizations.of(context)!.text_name :
+                                                          "Name of organization").nameChecking,
                                                   controller: _nameController,
                                                   cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText:  AppLocalizations.of(context)!.text_hint_name,
+                                                    hintText:  widget.userCategory == TextStrings.user_category_individual ?
+                                                              AppLocalizations.of(context)!.text_hint_name :
+                                                              "Your organization name",
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -218,7 +271,66 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 ),
                                               ],
                                             ),
+                                          ) ,
+
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: _setValue(15.5)),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("Type of Organisation",
+                                                  style: Styles.textLabelTitle,
+                                                ),
+                                                InkWell(
+                                                  onTap: (){
+                                                    //_showDialogSelectPhoto();
+                                                    print("Type of Organisation");
+                                                  },
+                                                  child: TextFormField(
+                                                    enabled: false,
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _photoFocusNode,
+                                                    keyboardType: TextInputType.text,
+                                                    validator:
+                                                    InputValidator(ch: "type of organisation").emptyChecking,
+                                                    controller: _photoController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: "type of organization",
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
+
+
 
                                           Container(
                                             margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -234,7 +346,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   style: Styles.textLabelSubTitle,
                                                   focusNode: _emailFocusNode,
                                                   keyboardType: TextInputType.emailAddress,
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emptyChecking,
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
                                                   controller: _emailController,
                                                   cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
@@ -281,8 +393,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   maxLines: 1,
                                                   style: Styles.textLabelSubTitle,
                                                   focusNode: _phoneFocusNode,
-                                                  keyboardType: TextInputType.phone,
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).emptyChecking,
+                                                  keyboardType: TextInputType.number,
+                                                  inputFormatters: [
+                                                    LengthLimitingTextInputFormatter(15),
+                                                  ],
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
                                                   controller: _phoneController,
                                                   cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
@@ -449,7 +564,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 TextFormField(
                                                   textAlignVertical: TextAlignVertical.center,
                                                   obscureText: !_passwordVisible!,
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).emptyChecking,
+                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
                                                   // validator:
                                                   //     InputValidator(ch: "Password").passwordChecking,
                                                   controller: _passwordController,
@@ -548,9 +663,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   textAlignVertical: TextAlignVertical.center,
                                                   obscureText: !_confirmPasswordVisible!,
                                                   validator:
-                                                  InputValidator(ch: AppLocalizations.of(context)!.text_password).emptyChecking,
-                                                  // validator:
-                                                  //     InputValidator(ch: "Password").passwordChecking,
+                                                  InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
                                                   controller: _confirmPwdController,
                                                   focusNode: _confirmPswdFocusNode,
                                                   maxLines: 1,
@@ -657,9 +770,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     setState(() {
                                                       _isLoading = true;
                                                     });
+                                                    checkPassWord(
+                                                        _passwordController.text,
+                                                        _confirmPwdController.text);
                                                   } else {
                                                     setState(() => _autoValidate =
                                                         AutovalidateMode.always);
+
                                                   }
                                                 },
                                                 child: Container(
@@ -997,5 +1114,37 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ));
         });
+  }
+
+  void checkPassWord(String pswd, String conPswd) {
+    if (pswd != conPswd) {
+
+      SnackBarWidget().setSnackBar("Passwords are different!", context);
+
+      setState(() {
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
+      });
+    } else {
+
+      print(" Name : " + _nameController.text +
+          "\n Email : "+ _emailController.text +
+          "\n phone : "+ _photoController.text +
+          "\n State : " +
+          "\n photo path :" +
+          "\n password : " + _passwordController.text+
+          "\n c password " + _confirmPwdController.text
+      );
+
+
+      _signupBloc.postSignUpRequest(
+          " "," "," ",
+          _emailController.text,
+          _phoneController.text,
+          _passwordController.text);
+      setState(() {
+        _isLoading = true;
+      });
+    }
   }
 }
