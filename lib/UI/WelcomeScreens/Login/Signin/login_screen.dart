@@ -4,7 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/PhoneLogin/phone_login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/phone_login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
@@ -14,13 +14,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../main.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -61,6 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
   UserCredential? userCredential;
   User? user;
   bool socialLoginIsLoading = false;
+  String facebookButtonClick = "0";
+
+  final facebookLogin = FacebookLogin();
+  Map? userProfile;
 
   @override
   void initState() {
@@ -399,15 +405,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     },
                                                   ),
                                                 ),
-                                                InkWell(
-                                                  onTap: (){
+                                                Container(
+                                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                                  child: IconButton(
+                                                    icon: SvgPicture.asset(
+                                                      'assets/image/login/login_fb.svg',height: 30,width: 30,
+                                                      fit: BoxFit.fill,
+                                                      allowDrawingOutsideViewBox: true,
+                                                    ),
+                                                    onPressed: () async {
+                                                      print('result facebook');
+                                                      _loginWithFB();
 
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                                    child: SvgPicture.asset('assets/image/login/login_fb.svg',height: 30,width: 30,),
+
+                                                    },
                                                   ),
                                                 ),
+
                                                 InkWell(
                                                   onTap: (){
 
@@ -535,6 +549,62 @@ class _LoginScreenState extends State<LoginScreen> {
 
     }
   }
+
+  _loginWithFB() async {
+    setState(() {
+      socialLoginIsLoading = true;
+    });
+    print("_loginWithFB entered");
+
+    facebookLogin.loginBehavior = FacebookLoginBehavior.webOnly;
+    final result = await facebookLogin.logIn(['email']);
+    print("_loginWithFB entered2");
+    print(result.status.toString() + "sdgdsgsg minnu");
+    switch (result.status) {
+
+
+      case FacebookLoginStatus.loggedIn:
+
+        final token = result.accessToken.token;
+        print("$token");
+
+        final graphResponse = await http.get(
+            Uri.parse('https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${result
+                .accessToken.token}'));
+        final profile = JSON.jsonDecode(graphResponse.body);
+
+        print("LoggedIn");
+
+
+        print(profile.toString());
+        print(profile);
+
+
+
+          setState(() {
+            userProfile = profile;
+            socialLoginIsLoading = true;
+
+          });
+
+
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        setState(() {
+          facebookButtonClick = "0";
+          socialLoginIsLoading = false;
+        });
+        break;
+      case FacebookLoginStatus.error:
+        setState(() {
+          facebookButtonClick = "0";
+          socialLoginIsLoading = false;
+        });
+        break;
+    }
+  }
+
 }
 
 class MyBehavior extends ScrollBehavior {
