@@ -22,7 +22,6 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
   final SignupBloc _signupBloc = SignupBloc();
   List<StateDetails> _countryData = [];
   String? countryCode;
-
   String selectedState = "";
   bool isloading = false;
 
