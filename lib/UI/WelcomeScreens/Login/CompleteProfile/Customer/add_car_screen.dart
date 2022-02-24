@@ -1,24 +1,18 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:auto_fix/Widgets/snackbar_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+
+
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({Key? key}) : super(key: key);
@@ -72,7 +66,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
   double _lowerValue = 100;
   double _upperValue = 500;
 
+  DateTime? _selectedDate;
+  var pickeddate;
+  var pickedtime;
 
+  final DateTime initialYear = DateTime.now();
+  DateTime? selectedYear;
+  DateTime selectedDate = DateTime.now();
 
 
 
@@ -657,6 +657,37 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                     child: MaterialButton(
                                                       onPressed: () {
 
+                                                        //showYearSelector(context);
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (BuildContext context) {
+                                                              return AlertDialog(
+                                                                contentPadding: EdgeInsets.all(0.0),
+                                                                content: setupAlertDialoadContainer(),
+                                                              );
+                                                            });
+
+
+
+                                                       /* showModalBottomSheet(
+                                                            context: context,
+                                                            builder: (BuildContext builder) {
+                                                              return  Container(
+                                                                  height: MediaQuery.of(context).copyWith().size.height / 3,
+                                                                  child: CupertinoDatePicker(
+                                                                    initialDateTime: DateTime.now(),
+                                                                    onDateTimeChanged: (DateTime newdate) {
+                                                                      print(newdate);
+                                                                    },
+                                                                    minimumYear: 2010,
+                                                                    maximumYear: 2030,
+                                                                    mode: CupertinoDatePickerMode.date,
+                                                                    dateOrder: DatePickerDateOrder,
+                                                                  ),);
+                                                            });*/
+
+
+
                                                       },
                                                       child: Container(
                                                         height: 45,
@@ -705,8 +736,116 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
+  Widget setupAlertDialoadContainer() {
+    return Container(
+      height: 300.0, // Change as per your requirement
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+              height: 50,
+              color: CustColors.blue,
+              alignment: Alignment.center,
+              child: Text('Select Date',
+                style: Styles.textButtonLabelSubTitle,)
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListWheelScrollView(
+                      itemExtent: 40,
+                      useMagnifier: true,
+                      magnification: 1.2,
+                      onSelectedItemChanged: (index) => {
+                        print(index)
+                      },
+                      children: List.generate(1000, (index) => index )
+                          .map((text) => Container(
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          child: Center(child: Text(text.toString())),
+                        ),
+                      ).toList(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListWheelScrollView.useDelegate(
+                      itemExtent: 40,
+                      useMagnifier: true,
+                      magnification: 1.2,
+                      onSelectedItemChanged: (index) => {
+                        print(index)
+                      },
+                      childDelegate: ListWheelChildBuilderDelegate(
+                          builder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(left: 20, right: 20),
+                              alignment: Alignment.center,
+                              child: Text('$index'),
+                            );
+                          },
+                          childCount: 1000),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Container(
+              margin: EdgeInsets.only(top: 20.8),
+              child: _isLoading
+                  ? Center(
+                child: Container(
+                  height: _setValue(28),
+                  width: _setValue(28),
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        CustColors.peaGreen),
+                  ),
+                ),
+              )
+                  : Container(
+
+                child: MaterialButton(
+                  onPressed: () {
 
 
+
+
+                  },
+                  child: Container(
+                    height: 45,
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Done',
+                          textAlign: TextAlign.center,
+                          style: Styles.textButtonLabelSubTitle,
+                        ),
+                      ],
+                    ),
+                  ),
+                  color: CustColors.materialBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          _setValue(10))),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   _showDialogSelectPhoto() async {
     showModalBottomSheet(
@@ -768,6 +907,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 ],
               ));
         });
+  }
+
+  void showYearSelector(BuildContext context) {
+    showDatePicker(
+      context: context,
+      initialDatePickerMode: DatePickerMode.year,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101)
+    ).then((date) {
+      if (date != null) {
+        setState(() {
+          this.selectedYear = date;
+          print(selectedYear?.year);
+        });
+      }
+    });
   }
 
 }

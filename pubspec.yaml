@@ -65,8 +65,6 @@ dependencies:
   country_code_picker: ^2.0.2
   sms_otp_auto_verify: ^2.1.0
   flutter_xlider: ^3.4.0
-
-
   flutter_svg: 0.23.0+1
   intl: ^0.17.0
 
