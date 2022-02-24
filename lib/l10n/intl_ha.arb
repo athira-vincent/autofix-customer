@@ -43,6 +43,19 @@
   "text_confirm_password": "Tabbata kalmar shiga",
 
   "text_already_have_account": "Kuna da asusu ? ",
-  "text_sign_in": "Shiga"
+  "text_sign_in": "Shiga",
+
+  "text_organization_name": "Name of Organization",
+    "text_hint_sign_in": "Your Organization Name",
+    "text_organization_type": "Type of Organization",
+    "text_hint_organization_type": "Select your organization from list",
+    "text_contact_person": "Contact Person Name",
+    "text_hint_contact_person": "Enter your name",
+    "text_experience_year": "Year of experience",
+    "text_hint_experience_year": "Add your year of experience",
+    "text_ministry_govt": "Ministry/Govt. Agency",
+    "text_hint_ministry_govt": "Select your ministry/govt agency from list",
+    "text_contact_person_head": "Contact Person / Head ",
+    "text_hint_contact_person_head": "Enter head of the department name"
 
 }
