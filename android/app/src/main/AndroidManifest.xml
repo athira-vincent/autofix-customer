@@ -9,6 +9,7 @@
    <application
         android:label="auto_fix"
         android:usesCleartextTraffic="true"
+       android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
      <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCOijUnxSdUDHpQWIqJT5y-BklV9pI0Te0"/>
         <activity

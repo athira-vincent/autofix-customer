@@ -114,6 +114,19 @@ class Styles {
       fontFamily: 'Samsung_SharpSans_Bold'
   );
 
+  static const textHeadLogin28 = TextStyle(
+      color: Colors.black,
+      fontSize: 28,
+      fontWeight: FontWeight.w800,
+      fontFamily: 'Samsung_SharpSans_Bold');
+
+  static const textLabelTitle14= TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 14,
+  );
+
 
 
   //Athira
