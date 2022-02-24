@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -17,7 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:intl/intl.dart';
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({Key? key}) : super(key: key);
@@ -30,20 +31,20 @@ class AddCarScreen extends StatefulWidget {
 
 class _AddCarScreenState extends State<AddCarScreen> {
 
-  TextEditingController _workSelectionController = TextEditingController();
-  FocusNode _workSelectionFocusNode = FocusNode();
+  TextEditingController _brandController = TextEditingController();
+  FocusNode _brandFocusNode = FocusNode();
 
-  TextEditingController _noOfMechanicsController = TextEditingController();
-  FocusNode _noOfMechanicsFocusNode = FocusNode();
+  TextEditingController _modelController = TextEditingController();
+  FocusNode _modelFocusNode = FocusNode();
 
-  TextEditingController _rcNumberController = TextEditingController();
-  FocusNode _rcNumberFocusNode = FocusNode();
+  TextEditingController _engineTypeController = TextEditingController();
+  FocusNode _engineTypeFocusNode = FocusNode();
 
-  TextEditingController _chooseVechicleSpecializedController = TextEditingController();
-  FocusNode _chooseVechicleSpecializedFocusNode = FocusNode();
+  TextEditingController _yearController = TextEditingController();
+  FocusNode _yearControllerFocusNode = FocusNode();
 
-  TextEditingController _yearOfExistenceController = TextEditingController();
-  FocusNode _yearOfExistenceFocusNode = FocusNode();
+  TextEditingController _lastMaintenanceController = TextEditingController();
+  FocusNode _lastMaintenanceFocusNode = FocusNode();
 
   TextEditingController _addressController = TextEditingController();
   FocusNode _addressFocusNode = FocusNode();
@@ -55,6 +56,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
   double height = 0;
   String selectedState = "";
   final picker = ImagePicker();
+
+  var _value = 2.0;
   double _setValue(double value) {
     return value * per + value;
   }
@@ -65,6 +68,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   String userProfilePic = '';
+  bool _isLoading = false;
+  double _lowerValue = 100;
+  double _upperValue = 500;
+
+
+
 
 
 
@@ -124,68 +133,55 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Stack(
+                                    child: Column(
                                       children: [
+                                        Center(
+                                          child: Container(
+                                            width: 100.0,
+                                            height: 100.0,
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              child: _images == null
+                                                  ? Container(
+                                                  child:CircleAvatar(
+                                                      radius: 50,
+                                                      backgroundColor: Colors.white,
+                                                      child: ClipOval(
+                                                        child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
+                                                      )))
+                                                  : Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    child: CircleAvatar(
+                                                      backgroundColor: Colors.white,
+                                                      backgroundImage: FileImage(_images!),
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                         InkWell(
                                           onTap: () {
 
                                             _showDialogSelectPhoto();
                                           },
-                                          child: Center(
-                                            child: Container(
-                                              width: 100.0,
-                                              height: 100.0,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                child: _images == null
-                                                    ? Container(
-                                                    child:CircleAvatar(
-                                                        radius: 50,
-                                                        backgroundColor: Colors.white,
-                                                        child: ClipOval(
-                                                          child: Image.asset(
-                                                            'assets/image/CustomerType/img_individual.png',
-                                                          ),
-                                                        )))
-                                                    : Container(
-                                                      height: 100,
-                                                      width: 100,
-                                                      child: CircleAvatar(
-                                                        backgroundColor: Colors.white,
-                                                        backgroundImage: FileImage(_images!),
-                                                      ),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Center(
+                                                child: Container(
+                                                  decoration: new BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  width: 30.0,
+                                                  height: 30.0,
+                                                  child: SvgPicture.asset('assets/image/CustomerType/add_car_plus.svg'),
                                                 ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ),
-                                        /*Positioned(
-                                          left: 0,
-                                          right: 0,
-                                          child: InkWell(
-                                            onTap: () {
-
-                                              _showDialogSelectPhoto();
-                                            },
-                                            child: Center(
-                                              child: Container(
-                                                decoration: new BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                width: 100.0,
-                                                height: 100.0,
-                                                child: Center(
-                                                    child: Align(
-                                                        alignment: Alignment.center,
-                                                        child: Image.asset(
-                                                          'assets/image/CustomerType/img_individual.png',
-                                                          height: 30,
-                                                          width: 30,
-                                                        ))),
-                                              ),
-                                            ),
-                                          ),
-                                        )*/
+                                        )
                                       ],
                                     ),
                                   ),
@@ -224,14 +220,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             children: [
                                               Text(
 
-                                                "Work Selection",
+                                                "Brand",
                                                 style: Styles.textLabelTitle,
                                               ),
                                               TextFormField(
                                                 textAlignVertical: TextAlignVertical.center,
                                                 maxLines: 1,
                                                 style: Styles.textLabelSubTitle,
-                                                focusNode: _workSelectionFocusNode,
+                                                focusNode: _brandFocusNode,
                                                 keyboardType: TextInputType.name,
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.allow(
@@ -240,12 +236,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                 validator: InputValidator(
                                                     ch :
                                                     AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _workSelectionController,
+                                                controller: _brandController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
                                                   hintText:
-                                                  "Select your service type(Emergency/regular…)",
+                                                  "Select your vehicle brand",
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
@@ -282,14 +278,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             children: [
                                               Text(
 
-                                                "Number of mechanics",
+                                                "Model",
                                                 style: Styles.textLabelTitle,
                                               ),
                                               TextFormField(
                                                 textAlignVertical: TextAlignVertical.center,
                                                 maxLines: 1,
                                                 style: Styles.textLabelSubTitle,
-                                                focusNode: _noOfMechanicsFocusNode,
+                                                focusNode: _modelFocusNode,
                                                 keyboardType: TextInputType.name,
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.allow(
@@ -298,12 +294,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                 validator: InputValidator(
                                                     ch :
                                                     AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _noOfMechanicsController,
+                                                controller: _modelController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
                                                   hintText:
-                                                  "Select your mechanic strength",
+                                                  "Select your car variant",
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
@@ -339,14 +335,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             children: [
                                               Text(
 
-                                                "RC number",
+                                                "Select Engine Type",
                                                 style: Styles.textLabelTitle,
                                               ),
                                               TextFormField(
                                                 textAlignVertical: TextAlignVertical.center,
                                                 maxLines: 1,
                                                 style: Styles.textLabelSubTitle,
-                                                focusNode: _rcNumberFocusNode,
+                                                focusNode: _engineTypeFocusNode,
                                                 keyboardType: TextInputType.name,
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.allow(
@@ -355,12 +351,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                 validator: InputValidator(
                                                     ch :
                                                     AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _rcNumberController,
+                                                controller: _engineTypeController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
                                                   hintText:
-                                                  "Enter your  RC number",
+                                                  "Select your engine model",
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
@@ -398,14 +394,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             children: [
                                               Text(
 
-                                                "Choose vehicle specialised",
+                                                "Select Year",
                                                 style: Styles.textLabelTitle,
                                               ),
                                               TextFormField(
                                                 textAlignVertical: TextAlignVertical.center,
                                                 maxLines: 1,
                                                 style: Styles.textLabelSubTitle,
-                                                focusNode: _chooseVechicleSpecializedFocusNode,
+                                                focusNode: _yearControllerFocusNode,
                                                 keyboardType: TextInputType.name,
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.allow(
@@ -414,12 +410,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                 validator: InputValidator(
                                                     ch :
                                                     AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _chooseVechicleSpecializedController,
+                                                controller: _yearController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
                                                   hintText:
-                                                  "Select your company specialised vehicles",
+                                                  "Select your vehicle manufacture date",
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
@@ -455,14 +451,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             children: [
                                               Text(
 
-                                                "Year of existence",
+                                                "Last maintenance",
                                                 style: Styles.textLabelTitle,
                                               ),
                                               TextFormField(
                                                 textAlignVertical: TextAlignVertical.center,
                                                 maxLines: 1,
                                                 style: Styles.textLabelSubTitle,
-                                                focusNode: _yearOfExistenceFocusNode,
+                                                focusNode: _lastMaintenanceFocusNode,
                                                 keyboardType: TextInputType.name,
                                                 inputFormatters: [
                                                   FilteringTextInputFormatter.allow(
@@ -471,12 +467,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                 validator: InputValidator(
                                                     ch :
                                                     AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _yearOfExistenceController,
+                                                controller: _lastMaintenanceController,
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
                                                   hintText:
-                                                  "Enter you year of existence ",
+                                                  "Select your last service date",
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
@@ -506,57 +502,183 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         ) ,
 
                                         Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
+                                          width: double.infinity,
+                                          margin: EdgeInsets.only(top: _setValue(15.5),bottom: _setValue(15.5)),
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
-                                              Text(
+                                              Container(
+                                                child: Text(
 
-                                                "Address",
-                                                style: Styles.textLabelTitle,
+                                                  "Approximate mileage",
+
+                                                  style: Styles.textLabelTitle,
+                                                ),
                                               ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _addressFocusNode,
-                                                keyboardType: TextInputType.name,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.allow(
-                                                      RegExp('[a-zA-Z ]')),
-                                                ],
-                                                validator: InputValidator(
-                                                    ch :
-                                                    AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _addressController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText:
-                                                  "Enter your address",
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 8.0),
+                                                child: Container(
+                                                  child: Text(
+
+                                                    "Select your vehicle total kilometres",
+                                                    style: Styles.textLabelSubTitle,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 10),
+                                                child: Center(
+                                                  // ignore: missing_required_param
+                                                  child: FlutterSlider(
+                                                    values: [_lowerValue],
+                                                    max: 500,
+                                                    min: 0,
+                                                    tooltip: FlutterSliderTooltip(
+                                                        custom: (value) {
+                                                          return Text(value.toString());
+                                                        }
+                                                    ),
+                                                    trackBar: FlutterSliderTrackBar(
+                                                      inactiveTrackBar: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(0),
+                                                        color:CustColors.whiteBlueish,
+                                                        border: Border.all(width: 3, color: Colors.blue),
+                                                      ),
+                                                      activeTrackBar: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(0),
+                                                          color:CustColors.blue
+                                                      ),
+                                                    ),
+                                                    handler: FlutterSliderHandler(
+                                                      decoration:BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      child: Container(
+                                                        decoration:BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                        child: Material(
+                                                          color: Colors.transparent,
+                                                          elevation: 10,
+                                                          child: Container(
+                                                              decoration:BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(20),
+                                                                color: CustColors.blue
+                                                              ),
+                                                              padding: EdgeInsets.all(5),
+                                                              child: Icon(
+                                                                Icons.pause,
+                                                                color: Colors.white,
+                                                                size: 20,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onDragging: (handlerIndex, lowerValue, upperValue) {
+                                                      setState(() {
+                                                        _lowerValue = lowerValue;
+                                                        _upperValue = upperValue;
+                                                        print('$_lowerValue');
+                                                      });
+                                                    },
+                                                  )
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ) ,
+
+
+                                        Container(
+                                          width: double.infinity,
+                                          margin: EdgeInsets.only(top: _setValue(0.5),bottom: _setValue(25.5)),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                child: Container(
+                                                  margin: EdgeInsets.only(top: 20.8),
+                                                  child: _isLoading
+                                                      ? Center(
+                                                    child: Container(
+                                                      height: _setValue(28),
+                                                      width: _setValue(28),
+                                                      child: CircularProgressIndicator(
+                                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                                            CustColors.peaGreen),
+                                                      ),
+                                                    ),
+                                                  )
+                                                      : Container(
+
+                                                        child: MaterialButton(
+                                                          onPressed: () {
+
+                                                          },
+                                                          child: Container(
+                                                            height: 45,
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              children: [
+                                                                Text(
+                                                                  'Add More',
+                                                                  textAlign: TextAlign.center,
+                                                                  style: Styles.textButtonLabelSubTitle,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          color: CustColors.materialBlue,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(
+                                                                  _setValue(10))),
+                                                        ),
+                                                      ),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                child: Container(
+                                                  margin: EdgeInsets.only(top: 20.8),
+                                                  child: _isLoading
+                                                      ? Center(
+                                                    child: Container(
+                                                      height: _setValue(28),
+                                                      width: _setValue(28),
+                                                      child: CircularProgressIndicator(
+                                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                                            CustColors.peaGreen),
+                                                      ),
+                                                    ),
+                                                  )
+                                                      : Container(
+
+                                                    child: MaterialButton(
+                                                      onPressed: () {
+
+                                                      },
+                                                      child: Container(
+                                                        height: 45,
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Text(
+                                                              'Next',
+                                                              textAlign: TextAlign.center,
+                                                              style: Styles.textButtonLabelSubTitle,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      color: CustColors.materialBlue,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(
+                                                              _setValue(10))),
                                                     ),
                                                   ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -648,6 +770,17 @@ class _AddCarScreenState extends State<AddCarScreen> {
         });
   }
 
+}
+
+class Data {
+  /// Initialize the instance of the [Data] class.
+  Data({required this.x, required this.y});
+
+  /// Spline series x points.
+  final DateTime x;
+
+  /// Spline series y points.
+  final double y;
 }
 
 
