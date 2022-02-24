@@ -114,9 +114,9 @@ class Styles {
       fontFamily: 'Samsung_SharpSans_Bold'
   );
 
-  static const textHeadLogin30 = TextStyle(
+  static const textHeadLogin28 = TextStyle(
       color: Colors.black,
-      fontSize: 30,
+      fontSize: 28,
       fontWeight: FontWeight.w800,
       fontFamily: 'Samsung_SharpSans_Bold');
 

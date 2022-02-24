@@ -73,7 +73,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: CustColors.whiteBlueish,
+        backgroundColor: Colors.white,
         body: ScrollConfiguration(
           behavior: MyBehavior(),
           child: SingleChildScrollView(
@@ -84,7 +84,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   Container(
                     child: Text(
                       AppLocalizations.of(context)!.text_complete_your_profile,
-                      style: Styles.textHeadLogin30,
+                      style: Styles.textHeadLogin28,
                     ),
                   ),
 
@@ -126,34 +126,40 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Stack(
                                       children: [
-                                        Center(
-                                          child: Container(
-                                            width: 100.0,
-                                            height: 100.0,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(20.0),
-                                              child: _images == null
-                                                  ? Container(
-                                                  child:CircleAvatar(
-                                                      radius: 50,
-                                                      backgroundColor: Colors.white,
-                                                      child: ClipOval(
-                                                        child: Image.asset(
-                                                          'assets/image/CustomerType/img_individual.png',
-                                                        ),
-                                                      )))
-                                                  : Container(
-                                                    height: 100,
-                                                    width: 100,
-                                                    child: CircleAvatar(
-                                                      backgroundColor: Colors.white,
-                                                      backgroundImage: FileImage(_images!),
-                                                    ),
+                                        InkWell(
+                                          onTap: () {
+
+                                            _showDialogSelectPhoto();
+                                          },
+                                          child: Center(
+                                            child: Container(
+                                              width: 100.0,
+                                              height: 100.0,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(20.0),
+                                                child: _images == null
+                                                    ? Container(
+                                                    child:CircleAvatar(
+                                                        radius: 50,
+                                                        backgroundColor: Colors.white,
+                                                        child: ClipOval(
+                                                          child: Image.asset(
+                                                            'assets/image/CustomerType/img_individual.png',
+                                                          ),
+                                                        )))
+                                                    : Container(
+                                                      height: 100,
+                                                      width: 100,
+                                                      child: CircleAvatar(
+                                                        backgroundColor: Colors.white,
+                                                        backgroundImage: FileImage(_images!),
+                                                      ),
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                        Positioned(
+                                        /*Positioned(
                                           left: 0,
                                           right: 0,
                                           child: InkWell(
@@ -164,8 +170,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             child: Center(
                                               child: Container(
                                                 decoration: new BoxDecoration(
-                                                  color:
-                                                  const Color(0xFFfeb0ac).withOpacity(0.4),
                                                   shape: BoxShape.circle,
                                                 ),
                                                 width: 100.0,
@@ -181,7 +185,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                               ),
                                             ),
                                           ),
-                                        )
+                                        )*/
                                       ],
                                     ),
                                   ),
