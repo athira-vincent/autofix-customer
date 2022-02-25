@@ -15,7 +15,12 @@ import 'package:image_picker/image_picker.dart';
 
 
 class AddCarScreen extends StatefulWidget {
-  const AddCarScreen({Key? key}) : super(key: key);
+
+  final String userType;
+  final String userCategory;
+
+
+  AddCarScreen({required this.userType,required this.userCategory});
 
   @override
   State<StatefulWidget> createState() {
