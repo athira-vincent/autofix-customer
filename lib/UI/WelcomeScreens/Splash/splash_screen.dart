@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  AddCarScreen(userType: "2",userCategory: "2",)));
+                builder: (context) =>  WorkSelectionScreen(userType: "2",userCategory: "2",)));
       }
     }
   }
