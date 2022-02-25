@@ -79,6 +79,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
   DateTime? selectedYear;
   DateTime selectedDate = DateTime.now();
 
+  StateSetter? monthYear1;
+  int? selectedyearIndex = 0 ;
+  int? selectedmonthIndex = 0 ;
+  List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
+
 
 
 
@@ -648,72 +654,52 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                   margin: EdgeInsets.only(top: 20.8),
                                                   child: _isLoading
                                                       ? Center(
-                                                    child: Container(
-                                                      height: _setValue(28),
-                                                      width: _setValue(28),
-                                                      child: CircularProgressIndicator(
-                                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                                            CustColors.peaGreen),
-                                                      ),
-                                                    ),
-                                                  )
-                                                      : Container(
-
-                                                    child: MaterialButton(
-                                                      onPressed: () {
-
-                                                        //showYearSelector(context);
-                                                        showDialog(
-                                                            context: context,
-                                                            builder: (BuildContext context) {
-                                                              return AlertDialog(
-                                                                contentPadding: EdgeInsets.all(0.0),
-                                                                content: setupAlertDialoadContainer(),
-                                                              );
-                                                            });
-
-
-
-                                                       /* showModalBottomSheet(
-                                                            context: context,
-                                                            builder: (BuildContext builder) {
-                                                              return  Container(
-                                                                  height: MediaQuery.of(context).copyWith().size.height / 3,
-                                                                  child: CupertinoDatePicker(
-                                                                    initialDateTime: DateTime.now(),
-                                                                    onDateTimeChanged: (DateTime newdate) {
-                                                                      print(newdate);
-                                                                    },
-                                                                    minimumYear: 2010,
-                                                                    maximumYear: 2030,
-                                                                    mode: CupertinoDatePickerMode.date,
-                                                                    dateOrder: DatePickerDateOrder,
-                                                                  ),);
-                                                            });*/
-
-
-
-                                                      },
-                                                      child: Container(
-                                                        height: 45,
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          children: [
-                                                            Text(
-                                                              'Next',
-                                                              textAlign: TextAlign.center,
-                                                              style: Styles.textButtonLabelSubTitle,
+                                                          child: Container(
+                                                            height: _setValue(28),
+                                                            width: _setValue(28),
+                                                            child: CircularProgressIndicator(
+                                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                                  CustColors.peaGreen),
                                                             ),
-                                                          ],
+                                                          ),
+                                                        )
+                                                      : Container(
+                                                          child: MaterialButton(
+                                                            onPressed: () {
+                                                              showDialog(
+                                                                  context: context,
+                                                                  builder: (BuildContext context) {
+                                                                    return AlertDialog(
+                                                                      contentPadding: EdgeInsets.all(0.0),
+                                                                      content: StatefulBuilder(
+                                                                          builder: (BuildContext context, StateSetter monthYear) {
+                                                                            monthYear1 = monthYear;
+                                                                            return  setupAlertDialoadContainer();
+                                                                          }
+                                                                      ),
+                                                                    );
+                                                                  });
+                                                            },
+                                                            child: Container(
+                                                              height: 45,
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                children: [
+                                                                  Text(
+                                                                    'Next',
+                                                                    textAlign: TextAlign.center,
+                                                                    style: Styles.textButtonLabelSubTitle,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            color: CustColors.materialBlue,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.circular(
+                                                                    _setValue(10))),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      color: CustColors.materialBlue,
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(
-                                                              _setValue(10))),
-                                                    ),
-                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -758,44 +744,92 @@ class _AddCarScreenState extends State<AddCarScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListWheelScrollView(
-                      itemExtent: 40,
-                      useMagnifier: true,
-                      magnification: 1.2,
-                      onSelectedItemChanged: (index) => {
-                        print(index)
-                      },
-                      children: List.generate(1000, (index) => index )
-                          .map((text) => Container(
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          child: Center(child: Text(text.toString())),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text('Month',
+                          style: Styles.textLabelTitle14,),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListWheelScrollView.useDelegate(
+                            itemExtent: 40,
+                            useMagnifier: true,
+                            onSelectedItemChanged: (index) {
+                              print(index);
+                              monthYear1!(() {
+                                selectedmonthIndex = index;
+                              });
+                            },
+                            childDelegate: ListWheelChildBuilderDelegate(
+                                builder: (context, index) {
+                                  return
+                                    selectedmonthIndex==index
+                                        ? Container(
+                                            color: CustColors.black_01,
+                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            child: Text('${monthList[index]}'),
+                                          )
+                                        : Container(
+                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            child: Text('${monthList[index]}'),
+                                          );
+                                },
+                                childCount: monthList.length),
+                          ),
                         ),
-                      ).toList(),
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListWheelScrollView.useDelegate(
-                      itemExtent: 40,
-                      useMagnifier: true,
-                      magnification: 1.2,
-                      onSelectedItemChanged: (index) => {
-                        print(index)
-                      },
-                      childDelegate: ListWheelChildBuilderDelegate(
-                          builder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(left: 20, right: 20),
-                              alignment: Alignment.center,
-                              child: Text('$index'),
-                            );
-                          },
-                          childCount: 1000),
-                    ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text('Year',
+                          style: Styles.textLabelTitle14,),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListWheelScrollView.useDelegate(
+                            itemExtent: 40,
+                            useMagnifier: true,
+                            onSelectedItemChanged: (index) {
+                              print(index);
+
+                              monthYear1!(() {
+                                selectedyearIndex = index;
+                              });
+
+
+                            },
+                            childDelegate: ListWheelChildBuilderDelegate(
+                                builder: (context, index) {
+                                  return
+                                    selectedyearIndex==index
+                                    ?Container(
+                                      color: CustColors.black_01,
+                                      margin: EdgeInsets.only(left: 20, right: 20),
+                                      alignment: Alignment.center,
+                                      child: Text('${yearList[index]}'),
+                                    )
+                                    :Container(
+                                    margin: EdgeInsets.only(left: 20, right: 20),
+                                    alignment: Alignment.center,
+                                    child: Text('${yearList[index]}'),
+                                  );
+                                },
+                                childCount: yearList.length),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -912,23 +946,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 ],
               ));
         });
-  }
-
-  void showYearSelector(BuildContext context) {
-    showDatePicker(
-      context: context,
-      initialDatePickerMode: DatePickerMode.year,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101)
-    ).then((date) {
-      if (date != null) {
-        setState(() {
-          this.selectedYear = date;
-          print(selectedYear?.year);
-        });
-      }
-    });
   }
 
 }
