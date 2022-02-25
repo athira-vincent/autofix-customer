@@ -511,7 +511,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-
                                                 "Address",
                                                 style: Styles.textLabelTitle,
                                               ),

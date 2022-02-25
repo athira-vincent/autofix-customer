@@ -164,5 +164,26 @@ class Styles {
     fontSize: 12,
   );
 
+  static const textSuccessfulTitleStyle01 = TextStyle(
+      color: CustColors.light_navy,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Corbel_Bold');
+  static const textSuccessfulTitleStyle02 = TextStyle(
+      color: CustColors.azure,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Corbel_Bold');
+  static const textSuccessfulTitle02Style = TextStyle(
+      color: CustColors.brownish_grey,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Samsung_SharpSans_Medium');
+
+  static const textSuccessfulTitle03Style = TextStyle(
+      color: Colors.black,
+      fontSize: 15.3,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Samsung_SharpSans_Medium');
 
 }

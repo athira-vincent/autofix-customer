@@ -70,6 +70,18 @@ class _SignupScreenState extends State<SignupScreen> {
   final SignupBloc _signupBloc = SignupBloc();
   bool _isLoading = false;
   List<StateDetails> _countryData = [];
+  List<String> orgTypeList = [
+    "private",
+    "Public",
+    "Privet-Public"
+  ];
+  List<String> ministryGovtList = [
+    "private",
+    "Public",
+    "Privet-Public",
+    "Ministry",
+    "Govt"
+  ];
   bool isloading = false;
   String? countryCode;
   double per = .10;
@@ -195,7 +207,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   CurvedBottomSheetContainer(
-                    percentage:0.90,
+                    percentage:0.80,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -293,11 +305,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 ),
                                                 InkWell(
                                                   onTap: (){
-                                                    //_showDialogSelectPhoto();
+                                                    showOrganisationTypeSelector();
                                                     print("Type of Organisation");
                                                   },
                                                   child: TextFormField(
                                                     enabled: false,
+                                                    readOnly: true,
                                                     textAlignVertical: TextAlignVertical.center,
                                                     maxLines: 1,
                                                     style: Styles.textLabelSubTitle,
@@ -415,15 +428,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 InkWell(
                                                   onTap: () async {
                                                     print("on tap Ministry/Govt. agency ");
-                                                    //showDialCodeSelector();
-                                                    /*String userSelectedState = await Navigator.push(
-                                                      context,
-                                                        MaterialPageRoute(
-                                                        builder: (context) => SelectStateScreen(),
-                                                        ),
-                                                    );*/
-                                                   // _awaitReturnValueFromSecondScreen(context);
-
+                                                    showMinistryGovtSelector();
                                                   },
                                                   child: TextFormField(
                                                     readOnly: true,
@@ -1266,20 +1271,216 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  bool validateSignUpCustomerCorporate(){
+    print("validateSignUpCustomerIndividual");
+    if(_nameController.text.isEmpty){
+      errorMsg = "Organisation Name cannot Empty";
+      return false;
+    }else if(_orgTypeController.text.isEmpty){
+      errorMsg = "Organisation Type cannot Empty";
+      return false;
+    }else if(_contactPersonController.text.isEmpty){
+      errorMsg = "Contact Person cannot Empty";
+      return false;
+    }else if(_phoneController.text.isEmpty){
+      errorMsg = "Phone Number cannot empty";
+      return false;
+    }
+    else if(_emailController.text.isEmpty){
+      errorMsg = "Enter Email Id";
+      return false;
+    }
+    else if(_stateController.text.isEmpty){
+      errorMsg = "Select State";
+      return false;
+    }
+    /*else if(_photoController.text.isEmpty){
+      errorMsg = "Select Photo";
+      return false;
+    }*/
+    else if(_passwordController.text.isEmpty){
+      errorMsg = "Fill Password";
+      return false;
+    }else if(_confirmPwdController.text.isEmpty){
+      errorMsg = "Enter Confirm Password";
+      return false;
+    }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
+      errorMsg = "Passwords are different!";
+      setState(() {
+        _passwordController.text = " ";
+        _confirmPwdController.text = " ";
+      });
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
   void signUpCustomerCorporate(){
     print("signUpCustomerCorporate");
+    if(validateSignUpCustomerCorporate()){
+      print("signUpCustomerCorporate");
+      print(" Name : " + _nameController.text +
+          "\n Email : "+ _emailController.text +
+          "\n phone : "+ _photoController.text +
+          "\n State : " +
+          "\n photo path :" +
+          "\n password : " + _passwordController.text+
+          "\n c password " + _confirmPwdController.text
+      );
+      _signupBloc.postSignUpRequest(
+          " "," "," ",
+          _emailController.text,
+          _phoneController.text,
+          _passwordController.text);
+
+    }else{
+      print("signUpCustomerCorporate - else");
+      SnackBarWidget().setSnackBar(errorMsg, context);
+    }
+  }
+
+  bool validateSignUpMechanicCorporate(){
+    print("validateSignMechanicCorporate");
+    if(_nameController.text.isEmpty){
+      errorMsg = "Organisation Name cannot Empty";
+      return false;
+    }else if(_orgTypeController.text.isEmpty){
+      errorMsg = "Organisation Type cannot Empty";
+      return false;
+    }else if(_contactPersonController.text.isEmpty){
+      errorMsg = "Contact Person cannot Empty";
+      return false;
+    }else if(_phoneController.text.isEmpty){
+      errorMsg = "Phone Number cannot empty";
+      return false;
+    }
+    else if(_emailController.text.isEmpty){
+      errorMsg = "Enter Email Id";
+      return false;
+    }
+    else if(_stateController.text.isEmpty){
+      errorMsg = "Select State";
+      return false;
+    }
+    /*else if(_photoController.text.isEmpty){
+      errorMsg = "Select Photo";
+      return false;
+    }*/
+    else if(_passwordController.text.isEmpty){
+      errorMsg = "Fill Password";
+      return false;
+    }else if(_confirmPwdController.text.isEmpty){
+      errorMsg = "Enter Confirm Password";
+      return false;
+    }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
+      errorMsg = "Passwords are different!";
+      setState(() {
+        _passwordController.text = " ";
+        _confirmPwdController.text = " ";
+      });
+      return false;
+    }
+    else{
+      return true;
+    }
   }
 
   void signUpMechanicCorporate(){
     print("signUpMechanicCorporate");
+    if(validateSignUpCustomerCorporate()){
+      print("signUpMechanicCorporate");
+      print(" Name : " + _nameController.text +
+          "\n Email : "+ _emailController.text +
+          "\n phone : "+ _photoController.text +
+          "\n State : " +
+          "\n photo path :" +
+          "\n password : " + _passwordController.text+
+          "\n c password " + _confirmPwdController.text
+      );
+      _signupBloc.postSignUpRequest(
+          " "," "," ",
+          _emailController.text,
+          _phoneController.text,
+          _passwordController.text);
+
+    }else{
+      print("signUpMechanicCorporate - else");
+      SnackBarWidget().setSnackBar(errorMsg, context);
+    }
+  }
+
+  bool validateSignUpCustomerGovernment(){
+    print("validateSignMechanicCorporate");
+    if(_stateController.text.isEmpty){
+      errorMsg = "Select State";
+      return false;
+    }
+    else if(_ministryGovtController.text.isEmpty){
+      errorMsg = "Select Ministry";
+      return false;
+    }
+    else if(_contactPersonController.text.isEmpty){
+      errorMsg = "Contact Person cannot Empty";
+      return false;
+    }
+    else if(_phoneController.text.isEmpty){
+      errorMsg = "Phone Number cannot empty";
+      return false;
+    }
+    else if(_emailController.text.isEmpty){
+      errorMsg = "Enter Email Id";
+      return false;
+    }
+    /*else if(_photoController.text.isEmpty){
+      errorMsg = "Select Photo";
+      return false;
+    }*/
+    else if(_passwordController.text.isEmpty){
+      errorMsg = "Fill Password";
+      return false;
+    }else if(_confirmPwdController.text.isEmpty){
+      errorMsg = "Enter Confirm Password";
+      return false;
+    }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
+      errorMsg = "Passwords are different!";
+      setState(() {
+        _passwordController.text = " ";
+        _confirmPwdController.text = " ";
+      });
+      return false;
+    }
+    else{
+      return true;
+    }
   }
 
   void signUpCustomerGovernment(){
     print("signUpCustomerGovernment");
+    if(validateSignUpCustomerGovernment()){
+      print("signUpMechanicCorporate");
+      print(" Name : " + _nameController.text +
+          "\n Email : "+ _emailController.text +
+          "\n phone : "+ _photoController.text +
+          "\n State : " +
+          "\n photo path :" +
+          "\n password : " + _passwordController.text+
+          "\n c password " + _confirmPwdController.text
+      );
+      _signupBloc.postSignUpRequest(
+          " "," "," ",
+          _emailController.text,
+          _phoneController.text,
+          _passwordController.text);
+
+    }else{
+      print("signUpCustomerGovernment - else");
+      SnackBarWidget().setSnackBar(errorMsg, context);
+    }
   }
 
-
-  void showDialCodeSelector() {
+  void showOrganisationTypeSelector() {
     _signupBloc.searchStates("");
     showModalBottomSheet(
         context: context,
@@ -1300,7 +1501,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           Container(
                               width: double.maxFinite,
                               child: Column(children: [
-                                Container(
+                                /*Container(
                                   height: _setValue(36.3),
                                   margin: EdgeInsets.only(
                                       left: _setValue(41.3),
@@ -1400,24 +1601,24 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ),
                                     ],
                                   ),
-                                ),
+                                ),*/
                                 Container(
                                   height: 421 - 108,
                                   padding:
                                       EdgeInsets.only(top: _setValue(22.4)),
-                                  child: _countryData.length != 0
+                                  child: orgTypeList.length != 0
                                       ? ListView.separated(
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
-                                          itemCount: _countryData.length,
+                                          itemCount: orgTypeList.length,
                                           itemBuilder: (context, index) {
                                             return InkWell(
                                                 onTap: () {
                                                   final dial_Code =
-                                                      _countryData[index].name;
+                                                      orgTypeList[index];
 
                                                   setState(() {
-                                                    _stateController.text =
+                                                    _orgTypeController.text =
                                                         dial_Code.toString();
                                                   });
 
@@ -1429,7 +1630,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     right: _setValue(41.3),
                                                   ),
                                                   child: Text(
-                                                    '${_countryData[index].name}',
+                                                    '${orgTypeList[index]}',
                                                     style: TextStyle(
                                                         fontSize:
                                                             _setValueFont(12),
@@ -1459,6 +1660,202 @@ class _SignupScreenState extends State<SignupScreen> {
                                       : Center(
                                           child: Text('No Results found.'),
                                         ),
+                                ),
+                              ])),
+                          Center(
+                            child: isloading
+                                ? CircularProgressIndicator()
+                                : Text(''),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          });
+        });
+  }
+
+  void showMinistryGovtSelector() {
+    _signupBloc.searchStates("");
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return BottomSheet(
+                onClosing: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20))),
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      height: 421,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                              width: double.maxFinite,
+                              child: Column(children: [
+                                /*Container(
+                                  height: _setValue(36.3),
+                                  margin: EdgeInsets.only(
+                                      left: _setValue(41.3),
+                                      right: _setValue(41.3),
+                                      top: _setValue(20.3)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        _setValue(20),
+                                      ),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black38,
+                                        spreadRadius: 0,
+                                        blurRadius: 1.5,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: _setValue(23.4)),
+                                          alignment: Alignment.center,
+                                          height: _setValue(36.3),
+                                          child: Center(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                              onChanged: (text) {
+                                                setState(() {
+                                                  _countryData.clear();
+                                                  isloading = true;
+                                                });
+                                                _signupBloc.searchStates(text);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Corbel_Regular',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: CustColors.blue),
+                                              decoration: InputDecoration(
+                                                hintText: "Search Your  State",
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
+                                                hintStyle: TextStyle(
+                                                  color: CustColors.greyText,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Corbel-Light',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: _setValue(25),
+                                            height: _setValue(25),
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            decoration: BoxDecoration(
+                                              color: CustColors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            child: Image.asset(
+                                              'assets/images/search.png',
+                                              width: _setValue(10.4),
+                                              height: _setValue(10.4),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),*/
+                                Container(
+                                  height: 421 - 108,
+                                  padding:
+                                  EdgeInsets.only(top: _setValue(22.4)),
+                                  child: ministryGovtList.length != 0
+                                      ? ListView.separated(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: ministryGovtList.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          onTap: () {
+                                            final dial_Code =
+                                            ministryGovtList[index];
+
+                                            setState(() {
+                                              _ministryGovtController.text =
+                                                  dial_Code.toString();
+                                            });
+
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              left: _setValue(41.3),
+                                              right: _setValue(41.3),
+                                            ),
+                                            child: Text(
+                                              '${ministryGovtList[index]}',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                  _setValueFont(12),
+                                                  fontFamily:
+                                                  'Corbel-Light',
+                                                  fontWeight:
+                                                  FontWeight.w600,
+                                                  color:
+                                                  Color(0xff0b0c0d)),
+                                            ),
+                                          ));
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context,
+                                        int index) {
+                                      return Container(
+                                          margin: EdgeInsets.only(
+                                              top: _setValue(12.7),
+                                              left: _setValue(41.3),
+                                              right: _setValue(41.3),
+                                              bottom: _setValue(12.9)),
+                                          child: Divider(
+                                            height: 0,
+                                          ));
+                                    },
+                                  )
+                                      : Center(
+                                    child: Text('No Results found.'),
+                                  ),
                                 ),
                               ])),
                           Center(
