@@ -7,7 +7,7 @@
 </intent>
 </queries>
    <application
-        android:label="auto_fix"
+        android:label="ResolMech"
         android:usesCleartextTraffic="true"
        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">

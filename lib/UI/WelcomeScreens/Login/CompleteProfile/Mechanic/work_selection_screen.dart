@@ -81,7 +81,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
 
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -903,8 +902,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
       ),
     );
   }
-
-
 
   _showDialogSelectPhoto() async {
     showModalBottomSheet(
