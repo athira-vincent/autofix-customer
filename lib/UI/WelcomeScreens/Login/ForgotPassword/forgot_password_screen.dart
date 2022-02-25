@@ -247,7 +247,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                if (_formKey.currentState!.validate()) {
+                                                /*if (_formKey.currentState!.validate()) {
                                                   _forgotPasswordBloc.postForgotPasswordRequest(
                                                       _emailController.text);
 
@@ -257,7 +257,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                 } else {
                                                   setState(() =>
                                                   _autoValidate = AutovalidateMode.always);
-                                                }
+                                                }*/
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  new MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LoginScreen()),
+                                                );
                                               },
                                               child: Container(
                                                 height: 45,

@@ -29,79 +29,81 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            color: Colors.white,
-            child: Column(
-              children: [
-                IndicatorWidget(isFirst: true,isSecond: true,isThird: false,isFourth: false,),
+          child: SingleChildScrollView(
+            child: Container(
+              width: size.width,
+              height: size.height,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  IndicatorWidget(isFirst: true,isSecond: true,isThird: false,isFourth: false,),
 
-                Container(
-                  margin: EdgeInsets.only(
-                      top: size.height * 0.033,
-                      right: size.width * 0.181,
-                      left: size.width * 0.172
-                  ),
-                  child: Text(AppLocalizations.of(context)!.text_mechanic,
-                    style: Styles.hiddenTextBlack
-                  ),
-                ),
-
-                Expanded(
-                  child: Container(
-                    color: CustColors.pale_grey,
+                  Container(
                     margin: EdgeInsets.only(
-                        top: size.height * 0.026,
-                        right: size.width * 0.05,
-                        left: size.width * 0.05,
-                        bottom: size.height * 0.041
+                        top: size.height * 0.033,
+                        right: size.width * 0.181,
+                        left: size.width * 0.172
                     ),
-                    //padding: EdgeInsets.only(bottom: size.height * 0.101),
-                    height: size.height * 0.850,
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: size.height * 0.033,
-                              right: size.width * 0.181,
-                              left: size.width * 0.172
-                          ),
-                          child: Text(AppLocalizations.of(context)!.text_customer,
-                              style: Styles.TitleTextBlack
-                          ),
-                          //child: Text("Select ! What type of user are you ?"),
-                        ),
-
-                        InkWell(
-                          onTap: (){
-                            setUserCategory(TextStrings.user_category_individual);
-                          },
-                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
-                            imagePath: "assets/image/CustomerType/img_individual.png",),
-                        ),
-
-                        InkWell(
-                          onTap: (){
-                            setUserCategory(TextStrings.user_category_corporate);
-                          },
-                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
-                            imagePath: "assets/image/CustomerType/img_corporate.png",),
-                        ),
-
-                        InkWell(
-                          onTap: (){
-                            setUserCategory(TextStrings.user_category_government);
-                          },
-                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_govt_bodies,
-                            imagePath: "assets/image/CustomerType/img_government_bodies.png",),
-                        ),
-                      ],
+                    child: Text(AppLocalizations.of(context)!.text_mechanic,
+                      style: Styles.hiddenTextBlack
                     ),
                   ),
-                ),
 
-              ],
+                  Expanded(
+                    child: Container(
+                      color: CustColors.pale_grey,
+                      margin: EdgeInsets.only(
+                          top: size.height * 0.026,
+                          right: size.width * 0.05,
+                          left: size.width * 0.05,
+                          bottom: size.height * 0.041
+                      ),
+                      //padding: EdgeInsets.only(bottom: size.height * 0.101),
+                      height: size.height * 0.850,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: size.height * 0.033,
+                                right: size.width * 0.181,
+                                left: size.width * 0.172
+                            ),
+                            child: Text(AppLocalizations.of(context)!.text_customer,
+                                style: Styles.TitleTextBlack
+                            ),
+                            //child: Text("Select ! What type of user are you ?"),
+                          ),
+
+                          InkWell(
+                            onTap: (){
+                              setUserCategory(TextStrings.user_category_individual);
+                            },
+                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
+                              imagePath: "assets/image/CustomerType/img_individual.png",),
+                          ),
+
+                          InkWell(
+                            onTap: (){
+                              setUserCategory(TextStrings.user_category_corporate);
+                            },
+                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
+                              imagePath: "assets/image/CustomerType/img_corporate.png",),
+                          ),
+
+                          InkWell(
+                            onTap: (){
+                              setUserCategory(TextStrings.user_category_government);
+                            },
+                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_govt_bodies,
+                              imagePath: "assets/image/CustomerType/img_government_bodies.png",),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
             ),
           ),
         ),

@@ -276,7 +276,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          OtpVerificationScreen()),
+                                                          OtpVerificationScreen(userType: "0",userCategory: "0",)),
                                                 );
 
                                               },

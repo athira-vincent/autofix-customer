@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
@@ -801,6 +802,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           setState(() {
                             _isLoading = false;
                             print('sucess');
+                            Navigator.pushReplacement(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) =>
+                                      LoginScreen()),
+                            );
                           });
                         } else {
                           setState(() {

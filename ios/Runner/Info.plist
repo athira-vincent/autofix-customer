@@ -21,6 +21,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb991690084772771</string>
+			</array>
+		</dict>
+		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
@@ -31,8 +37,20 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>991690084772771</string>
+	<key>FacebookClientToken</key>
+	<string>5f192484e928311f3087938921c7d3eb</string>
+	<key>FacebookDisplayName</key>
+	<string>ResolMech</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Upload image from camera for profile picture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Post videos to profile</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload images for profile picture</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -52,30 +70,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>fb991690084772771</string>
-      </array>
-      </dict>
-    </array>
-    <key>FacebookAppID</key>
-    <string>991690084772771</string>
-    <key>FacebookClientToken</key>
-    <string>5f192484e928311f3087938921c7d3eb</string>
-    <key>FacebookDisplayName</key>
-    <string>ResolMech</string>
-
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Upload images for profile picture</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Upload image from camera for profile picture</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Post videos to profile</string>
-
-
 </dict>
 </plist>

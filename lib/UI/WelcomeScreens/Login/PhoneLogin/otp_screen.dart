@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
@@ -17,7 +20,12 @@ import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 import '../../../../../main.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({Key? key}) : super(key: key);
+
+  final String userType;
+  final String userCategory;
+
+
+  OtpVerificationScreen({required this.userType,required this.userCategory});
 
   @override
   State<StatefulWidget> createState() {
@@ -248,6 +256,55 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
+
+                                                if( widget.userType == TextStrings.user_customer)
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                    );
+                                                  }
+                                                else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                    );
+                                                  }
+                                                else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                    );
+                                                  }
+                                                else if( widget.userType == '1')
+                                                {
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    new MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LoginScreen()),
+                                                  );
+                                                }
+                                                else
+                                                {
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    new MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LoginScreen()),
+                                                  );
+                                                }
+
+
+
 
                                               },
                                               child: Container(

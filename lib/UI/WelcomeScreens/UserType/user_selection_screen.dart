@@ -61,6 +61,8 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                     left: size.width * 0.172
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text( AppLocalizations.of(context)!.text_user_selection_red,style: Styles.textLabelSubTitleRed,),
                       Text(AppLocalizations.of(context)!.text_user_selection_blue,style: Styles.textLabelSubTitleBlue,),
