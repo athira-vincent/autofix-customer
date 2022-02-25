@@ -52,7 +52,7 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
                       children: [
                         Center(
                           child: UserTypeSelectionWidget(
-                            imagePath: 'assets/image/UserType/img_user_customer.png',
+                            imagePath: 'assets/image/img_service_regular.png',
                             titleText: Text("Regular",
                                 style: Styles.titleTextStyle),
                             //titleText: ,
@@ -61,7 +61,7 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
 
                         Center(
                           child: UserTypeSelectionWidget(
-                            imagePath: 'assets/image/UserType/img_user_mechanic.png',
+                            imagePath: 'assets/image/img_service_emergency.png',
                             titleText: Text("Emergency ",
                                 style: Styles.titleTextStyle),
                           ),
