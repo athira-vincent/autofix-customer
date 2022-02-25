@@ -77,5 +77,4 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
       ),
     );
   }
-
 }

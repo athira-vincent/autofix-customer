@@ -58,7 +58,7 @@ dependencies:
   # FACEBOOK PACKAGE
   flutter_facebook_login: 3.0.0
   # FIREBASE PACKAGES
-  google_sign_in: 5.2.3
+  google_sign_in: 5.2.4
   firebase_core: 1.11.0
   firebase_auth: 2.0.0
   animations: ^2.0.0
