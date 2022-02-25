@@ -707,7 +707,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   onDragging: (handlerIndex, lowerValue, upperValue) {
                     setState(() {
                       _lowerValue = lowerValue;
-                      _upperValue = upperValue;
                       print('$_lowerValue');
                     });
                   },
@@ -1119,16 +1118,19 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                   return
                                     selectedmonthIndex==index
                                         ? Container(
-                                      color: CustColors.black_01,
-                                      margin: EdgeInsets.only(left: 20, right: 20),
-                                      alignment: Alignment.center,
-                                      child: Text('${monthList[index]}'),
-                                    )
+                                            color: CustColors.pale_grey,
+                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                                '${monthList[index]}',
+                                                style: Styles.TitleTextBlack
+                                            ),
+                                          )
                                         : Container(
-                                      margin: EdgeInsets.only(left: 20, right: 20),
-                                      alignment: Alignment.center,
-                                      child: Text('${monthList[index]}'),
-                                    );
+                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            child: Text('${monthList[index]}'),
+                                          );
                                 },
                                 childCount: monthList.length),
                           ),
@@ -1153,29 +1155,29 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             useMagnifier: true,
                             onSelectedItemChanged: (index) {
                               print(index);
-
                               monthYear1!(() {
                                 selectedyearIndex = index;
                                 selectedYearText = yearList[index];
                               });
-
-
                             },
                             childDelegate: ListWheelChildBuilderDelegate(
                                 builder: (context, index) {
                                   return
                                     selectedyearIndex==index
-                                        ?Container(
-                                      color: CustColors.black_01,
-                                      margin: EdgeInsets.only(left: 20, right: 20),
-                                      alignment: Alignment.center,
-                                      child: Text('${yearList[index]}'),
-                                    )
-                                        :Container(
-                                      margin: EdgeInsets.only(left: 20, right: 20),
-                                      alignment: Alignment.center,
-                                      child: Text('${yearList[index]}'),
-                                    );
+                                        ? Container(
+                                            color: CustColors.pale_grey,
+                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                                '${yearList[index]}',
+                                                style: Styles.TitleTextBlack
+                                            ),
+                                          )
+                                        : Container(
+                                            margin: EdgeInsets.only(left: 20, right: 20),
+                                            alignment: Alignment.center,
+                                            child: Text('${yearList[index]}'),
+                                          );
                                 },
                                 childCount: yearList.length),
                           ),
@@ -1188,55 +1190,53 @@ class _AddCarScreenState extends State<AddCarScreen> {
             ),
           ),
           Container(
-            child: Container(
-              margin: EdgeInsets.only(top: 20.8),
-              child: _isLoading
-                  ? Center(
+            margin: EdgeInsets.only(top: 15.8,bottom: 15),
+            child: _isLoading
+                ? Center(
+              child: Container(
+                height: _setValue(28),
+                width: _setValue(28),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      CustColors.peaGreen),
+                ),
+              ),
+            )
+                : Container(
+              child: MaterialButton(
+                onPressed: () {
+
+
+                  Navigator.pop(context);
+
+                  setState(() {
+
+                    _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
+                    if (_formKey.currentState!.validate()) {
+                    } else {
+                    }
+                  });
+
+                },
                 child: Container(
-                  height: _setValue(28),
-                  width: _setValue(28),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
+                  height: 45,
+                  width: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Done',
+                        textAlign: TextAlign.center,
+                        style: Styles.textButtonLabelSubTitle,
+                      ),
+                    ],
                   ),
                 ),
-              )
-                  : Container(
-                child: MaterialButton(
-                  onPressed: () {
-
-
-                    Navigator.pop(context);
-
-                    setState(() {
-
-                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
-                      if (_formKey.currentState!.validate()) {
-                      } else {
-                      }
-                    });
-
-                  },
-                  child: Container(
-                    height: 45,
-                    width: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Done',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
-                        ),
-                      ],
-                    ),
-                  ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
+                color: CustColors.materialBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        _setValue(10))),
               ),
             ),
           ),
