@@ -135,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                  const AddCarScreen()));
+                   AddCarScreen(userType: "1",userCategory: "1",)));
         });
       } else {
         setState(()  {
@@ -149,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                  const AddCarScreen()));
+                   AddCarScreen(userType: "1",userCategory: "1",)));
           FocusScope.of(context).unfocus();
 
         });
