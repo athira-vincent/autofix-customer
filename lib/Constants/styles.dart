@@ -25,6 +25,13 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelSubTitleRed = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w500,
+    color: CustColors.rusty_red,
+    fontSize: 10,
+  );
+
   static const textLabelSubTitle12 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w400,
@@ -53,12 +60,6 @@ class Styles {
     fontSize: 15,
   );
 
-  static const textLabelSubTitleRed = TextStyle(
-    fontFamily: 'Samsung_SharpSans_Medium',
-    fontWeight: FontWeight.w500,
-    color: CustColors.rusty_red,
-    fontSize: 12.7,
-  );
 
   static const textLabelSubTitleBlue = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',

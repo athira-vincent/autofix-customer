@@ -82,6 +82,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
   StateSetter? monthYear1;
   int? selectedyearIndex = 0 ;
   int? selectedmonthIndex = 0 ;
+  String? selectedMonthText= 'Jan' ;
+  String? selectedYearText= '1900';
   List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
 
@@ -110,11 +112,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
             child: SafeArea(
               child: Column(
                 children: [
-
                   completeYourProfileText(),
-
                   uploadVechicleImage(size),
-
                   SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -132,217 +131,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                     padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                     child: Column(
                                       children: [
-
-
                                         brandTextSelection(),
-
-
-                                        modelTextSelection()  ,
-
-                                        engineTypeTextSelection() ,
-
-
-
-                                        yearTypeTextSelection() ,
-
-                                        lastMaintenanceTextSelection() ,
-
-                                        Container(
-                                          width: double.infinity,
-                                          margin: EdgeInsets.only(top: _setValue(15.5),bottom: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                child: Text(
-
-                                                  "Approximate mileage",
-
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 8.0),
-                                                child: Container(
-                                                  child: Text(
-
-                                                    "Select your vehicle total kilometres",
-                                                    style: Styles.textLabelSubTitle,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10),
-                                                child: Center(
-                                                  // ignore: missing_required_param
-                                                  child: FlutterSlider(
-                                                    values: [_lowerValue],
-                                                    max: 500,
-                                                    min: 0,
-                                                    tooltip: FlutterSliderTooltip(
-                                                        custom: (value) {
-                                                          return Text(value.toString());
-                                                        }
-                                                    ),
-                                                    trackBar: FlutterSliderTrackBar(
-                                                      inactiveTrackBar: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(0),
-                                                        color:CustColors.whiteBlueish,
-                                                        border: Border.all(width: 3, color: Colors.blue),
-                                                      ),
-                                                      activeTrackBar: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(0),
-                                                          color:CustColors.blue
-                                                      ),
-                                                    ),
-                                                    handler: FlutterSliderHandler(
-                                                      decoration:BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: Container(
-                                                        decoration:BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        child: Material(
-                                                          color: Colors.transparent,
-                                                          elevation: 10,
-                                                          child: Container(
-                                                              decoration:BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(20),
-                                                                color: CustColors.blue
-                                                              ),
-                                                              padding: EdgeInsets.all(5),
-                                                              child: Icon(
-                                                                Icons.pause,
-                                                                color: Colors.white,
-                                                                size: 20,
-                                                              )),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onDragging: (handlerIndex, lowerValue, upperValue) {
-                                                      setState(() {
-                                                        _lowerValue = lowerValue;
-                                                        _upperValue = upperValue;
-                                                        print('$_lowerValue');
-                                                      });
-                                                    },
-                                                  )
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                        ) ,
-
-
-                                        Container(
-                                          width: double.infinity,
-                                          margin: EdgeInsets.only(top: _setValue(0.5),bottom: _setValue(25.5)),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                child: Container(
-                                                  margin: EdgeInsets.only(top: 20.8),
-                                                  child: _isLoading
-                                                      ? Center(
-                                                    child: Container(
-                                                      height: _setValue(28),
-                                                      width: _setValue(28),
-                                                      child: CircularProgressIndicator(
-                                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                                            CustColors.peaGreen),
-                                                      ),
-                                                    ),
-                                                  )
-                                                      : Container(
-
-                                                        child: MaterialButton(
-                                                          onPressed: () {
-
-                                                          },
-                                                          child: Container(
-                                                            height: 45,
-                                                            child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                Text(
-                                                                  'Add More',
-                                                                  textAlign: TextAlign.center,
-                                                                  style: Styles.textButtonLabelSubTitle,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          color: CustColors.materialBlue,
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(
-                                                                  _setValue(10))),
-                                                        ),
-                                                      ),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                child: Container(
-                                                  margin: EdgeInsets.only(top: 20.8),
-                                                  child: _isLoading
-                                                      ? Center(
-                                                          child: Container(
-                                                            height: _setValue(28),
-                                                            width: _setValue(28),
-                                                            child: CircularProgressIndicator(
-                                                              valueColor: AlwaysStoppedAnimation<Color>(
-                                                                  CustColors.peaGreen),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : Container(
-                                                          child: MaterialButton(
-                                                            onPressed: () {
-                                                              showDialog(
-                                                                  context: context,
-                                                                  builder: (BuildContext context) {
-                                                                    return AlertDialog(
-                                                                      contentPadding: EdgeInsets.all(0.0),
-                                                                      content: StatefulBuilder(
-                                                                          builder: (BuildContext context, StateSetter monthYear) {
-                                                                            monthYear1 = monthYear;
-                                                                            return  setupAlertDialogMonthAndYear();
-                                                                          }
-                                                                      ),
-                                                                    );
-                                                                  });
-                                                            },
-                                                            child: Container(
-                                                              height: 45,
-                                                              child: Row(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                children: [
-                                                                  Text(
-                                                                    'Next',
-                                                                    textAlign: TextAlign.center,
-                                                                    style: Styles.textButtonLabelSubTitle,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            color: CustColors.materialBlue,
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius.circular(
-                                                                    _setValue(10))),
-                                                          ),
-                                                        ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ) ,
-
-
-
+                                        modelTextSelection(),
+                                        engineTypeTextSelection(),
+                                        yearTypeTextSelection(),
+                                        lastMaintenanceTextSelection(),
+                                        approximateMilageSelection(),
+                                        addMoreAndNextButtons(),
                                       ],
                                     ),
                                   ),
@@ -516,8 +311,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  ch : 'Brand name' ).nameChecking,
               controller: _brandController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -546,6 +340,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
+                errorStyle: Styles.textLabelSubTitleRed,
                 hintStyle: Styles.textLabelSubTitle,),
             ),
           ],
@@ -595,7 +390,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  'Model name'  ).nameCheckingWithNumeric,
               controller: _modelController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -624,6 +419,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
+                errorStyle: Styles.textLabelSubTitleRed,
                 hintStyle: Styles.textLabelSubTitle,),
             ),
           ],
@@ -660,7 +456,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  'Engine Type' ).nameCheckingWithNumeric,
               controller: _engineTypeController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -689,6 +485,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
+                errorStyle: Styles.textLabelSubTitleRed,
                 hintStyle: Styles.textLabelSubTitle,),
             ),
           ],
@@ -725,7 +522,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  'Year' ).nameCheckingWithNumeric,
               controller: _yearController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -754,6 +551,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   vertical: 12.8,
                   horizontal: 0.0,
                 ),
+                errorStyle: Styles.textLabelSubTitleRed,
                 hintStyle: Styles.textLabelSubTitle,),
             ),
           ],
@@ -763,175 +561,175 @@ class _AddCarScreenState extends State<AddCarScreen> {
   }
 
   Widget lastMaintenanceTextSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-
-            "Last maintenance",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _lastMaintenanceFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _lastMaintenanceController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Select your last service date",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+    return  InkWell(
+      onTap: (){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.all(0.0),
+                content: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter monthYear) {
+                      monthYear1 = monthYear;
+                      return  setupAlertDialogMonthAndYear();
+                    }
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+              );
+            });
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Last maintenance",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _lastMaintenanceFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  'Last maintenance date' ).nameCheckingWithNumeric,
+              controller: _lastMaintenanceController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your last service date",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-
-
-  Widget setupAlertDialogMonthAndYear() {
-    return Container(
-      height: 300.0, // Change as per your requirement
+  Widget approximateMilageSelection() {
+    return  Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: _setValue(15.5),bottom: _setValue(15.5)),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: double.infinity,
-              height: 50,
-              color: CustColors.blue,
-              alignment: Alignment.center,
-              child: Text('Select Date',
-                style: Styles.textButtonLabelSubTitle,)
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text('Month',
-                          style: Styles.textLabelTitle14,),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListWheelScrollView.useDelegate(
-                            itemExtent: 40,
-                            useMagnifier: true,
-                            onSelectedItemChanged: (index) {
-                              print(index);
-                              monthYear1!(() {
-                                selectedmonthIndex = index;
-                              });
-                            },
-                            childDelegate: ListWheelChildBuilderDelegate(
-                                builder: (context, index) {
-                                  return
-                                    selectedmonthIndex==index
-                                        ? Container(
-                                            color: CustColors.black_01,
-                                            margin: EdgeInsets.only(left: 20, right: 20),
-                                            alignment: Alignment.center,
-                                            child: Text('${monthList[index]}'),
-                                          )
-                                        : Container(
-                                            margin: EdgeInsets.only(left: 20, right: 20),
-                                            alignment: Alignment.center,
-                                            child: Text('${monthList[index]}'),
-                                          );
-                                },
-                                childCount: monthList.length),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text('Year',
-                          style: Styles.textLabelTitle14,),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListWheelScrollView.useDelegate(
-                            itemExtent: 40,
-                            useMagnifier: true,
-                            onSelectedItemChanged: (index) {
-                              print(index);
-
-                              monthYear1!(() {
-                                selectedyearIndex = index;
-                              });
-
-
-                            },
-                            childDelegate: ListWheelChildBuilderDelegate(
-                                builder: (context, index) {
-                                  return
-                                    selectedyearIndex==index
-                                    ?Container(
-                                      color: CustColors.black_01,
-                                      margin: EdgeInsets.only(left: 20, right: 20),
-                                      alignment: Alignment.center,
-                                      child: Text('${yearList[index]}'),
-                                    )
-                                    :Container(
-                                    margin: EdgeInsets.only(left: 20, right: 20),
-                                    alignment: Alignment.center,
-                                    child: Text('${yearList[index]}'),
-                                  );
-                                },
-                                childCount: yearList.length),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            child: Text(
+              "Approximate mileage",
+              style: Styles.textLabelTitle,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Container(
+              child: Text(
+                "Select your vehicle total kilometres",
+                style: Styles.textLabelSubTitle,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Center(
+              // ignore: missing_required_param
+                child: FlutterSlider(
+                  values: [_lowerValue],
+                  max: 500,
+                  min: 0,
+                  tooltip: FlutterSliderTooltip(
+                      custom: (value) {
+                        return Text(value.toString());
+                      }
+                  ),
+                  trackBar: FlutterSliderTrackBar(
+                    inactiveTrackBar: BoxDecoration(
+                      borderRadius: BorderRadius.circular(0),
+                      color:CustColors.whiteBlueish,
+                      border: Border.all(width: 3, color: Colors.blue),
+                    ),
+                    activeTrackBar: BoxDecoration(
+                        borderRadius: BorderRadius.circular(0),
+                        color:CustColors.blue
+                    ),
+                  ),
+                  handler: FlutterSliderHandler(
+                    decoration:BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Container(
+                      decoration:BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        elevation: 10,
+                        child: Container(
+                            decoration:BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: CustColors.blue
+                            ),
+                            padding: EdgeInsets.all(5),
+                            child: Icon(
+                              Icons.pause,
+                              color: Colors.white,
+                              size: 20,
+                            )),
+                      ),
+                    ),
+                  ),
+                  onDragging: (handlerIndex, lowerValue, upperValue) {
+                    setState(() {
+                      _lowerValue = lowerValue;
+                      _upperValue = upperValue;
+                      print('$_lowerValue');
+                    });
+                  },
+                )
+            ),
+          ),
+        ],
+      ),
+    ) ;
+  }
+
+  Widget addMoreAndNextButtons() {
+    return  Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(top: _setValue(0.5),bottom: _setValue(25.5)),
+      child: Row(
+        children: [
           Container(
             child: Container(
               margin: EdgeInsets.only(top: 20.8),
@@ -951,19 +749,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 child: MaterialButton(
                   onPressed: () {
 
-
-
-
                   },
                   child: Container(
                     height: 45,
-                    width: 100,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Done',
+                          'Add More',
                           textAlign: TextAlign.center,
                           style: Styles.textButtonLabelSubTitle,
                         ),
@@ -978,10 +772,71 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ),
             ),
           ),
+          Spacer(),
+          Container(
+            child: Container(
+              margin: EdgeInsets.only(top: 20.8),
+              child: _isLoading
+                  ? Center(
+                      child: Container(
+                        height: _setValue(28),
+                        width: _setValue(28),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              CustColors.peaGreen),
+                        ),
+                      ),
+                    )
+                  : Container(
+                    child: MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLoading = true;
+                          print('true');
+                        });
+                        if (_formKey.currentState!.validate()) {
+
+                          setState(() {
+                            _isLoading = false;
+                            print('sucess');
+                          });
+                        } else {
+                          setState(() {
+                            _isLoading = false;
+                            print('error');
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: 45,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Next',
+                              textAlign: TextAlign.center,
+                              style: Styles.textButtonLabelSubTitle,
+                            ),
+                          ],
+                        ),
+                      ),
+                      color: CustColors.materialBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              _setValue(10))),
+                    ),
+                  ),
+            ),
+          ),
         ],
       ),
-    );
+    ) ;
   }
+
+
+
+
 
   _showDialogSelectPhoto() async {
     showModalBottomSheet(
@@ -1072,9 +927,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               color: Colors.black)),
                       onTap: () async {
                         Navigator.pop(context);
+
                         setState(() {
+
                           selectedBrand=brandList[index];
                           _brandController.text = brandList[index];
+                          if (_formKey.currentState!.validate()) {
+                          } else {
+                          }
                         });
 
                       },
@@ -1110,9 +970,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             color: Colors.black)),
                     onTap: () async {
                       Navigator.pop(context);
+
                       setState(() {
+
                         selectedmodel=modelList[index];
                         _modelController.text = modelList[index];
+                        if (_formKey.currentState!.validate()) {
+                        } else {
+                        }
                       });
 
                     },
@@ -1148,9 +1013,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             color: Colors.black)),
                     onTap: () async {
                       Navigator.pop(context);
+
                       setState(() {
+
                         selectedengine=engineList[index];
                         _engineTypeController.text = engineList[index];
+                        if (_formKey.currentState!.validate()) {
+                        } else {
+                        }
                       });
 
                     },
@@ -1186,9 +1056,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             color: Colors.black)),
                     onTap: () async {
                       Navigator.pop(context);
+
                       setState(() {
+
                         selectedYearType=yearTypeList[index];
                         _yearController.text = yearTypeList[index];
+                        if (_formKey.currentState!.validate()) {
+                        } else {
+                        }
                       });
 
                     },
@@ -1199,6 +1074,173 @@ class _AddCarScreenState extends State<AddCarScreen> {
         });
   }
 
+  Widget setupAlertDialogMonthAndYear() {
+    return Container(
+      height: 300.0, // Change as per your requirement
+      child: Column(
+        children: [
+          Container(
+              width: double.infinity,
+              height: 50,
+              color: CustColors.blue,
+              alignment: Alignment.center,
+              child: Text('Select Date',
+                style: Styles.textButtonLabelSubTitle,)
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text('Month',
+                          style: Styles.textLabelTitle14,),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListWheelScrollView.useDelegate(
+                            itemExtent: 40,
+                            useMagnifier: true,
+                            onSelectedItemChanged: (index) {
+                              print(index);
+                              monthYear1!(() {
+                                selectedmonthIndex = index;
+                                selectedMonthText = monthList[index];
+                              });
+                            },
+                            childDelegate: ListWheelChildBuilderDelegate(
+                                builder: (context, index) {
+                                  return
+                                    selectedmonthIndex==index
+                                        ? Container(
+                                      color: CustColors.black_01,
+                                      margin: EdgeInsets.only(left: 20, right: 20),
+                                      alignment: Alignment.center,
+                                      child: Text('${monthList[index]}'),
+                                    )
+                                        : Container(
+                                      margin: EdgeInsets.only(left: 20, right: 20),
+                                      alignment: Alignment.center,
+                                      child: Text('${monthList[index]}'),
+                                    );
+                                },
+                                childCount: monthList.length),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text('Year',
+                          style: Styles.textLabelTitle14,),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListWheelScrollView.useDelegate(
+                            itemExtent: 40,
+                            useMagnifier: true,
+                            onSelectedItemChanged: (index) {
+                              print(index);
+
+                              monthYear1!(() {
+                                selectedyearIndex = index;
+                                selectedYearText = yearList[index];
+                              });
+
+
+                            },
+                            childDelegate: ListWheelChildBuilderDelegate(
+                                builder: (context, index) {
+                                  return
+                                    selectedyearIndex==index
+                                        ?Container(
+                                      color: CustColors.black_01,
+                                      margin: EdgeInsets.only(left: 20, right: 20),
+                                      alignment: Alignment.center,
+                                      child: Text('${yearList[index]}'),
+                                    )
+                                        :Container(
+                                      margin: EdgeInsets.only(left: 20, right: 20),
+                                      alignment: Alignment.center,
+                                      child: Text('${yearList[index]}'),
+                                    );
+                                },
+                                childCount: yearList.length),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            child: Container(
+              margin: EdgeInsets.only(top: 20.8),
+              child: _isLoading
+                  ? Center(
+                child: Container(
+                  height: _setValue(28),
+                  width: _setValue(28),
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        CustColors.peaGreen),
+                  ),
+                ),
+              )
+                  : Container(
+                child: MaterialButton(
+                  onPressed: () {
+
+
+                    Navigator.pop(context);
+
+                    setState(() {
+
+                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
+                      if (_formKey.currentState!.validate()) {
+                      } else {
+                      }
+                    });
+
+                  },
+                  child: Container(
+                    height: 45,
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Done',
+                          textAlign: TextAlign.center,
+                          style: Styles.textButtonLabelSubTitle,
+                        ),
+                      ],
+                    ),
+                  ),
+                  color: CustColors.materialBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          _setValue(10))),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
 
 }

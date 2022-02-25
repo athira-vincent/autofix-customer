@@ -25,6 +25,22 @@ class InputValidator {
     }
   }
 
+  String? nameCheckingWithNumeric(String? value) {
+    String pattern = r'^[a-z A-Z 0-9,.\-]+$';
+    RegExp regExp = RegExp(pattern);
+    if (value!.isEmpty && ch != "Last name") {
+      return ch.toString() + " is " + TextStrings.errRequired;
+    }
+    if (value.isEmpty && ch == "Last name") return null;
+
+    if (value.length > 100) return TextStrings.invalidName;
+    if (!regExp.hasMatch(value)) {
+      return TextStrings.invalidName;
+    } else {
+      return null;
+    }
+  }
+
   String? emptyChecking(String? value) {
     if (value!.isEmpty) {
       return ch! + " is " + TextStrings.errRequired;
