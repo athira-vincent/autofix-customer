@@ -85,12 +85,22 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
 
+  List<String> brandList = ['Bmw','Maruthi','Benz','Polo','corolla','swift','rangeover','scooty','grazia'];
+  String? selectedBrand = '' ;
 
+  List<String> modelList = ['001','002','003','004','0058','006','123','scooty12','grazia12'];
+  String? selectedmodel = '' ;
 
+  List<String> engineList = ['Bmw','Maruthi','Benz','Polo','corolla','swift','rangeover','scooty','grazia'];
+  String? selectedengine = '' ;
+
+  List<String> yearTypeList = ['2012','2013','2014','2015','2016','swift','rangeover','scooty','grazia'];
+  String? selectedYearType = '' ;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    print('${_images?.path}' + ">>>>>>> image from Widget");
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
@@ -101,109 +111,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: Column(
                 children: [
 
-                  Container(
-                    child: Text(
-                      AppLocalizations.of(context)!.text_complete_your_profile,
-                      style: Styles.textHeadLogin28,
-                    ),
-                  ),
+                  completeYourProfileText(),
 
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: Container(
-                      color: Colors.white,
-                      child: Row(
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              color: Colors.white,
-                              child: SvgPicture.asset('assets/image/CustomerType/customerAddCar_bg.svg',height: size.height * 0.20,width: 30,),
-                            ),
-                          ),
-                          Container(
-                            width: 180,
-                            height: 200,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(30),
-                              ),
-                              color: CustColors.whiteBlueish,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 150,
-                                    child: Text(
-                                      'Upload your vechicle photo',
-                                      textAlign: TextAlign.center,
-                                      style: Styles.textLabelTitle14,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            width: 100.0,
-                                            height: 100.0,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(20.0),
-                                              child: _images == null
-                                                  ? Container(
-                                                  child:CircleAvatar(
-                                                      radius: 50,
-                                                      backgroundColor: Colors.white,
-                                                      child: ClipOval(
-                                                        child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
-                                                      )))
-                                                  : Container(
-                                                    height: 100,
-                                                    width: 100,
-                                                    child: CircleAvatar(
-                                                      backgroundColor: Colors.white,
-                                                      backgroundImage: FileImage(_images!),
-                                                    ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-
-                                            _showDialogSelectPhoto();
-                                          },
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              Center(
-                                                child: Container(
-                                                  decoration: new BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  width: 30.0,
-                                                  height: 30.0,
-                                                  child: SvgPicture.asset('assets/image/CustomerType/add_car_plus.svg'),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  uploadVechicleImage(size),
 
                   SingleChildScrollView(
                     child: Column(
@@ -224,293 +134,18 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                       children: [
 
 
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-
-                                                "Brand",
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _brandFocusNode,
-                                                keyboardType: TextInputType.name,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.allow(
-                                                      RegExp('[a-zA-Z ]')),
-                                                ],
-                                                validator: InputValidator(
-                                                    ch :
-                                                    AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _brandController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText:
-                                                  "Select your vehicle brand",
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                              ),
-                                            ],
-                                          ),
-                                        ) ,
+                                        brandTextSelection(),
 
 
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
+                                        modelTextSelection()  ,
 
-                                                "Model",
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _modelFocusNode,
-                                                keyboardType: TextInputType.name,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.allow(
-                                                      RegExp('[a-zA-Z ]')),
-                                                ],
-                                                validator: InputValidator(
-                                                    ch :
-                                                    AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _modelController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText:
-                                                  "Select your car variant",
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                              ),
-                                            ],
-                                          ),
-                                        ) ,
-
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-
-                                                "Select Engine Type",
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _engineTypeFocusNode,
-                                                keyboardType: TextInputType.name,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.allow(
-                                                      RegExp('[a-zA-Z ]')),
-                                                ],
-                                                validator: InputValidator(
-                                                    ch :
-                                                    AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _engineTypeController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText:
-                                                  "Select your engine model",
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                              ),
-                                            ],
-                                          ),
-                                        ) ,
+                                        engineTypeTextSelection() ,
 
 
 
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
+                                        yearTypeTextSelection() ,
 
-                                                "Select Year",
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _yearControllerFocusNode,
-                                                keyboardType: TextInputType.name,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.allow(
-                                                      RegExp('[a-zA-Z ]')),
-                                                ],
-                                                validator: InputValidator(
-                                                    ch :
-                                                    AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _yearController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText:
-                                                  "Select your vehicle manufacture date",
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                              ),
-                                            ],
-                                          ),
-                                        ) ,
-
-                                        Container(
-                                          margin: EdgeInsets.only(top: _setValue(15.5)),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-
-                                                "Last maintenance",
-                                                style: Styles.textLabelTitle,
-                                              ),
-                                              TextFormField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                maxLines: 1,
-                                                style: Styles.textLabelSubTitle,
-                                                focusNode: _lastMaintenanceFocusNode,
-                                                keyboardType: TextInputType.name,
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.allow(
-                                                      RegExp('[a-zA-Z ]')),
-                                                ],
-                                                validator: InputValidator(
-                                                    ch :
-                                                    AppLocalizations.of(context)!.text_name ).nameChecking,
-                                                controller: _lastMaintenanceController,
-                                                cursorColor: CustColors.whiteBlueish,
-                                                decoration: InputDecoration(
-                                                  isDense: true,
-                                                  hintText:
-                                                  "Select your last service date",
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  focusedBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  enabledBorder: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: CustColors.greyish,
-                                                      width: .5,
-                                                    ),
-                                                  ),
-                                                  contentPadding: EdgeInsets.symmetric(
-                                                    vertical: 12.8,
-                                                    horizontal: 0.0,
-                                                  ),
-                                                  hintStyle: Styles.textLabelSubTitle,),
-                                              ),
-                                            ],
-                                          ),
-                                        ) ,
+                                        lastMaintenanceTextSelection() ,
 
                                         Container(
                                           width: double.infinity,
@@ -727,6 +362,468 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
+
+  Widget completeYourProfileText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+        child: Text(
+          AppLocalizations.of(context)!.text_complete_your_profile,
+          style: Styles.textCompleteYourProfile,
+        ),
+      ),
+    );
+  }
+
+  Widget uploadVechicleImage(Size size) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+      child: Container(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SvgPicture.asset('assets/image/CustomerType/customerAddCar_bg.svg',height: size.height * 0.25,width: 30,),
+              ),
+            ),
+            Container(
+              width: 150,
+              height: 200,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(30),
+                ),
+                color: CustColors.whiteBlueish,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 150,
+                      child: Text(
+                        'Upload your vechicle photo',
+                        textAlign: TextAlign.center,
+                        style: Styles.textUploadYourProfilePic,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 100.0,
+                              height: 100.0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: _images == null
+                                    ? Container(
+                                        child:CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: Colors.white,
+                                        child: ClipOval(
+                                          child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
+                                        )))
+                                    : Container(
+                                      height: 100,
+                                      width: 100,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: FileImage(_images!),
+                                      ),
+                                      ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+
+                              _showDialogSelectPhoto();
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    width: 30.0,
+                                    height: 30.0,
+                                    child: SvgPicture.asset('assets/image/CustomerType/add_car_plus.svg'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget brandTextSelection() {
+    return  InkWell(
+      onTap: (){
+        _showDialogForBrands(brandList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(0.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Brand",
+                    style: Styles.textLabelTitle,
+                  ),
+                  Spacer(),
+                  Icon(
+                    Icons.keyboard_arrow_down_sharp,
+                    color: CustColors.greyText,
+                    size: 28.0,
+                  ),
+
+                ],
+              ),
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _brandFocusNode,
+              enabled: false,
+              keyboardType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  AppLocalizations.of(context)!.text_name ).nameChecking,
+              controller: _brandController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your vehicle brand",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget modelTextSelection() {
+    return  InkWell(
+      onTap: (){
+        _showDialogForModel(modelList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Model",
+                    style: Styles.textLabelTitle,
+                  ),
+                  Spacer(),
+                  Icon(
+                    Icons.keyboard_arrow_down_sharp,
+                    color: CustColors.greyText,
+                    size: 28.0,
+                  ),
+
+                ],
+              ),
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _modelFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  AppLocalizations.of(context)!.text_name ).nameChecking,
+              controller: _modelController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your car variant",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ) ,
+    );
+  }
+
+  Widget engineTypeTextSelection() {
+    return  InkWell(
+      onTap: (){
+        _showDialogForEngineType(engineList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+
+              "Select Engine Type",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _engineTypeFocusNode,
+              enabled: false,
+              keyboardType: TextInputType.name,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  AppLocalizations.of(context)!.text_name ).nameChecking,
+              controller: _engineTypeController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your engine model",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ) ,
+    );
+  }
+
+  Widget yearTypeTextSelection() {
+    return  InkWell(
+      onTap: (){
+        _showDialogForYear(yearTypeList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+
+              "Select Year",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _yearControllerFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  AppLocalizations.of(context)!.text_name ).nameChecking,
+              controller: _yearController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your vehicle manufacture date",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ) ,
+    );
+  }
+
+  Widget lastMaintenanceTextSelection() {
+    return  Container(
+      margin: EdgeInsets.only(top: _setValue(15.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+
+            "Last maintenance",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _lastMaintenanceFocusNode,
+            keyboardType: TextInputType.name,
+            enabled: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z ]')),
+            ],
+            validator: InputValidator(
+                ch :
+                AppLocalizations.of(context)!.text_name ).nameChecking,
+            controller: _lastMaintenanceController,
+            cursorColor: CustColors.whiteBlueish,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "Select your last service date",
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
   Widget setupAlertDialogMonthAndYear() {
     return Container(
       height: 300.0, // Change as per your requirement
@@ -916,6 +1013,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
+                          print(_images.toString() + ">>>>>>> image from camera");
                         }
                       });
                     },
@@ -939,6 +1037,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       setState(() {
                         if (image != null) {
                           _images = (File(image.path));
+                          print(_images.toString() + ">>>>>>> image from gallery");
                         }
                       });
                     },
@@ -947,6 +1046,160 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ));
         });
   }
+
+  _showDialogForBrands(List<String> brandList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: brandList.length,
+                  itemBuilder: (context, index) {
+                    return  ListTile(
+                      title: Text("${brandList[index]}",
+                          style: TextStyle(
+                              fontFamily: 'Corbel_Regular',
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15,
+                              color: Colors.black)),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        setState(() {
+                          selectedBrand=brandList[index];
+                          _brandController.text = brandList[index];
+                        });
+
+                      },
+                    );
+                  },
+                ),
+              ),);
+        });
+  }
+
+  _showDialogForModel(List<String> modelList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: modelList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${modelList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      setState(() {
+                        selectedmodel=modelList[index];
+                        _modelController.text = modelList[index];
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
+  _showDialogForEngineType(List<String> engineList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: engineList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${engineList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      setState(() {
+                        selectedengine=engineList[index];
+                        _engineTypeController.text = engineList[index];
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
+  _showDialogForYear(List<String> yearTypeList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: yearTypeList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${yearTypeList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      setState(() {
+                        selectedYearType=yearTypeList[index];
+                        _yearController.text = yearTypeList[index];
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
+
 
 }
 

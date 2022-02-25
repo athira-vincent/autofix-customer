@@ -120,6 +120,19 @@ class Styles {
       fontWeight: FontWeight.w800,
       fontFamily: 'Samsung_SharpSans_Bold');
 
+  static const textCompleteYourProfile = TextStyle(
+      color: Colors.black,
+      fontSize: 26,
+      fontWeight: FontWeight.w800,
+      fontFamily: 'SharpSans_Bold');
+
+  static const textUploadYourProfilePic= TextStyle(
+    fontFamily: 'SharpSans_Bold',
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+    fontSize: 14,
+  );
+
   static const textLabelTitle14= TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
