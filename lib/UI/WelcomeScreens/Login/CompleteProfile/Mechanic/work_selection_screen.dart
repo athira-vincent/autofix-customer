@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/service_type_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
@@ -300,62 +301,72 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   }
 
   Widget workSelectionTextSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return  InkWell(
+      onTap: (){
+        Navigator.pushReplacement(
+          context,
+          new MaterialPageRoute(
+              builder: (context) =>
+                  ServiceTypeSelectionScreen()),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
 
-            "Work Selection",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _workSelectionFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _workSelectionController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Select your service type(Emergency/regular…)",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+              "Work Selection",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _workSelectionFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  AppLocalizations.of(context)!.text_name ).nameChecking,
+              controller: _workSelectionController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your service type(Emergency/regular…)",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }

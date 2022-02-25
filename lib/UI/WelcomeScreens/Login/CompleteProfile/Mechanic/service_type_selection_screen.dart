@@ -31,9 +31,12 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
             ),
             child: Column(
               children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                    child: Text("Select your services on both categories")),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                      child: Text("Select your services on both categories")),
+                ),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(
