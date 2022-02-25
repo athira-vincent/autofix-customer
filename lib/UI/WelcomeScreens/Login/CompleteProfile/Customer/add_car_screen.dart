@@ -45,8 +45,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
 
-  TextEditingController _addressController = TextEditingController();
-  FocusNode _addressFocusNode = FocusNode();
   File? _images;
   bool isloading = false;
   String? countryCode;
@@ -56,7 +54,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String selectedState = "";
   final picker = ImagePicker();
 
-  var _value = 2.0;
   double _setValue(double value) {
     return value * per + value;
   }
@@ -69,9 +66,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String userProfilePic = '';
   bool _isLoading = false;
   double _lowerValue = 100;
-  double _upperValue = 500;
 
-  DateTime? _selectedDate;
   var pickeddate;
   var pickedtime;
 
@@ -292,7 +287,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   Spacer(),
                   Icon(
                     Icons.keyboard_arrow_down_sharp,
-                    color: CustColors.greyText,
+                    color: Colors.white,
                     size: 28.0,
                   ),
 
@@ -370,7 +365,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   Spacer(),
                   Icon(
                     Icons.keyboard_arrow_down_sharp,
-                    color: CustColors.greyText,
+                    color: Colors.white,
                     size: 28.0,
                   ),
 
@@ -746,30 +741,38 @@ class _AddCarScreenState extends State<AddCarScreen> {
               )
                   : Container(
 
-                child: MaterialButton(
-                  onPressed: () {
+                      child: MaterialButton(
+                        onPressed: () {
+                          setState(() {
+                            _formKey.currentState?.reset();
+                            _brandController.text='';
+                            _modelController.text='';
+                            _engineTypeController.text='';
+                            _yearController.text='';
+                            _lastMaintenanceController.text='';
+                          });
 
-                  },
-                  child: Container(
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Add More',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
+                        },
+                        child: Container(
+                          height: 45,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Add More',
+                                textAlign: TextAlign.center,
+                                style: Styles.textButtonLabelSubTitle,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
+                        color: CustColors.materialBlue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                _setValue(10))),
+                      ),
                     ),
-                  ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
-              ),
             ),
           ),
           Spacer(),
