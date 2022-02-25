@@ -674,7 +674,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                                       content: StatefulBuilder(
                                                                           builder: (BuildContext context, StateSetter monthYear) {
                                                                             monthYear1 = monthYear;
-                                                                            return  setupAlertDialoadContainer();
+                                                                            return  setupAlertDialogMonthAndYear();
                                                                           }
                                                                       ),
                                                                     );
@@ -727,7 +727,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
-  Widget setupAlertDialoadContainer() {
+  Widget setupAlertDialogMonthAndYear() {
     return Container(
       height: 300.0, // Change as per your requirement
       child: Column(
