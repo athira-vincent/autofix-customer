@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
@@ -93,7 +94,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           child: SingleChildScrollView(
             child: SafeArea(
               child:
-              widget.userCategory=="1"
+              widget.userCategory==TextStrings.user_category_individual
                 ? Column(
                     children: [
                       completeYourProfileText(),
@@ -809,35 +810,36 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                 ),
               )
                   : Container(
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) =>
+                                  WaitAdminApprovalScreen(refNumber:'12345678')),
+                        );
 
-                child: MaterialButton(
-                  onPressed: () {
-
-
-
-
-
-                  },
-                  child: Container(
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Next',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
+                      },
+                      child: Container(
+                        height: 45,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Next',
+                              textAlign: TextAlign.center,
+                              style: Styles.textButtonLabelSubTitle,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                      color: CustColors.materialBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              _setValue(10))),
                     ),
                   ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
-              ),
             ),
           ),
         ],
@@ -868,34 +870,36 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               )
                   : Container(
 
-                child: MaterialButton(
-                  onPressed: () {
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) =>
+                                  WaitAdminApprovalScreen(refNumber:'12345678')),
+                        );
 
-
-
-
-
-                  },
-                  child: Container(
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Next',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
+                      },
+                      child: Container(
+                        height: 45,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Next',
+                              textAlign: TextAlign.center,
+                              style: Styles.textButtonLabelSubTitle,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                      color: CustColors.materialBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              _setValue(10))),
                     ),
                   ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
-              ),
             ),
           ),
         ],

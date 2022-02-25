@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
@@ -135,7 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                   AddCarScreen(userType: "1",userCategory: "1",)));
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
         });
       } else {
         setState(()  {
@@ -149,7 +150,7 @@ class _SignupScreenState extends State<SignupScreen> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                   AddCarScreen(userType: "1",userCategory: "1",)));
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
           FocusScope.of(context).unfocus();
 
         });
@@ -207,7 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   CurvedBottomSheetContainer(
-                    percentage:0.80,
+                    percentage:0.90,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -1012,6 +1013,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                               child: MaterialButton(
                                                 onPressed: () {
 
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+
+
                                                   /*if(formValidate()){
                                                     setState(() {
                                                       _isLoading = true;
@@ -1023,7 +1031,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     print("_formKey.currentState!.validate() - else");
                                                   }*/
 
-                                                  if (_formKey.currentState!.validate()) {
+                                                  /*if (_formKey.currentState!.validate()) {
                                                     print("_formKey.currentState!.validate()");
 
                                                     _checkInternet.check().then((intenet) {
@@ -1031,19 +1039,24 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                                         // Internet Present Case
                                                         print('internet connection - true');
-                                                        widget.userCategory == TextStrings.user_category_individual
+                                                        *//*widget.userCategory == TextStrings.user_category_individual
                                                             && widget.userType == TextStrings.user_customer
-                                                            ? signUpCustomerIndividual()
+                                                            ? signUpCustomerIndividual(context)
                                                             :  widget.userCategory == TextStrings.user_category_individual
                                                             && widget.userType == TextStrings.user_mechanic
-                                                            ? signUpMechanicIndividual()
+                                                            ? signUpMechanicIndividual(context)
                                                             : widget.userCategory == TextStrings.user_category_corporate
                                                             && widget.userType == TextStrings.user_customer
-                                                            ? signUpCustomerCorporate()
+                                                            ? signUpCustomerCorporate(context)
                                                             : widget.userCategory == TextStrings.user_category_corporate
                                                             && widget.userType == TextStrings.user_mechanic
-                                                            ? signUpMechanicCorporate()
-                                                            : signUpCustomerGovernment();
+                                                            ? signUpMechanicCorporate(context)
+                                                            : signUpCustomerGovernment(context);*//*
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
                                                         setState(() {
                                                           _isLoading = true;
                                                         });
@@ -1052,11 +1065,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                                       }
                                                     });
-                                                  } else {
+                                                  }
+                                                  else {
                                                     print("_formKey.currentState!.validate() - else");
                                                     setState(() => _autoValidate =
                                                         AutovalidateMode.always);
-                                                  }
+                                                  }*/
                                                 },
                                                 child: Container(
                                                   height: 45,
@@ -1181,7 +1195,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   }
 
-  void signUpCustomerIndividual(){
+  void signUpCustomerIndividual(BuildContext context){
     print("signUpCustomerIndividual - loaded");
     if(validateSignUpCustomerIndividual()){
       print("signUpCustomerIndividual");
@@ -1247,7 +1261,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpMechanicIndividual(){
+  void signUpMechanicIndividual(BuildContext context){
     print("signUpMechanicIndividual - loaded");
     if(validateSignUpMechanicIndividual()){
       print("signUpMechanicIndividual");
@@ -1317,7 +1331,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpCustomerCorporate(){
+  void signUpCustomerCorporate(BuildContext context){
     print("signUpCustomerCorporate");
     if(validateSignUpCustomerCorporate()){
       print("signUpCustomerCorporate");
@@ -1387,7 +1401,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpMechanicCorporate(){
+  void signUpMechanicCorporate(BuildContext context){
     print("signUpMechanicCorporate");
     if(validateSignUpCustomerCorporate()){
       print("signUpMechanicCorporate");
@@ -1456,7 +1470,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpCustomerGovernment(){
+  void signUpCustomerGovernment(BuildContext context){
     print("signUpCustomerGovernment");
     if(validateSignUpCustomerGovernment()){
       print("signUpMechanicCorporate");
