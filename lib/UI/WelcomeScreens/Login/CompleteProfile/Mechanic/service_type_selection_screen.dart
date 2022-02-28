@@ -1,5 +1,8 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/Widgets/user_type_widget.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/emergancy_service_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
+import 'package:auto_fix/Widgets/service_type_widget.dart';
 import 'package:flutter/material.dart';
 
 class ServiceTypeSelectionScreen extends StatefulWidget {
@@ -35,7 +38,8 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     alignment: Alignment.centerLeft,
-                      child: Text("Select your services on both categories")),
+                      child: Text("Select your services on both categories",
+                        style: Styles.serviceSelectionTitle01Style,)),
                 ),
                 Expanded(
                   child: Container(
@@ -51,19 +55,39 @@ class _ServiceTypeSelectionScreenState extends State<ServiceTypeSelectionScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Center(
-                          child: UserTypeSelectionWidget(
-                            imagePath: 'assets/image/img_service_regular.png',
-                            titleText: Text("Regular",
-                                style: Styles.titleTextStyle),
-                            //titleText: ,
+                          child: InkWell(
+                            onTap : (){
+                              //Navigator.pop(context,"Regular");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      RegularServiceListScreen()));
+                            },
+                            child: ServiceTypeSelectionWidget(
+                              imagePath: 'assets/image/img_service_regular.png',
+                              titleText: Text("Regular",
+                                  style: Styles.titleTextStyle),
+                              //titleText: ,
+                            ),
                           ),
                         ),
 
                         Center(
-                          child: UserTypeSelectionWidget(
-                            imagePath: 'assets/image/img_service_emergency.png',
-                            titleText: Text("Emergency ",
-                                style: Styles.titleTextStyle),
+                          child: InkWell(
+                            onTap: (){
+                              //Navigator.pop(context,"Emergency");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EmergencyServiceListScreen()));
+                            },
+                            child: ServiceTypeSelectionWidget(
+                              imagePath: 'assets/image/img_service_emergency.png',
+                              titleText: Text("Emergency ",
+                                  style: Styles.titleTextStyle),
+                            ),
                           ),
                         ),
                       ],

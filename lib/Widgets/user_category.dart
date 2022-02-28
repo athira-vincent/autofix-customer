@@ -17,11 +17,11 @@ class UserCategorySelectionWidget extends StatelessWidget {
     return Container(
       //margin: EdgeInsets.only(top: size.height * 0.037,),
       child: Container(
-        height: size.height * 0.163,
+        height: size.height * 0.160,
         width: size.width * 0.757,
         color: Colors.white,
         margin: EdgeInsets.only(
-            top: size.height * 0.070,
+            top: size.height * 0.060,
             left: size.width * 0.10,
             right: size.width * 0.10,
         ),

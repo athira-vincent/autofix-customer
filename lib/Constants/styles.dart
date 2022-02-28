@@ -200,4 +200,19 @@ class Styles {
       fontWeight: FontWeight.w600,
       fontFamily: 'Samsung_SharpSans_Medium');
 
+  static const serviceSelectionTitle01Style = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 12.7,
+    color: CustColors.light_navy,
+    fontWeight: FontWeight.w700,
+    letterSpacing: .3,
+  );
+
+  static const searchTextStyle01 =  TextStyle(
+    color: CustColors.warm_grey02,
+    fontSize: 10,
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+  );
+
 }

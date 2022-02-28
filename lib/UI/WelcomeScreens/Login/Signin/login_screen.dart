@@ -10,6 +10,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordController = TextEditingController();
   FocusNode _userNameFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SigninBloc _signinBloc = SigninBloc();
 
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _isLoading = false;
   bool? _passwordVisible;
@@ -80,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
             behavior: MyBehavior(),
@@ -488,15 +492,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
 

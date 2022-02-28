@@ -67,6 +67,8 @@ class _SignupScreenState extends State<SignupScreen> {
   CheckInternet _checkInternet = CheckInternet();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final SignupBloc _signupBloc = SignupBloc();
   bool _isLoading = false;
@@ -81,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
     "Public",
     "Privet-Public",
     "Ministry",
-    "Govt"
+    "Government"
   ];
   bool isloading = false;
   String? countryCode;
@@ -95,7 +97,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String selectedState = "";
   final picker = ImagePicker();
   File? _images;
-  late String errorMsg;
+  String errorMsg = "";
 
   final ScrollController _scrollController = ScrollController();
   double _setValue(double value) {
@@ -130,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
         setState(() {
           print("errrrorr 02");
           _isLoading = false;
-          SnackBarWidget().setSnackBar(value.message.toString(), context);
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(), _scaffoldKey);
 
           Navigator.pushReplacement(
               context,
@@ -144,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
           _isLoading = false;
 
           //setSignUp1Data(value);
-          SnackBarWidget().setSnackBar("Successfully Registered", context);
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
 
           Navigator.pushReplacement(
               context,
@@ -177,6 +179,7 @@ class _SignupScreenState extends State<SignupScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: CustColors.whiteBlueish,
         body: ScrollConfiguration(
           behavior: MyBehavior(),
@@ -199,7 +202,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         children: [
                           Padding(
                             padding: EdgeInsets.fromLTRB(0, size.height * 0.020, 0, size.height * 0.010),
-                            child: Image.asset('assets/image/SignUp/img_sign_up_customer.png',
+                            child: Image.asset(
+                              widget.userType == TextStrings.user_customer
+                                  ?
+                              'assets/image/SignUp/img_sign_up_customer.png'
+                                  :
+                              'assets/image/SignUp/img_sign_up_mechanic.png'
+                              ,
                               height: size.height * 0.23,),
                           ),
                         ],
@@ -1013,25 +1022,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                               child: MaterialButton(
                                                 onPressed: () {
 
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-
-
-                                                  /*if(formValidate()){
-                                                    setState(() {
-                                                      _isLoading = true;
-                                                    });
-                                                    checkPassWord(
-                                                        _passwordController.text,
-                                                        _confirmPwdController.text);
-                                                  }else{
-                                                    print("_formKey.currentState!.validate() - else");
-                                                  }*/
-
-                                                  /*if (_formKey.currentState!.validate()) {
+                                                  if (_formKey.currentState!.validate()) {
                                                     print("_formKey.currentState!.validate()");
 
                                                     _checkInternet.check().then((intenet) {
@@ -1039,7 +1030,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                                         // Internet Present Case
                                                         print('internet connection - true');
-                                                        *//*widget.userCategory == TextStrings.user_category_individual
+                                                        if(
+                                                        widget.userCategory == TextStrings.user_category_individual
                                                             && widget.userType == TextStrings.user_customer
                                                             ? signUpCustomerIndividual(context)
                                                             :  widget.userCategory == TextStrings.user_category_individual
@@ -1051,18 +1043,31 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             : widget.userCategory == TextStrings.user_category_corporate
                                                             && widget.userType == TextStrings.user_mechanic
                                                             ? signUpMechanicCorporate(context)
-                                                            : signUpCustomerGovernment(context);*//*
-                                                        Navigator.pushReplacement(
+                                                            : signUpCustomerGovernment(context)
+                                                        ){
+                                                          setState(() {
+                                                            _isLoading = true;
+                                                          });
+                                                          _signupBloc.postSignUpRequest(
+                                                              " "," "," ",
+                                                              _emailController.text,
+                                                              _phoneController.text,
+                                                              _passwordController.text);
+                                                        }else{
+                                                          setState(() {
+                                                            _isLoading = false;
+                                                          });
+                                                          print(errorMsg.toString());
+                                                          SnackBarWidget().setMaterialSnackBar(errorMsg.toString(),_scaffoldKey);
+                                                        }
+
+                                                       /* Navigator.pushReplacement(
                                                             context,
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
-                                                                    OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-                                                        setState(() {
-                                                          _isLoading = true;
-                                                        });
+                                                                    OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));*/
                                                       } else {
                                                         print('No internet connection');
-
                                                       }
                                                     });
                                                   }
@@ -1070,7 +1075,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     print("_formKey.currentState!.validate() - else");
                                                     setState(() => _autoValidate =
                                                         AutovalidateMode.always);
-                                                  }*/
+                                                  }
                                                 },
                                                 child: Container(
                                                   height: 45,
@@ -1157,7 +1162,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   bool validateSignUpCustomerIndividual(){
-    print("validateSignUpCustomerIndividual");
+    print("validateSignUpCustomerIndividual - loaded");
     if(_nameController.text.isEmpty){
       errorMsg = "Name cannot Empty";
       return false;
@@ -1195,27 +1200,22 @@ class _SignupScreenState extends State<SignupScreen> {
 
   }
 
-  void signUpCustomerIndividual(BuildContext context){
+  bool signUpCustomerIndividual(BuildContext context){
     print("signUpCustomerIndividual - loaded");
     if(validateSignUpCustomerIndividual()){
-      print("signUpCustomerIndividual");
+      print("validateSignUpCustomerIndividual - true");
       print(" Name : " + _nameController.text +
           "\n Email : "+ _emailController.text +
           "\n phone : "+ _photoController.text +
           "\n State : " +
-          "\n photo path :" +
+          "\n photo path :" + _photoController.text+
           "\n password : " + _passwordController.text+
           "\n c password " + _confirmPwdController.text
       );
-      _signupBloc.postSignUpRequest(
-          " "," "," ",
-          _emailController.text,
-          _phoneController.text,
-          _passwordController.text);
-
+      return true;
     }else{
       print("signUpCustomerIndividual - else");
-      SnackBarWidget().setSnackBar(errorMsg, context);
+      return false;
     }
   }
 
@@ -1261,7 +1261,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpMechanicIndividual(BuildContext context){
+  bool signUpMechanicIndividual(BuildContext context){
     print("signUpMechanicIndividual - loaded");
     if(validateSignUpMechanicIndividual()){
       print("signUpMechanicIndividual");
@@ -1273,15 +1273,10 @@ class _SignupScreenState extends State<SignupScreen> {
           "\n password : " + _passwordController.text+
           "\n c password " + _confirmPwdController.text
       );
-      _signupBloc.postSignUpRequest(
-          " "," "," ",
-          _emailController.text,
-          _phoneController.text,
-          _passwordController.text);
-
+      return true;
     }else{
       print("signUpMechanicIndividual - else");
-      SnackBarWidget().setSnackBar(errorMsg, context);
+      return false;
     }
   }
 
@@ -1331,7 +1326,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpCustomerCorporate(BuildContext context){
+  bool signUpCustomerCorporate(BuildContext context){
     print("signUpCustomerCorporate");
     if(validateSignUpCustomerCorporate()){
       print("signUpCustomerCorporate");
@@ -1343,15 +1338,10 @@ class _SignupScreenState extends State<SignupScreen> {
           "\n password : " + _passwordController.text+
           "\n c password " + _confirmPwdController.text
       );
-      _signupBloc.postSignUpRequest(
-          " "," "," ",
-          _emailController.text,
-          _phoneController.text,
-          _passwordController.text);
-
+    return true;
     }else{
       print("signUpCustomerCorporate - else");
-      SnackBarWidget().setSnackBar(errorMsg, context);
+      return false;
     }
   }
 
@@ -1401,7 +1391,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpMechanicCorporate(BuildContext context){
+  bool signUpMechanicCorporate(BuildContext context){
     print("signUpMechanicCorporate");
     if(validateSignUpCustomerCorporate()){
       print("signUpMechanicCorporate");
@@ -1413,15 +1403,11 @@ class _SignupScreenState extends State<SignupScreen> {
           "\n password : " + _passwordController.text+
           "\n c password " + _confirmPwdController.text
       );
-      _signupBloc.postSignUpRequest(
-          " "," "," ",
-          _emailController.text,
-          _phoneController.text,
-          _passwordController.text);
+     return true;
 
     }else{
       print("signUpMechanicCorporate - else");
-      SnackBarWidget().setSnackBar(errorMsg, context);
+      return false;
     }
   }
 
@@ -1470,7 +1456,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void signUpCustomerGovernment(BuildContext context){
+  bool signUpCustomerGovernment(BuildContext context){
     print("signUpCustomerGovernment");
     if(validateSignUpCustomerGovernment()){
       print("signUpMechanicCorporate");
@@ -1482,15 +1468,10 @@ class _SignupScreenState extends State<SignupScreen> {
           "\n password : " + _passwordController.text+
           "\n c password " + _confirmPwdController.text
       );
-      _signupBloc.postSignUpRequest(
-          " "," "," ",
-          _emailController.text,
-          _phoneController.text,
-          _passwordController.text);
-
+      return true;
     }else{
       print("signUpCustomerGovernment - else");
-      SnackBarWidget().setSnackBar(errorMsg, context);
+      return false;
     }
   }
 
@@ -1956,6 +1937,16 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ));
         });
+  }
+
+
+  void setSnackBar(String msg){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('$msg',
+          style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+      duration: Duration(seconds: 2),
+      backgroundColor: CustColors.peaGreen,
+    ));
   }
 
 }

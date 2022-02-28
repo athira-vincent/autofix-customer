@@ -59,12 +59,12 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           bottom: size.height * 0.041
                       ),
                       //padding: EdgeInsets.only(bottom: size.height * 0.101),
-                      height: size.height * 0.850,
+                      height: size.height * 0.810,
                       child: Column(
                         children: [
                           Container(
                             margin: EdgeInsets.only(
-                                top: size.height * 0.033,
+                                top: size.height * 0.023,
                                 right: size.width * 0.181,
                                 left: size.width * 0.172
                             ),

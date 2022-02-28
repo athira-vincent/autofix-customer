@@ -119,7 +119,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                                           children: [
                                             workSelectionTextSelection() ,
                                             vehicleSpecializedTextSelection(),
-                                            uploadApprenticeCertificateSelection()  ,
+                                            uploadApprenticeCertificateSelection() ,
                                             addressTextSelection(),
                                             meansOfIdentificationSelection(),
                                             NextButtonMechanicIndividual(),
@@ -303,7 +303,8 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget workSelectionTextSelection() {
     return  InkWell(
       onTap: (){
-        Navigator.pushReplacement(
+        var serviceType =
+        Navigator.push(
           context,
           new MaterialPageRoute(
               builder: (context) =>
