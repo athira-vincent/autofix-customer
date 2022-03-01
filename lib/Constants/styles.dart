@@ -142,6 +142,13 @@ class Styles {
   );
 
 
+  static const textLabelTitle12= TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
 
   //Athira
   static const hiddenTextBlack = TextStyle(
