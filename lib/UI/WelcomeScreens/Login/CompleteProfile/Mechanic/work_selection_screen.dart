@@ -81,6 +81,8 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   String userProfilePic = '';
   bool _isLoading = false;
 
+  List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
+  String? selectedworkSelection = '' ;
 
 
   @override
@@ -303,13 +305,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget workSelectionTextSelection() {
     return  InkWell(
       onTap: (){
-        var serviceType =
-        Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) =>
-                  ServiceTypeSelectionScreen()),
-        );
+        _showDialogForWorkSelection(workSelectionList);
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -980,6 +976,50 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               ));
         });
   }
+
+  _showDialogForWorkSelection(List<String> _workSelectionList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: _workSelectionList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${_workSelectionList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      setState(() {
+
+                        selectedworkSelection=_workSelectionList[index];
+                        _workSelectionController.text = workSelectionList[index];
+                        if (_formKey.currentState!.validate()) {
+                        } else {
+                        }
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
 
 }
 

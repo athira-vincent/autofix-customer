@@ -553,7 +553,7 @@ class _LoginScreenState extends State<LoginScreen> {
     print("_loginWithFB entered");
 
     facebookLogin.loginBehavior = FacebookLoginBehavior.webOnly;
-    final result = await facebookLogin.logIn(['email']);
+    final result = await facebookLogin.logInWithReadPermissions(['email']);
     print("_loginWithFB entered2");
     print(result.status.toString() + "sdgdsgsg minnu");
     switch (result.status) {

@@ -53,6 +53,13 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelTitle_Regular = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+    fontSize: 10,
+  );
+
   static const textButtonLabelSubTitle = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w400,
@@ -141,6 +148,13 @@ class Styles {
     fontSize: 14,
   );
 
+
+  static const textLabelTitle12= TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+    fontSize: 12,
+  );
 
 
   //Athira
