@@ -115,6 +115,7 @@ flutter:
     - assets/image/SignUp/
     - assets/fonts/
     - assets/json/
+    - assets/image/home_customer/
     - assets/image/MechanicType/mechanicCompleteProfile_bg.svg
   fonts:
     - family: Montserrat_SemiBold
