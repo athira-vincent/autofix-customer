@@ -429,7 +429,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
-              style: Styles.textLabelTitle_Regular,
+              style: Styles.serviceSelectionTitle01Style,
             ),
           ),
           Container(
