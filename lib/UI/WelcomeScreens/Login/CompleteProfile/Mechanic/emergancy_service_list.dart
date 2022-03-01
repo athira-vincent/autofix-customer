@@ -53,11 +53,12 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           color: Colors.white,
           child: Container(
             margin: EdgeInsets.only(
-                top: size.height * 0.040,
-                bottom: size.height * 0.049,
-                left: size.width * 0.06,
-                right: size.width * 0.06
+              top: size.height * 0.033,
+              bottom: size.height * 0.027,
+              left: size.width * 0.06,
+              right: size.width * 0.06,
             ),
+            color: Colors.white,
             child: Column(
               children: [
                 Padding(
@@ -67,59 +68,51 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                       child: Text("Select Emergency Services",
                         style: Styles.serviceSelectionTitle01Style,)),
                 ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        top: size.height * 0.026,
-                        right: size.width * 0.06,
-                        left: size.width * 0.06,
-                        bottom: size.height * 0.035
+
+                Container(
+                  margin: EdgeInsets.only(
+                    top: size.height * 0.026,
+                    left: size.width * 0.025,
+                    right: size.width * 0.078,
+                  ),
+                  height: ScreenSize().setValue(36.3),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        ScreenSize().setValue(5),
+                      ),
                     ),
-                    height: size.height * 0.82,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 40, right: 40),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: ScreenSize().setValue(36.3),
-                            margin: EdgeInsets.only(top: ScreenSize().setValue(15)),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  ScreenSize().setValue(10),
-                                ),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: CustColors.pale_grey,
-                                  spreadRadius: 0,
-                                  blurRadius: 1.5,
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(left: ScreenSize().setValue(20)),
-                                  child: Icon(
-                                    Icons.search,
-                                    size: 20,
-                                    color: CustColors.greyText,
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: ScreenSize().setValue(15)),
-                                    alignment: Alignment.center,
-                                    height: ScreenSize().setValue(36.3),
-                                    child: Center(
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.text,
-                                        textAlignVertical: TextAlignVertical.center,
-                                        /*onChanged: (text) {
+                    boxShadow: [
+                      BoxShadow(
+                        color: CustColors.pinkish_grey,
+                        spreadRadius: 0,
+                        blurRadius: 1.5,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: ScreenSize().setValue(20)),
+                        child: Icon(
+                          Icons.search,
+                          size: 20,
+                          color: CustColors.light_navy,
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          margin: EdgeInsets.only(left: ScreenSize().setValue(15)),
+                          alignment: Alignment.center,
+                          height: ScreenSize().setValue(36.3),
+                          child: Center(
+                            child: TextFormField(
+                              keyboardType: TextInputType.text,
+                              textAlignVertical: TextAlignVertical.center,
+                              /*onChanged: (text) {
                                            setState(() {
                                              makeDetails!.clear();
                                              //_countryData.clear();
@@ -127,36 +120,41 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                            });
                                            _allMakeBloc.searchMake(text);
                                          },*/
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: 'Corbel_Regular',
-                                            fontWeight: FontWeight.w600,
-                                            color: CustColors.borderColor),
-                                        decoration: InputDecoration(
-                                          hintText: "Search Your Service",
-                                          border: InputBorder.none,
-                                          contentPadding: new EdgeInsets.only(bottom: 15),
-                                          hintStyle: TextStyle(
-                                            color: CustColors.greyText,
-                                            fontSize: 15,
-                                            fontFamily: 'Corbel-Light',
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              textAlign: TextAlign.left,
+                              style: Styles.searchTextStyle01,
+                              decoration: InputDecoration(
+                                  hintText: "Search Your Service",
+                                  border: InputBorder.none,
+                                  contentPadding: new EdgeInsets.only(bottom: 15),
+                                  hintStyle: Styles.searchTextStyle01
+                              ),
                             ),
                           ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        top: size.height * 0.023,
+                        bottom: size.height * 0.019
+                    ),
+                    color: CustColors.pale_grey,
+                    height: size.height * 0.82, //0.764
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: size.width * 0.049,
+                          right: size.width * 0.049,
+                          //top: size.height * 0.03,
+                          bottom: size.height * 0.032
+                      ),
+                      child: Column(
+                        children: [
                           Expanded(
                             child: Container(
-                              //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
-                              margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
-                                  top: ScreenSize().setValue(22.4)),
                               child:  emergencyServiceList.length != 0
                                   ? ListView.separated(
                                 scrollDirection: Axis.vertical,
@@ -189,10 +187,10 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                         //Navigator.pop(context);
                                       },
                                       child: Container(
-                                        margin: EdgeInsets.only(
-                                          left: 5,
-                                          right: 5,
-                                        ),
+                                        /*margin: EdgeInsets.only(
+                                            left: 5,
+                                            right: 5,
+                                          ),*/
                                         child: Row(
                                           children: [
                                             Transform.scale(
@@ -214,22 +212,12 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                             ),
 
                                             Text(
-                                              '$emergencyServiceList[index].toString()}',
-                                              style: TextStyle(
-                                                fontFamily: 'Corbel_Light',
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black,
-                                                fontSize:
-                                                ScreenSize().setValueFont(10
-                                                ),
-                                              ),
+                                              '${emergencyServiceList[index].toString()}',
+                                              style: Styles.searchTextStyle02,
                                             ),
-
                                             SizedBox(
                                               width: size.width / 100 * 25,
                                             ),
-
-
                                           ],
                                         ),
                                       ));
@@ -249,51 +237,49 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                   : Center(
                                 child: Text('No Results found.'),
                               ),
-
                             ),
                           ),
-
-                          //_isChecked!.contains(true)
-                          selectedServiceList.length >= 3
-                              ?
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
-                            //padding: EdgeInsets.only(left: 20, right: 20),
-                            decoration: BoxDecoration(
-                              color: CustColors.blue,
-                              border: Border.all(
-                                color: CustColors.blue,
-                                style: BorderStyle.solid,
-                                width: 0.70,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child:  MaterialButton(
-                              child: Text(
-                                "Submit",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Corbel_Bold',
-                                    fontSize:
-                                    ScreenSize().setValueFont(14.5),
-                                    fontWeight: FontWeight.w800),
-                              ),
-                              onPressed: () {
-                                // Map<List<AllServiceFeeData>?, String> myData = new Map();
-                                //SelectedData data = SelectedData(selectedServiceList,"rate");
-                                Navigator.pop(context, "data");
-                              },
-                            ),
-                          )
-                              :
-                          Container(),
                         ],
                       ),
-
                     ),
                   ),
                 ),
+                selectedServiceList.length >= 3
+                    ?
+                InkWell(
+                  onTap: (){
+                    // Map<List<AllServiceFeeData>?, String> myData = new Map();
+                    //SelectedData data = SelectedData(selectedServiceList,"rate");
+                    Navigator.pop(context, "data");
+                  },
+                  child: Container(
+                    height: size.height * 0.045,
+                    width: size.width * 0.246,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
+                    //padding: EdgeInsets.only(left: 20, right: 20),
+                    decoration: BoxDecoration(
+                      color: CustColors.light_navy,
+                      border: Border.all(
+                        color: CustColors.blue,
+                        style: BorderStyle.solid,
+                        width: 0.70,
+                      ),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child:  Text(
+                      "Next",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Corbel_Bold',
+                          fontSize:
+                          ScreenSize().setValueFont(14.5),
+                          fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                )
+                    :
+                Container(),
               ],
             ),
           ),

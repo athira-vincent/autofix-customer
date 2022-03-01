@@ -214,5 +214,12 @@ class Styles {
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w600,
   );
+  static const searchTextStyle02 = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 10,
+    color: CustColors.almost_black,
+    fontWeight: FontWeight.w700,
+    letterSpacing: .3,
+  );
 
 }

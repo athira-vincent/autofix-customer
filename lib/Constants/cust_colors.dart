@@ -38,6 +38,7 @@ class CustColors {
   static const brownish_grey= Color(0xff6c6c6c);
 
   static const warm_grey02= Color(0xff969696);
+  static const almost_black= Color(0xff0b0c0d);
 
 
 }

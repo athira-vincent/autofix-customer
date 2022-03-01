@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
@@ -57,7 +58,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                 left: size.width * 0.06,
                 right: size.width * 0.06,
             ),
-            color: Colors.yellow,
+            color: Colors.white,
             child: Column(
               children: [
                 Padding(
@@ -138,20 +139,22 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(
-                        top: size.height * 0.026,
+                        top: size.height * 0.023,
                         bottom: size.height * 0.019
                     ),
-                    color: Colors.green,
+                    color: CustColors.pale_grey,
                     height: size.height * 0.82, //0.764
                     child: Container(
-                      margin: EdgeInsets.only(left: 40, right: 40),
+                      margin: EdgeInsets.only(
+                        left: size.width * 0.049,
+                        right: size.width * 0.049,
+                        //top: size.height * 0.03,
+                        bottom: size.height * 0.032
+                      ),
                       child: Column(
                         children: [
                           Expanded(
                             child: Container(
-                              //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
-                                margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
-                                    top: ScreenSize().setValue(22.4)),
                                 child:  regularServiceList.length != 0
                                     ? ListView.separated(
                                   scrollDirection: Axis.vertical,
@@ -184,10 +187,10 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                           //Navigator.pop(context);
                                         },
                                         child: Container(
-                                          margin: EdgeInsets.only(
+                                          /*margin: EdgeInsets.only(
                                             left: 5,
                                             right: 5,
-                                          ),
+                                          ),*/
                                           child: Row(
                                             children: [
                                               Transform.scale(
@@ -210,21 +213,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                                               Text(
                                                 '${regularServiceList[index].toString()}',
-                                                style: TextStyle(
-                                                  fontFamily: 'Corbel_Light',
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black,
-                                                  fontSize:
-                                                  ScreenSize().setValueFont(10
-                                                  ),
-                                                ),
+                                                style: Styles.searchTextStyle02,
                                               ),
-
                                               SizedBox(
                                                 width: size.width / 100 * 25,
                                               ),
-
-
                                             ],
                                           ),
                                         ));
@@ -244,51 +237,49 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     : Center(
                                     child: Text('No Results found.'),
                                 ),
-
                             ),
                           ),
-
-                          //_isChecked!.contains(true)
-                          selectedServiceList.length >= 3
-                              ?
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
-                            //padding: EdgeInsets.only(left: 20, right: 20),
-                            decoration: BoxDecoration(
-                              color: CustColors.blue,
-                              border: Border.all(
-                                color: CustColors.blue,
-                                style: BorderStyle.solid,
-                                width: 0.70,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child:  MaterialButton(
-                              child: Text(
-                                "Submit",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Corbel_Bold',
-                                    fontSize:
-                                    ScreenSize().setValueFont(14.5),
-                                    fontWeight: FontWeight.w800),
-                              ),
-                              onPressed: () {
-                               // Map<List<AllServiceFeeData>?, String> myData = new Map();
-                                //SelectedData data = SelectedData(selectedServiceList,"rate");
-                                Navigator.pop(context, "data");
-                              },
-                            ),
-                          )
-                              :
-                          Container(),
                         ],
                       ),
-
                     ),
                   ),
                 ),
+                selectedServiceList.length >= 3
+                    ?
+                InkWell(
+                  onTap: (){
+                    // Map<List<AllServiceFeeData>?, String> myData = new Map();
+                    //SelectedData data = SelectedData(selectedServiceList,"rate");
+                    Navigator.pop(context, "data");
+                  },
+                  child: Container(
+                    height: size.height * 0.045,
+                    width: size.width * 0.246,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
+                    //padding: EdgeInsets.only(left: 20, right: 20),
+                    decoration: BoxDecoration(
+                      color: CustColors.light_navy,
+                      border: Border.all(
+                        color: CustColors.blue,
+                        style: BorderStyle.solid,
+                        width: 0.70,
+                      ),
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    child:  Text(
+                      "Next",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Corbel_Bold',
+                          fontSize:
+                          ScreenSize().setValueFont(14.5),
+                          fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                )
+                    :
+                Container(),
               ],
             ),
           ),
