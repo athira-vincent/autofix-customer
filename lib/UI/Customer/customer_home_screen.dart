@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Cart/customer_cart.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
@@ -33,6 +34,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Container(
@@ -150,7 +152,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             height: _setValue(65),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              color: _index == 2
+              color: _index == 3
                   ? Colors.white.withOpacity(.05)
                   : Colors.transparent,
             ),
@@ -258,9 +260,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             margin: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 120,
             ),
-            child: _index == 0 ? CustomerHomeScreen() :
+            child: _index == 0 ? CustomerHome() :
                 _index == 1 ? CustomerCartScreen() :
-                    _index == 2 ? CustomerMyProfileScreen() : CustomerMyServiceScreen(),
+                _index == 2 ? CustomerMyProfileScreen() : CustomerMyServiceScreen(),
 
           ),
         ],

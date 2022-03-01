@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 
-class CustomerHomeScreen extends StatefulWidget {
+class CustomerHome extends StatefulWidget {
 
-  CustomerHomeScreen();
+  CustomerHome();
 
   @override
   State<StatefulWidget> createState() {
-    return _CustomerHomeScreenState();
+    return _CustomerHomeState();
   }
 }
 
-class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
-  @override
+class _CustomerHomeState extends State<CustomerHome> {
+
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text("Home"),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            47.3,
+          ),
         ),
       ),
+      child: Center(child: Text('Home')),
     );
   }
 
