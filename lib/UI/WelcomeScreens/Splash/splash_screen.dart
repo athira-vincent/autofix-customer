@@ -77,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  HomeCustomerUIScreen(userCategory:"1" ,userType: "1",)));
+                builder: (context) =>  WorkSelectionScreen(userCategory:"1" ,userType: "1",)));
       }
     }
   }
