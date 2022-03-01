@@ -112,7 +112,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 width: 50,
                 child: Column(
                   children: [
-                    Text('Search your Services',
+                    Text('Elenjikkal house Empyreal Garden',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
@@ -145,7 +145,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20,5,20,5),
           child: Container(
             height: 35.0,
             margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
@@ -243,7 +243,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(20,5,20,5),
           child: Container(
             height: 35.0,
             margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
