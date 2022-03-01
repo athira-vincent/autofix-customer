@@ -54,7 +54,7 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   shimmer: ^2.0.0
   connectivity_plus: ^1.2.0
-
+  carousel_slider: 4.0.0
   # FACEBOOK PACKAGE
   flutter_facebook_login: 3.0.0
   # FIREBASE PACKAGES
@@ -67,6 +67,7 @@ dependencies:
   flutter_xlider: ^3.4.0
   flutter_svg: 0.23.0+1
   intl: ^0.17.0
+
 
 
 dev_dependencies:

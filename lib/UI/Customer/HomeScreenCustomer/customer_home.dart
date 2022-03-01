@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Constants/cust_colors.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
 
@@ -22,6 +23,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   TextEditingController searchController = new TextEditingController();
   String? filter;
+
+  final List<String> imageList = [
+    "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
+    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  ];
 
   bool isEmergencyService = true;
   bool isRegularService = false;
@@ -59,6 +67,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 serviceBanners(),
                 emergencyService(),
                 regularService(),
+                upcomingServices(),
+                sparePartsServices()
+
               ],
             ),
           ),
@@ -129,17 +140,24 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
   Widget serviceBanners() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Container(
-        decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
-            borderRadius: BorderRadius.circular(11.0)
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            decoration: BoxDecoration(
+                color: CustColors.whiteBlueish,
+                borderRadius: BorderRadius.circular(11.0)
+            ),
+            child: Image.asset('assets/image/home_customer/banner1.png'),
+          )
         ),
-        child: Image.asset('assets/image/home_customer/banner1.png'),
-      )
+      ],
     );
   }
+
+
+
 
   Widget emergencyService() {
     return Column(
@@ -334,6 +352,130 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         )
             : Container()
       ],
+    );
+  }
+
+  Widget upcomingServices() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Upcoming Services',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: Styles.textLabelTitle_Regular,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(5),
+            child: CarouselSlider.builder(
+              itemCount: imageList.length,
+              options: CarouselOptions(
+                height: 200,
+                autoPlay: false,
+                autoPlayInterval: Duration(seconds: 3),
+                reverse: false,
+                aspectRatio: 5,
+              ),
+              itemBuilder: (context, i, id){
+                //for onTap to redirect to another screen
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.white,)
+                      ),
+                      //ClipRRect for image border radius
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Image.network(
+                          imageList[i],
+                          width: 600,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    onTap: (){
+                      var url = imageList[i];
+                      print(url.toString());
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget sparePartsServices() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Spareparts for your models ',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: Styles.textLabelTitle_Regular,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(5),
+            child: CarouselSlider.builder(
+              itemCount: imageList.length,
+              options: CarouselOptions(
+                height: 200,
+                autoPlay: false,
+                autoPlayInterval: Duration(seconds: 3),
+                reverse: false,
+                aspectRatio: 16/8,
+                viewportFraction: 0.5
+              ),
+              itemBuilder: (context, i, id){
+                //for onTap to redirect to another screen
+                return Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: GestureDetector(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.white,)
+                      ),
+                      //ClipRRect for image border radius
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Image.network(
+                          imageList[i],
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    onTap: (){
+                      var url = imageList[i];
+                      print(url.toString());
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
