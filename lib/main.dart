@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: CustomerHomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
