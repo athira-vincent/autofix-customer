@@ -103,7 +103,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
 
   Future<void> GetAddressFromLatLong(Position position)async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
