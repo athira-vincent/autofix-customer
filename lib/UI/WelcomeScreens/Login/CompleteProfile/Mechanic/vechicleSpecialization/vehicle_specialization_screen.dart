@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_bloc.dart';
@@ -26,6 +28,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   String? countryCode;
   String selectedState = "";
   bool isloading = false;
+  List<String> vehicleSpecialisationList =[];
 
   @override
   void initState() {
@@ -100,11 +103,16 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                       if(_countryData[index].value=="1")
                                         {
                                           _countryData[index].value="0";
+                                          if (vehicleSpecialisationList.contains(_countryData[index].id)) {
+                                            vehicleSpecialisationList.remove(_countryData[index].id);
+                                          }
                                         }
                                       else
                                         {
                                           _countryData[index].value="1";
+                                          vehicleSpecialisationList.insert(0, _countryData[index].id);
                                         }
+                                      print(vehicleSpecialisationList);
                                     });
                                   },
                                   child:Container(
