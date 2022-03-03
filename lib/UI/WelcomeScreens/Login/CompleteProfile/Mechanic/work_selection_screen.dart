@@ -84,6 +84,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
   String? selectedworkSelection = '' ;
 
+  List<String> noOfMechanicsSelectionList = ['2','3','4'];
+  String? noOfMechanicsSelection = '' ;
+
 
   @override
   Widget build(BuildContext context) {
@@ -330,11 +333,16 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  'Work Selection').nameChecking,
               controller: _workSelectionController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
                 isDense: true,
+                suffixIcon: Align(
+                  widthFactor: 3.0,
+                  heightFactor: 3.0,
+                  child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
                 hintText:
                 "Select your service type(Emergency/regular…)",
                 border: UnderlineInputBorder(
@@ -614,62 +622,72 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
 
   Widget numberOfMechanicsSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return  InkWell(
+      onTap: (){
+        _showDialogNumberOfMecanicsSelection(noOfMechanicsSelectionList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
 
-            "Number of mechanics",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _noOfMechanicsFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _noOfMechanicsController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Select your mechanic strength",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+              "Number of mechanics",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _noOfMechanicsFocusNode,
+              keyboardType: TextInputType.number,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[0-9]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  'Mechanic strength').nameCheckingWithNumeric,
+              controller: _noOfMechanicsController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                hintText:
+                "Select your mechanic strength",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -691,14 +709,12 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             style: Styles.textLabelSubTitle,
             focusNode: _rcNumberFocusNode,
             keyboardType: TextInputType.name,
-            enabled: false,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
+                  RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
+                ch : 'RC number').nameCheckingWithNumeric,
             controller: _rcNumberController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
@@ -1019,6 +1035,51 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             ),);
         });
   }
+
+
+  _showDialogNumberOfMecanicsSelection(List<String> noOfMechanicsSelectionList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: noOfMechanicsSelectionList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${noOfMechanicsSelectionList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      setState(() {
+
+                        noOfMechanicsSelection=noOfMechanicsSelectionList[index];
+                        _noOfMechanicsController.text = noOfMechanicsSelectionList[index];
+                        if (_formKey.currentState!.validate()) {
+                        } else {
+                        }
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
 
 
 }
