@@ -57,6 +57,19 @@
     <string>This app needs access to location when in the background.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>This app needs access to location when open and in the background.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+       <string>fetch</string>
+       <string>remote-notification</string>
+    </array>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>${PRODUCT_NAME} need access to the Media Libraray to upload evidence</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>${PRODUCT_NAME} need access to the Media Libraray to upload evidence</string>
+    <key>NSFileProviderDomainUsageDescription</key>
+    <string>${PRODUCT_NAME} need access to the Media Libraray to upload evidence</string>
+    <key>NSFileProviderPresenceUsageDescription</key>
+    <string>${PRODUCT_NAME} need access to the Media Libraray to upload evidence</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

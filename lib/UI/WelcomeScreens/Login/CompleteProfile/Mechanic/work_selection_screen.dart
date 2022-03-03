@@ -14,6 +14,7 @@ import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -87,6 +88,8 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
   List<String> noOfMechanicsSelectionList = ['2','3','4'];
   String? noOfMechanicsSelection = '' ;
+
+  String? _fileName;
 
 
   @override
@@ -594,7 +597,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget meansOfIdentificationSelection() {
     return  InkWell(
       onTap: (){
-
+        _openFileExplorerMeansOfIdentification();
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -1119,6 +1122,28 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         });
   }
 
+  void _openFileExplorerMeansOfIdentification() async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf','docx'], //here you can add any of extention what you need to pick
+      );
+
+      if(file != null) {
+
+        setState(() {
+
+          _fileName = file.toString(); //file1 is a global variable which i created
+          print(_fileName);
+
+        });
+
+      }
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    if (!mounted) return;
+  }
 
 
 }
