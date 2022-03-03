@@ -401,11 +401,10 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               enabled: false,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                    RegExp('[a-zA-Z ]')),
+                    RegExp('[a-zA-Z0-9 ]')),
               ],
               validator: InputValidator(
-                  ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  ch :'vehicle specialised').nameCheckingWithNumericAndBracket,
               controller: _chooseVechicleSpecializedController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -540,14 +539,12 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             style: Styles.textLabelSubTitle,
             focusNode: _addressFocusNode,
             keyboardType: TextInputType.name,
-            enabled: false,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
+                  RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
+                ch :'Address').nameCheckingWithNumeric,
             controller: _addressController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
@@ -792,15 +789,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             maxLines: 1,
             style: Styles.textLabelSubTitle,
             focusNode: _yearOfExistenceFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
+            keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
+                  RegExp('[0-9]')),
             ],
             validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
+                ch : 'Year of existence' ).nameCheckingWithNumeric,
             controller: _yearOfExistenceController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
