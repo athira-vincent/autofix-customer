@@ -462,62 +462,72 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   }
 
   Widget uploadApprenticeCertificateSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return  InkWell(
+      onTap: (){
 
-            "Upload certificate of apprentice ",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _apprenticeCertificateFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _apprenticeCertificateController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Attach your certificates ",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+
+              "Upload certificate of apprentice ",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _apprenticeCertificateFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :'Upload certificate of apprentice ').nameChecking,
+              controller: _apprenticeCertificateController,
+              cursorColor: CustColors.whiteBlueish,
+
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/attach_icon.svg',height: 9,width: 9,)
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                hintText:
+                "Attach your certificates ",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -582,62 +592,71 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   }
 
   Widget meansOfIdentificationSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return  InkWell(
+      onTap: (){
 
-            "Means of identification ",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _identificationProofFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _identificationProofController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Attach any identification proof",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+
+              "Means of identification ",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _identificationProofFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :'Means of identification' ).nameChecking,
+              controller: _identificationProofController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/attach_icon.svg',height: 9,width: 9,)
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                hintText:
+                "Attach any identification proof",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     ) ;
   }
