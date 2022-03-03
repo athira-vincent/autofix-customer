@@ -47,101 +47,125 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return  Scaffold(
-        body: Container(
-          margin: EdgeInsets.only(left: 40, right: 40),
-          child: Column(
-            children: [
+      appBar: AppBar(
+        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Select brands',
+          textAlign: TextAlign.center,
+          style: Styles.textLabelTitle,
+        ),
+      ),
+        body: SafeArea(
+          child: Container(
+            margin: EdgeInsets.only(left: 20, right: 20,top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Choose multiple brands you specialised in',
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.visible,
+                    style: Styles.textLabelTitle,
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
+                    margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
+                        top: ScreenSize().setValue(22.4)),
+                    child: _countryData.length != 0
+                        ? Container(
+                            child: GridView.builder(
+                              itemCount:_countryData.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1.5,
+                                crossAxisSpacing: 1,
+                                mainAxisSpacing: 1,
+                              ),
+                              itemBuilder: (context,index,) {
 
-              Expanded(
-                child: Container(
-                  //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
-                  margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
-                      top: ScreenSize().setValue(22.4)),
-                  child: _countryData.length != 0
-                      ? Container(
-                          child: GridView.builder(
-                            itemCount:_countryData.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              childAspectRatio: .94,
-                              crossAxisSpacing: 1,
-                              mainAxisSpacing: 1,
-                            ),
-                            itemBuilder: (context,index,) {
+                                return GestureDetector(
+                                  onTap:(){
+                                    setState(() {
+                                      if(_countryData[index].value=="1")
+                                        {
+                                          _countryData[index].value="0";
+                                        }
+                                      else
+                                        {
+                                          _countryData[index].value="1";
+                                        }
+                                    });
+                                  },
+                                  child:Container(
 
-                              return GestureDetector(
-                                onTap:(){
-                                  setState(() {
-                                    if(_countryData[index].value=="1")
-                                      {
-                                        _countryData[index].value="0";
-                                      }
-                                    else
-                                      {
-                                        _countryData[index].value="1";
-                                      }
-                                  });
-                                },
-                                child:Container(
+                                    child: Column(
+                                      mainAxisAlignment:MainAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.topRight,
+                                          children: [
 
-                                  child: Column(
-                                    mainAxisAlignment:MainAxisAlignment.start,
-                                    children: [
-                                      Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color:  _countryData[index].value=="0"?Colors.white:CustColors.whiteBlueish,
-                                                borderRadius: BorderRadius.circular(11.0)
-                                            ),
-                                            height: 50,
-                                            width: 50,
-                                            child: Container(
-                                                child: Image.network(_countryData[index].image,
-                                                fit: BoxFit.contain,
-                                                  height: 50,
-                                                  width: 50,)
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 20,
-                                            width: 20,
-                                            child: Align(
-                                              alignment: Alignment.topRight,
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color:  _countryData[index].value=="0"?Colors.white:CustColors.whiteBlueish,
+                                                  borderRadius: BorderRadius.circular(11.0)
+                                              ),
+                                              height: 50,
+                                              width: 50,
                                               child: Container(
-                                                child: _countryData[index].value=="1"
-                                                    ? Icon( Icons.check_circle,size: 20,color: CustColors.light_navy,)
-                                                    : Container(),
+                                                  child: Image.network(_countryData[index].image,
+                                                  fit: BoxFit.contain,
+                                                    height: 50,
+                                                    width: 50,)
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(0),
-                                        child: Text(_countryData[index].name,
-                                          style: Styles.textLabelTitle12,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.visible,),
-                                      ),
-                                    ],
+                                            Container(
+                                              height: 20,
+                                              width: 20,
+                                              child: Align(
+                                                alignment: Alignment.topRight,
+                                                child: Container(
+                                                  child: _countryData[index].value=="1"
+                                                      ? Icon( Icons.check_circle,size: 20,color: CustColors.light_navy,)
+                                                      : Container(),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        /*Padding(
+                                          padding: const EdgeInsets.all(0),
+                                          child: Text(_countryData[index].name,
+                                            style: Styles.textLabelTitle12,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.visible,),
+                                        ),*/
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
+                          )
+                        : Center(
+                            child: Text('No Results found.'),
                           ),
-                        )
-                      : Center(
-                          child: Text('No Results found.'),
-                        ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
