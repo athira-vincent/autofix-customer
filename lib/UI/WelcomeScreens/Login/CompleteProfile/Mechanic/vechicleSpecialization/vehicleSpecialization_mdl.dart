@@ -30,16 +30,19 @@ class VehicleSpecialization {
     required this.name,
     required this.id,
     required this.image,
+    required this.value,
   });
 
   String name;
   String id;
   String image;
+  String value;
 
   factory VehicleSpecialization.fromJson(Map<String, dynamic> json) => VehicleSpecialization(
     name: json["name"] == null ? null : json["name"],
     id: json["id"] == null ? null : json["id"],
     image: json["image"] == null ? null : json["image"],
+    value: json["value"] == null ? null : json["value"],
   );
 
 }

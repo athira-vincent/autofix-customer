@@ -58,48 +58,69 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                   margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
                       top: ScreenSize().setValue(22.4)),
                   child: _countryData.length != 0
-                      ? ListView.separated(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: _countryData.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                              onTap: () {
+                      ? Container(
+                          child: GridView.builder(
+                            itemCount:_countryData.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: .94,
+                              crossAxisSpacing: 1,
+                              mainAxisSpacing: 1,
+                            ),
+                            itemBuilder: (context,index,) {
 
-                                selectedState = _countryData[index].name!;
+                              return GestureDetector(
+                                onTap:(){
+                                  setState(() {
+                                    if(_countryData[index].value=="1")
+                                      {
+                                        _countryData[index].value="0";
+                                      }
+                                    else
+                                      {
+                                        _countryData[index].value="1";
+                                      }
+                                  });
+                                },
+                                child:Container(
 
-                                final stateName = _countryData[index].name;
-                                final countryDataId = _countryData[index].id;
-                                print(">>>>>selectedState : " + selectedState);
-                                print(countryDataId! + ">>>>>>>>>" + stateName!);
-
-                                // Navigator.of(context).pop(stateName);
-                                Navigator.pop(context,selectedState.toString());
-
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  left: 5,
-                                  right: 5,
+                                  child: Column(
+                                    mainAxisAlignment:MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:  _countryData[index].value=="0"?Colors.white:CustColors.greyish,
+                                            borderRadius: BorderRadius.circular(11.0)
+                                        ),
+                                        height: 50,
+                                        width: 50,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0),
+                                          child: Container(
+                                              child: Image.network(_countryData[index].image,
+                                              fit: BoxFit.contain,
+                                                height: 50,
+                                                width: 50,)
+                                          )
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(2),
+                                        child: Text(_countryData[index].name,
+                                          style: Styles.textLabelTitle12,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.visible,),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                child: Text(
-                                  '${_countryData[index].name}',
-                                  style:Styles.textLabelSubTitle10,
-                                ),
-                              ));
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return Container(
-                              margin: EdgeInsets.only(
-                                  top: ScreenSize().setValue(10),
-                                  left: 5,
-                                  right: 5,
-                                  bottom: ScreenSize().setValue(10)),
-                              child: Divider(
-                                height: 0,
-                              ));
-                        },
-                      )
+                              );
+                            },
+                          ),
+                        )
                       : Center(
                           child: Text('No Results found.'),
                         ),

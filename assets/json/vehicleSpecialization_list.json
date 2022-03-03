@@ -1,9 +1,9 @@
 {"vehicleSpecialization":
     [
-    {"name":"Abia","id":"1","image": ""},
-    {"name":"Abia","id":"1","image": ""},
-    {"name":"Abia","id":"1","image": ""},
-    {"name":"Abia","id":"1","image": ""},
-    {"name":"Abia","id":"1","image": ""}
+        {"name":"Ford","id":"1","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Bmw","id":"2","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Corolla","id":"3","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Maruthi","id":"4","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Amaze","id":"5","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"}
     ]
 }
