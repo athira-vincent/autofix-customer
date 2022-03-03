@@ -380,11 +380,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget vehicleSpecializedTextSelection() {
     return InkWell(
       onTap: (){
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    VehicleSpecializationScreen()));
+        _awaitReturnValueFromSecondScreen(context);
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -445,6 +441,25 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         ),
       ),
     );
+  }
+
+  void _awaitReturnValueFromSecondScreen(BuildContext context) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VehicleSpecializationScreen(),
+        ));
+    setState(() {
+      selectedState = result;
+      if(selectedState!='[]')
+        {
+          _chooseVechicleSpecializedController.text = selectedState;
+          print ("Selected state @ sign up: " + selectedState );
+        }
+
+    });
   }
 
   Widget uploadApprenticeCertificateSelection() {

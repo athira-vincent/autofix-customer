@@ -54,7 +54,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
         centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context,vehicleSpecialisationList.toString()),
         ),
         backgroundColor: Colors.white,
         title: Text(
@@ -96,7 +96,6 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                 mainAxisSpacing: 1,
                               ),
                               itemBuilder: (context,index,) {
-
                                 return GestureDetector(
                                   onTap:(){
                                     setState(() {
@@ -170,6 +169,42 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                         : Center(
                             child: Text('No Results found.'),
                           ),
+                  ),
+                ),
+
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context,vehicleSpecialisationList.toString());
+                  },
+                  child: Row(
+                    children: [
+                      Spacer(),
+                      Container(
+                        height: size.height * 0.045,
+                        width: size.width * 0.246,
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+                        //padding: EdgeInsets.only(left: 20, right: 20),
+                        decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          border: Border.all(
+                            color: CustColors.blue,
+                            style: BorderStyle.solid,
+                            width: 0.70,
+                          ),
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child:  Text(
+                          "Next",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Corbel_Bold',
+                              fontSize:
+                              ScreenSize().setValueFont(14.5),
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
