@@ -22,26 +22,10 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   final vehicleSpecializationBloc _specializationBloc = vehicleSpecializationBloc();
 
 
-  List regularServiceList = [
-    "Service 1",
-    "Service 2",
-    "Service 3",
-    "Service 4",
-    "Service 5",
-    "Service 6",
-    "Service 7",
-    "Service 8",
-    "Service 9",
-    "Service 10",
-    "Service 11",
-    "Service 12",
-  ];
-  String title = "";
-  List selectedServiceList = [];
-  List<bool>? _regularIsChecked;
-
   List<VehicleSpecialization> _countryData = [];
-
+  String? countryCode;
+  String selectedState = "";
+  bool isloading = false;
 
   @override
   void initState() {
@@ -62,15 +46,69 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
         body: Container(
-          height: size.height,
-          width:  size.width,
-          color: Colors.red,
+          margin: EdgeInsets.only(left: 40, right: 40),
+          child: Column(
+            children: [
+
+              Expanded(
+                child: Container(
+                  //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
+                  margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
+                      top: ScreenSize().setValue(22.4)),
+                  child: _countryData.length != 0
+                      ? ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: _countryData.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                              onTap: () {
+
+                                selectedState = _countryData[index].name!;
+
+                                final stateName = _countryData[index].name;
+                                final countryDataId = _countryData[index].id;
+                                print(">>>>>selectedState : " + selectedState);
+                                print(countryDataId! + ">>>>>>>>>" + stateName!);
+
+                                // Navigator.of(context).pop(stateName);
+                                Navigator.pop(context,selectedState.toString());
+
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  left: 5,
+                                  right: 5,
+                                ),
+                                child: Text(
+                                  '${_countryData[index].name}',
+                                  style:Styles.textLabelSubTitle10,
+                                ),
+                              ));
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenSize().setValue(10),
+                                  left: 5,
+                                  right: 5,
+                                  bottom: ScreenSize().setValue(10)),
+                              child: Divider(
+                                height: 0,
+                              ));
+                        },
+                      )
+                      : Center(
+                          child: Text('No Results found.'),
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
   }
 
 }
