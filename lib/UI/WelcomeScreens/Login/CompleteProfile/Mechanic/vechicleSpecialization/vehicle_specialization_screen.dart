@@ -64,7 +64,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
+                              crossAxisCount: 4,
                               childAspectRatio: .94,
                               crossAxisSpacing: 1,
                               mainAxisSpacing: 1,
@@ -89,25 +89,40 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                   child: Column(
                                     mainAxisAlignment:MainAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color:  _countryData[index].value=="0"?Colors.white:CustColors.greyish,
-                                            borderRadius: BorderRadius.circular(11.0)
-                                        ),
-                                        height: 50,
-                                        width: 50,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Container(
-                                              child: Image.network(_countryData[index].image,
-                                              fit: BoxFit.contain,
-                                                height: 50,
-                                                width: 50,)
-                                          )
-                                        ),
+                                      Stack(
+                                        alignment: Alignment.topRight,
+                                        children: [
+
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color:  _countryData[index].value=="0"?Colors.white:CustColors.whiteBlueish,
+                                                borderRadius: BorderRadius.circular(11.0)
+                                            ),
+                                            height: 50,
+                                            width: 50,
+                                            child: Container(
+                                                child: Image.network(_countryData[index].image,
+                                                fit: BoxFit.contain,
+                                                  height: 50,
+                                                  width: 50,)
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 20,
+                                            width: 20,
+                                            child: Align(
+                                              alignment: Alignment.topRight,
+                                              child: Container(
+                                                child: _countryData[index].value=="1"
+                                                    ? Icon( Icons.check_circle,size: 20,color: CustColors.light_navy,)
+                                                    : Container(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.all(2),
+                                        padding: const EdgeInsets.all(0),
                                         child: Text(_countryData[index].name,
                                           style: Styles.textLabelTitle12,
                                           maxLines: 2,
