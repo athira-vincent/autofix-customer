@@ -197,19 +197,24 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
   Widget serviceBanners() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          Container(
             decoration: BoxDecoration(
                 color: CustColors.whiteBlueish,
                 borderRadius: BorderRadius.circular(11.0)
             ),
-            child: Image.asset('assets/image/home_customer/banner1.png'),
-          )
-        ),
-      ],
+            child: Image.asset('assets/image/bannerPngDummy1.png'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: circleBar(true),
+          ),
+        ],
+      ),
     );
   }
 
@@ -534,6 +539,17 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
 
+  Widget circleBar(bool isActive) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 150),
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      height: isActive ? 5 : 5,
+      width: isActive ? 30 : 25,
+      decoration: BoxDecoration(
+          color: isActive ? Colors.white : CustColors.whiteBlueish,
+          borderRadius: BorderRadius.all(Radius.circular(12))),
+    );
+  }
 
 
 }
