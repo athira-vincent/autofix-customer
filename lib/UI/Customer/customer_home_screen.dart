@@ -6,7 +6,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.d
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'HomeScreenCustomer/customer_home.dart';
+import 'BottomBar/Home/customer_home.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
 
