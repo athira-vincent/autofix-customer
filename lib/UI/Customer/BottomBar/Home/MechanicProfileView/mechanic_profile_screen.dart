@@ -161,7 +161,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                   radius: 50,
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
+                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                   )))
 
                       ),
@@ -324,7 +324,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                                   radius: 50,
                                                   backgroundColor: Colors.white,
                                                   child: ClipOval(
-                                                    child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
+                                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                                   )))
 
                                       ),
