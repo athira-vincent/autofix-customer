@@ -216,8 +216,13 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                                 style: Styles.searchTextStyle02,
                                               ),
                                               SizedBox(
-                                                width: size.width / 100 * 25,
+                                                width: size.width / 100 * 20,
                                               ),
+                                              Text("2000 "),
+                                              SizedBox(
+                                                width: size.width / 100 * 5,
+                                              ),
+                                              Text("00 : 30")
                                             ],
                                           ),
                                         ));

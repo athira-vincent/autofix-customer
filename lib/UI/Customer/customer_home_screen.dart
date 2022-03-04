@@ -50,12 +50,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
+                
                   margin: EdgeInsets.only(top: _setValue(5.1)),
-                  child: Image.asset(
-                    'assets/images/profile_blue.png',
-                    width: _setValue(22.4),
-                    height: _setValue(27.2),
-                  ),
+                  //child: Icon(Icons.home_outlined)
+                  child: Image.asset('assets\image\ic_home.png'),
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
@@ -87,8 +85,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               children: [
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
+                  //child: Icon(Icons.cart)
                   child: Image.asset(
-                    'assets/images/spair_parts.png',
+                    'assets\image\ic_home_cart.png',
                     width: _setValue(29),
                     height: _setValue(29),
                   ),
@@ -125,7 +124,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
                   child: Image.asset(
-                    'assets/images/services.png',
+                    'assets\image\ic_home_service.png',
                     width: _setValue(32.4),
                     height: _setValue(31.2),
                   ),
@@ -162,7 +161,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
                   child: Image.asset(
-                    'assets/images/services.png',
+                'assets\image\ic_home_profile.png',
                     width: _setValue(32.4),
                     height: _setValue(31.2),
                   ),
@@ -216,26 +215,26 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      //"Hi $_userName",
-                      "Hi Abc",
-                      style: TextStyle(
-                          fontFamily: 'Corbel_Light',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 17,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5),
-                      child: Text(
-                        "Welcome",
-                        style: TextStyle(
-                            fontFamily: 'Corbel_Light',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                            color: Colors.white),
-                      ),
-                    ),
+                    // Text(
+                    //   //"Hi $_userName",
+                    //   "Hi Abc",
+                    //   style: TextStyle(
+                    //       fontFamily: 'Corbel_Light',
+                    //       fontWeight: FontWeight.w600,
+                    //       fontSize: 17,
+                    //       color: Colors.white),
+                    // ),
+                    // Container(
+                    //   margin: EdgeInsets.only(top: 5),
+                    //   child: Text(
+                    //     "Welcome",
+                    //     style: TextStyle(
+                    //         fontFamily: 'Corbel_Light',
+                    //         fontWeight: FontWeight.w600,
+                    //         fontSize: 17,
+                    //         color: Colors.white),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -252,9 +251,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               margin: EdgeInsets.only(
                 top: MediaQuery.of(context).padding.top,
               ),
-              child: Image.asset(
-                'assets/images/app_bar_arc.png',
-              )),
+              // child: Image.asset(
+              //   'assets/images/app_bar_arc.png',
+              // )
+              ),
           Container(
             width: double.infinity,
             margin: EdgeInsets.only(
@@ -293,10 +293,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   fontSize: 0),
               items: bottomNavigationBarItems,
               currentIndex: _index,
-              backgroundColor: CustColors.blue,
+              //backgroundColor: CustColors.blue,
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.white,
+              selectedItemColor: Colors.blue,
+              unselectedItemColor: Colors.grey,
               onTap: (index) {
                 setState(() {
                   _index = index;
