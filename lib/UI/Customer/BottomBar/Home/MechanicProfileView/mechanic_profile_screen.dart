@@ -38,6 +38,19 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.pop(context),
+          ),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Maria Kurian',
+            textAlign: TextAlign.center,
+            style: Styles.textLabelTitle,
+          ),
+        ),
         body: SingleChildScrollView(
           child: Column(
 
