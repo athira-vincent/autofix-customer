@@ -51,7 +51,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                 profileImageAndKmAndReviewCount(size),
                 timeAndLocationUi(size),
                 reviewsUi(size),
-                selectedServiceDetailsUi(size)
+                selectedServiceDetailsUi(size),
+                acceptAndSendRequestButton( size)
               ],
             ),
           ),
@@ -444,7 +445,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,
-                  style: Styles.textLabelTitle_10,
+                  style: Styles.appBarTextBlack,
                 ),
               ),
             ),
@@ -503,7 +504,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
-                        style: Styles.textLabelTitle_10,
+                        style: Styles.appBarTextBlack17,
                       ),
                     ],
                   ),
@@ -514,7 +515,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
-                        style: Styles.textLabelTitle_10,
+                        style: Styles.appBarTextBlack17,
                       ),
                     ],
                   ),
@@ -531,35 +532,38 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     return InkWell(
       onTap: (){
       },
-      child: Row(
-        children: [
-          Spacer(),
-          Container(
-            height: size.height * 0.045,
-            width: size.width * 0.246,
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
-            //padding: EdgeInsets.only(left: 20, right: 20),
-            decoration: BoxDecoration(
-              color: CustColors.light_navy,
-              border: Border.all(
-                color: CustColors.blue,
-                style: BorderStyle.solid,
-                width: 0.70,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            Spacer(),
+            Container(
+              height: 45,
+              width:200,
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+              //padding: EdgeInsets.only(left: 20, right: 20),
+              decoration: BoxDecoration(
+                color: CustColors.light_navy,
+                border: Border.all(
+                  color: CustColors.blue,
+                  style: BorderStyle.solid,
+                  width: 0.70,
+                ),
+                borderRadius: BorderRadius.circular(7),
               ),
-              borderRadius: BorderRadius.circular(7),
+              child:  Text(
+                "Accept & send request",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Corbel_Bold',
+                    fontSize:
+                    ScreenSize().setValueFont(14.5),
+                    fontWeight: FontWeight.w800),
+              ),
             ),
-            child:  Text(
-              "Accept & send request",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Corbel_Bold',
-                  fontSize:
-                  ScreenSize().setValueFont(14.5),
-                  fontWeight: FontWeight.w800),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
