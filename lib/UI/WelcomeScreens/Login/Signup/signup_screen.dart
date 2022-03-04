@@ -79,11 +79,12 @@ class _SignupScreenState extends State<SignupScreen> {
     "Privet-Public"
   ];
   List<String> ministryGovtList = [
-    "private",
-    "Public",
-    "Privet-Public",
+    "Federal Govt",
+    "State Govt",
+    "Locaal Govt",
     "Ministry",
-    "Government"
+    "Government Agency",
+  
   ];
   bool isloading = false;
   String? countryCode;
@@ -142,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
         });
       } else {
         setState(()  {
-          print("errrrorr 01");
+           print("errrrorr 01");
           _isLoading = false;
 
           //setSignUp1Data(value);
