@@ -38,13 +38,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
-        body: Column(
+        body: SingleChildScrollView(
+          child: Column(
 
-          children: [
-            profileImageAndKmAndReviewCount(size),
-            timeAndLocationUi(size),
-            reviewsUi(size)
-          ],
+            children: [
+              profileImageAndKmAndReviewCount(size),
+              timeAndLocationUi(size),
+              reviewsUi(size)
+            ],
+          ),
         ),
       ),
     );
@@ -222,48 +224,46 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.lock_clock, color: CustColors.light_navy,size: 35,),
-                    SizedBox(
-                      width: 50,
-                      child: Column(
-                        children: [
-                          Text('3 Minutes',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.visible,
-                            style: Styles.textLabelTitle_10,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 50,
-                      child: Column(
-                        children: [
-                          Text('Location',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.visible,
-                            style: Styles.textLabelTitle_10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+            Container(
+              child: ListView.builder(
+                itemCount:4,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context,index,) {
+                  return GestureDetector(
+                    onTap:(){
 
-                  ],
-                ),
-              ],
-            ),
+                    },
+                    child:Container(
+
+                      child: Column(
+                        mainAxisAlignment:MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: CustColors.whiteBlueish,
+                                borderRadius: BorderRadius.circular(11.0)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25),
+                              child: Icon(  Icons.star,size: 40,color: CustColors.light_navy,),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Text('dgf',
+                              style: Styles.textLabelTitle12,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.visible,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),
