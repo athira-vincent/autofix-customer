@@ -9,11 +9,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
 
-  final String userType;
-  final String userCategory;
 
 
-  HomeCustomerUIScreen({required this.userType,required this.userCategory});
+  HomeCustomerUIScreen();
 
   @override
   State<StatefulWidget> createState() {
