@@ -116,7 +116,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     );
   }
 
-
   Widget profileImageAndKmAndReviewCount(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,10,10,10),
@@ -302,7 +301,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       mainAxisAlignment:MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                          padding: const EdgeInsets.fromLTRB(10,5,10,0),
                           child: Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -382,6 +381,34 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   );
                 },
               ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Container(
+                  height: 1,
+                  width: 110,
+                  color: CustColors.greyText,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Load more',
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.visible,
+                    style: Styles.textLabelTitle_10,
+                  ),
+                ),
+                Container(
+                  height: 1,
+                  width: 110,
+                  color: CustColors.greyText,
+                ),
+
+
+              ],
             )
           ],
         ),
