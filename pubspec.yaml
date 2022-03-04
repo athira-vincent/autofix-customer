@@ -117,6 +117,8 @@ flutter:
     - assets/image/MechanicType/
     - assets/image/phoneLogin/
     - assets/image/SignUp/
+    - assets/image/mechanicProfileView/
+    - assets/image/mechanicProfileView/curvedGray.png
     - assets/fonts/
     - assets/json/
     - assets/image/home_customer/
