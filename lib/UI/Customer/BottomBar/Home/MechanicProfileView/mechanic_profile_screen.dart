@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,8 +39,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     return MaterialApp(
       home: Scaffold(
         body: Column(
+
           children: [
-            uploadVechicleImage(size),
+            profileImageAndKmAndReviewCount(size),
+            timeAndLocationUi(size),
+            reviewsUi(size)
           ],
         ),
       ),
@@ -47,12 +51,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-  Widget uploadVechicleImage(Size size) {
+  Widget profileImageAndKmAndReviewCount(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,10,10,10),
       child: Container(
         alignment: Alignment.center,
-        color: Colors.red,
         child: Wrap(
           children: [
             Padding(
@@ -119,7 +122,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,110,10,0),
                         child: RatingBar.builder(
-                          initialRating: 3,
+                          initialRating: 3.5,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -128,7 +131,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                           itemPadding: EdgeInsets.symmetric(horizontal: 1),
                           itemBuilder: (context, _) => Icon(
                             Icons.star,
-                            color: Colors.amber,
+                            color: CustColors.blue,
                           ),
                           onRatingUpdate: (rating) {
                             print(rating);
@@ -143,6 +146,125 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
           ],
 
+        ),
+      ),
+    );
+  }
+
+  Widget timeAndLocationUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      child: Container(
+        alignment: Alignment.center,
+        child:Row(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.lock_clock, color: CustColors.light_navy,size: 35,),
+                SizedBox(
+                  width: 50,
+                  child: Column(
+                    children: [
+                      Text('3 Minutes',
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.visible,
+                        style: Styles.textLabelTitle_10,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Spacer(),
+            Row(
+              children: [
+                SizedBox(
+                  width: 50,
+                  child: Column(
+                    children: [
+                      Text('Location',
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.visible,
+                        style: Styles.textLabelTitle_10,
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget reviewsUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      child: Container(
+        alignment: Alignment.center,
+        child:Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Text('Reviews',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.textLabelTitle_10,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.lock_clock, color: CustColors.light_navy,size: 35,),
+                    SizedBox(
+                      width: 50,
+                      child: Column(
+                        children: [
+                          Text('3 Minutes',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 50,
+                      child: Column(
+                        children: [
+                          Text('Location',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
