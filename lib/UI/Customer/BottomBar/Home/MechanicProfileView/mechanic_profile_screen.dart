@@ -44,7 +44,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             children: [
               profileImageAndKmAndReviewCount(size),
               timeAndLocationUi(size),
-              reviewsUi(size)
+              reviewsUi(size),
+              selectedServiceDetailsUi(size)
             ],
           ),
         ),
@@ -214,7 +215,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(10,10,10,0),
               child: Container(
                 child: Text('Reviews',
                   maxLines: 2,
@@ -226,7 +227,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:4,
+                itemCount:3,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -234,36 +235,190 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     onTap:(){
 
                     },
-                    child:Container(
-
-                      child: Column(
-                        mainAxisAlignment:MainAxisAlignment.start,
-                        children: [
-                          Container(
+                    child:Column(
+                      mainAxisAlignment:MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                          child: Container(
+                            width: double.infinity,
                             decoration: BoxDecoration(
                                 color: CustColors.whiteBlueish,
                                 borderRadius: BorderRadius.circular(11.0)
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(25),
-                              child: Icon(  Icons.star,size: 40,color: CustColors.light_navy,),
+                              padding: const EdgeInsets.all(0),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                    child: Container(
+                                      width: 80.0,
+                                      height: 80.0,
+                                      child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                          child:Container(
+                                              child:CircleAvatar(
+                                                  radius: 50,
+                                                  backgroundColor: Colors.white,
+                                                  child: ClipOval(
+                                                    child:  SvgPicture.asset('assets/image/CustomerType/upload_car_avathar.svg'),
+                                                  )))
+
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(2),
+                                            child: Text('Christopher',
+                                              style: Styles.textLabelTitle12,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.visible,),
+                                          ),
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(2),
+                                            child: Text('Good service and  nice work…',
+                                              style: Styles.textLabelTitle12,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.visible,),
+                                          ),
+
+                                          Row(
+                                            children: [
+                                              Spacer(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top:8),
+                                                child: Text('Read More',
+                                                  style: Styles.textLabelTitle12,
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.start,
+                                                  overflow: TextOverflow.visible,),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Text('dgf',
-                              style: Styles.textLabelTitle12,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.visible,),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget selectedServiceDetailsUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      child: Container(
+        alignment: Alignment.center,
+        child:Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10,10,10,0),
+              child: Container(
+                child: Text('Selected Service',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.textLabelTitle_10,
+                ),
+              ),
+            ),
+            Container(
+              child: ListView.builder(
+                itemCount:2,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context,index,) {
+                  return GestureDetector(
+                    onTap:(){
+
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child:Row(
+                          children: [
+                            Row(
+                              children: [
+                                Text('AC Heating',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelTitle_10,
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            Row(
+                              children: [
+                                Text('250',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelTitle_10,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10,10,10,0),
+              child: Row(
+                children: [
+                  Row(
+                    children: [
+                      Text('Total Amount',
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.visible,
+                        style: Styles.textLabelTitle_10,
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      Text('500',
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.visible,
+                        style: Styles.textLabelTitle_10,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
