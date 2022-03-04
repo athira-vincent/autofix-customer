@@ -222,13 +222,6 @@ class Styles {
     letterSpacing: .3,
   );
 
-  static const badgeTextStyle = TextStyle(
-    fontFamily: "Samsung_SharpSans_Medium",
-    fontSize: 12.7,
-    color: CustColors.white_02,
-    fontWeight: FontWeight.w700,
-    letterSpacing: .3,
-  );
 
   static const searchTextStyle01 =  TextStyle(
     color: CustColors.warm_grey02,
@@ -242,6 +235,42 @@ class Styles {
     color: CustColors.almost_black,
     fontWeight: FontWeight.w700,
     letterSpacing: .3,
+  );
+
+  static const appBarTextBlack = TextStyle(
+      fontSize: 18,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const experienceTextBlack = TextStyle(
+      fontSize: 10,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const badgeTextStyle = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 12.7,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w500,
+    letterSpacing: .3,
+  );
+
+  static const appBarTextBlack17 = TextStyle(
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.w700,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const awayTextBlack = TextStyle(
+      fontSize: 11,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
   );
 
 }

@@ -1,3 +1,4 @@
+import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -29,6 +30,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
+
   double _setValueFont(double value) {
     return value * perfont + value;
   }
@@ -39,6 +41,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -69,7 +72,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Text(
               'Maria Kurian',
               textAlign: TextAlign.center,
-              style: Styles.textLabelTitle,
+              style: Styles.appBarTextBlack,
             ),
             Spacer(),
 
@@ -86,26 +89,32 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   Text(
                     'experience',
                     textAlign: TextAlign.center,
-                    style: Styles.textLabelSubTitle10,
+                    style: Styles.experienceTextBlack,
                   ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Stack(
+                      alignment: Alignment.topCenter,
+                      children: [
 
-                      Container(
-                        height: 60,
-                        width: 60,
-                        color: Colors.white,
-                        child: CustomPaint(
-                          painter: CurvePainter(),
+                        Container(
+                          height: 60,
+                          width: 60,
+                          color: Colors.white,
+                          child: CustomPaint(
+                            painter: CurvePainter(),
+                          ),
                         ),
-                      ),
-                      Text(
-                        '9 Years',
-                        textAlign: TextAlign.center,
-                        style: Styles.badgeTextStyle,
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '9 Year',
+                            textAlign: TextAlign.center,
+                            style: Styles.badgeTextStyle,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -141,11 +150,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Text('1200 Km'),
+                        child: Text('1200 Km',
+                          style: Styles.appBarTextBlack17,),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,110,155,0),
-                        child: Text('Away'),
+                        child: Text('Away',
+                          style: Styles.awayTextBlack,),
                       )
                     ],
                   ),
@@ -182,7 +193,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,75,10,0),
-                        child: Text('Reviews'),
+                        child: Text('Reviews',
+                          style: Styles.appBarTextBlack17,),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,110,10,0),
@@ -511,6 +523,43 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget acceptAndSendRequestButton(Size size) {
+    return InkWell(
+      onTap: (){
+      },
+      child: Row(
+        children: [
+          Spacer(),
+          Container(
+            height: size.height * 0.045,
+            width: size.width * 0.246,
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+            //padding: EdgeInsets.only(left: 20, right: 20),
+            decoration: BoxDecoration(
+              color: CustColors.light_navy,
+              border: Border.all(
+                color: CustColors.blue,
+                style: BorderStyle.solid,
+                width: 0.70,
+              ),
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child:  Text(
+              "Accept & send request",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Corbel_Bold',
+                  fontSize:
+                  ScreenSize().setValueFont(14.5),
+                  fontWeight: FontWeight.w800),
+            ),
+          ),
+        ],
       ),
     );
   }
