@@ -296,7 +296,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,
-                  style: Styles.textLabelTitle_10,
+                  style: Styles.appBarTextBlack,
                 ),
               ),
             ),
