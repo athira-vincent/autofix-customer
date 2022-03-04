@@ -222,6 +222,14 @@ class Styles {
     letterSpacing: .3,
   );
 
+  static const badgeTextStyle = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 12.7,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w700,
+    letterSpacing: .3,
+  );
+
   static const searchTextStyle01 =  TextStyle(
     color: CustColors.warm_grey02,
     fontSize: 10,

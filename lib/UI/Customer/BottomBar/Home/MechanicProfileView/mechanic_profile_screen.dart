@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/styles.dart';
+import '../../../../../Widgets/CurvePainter.dart';
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
@@ -38,31 +39,80 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Maria Kurian',
-            textAlign: TextAlign.center,
-            style: Styles.textLabelTitle,
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
 
-            children: [
-              profileImageAndKmAndReviewCount(size),
-              timeAndLocationUi(size),
-              reviewsUi(size),
-              selectedServiceDetailsUi(size)
-            ],
+              children: [
+                appBarCustomUi(size),
+                profileImageAndKmAndReviewCount(size),
+                timeAndLocationUi(size),
+                reviewsUi(size),
+                selectedServiceDetailsUi(size)
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget appBarCustomUi(Size size) {
+    return Stack(
+      children: [
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.pop(context),
+            ),
+            Text(
+              'Maria Kurian',
+              textAlign: TextAlign.center,
+              style: Styles.textLabelTitle,
+            ),
+            Spacer(),
+
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top:8.0),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    'experience',
+                    textAlign: TextAlign.center,
+                    style: Styles.textLabelSubTitle10,
+                  ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+
+                      Container(
+                        height: 60,
+                        width: 60,
+                        color: Colors.white,
+                        child: CustomPaint(
+                          painter: CurvePainter(),
+                        ),
+                      ),
+                      Text(
+                        '9 Years',
+                        textAlign: TextAlign.center,
+                        style: Styles.badgeTextStyle,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
