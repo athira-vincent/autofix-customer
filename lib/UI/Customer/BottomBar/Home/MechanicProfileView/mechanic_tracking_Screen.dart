@@ -155,179 +155,235 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: Container(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
 
-              Expanded(
-                child: GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 11.0,
+
+
+                Expanded(
+                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 11.0,
+                    ),
+                    mapType: _currentMapType,
+                    markers: _markers,
+                    onCameraMove: _onCameraMove,
+                    polylines: Set<Polyline>.of(polylines.values),
                   ),
-                  mapType: _currentMapType,
-                  markers: _markers,
-                  onCameraMove: _onCameraMove,
-                  polylines: Set<Polyline>.of(polylines.values),
                 ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20,20,20,50),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
 
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20,20,20,20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  child: SvgPicture.asset(
-                                    'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20,20,20,20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: SvgPicture.asset(
+                                      'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
+                                    ),
                                   ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Departed",
+                                          style: Styles.waitingTextBlack17,
+                                        ),
+                                        Text(
+                                          "Mechanic Departed from his location.",
+                                          style: Styles.awayTextBlack,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: FDottedLine(
+                                  color: CustColors.blue,
+                                  height: 40.0,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: SvgPicture.asset(
+                                      'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "3 mintues",
+                                          style: Styles.waitingTextBlack17,
+                                        ),
+                                        Text(
+                                          "Arrival time.",
+                                          style: Styles.awayTextBlack,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: CustColors.blue,
+                            borderRadius: BorderRadius.only(
+                                bottomRight:   Radius.circular(20),
+                                bottomLeft:  Radius.circular(20)),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Container(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
+                                      Icon(Icons.phone, color: Colors.white),
                                       Text(
-                                        "Departed",
-                                        style: Styles.waitingTextBlack17,
-                                      ),
-                                      Text(
-                                        "Mechanic Departed from his location.",
-                                        style: Styles.awayTextBlack,
+                                        "Call",
+                                        style: Styles.popUPTextStyle,
                                       ),
                                     ],
                                   ),
                                 ),
-
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: FDottedLine(
-                                color: CustColors.blue,
-                                height: 40.0,
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 20,
-                                  width: 20,
-                                  child: SvgPicture.asset(
-                                    'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
+                              Expanded(
+                                child:  Container(
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
+                                      Icon(Icons.chat, color: Colors.white),
                                       Text(
-                                        "3 mintues",
-                                        style: Styles.waitingTextBlack17,
-                                      ),
-                                      Text(
-                                        "Arrival time.",
-                                        style: Styles.awayTextBlack,
+                                        "Chat",
+                                        style: Styles.popUPTextStyle,
                                       ),
                                     ],
                                   ),
                                 ),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: CustColors.blue,
-                          borderRadius: BorderRadius.only(
-                              bottomRight:   Radius.circular(20),
-                              bottomLeft:  Radius.circular(20)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.phone, color: Colors.white),
-                                    Text(
-                                      "Call",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                              ),
+                              Expanded(
+                                child:  Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.smartphone_sharp, color: Colors.white),
+                                      Text(
+                                        "Call via ResolMech",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.chat, color: Colors.white),
-                                    Text(
-                                      "Chat",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.smartphone_sharp, color: Colors.white),
-                                    Text(
-                                      "Call via ResolMech",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-            ],
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Icon(Icons.arrow_back, color: Colors.black),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Mechanic on the way",
+                                            textAlign: TextAlign.start,
+                                            style: Styles.waitingTextBlack17,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
           ),
         ),
       ),
