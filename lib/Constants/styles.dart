@@ -266,6 +266,13 @@ class Styles {
       fontFamily:'Samsung_SharpSans_Medium'
   );
 
+  static const waitingTextBlack17 = TextStyle(
+      fontSize: 14,
+      color: Colors.black,
+      fontWeight: FontWeight.w700,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
   static const awayTextBlack = TextStyle(
       fontSize: 11,
       color: Colors.black,

@@ -52,7 +52,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                 timeAndLocationUi(size),
                 reviewsUi(size),
                 selectedServiceDetailsUi(size),
-                acceptAndSendRequestButton( size)
+                acceptAndSendRequestButton( size,context)
               ],
             ),
           ),
@@ -528,9 +528,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     );
   }
 
-  Widget acceptAndSendRequestButton(Size size) {
+  Widget acceptAndSendRequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
+        _showProductTourDialog(context);
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -568,5 +569,53 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     );
   }
 
+  _showProductTourDialog(BuildContext context) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                backgroundColor: Colors.white,
+                insetPadding: EdgeInsets.only(left: 20, right: 20),
 
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                contentPadding: const EdgeInsets.all(20),
+                content: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "Wait few minutes !",
+                            style: Styles.waitingTextBlack17,
+                          ),
+                          Text(
+                            "Wait for the response from George Dola!",
+                            style: Styles.awayTextBlack,
+                          ),
+                          Container(
+                            height: 150,
+                              child: SvgPicture.asset(
+                                  'assets/image/mechanicProfileView/waitForMechanic.svg',
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ));
+          });
+        });
+
+   
+  }
 }
