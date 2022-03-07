@@ -70,6 +70,7 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.2
   file_picker: ^4.5.0
+  fdottedline: ^1.0.1
 
 
 

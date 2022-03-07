@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
+import '../../Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
 
 class SplashScreen extends StatefulWidget {
   
@@ -79,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  MechanicProfileViewScreen()));
+                builder: (context) =>  MechanicTrackingScreen()));
       }
     }
   }
