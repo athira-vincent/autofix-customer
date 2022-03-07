@@ -1,3 +1,4 @@
+import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -531,7 +532,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   Widget acceptAndSendRequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-        _showProductTourDialog(context);
+        _showMechanicAcceptanceDialog(context);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechanicTrackingScreen()));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -569,7 +574,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     );
   }
 
-  _showProductTourDialog(BuildContext context) async {
+  _showMechanicAcceptanceDialog(BuildContext context) async {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
