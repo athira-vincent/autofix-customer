@@ -125,6 +125,8 @@ flutter:
     - assets/image/home_customer/
     - assets/image/home_customer/banner1.png
     - assets/image/mechanicProfileView/directionMechnanicTracking.svg
+    - assets/map_style/map_style.txt
+
   fonts:
     - family: Montserrat_SemiBold
       fonts:

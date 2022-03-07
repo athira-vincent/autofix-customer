@@ -13,6 +13,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/styles.dart';
 import '../../../../../Widgets/CurvePainter.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
 
 class MechanicTrackingScreen extends StatefulWidget {
 
@@ -50,8 +52,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   static const LatLng _center = const LatLng(12.988827, 77.472091);
 
+  String? _mapStyle;
+
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+    controller.setMapStyle(_mapStyle);
   }
 
   Set<Polyline> lines = {};
@@ -134,6 +139,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
+      _mapStyle = string;
+    });
     /// add origin marker origin marker
     _addMarker(
       LatLng(_originLatitude, _originLongitude),
