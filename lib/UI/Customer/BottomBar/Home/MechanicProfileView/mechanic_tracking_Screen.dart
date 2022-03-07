@@ -189,59 +189,81 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
 
-                      Row(
-                        children: [
-                          Icon(Icons.send, color: Colors.blue),
-                          Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20,20,20,20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                Text(
-                                  "Departed",
-                                  style: Styles.waitingTextBlack17,
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  child: SvgPicture.asset(
+                                    'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
+                                  ),
                                 ),
-                                Text(
-                                  "Mechanic Departed from his location.",
-                                  style: Styles.awayTextBlack,
+                                Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Departed",
+                                        style: Styles.waitingTextBlack17,
+                                      ),
+                                      Text(
+                                        "Mechanic Departed from his location.",
+                                        style: Styles.awayTextBlack,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+
                               ],
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: FDottedLine(
+                                color: CustColors.blue,
+                                height: 40.0,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 20,
+                                  width: 20,
+                                  child: SvgPicture.asset(
+                                    'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "3 mintues",
+                                        style: Styles.waitingTextBlack17,
+                                      ),
+                                      Text(
+                                        "Arrival time.",
+                                        style: Styles.awayTextBlack,
+                                      ),
+                                    ],
+                                  ),
+                                ),
 
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: FDottedLine(
-                          color: CustColors.blue,
-                          height: 40.0,
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.send, color: Colors.blue),
-                          Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "3 mintues",
-                                  style: Styles.waitingTextBlack17,
-                                ),
-                                Text(
-                                  "Arrival time.",
-                                  style: Styles.awayTextBlack,
-                                ),
-                              ],
-                            ),
-                          ),
 
-                        ],
-                      ),
                       Container(
                         height: 50,
                         decoration: BoxDecoration(
