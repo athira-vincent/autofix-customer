@@ -6,6 +6,8 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.d
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'BottomBar/Home/customer_home.dart';
+
 class CustomerHomeScreen extends StatefulWidget {
 
   CustomerHomeScreen();
@@ -260,7 +262,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             margin: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 120,
             ),
-            child: _index == 0 ? CustomerHome() :
+            child: _index == 0 ? HomeCustomerUIScreen() :
                 _index == 1 ? CustomerCartScreen() :
                 _index == 2 ? CustomerMyProfileScreen() : CustomerMyServiceScreen(),
 

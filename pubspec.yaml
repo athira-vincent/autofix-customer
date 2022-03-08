@@ -56,7 +56,7 @@ dependencies:
   connectivity_plus: ^1.2.0
   carousel_slider: 4.0.0
   # FACEBOOK PACKAGE
-  flutter_facebook_login: 1.2.0
+  flutter_facebook_login: 2.0.1
   # FIREBASE PACKAGES
   google_sign_in: 5.1.0
   firebase_core: 1.11.0
@@ -67,6 +67,10 @@ dependencies:
   flutter_xlider: ^3.4.0
   flutter_svg: 0.23.0+1
   intl: ^0.17.0
+  geolocator: ^8.2.0
+  geocoding: ^2.0.2
+  file_picker: ^4.5.0
+  fdottedline: ^1.0.1
 
 
 
@@ -114,11 +118,15 @@ flutter:
     - assets/image/MechanicType/
     - assets/image/phoneLogin/
     - assets/image/SignUp/
+    - assets/image/mechanicProfileView/
+    - assets/image/mechanicProfileView/curvedGray.png
     - assets/fonts/
     - assets/json/
     - assets/image/home_customer/
     - assets/image/home_customer/banner1.png
-    - assets/image/MechanicType/mechanicCompleteProfile_bg.svg
+    - assets/image/mechanicProfileView/directionMechnanicTracking.svg
+    - assets/map_style/map_style.txt
+
   fonts:
     - family: Montserrat_SemiBold
       fonts:

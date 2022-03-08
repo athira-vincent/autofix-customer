@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/service_type_selection_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicle_specialization_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
@@ -13,6 +14,7 @@ import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,6 +85,11 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
   List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
   String? selectedworkSelection = '' ;
+
+  List<String> noOfMechanicsSelectionList = ['2','3','4'];
+  String? noOfMechanicsSelection = '' ;
+
+  String? _fileName;
 
 
   @override
@@ -330,11 +337,16 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  AppLocalizations.of(context)!.text_name ).nameChecking,
+                  'Work Selection').nameChecking,
               controller: _workSelectionController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
                 isDense: true,
+                suffixIcon: Align(
+                  widthFactor: 3.0,
+                  heightFactor: 3.0,
+                  child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
                 hintText:
                 "Select your service type(Emergency/regular…)",
                 border: UnderlineInputBorder(
@@ -369,123 +381,156 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   }
 
   Widget vehicleSpecializedTextSelection() {
-    return Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return InkWell(
+      onTap: (){
+        _awaitReturnValueFromSecondScreen(context);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
 
-            "Choose vehicle specialised",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _chooseVechicleSpecializedFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _chooseVechicleSpecializedController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Select your company specialised vehicles",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+              "Choose vehicle specialised",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _chooseVechicleSpecializedFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z0-9 ]')),
+              ],
+              validator: InputValidator(
+                  ch :'vehicle specialised').nameCheckingWithNumericAndBracket,
+              controller: _chooseVechicleSpecializedController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText:
+                "Select your company specialised vehicles",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget uploadApprenticeCertificateSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+  void _awaitReturnValueFromSecondScreen(BuildContext context) async {
 
-            "Upload certificate of apprentice ",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _apprenticeCertificateFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _apprenticeCertificateController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Attach your certificates ",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VehicleSpecializationScreen(),
+        ));
+    setState(() {
+      selectedState = result;
+      if(selectedState!='[]')
+        {
+          _chooseVechicleSpecializedController.text = selectedState;
+          print ("Selected state @ sign up: " + selectedState );
+        }
+
+    });
+  }
+
+  Widget uploadApprenticeCertificateSelection() {
+    return  InkWell(
+      onTap: (){
+
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+
+              "Upload certificate of apprentice ",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _apprenticeCertificateFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :'Upload certificate of apprentice ').nameChecking,
+              controller: _apprenticeCertificateController,
+              cursorColor: CustColors.whiteBlueish,
+
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/attach_icon.svg',height: 9,width: 9,)
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                hintText:
+                "Attach your certificates ",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -507,14 +552,12 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             style: Styles.textLabelSubTitle,
             focusNode: _addressFocusNode,
             keyboardType: TextInputType.name,
-            enabled: false,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
+                  RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
+                ch :'Address').nameCheckingWithNumeric,
             controller: _addressController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
@@ -552,124 +595,143 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   }
 
   Widget meansOfIdentificationSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return  InkWell(
+      onTap: (){
+        _openFileExplorerMeansOfIdentification();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
 
-            "Means of identification ",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _identificationProofFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _identificationProofController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Attach any identification proof",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+              "Means of identification ",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _identificationProofFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch :'Means of identification' ).nameChecking,
+              controller: _identificationProofController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/attach_icon.svg',height: 9,width: 9,)
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                hintText:
+                "Attach any identification proof",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     ) ;
   }
 
 
   Widget numberOfMechanicsSelection() {
-    return  Container(
-      margin: EdgeInsets.only(top: _setValue(15.5)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
+    return  InkWell(
+      onTap: (){
+        _showDialogNumberOfMecanicsSelection(noOfMechanicsSelectionList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: _setValue(15.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
 
-            "Number of mechanics",
-            style: Styles.textLabelTitle,
-          ),
-          TextFormField(
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            style: Styles.textLabelSubTitle,
-            focusNode: _noOfMechanicsFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
-            ],
-            validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
-            controller: _noOfMechanicsController,
-            cursorColor: CustColors.whiteBlueish,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText:
-              "Select your mechanic strength",
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+              "Number of mechanics",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _noOfMechanicsFocusNode,
+              keyboardType: TextInputType.number,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[0-9]')),
+              ],
+              validator: InputValidator(
+                  ch :
+                  'Mechanic strength').nameCheckingWithNumeric,
+              controller: _noOfMechanicsController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                hintText:
+                "Select your mechanic strength",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: CustColors.greyish,
-                  width: .5,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 12.8,
-                horizontal: 0.0,
-              ),
-              errorStyle: Styles.textLabelSubTitleRed,
-              hintStyle: Styles.textLabelSubTitle,),
-          ),
-        ],
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -691,14 +753,12 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             style: Styles.textLabelSubTitle,
             focusNode: _rcNumberFocusNode,
             keyboardType: TextInputType.name,
-            enabled: false,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
+                  RegExp('[a-zA-Z0-9 ]')),
             ],
             validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
+                ch : 'RC number').nameCheckingWithNumeric,
             controller: _rcNumberController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
@@ -751,15 +811,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             maxLines: 1,
             style: Styles.textLabelSubTitle,
             focusNode: _yearOfExistenceFocusNode,
-            keyboardType: TextInputType.name,
-            enabled: false,
+            keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z ]')),
+                  RegExp('[0-9]')),
             ],
             validator: InputValidator(
-                ch :
-                AppLocalizations.of(context)!.text_name ).nameChecking,
+                ch : 'Year of existence' ).nameCheckingWithNumeric,
             controller: _yearOfExistenceController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
@@ -1018,6 +1076,73 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               ),
             ),);
         });
+  }
+
+
+  _showDialogNumberOfMecanicsSelection(List<String> noOfMechanicsSelectionList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: noOfMechanicsSelectionList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${noOfMechanicsSelectionList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      setState(() {
+
+                        noOfMechanicsSelection=noOfMechanicsSelectionList[index];
+                        _noOfMechanicsController.text = noOfMechanicsSelectionList[index];
+                        if (_formKey.currentState!.validate()) {
+                        } else {
+                        }
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
+  void _openFileExplorerMeansOfIdentification() async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf','docx'], //here you can add any of extention what you need to pick
+      );
+
+      if(file != null) {
+
+        setState(() {
+
+          _fileName = file.toString(); //file1 is a global variable which i created
+          print(_fileName);
+
+        });
+
+      }
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    if (!mounted) return;
   }
 
 

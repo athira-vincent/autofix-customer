@@ -4,9 +4,13 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 
+import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
+
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();
+  final _vehicleSpecializationApiProvider = vehicleSpecializationApiProvider();
+
   final _signinApiProvider = SigninApiProvider();
   final _forgotPasswordApiProvider = ForgotPasswordApiProvider();
   final _fcmTokenUpdateApiProvider = FcmTokenUpdateApiProvider();
@@ -21,6 +25,10 @@ class Repository {
           firstName, userName, email, state, password, phone);
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
+
+
+  // Get vehicleSpecialization
+  Future<dynamic> getvehicleSpecializationList() => _vehicleSpecializationApiProvider.getVehicleSpecialization();
   //SignIn
   Future<dynamic> getSignIn(String userName, String password) =>
       _signinApiProvider.getSignInRequest(userName, password);
