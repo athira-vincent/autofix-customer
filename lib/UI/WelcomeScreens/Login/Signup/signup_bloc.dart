@@ -1,28 +1,41 @@
 import 'package:auto_fix/Repository/repository.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Individual_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
 
 class SignupBloc {
+
   final Repository repository = Repository();
-  final postSignUp = PublishSubject<SignupMdl>();
-  Stream<SignupMdl> get signUpResponse => postSignUp.stream;
+
+
+  final postSignUpCustomerIndividual = PublishSubject<CustomersSignUpIndividualMdl>();
+  Stream<CustomersSignUpIndividualMdl> get signUpCustomerIndividualResponse => postSignUpCustomerIndividual.stream;
+
+
+
   final statesCode = PublishSubject<List<StateDetails>>();
   Stream<List<StateDetails>> get countryDialcodeResponse => statesCode.stream;
 
   List<StateDetails> _statesDataList = [];
-  dispose() {
-    postSignUp.close();
-    statesCode.close();
+
+
+  postSignUpCustomerIndividualRequest(String firstName, String lastName, String email,
+      String state, String password, String phone) async {
+    CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeIndividual(
+        firstName, lastName, email, state, password, phone);
+    postSignUpCustomerIndividual.sink.add(_signUpMdl);
   }
 
-  postSignUpRequest(String firstName, String userName, String email,
-      String state, String password, String phone) async {
-    SignupMdl _signUpMdl = await repository.getSignUp(
-        firstName, userName, email, state, password, phone);
-    postSignUp.sink.add(_signUpMdl);
+  postSignUpCustomerCorporateRequest(String firstName, String userName, String email,
+      String state, String password, String phone,String orgName,String orgType,) async {
+    CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeCorporate(
+        firstName, userName, email, state, password, phone,orgName,orgType);
+    postSignUpCustomerIndividual.sink.add(_signUpMdl);
   }
+
+
 
   dialStatesListRequest() async {
     dynamic _state = await repository.getStateList();
@@ -45,5 +58,11 @@ class SignupBloc {
     } else {
       statesCode.sink.add(_statesDataList);
     }
+  }
+
+
+  dispose() {
+    statesCode.close();
+    postSignUpCustomerIndividual.close();
   }
 }

@@ -128,34 +128,25 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   _getSignUpResponse() {
-    _signupBloc.postSignUp.listen((value) {
+    _signupBloc.postSignUpCustomerIndividual.listen((value) {
       if (value.status == "error") {
         setState(() {
-          print("errrrorr 02");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(), _scaffoldKey);
-
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
         });
+
       } else {
-        setState(()  {
-           print("errrrorr 01");
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-
-          //setSignUp1Data(value);
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
           FocusScope.of(context).unfocus();
-
         });
       }
     });
@@ -1022,61 +1013,28 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                               child: MaterialButton(
                                                 onPressed: () {
-
                                                   if (_formKey.currentState!.validate()) {
                                                     print("_formKey.currentState!.validate()");
 
-                                                    _checkInternet.check().then((intenet) {
-                                                      if (intenet != null && intenet) {
-
-                                                        // Internet Present Case
-                                                        print('internet connection - true');
-                                                        if(
-                                                        widget.userCategory == TextStrings.user_category_individual
-                                                            && widget.userType == TextStrings.user_customer
-                                                            ? signUpCustomerIndividual(context)
-                                                            :  widget.userCategory == TextStrings.user_category_individual
-                                                            && widget.userType == TextStrings.user_mechanic
-                                                            ? signUpMechanicIndividual(context)
-                                                            : widget.userCategory == TextStrings.user_category_corporate
-                                                            && widget.userType == TextStrings.user_customer
-                                                            ? signUpCustomerCorporate(context)
-                                                            : widget.userCategory == TextStrings.user_category_corporate
-                                                            && widget.userType == TextStrings.user_mechanic
-                                                            ? signUpMechanicCorporate(context)
-                                                            : signUpCustomerGovernment(context)
-                                                        ){
-                                                          setState(() {
-                                                            _isLoading = true;
-                                                          });
-                                                          _signupBloc.postSignUpRequest(
-                                                              " "," "," ",
-                                                              _emailController.text,
-                                                              _phoneController.text,
-                                                              _passwordController.text);
-                                                        }else{
-                                                          setState(() {
-                                                            _isLoading = false;
-                                                          });
-                                                          print(errorMsg.toString());
-                                                          SnackBarWidget().setMaterialSnackBar(errorMsg.toString(),_scaffoldKey);
-                                                        }
-
-                                                       /* Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));*/
-                                                      } else {
-                                                        print('No internet connection');
-                                                      }
-                                                    });
+                                                    widget.userCategory == TextStrings.user_category_individual
+                                                        && widget.userType == TextStrings.user_customer
+                                                        ? signUpCustomerIndividual(context)
+                                                        :  widget.userCategory == TextStrings.user_category_individual
+                                                        && widget.userType == TextStrings.user_mechanic
+                                                        ? signUpMechanicIndividual(context)
+                                                        : widget.userCategory == TextStrings.user_category_corporate
+                                                        && widget.userType == TextStrings.user_customer
+                                                        ? signUpCustomerCorporate(context)
+                                                        : widget.userCategory == TextStrings.user_category_corporate
+                                                        && widget.userType == TextStrings.user_mechanic
+                                                        ? signUpMechanicCorporate(context)
+                                                        : signUpCustomerGovernment(context);
                                                   }
                                                   else {
                                                     print("_formKey.currentState!.validate() - else");
-                                                    setState(() => _autoValidate =
-                                                        AutovalidateMode.always);
+                                                    setState(() => _autoValidate = AutovalidateMode.always);
                                                   }
+
                                                 },
                                                 child: Container(
                                                   height: 45,
@@ -1190,8 +1148,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1202,19 +1160,28 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   bool signUpCustomerIndividual(BuildContext context){
-    print("signUpCustomerIndividual - loaded");
     if(validateSignUpCustomerIndividual()){
-      print("validateSignUpCustomerIndividual - true");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" + _photoController.text+
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+
+      setState(() {
+        print("validateSignUpCustomerIndividual - true");
+        print(" Name : " + _nameController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpCustomerIndividualRequest(_nameController.text, _nameController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text);
+      });
+
       return true;
     }else{
+      setState(() {
+        _isLoading=false;
+      });
       print("signUpCustomerIndividual - else");
       return false;
     }
@@ -1252,8 +1219,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1317,8 +1284,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1382,8 +1349,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1447,8 +1414,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }

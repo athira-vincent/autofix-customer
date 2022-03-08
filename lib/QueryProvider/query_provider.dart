@@ -29,34 +29,80 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUp(String firstName, String userName, String email, String state,
+  signUpCustomerIndividual(String firstName, String userName, String email, String state,
       String password, String phoneNo) async {
     String _query = """ 
-    mutation{
-          customersSignUp(firstName: "$firstName",
-           lastName: "", address: "", 
-           emailId: "$email", 
-           phoneNo: "$phoneNo", 
-           password: "$password", 
-           state:"$state", 
-           userName:"$userName") {
-            token
-            customer {
-              id
-              firstName
-              lastName
-              address
-              emailId
-              phoneNo
-              profilePic
-              isProfileCompleted
-              state
-              userName
-              status
-            }
-            isProfileCompleted
-          } 
+    mutation {
+        customersSignUp_Individual(
+          firstName: "$firstName"
+          lastName: "$userName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          password: "$password"
+          state: "$state"
+          userType: 1
+          accountType: 1
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            userType
+            accountType
+            profilePic
+            isProfile_Completed
+            status
+          }
+          isProfile_Completed
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
   }
+
+  signUpCustomerCorporate(String firstName, String userName, String email, String state,
+      String password, String phoneNo,String orgName,String orgType) async {
+    String _query = """ 
+    mutation {
+        customersSignUp_Corporate(
+          firstName: "$firstName"
+          lastName: "$userName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          org_name: "$orgName"
+          org_type: "$orgType"
+          password: "$password"
+          state: "$state"
+          userType: 1
+          accountType: 2
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            userType
+            accountType
+            profilePic
+            isProfile_Completed
+            status
+          }
+          isProfile_Completed
+        }
+      }
+
     """;
     log(_query);
     return await GqlClient.I.mutation(_query,

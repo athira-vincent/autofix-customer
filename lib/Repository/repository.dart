@@ -17,12 +17,19 @@ class Repository {
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
 
 
-
-  // Customer SignUpScreen1
-  Future<dynamic> getSignUp(String firstName, String userName, String email,
-          String state, String password, String phone) =>
-      _signupApiProvider.getSignUpRequest(
+  // Customer Individual SignUp
+  Future<dynamic> getSignUpCustomeIndividual(String firstName, String userName, String email,
+      String state, String password, String phone) =>
+      _signupApiProvider.getSignUpCustomerIndividualRequest(
           firstName, userName, email, state, password, phone);
+
+  // Customer Corporate SignUp
+  Future<dynamic> getSignUpCustomeCorporate(String firstName, String userName, String email,
+      String state, String password, String phone,String orgName,String orgType,) =>
+      _signupApiProvider.getSignUpCustomerCorporateRequest(
+          firstName, userName, email, state, password, phone,orgName,orgType);
+
+
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 

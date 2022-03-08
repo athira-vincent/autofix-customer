@@ -3,29 +3,63 @@
 import 'dart:convert';
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Individual_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 
 import 'package:flutter/services.dart';
 
 class SignupApiProvider {
+
   final QueryProvider _queryProvider = QueryProvider();
-  Future<SignupMdl> getSignUpRequest(String firstName, String userName,
-      String email, String state, String password, String phone) async {
-    Map<String, dynamic> _resp = await _queryProvider.signUp(
-        firstName, userName, email, state, password, phone);
+
+
+
+  Future<CustomersSignUpIndividualMdl> getSignUpCustomerIndividualRequest(
+      String firstName,
+      String userName,
+      String email,
+      String state,
+      String password,
+      String phone) async {
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerIndividual(firstName, userName, email, state, password, phone);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
-        final errorMsg = SignupMdl(status: "error", message: _resp['message']);
+        final errorMsg = CustomersSignUpIndividualMdl(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};
-        return SignupMdl.fromJson(data);
+        return CustomersSignUpIndividualMdl.fromJson(data);
       }
     } else {
-      final errorMsg =
-          SignupMdl(status: "error", message: "No Internet connection");
+      final errorMsg = CustomersSignUpIndividualMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  Future<CustomersSignUpIndividualMdl> getSignUpCustomerCorporateRequest(
+      String firstName,
+      String userName,
+      String email,
+      String state,
+      String password,
+      String phone,
+      String orgName,
+      String orgType,) async {
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerCorporate(firstName, userName, email, state, password, phone,orgName,orgType);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustomersSignUpIndividualMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustomersSignUpIndividualMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CustomersSignUpIndividualMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }
