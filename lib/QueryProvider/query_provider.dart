@@ -110,20 +110,22 @@ class QueryProvider {
   }
 
   signUpCustomerGovtBodies(String firstName, String lastName, String email, String state,
-      String password, String phoneNo,String orgName,String orgType) async {
+      String password, String phoneNo,String govt_agency,String govt_type) async {
     String _query = """ 
     mutation {
-        customersSignUp_Corporate(
+         customersSignUp_govtBodies(
           firstName: "$firstName"
-          lastName: "$lastName"
+          lastName:"$lastName"
           emailId: "$email"
           phoneNo: "$phoneNo"
-          org_name: "$orgName"
-          org_type: "$orgType"
+          govt_type: "$govt_type"
+          govt_agency: "Food Corporation of india"
+          ministry_name: "Labour And Environment"
+          head_of_dept: "Athira"
           password: "$password"
           state: "$state"
           userType: 1
-          accountType: 2
+          accountType: 3
         ) {
           token
           customer {

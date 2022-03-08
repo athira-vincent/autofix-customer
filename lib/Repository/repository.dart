@@ -31,9 +31,10 @@ class Repository {
 
   // Customer GovtBodies SignUp
   Future<dynamic> getSignUpCustomeGovtBodies(String firstName, String lastName, String email,
-      String state, String password, String phone,String orgName,String orgType,) =>
+      String state, String password, String phone,String govt_agency,
+      String govt_type) =>
       _signupApiProvider.getSignUpCustomerGovtBodiesRequest(
-          firstName, lastName, email, state, password, phone,orgName,orgType);
+          firstName, lastName, email, state, password, phone,govt_agency,govt_type);
 
 
   // Get State

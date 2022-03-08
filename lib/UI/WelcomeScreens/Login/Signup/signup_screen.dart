@@ -1454,7 +1454,7 @@ class _SignupScreenState extends State<SignupScreen> {
         );
         _isLoading=true;
         _signupBloc.postSignUpCustomerGovtBodiesRequest(_contactPersonController.text, _contactPersonController.text,_emailController.text,
-            _stateController.text,  _passwordController.text, _phoneController.text,_nameController.text,_orgTypeController.text);
+            _stateController.text,  _passwordController.text, _phoneController.text,_ministryGovtController.text,_ministryGovtController.text);
       });
       return true;
     }else{

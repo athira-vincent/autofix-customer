@@ -37,9 +37,10 @@ class SignupBloc {
 
 
   postSignUpCustomerGovtBodiesRequest(String firstName, String lastName, String email,
-      String state, String password, String phone,String orgName,String orgType,) async {
+      String state, String password, String phone,String govt_agency,
+      String govt_type) async {
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
-        firstName, lastName, email, state, password, phone,orgName,orgType);
+        firstName, lastName, email, state, password, phone,govt_agency,govt_type);
     postSignUpCustomerIndividual.sink.add(_signUpMdl);
   }
 

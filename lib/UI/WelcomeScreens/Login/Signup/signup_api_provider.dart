@@ -71,9 +71,9 @@ class SignupApiProvider {
       String state,
       String password,
       String phone,
-      String orgName,
-      String orgType,) async {
-    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerGovtBodies(firstName, lastName, email, state, password, phone,orgName,orgType);
+      String govt_agency,
+      String govt_type) async {
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerGovtBodies(firstName, lastName, email, state, password, phone,govt_agency,govt_type);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
