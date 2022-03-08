@@ -43,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? _isLoggedin = _shdPre.getBool(SharedPrefKeys.isUserLoggedIn);
     bool? isWalked = _shdPre.getBool(SharedPrefKeys.isWalked);
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
-
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
