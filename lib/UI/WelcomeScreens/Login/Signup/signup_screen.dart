@@ -128,7 +128,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   _getSignUpResponse() {
-    _signupBloc.postSignUpCustomerIndividual.listen((value) {
+    _signupBloc.postSignUpCustomer.listen((value) {
       if (value.status == "error") {
         setState(() {
           SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);

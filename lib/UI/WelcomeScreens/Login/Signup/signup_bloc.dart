@@ -10,8 +10,8 @@ class SignupBloc {
   final Repository repository = Repository();
 
 
-  final postSignUpCustomerIndividual = PublishSubject<CustomersSignUpIndividualMdl>();
-  Stream<CustomersSignUpIndividualMdl> get signUpCustomerIndividualResponse => postSignUpCustomerIndividual.stream;
+  final postSignUpCustomer = PublishSubject<CustomersSignUpIndividualMdl>();
+  Stream<CustomersSignUpIndividualMdl> get signUpCustomerResponse => postSignUpCustomer.stream;
 
 
 
@@ -25,14 +25,14 @@ class SignupBloc {
       String state, String password, String phone) async {
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeIndividual(
         firstName, lastName, email, state, password, phone);
-    postSignUpCustomerIndividual.sink.add(_signUpMdl);
+    postSignUpCustomer.sink.add(_signUpMdl);
   }
 
   postSignUpCustomerCorporateRequest(String firstName, String lastName, String email,
       String state, String password, String phone,String orgName,String orgType,) async {
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeCorporate(
         firstName, lastName, email, state, password, phone,orgName,orgType);
-    postSignUpCustomerIndividual.sink.add(_signUpMdl);
+    postSignUpCustomer.sink.add(_signUpMdl);
   }
 
 
@@ -41,7 +41,7 @@ class SignupBloc {
       String govt_type) async {
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
         firstName, lastName, email, state, password, phone,govt_agency,govt_type);
-    postSignUpCustomerIndividual.sink.add(_signUpMdl);
+    postSignUpCustomer.sink.add(_signUpMdl);
   }
 
 
@@ -72,6 +72,6 @@ class SignupBloc {
 
   dispose() {
     statesCode.close();
-    postSignUpCustomerIndividual.close();
+    postSignUpCustomer.close();
   }
 }
