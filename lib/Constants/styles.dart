@@ -287,5 +287,34 @@ class Styles {
       fontWeight: FontWeight.w600,
       fontFamily:'Samsung_SharpSans_Medium'
   );
+  static const homeActiveTextStyle = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Medium',
+      fontSize: 6,
+      fontWeight: FontWeight.w600,
+      color: CustColors.light_navy);
+  static const homeInactiveTextStyle = TextStyle(
+      fontSize: 6,
+      color: CustColors.brownish_grey_02,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const homeWelcomeTextStyle = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Medium',
+      fontWeight: FontWeight.w600,
+      fontSize: 15.4,
+      color: CustColors.light_navy);
+  static const homeNameTextStyle = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Bold',
+      fontWeight: FontWeight.w600,
+      fontSize: 15.4,
+      color: CustColors.light_navy);
+  static const homeWelcomeSymbolTextStyle = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Bold',
+      fontWeight: FontWeight.w600,
+      fontSize: 15.4,
+      color: CustColors.cherry);
+
+
 
 }
