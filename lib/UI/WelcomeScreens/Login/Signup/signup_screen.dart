@@ -175,7 +175,6 @@ class _SignupScreenState extends State<SignupScreen> {
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-
   Future<void> GetAddressFromLatLong(Position position)async {
 
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
@@ -243,19 +242,7 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _stateController.dispose();
-    _photoController.dispose();
-    _passwordController.dispose();
-    _confirmPwdController.dispose();
 
-    _signupBloc.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -2036,7 +2023,6 @@ class _SignupScreenState extends State<SignupScreen> {
         });
   }
 
-
   void setSnackBar(String msg){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('$msg',
@@ -2044,6 +2030,20 @@ class _SignupScreenState extends State<SignupScreen> {
       duration: Duration(seconds: 2),
       backgroundColor: CustColors.peaGreen,
     ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _stateController.dispose();
+    _photoController.dispose();
+    _passwordController.dispose();
+    _confirmPwdController.dispose();
+
+    _signupBloc.dispose();
   }
 
 }
