@@ -1,10 +1,12 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Cart/customer_cart.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'BottomBar/Home/customer_home.dart';
 
@@ -21,10 +23,13 @@ class CustomerHomeScreen extends StatefulWidget {
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
   int _index = 0;
+  int _counter = 0;
+
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   double per = .10;
   double perfont = .10;
+
 
   double _setValue(double value) {
     return value * per + value;
@@ -47,25 +52,34 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             height: size.height * 48 / 100,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
-                color: _index == 0
+                /*color: _index == 0
                     ? Colors.white.withOpacity(.05)
-                    : Colors.transparent),
+                    : Colors.transparent*/
+            ),
             child: Column(
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  child: Image.asset('assets/image/ic_home.png',
-                  ),
+                  child: _index == 0 ?
+                  Image.asset('assets/image/ic_home_active.png',
+                    width: _setValue(28),
+                    height: _setValue(28),
+                  )
+                  :
+                  SvgPicture.asset(
+                    'assets/image/ic_home_inactive.svg',
+                    width: _setValue(26),
+                    height: _setValue(26),
+                  )
                 ),
                 Container(
                   //margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
                     'Home',
-                    style: TextStyle(
-                        fontFamily: 'Corbel_Light',
-                        fontSize: _setValueFont(8.5),
-                        fontWeight: FontWeight.w600,
-                        color: CustColors.light_navy),
+                    style: _index == 0 ?
+                        Styles.homeActiveTextStyle
+                       :
+                      Styles.homeInactiveTextStyle,
                   ),
                 ),
               ],
@@ -79,30 +93,37 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             height: _setValue(65),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
-                color: _index == 1
+                /*color: _index == 1
                     ? Colors.white.withOpacity(.05)
-                    : Colors.transparent),
+                    : Colors.transparent*/
+            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
                   //child: Icon(Icons.cart)
-                  child: Image.asset(
-                    'assets/image/ic_home_cart.png',
-                    width: _setValue(29),
-                    height: _setValue(29),
+                  child: _index == 1 ?
+                  SvgPicture.asset(
+                    'assets/image/ic_home_cart_active.svg',
+                    width: _setValue(28),
+                    height: _setValue(28),
+                  )
+                  :
+                  Image.asset(
+                    'assets/image/ic_home_cart_inactive.png',
+                    width: _setValue(26),
+                    height: _setValue(26),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
                     'Cart',
-                    style: TextStyle(
-                        fontFamily: 'Corbel_Light',
-                        fontSize: _setValueFont(9.5),
-                        fontWeight: FontWeight.w600,
-                        color: CustColors.brownish_grey_02),
+                    style: _index == 1 ?
+                    Styles.homeActiveTextStyle
+                        :
+                    Styles.homeInactiveTextStyle,
                   ),
                 ),
               ],
@@ -116,30 +137,38 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             height: _setValue(65),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              color: _index == 2
+             /* color: _index == 2
                   ? Colors.white.withOpacity(.05)
-                  : Colors.transparent,
+                  : Colors.transparent,*/
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
-                  child: Image.asset(
-                    'assets/image/ic_home_service.png',
-                    width: _setValue(32.4),
-                    height: _setValue(31.2),
-                  ),
+                  child:
+                      _index == 2 ?
+                      SvgPicture.asset(
+                        'assets/image/ic_home_service_active.svg',
+                        width: _setValue(28),
+                        height: _setValue(28),
+                      )
+                          :
+                      Image.asset(
+                      'assets/image/ic_home_service_inactive.png',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                      ),
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
                     'My services ',
-                    style: TextStyle(
-                        fontFamily: 'Corbel_Light',
-                        fontSize: _setValueFont(9.5),
-                        fontWeight: FontWeight.w600,
-                        color: CustColors.brownish_grey_02),
+                    style: _index == 2 ?
+                    Styles.homeActiveTextStyle
+                        :
+                    Styles.homeInactiveTextStyle
+                    ,
                   ),
                 ),
               ],
@@ -162,21 +191,27 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               children: [
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
-                  child: Image.asset(
-                'assets/image/ic_home_profile.png',
-                    width: _setValue(32.4),
-                    height: _setValue(31.2),
+                  child: _index == 3 ?
+                  SvgPicture.asset(
+                    'assets/image/ic_home_profile_active.svg',
+                    width: _setValue(28),
+                    height: _setValue(28),
+                  )
+                      :
+                  Image.asset(
+                'assets/image/ic_home_profile_inactive.png',
+                    width: _setValue(26),
+                    height: _setValue(26),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
                     'Profile',
-                    style: TextStyle(
-                        fontFamily: 'Corbel_Light',
-                        fontSize: _setValueFont(9.5),
-                        fontWeight: FontWeight.w600,
-                        color: CustColors.brownish_grey_02),
+                    style: _index == 3 ?
+                    Styles.homeActiveTextStyle
+                    :
+                    Styles.homeInactiveTextStyle,
                   ),
                 ),
               ],
@@ -190,9 +225,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize:
-        Size.fromHeight(60.0 + MediaQuery.of(context).padding.top),
+        preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
         child: AppBar(
+
           actions: [],
           automaticallyImplyLeading: false,
           flexibleSpace: Row(
@@ -200,63 +235,92 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             children: [
               Container(
                 margin: EdgeInsets.only(
-                    left: 21, top: 36 + MediaQuery.of(context).padding.top),
+                    left: 21, top: 30 + MediaQuery.of(context).padding.top),
                 child: GestureDetector(
                     onTap: () {
                       scaffoldKey.currentState?.openDrawer();
                     },
                     child: Image.asset(
-                      'assets/images/drawer.png',
+                      'assets/image/ic_drawer.png',
                       width: 25,
                       height: 25,
                     )),
               ),
+
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: 32.5 + MediaQuery.of(context).padding.top, left: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        //"Hi $_userName",
+                        "Welcome",
+                        style: Styles.homeWelcomeTextStyle,
+                      ),
+                      Text(
+                        " Athira",
+                        style: Styles.homeNameTextStyle,
+                      ),
+                      Text(
+                        " !",
+                        style: Styles.homeWelcomeSymbolTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
               Container(
                 margin: EdgeInsets.only(
-                    top: 32.3 + MediaQuery.of(context).padding.top, left: 44.6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                     top: 36 + MediaQuery.of(context).padding.top,
+                  right: size.width * 4.2/100
+                ),
+                child: Stack(
                   children: [
-                    // Text(
-                    //   //"Hi $_userName",
-                    //   "Hi Abc",
-                    //   style: TextStyle(
-                    //       fontFamily: 'Corbel_Light',
-                    //       fontWeight: FontWeight.w600,
-                    //       fontSize: 17,
-                    //       color: Colors.white),
-                    // ),
-                    // Container(
-                    //   margin: EdgeInsets.only(top: 5),
-                    //   child: Text(
-                    //     "Welcome",
-                    //     style: TextStyle(
-                    //         fontFamily: 'Corbel_Light',
-                    //         fontWeight: FontWeight.w600,
-                    //         fontSize: 17,
-                    //         color: Colors.white),
-                    //   ),
-                    // ),
+                        GestureDetector(
+                        onTap: () {},
+                          child: SvgPicture.asset(
+                            'assets/image/notification_icon.svg',
+                            width: 25,
+                            height: 25,
+                          ),
+                        ),
+                    Positioned(
+                      right: 0,
+                      child: _counter > 0 ? Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: new BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
+                        ),
+                        child: new Text(
+                         '$_counter',
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ) : Container(),
+                    ),
+
                   ],
                 ),
               ),
             ],
           ),
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
         ),
       ),
       body: Stack(
         children: [
-          Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top,
-              ),
-              // child: Image.asset(
-              //   'assets/images/app_bar_arc.png',
-              // )
-              ),
           Container(
             width: double.infinity,
             margin: EdgeInsets.only(

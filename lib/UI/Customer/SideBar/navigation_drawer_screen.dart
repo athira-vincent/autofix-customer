@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerNavigationDrawerScreen extends StatefulWidget {
@@ -174,13 +175,12 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           ),
           leading: Container(
             child: Image.asset(
-              'assets/images/profile.png',
+              'assets/image/ic_order_details.png',
               width: 14.28,
               height: 18.76,
             ),
           ),
           onTap: () {
-
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerOrderDetailsScreen()));
@@ -202,11 +202,11 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
           ),
           leading: Container(
-            child: Image.asset(
-              'assets/images/my_services.png',
-              width: 21.14,
-              height: 19.6,
-            ),
+            child: SvgPicture.asset(
+                 'assets/image/ic_book_now.svg',
+                  width: 14.28,
+                  height: 18.76,
+                ),
           ),
           onTap: () {
             Navigator.pop(context);
@@ -230,10 +230,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
           ),
           leading: Container(
-            child: Image.asset(
-              'assets/images/my_services.png',
-              width: 21.14,
-              height: 19.6,
+            child: SvgPicture.asset(
+              'assets/image/ic_my_vehicles.svg',
+              width: 14.28,
+              height: 18.76,
             ),
           ),
           onTap: () {
@@ -258,10 +258,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
           ),
           leading: Container(
-            child: Image.asset(
-              'assets/images/my_services.png',
-              width: 21.14,
-              height: 19.6,
+            child: SvgPicture.asset(
+              'assets/image/ic_my_appointments.svg',
+              width: 14.28,
+              height: 18.76,
             ),
           ),
           onTap: () {
@@ -286,10 +286,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
           ),
           leading: Container(
-            child: Image.asset(
-              'assets/images/my_services.png',
-              width: 21.14,
-              height: 19.6,
+            child: SvgPicture.asset(
+              'assets/image/ic_edit_profile.svg',
+              width: 14.28,
+              height: 18.76,
             ),
           ),
           onTap: () {
@@ -342,8 +342,8 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
           ),
           leading: Container(
-            child: Image.asset(
-              'assets/images/my_vehicle.png',
+            child: SvgPicture.asset(
+              'assets/image/ic_logout.svg',
               width: 21.84,
               height: 20.44,
             ),
