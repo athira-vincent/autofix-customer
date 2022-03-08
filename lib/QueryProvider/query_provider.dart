@@ -29,39 +29,234 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUp(String firstName, String userName, String email, String state,
+  signUpCustomerIndividual(String firstName, String lastName, String email, String state,
       String password, String phoneNo) async {
     String _query = """ 
-    mutation{
-          customersSignUp(firstName: "$firstName",
-           lastName: "", address: "", 
-           emailId: "$email", 
-           phoneNo: "$phoneNo", 
-           password: "$password", 
-           state:"$state", 
-           userName:"$userName") {
-            token
-            customer {
-              id
-              firstName
-              lastName
-              address
-              emailId
-              phoneNo
-              profilePic
-              isProfileCompleted
-              state
-              userName
-              status
-            }
-            isProfileCompleted
-          } 
-  }
+    mutation {
+        customersSignUp_Individual(
+          firstName: "$firstName"
+          lastName: "$lastName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          password: "$password"
+          state: "$state"
+          userType: 1
+          accountType: 1
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            userType
+            accountType
+            profilePic
+            isProfile_Completed
+            status
+          }
+          isProfile_Completed
+        }
+      }
+
     """;
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
+
+  signUpCustomerCorporate(String firstName, String lastName, String email, String state,
+      String password, String phoneNo,String orgName,String orgType) async {
+    String _query = """ 
+    mutation {
+        customersSignUp_Corporate(
+          firstName: "$firstName"
+          lastName: "$lastName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          org_name: "$orgName"
+          org_type: "$orgType"
+          password: "$password"
+          state: "$state"
+          userType: 1
+          accountType: 2
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            userType
+            accountType
+            profilePic
+            isProfile_Completed
+            status
+          }
+          isProfile_Completed
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  signUpCustomerGovtBodies(String firstName, String lastName, String email, String state,
+      String password, String phoneNo,String govt_agency,String govt_type) async {
+    String _query = """ 
+    mutation {
+         customersSignUp_govtBodies(
+          firstName: "$firstName"
+          lastName:"$lastName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          govt_type: "$govt_type"
+          govt_agency: "Food Corporation of india"
+          ministry_name: "Labour And Environment"
+          head_of_dept: "Athira"
+          password: "$password"
+          state: "$state"
+          userType: 1
+          accountType: 3
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            userType
+            accountType
+            profilePic
+            isProfile_Completed
+            status
+          }
+          isProfile_Completed
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  signUpMechanicIndividual(String firstName, String lastName, String email, String state,
+      String password, String phoneNo, String latitude, String longitude,
+      String year_of_experience,) async {
+    String _query = """ 
+    mutation {
+        mechanic_signUp_Individual(
+          firstName: "$firstName"
+          lastName: "$lastName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          state: "$state"
+          latitude: ${double.parse(latitude.toString())}
+          longitude: ${double.parse(longitude.toString())}
+          password: "$password"
+          confirm_password: "$password"
+          userType: 2
+          accountType: 1
+          year_of_experience: "$year_of_experience"
+        ) {
+          token
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            latitude
+            longitude
+            userType
+            accountType
+            status
+          }
+          genMechanic {
+            id
+            org_name
+            org_type
+            year_exp
+            userId
+            status
+          }
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+
+  signUpMechanicCorporate(String firstName, String lastName, String email, String state,
+      String password, String phoneNo, String latitude, String longitude,
+      String year_of_experience,String orgName,String orgType) async {
+    String _query = """ 
+    mutation {
+        mechanic_signUp_Corporate(
+          firstName:  "$firstName"
+          lastName:  "$lastName"
+          emailId:  "$email"
+          phoneNo:  "$phoneNo"
+          state:  "$state"
+          latitude:  ${double.parse(latitude.toString())}
+          longitude: ${double.parse(longitude.toString())}
+          password:  "$password"
+          confirm_password: "$password"
+          userType: 2
+          accountType: 2
+          year_of_experience:"$year_of_experience"
+          org_Name: "$orgName"
+          org_Type:"$orgType"
+        ) {
+          token
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            latitude
+            longitude
+            userType
+            accountType
+            status
+          }
+          genMechanic {
+            id
+            org_name
+            org_type
+            year_exp
+            userId
+            status
+          }
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
 
   forgotPassword(String email) async {
     String _query = """

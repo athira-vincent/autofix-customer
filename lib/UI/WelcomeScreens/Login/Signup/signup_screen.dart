@@ -16,13 +16,18 @@ import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as path;
 
 class SignupScreen extends StatefulWidget {
 
@@ -74,7 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isLoading = false;
   List<StateDetails> _countryData = [];
   List<String> orgTypeList = [
-    "private",
+    "Private",
     "Public",
     "Privet-Public"
   ];
@@ -99,6 +104,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final picker = ImagePicker();
   File? _images;
   String errorMsg = "";
+  String imageFirebaseUrl="";
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   final ScrollController _scrollController = ScrollController();
   double _setValue(double value) {
@@ -109,17 +116,77 @@ class _SignupScreenState extends State<SignupScreen> {
     return value * perfont + value;
   }
 
+  String location ='Null, Press Button';
+  String Address = 'search';
+  String latitude = '10.5075868';
+  String longitude = '76.2424536';
+
   @override
   void initState() {
     super.initState();
+    _getCurrentCustomerLocation();
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
     _setSignUpVisitFlag();
     _passwordVisible = false;
     _confirmPasswordVisible = false;
-    _getSignUpResponse();
+    _listenSignUpResponse();
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
+  }
+
+  Future<void> _getCurrentCustomerLocation() async {
+    Position position = await _getGeoLocationPosition();
+    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    print(location);
+    setState(() {
+      latitude = position.latitude.toString();
+      longitude = position.longitude.toString();
+    });
+    GetAddressFromLatLong(position);
+  }
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<void> GetAddressFromLatLong(Position position)async {
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+
   }
 
   _setSignUpVisitFlag() async {
@@ -127,53 +194,60 @@ class _SignupScreenState extends State<SignupScreen> {
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
   }
 
-  _getSignUpResponse() {
-    _signupBloc.postSignUp.listen((value) {
+  _listenSignUpResponse() {
+    _signupBloc.postSignUpCustomer.listen((value) {
       if (value.status == "error") {
         setState(() {
-          print("errrrorr 02");
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(), _scaffoldKey);
-
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
         });
+
       } else {
-        setState(()  {
-           print("errrrorr 01");
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-
-          //setSignUp1Data(value);
+          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
           FocusScope.of(context).unfocus();
+        });
+      }
+    });
+    _signupBloc.postSignUpMechanic.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpMechanic >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
 
+      } else {
+
+        setState(() {
+          print("success postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+          FocusScope.of(context).unfocus();
         });
       }
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _stateController.dispose();
-    _photoController.dispose();
-    _passwordController.dispose();
-    _confirmPwdController.dispose();
 
-    _signupBloc.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,927 +291,898 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
 
-                  CurvedBottomSheetContainer(
-                    percentage:0.90,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Form(
-                              autovalidateMode: _autoValidate,
-                              key: _formKey,
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 0),
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            topLeft: Radius.circular(30),
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Form(
+                                autovalidateMode: _autoValidate,
+                                key: _formKey,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    left: _setValue(20.5), right: _setValue(20.5),top: _setValue(17.5), ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
                                       Container(
-                                          child: Text(
+                                        child: Text(
                                           AppLocalizations.of(context)!.text_sign_up,
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                      child: Column(
-                                        children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
+                                        child: Column(
+                                          children: [
 
-                                          widget.userCategory == TextStrings.user_category_government ?
-                                          Container() :
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  widget.userCategory == TextStrings.user_category_individual ?
-                                                   AppLocalizations.of(context)!.text_name :
-                                                  AppLocalizations.of(context)!.text_organization_name,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  focusNode: _nameFocusNode,
-                                                  keyboardType: TextInputType.name,
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter.allow(
-                                                        RegExp('[a-zA-Z ]')),
-                                                  ],
-                                                  validator: InputValidator(
-                                                    ch : widget.userCategory == TextStrings.user_category_individual ?
-                                                          AppLocalizations.of(context)!.text_name :
-                                                    AppLocalizations.of(context)!.text_organization_name).nameChecking,
-                                                  controller: _nameController,
-                                                  cursorColor: CustColors.whiteBlueish,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    hintText:  widget.userCategory == TextStrings.user_category_individual ?
-                                                              AppLocalizations.of(context)!.text_hint_name :
-                                                    AppLocalizations.of(context)!.text_hint_organization_name,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-                                              ],
-                                            ),
-                                          ) ,
-
-                                          widget.userCategory == TextStrings.user_category_corporate ?
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_organization_type,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                InkWell(
-                                                  onTap: (){
-                                                    showOrganisationTypeSelector();
-                                                    print("Type of Organisation");
-                                                  },
-                                                  child: TextFormField(
-                                                    enabled: false,
-                                                    readOnly: true,
+                                            widget.userCategory == TextStrings.user_category_government ?
+                                            Container() :
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    widget.userCategory == TextStrings.user_category_individual ?
+                                                    AppLocalizations.of(context)!.text_name :
+                                                    AppLocalizations.of(context)!.text_organization_name,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
                                                     textAlignVertical: TextAlignVertical.center,
                                                     maxLines: 1,
                                                     style: Styles.textLabelSubTitle,
-                                                    focusNode: _orgTypeFocusNode,
-                                                    keyboardType: TextInputType.text,
-                                                    //validator: InputValidator(ch: AppLocalizations.of(context)!.text_hint_organization_type).emptyChecking,
-                                                    controller: _orgTypeController,
-                                                    cursorColor: CustColors.whiteBlueish,
-                                                    decoration: InputDecoration(
-                                                      isDense: true,
-                                                      hintText: AppLocalizations.of(context)!.text_hint_organization_type,
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ) : Container(),
-
-                                          widget.userCategory == TextStrings.user_category_government ?
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_state,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                InkWell(
-                                                  onTap: () async {
-                                                    print("on tap state ");
-                                                    //showDialCodeSelector();
-                                                    /*String userSelectedState = await Navigator.push(
-                                                      context,
-                                                        MaterialPageRoute(
-                                                        builder: (context) => SelectStateScreen(),
-                                                        ),
-                                                    );*/
-                                                    _awaitReturnValueFromSecondScreen(context);
-
-                                                  },
-                                                  child: TextFormField(
-                                                    readOnly: true,
-                                                    enabled: false,
-                                                    textAlignVertical: TextAlignVertical.center,
-                                                    maxLines: 1,
-                                                    style: Styles.textLabelSubTitle,
-                                                    focusNode: _stateFocusNode,
-                                                    //keyboardType: TextInputType.phone,
-                                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
-                                                    controller: _stateController,
-                                                    cursorColor: CustColors.whiteBlueish,
-                                                    decoration: InputDecoration(
-                                                      isDense: true,
-                                                      hintText: AppLocalizations.of(context)!.text_hint_state,
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ) : Container(),
-
-                                          widget.userCategory == TextStrings.user_category_government ?
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_ministry_govt,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                InkWell(
-                                                  onTap: () async {
-                                                    print("on tap Ministry/Govt. agency ");
-                                                    showMinistryGovtSelector();
-                                                  },
-                                                  child: TextFormField(
-                                                    readOnly: true,
-                                                    enabled: false,
-                                                    textAlignVertical: TextAlignVertical.center,
-                                                    maxLines: 1,
-                                                    style: Styles.textLabelSubTitle,
-                                                    focusNode: _ministryGovtFocusNode,
-                                                    //keyboardType: TextInputType.phone,
-                                                    //validator: InputValidator(ch: " ministry/govt agency").emptyChecking,
-                                                    controller: _ministryGovtController,
-                                                    cursorColor: CustColors.whiteBlueish,
-                                                    decoration: InputDecoration(
-                                                      isDense: true,
-                                                      hintText: AppLocalizations.of(context)!.text_hint_ministry_govt,
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ) : Container(),
-
-                                          widget.userCategory == TextStrings.user_category_corporate
-                                              || widget.userCategory == TextStrings.user_category_government?
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  AppLocalizations.of(context)!.text_contact_person,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  focusNode: _contactPersonFocusNode,
-                                                  keyboardType: TextInputType.name,
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter.allow(
-                                                        RegExp('[a-zA-Z ]')),
-                                                  ],
-                                                  validator: InputValidator(ch :AppLocalizations.of(context)!.text_contact_person,).nameChecking,
-                                                  controller: _contactPersonController,
-                                                  cursorColor: CustColors.whiteBlueish,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    hintText: AppLocalizations.of(context)!.text_hint_contact_person,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-                                              ],
-                                            ),
-                                          ) : Container() ,
-
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_phone,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  focusNode: _phoneFocusNode,
-                                                  keyboardType: TextInputType.number,
-                                                  inputFormatters: [
-                                                    LengthLimitingTextInputFormatter(15),
-                                                  ],
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
-                                                  controller: _phoneController,
-                                                  cursorColor: CustColors.whiteBlueish,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    hintText: AppLocalizations.of(context)!.text_hint_phone,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-
-                                              ],
-                                            ),
-                                          ),
-
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_email,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  focusNode: _emailFocusNode,
-                                                  keyboardType: TextInputType.emailAddress,
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
-                                                  controller: _emailController,
-                                                  cursorColor: CustColors.whiteBlueish,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    hintText: AppLocalizations.of(context)!.text_hint_email,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-
-                                          widget.userCategory != TextStrings.user_category_government ?
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_state,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                InkWell(
-                                                  onTap: () async {
-                                                    print("on tap state ");
-                                                    //showDialCodeSelector();
-                                                    /*String userSelectedState = await Navigator.push(
-                                                      context,
-                                                        MaterialPageRoute(
-                                                        builder: (context) => SelectStateScreen(),
-                                                        ),
-                                                    );*/
-                                                    _awaitReturnValueFromSecondScreen(context);
-                                                  },
-                                                  child: TextFormField(
-                                                    readOnly: true,
-                                                    enabled: false,
-                                                    textAlignVertical: TextAlignVertical.center,
-                                                    maxLines: 1,
-                                                    style: Styles.textLabelSubTitle,
-                                                    focusNode: _stateFocusNode,
-                                                    //keyboardType: TextInputType.phone,
-                                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
-                                                    controller: _stateController,
-                                                    cursorColor: CustColors.whiteBlueish,
-                                                    decoration: InputDecoration(
-                                                      isDense: true,
-                                                      hintText: AppLocalizations.of(context)!.text_hint_state,
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ) : Container(),
-
-                                          widget.userType == TextStrings.user_mechanic
-                                              && widget.userCategory == TextStrings.user_category_individual ?
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_experience_year,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  focusNode: _yearOfExperienceFocusNode,
-                                                  keyboardType: TextInputType.number,
-                                                  inputFormatters: [
-                                                    LengthLimitingTextInputFormatter(3),
-                                                  ],
-                                                  //validator: InputValidator(ch: AppLocalizations.of(context)!.text_experience_year).phoneNumChecking,
-                                                  controller: _yearOfExperienceController,
-                                                  cursorColor: CustColors.whiteBlueish,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    hintText: AppLocalizations.of(context)!.text_hint_experience_year,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-
-                                              ],
-                                            ),
-                                          ) : Container(),
-
-                                          Container(
-                                            margin: EdgeInsets.only(top: _setValue(15.5)),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_upload_photo,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                InkWell(
-                                                  onTap: (){
-                                                    _showDialogSelectPhoto();
-                                                    print("on tap photo ");
-                                                  },
-                                                  child: TextFormField(
-                                                    enabled: false,
-                                                    textAlignVertical: TextAlignVertical.center,
-                                                    maxLines: 1,
-                                                    style: Styles.textLabelSubTitle,
-                                                    focusNode: _photoFocusNode,
-                                                    keyboardType: TextInputType.text,
-                                                    //validator: InputValidator(ch: AppLocalizations.of(context)!.text_photo).emptyChecking,
-                                                    controller: _photoController,
-                                                    cursorColor: CustColors.whiteBlueish,
-                                                    decoration: InputDecoration(
-                                                      isDense: true,
-                                                      hintText: AppLocalizations.of(context)!.text_hint_upload_photo,
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      enabledBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                          color: CustColors.greyish,
-                                                          width: .5,
-                                                        ),
-                                                      ),
-                                                      contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 12.8,
-                                                        horizontal: 0.0,
-                                                      ),
-                                                      hintStyle: Styles.textLabelSubTitle,),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-
-                                          Container(
-                                            margin: EdgeInsets.only(top: 20.5),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_password,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  obscureText: !_passwordVisible!,
-                                                  validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
-                                                  controller: _passwordController,
-                                                  focusNode: _passwordFocusNode,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    suffixIconConstraints: BoxConstraints(
-                                                      minWidth: 25,
-                                                      minHeight: 25,
-                                                    ),
-                                                    suffixIcon: Container(
-                                                      width: 5,
-                                                      height: 10,
-                                                      alignment: Alignment.centerRight,
-                                                      child: IconButton(
-                                                        iconSize: 15,
-                                                        padding: EdgeInsets.zero,
-                                                        icon: Icon(
-                                                          // Based on passwordVisible state choose the icon
-                                                          _passwordVisible!
-                                                              ? Icons.visibility
-                                                              : Icons.visibility_off,
-                                                          color: Colors.grey,
-                                                        ),
-                                                        onPressed: () {
-                                                          // Update the state i.e. toogle the state of passwordVisible variable
-                                                          setState(() {
-                                                            _passwordVisible = !_passwordVisible!;
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    hintText: AppLocalizations.of(context)!.text_password,
-                                                    errorMaxLines: 3,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-                                                /*Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ForgotPasswordScreen()));
-                                                      },
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(top: _setValue(10)),
-                                                        child: Text(
-                                                          'Forgot password?',
-                                                          style: Styles.textLabelSubTitle,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )*/
-                                              ],
-                                            ),
-                                          ),
-
-                                          Container(
-                                            margin: EdgeInsets.only(top: 20.5),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(AppLocalizations.of(context)!.text_confirm_password,
-                                                  style: Styles.textLabelTitle,
-                                                ),
-                                                TextFormField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  obscureText: !_confirmPasswordVisible!,
-                                                  validator:
-                                                  InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
-                                                  controller: _confirmPwdController,
-                                                  focusNode: _confirmPswdFocusNode,
-                                                  maxLines: 1,
-                                                  style: Styles.textLabelSubTitle,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    suffixIconConstraints: BoxConstraints(
-                                                      minWidth: 25,
-                                                      minHeight: 25,
-                                                    ),
-                                                    suffixIcon: Container(
-                                                      width: 5,
-                                                      height: 10,
-                                                      alignment: Alignment.centerRight,
-                                                      child: IconButton(
-                                                        iconSize: 15,
-                                                        padding: EdgeInsets.zero,
-                                                        icon: Icon(
-                                                          // Based on passwordVisible state choose the icon
-                                                          _confirmPasswordVisible!
-                                                              ? Icons.visibility
-                                                              : Icons.visibility_off,
-                                                          color: Colors.grey,
-                                                        ),
-                                                        onPressed: () {
-                                                          // Update the state i.e. toogle the state of passwordVisible variable
-                                                          setState(() {
-                                                            _confirmPasswordVisible = !_confirmPasswordVisible!;
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    hintText: AppLocalizations.of(context)!.text_password,
-                                                    errorMaxLines: 3,
-                                                    border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    focusedBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    enabledBorder: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: CustColors.greyish,
-                                                        width: .5,
-                                                      ),
-                                                    ),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                      vertical: 12.8,
-                                                      horizontal: 0.0,
-                                                    ),
-                                                    hintStyle: Styles.textLabelSubTitle,),
-                                                ),
-                                                /*Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ForgotPasswordScreen()));
-                                                      },
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(top: _setValue(10)),
-                                                        child: Text(
-                                                          'Forgot password?',
-                                                          style: Styles.textLabelSubTitle,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )*/
-                                              ],
-                                            ),
-                                          ),
-
-                                          Container(
-                                            margin: EdgeInsets.only(top: 20.8),
-                                            child: _isLoading
-                                                ? Center(
-                                              child: Container(
-                                                height: _setValue(28),
-                                                width: _setValue(28),
-                                                child: CircularProgressIndicator(
-                                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                                      CustColors.peaGreen),
-                                                ),
-                                              ),
-                                            )
-                                                : Container(
-
-                                              child: MaterialButton(
-                                                onPressed: () {
-
-                                                  if (_formKey.currentState!.validate()) {
-                                                    print("_formKey.currentState!.validate()");
-
-                                                    _checkInternet.check().then((intenet) {
-                                                      if (intenet != null && intenet) {
-
-                                                        // Internet Present Case
-                                                        print('internet connection - true');
-                                                        if(
-                                                        widget.userCategory == TextStrings.user_category_individual
-                                                            && widget.userType == TextStrings.user_customer
-                                                            ? signUpCustomerIndividual(context)
-                                                            :  widget.userCategory == TextStrings.user_category_individual
-                                                            && widget.userType == TextStrings.user_mechanic
-                                                            ? signUpMechanicIndividual(context)
-                                                            : widget.userCategory == TextStrings.user_category_corporate
-                                                            && widget.userType == TextStrings.user_customer
-                                                            ? signUpCustomerCorporate(context)
-                                                            : widget.userCategory == TextStrings.user_category_corporate
-                                                            && widget.userType == TextStrings.user_mechanic
-                                                            ? signUpMechanicCorporate(context)
-                                                            : signUpCustomerGovernment(context)
-                                                        ){
-                                                          setState(() {
-                                                            _isLoading = true;
-                                                          });
-                                                          _signupBloc.postSignUpRequest(
-                                                              " "," "," ",
-                                                              _emailController.text,
-                                                              _phoneController.text,
-                                                              _passwordController.text);
-                                                        }else{
-                                                          setState(() {
-                                                            _isLoading = false;
-                                                          });
-                                                          print(errorMsg.toString());
-                                                          SnackBarWidget().setMaterialSnackBar(errorMsg.toString(),_scaffoldKey);
-                                                        }
-
-                                                       /* Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));*/
-                                                      } else {
-                                                        print('No internet connection');
-                                                      }
-                                                    });
-                                                  }
-                                                  else {
-                                                    print("_formKey.currentState!.validate() - else");
-                                                    setState(() => _autoValidate =
-                                                        AutovalidateMode.always);
-                                                  }
-                                                },
-                                                child: Container(
-                                                  height: 45,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Text(
-                                                        AppLocalizations.of(context)!.text_sign_up,
-                                                        textAlign: TextAlign.center,
-                                                        style: Styles.textButtonLabelSubTitle,
-                                                      ),
+                                                    focusNode: _nameFocusNode,
+                                                    keyboardType: TextInputType.name,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter.allow(
+                                                          RegExp('[a-zA-Z ]')),
                                                     ],
+                                                    validator: InputValidator(
+                                                        ch : widget.userCategory == TextStrings.user_category_individual ?
+                                                        AppLocalizations.of(context)!.text_name :
+                                                        AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                                                    controller: _nameController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText:  widget.userCategory == TextStrings.user_category_individual ?
+                                                      AppLocalizations.of(context)!.text_hint_name :
+                                                      AppLocalizations.of(context)!.text_hint_organization_name,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
                                                   ),
-                                                ),
-                                                color: CustColors.materialBlue,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(
-                                                        _setValue(13))),
+                                                ],
                                               ),
-                                            ),
-                                          ),
+                                            ) ,
 
-                                          Container(
-                                            margin: EdgeInsets.only(top: 15.8),
-                                            child: RichText(
-                                              maxLines: 2,
-                                              text: TextSpan(
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                    text: AppLocalizations.of(context)!.text_already_have_account,
-                                                    style: Styles.textLabelSubTitle,
+                                            widget.userCategory == TextStrings.user_category_corporate ?
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_organization_type,
+                                                    style: Styles.textLabelTitle,
                                                   ),
-                                                  TextSpan(
-                                                      text: AppLocalizations.of(context)!.text_sign_in,
-                                                      style: Styles.textLabelTitle_10,
-                                                      recognizer: TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          Navigator.push(
-                                                            context,
-                                                            new MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    LoginScreen()),
-                                                          );
-                                                        }),
+                                                  InkWell(
+                                                    onTap: (){
+                                                      showOrganisationTypeSelector();
+                                                      print("Type of Organisation");
+                                                    },
+                                                    child: TextFormField(
+                                                      enabled: false,
+                                                      readOnly: true,
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      maxLines: 1,
+                                                      style: Styles.textLabelSubTitle,
+                                                      focusNode: _orgTypeFocusNode,
+                                                      keyboardType: TextInputType.text,
+                                                      //validator: InputValidator(ch: AppLocalizations.of(context)!.text_hint_organization_type).emptyChecking,
+                                                      controller: _orgTypeController,
+                                                      cursorColor: CustColors.whiteBlueish,
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        hintText: AppLocalizations.of(context)!.text_hint_organization_type,
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                          vertical: 12.8,
+                                                          horizontal: 0.0,
+                                                        ),
+                                                        hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ) : Container(),
+
+                                            widget.userCategory == TextStrings.user_category_government ?
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_state,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      print("on tap state ");
+                                                      //showDialCodeSelector();
+                                                      /*String userSelectedState = await Navigator.push(
+                                                      context,
+                                                        MaterialPageRoute(
+                                                        builder: (context) => SelectStateScreen(),
+                                                        ),
+                                                    );*/
+                                                      _awaitReturnValueFromSecondScreen(context);
+
+                                                    },
+                                                    child: TextFormField(
+                                                      readOnly: true,
+                                                      enabled: false,
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      maxLines: 1,
+                                                      style: Styles.textLabelSubTitle,
+                                                      focusNode: _stateFocusNode,
+                                                      //keyboardType: TextInputType.phone,
+                                                      validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
+                                                      controller: _stateController,
+                                                      cursorColor: CustColors.whiteBlueish,
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        hintText: AppLocalizations.of(context)!.text_hint_state,
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                          vertical: 12.8,
+                                                          horizontal: 0.0,
+                                                        ),
+                                                        hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ) : Container(),
+
+                                            widget.userCategory == TextStrings.user_category_government ?
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_ministry_govt,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      print("on tap Ministry/Govt. agency ");
+                                                      showMinistryGovtSelector();
+                                                    },
+                                                    child: TextFormField(
+                                                      readOnly: true,
+                                                      enabled: false,
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      maxLines: 1,
+                                                      style: Styles.textLabelSubTitle,
+                                                      focusNode: _ministryGovtFocusNode,
+                                                      //keyboardType: TextInputType.phone,
+                                                      //validator: InputValidator(ch: " ministry/govt agency").emptyChecking,
+                                                      controller: _ministryGovtController,
+                                                      cursorColor: CustColors.whiteBlueish,
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        hintText: AppLocalizations.of(context)!.text_hint_ministry_govt,
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                          vertical: 12.8,
+                                                          horizontal: 0.0,
+                                                        ),
+                                                        hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ) : Container(),
+
+                                            widget.userCategory == TextStrings.user_category_corporate
+                                                || widget.userCategory == TextStrings.user_category_government?
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    AppLocalizations.of(context)!.text_contact_person,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _contactPersonFocusNode,
+                                                    keyboardType: TextInputType.name,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter.allow(
+                                                          RegExp('[a-zA-Z ]')),
+                                                    ],
+                                                    validator: InputValidator(ch :AppLocalizations.of(context)!.text_contact_person,).nameChecking,
+                                                    controller: _contactPersonController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: AppLocalizations.of(context)!.text_hint_contact_person,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                ],
+                                              ),
+                                            ) : Container() ,
+
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_phone,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _phoneFocusNode,
+                                                    keyboardType: TextInputType.number,
+                                                    inputFormatters: [
+                                                      LengthLimitingTextInputFormatter(15),
+                                                    ],
+                                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
+                                                    controller: _phoneController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: AppLocalizations.of(context)!.text_hint_phone,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+
                                                 ],
                                               ),
                                             ),
-                                          ),
 
-                                        ],
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_email,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _emailFocusNode,
+                                                    keyboardType: TextInputType.emailAddress,
+                                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
+                                                    controller: _emailController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: AppLocalizations.of(context)!.text_hint_email,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+
+                                            widget.userCategory != TextStrings.user_category_government ?
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_state,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      print("on tap state ");
+                                                      //showDialCodeSelector();
+                                                      /*String userSelectedState = await Navigator.push(
+                                                      context,
+                                                        MaterialPageRoute(
+                                                        builder: (context) => SelectStateScreen(),
+                                                        ),
+                                                    );*/
+                                                      _awaitReturnValueFromSecondScreen(context);
+                                                    },
+                                                    child: TextFormField(
+                                                      readOnly: true,
+                                                      enabled: false,
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      maxLines: 1,
+                                                      style: Styles.textLabelSubTitle,
+                                                      focusNode: _stateFocusNode,
+                                                      //keyboardType: TextInputType.phone,
+                                                      validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
+                                                      controller: _stateController,
+                                                      cursorColor: CustColors.whiteBlueish,
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        hintText: AppLocalizations.of(context)!.text_hint_state,
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                          vertical: 12.8,
+                                                          horizontal: 0.0,
+                                                        ),
+                                                        hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ) : Container(),
+
+                                            widget.userType == TextStrings.user_mechanic
+                                                && widget.userCategory == TextStrings.user_category_individual ?
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_experience_year,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    focusNode: _yearOfExperienceFocusNode,
+                                                    keyboardType: TextInputType.number,
+                                                    inputFormatters: [
+                                                      LengthLimitingTextInputFormatter(3),
+                                                    ],
+                                                    //validator: InputValidator(ch: AppLocalizations.of(context)!.text_experience_year).phoneNumChecking,
+                                                    controller: _yearOfExperienceController,
+                                                    cursorColor: CustColors.whiteBlueish,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      hintText: AppLocalizations.of(context)!.text_hint_experience_year,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ) : Container(),
+
+                                            Container(
+                                              margin: EdgeInsets.only(top: _setValue(15.5)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_upload_photo,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: (){
+                                                      _showDialogSelectPhoto();
+                                                      print("on tap photo ");
+                                                    },
+                                                    child: TextFormField(
+                                                      enabled: false,
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      maxLines: 1,
+                                                      style: Styles.textLabelSubTitle,
+                                                      focusNode: _photoFocusNode,
+                                                      keyboardType: TextInputType.text,
+                                                      //validator: InputValidator(ch: AppLocalizations.of(context)!.text_photo).emptyChecking,
+                                                      controller: _photoController,
+                                                      cursorColor: CustColors.whiteBlueish,
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        hintText: AppLocalizations.of(context)!.text_hint_upload_photo,
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                            color: CustColors.greyish,
+                                                            width: .5,
+                                                          ),
+                                                        ),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                          vertical: 12.8,
+                                                          horizontal: 0.0,
+                                                        ),
+                                                        hintStyle: Styles.textLabelSubTitle,),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+
+                                            Container(
+                                              margin: EdgeInsets.only(top: 20.5),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_password,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    obscureText: !_passwordVisible!,
+                                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
+                                                    controller: _passwordController,
+                                                    focusNode: _passwordFocusNode,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      suffixIconConstraints: BoxConstraints(
+                                                        minWidth: 25,
+                                                        minHeight: 25,
+                                                      ),
+                                                      suffixIcon: Container(
+                                                        width: 5,
+                                                        height: 10,
+                                                        alignment: Alignment.centerRight,
+                                                        child: IconButton(
+                                                          iconSize: 15,
+                                                          padding: EdgeInsets.zero,
+                                                          icon: Icon(
+                                                            // Based on passwordVisible state choose the icon
+                                                            _passwordVisible!
+                                                                ? Icons.visibility
+                                                                : Icons.visibility_off,
+                                                            color: Colors.grey,
+                                                          ),
+                                                          onPressed: () {
+                                                            // Update the state i.e. toogle the state of passwordVisible variable
+                                                            setState(() {
+                                                              _passwordVisible = !_passwordVisible!;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                      hintText: AppLocalizations.of(context)!.text_password,
+                                                      errorMaxLines: 3,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                  /*Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ForgotPasswordScreen()));
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(top: _setValue(10)),
+                                                        child: Text(
+                                                          'Forgot password?',
+                                                          style: Styles.textLabelSubTitle,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )*/
+                                                ],
+                                              ),
+                                            ),
+
+                                            Container(
+                                              margin: EdgeInsets.only(top: 20.5),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(AppLocalizations.of(context)!.text_confirm_password,
+                                                    style: Styles.textLabelTitle,
+                                                  ),
+                                                  TextFormField(
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    obscureText: !_confirmPasswordVisible!,
+                                                    validator:
+                                                    InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
+                                                    controller: _confirmPwdController,
+                                                    focusNode: _confirmPswdFocusNode,
+                                                    maxLines: 1,
+                                                    style: Styles.textLabelSubTitle,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      suffixIconConstraints: BoxConstraints(
+                                                        minWidth: 25,
+                                                        minHeight: 25,
+                                                      ),
+                                                      suffixIcon: Container(
+                                                        width: 5,
+                                                        height: 10,
+                                                        alignment: Alignment.centerRight,
+                                                        child: IconButton(
+                                                          iconSize: 15,
+                                                          padding: EdgeInsets.zero,
+                                                          icon: Icon(
+                                                            // Based on passwordVisible state choose the icon
+                                                            _confirmPasswordVisible!
+                                                                ? Icons.visibility
+                                                                : Icons.visibility_off,
+                                                            color: Colors.grey,
+                                                          ),
+                                                          onPressed: () {
+                                                            // Update the state i.e. toogle the state of passwordVisible variable
+                                                            setState(() {
+                                                              _confirmPasswordVisible = !_confirmPasswordVisible!;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                      hintText: AppLocalizations.of(context)!.text_password,
+                                                      errorMaxLines: 3,
+                                                      border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      focusedBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      enabledBorder: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: CustColors.greyish,
+                                                          width: .5,
+                                                        ),
+                                                      ),
+                                                      contentPadding: EdgeInsets.symmetric(
+                                                        vertical: 12.8,
+                                                        horizontal: 0.0,
+                                                      ),
+                                                      hintStyle: Styles.textLabelSubTitle,),
+                                                  ),
+                                                  /*Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ForgotPasswordScreen()));
+                                                      },
+                                                      child: Container(
+                                                        margin: EdgeInsets.only(top: _setValue(10)),
+                                                        child: Text(
+                                                          'Forgot password?',
+                                                          style: Styles.textLabelSubTitle,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )*/
+                                                ],
+                                              ),
+                                            ),
+
+                                            Container(
+                                              margin: EdgeInsets.only(top: 20.8),
+                                              child: _isLoading
+                                                  ? Center(
+                                                child: Container(
+                                                  height: _setValue(28),
+                                                  width: _setValue(28),
+                                                  child: CircularProgressIndicator(
+                                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                                        CustColors.peaGreen),
+                                                  ),
+                                                ),
+                                              )
+                                                  : Container(
+
+                                                child: MaterialButton(
+                                                  onPressed: () {
+                                                    if (_formKey.currentState!.validate()) {
+                                                      print("_formKey.currentState!.validate()");
+
+                                                      widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_customer
+                                                          ? signUpCustomerIndividual(context)
+                                                          :  widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_mechanic
+                                                          ? signUpMechanicIndividual(context)
+                                                          : widget.userCategory == TextStrings.user_category_corporate && widget.userType == TextStrings.user_customer
+                                                          ? signUpCustomerCorporate(context)
+                                                          : widget.userCategory == TextStrings.user_category_corporate && widget.userType == TextStrings.user_mechanic
+                                                          ? signUpMechanicCorporate(context)
+                                                          : signUpCustomerGovernment(context);
+                                                    }
+                                                    else {
+                                                      print("_formKey.currentState!.validate() - else");
+                                                      setState(() => _autoValidate = AutovalidateMode.always);
+                                                    }
+
+                                                  },
+                                                  child: Container(
+                                                    height: 45,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          AppLocalizations.of(context)!.text_sign_up,
+                                                          textAlign: TextAlign.center,
+                                                          style: Styles.textButtonLabelSubTitle,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  color: CustColors.materialBlue,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(
+                                                          _setValue(13))),
+                                                ),
+                                              ),
+                                            ),
+
+                                            Container(
+                                              margin: EdgeInsets.only(top: 15.8),
+                                              child: RichText(
+                                                maxLines: 2,
+                                                text: TextSpan(
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: AppLocalizations.of(context)!.text_already_have_account,
+                                                      style: Styles.textLabelSubTitle,
+                                                    ),
+                                                    TextSpan(
+                                                        text: AppLocalizations.of(context)!.text_sign_in,
+                                                        style: Styles.textLabelTitle_10,
+                                                        recognizer: TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            Navigator.push(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      LoginScreen()),
+                                                            );
+                                                          }),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                          ),
-                        ],
-                      ),
-                    )
-                  )
+                                    ],
+                                  ),
+                                )
+                            ),
+                          ],
+                        ),
+                      )
+                  ),
                 ],
               ),
             ),
@@ -1190,8 +1235,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1202,19 +1247,28 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   bool signUpCustomerIndividual(BuildContext context){
-    print("signUpCustomerIndividual - loaded");
     if(validateSignUpCustomerIndividual()){
-      print("validateSignUpCustomerIndividual - true");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" + _photoController.text+
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+
+      setState(() {
+        print("validateSignUpCustomerIndividual - true");
+        print(" Name : " + _nameController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpCustomerIndividualRequest( _nameController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text);
+      });
+
       return true;
     }else{
+      setState(() {
+        _isLoading=false;
+      });
       print("signUpCustomerIndividual - else");
       return false;
     }
@@ -1252,8 +1306,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1265,15 +1319,24 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpMechanicIndividual(BuildContext context){
     print("signUpMechanicIndividual - loaded");
     if(validateSignUpMechanicIndividual()){
-      print("signUpMechanicIndividual");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+      setState(() {
+        print("validateSignUpCustomerIndividual - true");
+        print(" Name : " + _nameController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n State : " + _stateController.text +
+            "\n lalitude : " + latitude +
+            "\n lalitude : " + longitude +
+            "\n _yearOfExperienceController Type : " + _yearOfExperienceController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpMechanicIndividualRequest( _nameController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text, latitude, longitude, _yearOfExperienceController.text);
+      });
       return true;
     }else{
       print("signUpMechanicIndividual - else");
@@ -1317,8 +1380,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1330,16 +1393,25 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpCustomerCorporate(BuildContext context){
     print("signUpCustomerCorporate");
     if(validateSignUpCustomerCorporate()){
-      print("signUpCustomerCorporate");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
-    return true;
+
+
+      setState(() {
+        print(" Name : " + _contactPersonController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n Organization : " + _nameController.text +
+            "\n Organization Type : " + _orgTypeController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpCustomerCorporateRequest(_contactPersonController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text,_nameController.text,_orgTypeController.text);
+      });
+
+      return true;
     }else{
       print("signUpCustomerCorporate - else");
       return false;
@@ -1351,13 +1423,16 @@ class _SignupScreenState extends State<SignupScreen> {
     if(_nameController.text.isEmpty){
       errorMsg = "Organisation Name cannot Empty";
       return false;
-    }else if(_orgTypeController.text.isEmpty){
+    }
+    else if(_orgTypeController.text.isEmpty){
       errorMsg = "Organisation Type cannot Empty";
       return false;
-    }else if(_contactPersonController.text.isEmpty){
+    }
+    else if(_contactPersonController.text.isEmpty){
       errorMsg = "Contact Person cannot Empty";
       return false;
-    }else if(_phoneController.text.isEmpty){
+    }
+    else if(_phoneController.text.isEmpty){
       errorMsg = "Phone Number cannot empty";
       return false;
     }
@@ -1376,14 +1451,16 @@ class _SignupScreenState extends State<SignupScreen> {
     else if(_passwordController.text.isEmpty){
       errorMsg = "Fill Password";
       return false;
-    }else if(_confirmPwdController.text.isEmpty){
+    }
+    else if(_confirmPwdController.text.isEmpty){
       errorMsg = "Enter Confirm Password";
       return false;
-    }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
+    }
+    else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1395,15 +1472,26 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpMechanicCorporate(BuildContext context){
     print("signUpMechanicCorporate");
     if(validateSignUpCustomerCorporate()){
-      print("signUpMechanicCorporate");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+      setState(() {
+        print("validateSignUpCustomerIndividual - true");
+        print(" Name : " + _nameController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n State : " + _stateController.text +
+            "\n lalitude : " + latitude +
+            "\n lalitude : " + longitude +
+            "\n Organization : " + _nameController.text +
+            "\n Organization Type : " + _orgTypeController.text +
+            "\n _yearOfExperienceController Type : " + _yearOfExperienceController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpMechanicCorporateRequest( _nameController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text, latitude, longitude, _yearOfExperienceController.text,_nameController.text,_orgTypeController.text);
+      });
      return true;
 
     }else{
@@ -1447,8 +1535,8 @@ class _SignupScreenState extends State<SignupScreen> {
     }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
-        _passwordController.text = " ";
-        _confirmPwdController.text = " ";
+        _passwordController.text = "";
+        _confirmPwdController.text = "";
       });
       return false;
     }
@@ -1460,15 +1548,23 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpCustomerGovernment(BuildContext context){
     print("signUpCustomerGovernment");
     if(validateSignUpCustomerGovernment()){
-      print("signUpMechanicCorporate");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+      setState(() {
+        print(" Name : " + _contactPersonController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n Govtment Agency : " + _ministryGovtController.text +
+            "\n Govtment Type : " + _ministryGovtController.text +
+            "\n Ministry name : " + _ministryGovtController.text +
+            "\n Head Of Dept : " + _ministryGovtController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpCustomerGovtBodiesRequest( _contactPersonController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text,_ministryGovtController.text,_ministryGovtController.text);
+      });
       return true;
     }else{
       print("signUpCustomerGovernment - else");
@@ -1907,6 +2003,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
+
                         }
                       });
                     },
@@ -1940,7 +2037,6 @@ class _SignupScreenState extends State<SignupScreen> {
         });
   }
 
-
   void setSnackBar(String msg){
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('$msg',
@@ -1948,6 +2044,58 @@ class _SignupScreenState extends State<SignupScreen> {
       duration: Duration(seconds: 2),
       backgroundColor: CustColors.peaGreen,
     ));
+  }
+
+  Future uploadImageToFirebase(File images) async {
+    final String fileName = path.basename(images!.path);
+    File imageFile = File(images.path);
+/*
+    try {
+
+      TaskSnapshot upload = await FirebaseStorage.instance
+          .ref(
+          'events/${file.name}-${DateTime.now().toIso8601String()}.${file.extension}')
+          .putBlob(Blob(file.bytes));
+
+      String url = await upload.ref.getDownloadURL();
+
+      return url;
+    } catch (e) {
+      print('error in uploading image for : ${e.toString()}');
+      return 0;
+    }*/
+
+    try {
+      // Uploading the selected image with some custom meta data
+      await storage.ref(fileName).putFile(
+          imageFile,
+          SettableMetadata(customMetadata: {
+            'uploaded_by': 'A bad guy',
+            'description': 'Some description...'
+          }));
+
+      // Refresh the UI
+      setState(() {});
+    } on FirebaseException catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+    }
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _stateController.dispose();
+    _photoController.dispose();
+    _passwordController.dispose();
+    _confirmPwdController.dispose();
+
+    _signupBloc.dispose();
   }
 
 }

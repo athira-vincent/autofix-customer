@@ -17,12 +17,42 @@ class Repository {
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
 
 
+  // Customer Individual SignUp
+  Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,
+      String state, String password, String phone) =>
+      _signupApiProvider.getSignUpCustomerIndividualRequest(
+          firstName, lastName, email, state, password, phone);
 
-  // Customer SignUpScreen1
-  Future<dynamic> getSignUp(String firstName, String userName, String email,
-          String state, String password, String phone) =>
-      _signupApiProvider.getSignUpRequest(
-          firstName, userName, email, state, password, phone);
+  // Customer Corporate SignUp
+  Future<dynamic> getSignUpCustomeCorporate(String firstName, String lastName, String email,
+      String state, String password, String phone,String orgName,String orgType,) =>
+      _signupApiProvider.getSignUpCustomerCorporateRequest(
+          firstName, lastName, email, state, password, phone,orgName,orgType);
+
+  // Customer GovtBodies SignUp
+  Future<dynamic> getSignUpCustomeGovtBodies(String firstName, String lastName, String email,
+      String state, String password, String phone,String govt_agency,
+      String govt_type) =>
+      _signupApiProvider.getSignUpCustomerGovtBodiesRequest(
+          firstName, lastName, email, state, password, phone,govt_agency,govt_type);
+
+
+  //  Mechanic Individual SignUp
+  Future<dynamic> getSignUpMechanicIndividual(String firstName, String lastName, String email,
+      String state, String password, String phone,String latitude, String longitude,
+      String year_of_experience,) =>
+      _signupApiProvider.getSignUpMechanicIndividualRequest(
+          firstName, lastName, email, state, password, phone, latitude,  longitude,
+         year_of_experience,);
+
+  //  Mechanic Corporate SignUp
+  Future<dynamic> getSignUpMechanicCorporate(String firstName, String lastName, String email,
+      String state, String password, String phone,String latitude, String longitude,
+      String year_of_experience, orgName, orgType) =>
+      _signupApiProvider.getSignUpMechanicCorporateRequest(
+        firstName, lastName, email, state, password, phone, latitude,  longitude,
+        year_of_experience, orgName, orgType);
+
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 

@@ -61,6 +61,7 @@ dependencies:
   google_sign_in: 5.1.0
   firebase_core: 1.11.0
   firebase_auth: 2.0.0
+  firebase_storage: ^10.2.8
   animations: ^2.0.0
   country_code_picker: ^2.0.2
   sms_otp_auto_verify: ^2.1.0

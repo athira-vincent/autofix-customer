@@ -122,7 +122,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
               userCategory: userCategory,
               userType: prefs.getString(SharedPrefKeys.userType).toString(),
             )));
-    print(">>>>> userCategory " + userCategory + " SharedPrefKeys.userType " + prefs.getString(SharedPrefKeys.userType).toString());
+    print(">>>>> userCategory " + userCategory + " >>>>>>>userType " + prefs.getString(SharedPrefKeys.userType).toString());
   }
 
 }
