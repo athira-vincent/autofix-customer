@@ -35,35 +35,35 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   @override
   Widget build(BuildContext context) {
 
+    Size size = MediaQuery.of(context).size;
+
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(top: 2.3),
-            width: _setValue(65),
-            height: _setValue(65),
+            margin: EdgeInsets.only(top: 4,),
+            width: size.width * 6 /100,
+            height: size.height * 48 / 100,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: _index == 0
                     ? Colors.white.withOpacity(.05)
                     : Colors.transparent),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                
-                  margin: EdgeInsets.only(top: _setValue(5.1)),
-                  //child: Icon(Icons.home_outlined)
-                  child: Image.asset('assets\image\ic_home.png'),
+                  child: Image.asset('assets/image/ic_home.png',
+                  ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
+                  //margin: EdgeInsets.only(bottom: _setValue(10.1)),
                   child: Text(
                     'Home',
                     style: TextStyle(
                         fontFamily: 'Corbel_Light',
-                        fontSize: _setValueFont(9.5),
+                        fontSize: _setValueFont(8.5),
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: CustColors.light_navy),
                   ),
                 ),
               ],
@@ -87,7 +87,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   margin: EdgeInsets.only(top: _setValue(5.1)),
                   //child: Icon(Icons.cart)
                   child: Image.asset(
-                    'assets\image\ic_home_cart.png',
+                    'assets/image/ic_home_cart.png',
                     width: _setValue(29),
                     height: _setValue(29),
                   ),
@@ -100,7 +100,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         fontFamily: 'Corbel_Light',
                         fontSize: _setValueFont(9.5),
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: CustColors.brownish_grey_02),
                   ),
                 ),
               ],
@@ -124,7 +124,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
                   child: Image.asset(
-                    'assets\image\ic_home_service.png',
+                    'assets/image/ic_home_service.png',
                     width: _setValue(32.4),
                     height: _setValue(31.2),
                   ),
@@ -137,7 +137,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         fontFamily: 'Corbel_Light',
                         fontSize: _setValueFont(9.5),
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: CustColors.brownish_grey_02),
                   ),
                 ),
               ],
@@ -161,7 +161,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 Container(
                   margin: EdgeInsets.only(top: _setValue(5.1)),
                   child: Image.asset(
-                'assets\image\ic_home_profile.png',
+                'assets/image/ic_home_profile.png',
                     width: _setValue(32.4),
                     height: _setValue(31.2),
                   ),
@@ -174,7 +174,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         fontFamily: 'Corbel_Light',
                         fontSize: _setValueFont(9.5),
                         fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                        color: CustColors.brownish_grey_02),
                   ),
                 ),
               ],
@@ -269,19 +269,19 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+          // borderRadius: BorderRadius.only(
+          //     topRight: Radius.circular(30), topLeft: Radius.circular(30)),
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(48),
-            topRight: Radius.circular(48),
-          ),
+          // borderRadius: BorderRadius.only(
+          //   topLeft: Radius.circular(48),
+          //   topRight: Radius.circular(48),
+          // ),
           child: SizedBox(
-            height: 75,
+            height: size.height * 0.075,
             child: BottomNavigationBar(
               selectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',

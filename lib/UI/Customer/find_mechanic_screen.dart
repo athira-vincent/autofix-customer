@@ -28,12 +28,13 @@ Size size = MediaQuery.of(context).size;
           behavior: MyBehavior(),
           child: SingleChildScrollView(
             child: SafeArea(
+
               child: Column(children: [
                 Container(
                   height: size.height * 0.358,
                  color: CustColors.ocean_blue, 
                  child: GoogleMap(
-                   sty
+                   //sty
                    mapType: MapType.normal,
                    compassEnabled: true,
                    myLocationButtonEnabled: true,
@@ -58,14 +59,26 @@ Size size = MediaQuery.of(context).size;
                  ),
             
                 ),
-                // CurvedBottomSheetContainer(
-                //   percentage: 0.90
-                //   child: SingleChildScrollView(
-                //     child: Container(
-                //       color: Colors.amber,
-                //     ),
-                //   ),
-                // )
+                CurvedBottomSheetContainer(
+                  percentage: 0.90,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      color: Colors.amber,
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: size.height * 0.02,
+                          //bottom: size.height * ,
+                          left: size.width * 0.121,
+                          right: size.width * 0.121
+                        ),
+                        color: CustColors.pale_grey,
+                      ),
+
+                    ),
+                  ),
+                ),
+
+
 
               ],),
               ),
