@@ -109,6 +109,48 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  signUpCustomerGovtBodies(String firstName, String userName, String email, String state,
+      String password, String phoneNo,String orgName,String orgType) async {
+    String _query = """ 
+    mutation {
+        customersSignUp_Corporate(
+          firstName: "$firstName"
+          lastName: "$userName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          org_name: "$orgName"
+          org_type: "$orgType"
+          password: "$password"
+          state: "$state"
+          userType: 1
+          accountType: 2
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            userType
+            accountType
+            profilePic
+            isProfile_Completed
+            status
+          }
+          isProfile_Completed
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+
   forgotPassword(String email) async {
     String _query = """
       mutation{

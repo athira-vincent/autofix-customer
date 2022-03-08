@@ -36,6 +36,14 @@ class SignupBloc {
   }
 
 
+  postSignUpCustomerGovtBodiesRequest(String firstName, String userName, String email,
+      String state, String password, String phone,String orgName,String orgType,) async {
+    CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
+        firstName, userName, email, state, password, phone,orgName,orgType);
+    postSignUpCustomerIndividual.sink.add(_signUpMdl);
+  }
+
+
 
   dialStatesListRequest() async {
     dynamic _state = await repository.getStateList();

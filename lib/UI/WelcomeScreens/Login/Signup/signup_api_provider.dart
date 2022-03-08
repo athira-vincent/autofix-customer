@@ -64,6 +64,31 @@ class SignupApiProvider {
     }
   }
 
+  Future<CustomersSignUpIndividualMdl> getSignUpCustomerGovtBodiesRequest(
+      String firstName,
+      String userName,
+      String email,
+      String state,
+      String password,
+      String phone,
+      String orgName,
+      String orgType,) async {
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerGovtBodies(firstName, userName, email, state, password, phone,orgName,orgType);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustomersSignUpIndividualMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustomersSignUpIndividualMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CustomersSignUpIndividualMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
   Future<dynamic> getStates() async {
     dynamic response = await loadStates();
     return StatesMdl.fromJson(response);
