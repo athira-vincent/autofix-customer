@@ -118,6 +118,34 @@ class SignupApiProvider {
     }
   }
 
+
+  Future<MechanicSignUpMdl> getSignUpMechanicCorporateRequest(
+      String firstName,
+      String lastName,
+      String email,
+      String state,
+      String password,
+      String phone,
+      String latitude,
+      String longitude,
+      String year_of_experience,String orgName,String orgType) async {
+    Map<String, dynamic> _resp = await _queryProvider.signUpMechanicCorporate(firstName, lastName, email, state, password, phone, latitude,  longitude,
+      year_of_experience, orgName, orgType);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicSignUpMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicSignUpMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicSignUpMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
   Future<dynamic> getStates() async {
     dynamic response = await loadStates();
     return StatesMdl.fromJson(response);

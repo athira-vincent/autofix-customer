@@ -163,13 +163,67 @@ class QueryProvider {
           emailId: "$email"
           phoneNo: "$phoneNo"
           state: "$state"
-          latitude: 10.74
-          longitude: 9.55
+          latitude: ${double.parse(latitude.toString())}
+          longitude: ${double.parse(longitude.toString())}
           password: "$password"
           confirm_password: "$password"
           userType: 2
           accountType: 1
-          year_of_experience: "$firstName"
+          year_of_experience: "$year_of_experience"
+        ) {
+          token
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            latitude
+            longitude
+            userType
+            accountType
+            status
+          }
+          genMechanic {
+            id
+            org_name
+            org_type
+            year_exp
+            userId
+            status
+          }
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+
+  signUpMechanicCorporate(String firstName, String lastName, String email, String state,
+      String password, String phoneNo, String latitude, String longitude,
+      String year_of_experience,String orgName,String orgType) async {
+    String _query = """ 
+    mutation {
+        mechanic_signUp_Corporate(
+          firstName:  "$firstName"
+          lastName:  "$lastName"
+          emailId:  "$email"
+          phoneNo:  "$phoneNo"
+          state:  "$state"
+          latitude:  ${double.parse(latitude.toString())}
+          longitude: ${double.parse(longitude.toString())}
+          password:  "$password"
+          confirm_password: "$password"
+          userType: 2
+          accountType: 2
+          year_of_experience:"$year_of_experience"
+          org_Name: "$orgName"
+          org_Type:"$orgType"
         ) {
           token
           mechanic {

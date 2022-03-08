@@ -20,6 +20,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -109,9 +111,15 @@ class _SignupScreenState extends State<SignupScreen> {
     return value * perfont + value;
   }
 
+  String location ='Null, Press Button';
+  String Address = 'search';
+  String latitude = '10.5075868';
+  String longitude = '76.2424536';
+
   @override
   void initState() {
     super.initState();
+    _getCurrentCustomerLocation();
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
     _setSignUpVisitFlag();
@@ -120,6 +128,61 @@ class _SignupScreenState extends State<SignupScreen> {
     _getSignUpResponse();
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
+  }
+
+  Future<void> _getCurrentCustomerLocation() async {
+    Position position = await _getGeoLocationPosition();
+    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    print(location);
+    setState(() {
+      latitude = position.latitude.toString();
+      longitude = position.longitude.toString();
+    });
+    GetAddressFromLatLong(position);
+  }
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+
+  Future<void> GetAddressFromLatLong(Position position)async {
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+
   }
 
   _setSignUpVisitFlag() async {
@@ -141,6 +204,30 @@ class _SignupScreenState extends State<SignupScreen> {
 
         setState(() {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+    _signupBloc.postSignUpMechanic.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpMechanic >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpMechanic >>>>>>>  ${value.status}");
           _isLoading = false;
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
           Navigator.pushReplacement(
@@ -1230,15 +1317,24 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpMechanicIndividual(BuildContext context){
     print("signUpMechanicIndividual - loaded");
     if(validateSignUpMechanicIndividual()){
-      print("signUpMechanicIndividual");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+      setState(() {
+        print("validateSignUpCustomerIndividual - true");
+        print(" Name : " + _nameController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n State : " + _stateController.text +
+            "\n lalitude : " + latitude +
+            "\n lalitude : " + longitude +
+            "\n _yearOfExperienceController Type : " + _yearOfExperienceController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpMechanicIndividualRequest( _nameController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text, latitude, longitude, _yearOfExperienceController.text);
+      });
       return true;
     }else{
       print("signUpMechanicIndividual - else");
@@ -1374,15 +1470,26 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpMechanicCorporate(BuildContext context){
     print("signUpMechanicCorporate");
     if(validateSignUpCustomerCorporate()){
-      print("signUpMechanicCorporate");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+      setState(() {
+        print("validateSignUpCustomerIndividual - true");
+        print(" Name : " + _nameController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n State : " + _stateController.text +
+            "\n lalitude : " + latitude +
+            "\n lalitude : " + longitude +
+            "\n Organization : " + _nameController.text +
+            "\n Organization Type : " + _orgTypeController.text +
+            "\n _yearOfExperienceController Type : " + _yearOfExperienceController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpMechanicCorporateRequest( _nameController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text, latitude, longitude, _yearOfExperienceController.text,_nameController.text,_orgTypeController.text);
+      });
      return true;
 
     }else{

@@ -32,6 +32,23 @@ class SignupBloc {
        year_of_experience,);
     postSignUpMechanic.sink.add(_signUpMdl);
   }
+
+  postSignUpMechanicCorporateRequest(String username, String email,
+      String state, String password, String phone,String latitude, String longitude,
+      String year_of_experience,String orgName,String orgType,) async {
+    String fullName = username;
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName = fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
+    MechanicSignUpMdl _signUpMdl = await repository.getSignUpMechanicCorporate(
+      firstName, lastName, email, state, password, phone, latitude,  longitude,
+      year_of_experience, orgName, orgType,);
+    postSignUpMechanic.sink.add(_signUpMdl);
+  }
+
+
   /// --------------- Mechanic SignUp ends -------------------- ///
 
 
