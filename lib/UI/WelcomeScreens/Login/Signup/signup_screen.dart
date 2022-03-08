@@ -2049,6 +2049,21 @@ class _SignupScreenState extends State<SignupScreen> {
   Future uploadImageToFirebase(File images) async {
     final String fileName = path.basename(images!.path);
     File imageFile = File(images.path);
+/*
+    try {
+
+      TaskSnapshot upload = await FirebaseStorage.instance
+          .ref(
+          'events/${file.name}-${DateTime.now().toIso8601String()}.${file.extension}')
+          .putBlob(Blob(file.bytes));
+
+      String url = await upload.ref.getDownloadURL();
+
+      return url;
+    } catch (e) {
+      print('error in uploading image for : ${e.toString()}');
+      return 0;
+    }*/
 
     try {
       // Uploading the selected image with some custom meta data
