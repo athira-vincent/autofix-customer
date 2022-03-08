@@ -21,24 +21,42 @@ class SignupBloc {
   List<StateDetails> _statesDataList = [];
 
 
-  postSignUpCustomerIndividualRequest(String firstName, String lastName, String email,
+  postSignUpCustomerIndividualRequest(String username, String email,
       String state, String password, String phone) async {
+    String fullName = username;
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName = fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeIndividual(
         firstName, lastName, email, state, password, phone);
     postSignUpCustomer.sink.add(_signUpMdl);
   }
 
-  postSignUpCustomerCorporateRequest(String firstName, String lastName, String email,
+  postSignUpCustomerCorporateRequest(String username,  String email,
       String state, String password, String phone,String orgName,String orgType,) async {
+    String fullName = username;
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName = fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeCorporate(
         firstName, lastName, email, state, password, phone,orgName,orgType);
     postSignUpCustomer.sink.add(_signUpMdl);
   }
 
 
-  postSignUpCustomerGovtBodiesRequest(String firstName, String lastName, String email,
+  postSignUpCustomerGovtBodiesRequest(String username,  String email,
       String state, String password, String phone,String govt_agency,
       String govt_type) async {
+    String fullName = username;
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName = fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
         firstName, lastName, email, state, password, phone,govt_agency,govt_type);
     postSignUpCustomer.sink.add(_signUpMdl);

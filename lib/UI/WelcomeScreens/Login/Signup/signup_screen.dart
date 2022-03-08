@@ -1171,7 +1171,7 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpCustomerIndividualRequest(_nameController.text, _nameController.text,_emailController.text,
+        _signupBloc.postSignUpCustomerIndividualRequest( _nameController.text,_emailController.text,
             _stateController.text,  _passwordController.text, _phoneController.text);
       });
 
@@ -1309,7 +1309,7 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpCustomerCorporateRequest(_contactPersonController.text, _contactPersonController.text,_emailController.text,
+        _signupBloc.postSignUpCustomerCorporateRequest(_contactPersonController.text,_emailController.text,
             _stateController.text,  _passwordController.text, _phoneController.text,_nameController.text,_orgTypeController.text);
       });
 
@@ -1453,7 +1453,7 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpCustomerGovtBodiesRequest(_contactPersonController.text, _contactPersonController.text,_emailController.text,
+        _signupBloc.postSignUpCustomerGovtBodiesRequest( _contactPersonController.text,_emailController.text,
             _stateController.text,  _passwordController.text, _phoneController.text,_ministryGovtController.text,_ministryGovtController.text);
       });
       return true;
