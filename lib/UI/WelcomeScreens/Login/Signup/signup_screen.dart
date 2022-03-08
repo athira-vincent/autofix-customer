@@ -1018,17 +1018,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   if (_formKey.currentState!.validate()) {
                                                     print("_formKey.currentState!.validate()");
 
-                                                    widget.userCategory == TextStrings.user_category_individual
-                                                        && widget.userType == TextStrings.user_customer
+                                                    widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_customer
                                                         ? signUpCustomerIndividual(context)
-                                                        :  widget.userCategory == TextStrings.user_category_individual
-                                                        && widget.userType == TextStrings.user_mechanic
+                                                      :  widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_mechanic
                                                         ? signUpMechanicIndividual(context)
-                                                        : widget.userCategory == TextStrings.user_category_corporate
-                                                        && widget.userType == TextStrings.user_customer
+                                                      : widget.userCategory == TextStrings.user_category_corporate && widget.userType == TextStrings.user_customer
                                                         ? signUpCustomerCorporate(context)
-                                                        : widget.userCategory == TextStrings.user_category_corporate
-                                                        && widget.userType == TextStrings.user_mechanic
+                                                      : widget.userCategory == TextStrings.user_category_corporate && widget.userType == TextStrings.user_mechanic
                                                         ? signUpMechanicCorporate(context)
                                                         : signUpCustomerGovernment(context);
                                                   }
@@ -1443,15 +1439,23 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpCustomerGovernment(BuildContext context){
     print("signUpCustomerGovernment");
     if(validateSignUpCustomerGovernment()){
-      print("signUpMechanicCorporate");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
+      setState(() {
+        print(" Name : " + _contactPersonController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n Govtment Agency : " + _ministryGovtController.text +
+            "\n Govtment Type : " + _ministryGovtController.text +
+            "\n Ministry name : " + _ministryGovtController.text +
+            "\n Head Of Dept : " + _ministryGovtController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpCustomerGovtBodiesRequest(_contactPersonController.text, _contactPersonController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text,_nameController.text,_orgTypeController.text);
+      });
       return true;
     }else{
       print("signUpCustomerGovernment - else");
