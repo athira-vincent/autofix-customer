@@ -47,7 +47,6 @@ class _SplashScreenState extends State<SplashScreen> {
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("User Type ============ $userType");
-
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
     if (_token == null || _token == "") {
