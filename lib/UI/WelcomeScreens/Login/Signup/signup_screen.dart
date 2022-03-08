@@ -131,6 +131,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _signupBloc.postSignUpCustomerIndividual.listen((value) {
       if (value.status == "error") {
         setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
           print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
         });
@@ -1297,16 +1299,25 @@ class _SignupScreenState extends State<SignupScreen> {
   bool signUpCustomerCorporate(BuildContext context){
     print("signUpCustomerCorporate");
     if(validateSignUpCustomerCorporate()){
-      print("signUpCustomerCorporate");
-      print(" Name : " + _nameController.text +
-          "\n Email : "+ _emailController.text +
-          "\n phone : "+ _photoController.text +
-          "\n State : " +
-          "\n photo path :" +
-          "\n password : " + _passwordController.text+
-          "\n c password " + _confirmPwdController.text
-      );
-    return true;
+
+
+      setState(() {
+        print(" Name : " + _contactPersonController.text +
+            "\n Email : "+ _emailController.text +
+            "\n phone : "+ _phoneController.text +
+            "\n State : " + _stateController.text +
+            "\n Organization : " + _nameController.text +
+            "\n Organization Type : " + _orgTypeController.text +
+            "\n photo path :" + _photoController.text+
+            "\n password : " + _passwordController.text+
+            "\n c password " + _confirmPwdController.text
+        );
+        _isLoading=true;
+        _signupBloc.postSignUpCustomerCorporateRequest(_contactPersonController.text, _contactPersonController.text,_emailController.text,
+            _stateController.text,  _passwordController.text, _phoneController.text,_nameController.text,_orgTypeController.text);
+      });
+
+      return true;
     }else{
       print("signUpCustomerCorporate - else");
       return false;
@@ -1318,13 +1329,16 @@ class _SignupScreenState extends State<SignupScreen> {
     if(_nameController.text.isEmpty){
       errorMsg = "Organisation Name cannot Empty";
       return false;
-    }else if(_orgTypeController.text.isEmpty){
+    }
+    else if(_orgTypeController.text.isEmpty){
       errorMsg = "Organisation Type cannot Empty";
       return false;
-    }else if(_contactPersonController.text.isEmpty){
+    }
+    else if(_contactPersonController.text.isEmpty){
       errorMsg = "Contact Person cannot Empty";
       return false;
-    }else if(_phoneController.text.isEmpty){
+    }
+    else if(_phoneController.text.isEmpty){
       errorMsg = "Phone Number cannot empty";
       return false;
     }
@@ -1343,10 +1357,12 @@ class _SignupScreenState extends State<SignupScreen> {
     else if(_passwordController.text.isEmpty){
       errorMsg = "Fill Password";
       return false;
-    }else if(_confirmPwdController.text.isEmpty){
+    }
+    else if(_confirmPwdController.text.isEmpty){
       errorMsg = "Enter Confirm Password";
       return false;
-    }else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
+    }
+    else if(_passwordController.text.toString() != _confirmPwdController.text.toString()) {
       errorMsg = "Passwords are different!";
       setState(() {
         _passwordController.text = "";
