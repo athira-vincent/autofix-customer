@@ -17,12 +17,12 @@ class SignupApiProvider {
 
   Future<CustomersSignUpIndividualMdl> getSignUpCustomerIndividualRequest(
       String firstName,
-      String userName,
+      String lastName,
       String email,
       String state,
       String password,
       String phone) async {
-    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerIndividual(firstName, userName, email, state, password, phone);
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerIndividual(firstName, lastName, email, state, password, phone);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -41,14 +41,14 @@ class SignupApiProvider {
 
   Future<CustomersSignUpIndividualMdl> getSignUpCustomerCorporateRequest(
       String firstName,
-      String userName,
+      String lastName,
       String email,
       String state,
       String password,
       String phone,
       String orgName,
       String orgType,) async {
-    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerCorporate(firstName, userName, email, state, password, phone,orgName,orgType);
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerCorporate(firstName, lastName, email, state, password, phone,orgName,orgType);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -66,14 +66,14 @@ class SignupApiProvider {
 
   Future<CustomersSignUpIndividualMdl> getSignUpCustomerGovtBodiesRequest(
       String firstName,
-      String userName,
+      String lastName,
       String email,
       String state,
       String password,
       String phone,
       String orgName,
       String orgType,) async {
-    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerGovtBodies(firstName, userName, email, state, password, phone,orgName,orgType);
+    Map<String, dynamic> _resp = await _queryProvider.signUpCustomerGovtBodies(firstName, lastName, email, state, password, phone,orgName,orgType);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

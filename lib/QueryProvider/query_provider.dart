@@ -29,13 +29,13 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUpCustomerIndividual(String firstName, String userName, String email, String state,
+  signUpCustomerIndividual(String firstName, String lastName, String email, String state,
       String password, String phoneNo) async {
     String _query = """ 
     mutation {
         customersSignUp_Individual(
           firstName: "$firstName"
-          lastName: "$userName"
+          lastName: "$lastName"
           emailId: "$email"
           phoneNo: "$phoneNo"
           password: "$password"
@@ -68,13 +68,13 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUpCustomerCorporate(String firstName, String userName, String email, String state,
+  signUpCustomerCorporate(String firstName, String lastName, String email, String state,
       String password, String phoneNo,String orgName,String orgType) async {
     String _query = """ 
     mutation {
         customersSignUp_Corporate(
           firstName: "$firstName"
-          lastName: "$userName"
+          lastName: "$lastName"
           emailId: "$email"
           phoneNo: "$phoneNo"
           org_name: "$orgName"
@@ -109,13 +109,13 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUpCustomerGovtBodies(String firstName, String userName, String email, String state,
+  signUpCustomerGovtBodies(String firstName, String lastName, String email, String state,
       String password, String phoneNo,String orgName,String orgType) async {
     String _query = """ 
     mutation {
         customersSignUp_Corporate(
           firstName: "$firstName"
-          lastName: "$userName"
+          lastName: "$lastName"
           emailId: "$email"
           phoneNo: "$phoneNo"
           org_name: "$orgName"

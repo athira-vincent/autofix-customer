@@ -28,18 +28,18 @@ class SignupBloc {
     postSignUpCustomerIndividual.sink.add(_signUpMdl);
   }
 
-  postSignUpCustomerCorporateRequest(String firstName, String userName, String email,
+  postSignUpCustomerCorporateRequest(String firstName, String lastName, String email,
       String state, String password, String phone,String orgName,String orgType,) async {
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeCorporate(
-        firstName, userName, email, state, password, phone,orgName,orgType);
+        firstName, lastName, email, state, password, phone,orgName,orgType);
     postSignUpCustomerIndividual.sink.add(_signUpMdl);
   }
 
 
-  postSignUpCustomerGovtBodiesRequest(String firstName, String userName, String email,
+  postSignUpCustomerGovtBodiesRequest(String firstName, String lastName, String email,
       String state, String password, String phone,String orgName,String orgType,) async {
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
-        firstName, userName, email, state, password, phone,orgName,orgType);
+        firstName, lastName, email, state, password, phone,orgName,orgType);
     postSignUpCustomerIndividual.sink.add(_signUpMdl);
   }
 

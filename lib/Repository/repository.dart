@@ -18,22 +18,22 @@ class Repository {
 
 
   // Customer Individual SignUp
-  Future<dynamic> getSignUpCustomeIndividual(String firstName, String userName, String email,
+  Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,
       String state, String password, String phone) =>
       _signupApiProvider.getSignUpCustomerIndividualRequest(
-          firstName, userName, email, state, password, phone);
+          firstName, lastName, email, state, password, phone);
 
   // Customer Corporate SignUp
-  Future<dynamic> getSignUpCustomeCorporate(String firstName, String userName, String email,
+  Future<dynamic> getSignUpCustomeCorporate(String firstName, String lastName, String email,
       String state, String password, String phone,String orgName,String orgType,) =>
       _signupApiProvider.getSignUpCustomerCorporateRequest(
-          firstName, userName, email, state, password, phone,orgName,orgType);
+          firstName, lastName, email, state, password, phone,orgName,orgType);
 
   // Customer GovtBodies SignUp
-  Future<dynamic> getSignUpCustomeGovtBodies(String firstName, String userName, String email,
+  Future<dynamic> getSignUpCustomeGovtBodies(String firstName, String lastName, String email,
       String state, String password, String phone,String orgName,String orgType,) =>
       _signupApiProvider.getSignUpCustomerGovtBodiesRequest(
-          firstName, userName, email, state, password, phone,orgName,orgType);
+          firstName, lastName, email, state, password, phone,orgName,orgType);
 
 
   // Get State
