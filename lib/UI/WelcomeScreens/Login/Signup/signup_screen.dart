@@ -16,6 +16,8 @@ import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +27,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as path;
 
 class SignupScreen extends StatefulWidget {
 
@@ -101,6 +104,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final picker = ImagePicker();
   File? _images;
   String errorMsg = "";
+  String imageFirebaseUrl="";
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   final ScrollController _scrollController = ScrollController();
   double _setValue(double value) {
@@ -1998,6 +2003,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
+
                         }
                       });
                     },
@@ -2039,6 +2045,29 @@ class _SignupScreenState extends State<SignupScreen> {
       backgroundColor: CustColors.peaGreen,
     ));
   }
+
+  Future uploadImageToFirebase(File images) async {
+    final String fileName = path.basename(images!.path);
+    File imageFile = File(images.path);
+
+    try {
+      // Uploading the selected image with some custom meta data
+      await storage.ref(fileName).putFile(
+          imageFile,
+          SettableMetadata(customMetadata: {
+            'uploaded_by': 'A bad guy',
+            'description': 'Some description...'
+          }));
+
+      // Refresh the UI
+      setState(() {});
+    } on FirebaseException catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+    }
+  }
+
 
   @override
   void dispose() {
