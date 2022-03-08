@@ -152,6 +152,57 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  signUpMechanicIndividual(String firstName, String lastName, String email, String state,
+      String password, String phoneNo, String latitude, String longitude,
+      String year_of_experience,) async {
+    String _query = """ 
+    mutation {
+        mechanic_signUp_Individual(
+          firstName: "$firstName"
+          lastName: "$lastName"
+          emailId: "$email"
+          phoneNo: "$phoneNo"
+          state: "$state"
+          latitude: 10.74
+          longitude: 9.55
+          password: "$password"
+          confirm_password: "$password"
+          userType: 2
+          accountType: 1
+          year_of_experience: "$firstName"
+        ) {
+          token
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            state
+            latitude
+            longitude
+            userType
+            accountType
+            status
+          }
+          genMechanic {
+            id
+            org_name
+            org_type
+            year_exp
+            userId
+            status
+          }
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
 
   forgotPassword(String email) async {
     String _query = """

@@ -1,5 +1,6 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Individual_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 
@@ -10,16 +11,37 @@ class SignupBloc {
   final Repository repository = Repository();
 
 
+
+  /// --------------- Mechanic SignUp Starts -------------------- ///
+
+
+  final postSignUpMechanic = PublishSubject<MechanicSignUpMdl>();
+  Stream<MechanicSignUpMdl> get signUpMechanicResponse => postSignUpMechanic.stream;
+
+  postSignUpMechanicIndividualRequest(String username, String email,
+      String state, String password, String phone,String latitude, String longitude,
+      String year_of_experience,) async {
+    String fullName = username;
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName = fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
+    MechanicSignUpMdl _signUpMdl = await repository.getSignUpMechanicIndividual(
+        firstName, lastName, email, state, password, phone, latitude,  longitude,
+       year_of_experience,);
+    postSignUpMechanic.sink.add(_signUpMdl);
+  }
+  /// --------------- Mechanic SignUp ends -------------------- ///
+
+
+
+
+  /// --------------- Customer SignUp Starts -------------------- ///
+
+
   final postSignUpCustomer = PublishSubject<CustomersSignUpIndividualMdl>();
   Stream<CustomersSignUpIndividualMdl> get signUpCustomerResponse => postSignUpCustomer.stream;
-
-
-
-  final statesCode = PublishSubject<List<StateDetails>>();
-  Stream<List<StateDetails>> get countryDialcodeResponse => statesCode.stream;
-
-  List<StateDetails> _statesDataList = [];
-
 
   postSignUpCustomerIndividualRequest(String username, String email,
       String state, String password, String phone) async {
@@ -63,6 +85,13 @@ class SignupBloc {
   }
 
 
+  /// --------------- Customer SignUp ends -------------------- ///
+
+
+  final statesCode = PublishSubject<List<StateDetails>>();
+  Stream<List<StateDetails>> get countryDialcodeResponse => statesCode.stream;
+
+  List<StateDetails> _statesDataList = [];
 
   dialStatesListRequest() async {
     dynamic _state = await repository.getStateList();

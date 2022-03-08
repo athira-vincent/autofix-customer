@@ -37,6 +37,14 @@ class Repository {
           firstName, lastName, email, state, password, phone,govt_agency,govt_type);
 
 
+  // Customer Mechanic SignUp
+  Future<dynamic> getSignUpMechanicIndividual(String firstName, String lastName, String email,
+      String state, String password, String phone,String latitude, String longitude,
+      String year_of_experience,) =>
+      _signupApiProvider.getSignUpMechanicIndividualRequest(
+          firstName, lastName, email, state, password, phone, latitude,  longitude,
+         year_of_experience,);
+
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 

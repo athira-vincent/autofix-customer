@@ -74,7 +74,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isLoading = false;
   List<StateDetails> _countryData = [];
   List<String> orgTypeList = [
-    "private",
+    "Private",
     "Public",
     "Privet-Public"
   ];
