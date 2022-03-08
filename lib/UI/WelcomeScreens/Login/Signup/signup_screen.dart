@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _setSignUpVisitFlag();
     _passwordVisible = false;
     _confirmPasswordVisible = false;
-    _getSignUpResponse();
+    _listenSignUpResponse();
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
   }
@@ -190,7 +190,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
   }
 
-  _getSignUpResponse() {
+  _listenSignUpResponse() {
     _signupBloc.postSignUpCustomer.listen((value) {
       if (value.status == "error") {
         setState(() {
@@ -205,6 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
         setState(() {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
+          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
           Navigator.pushReplacement(
               context,
@@ -229,6 +230,7 @@ class _SignupScreenState extends State<SignupScreen> {
         setState(() {
           print("success postSignUpMechanic >>>>>>>  ${value.status}");
           _isLoading = false;
+          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
           Navigator.pushReplacement(
               context,

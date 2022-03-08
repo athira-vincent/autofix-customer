@@ -56,7 +56,7 @@ class MechanicSignUpIndividual {
     required this.genMechanic,
   });
 
-  String token;
+  String? token;
   Mechanic? mechanic;
   GenMechanic? genMechanic;
 

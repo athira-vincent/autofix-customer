@@ -1,3 +1,5 @@
+import 'package:auto_fix/Constants/grapgh_ql_client.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicSignUp_Mdl.dart';
@@ -5,12 +7,20 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupBloc {
 
   final Repository repository = Repository();
 
+  /// --------------- Save Tocken -------------------- ///
 
+  void userDefault(String token) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.token, token);
+    GqlClient.I.config(token: '${shdPre.getString(SharedPrefKeys.token)}');
+    print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
+  }
 
   /// --------------- Mechanic SignUp Starts -------------------- ///
 
@@ -47,10 +57,6 @@ class SignupBloc {
       year_of_experience, orgName, orgType,);
     postSignUpMechanic.sink.add(_signUpMdl);
   }
-
-
-  /// --------------- Mechanic SignUp ends -------------------- ///
-
 
 
 
@@ -102,7 +108,7 @@ class SignupBloc {
   }
 
 
-  /// --------------- Customer SignUp ends -------------------- ///
+  /// --------------- State Selection -------------------- ///
 
 
   final statesCode = PublishSubject<List<StateDetails>>();
