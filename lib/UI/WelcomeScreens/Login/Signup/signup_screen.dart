@@ -136,6 +136,61 @@ class _SignupScreenState extends State<SignupScreen> {
     // _stateFocusNode.canRequestFocus = false;
   }
 
+  _listenSignUpResponse() {
+    _signupBloc.postSignUpCustomer.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+    _signupBloc.postSignUpMechanic.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpMechanic >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+        setState(() {
+          print("success postSignUpMechanic >>>>>>>  ${value.status}");
+          print("success Auth token >>>>>>>  ${value.data!.mechanicSignUpIndividual!.token.toString()}");
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+  }
+
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
@@ -193,59 +248,6 @@ class _SignupScreenState extends State<SignupScreen> {
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
-  }
-
-  _listenSignUpResponse() {
-    _signupBloc.postSignUpCustomer.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.postSignUpMechanic.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
   }
 
 
@@ -1104,9 +1106,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                                 child: MaterialButton(
                                                   onPressed: () {
+                                                    print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
                                                     if (_formKey.currentState!.validate()) {
                                                       print("_formKey.currentState!.validate()");
-
                                                       widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_customer
                                                           ? signUpCustomerIndividual(context)
                                                           :  widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_mechanic
@@ -2056,21 +2058,14 @@ class _SignupScreenState extends State<SignupScreen> {
     Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
     print(">>>>>>>>>>>>>>>> reference"+reference.toString());
     UploadTask uploadTask =  reference.putFile(images);
-    uploadTask.snapshotEvents.listen((event) {
-      setState(() {
-        _progress =
-            event.bytesTransferred.toDouble() / event.totalBytes.toDouble();
-        print(_progress.toString());
-      });
-      if (event.state == TaskState.success) {
-        _progress = null;
-      }
-    }).onError((error) {
-      // do something to handle error
-    });
     uploadTask.whenComplete(() async{
       try{
-        imageFirebaseUrl = await reference.getDownloadURL();
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          imageFirebaseUrl = fileImageurl;
+        });
+
       }catch(onError){
         print("Error");
       }
