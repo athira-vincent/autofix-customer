@@ -19,8 +19,8 @@ class MechanicCompleteProfileBloc {
     String lastName = fullName.substring(names[0].length);
     print(firstName);
     print(lastName);
-    CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporate(username,"aa");
-    postCompleteProfileCorporate.sink.add(_completeProfileMdl);
+    //CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporate(username,"aa");
+    //postCompleteProfileCorporate.sink.add(_completeProfileMdl);
   }
 
   /// --------------- Mechanic - Individual - Complete profile Starts -------------------- ///
@@ -34,8 +34,8 @@ class MechanicCompleteProfileBloc {
     String lastName = fullName.substring(names[0].length);
     print(firstName);
     print(lastName);
-    IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(username,email);
-    postCompleteProfileIndividual.sink.add(_completeProfileMdl);
+    //IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(username,email);
+   // postCompleteProfileIndividual.sink.add(_completeProfileMdl);
   }
 
 

@@ -100,7 +100,7 @@ class Repository {
 
 
 
-  // Mechanic Individual Complete Profile
+ /* // Mechanic Individual Complete Profile
   Future<dynamic> getCompleteProfileMechIndividual(String firstName, String phone) =>
       _completeProfileMecIndividualApiProvider.getcompleteProfileMechIndividualRequest(
           firstName, lastName,);
@@ -108,7 +108,7 @@ class Repository {
   // Mechanic Corporate Complete Profile
   Future<dynamic> getCompleteProfileMechCorporate(String firstName, String phone) =>
       _completeProfileMecIndividualApiProvider.getcompleteProfileMechCorporateRequest(
-        firstName, lastName,);
+        firstName, lastName,);*/
 
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
