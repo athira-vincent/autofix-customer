@@ -5,15 +5,19 @@ import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../Customer/customer_home_screen.dart';
 
 
 
@@ -34,6 +38,9 @@ class AddCarScreen extends StatefulWidget {
 class _AddCarScreenState extends State<AddCarScreen> {
 
   String authToken="";
+  final AddCarBloc _addCarBloc = AddCarBloc();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
 
   TextEditingController _brandController = TextEditingController();
   FocusNode _brandFocusNode = FocusNode();
@@ -69,7 +76,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   String userProfilePic = '';
-  bool _isLoading = false;
   double _lowerValue = 100;
 
   var pickeddate;
@@ -105,6 +111,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
+    _listenAddCarResponse();
   }
 
   Future<void> getSharedPrefData() async {
@@ -116,12 +123,40 @@ class _AddCarScreenState extends State<AddCarScreen> {
     });
   }
 
+  _listenAddCarResponse() {
+    _addCarBloc.postAddCar.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CustomerHomeScreen()));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     print('${_images?.path}' + ">>>>>>> image from Widget");
     return MaterialApp(
       home: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: ScrollConfiguration(
           behavior: MyBehavior(),
