@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/service_type_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicle_specialization_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
@@ -38,6 +39,8 @@ class WorkSelectionScreen extends StatefulWidget {
 }
 
 class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
+
+  MechanicCompleteProfileBloc _completeProfileBloc = MechanicCompleteProfileBloc();
 
   TextEditingController _workSelectionController = TextEditingController();
   FocusNode _workSelectionFocusNode = FocusNode();
@@ -91,6 +94,58 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
   String? _fileName;
 
+  _listenSignUpResponse() {
+    /*_completeProfileBloc.postSignUpCustomer.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+    _signupBloc.postSignUpMechanic.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpMechanic >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -878,12 +933,14 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   : Container(
                     child: MaterialButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        _completeProfileBloc.postCompleteProfileIndividualRequest("aa", "aa");
+
+                       /* Navigator.pushReplacement(
                           context,
                           new MaterialPageRoute(
                               builder: (context) =>
                                   WaitAdminApprovalScreen(refNumber:'12345678')),
-                        );
+                        );*/
 
                       },
                       child: Container(
@@ -938,12 +995,16 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
                     child: MaterialButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
+
+
+
+
+
+                        /*Navigator.pushReplacement(
                           context,
                           new MaterialPageRoute(
                               builder: (context) =>
-                                  WaitAdminApprovalScreen(refNumber:'12345678')),
-                        );
+                                  WaitAdminApprovalScreen(refNumber:'12345678')),);*/
 
                       },
                       child: Container(

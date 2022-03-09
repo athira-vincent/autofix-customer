@@ -473,6 +473,29 @@ class QueryProvider {
 
   selectCar() {}
 
+  completeProfileMechIndividual(String token,) async {
+    String _query = """  
+    """;
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  completeProfileMechCorporate(String token,) async {
+    String _query = """  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   viewVehicle(String token) async {
     String _query = """
       query{
