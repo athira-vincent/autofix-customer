@@ -5,8 +5,7 @@ import 'dart:convert';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicSignUp_Mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 
 import 'package:flutter/services.dart';
 

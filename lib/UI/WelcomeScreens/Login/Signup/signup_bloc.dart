@@ -3,8 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicSignUp_Mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,6 +105,12 @@ class SignupBloc {
         firstName, lastName, email, state, password, phone,govt_agency,govt_type);
     postSignUpCustomer.sink.add(_signUpMdl);
   }
+
+
+  /// --------------- Otp Verification Starts -------------------- ///
+
+
+
 
 
   /// --------------- State Selection -------------------- ///

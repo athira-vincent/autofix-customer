@@ -18,14 +18,23 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 
 import '../../../../../main.dart';
+import '../Signup/signup_bloc.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
 
   final String userType;
   final String userCategory;
+  final String phoneNumber;
+  final String otpNumber;
+  final String fromPage;
 
 
-  OtpVerificationScreen({required this.userType,required this.userCategory});
+  OtpVerificationScreen({
+    required this.userType,
+    required this.userCategory,
+    required this.phoneNumber,
+    required this.otpNumber,
+    required this.fromPage});
 
   @override
   State<StatefulWidget> createState() {
@@ -36,10 +45,11 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   TextEditingController _phoneNoController = TextEditingController();
+  final SignupBloc _signupBloc = SignupBloc();
   FocusNode _phoneNoFocusNode = FocusNode();
   TextStyle _labelStylePhoneNo = TextStyle();
 
-  int _otpCodeLength = 4;
+  int _otpCodeLength = 5;
   bool _isLoadingButton = false;
   bool _enableButton = false;
   String _otpCode ="";
@@ -84,6 +94,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void initState() {
     super.initState();
     _phoneNoController.addListener(onFocusChange);
+    textEditingController.text = widget.otpNumber;
     _getForgotPwd();
 
     _getSignatureCode();
@@ -226,7 +237,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                     codeLength: _otpCodeLength,
                                                     alignment: MainAxisAlignment.center,
                                                     defaultBoxSize: 50.0,
-                                                    margin: 14,
+                                                    margin: 5,
                                                     selectedBoxSize: 50.0,
                                                     textStyle: TextStyle(fontSize: 16),
                                                     defaultDecoration: _pinPutDecoration,
@@ -257,7 +268,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             child: MaterialButton(
                                               onPressed: () {
 
-                                                if( widget.userType == TextStrings.user_customer)
+                                                print(textEditingController.text);
+
+
+
+
+                                               /* if( widget.userType == TextStrings.user_customer)
                                                   {
                                                     Navigator.pushReplacement(
                                                       context,
@@ -302,7 +318,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                             LoginScreen()),
                                                   );
                                                 }
-
+*/
 
 
 
@@ -349,7 +365,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             ),
                                           ),
                                         ),
-                                        Container(
+                                        /*Container(
                                           margin: EdgeInsets.only(top: 15.8),
                                           child: RichText(
                                             maxLines: 2,
@@ -366,7 +382,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                               ],
                                             ),
                                           ),
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                   ),

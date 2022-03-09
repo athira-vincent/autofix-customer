@@ -1,7 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

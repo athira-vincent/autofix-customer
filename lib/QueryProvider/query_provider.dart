@@ -53,6 +53,7 @@ class QueryProvider {
             phoneNo
             state
             userType
+            resetToken
             accountType
             profilePic
             isProfile_Completed
@@ -94,6 +95,7 @@ class QueryProvider {
             phoneNo
             state
             userType
+            resetToken
             accountType
             profilePic
             isProfile_Completed
@@ -137,6 +139,7 @@ class QueryProvider {
             phoneNo
             state
             userType
+            resetToken
             accountType
             profilePic
             isProfile_Completed
@@ -183,6 +186,7 @@ class QueryProvider {
             latitude
             longitude
             userType
+            resetToken
             accountType
             status
           }
@@ -237,6 +241,7 @@ class QueryProvider {
             latitude
             longitude
             userType
+            resetToken
             accountType
             status
           }
