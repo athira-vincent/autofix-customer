@@ -40,7 +40,7 @@ class AddCarBloc {
   }
 
 
-  final postMakeBrand = PublishSubject<MakeBrandDetailsMdl>();
+  final postMakeBrand = BehaviorSubject<MakeBrandDetailsMdl>();
   Stream<MakeBrandDetailsMdl> get MakeBrandResponse => postMakeBrand.stream;
   postMakeBrandRequest(token,) async {
     MakeBrandDetailsMdl makeBrandDetailsMdl = await repository.postMakeBrandRequest(token,);
@@ -48,7 +48,7 @@ class AddCarBloc {
   }
 
 
-  final postModelDetail = PublishSubject<ModelDetailsMdl>();
+  final postModelDetail = BehaviorSubject<ModelDetailsMdl>();
   Stream<ModelDetailsMdl> get ModelDetailResponse => postModelDetail.stream;
   postModelDetailRequest(token,type) async {
     ModelDetailsMdl modelDetail = await repository.postModelDetailRequest(token,type);
