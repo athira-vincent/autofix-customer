@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Utility/check_network.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -30,6 +32,8 @@ class AddCarScreen extends StatefulWidget {
 }
 
 class _AddCarScreenState extends State<AddCarScreen> {
+
+  String authToken="";
 
   TextEditingController _brandController = TextEditingController();
   FocusNode _brandFocusNode = FocusNode();
@@ -95,6 +99,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> yearTypeList = ['2012','2013','2014','2015','2016','swift','rangeover','scooty','grazia'];
   String? selectedYearType = '' ;
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -152,6 +173,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
       ),
     );
   }
+
+
 
 
   Widget completeYourProfileText() {

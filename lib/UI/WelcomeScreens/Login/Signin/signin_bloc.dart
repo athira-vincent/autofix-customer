@@ -22,9 +22,7 @@ class SigninBloc {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
     shdPre.setBool(SharedPrefKeys.isUserLoggedIn, true);
-    GqlClient.I
-        .config(token: shdPre.getString(SharedPrefKeys.token).toString());
-    print(
-        "token===================================${shdPre.getString(SharedPrefKeys.token)}");
+    GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
+    print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }
 }
