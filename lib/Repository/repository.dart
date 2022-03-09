@@ -75,6 +75,14 @@ class Repository {
         makeId,
         vehicleModelId,);
 
+  //Otp Verification
+  Future<dynamic> postOtpVerificationRequest(
+      token,
+      otp,) =>
+      _signupApiProvider.postOtpVerificationRequest(
+        token,
+        otp,);
+
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 

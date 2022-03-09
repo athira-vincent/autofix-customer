@@ -8,6 +8,8 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dar
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../PhoneLogin/otp_Verification_Mdl.dart';
+
 class SignupBloc {
 
   final Repository repository = Repository();
@@ -110,7 +112,19 @@ class SignupBloc {
   /// --------------- Otp Verification Starts -------------------- ///
 
 
+  final postOtpVerification = PublishSubject<OtpVerificationMdl>();
+  Stream<OtpVerificationMdl> get otpVerificationResponse => postOtpVerification.stream;
 
+
+  postOtpVerificationRequest(
+      token,
+      otp,
+      ) async {
+    OtpVerificationMdl vehicleCreateMdl = await repository.postOtpVerificationRequest(
+      token,
+      otp,);
+    postOtpVerification.sink.add(vehicleCreateMdl);
+  }
 
 
   /// --------------- State Selection -------------------- ///

@@ -77,11 +77,11 @@ class _SplashScreenState extends State<SplashScreen> {
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
-       /* Navigator.pushReplacement(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  LoginScreen()));*/
-        Navigator.pushReplacement(
+                builder: (context) =>  LoginScreen()));
+        /*Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       userCategory: 'individual',
                       phoneNumber: "8547151373",
                       otpNumber: "75746",
-                      fromPage: "1",)));
+                      fromPage: "1",)));*/
       }
     }
   }

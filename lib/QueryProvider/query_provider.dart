@@ -301,6 +301,22 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
+  postOtpVerificationRequest(
+      token,
+      otp,) async {
+    String _query = """ 
+    mutation {
+      otp_Verification(otpCode: "$otp") {
+        message
+      }
+    }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
 
   forgotPassword(String email) async {
     String _query = """

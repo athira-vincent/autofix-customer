@@ -88,7 +88,7 @@ class Customer {
     required this.status,
   });
 
-  String id;
+  int id;
   String userCode;
   String firstName;
   String lastName;

@@ -83,7 +83,7 @@ class GenMechanic {
     required this.status,
   });
 
-  String id;
+  int id;
   dynamic orgName;
   dynamic orgType;
   String yearExp;

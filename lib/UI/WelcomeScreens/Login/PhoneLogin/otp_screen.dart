@@ -15,9 +15,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 
 import '../../../../../main.dart';
+import '../../../../Constants/shared_pref_keys.dart';
+import '../../../../Widgets/snackbar_widget.dart';
 import '../Signup/signup_bloc.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -89,16 +92,96 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 
+  String authToken="";
+
 
   @override
   void initState() {
     super.initState();
+    getSharedPrefData();
     _phoneNoController.addListener(onFocusChange);
     textEditingController.text = widget.otpNumber;
     _getForgotPwd();
+    _listenOtpVerificationResponse();
 
     _getSignatureCode();
     _startListeningSms();
+  }
+
+  _listenOtpVerificationResponse() {
+    _signupBloc.postOtpVerification.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+           if( widget.userType == TextStrings.user_customer)
+          {
+            Navigator.pushReplacement(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) =>
+                      AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+            );
+          }
+        else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
+          {
+            Navigator.pushReplacement(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) =>
+                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+            );
+          }
+        else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
+          {
+            Navigator.pushReplacement(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) =>
+                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+            );
+          }
+        else if( widget.userType == '1')
+        {
+          Navigator.pushReplacement(
+            context,
+            new MaterialPageRoute(
+                builder: (context) =>
+                    LoginScreen()),
+          );
+        }
+        else
+        {
+          Navigator.pushReplacement(
+            context,
+            new MaterialPageRoute(
+                builder: (context) =>
+                    LoginScreen()),
+          );
+        }
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+  }
+
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+    });
   }
 
   @override
@@ -268,57 +351,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             child: MaterialButton(
                                               onPressed: () {
 
-                                                print(textEditingController.text);
+                                                setState(() {
+                                                  print(textEditingController.text);
+                                                  print(authToken.toString());
+                                                  _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber);
+
+                                                });
 
 
 
 
-                                               /* if( widget.userType == TextStrings.user_customer)
-                                                  {
-                                                    Navigator.pushReplacement(
-                                                      context,
-                                                      new MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-                                                    );
-                                                  }
-                                                else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
-                                                  {
-                                                    Navigator.pushReplacement(
-                                                      context,
-                                                      new MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-                                                    );
-                                                  }
-                                                else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
-                                                  {
-                                                    Navigator.pushReplacement(
-                                                      context,
-                                                      new MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-                                                    );
-                                                  }
-                                                else if( widget.userType == '1')
-                                                {
-                                                  Navigator.pushReplacement(
-                                                    context,
-                                                    new MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginScreen()),
-                                                  );
-                                                }
-                                                else
-                                                {
-                                                  Navigator.pushReplacement(
-                                                    context,
-                                                    new MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginScreen()),
-                                                  );
-                                                }
-*/
+
 
 
 
