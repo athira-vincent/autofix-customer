@@ -257,6 +257,45 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  postAddCarRequest(
+      token,
+      year,
+      plateNo,
+      engineName,
+      lastMaintenance,
+      milege,
+      makeId,
+      vehicleModelId,) async {
+    String _query = """ 
+    mutation {
+        vehicleCreate(
+          year: "$year"
+          plateNo: "$plateNo"
+          engineName: "$engineName"
+          lastMaintenance: "$lastMaintenance"
+          milege: "$milege"
+          makeId: "$makeId"
+          vehicleModelId: "$vehicleModelId"
+        ) {
+          id
+          year
+          plateNo
+          engineName
+          milege
+          lastMaintenance
+          defaultVehicle
+          userId
+          makeId
+          vehicleModelId
+          status
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
 
   forgotPassword(String email) async {
     String _query = """

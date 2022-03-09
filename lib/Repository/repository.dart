@@ -4,11 +4,13 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 
+import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
 
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();
+  final _addCarApiProvider = AddCarApiProvider();
   final _vehicleSpecializationApiProvider = vehicleSpecializationApiProvider();
 
   final _signinApiProvider = SigninApiProvider();
@@ -52,6 +54,26 @@ class Repository {
       _signupApiProvider.getSignUpMechanicCorporateRequest(
         firstName, lastName, email, state, password, phone, latitude,  longitude,
         year_of_experience, orgName, orgType);
+
+  //AddCar Of Customer
+  Future<dynamic> postAddCarRequest(
+      token,
+      year,
+      plateNo,
+      engineName,
+      lastMaintenance,
+      milege,
+      makeId,
+      vehicleModelId,) =>
+      _addCarApiProvider.postAddCarRequest(
+        token,
+        year,
+        plateNo,
+        engineName,
+        lastMaintenance,
+        milege,
+        makeId,
+        vehicleModelId,);
 
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
