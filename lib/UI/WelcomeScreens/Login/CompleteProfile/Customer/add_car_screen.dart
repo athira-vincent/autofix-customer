@@ -694,7 +694,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         children: [
           Text(
 
-            "Address",
+            "Plate number",
             style: Styles.textLabelTitle,
           ),
           TextFormField(
