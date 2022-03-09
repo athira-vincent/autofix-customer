@@ -65,6 +65,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
 
+  TextEditingController _plateNumberController = TextEditingController();
+  FocusNode _plateNumberFocusNode = FocusNode();
+
   File? _images;
   bool isloading = false;
   String? countryCode;
@@ -230,6 +233,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         modelTextSelection(),
                                         engineTypeTextSelection(),
                                         yearTypeTextSelection(),
+                                        plateNumberTextSelection(),
                                         lastMaintenanceTextSelection(),
                                         approximateMilageSelection(),
                                         addMoreAndNextButtons(),
@@ -682,6 +686,65 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
+  Widget plateNumberTextSelection() {
+    return   Container(
+      margin: EdgeInsets.only(top: _setValue(15.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+
+            "Address",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _plateNumberFocusNode,
+            keyboardType: TextInputType.name,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z0-9 ]')),
+            ],
+            validator: InputValidator(
+                ch :'Plate number').nameCheckingWithNumeric,
+            controller: _plateNumberController,
+            cursorColor: CustColors.whiteBlueish,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "Enter your Plate number",
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget lastMaintenanceTextSelection() {
     return  InkWell(
       onTap: (){
@@ -876,6 +939,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             _engineTypeController.text='';
                             _yearController.text='';
                             _lastMaintenanceController.text='';
+                            _plateNumberController.text='';
                           });
 
                         },
@@ -925,6 +989,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             'kl-34 A213' + "  " +
                             selectedengine! +  "  " +
                             _lastMaintenanceController.text + "  " +
+                                _plateNumberController.text + "  " +
                             _lowerValue.toString() + "  " +
                             selectedBrand! + "  " +
                             selectedmodel! + " >>>>>>>>>>>> " +
@@ -933,6 +998,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             _engineTypeController.text + "  " +
                             _yearController.text + "  " +
                             _lastMaintenanceController.text + "  " +
+                                _plateNumberController.text + "  " +
                             _lowerValue.toString() );
                         setState(() {
                           _isLoading = true;
@@ -943,16 +1009,16 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           setState(() {
                             _isLoading = false;
                             print('sucess');
-                           /* _addCarBloc. postAddCarRequest(
+                            _addCarBloc. postAddCarRequest(
                               authToken,
                               selectedYearType ,
-                              'kl-34 A213',
+                               _plateNumberController.text,
                               selectedengine,
                               _lastMaintenanceController.text,
                               _lowerValue.toString(),
                               selectedBrand,
                               selectedmodel,
-                            );*/
+                            );
                           });
                         } else {
                           setState(() {
