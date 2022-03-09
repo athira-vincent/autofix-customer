@@ -943,7 +943,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           setState(() {
                             _isLoading = false;
                             print('sucess');
-                            /*_addCarBloc. postAddCarRequest(
+                           /* _addCarBloc. postAddCarRequest(
                               authToken,
                               selectedYearType ,
                               'kl-34 A213',
