@@ -301,6 +301,58 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
+  postMakeBrandRequest(
+      token,) async {
+    String _query = """ 
+    query
+    {
+      makeDetails {
+        id
+        makeName
+        status
+      }
+    }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postModelDetailRequest(
+      token,type) async {
+    String _query = """ 
+    query
+    {
+      modelDetails(type: "$type") {
+        id
+        modelName
+        engineName
+        years
+        makeId
+        status
+        make {
+          id
+          makeName
+          status
+        }
+      }
+    }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postOtpVerificationRequest(
       token,
       otp,) async {

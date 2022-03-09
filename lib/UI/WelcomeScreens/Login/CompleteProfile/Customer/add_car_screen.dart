@@ -120,10 +120,30 @@ class _AddCarScreenState extends State<AddCarScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
+      _addCarBloc.postMakeBrandRequest(authToken);
     });
   }
 
   _listenAddCarResponse() {
+    _addCarBloc.postMakeBrand.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.data!.makeDetails![0].makeName.toString()}");
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+
+        });
+      }
+    });
     _addCarBloc.postAddCar.listen((value) {
       if (value.status == "error") {
         setState(() {

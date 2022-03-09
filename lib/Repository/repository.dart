@@ -83,6 +83,20 @@ class Repository {
         token,
         otp,);
 
+  // Make Brand List
+  Future<dynamic> postMakeBrandRequest(
+      token,) =>
+      _addCarApiProvider.postMakeBrandRequest(
+        token,);
+
+  // Model Detail List
+  Future<dynamic> postModelDetailRequest(
+      token,type) =>
+      _addCarApiProvider.postModelDetailRequest(
+        token,type);
+
+
+
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 

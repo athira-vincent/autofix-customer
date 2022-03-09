@@ -6,6 +6,9 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'brand_model_engine/makeBrandDetails_Mdl.dart';
+import 'brand_model_engine/modelDetails_Mdl.dart';
+
 class AddCarBloc {
   final Repository repository = Repository();
 
@@ -37,7 +40,25 @@ class AddCarBloc {
   }
 
 
+  final postMakeBrand = PublishSubject<MakeBrandDetailsMdl>();
+  Stream<MakeBrandDetailsMdl> get MakeBrandResponse => postMakeBrand.stream;
+  postMakeBrandRequest(token,) async {
+    MakeBrandDetailsMdl makeBrandDetailsMdl = await repository.postMakeBrandRequest(token,);
+    postMakeBrand.sink.add(makeBrandDetailsMdl);
+  }
+
+
+  final postModelDetail = PublishSubject<ModelDetailsMdl>();
+  Stream<ModelDetailsMdl> get ModelDetailResponse => postModelDetail.stream;
+  postModelDetailRequest(token,type) async {
+    ModelDetailsMdl modelDetail = await repository.postModelDetailRequest(token,type);
+    postModelDetail.sink.add(modelDetail);
+  }
+
+
+
   dispose() {
+    postMakeBrand.close();
     postAddCar.close();
   }
 }

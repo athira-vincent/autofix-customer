@@ -77,20 +77,17 @@ class _SplashScreenState extends State<SplashScreen> {
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
+       /* Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  LoginScreen()));*/
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  LoginScreen()));
-        /*Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
                 builder: (context) =>
-                    OtpVerificationScreen(
+                    AddCarScreen(
                       userType: 'customer',
-                      userCategory: 'individual',
-                      phoneNumber: "8547151373",
-                      otpNumber: "75746",
-                      fromPage: "1",)));*/
+                      userCategory: 'individual',)));
       }
     }
   }
