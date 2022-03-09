@@ -106,6 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String errorMsg = "";
   String imageFirebaseUrl="";
   FirebaseStorage storage = FirebaseStorage.instance;
+  double? _progress;
 
   final ScrollController _scrollController = ScrollController();
   double _setValue(double value) {
@@ -2002,7 +2003,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
-
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          _photoController.text = fileName;
                         }
                       });
                     },
@@ -2024,9 +2027,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           source: ImageSource.gallery, imageQuality: 30));
 
                       setState(() {
+
                         if (image != null) {
                           _images = (File(image.path));
-                          _photoController.text = image.path;
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          _photoController.text = fileName;
                         }
                       });
                     },
@@ -2046,40 +2052,30 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Future uploadImageToFirebase(File images) async {
-    final String fileName = path.basename(images!.path);
-    File imageFile = File(images.path);
-/*
-    try {
-
-      TaskSnapshot upload = await FirebaseStorage.instance
-          .ref(
-          'events/${file.name}-${DateTime.now().toIso8601String()}.${file.extension}')
-          .putBlob(Blob(file.bytes));
-
-      String url = await upload.ref.getDownloadURL();
-
-      return url;
-    } catch (e) {
-      print('error in uploading image for : ${e.toString()}');
-      return 0;
-    }*/
-
-    try {
-      // Uploading the selected image with some custom meta data
-      await storage.ref(fileName).putFile(
-          imageFile,
-          SettableMetadata(customMetadata: {
-            'uploaded_by': 'A bad guy',
-            'description': 'Some description...'
-          }));
-
-      // Refresh the UI
-      setState(() {});
-    } on FirebaseException catch (error) {
-      if (kDebugMode) {
-        print(error);
+    String fileName = path.basename(images.path);
+    Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(images);
+    uploadTask.snapshotEvents.listen((event) {
+      setState(() {
+        _progress =
+            event.bytesTransferred.toDouble() / event.totalBytes.toDouble();
+        print(_progress.toString());
+      });
+      if (event.state == TaskState.success) {
+        _progress = null;
       }
-    }
+    }).onError((error) {
+      // do something to handle error
+    });
+    uploadTask.whenComplete(() async{
+      try{
+        imageFirebaseUrl = await reference.getDownloadURL();
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
+    });
   }
 
 
