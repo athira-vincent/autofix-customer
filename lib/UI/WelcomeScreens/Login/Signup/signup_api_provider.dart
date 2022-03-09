@@ -5,10 +5,11 @@ import 'dart:convert';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicSignUp_Mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 
 import 'package:flutter/services.dart';
+
+import '../PhoneLogin/otp_Verification_Mdl.dart';
 
 class SignupApiProvider {
 
@@ -145,6 +146,29 @@ class SignupApiProvider {
       return errorMsg;
     }
   }
+
+
+  Future<OtpVerificationMdl> postOtpVerificationRequest(
+      token,
+      otp,) async {
+    Map<String, dynamic> _resp = await _queryProvider.postOtpVerificationRequest(
+      token,
+      otp,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = OtpVerificationMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return OtpVerificationMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = OtpVerificationMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 
   Future<dynamic> getStates() async {
     dynamic response = await loadStates();

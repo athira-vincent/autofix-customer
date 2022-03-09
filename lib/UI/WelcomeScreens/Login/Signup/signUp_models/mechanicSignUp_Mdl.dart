@@ -83,7 +83,7 @@ class GenMechanic {
     required this.status,
   });
 
-  String id;
+  int id;
   dynamic orgName;
   dynamic orgType;
   String yearExp;
@@ -117,6 +117,7 @@ class Mechanic {
     required this.lastName,
     required this.emailId,
     required this.phoneNo,
+    required this.resetToken,
     required this.state,
     required this.latitude,
     required this.longitude,
@@ -131,6 +132,7 @@ class Mechanic {
   String lastName;
   String emailId;
   String phoneNo;
+  String resetToken;
   String state;
   double latitude;
   double longitude;
@@ -145,6 +147,7 @@ class Mechanic {
     lastName: json["lastName"] == null ? null : json["lastName"],
     emailId: json["emailId"] == null ? null : json["emailId"],
     phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    resetToken: json["resetToken"] == null ? null : json["resetToken"],
     state: json["state"] == null ? null : json["state"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
@@ -160,6 +163,7 @@ class Mechanic {
     "lastName": lastName == null ? null : lastName,
     "emailId": emailId == null ? null : emailId,
     "phoneNo": phoneNo == null ? null : phoneNo,
+    "resetToken": resetToken == null ? null : resetToken,
     "state": state == null ? null : state,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,

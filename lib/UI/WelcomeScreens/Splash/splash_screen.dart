@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
 import '../../Customer/customer_home_screen.dart';
+import '../Login/PhoneLogin/otp_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   
@@ -76,10 +77,17 @@ class _SplashScreenState extends State<SplashScreen> {
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
+       /* Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  LoginScreen()));*/
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  LoginScreen()));
+                builder: (context) =>
+                    AddCarScreen(
+                      userType: 'customer',
+                      userCategory: 'individual',)));
       }
     }
   }

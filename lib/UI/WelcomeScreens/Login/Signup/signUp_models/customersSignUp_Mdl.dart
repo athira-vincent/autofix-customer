@@ -79,6 +79,7 @@ class Customer {
     required this.lastName,
     required this.emailId,
     required this.phoneNo,
+    required this.resetToken,
     required this.state,
     required this.userType,
     required this.accountType,
@@ -87,12 +88,13 @@ class Customer {
     required this.status,
   });
 
-  String id;
+  int id;
   String userCode;
   String firstName;
   String lastName;
   String emailId;
   String phoneNo;
+  String resetToken;
   String state;
   int userType;
   int accountType;
@@ -107,6 +109,7 @@ class Customer {
     lastName: json["lastName"] == null ? null : json["lastName"],
     emailId: json["emailId"] == null ? null : json["emailId"],
     phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
+    resetToken: json["resetToken"] == null ? null : json["resetToken"],
     state: json["state"] == null ? null : json["state"],
     userType: json["userType"] == null ? null : json["userType"],
     accountType: json["accountType"] == null ? null : json["accountType"],
@@ -122,6 +125,7 @@ class Customer {
     "lastName": lastName == null ? null : lastName,
     "emailId": emailId == null ? null : emailId,
     "phoneNo": phoneNo == null ? null : phoneNo,
+    "resetToken": resetToken == null ? null : resetToken,
     "state": state == null ? null : state,
     "userType": userType == null ? null : userType,
     "accountType": accountType == null ? null : accountType,

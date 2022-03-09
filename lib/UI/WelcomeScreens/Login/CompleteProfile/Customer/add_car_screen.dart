@@ -3,15 +3,25 @@ import 'dart:math';
 
 import 'package:another_xlider/another_xlider.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../Customer/customer_home_screen.dart';
+import 'brand_model_engine/makeBrandDetails_Mdl.dart';
+import 'brand_model_engine/modelDetails_Mdl.dart';
+import 'package:path/path.dart' as path;
 
 
 
@@ -31,6 +41,15 @@ class AddCarScreen extends StatefulWidget {
 
 class _AddCarScreenState extends State<AddCarScreen> {
 
+  String authToken="";
+  final AddCarBloc _addCarBloc = AddCarBloc();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
+  String imageFirebaseUrl="";
+  FirebaseStorage storage = FirebaseStorage.instance;
+  double? _progress;
+
+
   TextEditingController _brandController = TextEditingController();
   FocusNode _brandFocusNode = FocusNode();
 
@@ -45,6 +64,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
+
+  TextEditingController _plateNumberController = TextEditingController();
+  FocusNode _plateNumberFocusNode = FocusNode();
 
   File? _images;
   bool isloading = false;
@@ -65,7 +87,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   String userProfilePic = '';
-  bool _isLoading = false;
   double _lowerValue = 100;
 
   var pickeddate;
@@ -83,17 +104,97 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
 
-  List<String> brandList = ['Bmw','Maruthi','Benz','Polo','corolla','swift','rangeover','scooty','grazia'];
   String? selectedBrand = '' ;
-
-  List<String> modelList = ['001','002','003','004','0058','006','123','scooty12','grazia12'];
   String? selectedmodel = '' ;
 
-  List<String> engineList = ['Bmw','Maruthi','Benz','Polo','corolla','swift','rangeover','scooty','grazia'];
+  List<String> engineList = [];
   String? selectedengine = '' ;
 
-  List<String> yearTypeList = ['2012','2013','2014','2015','2016','swift','rangeover','scooty','grazia'];
+  List<String> yearTypeList = [];
   String? selectedYearType = '' ;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+    _listenAddCarResponse();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+      _addCarBloc.postMakeBrandRequest(authToken);
+    });
+  }
+
+  _listenAddCarResponse() {
+    _addCarBloc.postModelDetail.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          _showDialogForModel();
+
+
+        });
+      }
+    });
+    _addCarBloc.postMakeBrand.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.data!.makeDetails![0].makeName.toString()}");
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+
+        });
+      }
+    });
+    _addCarBloc.postAddCar.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CustomerHomeScreen()));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +202,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     print('${_images?.path}' + ">>>>>>> image from Widget");
     return MaterialApp(
       home: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: ScrollConfiguration(
           behavior: MyBehavior(),
@@ -131,6 +233,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         modelTextSelection(),
                                         engineTypeTextSelection(),
                                         yearTypeTextSelection(),
+                                        plateNumberTextSelection(),
                                         lastMaintenanceTextSelection(),
                                         approximateMilageSelection(),
                                         addMoreAndNextButtons(),
@@ -152,6 +255,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
       ),
     );
   }
+
+
 
 
   Widget completeYourProfileText() {
@@ -270,7 +375,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget brandTextSelection() {
     return  InkWell(
       onTap: (){
-        _showDialogForBrands(brandList);
+        _showDialogForBrands();
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(0.5)),
@@ -307,7 +412,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch : 'Brand name' ).nameChecking,
+                  ch : 'Brand name' ).nameCheckingWithNumeric,
               controller: _brandController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -347,8 +452,18 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   Widget modelTextSelection() {
     return  InkWell(
-      onTap: (){
-        _showDialogForModel(modelList);
+      onTap: () async {
+
+        if(selectedBrand=='')
+          {
+            SnackBarWidget().setMaterialSnackBar( "Please select brand first", _scaffoldKey);
+          }
+        else
+          {
+            await  _addCarBloc.postModelDetailRequest(authToken,selectedBrand);
+
+          }
+
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -427,7 +542,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget engineTypeTextSelection() {
     return  InkWell(
       onTap: (){
-        _showDialogForEngineType(engineList);
+        if(selectedmodel=='')
+        {
+          SnackBarWidget().setMaterialSnackBar( "Please select model first", _scaffoldKey);
+        }
+        else
+        {
+          _showDialogForEngineType(engineList);
+        }
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -493,7 +615,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget yearTypeTextSelection() {
     return  InkWell(
       onTap: (){
-        _showDialogForYear(yearTypeList);
+        if(selectedmodel=='')
+        {
+          SnackBarWidget().setMaterialSnackBar( "Please select model first", _scaffoldKey);
+        }
+        else
+        {
+          _showDialogForYear(yearTypeList);
+        }
+
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -553,6 +683,65 @@ class _AddCarScreenState extends State<AddCarScreen> {
           ],
         ),
       ) ,
+    );
+  }
+
+  Widget plateNumberTextSelection() {
+    return   Container(
+      margin: EdgeInsets.only(top: _setValue(15.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+
+            "Plate number",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _plateNumberFocusNode,
+            keyboardType: TextInputType.name,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z0-9 ]')),
+            ],
+            validator: InputValidator(
+                ch :'Plate number').nameCheckingWithNumeric,
+            controller: _plateNumberController,
+            cursorColor: CustColors.whiteBlueish,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "Enter your Plate number",
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
     );
   }
 
@@ -750,6 +939,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             _engineTypeController.text='';
                             _yearController.text='';
                             _lastMaintenanceController.text='';
+                            _plateNumberController.text='';
                           });
 
                         },
@@ -793,6 +983,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   : Container(
                     child: MaterialButton(
                       onPressed: () {
+                        print(
+                            authToken + "  " +
+                            selectedYearType! + "  " +
+                            'kl-34 A213' + "  " +
+                            selectedengine! +  "  " +
+                            _lastMaintenanceController.text + "  " +
+                                _plateNumberController.text + "  " +
+                            _lowerValue.toString() + "  " +
+                            selectedBrand! + "  " +
+                            selectedmodel! + " >>>>>>>>>>>> " +
+                            _brandController.text.toString() + "  " +
+                            _modelController.text + "  " +
+                            _engineTypeController.text + "  " +
+                            _yearController.text + "  " +
+                            _lastMaintenanceController.text + "  " +
+                                _plateNumberController.text + "  " +
+                            _lowerValue.toString() );
                         setState(() {
                           _isLoading = true;
                           print('true');
@@ -802,11 +1009,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           setState(() {
                             _isLoading = false;
                             print('sucess');
-                            Navigator.pushReplacement(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) =>
-                                      LoginScreen()),
+                            _addCarBloc. postAddCarRequest(
+                              authToken,
+                              selectedYearType ,
+                               _plateNumberController.text,
+                              selectedengine,
+                              _lastMaintenanceController.text,
+                              _lowerValue.toString(),
+                              selectedBrand,
+                              selectedmodel,
                             );
                           });
                         } else {
@@ -877,6 +1088,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
                           print(_images.toString() + ">>>>>>> image from camera");
                         }
                       });
@@ -901,6 +1114,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       setState(() {
                         if (image != null) {
                           _images = (File(image.path));
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
                           print(_images.toString() + ">>>>>>> image from gallery");
                         }
                       });
@@ -911,7 +1126,28 @@ class _AddCarScreenState extends State<AddCarScreen> {
         });
   }
 
-  _showDialogForBrands(List<String> brandList) async {
+  Future uploadImageToFirebase(File images) async {
+    String fileName = path.basename(images.path);
+    Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(images);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          imageFirebaseUrl = fileImageurl;
+        });
+
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
+    });
+  }
+
+
+  _showDialogForBrands() async {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -921,40 +1157,59 @@ class _AddCarScreenState extends State<AddCarScreen> {
           return Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: brandList.length,
-                  itemBuilder: (context, index) {
-                    return  ListTile(
-                      title: Text("${brandList[index]}",
-                          style: TextStyle(
-                              fontFamily: 'Corbel_Regular',
-                              fontWeight: FontWeight.normal,
-                              fontSize: 15,
-                              color: Colors.black)),
-                      onTap: () async {
-                        Navigator.pop(context);
+                child:
+                Container(
+                  child: StreamBuilder(
+                      stream:  _addCarBloc.MakeBrandResponse,
+                      builder: (context, AsyncSnapshot<MakeBrandDetailsMdl> snapshot) {
+                        print("${snapshot.hasData}");
+                        print("${snapshot.connectionState}");
+                        return ListView.builder(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data?.data?.makeDetails?.length,
+                          itemBuilder: (context, index) {
+                            if (snapshot.connectionState != ConnectionState.active) {
+                              print('connectionState');
+                              return Center(child: progressBarLightRose());
+                            }
+                            return  ListTile(
+                                  title: Text("${snapshot.data?.data!.makeDetails![index].makeName}",
+                                      style: TextStyle(
+                                          fontFamily: 'Corbel_Regular',
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                          color: Colors.black)),
+                                  onTap: () async {
+                                    Navigator.pop(context);
 
-                        setState(() {
+                                    setState(() {
+                                      selectedmodel='';
+                                      _modelController.text ='';
+                                      engineList=[];
+                                      _engineTypeController.text='';
+                                      yearTypeList=[];
+                                      _yearController.text='';
 
-                          selectedBrand=brandList[index];
-                          _brandController.text = brandList[index];
-                          if (_formKey.currentState!.validate()) {
-                          } else {
-                          }
-                        });
+                                      selectedBrand=snapshot.data?.data!.makeDetails![index].id;
+                                      _brandController.text = "${snapshot.data?.data!.makeDetails![index].makeName}";
+                                      if (_formKey.currentState!.validate()) {
+                                      } else {
+                                      }
+                                    });
 
-                      },
-                    );
-                  },
-                ),
+                                  },
+                                );
+                          },
+                        );
+                      }),
+                )
               ),);
         });
   }
 
-  _showDialogForModel(List<String> modelList) async {
+  _showDialogForModel() async {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -964,35 +1219,65 @@ class _AddCarScreenState extends State<AddCarScreen> {
           return Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: modelList.length,
-                itemBuilder: (context, index) {
-                  return  ListTile(
-                    title: Text("${modelList[index]}",
-                        style: TextStyle(
-                            fontFamily: 'Corbel_Regular',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                            color: Colors.black)),
-                    onTap: () async {
-                      Navigator.pop(context);
+              child:
 
-                      setState(() {
+              Container(
+                child: StreamBuilder(
+                    stream:  _addCarBloc.ModelDetailResponse,
+                    builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
+                      print("${snapshot.hasData}");
+                      print("${snapshot.connectionState}");
+                      return ListView.builder(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data?.data?.modelDetails?.length,
+                        itemBuilder: (context, index) {
+                          if (snapshot.connectionState != ConnectionState.active) {
+                            print('connectionState');
+                            return Center(child: progressBarLightRose());
+                          }
+                          return  ListTile(
+                            title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
+                                style: TextStyle(
+                                    fontFamily: 'Corbel_Regular',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Colors.black)),
+                            onTap: () async {
+                              Navigator.pop(context);
 
-                        selectedmodel=modelList[index];
-                        _modelController.text = modelList[index];
-                        if (_formKey.currentState!.validate()) {
-                        } else {
-                        }
-                      });
+                              setState(() {
+                                engineList=[];
+                                _engineTypeController.text='';
+                                yearTypeList=[];
+                                _yearController.text='';
 
-                    },
-                  );
-                },
-              ),
+                                selectedmodel=snapshot.data?.data!.modelDetails![index].id;
+                                _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+
+                                final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                final splitNames= engineName.split(',');
+                                for (int i = 0; i < splitNames.length; i++){
+                                  engineList.add(splitNames[i]);
+                                }
+
+                                final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
+                                final splityearsNames= yearsNames.split(',');
+                                for (int i = 0; i < splityearsNames.length; i++){
+                                  yearTypeList.add(splityearsNames[i]);
+                                }
+                                if (_formKey.currentState!.validate()) {
+                                } else {
+                                }
+                              });
+
+                            },
+                          );
+                        },
+                      );
+                    }),
+              )
             ),);
         });
   }
@@ -1252,6 +1537,38 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
+
+
+
+  Widget progressBarDarkBlue() {
+    return Container(
+      height: 60.0,
+      child: new Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.blue),
+          )),
+    );
+  }
+
+  Widget progressBarLightRose() {
+    return Container(
+      height: 60.0,
+      child: new Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.blue),
+          )),
+    );
+  }
+
+  Widget progressBarTransparent() {
+    return Container(
+      height: 60.0,
+      child: new Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(Colors.transparent),
+          )),
+    );
+  }
 
 }
 

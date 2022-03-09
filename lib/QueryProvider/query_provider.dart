@@ -53,6 +53,7 @@ class QueryProvider {
             phoneNo
             state
             userType
+            resetToken
             accountType
             profilePic
             isProfile_Completed
@@ -94,6 +95,7 @@ class QueryProvider {
             phoneNo
             state
             userType
+            resetToken
             accountType
             profilePic
             isProfile_Completed
@@ -137,6 +139,7 @@ class QueryProvider {
             phoneNo
             state
             userType
+            resetToken
             accountType
             profilePic
             isProfile_Completed
@@ -183,6 +186,7 @@ class QueryProvider {
             latitude
             longitude
             userType
+            resetToken
             accountType
             status
           }
@@ -237,6 +241,7 @@ class QueryProvider {
             latitude
             longitude
             userType
+            resetToken
             accountType
             status
           }
@@ -255,6 +260,113 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  postAddCarRequest(
+      token,
+      year,
+      plateNo,
+      engineName,
+      lastMaintenance,
+      milege,
+      makeId,
+      vehicleModelId,) async {
+    String _query = """ 
+    mutation {
+        vehicleCreate(
+          year: "$year"
+          plateNo: "$plateNo"
+          engineName: "$engineName"
+          lastMaintenance: "$lastMaintenance"
+          milege: "$milege"
+          makeId: "$makeId"
+          vehicleModelId: "$vehicleModelId"
+        ) {
+          id
+          year
+          plateNo
+          engineName
+          milege
+          lastMaintenance
+          defaultVehicle
+          userId
+          makeId
+          vehicleModelId
+          status
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
+  postMakeBrandRequest(
+      token,) async {
+    String _query = """ 
+    query
+    {
+      makeDetails {
+        id
+        makeName
+        status
+      }
+    }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postModelDetailRequest(
+      token,type) async {
+    String _query = """ 
+    query
+    {
+      modelDetails(type: "$type") {
+        id
+        modelName
+        engineName
+        years
+        makeId
+        status
+        make {
+          id
+          makeName
+          status
+        }
+      }
+    }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postOtpVerificationRequest(
+      token,
+      otp,) async {
+    String _query = """ 
+    mutation {
+      otp_Verification(otpCode: "$otp") {
+        message
+      }
+    }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
 

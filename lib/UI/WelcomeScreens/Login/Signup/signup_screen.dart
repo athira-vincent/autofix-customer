@@ -9,7 +9,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
@@ -106,6 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String errorMsg = "";
   String imageFirebaseUrl="";
   FirebaseStorage storage = FirebaseStorage.instance;
+  double? _progress;
 
   final ScrollController _scrollController = ScrollController();
   double _setValue(double value) {
@@ -133,6 +134,71 @@ class _SignupScreenState extends State<SignupScreen> {
     _listenSignUpResponse();
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
+  }
+
+  _listenSignUpResponse() {
+    _signupBloc.postSignUpCustomer.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(
+                        userType: widget.userType,
+                        userCategory: widget.userCategory,
+                      phoneNumber: "${value.data!.customersSignUpIndividual!.customer?.phoneNo.toString()}",
+                      otpNumber: "${value.data!.customersSignUpIndividual!.customer?.resetToken.toString()}",
+                      fromPage: "1",)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
+    _signupBloc.postSignUpMechanic.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpMechanic >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+        setState(() {
+          print("success postSignUpMechanic >>>>>>>  ${value.status}");
+          print("success Auth token >>>>>>>  ${value.data!.mechanicSignUpIndividual!.token.toString()}");
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      OtpVerificationScreen(
+                        userType: widget.userType,
+                        userCategory: widget.userCategory,
+                        phoneNumber: "${value.data!.mechanicSignUpIndividual!.mechanic?.phoneNo.toString()}",
+                        otpNumber: "${value.data!.mechanicSignUpIndividual!.mechanic?.resetToken.toString()}",
+                        fromPage: "1",)));
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
   }
 
   Future<void> _getCurrentCustomerLocation() async {
@@ -193,60 +259,6 @@ class _SignupScreenState extends State<SignupScreen> {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
   }
-
-  _listenSignUpResponse() {
-    _signupBloc.postSignUpCustomer.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.postSignUpMechanic.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-  }
-
 
 
   @override
@@ -1104,9 +1116,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                                 child: MaterialButton(
                                                   onPressed: () {
+                                                    print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
                                                     if (_formKey.currentState!.validate()) {
                                                       print("_formKey.currentState!.validate()");
-
                                                       widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_customer
                                                           ? signUpCustomerIndividual(context)
                                                           :  widget.userCategory == TextStrings.user_category_individual && widget.userType == TextStrings.user_mechanic
@@ -2003,7 +2015,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
-
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          _photoController.text = fileName;
                         }
                       });
                     },
@@ -2025,9 +2039,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           source: ImageSource.gallery, imageQuality: 30));
 
                       setState(() {
+
                         if (image != null) {
                           _images = (File(image.path));
-                          _photoController.text = image.path;
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          _photoController.text = fileName;
                         }
                       });
                     },
@@ -2047,40 +2064,23 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Future uploadImageToFirebase(File images) async {
-    final String fileName = path.basename(images!.path);
-    File imageFile = File(images.path);
-/*
-    try {
+    String fileName = path.basename(images.path);
+    Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(images);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          imageFirebaseUrl = fileImageurl;
+        });
 
-      TaskSnapshot upload = await FirebaseStorage.instance
-          .ref(
-          'events/${file.name}-${DateTime.now().toIso8601String()}.${file.extension}')
-          .putBlob(Blob(file.bytes));
-
-      String url = await upload.ref.getDownloadURL();
-
-      return url;
-    } catch (e) {
-      print('error in uploading image for : ${e.toString()}');
-      return 0;
-    }*/
-
-    try {
-      // Uploading the selected image with some custom meta data
-      await storage.ref(fileName).putFile(
-          imageFile,
-          SettableMetadata(customMetadata: {
-            'uploaded_by': 'A bad guy',
-            'description': 'Some description...'
-          }));
-
-      // Refresh the UI
-      setState(() {});
-    } on FirebaseException catch (error) {
-      if (kDebugMode) {
-        print(error);
+      }catch(onError){
+        print("Error");
       }
-    }
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
+    });
   }
 
 
