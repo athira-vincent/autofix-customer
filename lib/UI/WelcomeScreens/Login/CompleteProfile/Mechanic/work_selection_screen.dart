@@ -4,6 +4,9 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/emergancy_service_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/service_type_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicle_specialization_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
@@ -16,12 +19,14 @@ import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 
 class WorkSelectionScreen extends StatefulWidget {
@@ -93,58 +98,93 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   String? noOfMechanicsSelection = '' ;
 
   String? _fileName;
+  String imageFirebaseUrl="";
 
-  _listenSignUpResponse() {
-    /*_completeProfileBloc.postSignUpCustomer.listen((value) {
+  @override
+  void initState() {
+    super.initState();
+    _listenCompleteProfileResponse();
+
+  }
+
+  _listenCompleteProfileResponse() {
+    _completeProfileBloc.postCompleteProfileIndividual.listen((value) {
       if (value.status == "error") {
         setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postCompleteProfileIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postCompleteProfileIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
         });
 
       } else {
 
         setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          print("success postCompleteProfileIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
+          //_completeProfileBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          /*Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
           FocusScope.of(context).unfocus();
+          */
+          changeScreen();
         });
       }
     });
-    _signupBloc.postSignUpMechanic.listen((value) {
+    _completeProfileBloc.postCompleteProfileCorporate.listen((value) {
       if (value.status == "error") {
         setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postCompleteProfileCorporate >>>>>>>  ${value.message}");
+          print("errrrorr postCompleteProfileCorporate >>>>>>>  ${value.status}");
           _isLoading = false;
         });
 
       } else {
 
         setState(() {
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
+          print("success postCompleteProfileCorporate >>>>>>>  ${value.status}");
           _isLoading = false;
-          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
+          //_completeProfileBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
+         // SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          /*Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       OtpVerificationScreen(userType: widget.userType,userCategory: widget.userCategory,)));
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).unfocus();*/
+          changeScreen();
         });
       }
-    });*/
+    });
+  }
+
+  void changeScreen(){
+    if(_workSelectionController.text.toString() == "Regular Services"){
+      print("Regular Services");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => RegularServiceListScreen() ));
+      FocusScope.of(context).unfocus();
+    }else if(_workSelectionController.text.toString() == "Emergency Services"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => EmergencyServiceListScreen() ));
+      FocusScope.of(context).unfocus();
+    }
+    else{
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BothServiceListScreen() ));
+      FocusScope.of(context).unfocus();
+    }
   }
 
   @override
@@ -933,7 +973,12 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   : Container(
                     child: MaterialButton(
                       onPressed: () {
-                        _completeProfileBloc.postCompleteProfileIndividualRequest("aa", "aa");
+                        _completeProfileBloc.postCompleteProfileIndividualRequest(
+                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzEsImlhdCI6MTY0Njg5MTQ3NSwiZXhwIjoxNjQ2OTc3ODc1fQ.DXos0dc_fTErmcCqRpNdkWppOtVYENr_hjTowBFlKpo",
+                          _workSelectionController.text,
+                          _chooseVechicleSpecializedController.text.toString(),
+                          _addressController.text.toString(),
+                        );
 
                        /* Navigator.pushReplacement(
                           context,
@@ -996,8 +1041,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: MaterialButton(
                       onPressed: () {
 
-
-
+                        _completeProfileBloc.postCompleteProfileCorporateRequest("aa", );
 
 
                         /*Navigator.pushReplacement(
@@ -1064,6 +1108,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       setState(() {
                         if (image != null) {
                           _images = File(image.path);
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          //_photoController.text = fileName;
                         }
                       });
                     },
@@ -1087,6 +1134,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       setState(() {
                         if (image != null) {
                           _images = (File(image.path));
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          //_photoController.text = fileName;
                         }
                       });
                     },
@@ -1206,6 +1256,25 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
     if (!mounted) return;
   }
 
+  Future uploadImageToFirebase(File images) async {
+    String fileName = path.basename(images.path);
+    Reference reference = FirebaseStorage.instance.ref().child("MechanicProfileImage").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(images);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          imageFirebaseUrl = fileImageurl;
+        });
+
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
+    });
+  }
 
 }
 

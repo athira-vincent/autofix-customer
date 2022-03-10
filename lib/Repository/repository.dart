@@ -1,6 +1,7 @@
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
@@ -18,8 +19,14 @@ class Repository {
   final _forgotPasswordApiProvider = ForgotPasswordApiProvider();
   final _fcmTokenUpdateApiProvider = FcmTokenUpdateApiProvider();
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
-  final _completeProfileMecIndividualApiProvider = MechanicCompleteProfileApiProvider();
+  final _completeProfileMechanicApiProvider = MechanicCompleteProfileApiProvider();
+  final _serviceListApiProvider = ServiceListApiProvider();
 
+
+
+  // Service List
+  Future<dynamic> getServiceList(String token, String type) =>
+      _serviceListApiProvider.getServiceListRequest(token,type);
 
   // Customer Individual SignUp
   Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,
@@ -101,14 +108,14 @@ class Repository {
 
 
   // Mechanic Individual Complete Profile
-  Future<dynamic> getCompleteProfileMechIndividual(String firstName, String phone) =>
-      _completeProfileMecIndividualApiProvider.getcompleteProfileMechIndividualRequest(
-          firstName, lastName,);
+  Future<dynamic> getCompleteProfileMechIndividual(String token,String workSelection, String vehicleSpecialization, address) =>
+      _completeProfileMechanicApiProvider.getCompleteProfileMechIndividualRequest(
+         token, workSelection, vehicleSpecialization,address );
 
   // Mechanic Corporate Complete Profile
   Future<dynamic> getCompleteProfileMechCorporate(String firstName, String phone) =>
-      _completeProfileMecIndividualApiProvider.getcompleteProfileMechCorporateRequest(
-        firstName, lastName,);
+      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest(
+        firstName,);
 
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();

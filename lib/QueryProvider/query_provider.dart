@@ -471,11 +471,48 @@ class QueryProvider {
     );
   }
 
+  serviceList(String token, String type) async {
+    String _query = """
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
   selectCar() {}
 
-  completeProfileMechIndividual(String token,) async {
-    String _query = """  
+  completeProfileMechIndividual(String token,String workSelection, String vehicleSpecialization, String address) async {
+    String _query = """
+    mutation {
+  mechanic_work_selection_Individual(
+    service_type: $workSelection
+    vehicle: $vehicleSpecialization
+    address: $address
+    apprentice_cert: "string"
+    identification_cert: "string"
+  ) {
+    id
+    service_type
+    apprentice_cert
+    address
+    identification_cert
+    no_mechanics
+    rc_number
+    year_existence
+    status
+    userId
+  }
+}
+
     """;
+    log(_query);
+    print(">>>> Token $token");
     return await GqlClient.I.query01(
       _query,
       token,
@@ -485,9 +522,31 @@ class QueryProvider {
   }
 
   completeProfileMechCorporate(String token,) async {
-    String _query = """  
+    String _query = """ 
+    mutation {
+  mechanic_work_selection_Corporate(
+    service_type: "1,2"
+    vehicle: "1"
+    address: "string"
+    no_mechanics: "string"
+    rc_number: "string"
+    year_existence: "string"
+  ) {
+    id
+    service_type
+    apprentice_cert
+    address
+    identification_cert
+    no_mechanics
+    rc_number
+    year_existence
+    status
+    userId
+  }
+}
     """;
     log(_query);
+    print(">>>> Token $token");
     return await GqlClient.I.query01(
       _query,
       token,

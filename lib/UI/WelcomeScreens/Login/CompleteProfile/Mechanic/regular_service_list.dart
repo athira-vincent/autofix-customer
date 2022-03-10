@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,12 @@ class RegularServiceListScreen extends StatefulWidget {
 
 class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
-  List regularServiceList = [
+
+  final ServiceListBloc _serviceListBloc = ServiceListBloc();
+
+  late List<EmeregencyOrRegularServiceList> regularServiceList ;
+
+  /*List regularServiceList = [
     "Service 1",
     "Service 2",
     "Service 3",
@@ -30,7 +37,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     "Service 10",
     "Service 11",
     "Service 12",
-  ];
+  ];*/
   String title = "";
   List selectedServiceList = [];
   List<bool>? _regularIsChecked;
@@ -39,7 +46,37 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _serviceListBloc.postServiceListRequest("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY0NjkxMDcwNCwiZXhwIjoxNjQ2OTk3MTA0fQ.9i53B_oDKlP7ZXJJCG9fsY4RTopHcMKFp0cdxqhiMGA", "1");
+
+    _listenServiceListResponse();
     _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
+  }
+
+
+  _listenServiceListResponse() {
+    _serviceListBloc.postServiceList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          //_isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          //_isLoading = false;
+          regularServiceList = value.data!.emeregencyOrRegularServiceList!;
+          //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+
+        });
+      }
+    });
   }
 
   @override
@@ -255,7 +292,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                   onTap: (){
                     // Map<List<AllServiceFeeData>?, String> myData = new Map();
                     //SelectedData data = SelectedData(selectedServiceList,"rate");
-                    Navigator.pop(context, "data");
+                    //Navigator.pop(context, "data");
                   },
                   child: Container(
                     height: size.height * 0.045,
