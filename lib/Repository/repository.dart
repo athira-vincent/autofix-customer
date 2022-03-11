@@ -1,5 +1,6 @@
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
@@ -21,12 +22,16 @@ class Repository {
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   final _completeProfileMechanicApiProvider = MechanicCompleteProfileApiProvider();
   final _serviceListApiProvider = ServiceListApiProvider();
+  final _addServiceListApiProvider = AddServicesApiProvider();
 
 
-
-  // Service List
+  // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, String type) =>
       _serviceListApiProvider.getServiceListRequest(token,type);
+
+  // Service List
+  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList) =>
+      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
 
   // Customer Individual SignUp
   Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,

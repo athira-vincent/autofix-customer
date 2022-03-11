@@ -473,6 +473,17 @@ class QueryProvider {
 
   serviceList(String token, String type) async {
     String _query = """
+    {
+  emeregency_or_regular_serviceList(id: $type) {
+    id
+    serviceName
+    icon
+    minAmount
+    maxAmount
+    categoryId
+    status
+  }
+}
      """;
     log(_query);
     print("Token >>>>>>> $token");
@@ -1156,6 +1167,20 @@ class QueryProvider {
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
+
+  mechanicAddServiceList(String token,String serviceList, String ServiceList, String timeList) async {
+    String _query = """ 
+    mutation {
+  mechanic_service_add(services: $serviceList, fee: ["2200","2200"], time: ["10","10"]) {
+    message
+  }
+}
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
 
   mechanicChangePassword(String password) {}
 
