@@ -612,7 +612,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
-
   Widget circleBar(bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
