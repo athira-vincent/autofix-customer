@@ -45,6 +45,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final AddCarBloc _addCarBloc = AddCarBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLoading = false;
+  bool _isAddMore = false;
   String imageFirebaseUrl="";
   FirebaseStorage storage = FirebaseStorage.instance;
   double? _progress;
@@ -183,12 +184,32 @@ class _AddCarScreenState extends State<AddCarScreen> {
         setState(() {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      CustomerHomeScreen()));
-          FocusScope.of(context).unfocus();
+           if(_isAddMore==true)
+             {
+                 _formKey.currentState?.reset();
+                 _brandController.text='';
+                 _modelController.text='';
+                 _engineTypeController.text='';
+                 _yearController.text='';
+                 _lastMaintenanceController.text='';
+                 _plateNumberController.text='';
+                 _isAddMore = false;
+             }
+           else
+             {
+
+               Navigator.pushReplacement(
+                   context,
+                   MaterialPageRoute(
+                       builder: (context) =>
+                           CustomerHomeScreen()));
+               FocusScope.of(context).unfocus();
+               _isAddMore = false;
+             }
+
+
+
+
         });
       }
     });
@@ -932,14 +953,34 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       child: MaterialButton(
                         onPressed: () {
                           setState(() {
-                            _formKey.currentState?.reset();
-                            _brandController.text='';
-                            _modelController.text='';
-                            _engineTypeController.text='';
-                            _yearController.text='';
-                            _lastMaintenanceController.text='';
-                            _plateNumberController.text='';
+                            _isAddMore = true;
+                            _isLoading = true;
+                            print('true');
                           });
+                          if (_formKey.currentState!.validate()) {
+
+                            setState(() {
+                              _isLoading = false;
+                              print('sucess');
+                              _addCarBloc. postAddCarRequest(
+                                  authToken,
+                                  selectedYearType ,
+                                  _plateNumberController.text,
+                                  selectedengine,
+                                  _lastMaintenanceController.text,
+                                  _lowerValue.toString(),
+                                  selectedBrand,
+                                  selectedmodel,
+                                  imageFirebaseUrl
+                              );
+                            });
+                          } else {
+                            setState(() {
+                              _isLoading = false;
+                              print('error');
+                            });
+                          }
+
 
                         },
                         child: Container(
@@ -982,8 +1023,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   : Container(
                     child: MaterialButton(
                       onPressed: () {
-                        print(
-                            authToken + "  " +
+                        print( authToken + "  " +
                             selectedYearType! + "  " +
                             'kl-34 A213' + "  " +
                             selectedengine! +  "  " +
@@ -1001,6 +1041,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             _lowerValue.toString() );
                         setState(() {
                           _isLoading = true;
+                          _isAddMore = false;
                           print('true');
                         });
                         if (_formKey.currentState!.validate()) {
