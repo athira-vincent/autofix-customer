@@ -1,16 +1,16 @@
 // To parse this JSON data, do
 //
-//     final customersSignUpIndividualMdl = customersSignUpIndividualMdlFromJson(jsonString);
+//     final customersSignUpGovtBodiesMdl = customersSignUpGovtBodiesMdlFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-CustomersSignUpIndividualMdl customersSignUpIndividualMdlFromJson(String str) => CustomersSignUpIndividualMdl.fromJson(json.decode(str));
+CustomersSignUpGovtBodiesMdl customersSignUpGovtBodiesMdlFromJson(String str) => CustomersSignUpGovtBodiesMdl.fromJson(json.decode(str));
 
-String customersSignUpIndividualMdlToJson(CustomersSignUpIndividualMdl data) => json.encode(data.toJson());
+String customersSignUpGovtBodiesMdlToJson(CustomersSignUpGovtBodiesMdl data) => json.encode(data.toJson());
 
-class CustomersSignUpIndividualMdl {
-  CustomersSignUpIndividualMdl({
+class CustomersSignUpGovtBodiesMdl {
+  CustomersSignUpGovtBodiesMdl({
     required this.status,
     required this.message,
     required this.data,
@@ -20,7 +20,7 @@ class CustomersSignUpIndividualMdl {
   String? message;
   Data? data;
 
-  factory CustomersSignUpIndividualMdl.fromJson(Map<String, dynamic> json) => CustomersSignUpIndividualMdl(
+  factory CustomersSignUpGovtBodiesMdl.fromJson(Map<String, dynamic> json) => CustomersSignUpGovtBodiesMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"] ,
     status:  json["status"] ,
@@ -33,32 +33,32 @@ class CustomersSignUpIndividualMdl {
 
 class Data {
   Data({
-    required this.customersSignUpIndividual,
+    required this.customersSignUpGovtBodies,
   });
 
-  CustomersSignUpIndividual? customersSignUpIndividual;
+  CustomersSignUpGovtBodies? customersSignUpGovtBodies;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    customersSignUpIndividual: json["customersSignUp_Individual"] == null ? null : CustomersSignUpIndividual.fromJson(json["customersSignUp_Individual"]),
+    customersSignUpGovtBodies: json["customersSignUp_govtBodies"] == null ? null : CustomersSignUpGovtBodies.fromJson(json["customersSignUp_govtBodies"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "customersSignUp_Individual": customersSignUpIndividual == null ? null : customersSignUpIndividual?.toJson(),
+    "customersSignUp_govtBodies": customersSignUpGovtBodies == null ? null : customersSignUpGovtBodies?.toJson(),
   };
 }
 
-class CustomersSignUpIndividual {
-  CustomersSignUpIndividual({
+class CustomersSignUpGovtBodies {
+  CustomersSignUpGovtBodies({
     required this.token,
     required this.customer,
     required this.isProfileCompleted,
   });
 
-  String token;
+  String? token;
   Customer? customer;
-  int isProfileCompleted;
+  int? isProfileCompleted;
 
-  factory CustomersSignUpIndividual.fromJson(Map<String, dynamic> json) => CustomersSignUpIndividual(
+  factory CustomersSignUpGovtBodies.fromJson(Map<String, dynamic> json) => CustomersSignUpGovtBodies(
     token: json["token"] == null ? null : json["token"],
     customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
     isProfileCompleted: json["isProfile_Completed"] == null ? null : json["isProfile_Completed"],
@@ -79,12 +79,13 @@ class Customer {
     required this.lastName,
     required this.emailId,
     required this.phoneNo,
-    required this.resetToken,
     required this.state,
+    required this.resetToken,
     required this.userType,
     required this.accountType,
     required this.profilePic,
     required this.isProfileCompleted,
+    required this.otpVerified,
     required this.status,
   });
 
@@ -94,12 +95,13 @@ class Customer {
   String lastName;
   String emailId;
   String phoneNo;
-  String resetToken;
   String state;
+  String resetToken;
   int userType;
   int accountType;
   dynamic profilePic;
   int isProfileCompleted;
+  int otpVerified;
   int status;
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -109,12 +111,13 @@ class Customer {
     lastName: json["lastName"] == null ? null : json["lastName"],
     emailId: json["emailId"] == null ? null : json["emailId"],
     phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
-    resetToken: json["resetToken"] == null ? null : json["resetToken"],
     state: json["state"] == null ? null : json["state"],
+    resetToken: json["resetToken"] == null ? null : json["resetToken"],
     userType: json["userType"] == null ? null : json["userType"],
     accountType: json["accountType"] == null ? null : json["accountType"],
     profilePic: json["profilePic"],
     isProfileCompleted: json["isProfile_Completed"] == null ? null : json["isProfile_Completed"],
+    otpVerified: json["otp_verified"] == null ? null : json["otp_verified"],
     status: json["status"] == null ? null : json["status"],
   );
 
@@ -125,12 +128,13 @@ class Customer {
     "lastName": lastName == null ? null : lastName,
     "emailId": emailId == null ? null : emailId,
     "phoneNo": phoneNo == null ? null : phoneNo,
-    "resetToken": resetToken == null ? null : resetToken,
     "state": state == null ? null : state,
+    "resetToken": resetToken == null ? null : resetToken,
     "userType": userType == null ? null : userType,
     "accountType": accountType == null ? null : accountType,
     "profilePic": profilePic,
     "isProfile_Completed": isProfileCompleted == null ? null : isProfileCompleted,
+    "otp_verified": otpVerified == null ? null : otpVerified,
     "status": status == null ? null : status,
   };
 }

@@ -1,11 +1,16 @@
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
+import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
+import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
 
@@ -21,8 +26,11 @@ class HomeCustomerUIScreen extends StatefulWidget {
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
+
   TextEditingController searchController = new TextEditingController();
   String? filter;
+  String authToken="";
+
 
   final List<String> imageList = [
     "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
@@ -48,15 +56,51 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String location ='Null, Press Button';
   String Address = 'search';
 
+  final ServiceListBloc _serviceListBloc = ServiceListBloc();
+
+
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
     _getCurrentCustomerLocation();
+    _listenServiceListResponse();
 
   }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+      _serviceListBloc.postServiceListRequest("$authToken", "1");
+
+    });
+  }
+
+  _listenServiceListResponse() {
+    _serviceListBloc.serviceListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+  }
+
 
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
@@ -264,50 +308,66 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ),
         isEmergencyService==true
         ? Container(
-          child: GridView.builder(
-            itemCount:choices.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: .94,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-            ),
-            itemBuilder: (context,index,) {
-              return GestureDetector(
-                onTap:(){
-
-                },
-                child:Container(
-
-                  child: Column(
-                    mainAxisAlignment:MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: CustColors.whiteBlueish,
-                            borderRadius: BorderRadius.circular(11.0)
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: Icon(choices[index].icon,size: 40,color: CustColors.light_navy,),
-                        ),
+          child: StreamBuilder(
+              stream:  _serviceListBloc.serviceListResponse,
+              builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
+                print("${snapshot.hasData}");
+                print("${snapshot.connectionState}");
+                if(snapshot.hasData)
+                  {
+                    return GridView.builder(
+                      itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1.3,
+                        crossAxisSpacing: .05,
+                        mainAxisSpacing: .05,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Text(choices[index].title,
-                            style: Styles.textLabelTitle12,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.visible,),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+                      itemBuilder: (context,index,) {
+                        return GestureDetector(
+                          onTap:(){
+
+                          },
+                          child:
+
+                          Container(
+
+                            child: Column(
+                              mainAxisAlignment:MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: CustColors.whiteBlueish,
+                                      borderRadius: BorderRadius.circular(11.0)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(2),
+                                  child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                    style: Styles.textLabelTitleEmergencyServiceName,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.visible,),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                else{
+                  return CircularProgressIndicator();
+                }
+
+              }
+              ),
         )
         : Container()
       ],
@@ -362,49 +422,65 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ),
         isRegularService==true
             ? Container(
-          child: GridView.builder(
-            itemCount:choices.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: .94,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-            ),
-            itemBuilder: (context,index,) {
-              return GestureDetector(
-                onTap:(){
+          child: StreamBuilder(
+              stream:  _serviceListBloc.serviceListResponse,
+              builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
+                print("${snapshot.hasData}");
+                print("${snapshot.connectionState}");
+                if(snapshot.hasData)
+                {
+                  return GridView.builder(
+                    itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.3,
+                      crossAxisSpacing: .05,
+                      mainAxisSpacing: .05,
+                    ),
+                    itemBuilder: (context,index,) {
+                      return GestureDetector(
+                        onTap:(){
 
-                },
-                child:Container(
+                        },
+                        child:
 
-                  child: Column(
-                    mainAxisAlignment:MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: CustColors.whiteBlueish,
-                            borderRadius: BorderRadius.circular(11.0)
+                        Container(
+
+                          child: Column(
+                            mainAxisAlignment:MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: CustColors.whiteBlueish,
+                                    borderRadius: BorderRadius.circular(11.0)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                  style: Styles.textLabelTitleEmergencyServiceName,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.visible,),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: Icon(choices[index].icon,size: 40,color: CustColors.light_navy,),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Text(choices[index].title,
-                          style: Styles.textLabelTitle12,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.visible,),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+                      );
+                    },
+                  );
+                }
+                else{
+                  return CircularProgressIndicator();
+                }
+
+              }
           ),
         )
             : Container()
@@ -561,6 +637,8 @@ class Choice {
 
 
 class MyBehavior extends ScrollBehavior {
+
+
   @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {

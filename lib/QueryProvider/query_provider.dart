@@ -30,7 +30,7 @@ class QueryProvider {
   }
 
   signUpCustomerIndividual(String firstName, String lastName, String email, String state,
-      String password, String phoneNo) async {
+      String password, String phoneNo, String profilepic) async {
     String _query = """ 
     mutation {
         customersSignUp_Individual(
@@ -42,6 +42,7 @@ class QueryProvider {
           state: "$state"
           userType: 1
           accountType: 1
+          profilepic:"$profilepic"
         ) {
           token
           customer {
@@ -70,7 +71,7 @@ class QueryProvider {
   }
 
   signUpCustomerCorporate(String firstName, String lastName, String email, String state,
-      String password, String phoneNo,String orgName,String orgType) async {
+      String password, String phoneNo,String orgName,String orgType, String profilepic) async {
     String _query = """ 
     mutation {
         customersSignUp_Corporate(
@@ -84,6 +85,7 @@ class QueryProvider {
           state: "$state"
           userType: 1
           accountType: 2
+          profilepic:"$profilepic"
         ) {
           token
           customer {
@@ -112,7 +114,7 @@ class QueryProvider {
   }
 
   signUpCustomerGovtBodies(String firstName, String lastName, String email, String state,
-      String password, String phoneNo,String govt_agency,String govt_type) async {
+      String password, String phoneNo,String govt_agency,String govt_type, String profilepic) async {
     String _query = """ 
     mutation {
          customersSignUp_govtBodies(
@@ -128,6 +130,7 @@ class QueryProvider {
           state: "$state"
           userType: 1
           accountType: 3
+          profilepic:"$profilepic"
         ) {
           token
           customer {
@@ -157,7 +160,7 @@ class QueryProvider {
 
   signUpMechanicIndividual(String firstName, String lastName, String email, String state,
       String password, String phoneNo, String latitude, String longitude,
-      String year_of_experience,) async {
+      String year_of_experience, String profilepic) async {
     String _query = """ 
     mutation {
         mechanic_signUp_Individual(
@@ -173,6 +176,7 @@ class QueryProvider {
           userType: 2
           accountType: 1
           year_of_experience: "$year_of_experience"
+          profilepic:"$profilepic"
         ) {
           token
           mechanic {
@@ -210,7 +214,7 @@ class QueryProvider {
 
   signUpMechanicCorporate(String firstName, String lastName, String email, String state,
       String password, String phoneNo, String latitude, String longitude,
-      String year_of_experience,String orgName,String orgType) async {
+      String year_of_experience,String orgName,String orgType, String profilepic) async {
     String _query = """ 
     mutation {
         mechanic_signUp_Corporate(
@@ -228,6 +232,7 @@ class QueryProvider {
           year_of_experience:"$year_of_experience"
           org_Name: "$orgName"
           org_Type:"$orgType"
+          profilepic:"$profilepic"
         ) {
           token
           mechanic {
@@ -270,7 +275,8 @@ class QueryProvider {
       lastMaintenance,
       milege,
       makeId,
-      vehicleModelId,) async {
+      vehicleModelId,
+      vehiclePic) async {
     String _query = """ 
     mutation {
         vehicleCreate(
@@ -279,8 +285,9 @@ class QueryProvider {
           engineName: "$engineName"
           lastMaintenance: "$lastMaintenance"
           milege: "$milege"
-          makeId: "$makeId"
-          vehicleModelId: "$vehicleModelId"
+          makeId:  ${int.parse(makeId.toString())}
+          vehicleModelId: ${int.parse(vehicleModelId.toString())}
+          vehiclePic: "$vehiclePic"
         ) {
           id
           year

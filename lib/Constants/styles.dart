@@ -156,6 +156,13 @@ class Styles {
     fontSize: 12,
   );
 
+  static const textLabelTitleEmergencyServiceName= TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+    fontSize: 11,
+  );
+
 
   //Athira
   static const hiddenTextBlack = TextStyle(
@@ -289,11 +296,12 @@ class Styles {
   );
   static const homeActiveTextStyle = TextStyle(
       fontFamily: 'Samsung_SharpSans_Medium',
-      fontSize: 6,
+      fontSize: 9,
       fontWeight: FontWeight.w600,
       color: CustColors.light_navy);
+
   static const homeInactiveTextStyle = TextStyle(
-      fontSize: 6,
+      fontSize: 9,
       color: CustColors.brownish_grey_02,
       fontWeight: FontWeight.w600,
       fontFamily:'Samsung_SharpSans_Medium'

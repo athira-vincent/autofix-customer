@@ -35,39 +35,39 @@ class Repository {
 
   // Customer Individual SignUp
   Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,
-      String state, String password, String phone) =>
+      String state, String password, String phone,String profilepic) =>
       _signupApiProvider.getSignUpCustomerIndividualRequest(
-          firstName, lastName, email, state, password, phone);
+          firstName, lastName, email, state, password, phone,profilepic);
 
   // Customer Corporate SignUp
   Future<dynamic> getSignUpCustomeCorporate(String firstName, String lastName, String email,
-      String state, String password, String phone,String orgName,String orgType,) =>
+      String state, String password, String phone,String orgName,String orgType,String profilepic) =>
       _signupApiProvider.getSignUpCustomerCorporateRequest(
-          firstName, lastName, email, state, password, phone,orgName,orgType);
+          firstName, lastName, email, state, password, phone,orgName,orgType,profilepic);
 
   // Customer GovtBodies SignUp
   Future<dynamic> getSignUpCustomeGovtBodies(String firstName, String lastName, String email,
       String state, String password, String phone,String govt_agency,
-      String govt_type) =>
+      String govt_type,String profilepic) =>
       _signupApiProvider.getSignUpCustomerGovtBodiesRequest(
-          firstName, lastName, email, state, password, phone,govt_agency,govt_type);
+          firstName, lastName, email, state, password, phone,govt_agency,govt_type,profilepic);
 
 
   //  Mechanic Individual SignUp
   Future<dynamic> getSignUpMechanicIndividual(String firstName, String lastName, String email,
       String state, String password, String phone,String latitude, String longitude,
-      String year_of_experience,) =>
+      String year_of_experience,String profilepic) =>
       _signupApiProvider.getSignUpMechanicIndividualRequest(
           firstName, lastName, email, state, password, phone, latitude,  longitude,
-         year_of_experience,);
+         year_of_experience,profilepic);
 
   //  Mechanic Corporate SignUp
   Future<dynamic> getSignUpMechanicCorporate(String firstName, String lastName, String email,
       String state, String password, String phone,String latitude, String longitude,
-      String year_of_experience, orgName, orgType) =>
+      String year_of_experience, orgName, orgType,String profilepic) =>
       _signupApiProvider.getSignUpMechanicCorporateRequest(
         firstName, lastName, email, state, password, phone, latitude,  longitude,
-        year_of_experience, orgName, orgType);
+        year_of_experience, orgName, orgType,profilepic);
 
 
   //AddCar Of Customer
@@ -79,7 +79,8 @@ class Repository {
       lastMaintenance,
       milege,
       makeId,
-      vehicleModelId,) =>
+      vehicleModelId,
+      vehiclePic) =>
       _addCarApiProvider.postAddCarRequest(
         token,
         year,
@@ -88,7 +89,8 @@ class Repository {
         lastMaintenance,
         milege,
         makeId,
-        vehicleModelId,);
+        vehicleModelId,
+          vehiclePic);
 
   //Otp Verification
   Future<dynamic> postOtpVerificationRequest(

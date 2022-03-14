@@ -1,8 +1,11 @@
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersSignUp_Mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicSignUp_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersCorporateSignUp_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersGovernmentSignUp_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersIndividualSignUp_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicCorporateSignUp_Mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicIndividualSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
@@ -26,12 +29,12 @@ class SignupBloc {
   /// --------------- Mechanic SignUp Starts -------------------- ///
 
 
-  final postSignUpMechanic = PublishSubject<MechanicSignUpMdl>();
-  Stream<MechanicSignUpMdl> get signUpMechanicResponse => postSignUpMechanic.stream;
+  final postSignUpIndividualMechanic = PublishSubject<MechanicSignUpMdl>();
+  Stream<MechanicSignUpMdl> get signUpIndividuaMechanicResponse => postSignUpIndividualMechanic.stream;
 
   postSignUpMechanicIndividualRequest(String username, String email,
       String state, String password, String phone,String latitude, String longitude,
-      String year_of_experience,) async {
+      String year_of_experience,String profilepic) async {
     String fullName = username;
     var names = fullName.split(' ');
     String firstName = names[0];
@@ -40,23 +43,27 @@ class SignupBloc {
     print(lastName);
     MechanicSignUpMdl _signUpMdl = await repository.getSignUpMechanicIndividual(
         firstName, lastName, email, state, password, phone, latitude,  longitude,
-       year_of_experience,);
-    postSignUpMechanic.sink.add(_signUpMdl);
+       year_of_experience,profilepic);
+    postSignUpIndividualMechanic.sink.add(_signUpMdl);
   }
+
+
+  final postSignUpCorporateMechanic = PublishSubject<MechanicSignUpCorporateMdl>();
+  Stream<MechanicSignUpCorporateMdl> get signUpCorporateMechanicResponse => postSignUpCorporateMechanic.stream;
 
   postSignUpMechanicCorporateRequest(String username, String email,
       String state, String password, String phone,String latitude, String longitude,
-      String year_of_experience,String orgName,String orgType,) async {
+      String year_of_experience,String orgName,String orgType,String profilepic) async {
     String fullName = username;
     var names = fullName.split(' ');
     String firstName = names[0];
     String lastName = fullName.substring(names[0].length);
     print(firstName);
     print(lastName);
-    MechanicSignUpMdl _signUpMdl = await repository.getSignUpMechanicCorporate(
+    MechanicSignUpCorporateMdl _signUpMdl = await repository.getSignUpMechanicCorporate(
       firstName, lastName, email, state, password, phone, latitude,  longitude,
-      year_of_experience, orgName, orgType,);
-    postSignUpMechanic.sink.add(_signUpMdl);
+      year_of_experience, orgName, orgType,profilepic);
+    postSignUpCorporateMechanic.sink.add(_signUpMdl);
   }
 
 
@@ -64,11 +71,11 @@ class SignupBloc {
   /// --------------- Customer SignUp Starts -------------------- ///
 
 
-  final postSignUpCustomer = PublishSubject<CustomersSignUpIndividualMdl>();
-  Stream<CustomersSignUpIndividualMdl> get signUpCustomerResponse => postSignUpCustomer.stream;
+  final postSignUpIndividualCustomer = PublishSubject<CustomersSignUpIndividualMdl>();
+  Stream<CustomersSignUpIndividualMdl> get signUpIndividualCustomerResponse => postSignUpIndividualCustomer.stream;
 
   postSignUpCustomerIndividualRequest(String username, String email,
-      String state, String password, String phone) async {
+      String state, String password, String phone,String profilepic) async {
     String fullName = username;
     var names = fullName.split(' ');
     String firstName = names[0];
@@ -76,36 +83,44 @@ class SignupBloc {
     print(firstName);
     print(lastName);
     CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeIndividual(
-        firstName, lastName, email, state, password, phone);
-    postSignUpCustomer.sink.add(_signUpMdl);
+        firstName, lastName, email, state, password, phone,profilepic);
+    postSignUpIndividualCustomer.sink.add(_signUpMdl);
   }
 
+  final postSignUpCorporateCustomer = PublishSubject<CustomersSignUpCorporateMdl>();
+  Stream<CustomersSignUpCorporateMdl> get signUpCorporateCustomerResponse => postSignUpCorporateCustomer.stream;
+
+
   postSignUpCustomerCorporateRequest(String username,  String email,
-      String state, String password, String phone,String orgName,String orgType,) async {
+      String state, String password, String phone,String orgName,String orgType,String profilepic) async {
     String fullName = username;
     var names = fullName.split(' ');
     String firstName = names[0];
     String lastName = fullName.substring(names[0].length);
     print(firstName);
     print(lastName);
-    CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeCorporate(
-        firstName, lastName, email, state, password, phone,orgName,orgType);
-    postSignUpCustomer.sink.add(_signUpMdl);
+    CustomersSignUpCorporateMdl _signUpMdl = await repository.getSignUpCustomeCorporate(
+        firstName, lastName, email, state, password, phone,orgName,orgType,profilepic);
+    postSignUpCorporateCustomer.sink.add(_signUpMdl);
   }
+
+
+  final postSignUpGovtBodiesCustomer = PublishSubject<CustomersSignUpGovtBodiesMdl>();
+  Stream<CustomersSignUpGovtBodiesMdl> get signUpGovtBodiesCustomerResponse => postSignUpGovtBodiesCustomer.stream;
 
 
   postSignUpCustomerGovtBodiesRequest(String username,  String email,
       String state, String password, String phone,String govt_agency,
-      String govt_type) async {
+      String govt_type,String profilepic) async {
     String fullName = username;
     var names = fullName.split(' ');
     String firstName = names[0];
     String lastName = fullName.substring(names[0].length);
     print(firstName);
     print(lastName);
-    CustomersSignUpIndividualMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
-        firstName, lastName, email, state, password, phone,govt_agency,govt_type);
-    postSignUpCustomer.sink.add(_signUpMdl);
+    CustomersSignUpGovtBodiesMdl _signUpMdl = await repository.getSignUpCustomeGovtBodies(
+        firstName, lastName, email, state, password, phone,govt_agency,govt_type,profilepic);
+    postSignUpGovtBodiesCustomer.sink.add(_signUpMdl);
   }
 
 
@@ -161,6 +176,10 @@ class SignupBloc {
 
   dispose() {
     statesCode.close();
-    postSignUpCustomer.close();
+    postSignUpIndividualMechanic.close();
+    postSignUpCorporateMechanic.close();
+    postSignUpIndividualCustomer.close();
+    postSignUpCorporateCustomer.close();
+    postSignUpGovtBodiesCustomer.close();
   }
 }

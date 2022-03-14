@@ -267,3 +267,11 @@ class _FindMechanicScreenState extends State<FindMechanicScreen> {
     );
   }
 }
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}

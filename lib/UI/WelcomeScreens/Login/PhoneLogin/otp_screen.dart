@@ -352,18 +352,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                               onPressed: () {
 
                                                 setState(() {
+                                                  _isLoading=true;
                                                   print(textEditingController.text);
                                                   print(authToken.toString());
                                                   _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber);
 
                                                 });
-
-
-
-
-
-
-
 
                                               },
                                               child: Container(

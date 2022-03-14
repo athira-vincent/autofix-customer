@@ -26,6 +26,7 @@ class AddCarBloc {
       milege,
       makeId,
       vehicleModelId,
+      vehiclePic
   ) async {
     VehicleCreateMdl vehicleCreateMdl = await repository.postAddCarRequest(
       token,
@@ -35,7 +36,8 @@ class AddCarBloc {
       lastMaintenance,
       milege,
       makeId,
-      vehicleModelId,);
+      vehicleModelId,
+        vehiclePic);
     postAddCar.sink.add(vehicleCreateMdl);
   }
 
