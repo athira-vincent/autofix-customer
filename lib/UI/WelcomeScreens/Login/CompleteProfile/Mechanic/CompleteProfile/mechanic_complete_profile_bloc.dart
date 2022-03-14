@@ -27,15 +27,11 @@ class MechanicCompleteProfileBloc {
   final postCompleteProfileIndividual = PublishSubject<IndividualMechCompleteProfileMdl>();
   Stream<IndividualMechCompleteProfileMdl> get completeProfileIndividualResponse => postCompleteProfileIndividual.stream;
 
-  postCompleteProfileIndividualRequest(String username, String email,) async {
-    String fullName = username;
-    var names = fullName.split(' ');
-    String firstName = names[0];
-    String lastName = fullName.substring(names[0].length);
-    print(firstName);
-    print(lastName);
-    //IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(username,email);
-   // postCompleteProfileIndividual.sink.add(_completeProfileMdl);
+  postCompleteProfileIndividualRequest(String token,String workSelection, String vehicleSpecialization, String address) async {
+
+    print(workSelection);
+    IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(token,workSelection,vehicleSpecialization,address);
+    postCompleteProfileIndividual.sink.add(_completeProfileMdl);
   }
 
 

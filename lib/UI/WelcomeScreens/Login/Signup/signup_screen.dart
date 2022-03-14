@@ -1281,6 +1281,7 @@ class _SignupScreenState extends State<SignupScreen> {
       setState(() {
         _isLoading=false;
       });
+      SnackBarWidget().setMaterialSnackBar( errorMsg, _scaffoldKey);
       print("signUpCustomerIndividual - else");
       return false;
     }
@@ -1351,6 +1352,7 @@ class _SignupScreenState extends State<SignupScreen> {
       });
       return true;
     }else{
+      SnackBarWidget().setMaterialSnackBar( errorMsg, _scaffoldKey);
       print("signUpMechanicIndividual - else");
       return false;
     }
@@ -1425,6 +1427,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       return true;
     }else{
+      SnackBarWidget().setMaterialSnackBar( errorMsg, _scaffoldKey);
       print("signUpCustomerCorporate - else");
       return false;
     }
@@ -1507,6 +1510,7 @@ class _SignupScreenState extends State<SignupScreen> {
      return true;
 
     }else{
+      SnackBarWidget().setMaterialSnackBar( errorMsg, _scaffoldKey);
       print("signUpMechanicCorporate - else");
       return false;
     }
@@ -1579,6 +1583,7 @@ class _SignupScreenState extends State<SignupScreen> {
       });
       return true;
     }else{
+      SnackBarWidget().setMaterialSnackBar( errorMsg, _scaffoldKey);
       print("signUpCustomerGovernment - else");
       return false;
     }

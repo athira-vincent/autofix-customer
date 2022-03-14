@@ -471,11 +471,59 @@ class QueryProvider {
     );
   }
 
+  serviceList(String token, String type) async {
+    String _query = """
+    {
+  emeregency_or_regular_serviceList(id: $type) {
+    id
+    serviceName
+    icon
+    minAmount
+    maxAmount
+    categoryId
+    status
+  }
+}
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
   selectCar() {}
 
-  completeProfileMechIndividual(String token,) async {
-    String _query = """  
+  completeProfileMechIndividual(String token,String workSelection, String vehicleSpecialization, String address) async {
+    String _query = """
+    mutation {
+  mechanic_work_selection_Individual(
+    service_type: $workSelection
+    vehicle: $vehicleSpecialization
+    address: $address
+    apprentice_cert: "string"
+    identification_cert: "string"
+  ) {
+    id
+    service_type
+    apprentice_cert
+    address
+    identification_cert
+    no_mechanics
+    rc_number
+    year_existence
+    status
+    userId
+  }
+}
+
     """;
+    log(_query);
+    print(">>>> Token $token");
     return await GqlClient.I.query01(
       _query,
       token,
@@ -485,9 +533,31 @@ class QueryProvider {
   }
 
   completeProfileMechCorporate(String token,) async {
-    String _query = """  
+    String _query = """ 
+    mutation {
+  mechanic_work_selection_Corporate(
+    service_type: "1,2"
+    vehicle: "1"
+    address: "string"
+    no_mechanics: "string"
+    rc_number: "string"
+    year_existence: "string"
+  ) {
+    id
+    service_type
+    apprentice_cert
+    address
+    identification_cert
+    no_mechanics
+    rc_number
+    year_existence
+    status
+    userId
+  }
+}
     """;
     log(_query);
+    print(">>>> Token $token");
     return await GqlClient.I.query01(
       _query,
       token,
@@ -1097,6 +1167,20 @@ class QueryProvider {
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
+
+  mechanicAddServiceList(String token,String serviceList, String ServiceList, String timeList) async {
+    String _query = """ 
+    mutation {
+  mechanic_service_add(services: $serviceList, fee: ["2200","2200"], time: ["10","10"]) {
+    message
+  }
+}
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
 
   mechanicChangePassword(String password) {}
 
