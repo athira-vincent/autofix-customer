@@ -67,7 +67,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   TextEditingController _plateNumberController = TextEditingController();
   FocusNode _plateNumberFocusNode = FocusNode();
-
   File? _images;
   bool isloading = false;
   String? countryCode;
