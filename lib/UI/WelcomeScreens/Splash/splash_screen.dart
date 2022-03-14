@@ -77,17 +77,17 @@ class _SplashScreenState extends State<SplashScreen> {
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
-       /* Navigator.pushReplacement(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  LoginScreen()));*/
-        Navigator.pushReplacement(
+                builder: (context) =>  LoginScreen()));
+       /* Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
                     AddCarScreen(
                       userType: 'customer',
-                      userCategory: 'individual',)));
+                      userCategory: 'individual',)));*/
       }
     }
   }
