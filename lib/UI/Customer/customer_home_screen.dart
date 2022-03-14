@@ -44,181 +44,133 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     Size size = MediaQuery.of(context).size;
 
+
+
+
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-          icon: Container(
-            margin: EdgeInsets.only(top: 4,),
-            width: size.width * 6 /100,
-            height: size.height * 48 / 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                /*color: _index == 0
-                    ? Colors.white.withOpacity(.05)
-                    : Colors.transparent*/
-            ),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: _index == 0 ?
-                  Image.asset('assets/image/ic_home_active.png',
-                    width: _setValue(28),
-                    height: _setValue(28),
+          backgroundColor: Colors.white,
+          icon: Column(
+            children: [
+              Container(
+                  child: _index == 0
+                      ? Image.asset('assets/image/ic_home_active.png',
+                    width: _setValue(26),
+                    height: _setValue(26),
                   )
-                  :
-                  SvgPicture.asset(
+                      : SvgPicture.asset(
                     'assets/image/ic_home_inactive.svg',
                     width: _setValue(26),
                     height: _setValue(26),
                   )
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                child: Text(
+                  'Home',
+                  style: _index == 0
+                      ? Styles.homeActiveTextStyle
+                      : Styles.homeInactiveTextStyle,
                 ),
-                Container(
-                  //margin: EdgeInsets.only(bottom: _setValue(10.1)),
-                  child: Text(
-                    'Home',
-                    style: _index == 0 ?
-                        Styles.homeActiveTextStyle
-                       :
-                      Styles.homeInactiveTextStyle,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          label: ''),
+          label: ''
+      ),
       BottomNavigationBarItem(
-          icon: Container(
-            margin: EdgeInsets.only(top: 2.3),
-            width: _setValue(65),
-            height: _setValue(65),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                /*color: _index == 1
-                    ? Colors.white.withOpacity(.05)
-                    : Colors.transparent*/
-            ),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: _setValue(5.1)),
-                  //child: Icon(Icons.cart)
-                  child: _index == 1 ?
-                  SvgPicture.asset(
-                    'assets/image/ic_home_cart_active.svg',
-                    width: _setValue(28),
-                    height: _setValue(28),
-                  )
-                  :
-                  Image.asset(
-                    'assets/image/ic_home_cart_inactive.png',
-                    width: _setValue(26),
-                    height: _setValue(26),
-                  ),
+          backgroundColor: Colors.white,
+          icon: Column(
+            children: [
+              Container(
+                child: _index == 1
+                    ? SvgPicture.asset(
+                  'assets/image/ic_home_cart_active.svg',
+                  width: _setValue(26),
+                  height: _setValue(26),
+                )
+                    : Image.asset(
+                  'assets/image/ic_home_cart_inactive.png',
+                  width: _setValue(28),
+                  height: _setValue(28),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
-                  child: Text(
-                    'Cart',
-                    style: _index == 1 ?
-                    Styles.homeActiveTextStyle
-                        :
-                    Styles.homeInactiveTextStyle,
-                  ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                child: Text(
+                  'Cart',
+                  style: _index == 1
+                      ? Styles.homeActiveTextStyle
+                      : Styles.homeInactiveTextStyle,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          label: ''),
+          label: ''
+      ),
       BottomNavigationBarItem(
-          icon: Container(
-            margin: EdgeInsets.only(top: 2.3),
-            width: _setValue(65),
-            height: _setValue(65),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-             /* color: _index == 2
-                  ? Colors.white.withOpacity(.05)
-                  : Colors.transparent,*/
-            ),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: _setValue(5.1)),
-                  child:
-                      _index == 2 ?
-                      SvgPicture.asset(
-                        'assets/image/ic_home_service_active.svg',
-                        width: _setValue(28),
-                        height: _setValue(28),
-                      )
-                          :
-                      Image.asset(
-                      'assets/image/ic_home_service_inactive.png',
+          backgroundColor: Colors.white,
+          icon: Column(
+            children: [
+              Container(
+                child:
+                _index == 2
+                    ? SvgPicture.asset(
+                      'assets/image/ic_home_service_active.svg',
                       width: _setValue(26),
                       height: _setValue(26),
-                      ),
+                    )
+                    : Image.asset(
+                  'assets/image/ic_home_service_inactive.png',
+                  width: _setValue(26),
+                  height: _setValue(26),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
-                  child: Text(
-                    'My services ',
-                    style: _index == 2 ?
-                    Styles.homeActiveTextStyle
-                        :
-                    Styles.homeInactiveTextStyle
-                    ,
-                  ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                child: Text(
+                  'My services ',
+                  style: _index == 2
+                      ? Styles.homeActiveTextStyle
+                      : Styles.homeInactiveTextStyle,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          label: ''),
+          label: ''
+      ),
       BottomNavigationBarItem(
-          icon: Container(
-            margin: EdgeInsets.only(top: 2.3),
-            width: _setValue(65),
-            height: _setValue(65),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: _index == 3
-                  ? Colors.white.withOpacity(.05)
-                  : Colors.transparent,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: _setValue(5.1)),
-                  child: _index == 3 ?
-                  SvgPicture.asset(
-                    'assets/image/ic_home_profile_active.svg',
-                    width: _setValue(28),
-                    height: _setValue(28),
-                  )
-                      :
-                  Image.asset(
-                'assets/image/ic_home_profile_inactive.png',
-                    width: _setValue(26),
-                    height: _setValue(26),
-                  ),
+          backgroundColor: Colors.white,
+          icon: Column(
+            children: [
+              Container(
+                child: _index == 3
+                    ? SvgPicture.asset(
+                  'assets/image/ic_home_profile_active.svg',
+                  width: _setValue(26),
+                  height: _setValue(26),
+                )
+                    : Image.asset(
+                  'assets/image/ic_home_profile_inactive.png',
+                  width: _setValue(26),
+                  height: _setValue(26),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: _setValue(10.1)),
-                  child: Text(
-                    'Profile',
-                    style: _index == 3 ?
-                    Styles.homeActiveTextStyle
-                    :
-                    Styles.homeInactiveTextStyle,
-                  ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                child: Text(
+                  'Profile',
+                  style: _index == 3
+                      ? Styles.homeActiveTextStyle
+                      : Styles.homeInactiveTextStyle,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          label: ''),
+          label: ''
+      ),
     ];
+
+
     return Scaffold(
       drawer: CustomerNavigationDrawerScreen(),
       key: scaffoldKey,
@@ -323,9 +275,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         children: [
           Container(
             width: double.infinity,
-            margin: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 120,
-            ),
             child: _index == 0 ? HomeCustomerUIScreen() :
                 _index == 1 ? CustomerCartScreen() :
                 _index == 2 ? CustomerMyProfileScreen() : CustomerMyServiceScreen(),
@@ -347,7 +296,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           //   topRight: Radius.circular(48),
           // ),
           child: SizedBox(
-            height: size.height * 0.075,
+            height: size.height * 0.090,
             child: BottomNavigationBar(
               selectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',

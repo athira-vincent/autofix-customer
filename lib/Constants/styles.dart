@@ -289,11 +289,12 @@ class Styles {
   );
   static const homeActiveTextStyle = TextStyle(
       fontFamily: 'Samsung_SharpSans_Medium',
-      fontSize: 6,
+      fontSize: 9,
       fontWeight: FontWeight.w600,
       color: CustColors.light_navy);
+
   static const homeInactiveTextStyle = TextStyle(
-      fontSize: 6,
+      fontSize: 9,
       color: CustColors.brownish_grey_02,
       fontWeight: FontWeight.w600,
       fontFamily:'Samsung_SharpSans_Medium'
