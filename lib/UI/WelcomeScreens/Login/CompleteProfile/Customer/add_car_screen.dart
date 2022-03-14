@@ -1017,6 +1017,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               _lowerValue.toString(),
                               selectedBrand,
                               selectedmodel,
+                              imageFirebaseUrl
                             );
                           });
                         } else {

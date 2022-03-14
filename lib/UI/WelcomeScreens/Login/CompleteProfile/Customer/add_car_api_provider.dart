@@ -20,16 +20,10 @@ class AddCarApiProvider {
       lastMaintenance,
       milege,
       makeId,
-      vehicleModelId,) async {
+      vehicleModelId,
+      vehiclePic) async {
     Map<String, dynamic> _resp = await _queryProvider.postAddCarRequest(
-      token,
-      year,
-      plateNo,
-      engineName,
-      lastMaintenance,
-      milege,
-      makeId,
-      vehicleModelId,);
+      token, year, plateNo, engineName, lastMaintenance, milege, makeId, vehicleModelId, vehiclePic);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
