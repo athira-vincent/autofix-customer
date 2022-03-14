@@ -24,9 +24,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
   int _index = 0;
   int _counter = 0;
-
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
   double per = .10;
   double perfont = .10;
 
