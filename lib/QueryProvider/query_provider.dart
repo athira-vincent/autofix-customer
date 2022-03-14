@@ -285,8 +285,8 @@ class QueryProvider {
           engineName: "$engineName"
           lastMaintenance: "$lastMaintenance"
           milege: "$milege"
-          makeId: "$makeId"
-          vehicleModelId: "$vehicleModelId"
+          makeId:  ${int.parse(makeId.toString())}
+          vehicleModelId: ${int.parse(vehicleModelId.toString())}
           vehiclePic: "$vehiclePic"
         ) {
           id
