@@ -41,12 +41,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
-
-
-
-
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
@@ -169,8 +164,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           label: ''
       ),
     ];
-
-
     return Scaffold(
       drawer: CustomerNavigationDrawerScreen(),
       key: scaffoldKey,
@@ -179,7 +172,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
         child: AppBar(
-
           actions: [],
           automaticallyImplyLeading: false,
           flexibleSpace: Row(
@@ -187,22 +179,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             children: [
               Container(
                 margin: EdgeInsets.only(
-                    left: 21, top: 30 + MediaQuery.of(context).padding.top),
+                    left: 21, top: 20 + MediaQuery.of(context).padding.top),
                 child: GestureDetector(
                     onTap: () {
                       scaffoldKey.currentState?.openDrawer();
                     },
                     child: Image.asset(
                       'assets/image/ic_drawer.png',
-                      width: 25,
-                      height: 25,
+                      width: 30,
+                      height: 30,
                     )),
               ),
 
               Expanded(
                 child: Container(
                   margin: EdgeInsets.only(
-                      top: 32.5 + MediaQuery.of(context).padding.top, left: 20),
+                      top: 25 + MediaQuery.of(context).padding.top, left: 20),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -226,7 +218,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
               Container(
                 margin: EdgeInsets.only(
-                     top: 36 + MediaQuery.of(context).padding.top,
+                     top: 25 + MediaQuery.of(context).padding.top,
                   right: size.width * 4.2/100
                 ),
                 child: Stack(
@@ -235,8 +227,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         onTap: () {},
                           child: SvgPicture.asset(
                             'assets/image/notification_icon.svg',
-                            width: 25,
-                            height: 25,
+                            width: 22,
+                            height: 22,
                           ),
                         ),
                     Positioned(
@@ -275,10 +267,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         children: [
           Container(
             width: double.infinity,
-            child: _index == 0 ? HomeCustomerUIScreen() :
-                _index == 1 ? CustomerCartScreen() :
-                _index == 2 ? CustomerMyProfileScreen() : CustomerMyServiceScreen(),
-
+            child: _index == 0
+                ? HomeCustomerUIScreen()
+                : _index == 1 ? CustomerCartScreen()
+                : _index == 2 ? CustomerMyProfileScreen()
+                : CustomerMyServiceScreen(),
           ),
         ],
       ),

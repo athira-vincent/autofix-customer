@@ -309,109 +309,67 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isEmergencyService==true
         ?
 
-       /* Container(
+        Container(
           child: StreamBuilder(
               stream:  _serviceListBloc.serviceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
-                return GridView.builder(
-                  itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: .94,
-                    crossAxisSpacing: 1,
-                    mainAxisSpacing: 1,
-                  ),
-                  itemBuilder: (context,index,) {
-                    return GestureDetector(
-                      onTap:(){
+                if(snapshot.hasData)
+                  {
+                    return GridView.builder(
+                      itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1.3,
+                        crossAxisSpacing: .05,
+                        mainAxisSpacing: .05,
+                      ),
+                      itemBuilder: (context,index,) {
+                        return GestureDetector(
+                          onTap:(){
 
+                          },
+                          child:
+
+                          Container(
+
+                            child: Column(
+                              mainAxisAlignment:MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: CustColors.whiteBlueish,
+                                      borderRadius: BorderRadius.circular(11.0)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(2),
+                                  child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                    style: Styles.textLabelTitleEmergencyServiceName,
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.visible,),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       },
-                      child:
-
-                      Container(
-
-                        child: Column(
-                          mainAxisAlignment:MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: CustColors.whiteBlueish,
-                                  borderRadius: BorderRadius.circular(11.0)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(25),
-                                child: Icon(choices[0].icon,size: 40,color: CustColors.light_navy,),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Text('',
-                                style: Styles.textLabelTitle12,
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.visible,),
-                            ),
-                          ],
-                        ),
-                      ),
                     );
-                  },
-                );
-              }),
-        )*/
+                  }
+                else{
+                  return CircularProgressIndicator();
+                }
 
-
-        Container(
-          child: GridView.builder(
-            itemCount:choices.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: .94,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-            ),
-            itemBuilder: (context,index,) {
-              return GestureDetector(
-                onTap:(){
-
-                },
-                child:
-
-                Container(
-
-                  child: Column(
-                    mainAxisAlignment:MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: CustColors.whiteBlueish,
-                            borderRadius: BorderRadius.circular(11.0)
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: Icon(choices[index].icon,size: 40,color: CustColors.light_navy,),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Text(choices[index].title,
-                            style: Styles.textLabelTitle12,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.visible,),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+              }
+              ),
         )
 
 
@@ -469,51 +427,51 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ),
         isRegularService==true
             ? Container(
-          child: GridView.builder(
-            itemCount:choices.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: .94,
-              crossAxisSpacing: 1,
-              mainAxisSpacing: 1,
-            ),
-            itemBuilder: (context,index,) {
-              return GestureDetector(
-                onTap:(){
-
-                },
-                child:Container(
-
-                  child: Column(
-                    mainAxisAlignment:MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: CustColors.whiteBlueish,
-                            borderRadius: BorderRadius.circular(11.0)
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: Icon(choices[index].icon,size: 40,color: CustColors.light_navy,),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Text(choices[index].title,
-                          style: Styles.textLabelTitle12,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.visible,),
-                      ),
-                    ],
-                  ),
+              child: GridView.builder(
+                itemCount:choices.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: .94,
+                  crossAxisSpacing: 1,
+                  mainAxisSpacing: 1,
                 ),
-              );
-            },
-          ),
-        )
+                itemBuilder: (context,index,) {
+                  return GestureDetector(
+                    onTap:(){
+
+                    },
+                    child:Container(
+
+                      child: Column(
+                        mainAxisAlignment:MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: CustColors.whiteBlueish,
+                                borderRadius: BorderRadius.circular(11.0)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25),
+                              child: Icon(choices[index].icon,size: 40,color: CustColors.light_navy,),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Text(choices[index].title,
+                              style: Styles.textLabelTitle12,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.visible,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
             : Container()
       ],
     );
