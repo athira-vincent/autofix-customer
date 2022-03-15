@@ -11,6 +11,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import 'home_customer_bloc.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
 
@@ -56,7 +57,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String location ='Null, Press Button';
   String Address = 'search';
 
-  final ServiceListBloc _serviceListBloc = ServiceListBloc();
+  final HomeCustomerBloc _serviceListBloc = HomeCustomerBloc();
 
 
 
@@ -77,13 +78,30 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _serviceListBloc.postServiceListRequest("$authToken", "1");
+      _serviceListBloc.postEmergencyServiceListRequest("$authToken", "1");
+      _serviceListBloc.postRegularServiceListRequest("$authToken", "2");
 
     });
   }
 
   _listenServiceListResponse() {
-    _serviceListBloc.serviceListResponse.listen((value) {
+    _serviceListBloc.emergencyServiceListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+    _serviceListBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -309,7 +327,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isEmergencyService==true
         ? Container(
           child: StreamBuilder(
-              stream:  _serviceListBloc.serviceListResponse,
+              stream:  _serviceListBloc.emergencyServiceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
@@ -423,7 +441,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isRegularService==true
             ? Container(
           child: StreamBuilder(
-              stream:  _serviceListBloc.serviceListResponse,
+              stream:  _serviceListBloc.regularServiceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
