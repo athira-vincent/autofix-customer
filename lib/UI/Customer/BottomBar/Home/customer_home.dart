@@ -494,7 +494,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 else{
                   return CircularProgressIndicator();
                 }
-
               }
           ),
         )
