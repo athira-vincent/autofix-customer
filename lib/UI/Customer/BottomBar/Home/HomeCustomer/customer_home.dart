@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/find_mechanic_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -107,6 +109,42 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       }
     });
     _homeCustomerBloc.regularServiceListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  FindMechanicListScreen()));
+
+        });
+      }
+    });
+    _homeCustomerBloc.findMechanicsListEmergencyResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -356,13 +394,25 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                         return GestureDetector(
                           onTap:(){
 
-                            print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                            print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                            print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                            print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                            serviceIds.clear();
-                            serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
-                            print(">>>>>>>>>> ServiceId  $serviceIds");
+                            setState(() {
+                              print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                              print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                              print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                              print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                              serviceIds.clear();
+                              serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
+                              print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                              _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                  authToken,
+                                  '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                  '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                  CurrentLatitude,
+                                  CurrentLongitude,
+                                  serviceIds);
+                            });
+
+
 
 
 
