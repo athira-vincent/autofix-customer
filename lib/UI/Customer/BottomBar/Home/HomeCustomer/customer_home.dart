@@ -6,11 +6,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../Constants/cust_colors.dart';
+import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
-import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
+import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'home_customer_bloc.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
@@ -54,10 +54,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     const Choice(title: 'WiFi', icon: Icons.wifi),
   ];
 
+   String CurrentLatitude ="10.506402";
+   String CurrentLongitude ="76.244164";
+
   String location ='Null, Press Button';
   String Address = 'search';
 
   final HomeCustomerBloc _serviceListBloc = HomeCustomerBloc();
+
+  List<String> serviceIds =[];
 
 
 
@@ -123,6 +128,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    setState(() {
+      CurrentLatitude = position.latitude.toString();
+      CurrentLongitude = position.longitude.toString();
+    });
     print(location);
     GetAddressFromLatLong(position);
   }
@@ -347,6 +356,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                         return GestureDetector(
                           onTap:(){
 
+                            print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                            print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                            print(">>>>>>>>>> Date  ${_serviceListBloc.dateConvert(DateTime.now())}");
+                            print(">>>>>>>>>> Time  ${_serviceListBloc.timeConvert(DateTime.now())}");
+                            serviceIds.clear();
+                            serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
+                            print(">>>>>>>>>> ServiceId  $serviceIds");
+
+
+
                           },
                           child: Container(
                             child: Column(
@@ -504,7 +523,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget upcomingServices() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20,20,0,20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

@@ -7,11 +7,12 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersI
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicCorporateSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicIndividualSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
+import 'package:intl/intl.dart';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 
 
 class HomeCustomerBloc {
@@ -42,6 +43,23 @@ class HomeCustomerBloc {
 
     ServiceListMdl _serviceListMdl = await repository.getServiceList(token,type);
     postEmergencyServiceList.sink.add(_serviceListMdl);
+  }
+
+
+  dateConvert(DateTime Format) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+
+  timeConvert(DateTime Format) {
+    final DateFormat formatter = DateFormat('hh:mm a');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
   }
 
 

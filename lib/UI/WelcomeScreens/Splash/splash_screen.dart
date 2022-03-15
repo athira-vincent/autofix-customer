@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/customer_home.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/find_mechanic_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
@@ -59,6 +59,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  CustomerHomeScreen()));
       /*if (userType == TextStrings.user_customer) {
         if (_isDefaultVehicleAvailable == null ||
             _isDefaultVehicleAvailable == 1) {
@@ -77,14 +81,14 @@ class _SplashScreenState extends State<SplashScreen> {
             () => Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => WalkThroughPages())));
       } else {
-     /*   Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  LoginScreen()));*/
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  CustomerHomeScreen()));
+                builder: (context) =>  LoginScreen()));
+      /*  Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  CustomerHomeScreen()));*/
        /* Navigator.pushReplacement(
             context,
             MaterialPageRoute(

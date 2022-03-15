@@ -25,6 +25,8 @@ import '../../../../main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
+import '../../../Customer/customer_home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -321,6 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                                     setState(() {
                                                       _isLoading = true;
+                                                      _signinBloc.postSignInRequest(_userNameController.text, _passwordController.text);
                                                     });
                                                   } else {
                                                     setState(() => _autoValidate =
@@ -495,7 +498,14 @@ class _LoginScreenState extends State<LoginScreen> {
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
-
+        setState(() {
+          _isLoading = false;
+          _signinBloc.userDefault(value.data!.customerSignIn!.token.toString());
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  CustomerHomeScreen()));
+        });
       }
     });
   }

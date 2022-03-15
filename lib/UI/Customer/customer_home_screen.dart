@@ -1,14 +1,14 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Cart/customer_cart.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/customer_home.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'BottomBar/Home/customer_home.dart';
+import 'BottomBar/Home/HomeCustomer/customer_home.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
 

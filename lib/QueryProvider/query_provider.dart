@@ -5,23 +5,26 @@ import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 class QueryProvider {
   signIn(String userName, String password) async {
     String _query = """  
-  mutation{
-  customerSignIn(userName: "$userName", password: "$password") {
+ mutation {
+  customerSignIn(emailId: "$userName", password: "$password") {
     token
     customer {
       id
+      userCode
       firstName
       lastName
-      address
       emailId
       phoneNo
-      profilePic
-      isProfileCompleted
       state
-      userName
+      resetToken
+      userType
+      accountType
+      profilePic
+      isProfile_Completed
+      otp_verified
       status
     }
-    isProfileCompleted
+    isProfile_Completed
   }
 }
     """;
