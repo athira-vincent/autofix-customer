@@ -348,10 +348,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           onTap:(){
 
                           },
-                          child:
-
-                          Container(
-
+                          child: Container(
                             child: Column(
                               mainAxisAlignment:MainAxisAlignment.start,
                               children: [
