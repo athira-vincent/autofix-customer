@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_s
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/emergancy_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/service_type_selection_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicle_specialization_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -99,6 +100,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
   String? _fileName;
   String imageFirebaseUrl="";
+
+  String selectedVehicleId = "";
+  String selectedVehicles = "";
 
   @override
   void initState() {
@@ -543,17 +547,46 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
-    final result = await Navigator.push(
+    List<VehicleSpecialization> vehicleSpecialisationList = [];
+    vehicleSpecialisationList = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => VehicleSpecializationScreen(),
         ));
+
     setState(() {
-      selectedState = result;
+      for(int i = 0; i<vehicleSpecialisationList.length ; i++){
+        if(vehicleSpecialisationList.length-1 == i){
+          selectedVehicleId = selectedVehicleId
+              + vehicleSpecialisationList[i].id.toString() ;
+          selectedVehicles = selectedVehicles
+              + vehicleSpecialisationList[i].name.toString() ;
+        }
+        else{
+          selectedVehicleId = selectedVehicleId
+              + vehicleSpecialisationList[i].id.toString() + ", ";
+          //+ ( vehicleSpecialisationList.length == i ? "" : ", ") ;
+          selectedVehicles = selectedVehicles
+              + vehicleSpecialisationList[i].name.toString() + ", ";
+          //+ ( vehicleSpecialisationList.length == i ? "" : ", ") ;
+
+        }
+
+        /*selectedVehicleId = selectedVehicleId
+            + vehicleSpecialisationList[i].id.toString()
+            + ( vehicleSpecialisationList.length == i ? "" : ", ") ;
+        selectedVehicles = selectedVehicles
+            + vehicleSpecialisationList[i].name.toString()
+            + ( vehicleSpecialisationList.length == i ? "" : ", ") ;*/
+      }
+      //selectedState = result;
       if(selectedState!='[]')
         {
-          _chooseVechicleSpecializedController.text = selectedState;
+          _chooseVechicleSpecializedController.text = selectedVehicles;
           print ("Selected state @ sign up: " + selectedState );
+          print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
+          print ("Selected selectedVehicles @ sign up: " + selectedVehicles );
+
         }
 
     });
@@ -974,9 +1007,10 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: MaterialButton(
                       onPressed: () {
                         _completeProfileBloc.postCompleteProfileIndividualRequest(
-                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzEsImlhdCI6MTY0Njg5MTQ3NSwiZXhwIjoxNjQ2OTc3ODc1fQ.DXos0dc_fTErmcCqRpNdkWppOtVYENr_hjTowBFlKpo",
+                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
                           _workSelectionController.text,
-                          _chooseVechicleSpecializedController.text.toString(),
+                         // _chooseVechicleSpecializedController.text.toString(),
+                          selectedVehicleId,
                           _addressController.text.toString(),
                         );
 

@@ -28,7 +28,8 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   String? countryCode;
   String selectedState = "";
   bool isloading = false;
-  List<String> vehicleSpecialisationList =[];
+  //List<String> vehicleSpecialisationList =[];
+  List<VehicleSpecialization> vehicleSpecialisationList = [];
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
         centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context,vehicleSpecialisationList.toString()),
+          onPressed: () => Navigator.pop(context,vehicleSpecialisationList),
         ),
         backgroundColor: Colors.white,
         title: Text(
@@ -102,14 +103,14 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                       if(_countryData[index].value=="1")
                                         {
                                           _countryData[index].value="0";
-                                          if (vehicleSpecialisationList.contains(_countryData[index].id)) {
-                                            vehicleSpecialisationList.remove(_countryData[index].id);
+                                          if (vehicleSpecialisationList.contains(_countryData[index])) {
+                                            vehicleSpecialisationList.remove(_countryData[index]);
                                           }
                                         }
                                       else
                                         {
                                           _countryData[index].value="1";
-                                          vehicleSpecialisationList.insert(0, _countryData[index].id);
+                                          vehicleSpecialisationList.insert(0, _countryData[index]);
                                         }
                                       print(vehicleSpecialisationList);
                                     });
@@ -174,7 +175,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
 
                 InkWell(
                   onTap: (){
-                    Navigator.pop(context,vehicleSpecialisationList.toString());
+                    Navigator.pop(context,vehicleSpecialisationList);
                   },
                   child: Row(
                     children: [

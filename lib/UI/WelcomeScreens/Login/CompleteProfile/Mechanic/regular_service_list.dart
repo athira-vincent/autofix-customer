@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,15 +69,46 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     });
   }
 
+  _listenAddServiceListResponse() {
+    _addServiceListBloc.postAddServiceList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          //_isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postServiceList >>>>>>>  ${value.status}");
+          //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          //_isLoading = false;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WaitAdminApprovalScreen(refNumber: '123456',) ));
+          FocusScope.of(context).unfocus();
+          //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _serviceListBloc.postServiceListRequest("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzMsImlhdCI6MTY0Njk5NzgzMywiZXhwIjoxNjQ3MDg0MjMzfQ.km1DaRATqLWMon40ogJ2vJoRiWWQS48aCWYx8Jnl85k", "1");
+    _serviceListBloc.postServiceListRequest("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE", "1");
 
     _listenServiceListResponse();
+    _listenAddServiceListResponse();
+
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -206,14 +238,14 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     _rateController.text=regularServiceList[index].minAmount.toString();
                                     _timeController.text = "30:00";
                                     _rateController.addListener(() {
+                                      var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
                                       selectedServiceMdlList.removeAt(index);
-                                      selectedServiceMdlList.insert(index,
-                                          SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text, selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable));
+                                      selectedServiceMdlList.insert(index,temp);
                                     });
                                     _timeController.addListener(() {
+                                      var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable);
                                       selectedServiceMdlList.removeAt(index);
-                                      selectedServiceMdlList.insert(index,
-                                          SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable));
+                                      selectedServiceMdlList.insert(index,temp);
                                     });
                                     return InkWell(
                                         onTap: () {
@@ -299,7 +331,6 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                                 child: TextFormField(
                                                   //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                                   controller: _rateController,
-
                                                   style: Styles.searchTextStyle02,
                                                   enabled: _regularIsChecked![index],
                                                   //readOnly: _regularIsChecked![index],
@@ -354,17 +385,16 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                     print(">>>>>>> selectedServiceMdlList.length ${selectedServiceMdlList.length}");
 
-                    String serviceId="[";
+                    List<SelectedServicesMdl> selectedService=[];
+
+                    String serviceId="";
                     String feeList = "[";
                     String timeList = "[";
 
                     for(int i=0;i<selectedServiceMdlList.length;i++){
                       print("time 001 ${selectedServiceMdlList[i].isEnable}");
                       if(selectedServiceMdlList[i].isEnable){
-                        serviceId = serviceId +""" "${selectedServiceMdlList[i].serviceId}", """;
-                        feeList = feeList + """ "${selectedServiceMdlList[i].amount}",""";
-                        timeList = timeList + """ "${selectedServiceMdlList[i].time}",""";
-
+                        selectedService.add(selectedServiceMdlList[i]);
                       }else{
                         print("no data to print");
                       }
@@ -373,7 +403,20 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       //print("time 001 ${selectedServiceMdlList[i].isEnable}");
                     }
 
-                    serviceId = serviceId +"]";
+                    for(int m = 0 ; m< selectedService.length; m++){
+                      if( m != selectedService.length-1){
+                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" + ", ";
+                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}",""";
+                        timeList = timeList + """ "${selectedServiceMdlList[m].time}",""";
+                      }else{
+                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" ;
+                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}" """;
+                        timeList = timeList + """ "${selectedServiceMdlList[m].time}" """;
+                      }
+
+                    }
+
+                    serviceId = serviceId ;
                     feeList = feeList + "]";
                     timeList = timeList + "]";
 
@@ -391,8 +434,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY0NjkxMDcwNCwiZXhwIjoxNjQ2OTk3MTA0fQ.9i53B_oDKlP7ZXJJCG9fsY4RTopHcMKFp0cdxqhiMGA",
-                        serviceId,  feeList, "2000,3000,2500");
+                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
+                        serviceId,  feeList, "12:50,50:00,30:00");
                   },
                   child: Container(
                     height: size.height * 0.045,

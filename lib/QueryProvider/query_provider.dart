@@ -509,9 +509,9 @@ class QueryProvider {
     String _query = """
     mutation {
   mechanic_work_selection_Individual(
-    service_type: $workSelection
-    vehicle: $vehicleSpecialization
-    address: $address
+    service_type: "$workSelection"
+    vehicle: "$vehicleSpecialization"
+    address: "$address"
     apprentice_cert: "string"
     identification_cert: "string"
   ) {
@@ -1178,14 +1178,18 @@ class QueryProvider {
   mechanicAddServiceList(String token,String serviceList, String ServiceList, String timeList) async {
     String _query = """ 
     mutation {
-  mechanic_service_add(services: $serviceList, fee: ["2200","2200"], time: ["10","10"]) {
+  mechanic_service_add(services: "$serviceList", fee: ["2200","2200"], time: ["10","10"]) {
     message
   }
 }
     """;
     log(_query);
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
 
 
