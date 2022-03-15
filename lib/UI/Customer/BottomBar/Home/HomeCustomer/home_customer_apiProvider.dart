@@ -37,4 +37,29 @@ class HomeCustomerApiProvider {
       return errorMsg;
     }
   }
+
+  Future<MechanicsBookingMdl>  postFindMechanicsListEmergencyRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType)async {
+    Map<String, dynamic> _resp = await _queryProvider. postFindMechanicsListEmergencyRequest(
+        token,
+        bookMechanicId,
+        serviceId,
+        serviceType);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicsBookingMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicsBookingMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicsBookingMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 }

@@ -415,6 +415,57 @@ class QueryProvider {
   }
 
 
+  postFindMechanicsListEmergencyRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType) async {
+    String _query = """ 
+     query
+    {
+      mechaniclist_for_services(
+        bookMechanicId: $bookMechanicId
+        serviceId: $serviceId
+        serviceType: "$serviceType"
+      ) {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        state
+        userType
+        accountType
+        profilePic
+        isProfile_Completed
+        status
+        mechanicService {
+          id
+          fee
+          serviceId
+          status
+          userId
+        }
+        mechanicVehicle {
+          id
+          status
+          makeId
+        }
+      }
+    }
+
+    """;
+    log(_query);
+   return await GqlClient.I.query01(
+    _query,
+    token,
+    enableDebug: true,
+    isTokenThere: false,
+    );;
+  }
+
+
   forgotPassword(String email) async {
     String _query = """
       mutation{

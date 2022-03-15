@@ -47,7 +47,7 @@ class HomeCustomerBloc {
   }
 
 
-  /// =============== Regular services list ================== ///
+  /// =============== Mechanics Booking ID ================== ///
 
 
   final postMechanicsBookingIDList = BehaviorSubject<MechanicsBookingMdl>();
@@ -69,6 +69,27 @@ class HomeCustomerBloc {
         longitude,
         serviceId);
     postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
+  }
+
+
+  /// =============== Find Mechanics List Emergency ================== ///
+
+
+  final postFindMechanicsListEmergency = BehaviorSubject<MechanicsBookingMdl>();
+  Stream<MechanicsBookingMdl> get findMechanicsListEmergencyResponse => postFindMechanicsListEmergency.stream;
+
+  postFindMechanicsListEmergencyRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType) async {
+
+    MechanicsBookingMdl _mechanicsBookingMdl = await repository.postFindMechanicsListEmergencyRequest(
+        token,
+        bookMechanicId,
+        serviceId,
+        serviceType);
+    postFindMechanicsListEmergency.sink.add(_mechanicsBookingMdl);
   }
 
 

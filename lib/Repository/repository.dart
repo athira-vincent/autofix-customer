@@ -118,6 +118,18 @@ class Repository {
           longitude,
           serviceId);
 
+  //Mechanics List Emergency Request
+  Future<dynamic> postFindMechanicsListEmergencyRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType) =>
+      _homeCustomerApiProvider.postFindMechanicsListEmergencyRequest(
+          token,
+          bookMechanicId,
+          serviceId,
+          serviceType);
+
   // Make Brand List
   Future<dynamic> postMakeBrandRequest(
       token,) =>
