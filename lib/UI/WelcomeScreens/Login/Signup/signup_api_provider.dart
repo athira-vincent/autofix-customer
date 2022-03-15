@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dar
 
 import 'package:flutter/services.dart';
 
+import '../../../Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
 import '../PhoneLogin/otp_Verification_Mdl.dart';
 
 class SignupApiProvider {
@@ -176,6 +177,9 @@ class SignupApiProvider {
       return errorMsg;
     }
   }
+
+
+
 
 
   Future<dynamic> getStates() async {

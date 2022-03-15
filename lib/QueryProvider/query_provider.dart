@@ -379,6 +379,41 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
+  postMechanicsBookingIDRequest(
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId) async {
+    String _query = """ 
+     mutation {
+      mechanics_Booking(
+        date: "$date"
+        time: "$time"
+        latitude: ${double.parse(latitude.toString())}
+        longitude: ${double.parse(longitude.toString())}
+        serviceId: $serviceId
+      ) {
+        id
+        date
+        time
+        latitude
+        longitude
+        paymentMethod
+        userId
+        status
+        isAccepted
+        vehicleId
+        serviceId
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
 
   forgotPassword(String email) async {
     String _query = """

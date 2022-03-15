@@ -60,7 +60,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String location ='Null, Press Button';
   String Address = 'search';
 
-  final HomeCustomerBloc _serviceListBloc = HomeCustomerBloc();
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   List<String> serviceIds =[];
 
@@ -83,14 +83,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _serviceListBloc.postEmergencyServiceListRequest("$authToken", "1");
-      _serviceListBloc.postRegularServiceListRequest("$authToken", "2");
+      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
+      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
 
     });
   }
 
   _listenServiceListResponse() {
-    _serviceListBloc.emergencyServiceListResponse.listen((value) {
+    _homeCustomerBloc.emergencyServiceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -106,7 +106,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         });
       }
     });
-    _serviceListBloc.regularServiceListResponse.listen((value) {
+    _homeCustomerBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -336,7 +336,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isEmergencyService==true
         ? Container(
           child: StreamBuilder(
-              stream:  _serviceListBloc.emergencyServiceListResponse,
+              stream:  _homeCustomerBloc.emergencyServiceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
@@ -358,8 +358,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                             print(">>>>>>>>>> Latitude  $CurrentLatitude");
                             print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                            print(">>>>>>>>>> Date  ${_serviceListBloc.dateConvert(DateTime.now())}");
-                            print(">>>>>>>>>> Time  ${_serviceListBloc.timeConvert(DateTime.now())}");
+                            print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                            print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
                             serviceIds.clear();
                             serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
                             print(">>>>>>>>>> ServiceId  $serviceIds");
@@ -457,7 +457,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isRegularService==true
             ? Container(
           child: StreamBuilder(
-              stream:  _serviceListBloc.regularServiceListResponse,
+              stream:  _homeCustomerBloc.regularServiceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");

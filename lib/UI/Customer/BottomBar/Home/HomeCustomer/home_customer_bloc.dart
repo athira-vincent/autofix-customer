@@ -46,6 +46,8 @@ class HomeCustomerBloc {
   }
 
 
+  /// =============== Date Conversion ================== ///
+
   dateConvert(DateTime Format) {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted = formatter.format(Format);
@@ -53,6 +55,8 @@ class HomeCustomerBloc {
 
     return formatted;
   }
+
+  /// =============== Time Conversion ================== ///
 
   timeConvert(DateTime Format) {
     final DateFormat formatter = DateFormat('hh:mm a');
