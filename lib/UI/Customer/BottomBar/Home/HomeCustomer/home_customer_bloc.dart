@@ -13,6 +13,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import 'ModelsCustomerHome/mechanics_Booking_Mdl.dart';
 
 
 class HomeCustomerBloc {
@@ -43,6 +44,31 @@ class HomeCustomerBloc {
 
     ServiceListMdl _serviceListMdl = await repository.getServiceList(token,type);
     postEmergencyServiceList.sink.add(_serviceListMdl);
+  }
+
+
+  /// =============== Regular services list ================== ///
+
+
+  final postMechanicsBookingIDList = BehaviorSubject<MechanicsBookingMdl>();
+  Stream<MechanicsBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
+
+  postMechanicsBookingIDRequest(
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId) async {
+
+    MechanicsBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
+        token,
+        date,
+        time,
+        latitude,
+        longitude,
+        serviceId);
+    postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
   }
 
 
