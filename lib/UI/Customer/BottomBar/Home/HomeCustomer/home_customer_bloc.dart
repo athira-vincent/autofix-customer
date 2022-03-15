@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Repository/repository.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersCorporateSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersGovernmentSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersIndividualSignUp_Mdl.dart';
@@ -75,8 +76,8 @@ class HomeCustomerBloc {
   /// =============== Find Mechanics List Emergency ================== ///
 
 
-  final postFindMechanicsListEmergency = BehaviorSubject<MechanicsBookingMdl>();
-  Stream<MechanicsBookingMdl> get findMechanicsListEmergencyResponse => postFindMechanicsListEmergency.stream;
+  final postFindMechanicsListEmergency = BehaviorSubject<MechaniclistForServicesMdl>();
+  Stream<MechaniclistForServicesMdl> get findMechanicsListEmergencyResponse => postFindMechanicsListEmergency.stream;
 
   postFindMechanicsListEmergencyRequest(
       token,
@@ -84,12 +85,12 @@ class HomeCustomerBloc {
       serviceId,
       serviceType) async {
 
-    MechanicsBookingMdl _mechanicsBookingMdl = await repository.postFindMechanicsListEmergencyRequest(
+    MechaniclistForServicesMdl _mechaniclistForServicesMdl = await repository.postFindMechanicsListEmergencyRequest(
         token,
         bookMechanicId,
         serviceId,
         serviceType);
-    postFindMechanicsListEmergency.sink.add(_mechanicsBookingMdl);
+    postFindMechanicsListEmergency.sink.add(_mechaniclistForServicesMdl);
   }
 
 
