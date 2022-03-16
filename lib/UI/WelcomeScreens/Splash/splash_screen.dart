@@ -57,7 +57,6 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       GqlClient.I.config(token: _token);
     }
-
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
