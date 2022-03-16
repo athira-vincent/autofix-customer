@@ -59,7 +59,7 @@ class CustomerSignIn {
 }
 
 class Customer {
-  String? id;
+  int? id;
   String? firstName;
   String? lastName;
   String? address;

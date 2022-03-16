@@ -7,12 +7,14 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 
+import '../UI/Customer/BottomBar/Home/HomeCustomer/home_customer_apiProvider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
 
 
 class Repository {
   final _signupApiProvider = SignupApiProvider();
+  final _homeCustomerApiProvider = HomeCustomerApiProvider();
   final _addCarApiProvider = AddCarApiProvider();
   final _vehicleSpecializationApiProvider = vehicleSpecializationApiProvider();
 
@@ -99,6 +101,34 @@ class Repository {
       _signupApiProvider.postOtpVerificationRequest(
         token,
         otp,);
+
+  //Mechanic Booking Id Request
+  Future<dynamic> postMechanicsBookingIDRequest(
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId) =>
+      _homeCustomerApiProvider.postMechanicsBookingIDRequest(
+          token,
+          date,
+          time,
+          latitude,
+          longitude,
+          serviceId);
+
+  //Mechanics List Emergency Request
+  Future<dynamic> postFindMechanicsListEmergencyRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType) =>
+      _homeCustomerApiProvider.postFindMechanicsListEmergencyRequest(
+          token,
+          bookMechanicId,
+          serviceId,
+          serviceType);
 
   // Make Brand List
   Future<dynamic> postMakeBrandRequest(

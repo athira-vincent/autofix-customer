@@ -1,16 +1,18 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/find_mechanic_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../Constants/cust_colors.dart';
+import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
-import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
+import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'home_customer_bloc.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
@@ -54,10 +56,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     const Choice(title: 'WiFi', icon: Icons.wifi),
   ];
 
+   String CurrentLatitude ="10.506402";
+   String CurrentLongitude ="76.244164";
+
   String location ='Null, Press Button';
   String Address = 'search';
 
-  final HomeCustomerBloc _serviceListBloc = HomeCustomerBloc();
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
+  List<String> serviceIds =[];
 
 
 
@@ -78,14 +85,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _serviceListBloc.postEmergencyServiceListRequest("$authToken", "1");
-      _serviceListBloc.postRegularServiceListRequest("$authToken", "2");
+      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
+      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
 
     });
   }
 
   _listenServiceListResponse() {
-    _serviceListBloc.emergencyServiceListResponse.listen((value) {
+    _homeCustomerBloc.emergencyServiceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -101,7 +108,51 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         });
       }
     });
-    _serviceListBloc.regularServiceListResponse.listen((value) {
+    _homeCustomerBloc.regularServiceListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print(" postServiceList >>>>>>>  ${value.status}");
+          print(" authToken >>>>>>>  $authToken");
+          print(" serviceIds >>>>>>>  $serviceIds");
+          print(" serviceType >>>>>>>  emergency");
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  FindMechanicListScreen(
+                    bookingId: '${value.data?.mechanicsBooking?.id}',
+                  serviceIds: serviceIds,
+                  serviceType: 'emergency',
+                  authToken: authToken,)));
+
+        });
+      }
+    });
+    _homeCustomerBloc.findMechanicsListEmergencyResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -123,6 +174,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    setState(() {
+      CurrentLatitude = position.latitude.toString();
+      CurrentLongitude = position.longitude.toString();
+    });
     print(location);
     GetAddressFromLatLong(position);
   }
@@ -327,7 +382,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isEmergencyService==true
         ? Container(
           child: StreamBuilder(
-              stream:  _serviceListBloc.emergencyServiceListResponse,
+              stream:  _homeCustomerBloc.emergencyServiceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
@@ -346,6 +401,24 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       itemBuilder: (context,index,) {
                         return GestureDetector(
                           onTap:(){
+
+                            setState(() {
+                              print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                              print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                              print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                              print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                              serviceIds.clear();
+                              serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
+                              print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                              _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                  authToken,
+                                  '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                  '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                  CurrentLatitude,
+                                  CurrentLongitude,
+                                  serviceIds);
+                            });
 
                           },
                           child: Container(
@@ -438,7 +511,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         isRegularService==true
             ? Container(
           child: StreamBuilder(
-              stream:  _serviceListBloc.regularServiceListResponse,
+              stream:  _homeCustomerBloc.regularServiceListResponse,
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
@@ -494,7 +567,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 else{
                   return CircularProgressIndicator();
                 }
-
               }
           ),
         )
@@ -505,7 +577,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget upcomingServices() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20,20,0,20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

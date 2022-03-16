@@ -5,23 +5,26 @@ import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 class QueryProvider {
   signIn(String userName, String password) async {
     String _query = """  
-  mutation{
-  customerSignIn(userName: "$userName", password: "$password") {
+ mutation {
+  customerSignIn(emailId: "$userName", password: "$password") {
     token
     customer {
       id
+      userCode
       firstName
       lastName
-      address
       emailId
       phoneNo
-      profilePic
-      isProfileCompleted
       state
-      userName
+      resetToken
+      userType
+      accountType
+      profilePic
+      isProfile_Completed
+      otp_verified
       status
     }
-    isProfileCompleted
+    isProfile_Completed
   }
 }
     """;
@@ -374,6 +377,92 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation11(_query,
         enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
+  postMechanicsBookingIDRequest(
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId) async {
+    String _query = """ 
+     mutation {
+      mechanics_Booking(
+        date: "$date"
+        time: "$time"
+        latitude: ${double.parse(latitude.toString())}
+        longitude: ${double.parse(longitude.toString())}
+        serviceId: $serviceId
+      ) {
+        id
+        date
+        time
+        latitude
+        longitude
+        paymentMethod
+        userId
+        status
+        isAccepted
+        vehicleId
+        serviceId
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
+
+  postFindMechanicsListEmergencyRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType) async {
+    String _query = """ 
+     query
+    {
+      mechaniclist_for_services(
+        bookMechanicId: $bookMechanicId
+        serviceId: $serviceId
+        serviceType: "$serviceType"
+      ) {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        state
+        userType
+        accountType
+        profilePic
+        isProfile_Completed
+        status
+        mechanicService {
+          id
+          fee
+          serviceId
+          status
+          userId
+        }
+        mechanicVehicle {
+          id
+          status
+          makeId
+        }
+      }
+    }
+
+    """;
+    log(_query);
+   return await GqlClient.I.query01(
+    _query,
+    token,
+    enableDebug: true,
+    isTokenThere: false,
+    );;
   }
 
 
