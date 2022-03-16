@@ -1,16 +1,37 @@
-import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
+
+import 'dart:async';
+
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
+import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:fdottedline/fdottedline.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../Constants/cust_colors.dart';
+import '../../../../../Constants/shared_pref_keys.dart';
+import '../../../../../Constants/styles.dart';
+import '../../../../../Widgets/CurvePainter.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+import '../HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
+import '../HomeCustomer/home_customer_bloc.dart';
 
 
 class FindMechanicListScreen extends StatefulWidget {
 
+  final String bookingId;
+  final String authToken;
 
-  FindMechanicListScreen( );
+
+  FindMechanicListScreen({required this.bookingId,required this.authToken});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -19,259 +40,466 @@ class FindMechanicListScreen extends StatefulWidget {
 }
 
 class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
-   //Completer<GoogleMapController> _controller = Completer();
-   //var currentLocation = LocationData;
-  late GoogleMapController mapController;
-   final LatLng _initialPosition = LatLng(-15.4630239974464, 28.363397732282127);
 
-   void _onMapCreated(GoogleMapController controller){
-     mapController = controller;
-   }
-   @override
-  Widget build(BuildContext context) {
-  Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        body: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            child: SafeArea(
+  String authToken="";
 
-              child: Container(
-                width: size.width,
-                height: size.height,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: size.width,
-                      height: size.height,
-                      child:  Column(
-                        children: [
-                        Container(
-                          height: size.height * 0.358,
-                          color: CustColors.ocean_blue,
-                          child: GoogleMap(
-                            //sty
-                            onMapCreated: _onMapCreated,
-                            mapType: MapType.normal,
-                            compassEnabled: true,
-                            myLocationButtonEnabled: true,
-                            myLocationEnabled: true,
-                            zoomGesturesEnabled: true,
-                            zoomControlsEnabled: true,
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(-15.4630239974464, 28.363397732282127),
-                              zoom: 12,
-                            ),
-                            //  onMapCreated:(GoogleMapController controller){
-                            //     _controllerGoogleMap.complete(controller);
-                            //     newGoogleMapController = controller;
+  String waitingMechanic="0";
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
-                            //     setState(() {
-                            //       bottomPaddingOfMap = 300.0;
-                            //     });
-                            //     locatePosition();
+  double per = .10;
+  double perfont = .10;
+  double height = 0;
+  String selectedState = "";
 
-                            //  },
-
-                          ),
-                        ),
-                        CurvedBottomSheetContainer(
-                          percentage: 0.50,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    top: size.height * 2 / 100,
-                                    left: size.width * 12.1 / 100,
-                                    right: size.width * 12.1 / 100,
-                                  ),
-                                  color: CustColors.pale_grey,
-                                  child: Column(
-                                    children: [
-                                      Text("Wait a minute!!",
-                                        style: TextStyle(
-                                          color: CustColors.light_navy,
-                                          fontFamily: "Samsung_SharpSans_Medium",
-                                          fontSize: 13.3
-                                        ),
-                                      ),
-                                      Text("Finding mechanic near you \n Almost  there…..",
-                                        style: TextStyle(
-                                          color: CustColors.warm_grey03,
-                                          fontFamily: "Samsung_SharpSans_Regular",
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                      child: Text("Mechanic found",
-                                      style: TextStyle(
-                                        fontFamily: "Samsung_SharpSans_Medium",
-                                        fontSize: 16.7,
-                                        color: CustColors.black_04,
-                                      ),),
-                                  ),
-                                ),
-
-                                //mechanicList(size,"assets/image/mechanic_01.png","Eric","180  Reviews","8  Km","12 min","₦ 88 "),
-                                //mechanicList(size,"assets/image/mechanic_02.png","Lucka","60  Reviews","18  Km","15 min","₦ 88 "),
-                                //mechanicList(size,"assets/image/mechanic_03.png","George","130 Reviews","3  Km","4 min","₦ 88 "),
-                                //mechanicList(size,"assets/image/mechanic_04.png","Nelson","15  Reviews","28  Km","20 min","₦ 88 "),
-
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                      ),
-                    ),
-                    /*Container(
-                      color: Colors.green,
-                    ),*/
-                  ],
-                ),
-              ),
-              ),
-          ),
-      ),
-      ),
-    );
+  double _setValue(double value) {
+    return value * per + value;
   }
 
-  Widget mechanicList(Size size, String mechanicImageUrl,String mechanicName, String reviewCount, String km, String time, String cost){
+  double _setValueFont(double value) {
+    return value * perfont + value;
+  }
 
-    /* return Container(
-       color: Colors.tealAccent,
-       child: Text("Sample text")
-     );*/
+  final Set<Marker> _markers = {};
 
-     return ListView.builder(
-     // itemCount:3,
-      shrinkWrap: true,
-      //physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context,index,) {
-        return GestureDetector(
-          onTap:(){
+  LatLng _lastMapPosition = _center;
 
-          },
-          child:Column(
-            mainAxisAlignment:MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
+  MapType _currentMapType = MapType.terrain;
+
+  Completer<GoogleMapController> _controller = Completer();
+
+  static const LatLng _center = const LatLng(12.988827, 77.472091);
+
+  String? _mapStyle;
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+    controller.setMapStyle(_mapStyle);
+  }
+
+  Set<Polyline> lines = {};
+
+
+
+  void _onAddMarkerButtonPressed() {
+    setState(() {
+      _markers.add(Marker(
+        // This marker id can be anything that uniquely identifies each marker.
+        markerId: MarkerId(_lastMapPosition.toString()),
+        position: _lastMapPosition,
+        infoWindow: InfoWindow(
+          title: 'Really cool place',
+          snippet: '5 Star Rating',
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+      ));
+    });
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    _lastMapPosition = position.target;
+  }
+
+  // Starting point latitude
+  double _originLatitude = 6.5212402;
+// Starting point longitude
+  double _originLongitude = 3.3679965;
+// Destination latitude
+  double _destLatitude = 6.849660;
+// Destination Longitude
+  double _destLongitude = 3.648190;
+// Markers to show points on the map
+  Map<MarkerId, Marker> markers = {};
+
+  PolylinePoints polylinePoints = PolylinePoints();
+  Map<PolylineId, Polyline> polylines = {};
+
+  // This method will add markers to the map based on the LatLng position
+  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+    MarkerId markerId = MarkerId(id);
+    Marker marker =
+    Marker(markerId: markerId, icon: descriptor, position: position);
+    markers[markerId] = marker;
+  }
+
+  _addPolyLine(List<LatLng> polylineCoordinates) {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+      polylineId: id,
+      points: polylineCoordinates,
+      width: 8,
+    );
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  void _getPolyline() async {
+    List<LatLng> polylineCoordinates = [];
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      "YOUR API KEY HERE",
+      PointLatLng(_originLatitude, _originLongitude),
+      PointLatLng(_destLatitude, _destLongitude),
+      travelMode: TravelMode.driving,
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print(result.errorMessage);
+    }
+    _addPolyLine(polylineCoordinates);
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getSharedPrefData();
+    _listenServiceListResponse();
+
+    rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
+      _mapStyle = string;
+    });
+    /// add origin marker origin marker
+    _addMarker(
+      LatLng(_originLatitude, _originLongitude),
+      "origin",
+      BitmapDescriptor.defaultMarker,
+    );
+
+    // Add destination marker
+    _addMarker(
+      LatLng(_destLatitude, _destLongitude),
+      "destination",
+      BitmapDescriptor.defaultMarkerWithHue(90),
+    );
+
+    _getPolyline();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+      _homeCustomerBloc.postFindMechanicsListEmergencyRequest("$authToken", widget.bookingId,[1],"emergency");
+
+    });
+  }
+
+  _listenServiceListResponse() {
+    _homeCustomerBloc.findMechanicsListEmergencyResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+
+          if(value.data?.mechaniclistForServices?.length==0)
+            {
+              waitingMechanic = "0";
+            }
+          else
+            {
+              waitingMechanic = "1";
+            }
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return MaterialApp(
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+
+
+
+                Expanded(
+                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 11.0,
+                    ),
+                    mapType: _currentMapType,
+                    markers: _markers,
+                    onCameraMove: _onCameraMove,
+                    polylines: Set<Polyline>.of(polylines.values),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Row(
-                      children: [
-                        Text("Test"),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                          child: Container(
-                            width: 80.0,
-                            height: 80.0,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child:Container(
-                                    child:CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child:  Image.asset(mechanicImageUrl),
-                                        )))
+                ),
 
+                CurvedBottomSheetContainer(
+                  percentage: 0.70,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+
+                        waitingMechanic=="0"
+                        ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 70,
+                            width: 200,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                              ),
+                              color: CustColors.pale_grey,
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Text(mechanicName,
-                                    style: Styles.textLabelTitle12,
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,),
+                                Text("Wait a minute!!",
+                                  style: TextStyle(
+                                      color: CustColors.light_navy,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontSize: 13.3
+                                  ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Image.asset("assets/image/ic_star_group.png"),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Text(reviewCount,
-                                    style: Styles.textLabelTitle12,
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,),
+                                Text("Finding mechanic near you \n Almost  there…..",
+                                  style: TextStyle(
+                                      color: CustColors.warm_grey03,
+                                      fontFamily: "Samsung_SharpSans_Regular",
+                                      fontSize: 10
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        )
+                        :Container(),
+
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Text(km,
-                                style: Styles.textLabelTitle12,
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.visible,),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  child: Text("Mechanic found",
+                                    style: TextStyle(
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontSize: 16.7,
+                                      color: CustColors.black_04,
+                                    ),),
+                                ),
+                              ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Text(time,
-                                style: Styles.textLabelTitle12,
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.visible,),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Text(cost,
-                                style: Styles.textLabelTitle12,
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.visible,),
-                            ),
+
+                            Container(
+                              height: MediaQuery.of(context).size.height * double.parse(0.50.toString()),
+                              child: StreamBuilder(
+                                  stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
+                                  builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
+                                    print("${snapshot.hasData}");
+                                    print("${snapshot.connectionState}");
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            height: 70,
+                                            width: 200,
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              color: CustColors.pale_grey,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text("Wait a minute!!",
+                                                  style: TextStyle(
+                                                      color: CustColors.light_navy,
+                                                      fontFamily: "Samsung_SharpSans_Medium",
+                                                      fontSize: 13.3
+                                                  ),
+                                                ),
+                                                Text("Finding mechanic near you \n Almost  there…..",
+                                                  style: TextStyle(
+                                                      color: CustColors.warm_grey03,
+                                                      fontFamily: "Samsung_SharpSans_Regular",
+                                                      fontSize: 10
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      default:
+                                        return ListView.builder(
+                                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data?.data?.mechaniclistForServices?.length,
+                                          itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding: const EdgeInsets.all(2),
+                                                  child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
+                                                    style: Styles.textLabelTitleEmergencyServiceName,
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    overflow: TextOverflow.visible,),
+                                                );
+                                          },
+                                        );
+                                    }
+
+                                  }),
+                            )
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ],
+
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Icon(Icons.arrow_back, color: Colors.black),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Finding mechanic near you",
+                                            textAlign: TextAlign.start,
+                                            style: Styles.waitingTextBlack17,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
+
+
+
+  _showProductTourDialog(BuildContext context) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+                backgroundColor: Colors.white,
+                insetPadding: EdgeInsets.only(left: 20, right: 20),
+
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                contentPadding: const EdgeInsets.all(20),
+                content: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "Wait few minutes !",
+                            style: Styles.waitingTextBlack17,
+                          ),
+                          Text(
+                            "Wait for the response from George Dola!",
+                            style: Styles.awayTextBlack,
+                          ),
+                          Container(
+                              height: 150,
+                              child: SvgPicture.asset(
+                                'assets/image/mechanicProfileView/waitForMechanic.svg',
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ));
+          });
+        });
+
+
+  }
+
+
 }
 
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
-  }
-}
+
+
+
+
+
+
+
+

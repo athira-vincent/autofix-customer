@@ -135,11 +135,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print(" postServiceList >>>>>>>  ${value.status}");
+          print(" authToken >>>>>>>  $authToken");
+          print(" serviceIds >>>>>>>  $serviceIds");
+          print(" serviceType >>>>>>>  emergency");
+
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  FindMechanicListScreen()));
+                  builder: (context) =>  FindMechanicListScreen(bookingId: '${value.data?.mechanicsBooking?.id}',
+                  authToken: authToken,)));
 
         });
       }
@@ -411,10 +416,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                   CurrentLongitude,
                                   serviceIds);
                             });
-
-
-
-
 
                           },
                           child: Container(
