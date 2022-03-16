@@ -1175,10 +1175,10 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  mechanicAddServiceList(String token,String serviceList, String ServiceList, String timeList) async {
+  mechanicAddServiceList(String token,String serviceList, String costList, String timeList) async {
     String _query = """ 
     mutation {
-  mechanic_service_add(services: "$serviceList", fee: ["2200","2200"], time: ["10","10"]) {
+  mechanic_service_add(services: "$serviceList", fee: $costList, time: $timeList) {
     message
   }
 }

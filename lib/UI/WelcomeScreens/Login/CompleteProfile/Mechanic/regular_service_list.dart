@@ -4,9 +4,11 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
+import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class RegularServiceListScreen extends StatefulWidget {
@@ -106,7 +108,6 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
     _listenServiceListResponse();
     _listenAddServiceListResponse();
-
 
   }
 
@@ -252,10 +253,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                           final brandName = regularServiceList[index];
                                           //final brandId = regularServiceList[index].id;
                                           /* setState(() {
-                                         _brandController.text =
-                                             brandName.toString();
-                                         selectedBrandId =
-                                             int.parse(brandId!);
+                                         _brandController.text = brandName.toString();
+                                         selectedBrandId = int.parse(brandId!);
                                          _modelController.clear();
                                          selectedModelId = 0;
                                          _engineController.clear();
@@ -324,11 +323,30 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                               //   ),
                                               // ),
                                               SizedBox(
-                                                width: size.width / 100 * 20,
+                                                width: size.width / 100 * 18,
                                               ),
                                               //Text('${regularServiceList[index].minAmount.toString()}'),
                                               Flexible(
                                                 child: TextFormField(
+                                                  validator: (value){
+                                                    if(value!.isEmpty){
+                                                      return "Fill field";
+                                                    }
+                                                    else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
+                                                      return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
+                                                    }
+                                                    else{
+                                                      return null;
+                                                    }
+                                                  },
+                                                  cursorColor: CustColors.light_navy,
+                                                  keyboardType: TextInputType.number,
+                                                  inputFormatters: <TextInputFormatter>[
+                                                    FilteringTextInputFormatter.digitsOnly,
+                                                   // InputValidator(ch: "cost").serviceCostValidation(100, 2000, 2050)
+                                                   // CustomRangeTextInputFormatter().formatEditUpdate(regularServiceList[index]., newValue),
+                                                  ],
+                                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                                   //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                                   controller: _rateController,
                                                   style: Styles.searchTextStyle02,
@@ -342,9 +360,25 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                               //Text("00 : 30")
                                               Flexible(
                                                 child: TextFormField(
+                                                  validator: (value){
+                                                    if(value!.isEmpty){
+                                                      return "Fill field";
+                                                    }
+                                                    /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
+                                                      return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
+                                                    }*/
+                                                    else{
+                                                      return null;
+                                                    }
+                                                  },
+                                                  cursorColor: CustColors.light_navy,
+                                                  inputFormatters: <TextInputFormatter>[
+                                                    FilteringTextInputFormatter.digitsOnly,
+                                                  ],
+                                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                  keyboardType: TextInputType.datetime,
                                                   //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                                   controller: _timeController,
-
                                                   style: Styles.searchTextStyle02,
                                                   enabled: _regularIsChecked![index],
                                                   //readOnly: _regularIsChecked![index],
@@ -384,6 +418,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     //Navigator.pop(context, "data");
 
                     print(">>>>>>> selectedServiceMdlList.length ${selectedServiceMdlList.length}");
+
 
                     List<SelectedServicesMdl> selectedService=[];
 
@@ -435,7 +470,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
                         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
-                        serviceId,  feeList, "12:50,50:00,30:00");
+                        serviceId,  feeList, timeList);
                   },
                   child: Container(
                     height: size.height * 0.045,
@@ -457,8 +492,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Corbel_Bold',
-                          fontSize:
-                          ScreenSize().setValueFont(14.5),
+                          fontSize: ScreenSize().setValueFont(14.5),
                           fontWeight: FontWeight.w800),
                     ),
                   ),

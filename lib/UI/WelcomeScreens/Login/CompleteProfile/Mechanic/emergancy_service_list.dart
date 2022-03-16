@@ -1,7 +1,12 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class EmergencyServiceListScreen extends StatefulWidget {
@@ -16,29 +21,94 @@ class EmergencyServiceListScreen extends StatefulWidget {
 
 class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen> {
 
-  List emergencyServiceList = [
-    "Service 1",
-    "Service 2",
-    "Service 3",
-    "Service 4",
-    "Service 5",
-    "Service 6",
-    "Service 7",
-    "Service 8",
-    "Service 9",
-    "Service 10",
-    "Service 11",
-    "Service 12",
+  final ServiceListBloc _serviceListBloc = ServiceListBloc();
+  final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
 
-  ];
+
+  List<EmeregencyOrRegularServiceList> emergencyServiceList = [];
+  List<EmeregencyOrRegularServiceList> selectedServiceList = [];
+
   String title = "";
-  List selectedServiceList = [];
   List<bool>? _emergencyIsChecked;
+
+  String selectedService = "";
+  List<EmeregencyOrRegularServiceList> serviceSpecialisationList =[];
+  List<SelectedServicesMdl> selectedServiceMdlList=[];
+
+  _listenServiceListResponse() {
+    _serviceListBloc.postServiceList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          //_isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postServiceList >>>>>>>  ${value.status}");
+          //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          //_isLoading = false;
+          print(value.data!.emeregencyOrRegularServiceList!.length);
+          emergencyServiceList = value.data!.emeregencyOrRegularServiceList!;
+
+          for(int i=0;i<emergencyServiceList.length;i++){
+            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id,emergencyServiceList[i].minAmount, "00:30", false));
+          }
+          _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
+          print(_emergencyIsChecked!.length);
+
+          //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+
+        });
+      }
+    });
+  }
+
+  _listenAddServiceListResponse() {
+    _addServiceListBloc.postAddServiceList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          //_isLoading = false;
+        });
+
+      } else {
+
+        setState(() {
+          print("success postServiceList >>>>>>>  ${value.status}");
+          //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          //_isLoading = false;
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WaitAdminApprovalScreen(refNumber: '123456',) ));
+          FocusScope.of(context).unfocus();
+          //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _serviceListBloc.postServiceListRequest("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE", "2");
+
+    _listenServiceListResponse();
+    _listenAddServiceListResponse();
+
     _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
   }
 
@@ -112,14 +182,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               textAlignVertical: TextAlignVertical.center,
-                              /*onChanged: (text) {
-                                           setState(() {
-                                             makeDetails!.clear();
-                                             //_countryData.clear();
-                                             _loadingBrand = true;
-                                           });
-                                           _allMakeBloc.searchMake(text);
-                                         },*/
+
                               textAlign: TextAlign.left,
                               style: Styles.searchTextStyle01,
                               decoration: InputDecoration(
@@ -161,6 +224,21 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                 shrinkWrap: true,
                                 itemCount: emergencyServiceList.length,
                                 itemBuilder: (context, index) {
+
+                                  TextEditingController _rateController=TextEditingController();
+                                  TextEditingController _timeController = TextEditingController();
+                                  _rateController.text = emergencyServiceList[index].minAmount.toString();
+                                  _timeController.text = "30:00";
+                                  _rateController.addListener(() {
+                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
+                                    selectedServiceMdlList.removeAt(index);
+                                    selectedServiceMdlList.insert(index,temp);
+                                  });
+                                  _timeController.addListener(() {
+                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable);
+                                    selectedServiceMdlList.removeAt(index);
+                                    selectedServiceMdlList.insert(index,temp);
+                                  });
                                   //print(regularServiceList[index].minAmount.toString() + ">>>Min amt");
                                   //print(regularServiceList[index].isEditable.toString() + ">>>isEditable amt");
                                   //_rateController.text = regularServiceList![index].minAmount.toString();
@@ -201,10 +279,23 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                                   setState(() {
                                                     this._emergencyIsChecked![index] = val!;
                                                     //isChecked ? false : true;
-                                                    val ?
+                                                   /* val ?
                                                     selectedServiceList.add(emergencyServiceList[index])
                                                         :
-                                                    selectedServiceList.remove(emergencyServiceList[index]);
+                                                    selectedServiceList.remove(emergencyServiceList[index]);*/
+                                                    print("sgsjhgj 001 $val");
+                                                    if(val){
+                                                      var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
+                                                      selectedServiceMdlList.removeAt(index);
+                                                      selectedServiceMdlList.insert(index,
+                                                          temp);
+                                                    }else{
+                                                      //serviceSpecialisationList.remove(regularServiceList[index]);
+                                                      var temp= SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
+                                                      selectedServiceMdlList.removeAt(index);
+                                                      selectedServiceMdlList.insert(index,temp
+                                                      );
+                                                    }
                                                     print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
                                                   });
                                                 },
@@ -213,11 +304,67 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
 
                                             Text(
                                               '${emergencyServiceList[index].toString()}',
-                                              style: Styles.searchTextStyle02,
                                             ),
                                             SizedBox(
-                                              width: size.width / 100 * 25,
+                                              width: size.width / 100 * 18,
                                             ),
+                                            Flexible(
+                                              child: TextFormField(
+                                                validator: (value){
+                                                  if(value!.isEmpty){
+                                                    return "Fill field";
+                                                  }
+                                                  else if(int.parse(value) < int.parse(emergencyServiceList[index].minAmount) || int.parse(value) > int.parse(emergencyServiceList[index].maxAmount)){
+                                                    return emergencyServiceList[index].minAmount + " - " + emergencyServiceList[index].maxAmount;
+                                                  }
+                                                  else{
+                                                    return null;
+                                                  }
+                                                },
+                                                cursorColor: CustColors.light_navy,
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: <TextInputFormatter>[
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                ],
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                                controller: _rateController,
+                                                style: Styles.searchTextStyle02,
+                                                enabled: _emergencyIsChecked![index],
+                                                //readOnly: _regularIsChecked![index],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: size.width / 100 * 5,
+                                            ),
+                                            //Text("00 : 30")
+                                            Flexible(
+                                              child: TextFormField(
+                                                validator: (value){
+                                                  if(value!.isEmpty){
+                                                    return "Fill field";
+                                                  }
+                                                  /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
+                                                      return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
+                                                    }*/
+                                                  else{
+                                                    return null;
+                                                  }
+                                                },
+                                                cursorColor: CustColors.light_navy,
+                                                inputFormatters: <TextInputFormatter>[
+                                                  FilteringTextInputFormatter.digitsOnly,
+                                                ],
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                keyboardType: TextInputType.datetime,
+                                                //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                                controller: _timeController,
+                                                style: Styles.searchTextStyle02,
+                                                enabled: _emergencyIsChecked![index],
+                                                //readOnly: _regularIsChecked![index],
+                                              ),
+                                            ),
+
                                           ],
                                         ),
                                       ));
@@ -244,13 +391,52 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                     ),
                   ),
                 ),
-                selectedServiceList.length >= 3
-                    ?
+
                 InkWell(
                   onTap: (){
                     // Map<List<AllServiceFeeData>?, String> myData = new Map();
                     //SelectedData data = SelectedData(selectedServiceList,"rate");
-                    Navigator.pop(context, "data");
+
+                    print(">>>>>>> selectedServiceMdlList.length ${selectedServiceMdlList.length}");
+                    List<SelectedServicesMdl> selectedService=[];
+
+                    for(int i=0;i<selectedServiceMdlList.length;i++){
+                      print("time 001 ${selectedServiceMdlList[i].isEnable}");
+                      if(selectedServiceMdlList[i].isEnable){
+                        selectedService.add(selectedServiceMdlList[i]);
+                      }else{
+                        print("no data to print");
+                      }
+                      //print("fgdhj 001 ${selectedServiceMdlList[i].amount}");
+                      //print("time 001 ${selectedServiceMdlList[i].time}");
+                      //print("time 001 ${selectedServiceMdlList[i].isEnable}");
+                    }
+
+                    String serviceId="";
+                    String feeList = "[";
+                    String timeList = "[";
+
+                    for(int m = 0 ; m< selectedService.length; m++){
+                      if( m != selectedService.length-1){
+                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" + ", ";
+                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}",""";
+                        timeList = timeList + """ "${selectedServiceMdlList[m].time}",""";
+                      }else{
+                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" ;
+                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}" """;
+                        timeList = timeList + """ "${selectedServiceMdlList[m].time}" """;
+                      }
+                    }
+                    serviceId = serviceId ;
+                    feeList = feeList + "]";
+                    timeList = timeList + "]";
+
+                    print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
+
+                    _addServiceListBloc.postMechanicAddServicesRequest(
+                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
+                        serviceId,  feeList, timeList);
+
                   },
                   child: Container(
                     height: size.height * 0.045,
@@ -272,14 +458,11 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Corbel_Bold',
-                          fontSize:
-                          ScreenSize().setValueFont(14.5),
+                          fontSize: ScreenSize().setValueFont(14.5),
                           fontWeight: FontWeight.w800),
                     ),
                   ),
-                )
-                    :
-                Container(),
+                ),
               ],
             ),
           ),
@@ -288,4 +471,12 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     );
   }
 
+}
+
+class SelectedServicesMdl{
+  final String serviceId;
+  final String amount;
+  final String time;
+  final bool isEnable;
+  SelectedServicesMdl(this.serviceId, this.amount, this.time,this.isEnable);
 }
