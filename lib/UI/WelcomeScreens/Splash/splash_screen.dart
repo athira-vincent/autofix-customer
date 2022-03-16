@@ -61,18 +61,18 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
-      Navigator.push(
+      /*Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>  FindMechanicListScreen(bookingId: '20',
-                authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODIsImlhdCI6MTY0NzMzNzk5OSwiZXhwIjoxNjQ3NDI0Mzk5fQ.QmPvxtNQCffwruUrdVOM-OBndnY70TuICCV9a5uaRnQ',
-              )));
+                authToken: '',
+              )));*/
 
 
-  /*    Navigator.pushReplacement(
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>  CustomerHomeScreen()));*/
+              builder: (context) =>  CustomerHomeScreen()));
       /*if (userType == TextStrings.user_customer) {
         if (_isDefaultVehicleAvailable == null ||
             _isDefaultVehicleAvailable == 1) {

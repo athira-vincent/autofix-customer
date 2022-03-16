@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -335,121 +336,132 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                         physics: NeverScrollableScrollPhysics(),
                                                         itemCount:snapshot.data?.data?.mechaniclistForServices?.length,
                                                         itemBuilder: (context, index) {
-                                                              return Padding(
-                                                                padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                                                                child: Container(
-                                                                  width: double.infinity,
-                                                                  decoration: BoxDecoration(
-                                                                      color: CustColors.whiteBlueish,
-                                                                      borderRadius: BorderRadius.circular(11.0)
-                                                                  ),
-                                                                  child: Padding(
-                                                                    padding: const EdgeInsets.all(0),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                                                          child: Container(
-                                                                            width: 80.0,
-                                                                            height: 80.0,
-                                                                            child: ClipRRect(
-                                                                                borderRadius: BorderRadius.circular(20.0),
-                                                                                child:Container(
-                                                                                    child:CircleAvatar(
-                                                                                        radius: 50,
-                                                                                        backgroundColor: Colors.white,
-                                                                                        child: ClipOval(
-                                                                                          child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                                                                        )))
+                                                              return InkWell(
+                                                                onTap: (){
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>  MechanicProfileViewScreen(mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
+                                                                            authToken: '$authToken',
+                                                                            mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
+                                                                          )));
+                                                                },
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.fromLTRB(10,5,10,0),
+                                                                  child: Container(
+                                                                    width: double.infinity,
+                                                                    decoration: BoxDecoration(
+                                                                        color: CustColors.whiteBlueish,
+                                                                        borderRadius: BorderRadius.circular(11.0)
+                                                                    ),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.all(0),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                                                            child: Container(
+                                                                              width: 80.0,
+                                                                              height: 80.0,
+                                                                              child: ClipRRect(
+                                                                                  borderRadius: BorderRadius.circular(20.0),
+                                                                                  child:Container(
+                                                                                      child:CircleAvatar(
+                                                                                          radius: 50,
+                                                                                          backgroundColor: Colors.white,
+                                                                                          child: ClipOval(
+                                                                                            child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                                                          )))
 
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          child: Padding(
-                                                                            padding: const EdgeInsets.all(8.0),
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.all(2),
-                                                                                  child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
-                                                                                    style: Styles.mechanicNameStyle,
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.start,
-                                                                                    overflow: TextOverflow.visible,),
-                                                                                ),
+                                                                          Expanded(
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(2),
+                                                                                    child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
+                                                                                      style: Styles.mechanicNameStyle,
+                                                                                      maxLines: 1,
+                                                                                      textAlign: TextAlign.start,
+                                                                                      overflow: TextOverflow.visible,),
+                                                                                  ),
 
-                                                                                Container(
-                                                                                  child: Column(
+                                                                                  Container(
+                                                                                    child: Column(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                      children: [
+
+                                                                                        Padding(
+                                                                                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                          child: RatingBar.builder(
+                                                                                            initialRating: 3.5,
+                                                                                            minRating: 1,
+                                                                                            direction: Axis.horizontal,
+                                                                                            allowHalfRating: true,
+                                                                                            itemCount: 5,
+                                                                                            itemSize: 12,
+                                                                                            itemPadding: EdgeInsets.symmetric(horizontal: 1),
+                                                                                            itemBuilder: (context, _) => Icon(
+                                                                                              Icons.star,
+                                                                                              color: CustColors.blue,
+                                                                                            ),
+                                                                                            onRatingUpdate: (rating) {
+                                                                                              print(rating);
+                                                                                            },
+                                                                                          ),
+                                                                                        ),
+                                                                                        Padding(
+                                                                                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                          child: Text('1280 Reviews',
+                                                                                            style: Styles.smallTitleStyle1,),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Container(
+                                                                            width: 100,
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                                                children: [
+                                                                                  Column(
                                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
-
                                                                                       Padding(
                                                                                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                        child: RatingBar.builder(
-                                                                                          initialRating: 3.5,
-                                                                                          minRating: 1,
-                                                                                          direction: Axis.horizontal,
-                                                                                          allowHalfRating: true,
-                                                                                          itemCount: 5,
-                                                                                          itemSize: 12,
-                                                                                          itemPadding: EdgeInsets.symmetric(horizontal: 1),
-                                                                                          itemBuilder: (context, _) => Icon(
-                                                                                            Icons.star,
-                                                                                            color: CustColors.blue,
-                                                                                          ),
-                                                                                          onRatingUpdate: (rating) {
-                                                                                            print(rating);
-                                                                                          },
-                                                                                        ),
+                                                                                        child: Text('120 km',
+                                                                                          style: Styles.smallTitleStyle1,),
                                                                                       ),
                                                                                       Padding(
                                                                                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                        child: Text('1280 Reviews',
+                                                                                        child: Text('12 min',
                                                                                           style: Styles.smallTitleStyle1,),
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.fromLTRB(0,3,0,3),
+                                                                                        child: Text('1245',
+                                                                                          style: Styles.totalAmountStyle,),
                                                                                       ),
                                                                                     ],
                                                                                   ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Container(
-                                                                          width: 100,
-                                                                          child: Padding(
-                                                                            padding: const EdgeInsets.all(8.0),
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                                                              children: [
-                                                                                Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                  children: [
-                                                                                    Padding(
-                                                                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                      child: Text('120 km',
-                                                                                        style: Styles.smallTitleStyle1,),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                      child: Text('12 min',
-                                                                                        style: Styles.smallTitleStyle1,),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: const EdgeInsets.fromLTRB(0,3,0,3),
-                                                                                      child: Text('1245',
-                                                                                        style: Styles.totalAmountStyle,),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
 
 
-                                                                              ],
+                                                                                ],
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                      ],
+                                                                        ],
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),

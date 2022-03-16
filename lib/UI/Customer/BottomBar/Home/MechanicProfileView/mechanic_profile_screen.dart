@@ -9,10 +9,16 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/styles.dart';
 import '../../../../../Widgets/CurvePainter.dart';
+import '../HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
-  MechanicProfileViewScreen();
+  final String mechanicId;
+  final String authToken;
+  final MechaniclistForService mechaniclistForService;
+
+
+  MechanicProfileViewScreen({required this.mechanicId,required this.authToken,required this.mechaniclistForService});
 
   @override
   State<StatefulWidget> createState() {
@@ -72,7 +78,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             Text(
-              'Maria Kurian',
+              '${widget.mechaniclistForService.firstName}',
               textAlign: TextAlign.center,
               style: Styles.appBarTextBlack,
             ),
