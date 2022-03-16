@@ -29,9 +29,11 @@ class FindMechanicListScreen extends StatefulWidget {
 
   final String bookingId;
   final String authToken;
+  final  List<String> serviceIds;
+  final String serviceType;
 
 
-  FindMechanicListScreen({required this.bookingId,required this.authToken});
+  FindMechanicListScreen({required this.bookingId,required this.authToken,required this.serviceIds,required this.serviceType});
 
 
   @override
@@ -187,7 +189,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _homeCustomerBloc.postFindMechanicsListEmergencyRequest("$authToken", widget.bookingId,[1],"emergency");
+      _homeCustomerBloc.postFindMechanicsListEmergencyRequest("$authToken", widget.bookingId,widget.serviceIds,"emergency");
 
     });
   }

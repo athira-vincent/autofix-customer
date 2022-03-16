@@ -143,7 +143,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  FindMechanicListScreen(bookingId: '${value.data?.mechanicsBooking?.id}',
+                  builder: (context) =>  FindMechanicListScreen(
+                    bookingId: '${value.data?.mechanicsBooking?.id}',
+                  serviceIds: serviceIds,
+                  serviceType: 'emergency',
                   authToken: authToken,)));
 
         });

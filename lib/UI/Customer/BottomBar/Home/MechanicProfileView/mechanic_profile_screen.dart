@@ -1,3 +1,4 @@
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/styles.dart';
@@ -34,12 +36,44 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   double height = 0;
   String selectedState = "";
 
+  double totalFees = 0.0;
+  String authToken="";
+
   double _setValue(double value) {
     return value * per + value;
   }
 
   double _setValueFont(double value) {
     return value * perfont + value;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getSharedPrefData();
+    _listenServiceListResponse();
+
+
+
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+      for(int i=0;i<widget.mechaniclistForService.mechanicService!.length;i++)
+      {
+          totalFees = totalFees + double.parse(widget.mechaniclistForService.mechanicService![i].fee);
+      }
+    });
+  }
+
+  _listenServiceListResponse() {
+
   }
 
 
@@ -309,7 +343,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:3,
+                itemCount:1,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -458,10 +492,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:2,
+                itemCount:widget.mechaniclistForService.mechanicService?.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
+
+
+
                   return GestureDetector(
                     onTap:(){
 
@@ -474,7 +511,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                           children: [
                             Row(
                               children: [
-                                Text('AC Heating',
+                                Text('${widget.mechaniclistForService.mechanicService![index].id}',
                                   maxLines: 2,
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.visible,
@@ -485,7 +522,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                             Spacer(),
                             Row(
                               children: [
-                                Text('250',
+                                Text('${widget.mechaniclistForService.mechanicService![index].fee}',
                                   maxLines: 2,
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.visible,
@@ -518,7 +555,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   Spacer(),
                   Row(
                     children: [
-                      Text('500',
+                      Text('$totalFees',
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
