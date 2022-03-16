@@ -293,87 +293,177 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                         )
                         :Container(),
 
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  child: Text("Mechanic found",
-                                    style: TextStyle(
-                                      fontFamily: "Samsung_SharpSans_Medium",
-                                      fontSize: 16.7,
-                                      color: CustColors.black_04,
-                                    ),),
+                        Container(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    child: Text("Mechanic found",
+                                      style: TextStyle(
+                                        fontFamily: "Samsung_SharpSans_Medium",
+                                        fontSize: 16.7,
+                                        color: CustColors.black_04,
+                                      ),),
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            Container(
-                              height: MediaQuery.of(context).size.height * double.parse(0.50.toString()),
-                              child: StreamBuilder(
-                                  stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
-                                  builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
-                                    print("${snapshot.hasData}");
-                                    print("${snapshot.connectionState}");
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.waiting:
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            height: 70,
-                                            width: 200,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10),
+                              Container(
+                                height: MediaQuery.of(context).size.height * double.parse(0.70.toString()),
+                                child: StreamBuilder(
+                                    stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
+                                    builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
+                                      print("${snapshot.hasData}");
+                                      print("${snapshot.connectionState}");
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              height: 70,
+                                              width: 200,
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                                color: CustColors.pale_grey,
                                               ),
-                                              color: CustColors.pale_grey,
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Text("Wait a minute!!",
-                                                  style: TextStyle(
-                                                      color: CustColors.light_navy,
-                                                      fontFamily: "Samsung_SharpSans_Medium",
-                                                      fontSize: 13.3
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text("Wait a minute!!",
+                                                    style: TextStyle(
+                                                        color: CustColors.light_navy,
+                                                        fontFamily: "Samsung_SharpSans_Medium",
+                                                        fontSize: 13.3
+                                                    ),
                                                   ),
-                                                ),
-                                                Text("Finding mechanic near you \n Almost  there…..",
-                                                  style: TextStyle(
-                                                      color: CustColors.warm_grey03,
-                                                      fontFamily: "Samsung_SharpSans_Regular",
-                                                      fontSize: 10
+                                                  Text("Finding mechanic near you \n Almost  there…..",
+                                                    style: TextStyle(
+                                                        color: CustColors.warm_grey03,
+                                                        fontFamily: "Samsung_SharpSans_Regular",
+                                                        fontSize: 10
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      default:
-                                        return ListView.builder(
-                                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data?.data?.mechaniclistForServices?.length,
-                                          itemBuilder: (context, index) {
-                                                return Padding(
-                                                  padding: const EdgeInsets.all(2),
-                                                  child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
-                                                    style: Styles.textLabelTitleEmergencyServiceName,
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
-                                                    overflow: TextOverflow.visible,),
-                                                );
-                                          },
-                                        );
-                                    }
+                                          );
+                                        default:
+                                          return ListView.builder(
+                                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                            scrollDirection: Axis.vertical,
+                                            shrinkWrap: true,
+                                            itemCount: snapshot.data?.data?.mechaniclistForServices?.length,
+                                            itemBuilder: (context, index) {
+                                                  return Padding(
+                                                    padding: const EdgeInsets.fromLTRB(10,5,10,0),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                          color: CustColors.whiteBlueish,
+                                                          borderRadius: BorderRadius.circular(11.0)
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(0),
+                                                        child: Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                                              child: Container(
+                                                                width: 80.0,
+                                                                height: 80.0,
+                                                                child: ClipRRect(
+                                                                    borderRadius: BorderRadius.circular(20.0),
+                                                                    child:Container(
+                                                                        child:CircleAvatar(
+                                                                            radius: 50,
+                                                                            backgroundColor: Colors.white,
+                                                                            child: ClipOval(
+                                                                              child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                                            )))
 
-                                  }),
-                            )
-                          ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.all(8.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(2),
+                                                                      child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
+                                                                        style: Styles.textLabelTitle12,
+                                                                        maxLines: 1,
+                                                                        textAlign: TextAlign.start,
+                                                                        overflow: TextOverflow.visible,),
+                                                                    ),
+
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.all(2),
+                                                                            child: Text('Good service and  nice work…',
+                                                                              style: Styles.textLabelTitle12,
+                                                                              maxLines: 2,
+                                                                              textAlign: TextAlign.start,
+                                                                              overflow: TextOverflow.visible,),
+                                                                          ),
+                                                                        ),
+                                                                        Column(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                              child: Text('Reviews',
+                                                                                style: Styles.appBarTextBlack17,),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                              child: RatingBar.builder(
+                                                                                initialRating: 3.5,
+                                                                                minRating: 1,
+                                                                                direction: Axis.horizontal,
+                                                                                allowHalfRating: true,
+                                                                                itemCount: 5,
+                                                                                itemSize: 10,
+                                                                                itemPadding: EdgeInsets.symmetric(horizontal: 1),
+                                                                                itemBuilder: (context, _) => Icon(
+                                                                                  Icons.star,
+                                                                                  color: CustColors.blue,
+                                                                                ),
+                                                                                onRatingUpdate: (rating) {
+                                                                                  print(rating);
+                                                                                },
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                            },
+                                          );
+                                      }
+
+                                    }),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),
