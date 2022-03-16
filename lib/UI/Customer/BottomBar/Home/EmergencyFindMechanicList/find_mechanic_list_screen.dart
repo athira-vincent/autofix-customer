@@ -236,18 +236,16 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
 
 
 
-                Expanded(
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 11.0,
-                    ),
-                    mapType: _currentMapType,
-                    markers: _markers,
-                    onCameraMove: _onCameraMove,
-                    polylines: Set<Polyline>.of(polylines.values),
+                GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11.0,
                   ),
+                  mapType: _currentMapType,
+                  markers: _markers,
+                  onCameraMove: _onCameraMove,
+                  polylines: Set<Polyline>.of(polylines.values),
                 ),
 
                 CurvedBottomSheetContainer(
@@ -315,90 +313,78 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
 
 
 
-                              Column(
-                                children: [
-                                  Container(
-                                    child: StreamBuilder(
-                                        stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
-                                        builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
-                                          print("${snapshot.hasData}");
-                                          print("${snapshot.connectionState}");
-                                          switch (snapshot.connectionState) {
-                                            case ConnectionState.waiting:
-                                              return progressBarLightRose();
-                                            default:
-                                              return
-                                                snapshot.data?.data?.mechaniclistForServices?.length!=0
-                                                 ? ListView.builder(
-                                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                                      scrollDirection: Axis.vertical,
-                                                      shrinkWrap: true,
-                                                      itemCount: snapshot.data?.data?.mechaniclistForServices?.length,
-                                                      itemBuilder: (context, index) {
-                                                            return Padding(
-                                                              padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                                                              child: Container(
-                                                                width: double.infinity,
-                                                                decoration: BoxDecoration(
-                                                                    color: CustColors.whiteBlueish,
-                                                                    borderRadius: BorderRadius.circular(11.0)
-                                                                ),
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(0),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                                                        child: Container(
-                                                                          width: 80.0,
-                                                                          height: 80.0,
-                                                                          child: ClipRRect(
-                                                                              borderRadius: BorderRadius.circular(20.0),
-                                                                              child:Container(
-                                                                                  child:CircleAvatar(
-                                                                                      radius: 50,
-                                                                                      backgroundColor: Colors.white,
-                                                                                      child: ClipOval(
-                                                                                        child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                                                                      )))
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: StreamBuilder(
+                                          stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
+                                          builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
+                                            print("${snapshot.hasData}");
+                                            print("${snapshot.connectionState}");
+                                            switch (snapshot.connectionState) {
+                                              case ConnectionState.waiting:
+                                                return progressBarLightRose();
+                                              default:
+                                                return
+                                                  snapshot.data?.data?.mechaniclistForServices?.length!=0
+                                                   ? ListView.builder(
+                                                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                                        scrollDirection: Axis.vertical,
+                                                        shrinkWrap: true,
+                                                        physics: NeverScrollableScrollPhysics(),
+                                                        itemCount:snapshot.data?.data?.mechaniclistForServices?.length,
+                                                        itemBuilder: (context, index) {
+                                                              return Padding(
+                                                                padding: const EdgeInsets.fromLTRB(10,5,10,0),
+                                                                child: Container(
+                                                                  width: double.infinity,
+                                                                  decoration: BoxDecoration(
+                                                                      color: CustColors.whiteBlueish,
+                                                                      borderRadius: BorderRadius.circular(11.0)
+                                                                  ),
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.all(0),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                                                          child: Container(
+                                                                            width: 80.0,
+                                                                            height: 80.0,
+                                                                            child: ClipRRect(
+                                                                                borderRadius: BorderRadius.circular(20.0),
+                                                                                child:Container(
+                                                                                    child:CircleAvatar(
+                                                                                        radius: 50,
+                                                                                        backgroundColor: Colors.white,
+                                                                                        child: ClipOval(
+                                                                                          child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                                                        )))
 
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.all(8.0),
-                                                                          child: Column(
-                                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(2),
-                                                                                child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
-                                                                                  style: Styles.textLabelTitle12,
-                                                                                  maxLines: 1,
-                                                                                  textAlign: TextAlign.start,
-                                                                                  overflow: TextOverflow.visible,),
-                                                                              ),
+                                                                        Expanded(
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.all(8.0),
+                                                                            child: Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(2),
+                                                                                  child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
+                                                                                    style: Styles.mechanicNameStyle,
+                                                                                    maxLines: 1,
+                                                                                    textAlign: TextAlign.start,
+                                                                                    overflow: TextOverflow.visible,),
+                                                                                ),
 
-                                                                              Row(
-                                                                                children: [
-                                                                                  Expanded(
-                                                                                    child: Padding(
-                                                                                      padding: const EdgeInsets.all(2),
-                                                                                      child: Text('Good service and  nice work…',
-                                                                                        style: Styles.textLabelTitle12,
-                                                                                        maxLines: 2,
-                                                                                        textAlign: TextAlign.start,
-                                                                                        overflow: TextOverflow.visible,),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Column(
+                                                                                Container(
+                                                                                  child: Column(
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                                                     children: [
-                                                                                      Padding(
-                                                                                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                        child: Text('Reviews',
-                                                                                          style: Styles.appBarTextBlack17,),
-                                                                                      ),
+
                                                                                       Padding(
                                                                                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                                                                         child: RatingBar.builder(
@@ -407,7 +393,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                           direction: Axis.horizontal,
                                                                                           allowHalfRating: true,
                                                                                           itemCount: 5,
-                                                                                          itemSize: 10,
+                                                                                          itemSize: 12,
                                                                                           itemPadding: EdgeInsets.symmetric(horizontal: 1),
                                                                                           itemBuilder: (context, _) => Icon(
                                                                                             Icons.star,
@@ -417,87 +403,125 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                             print(rating);
                                                                                           },
                                                                                         ),
-                                                                                      )
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                        child: Text('1280 Reviews',
+                                                                                          style: Styles.smallTitleStyle1,),
+                                                                                      ),
                                                                                     ],
                                                                                   ),
-                                                                                ],
-                                                                              ),
-                                                                            ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            );
-                                                      },
-                                                    )
-                                                 : Padding(
-                                                  padding: const EdgeInsets.fromLTRB(15,0,15,15),
-                                                  child: Container(
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: <Widget>[
-                                                        Column(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                          children: <Widget>[
-                                                            Align(
-                                                              alignment: Alignment.center,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.fromLTRB(15,0,15,15),
-                                                                child: Container(
-                                                                  height: 100,
-                                                                  width: 260,
-                                                                  decoration: const BoxDecoration(
-                                                                    borderRadius: BorderRadius.all(
-                                                                      Radius.circular(10),
-                                                                    ),
-                                                                    color: CustColors.pale_grey,
-                                                                  ),
-                                                                  child: Padding(
-                                                                    padding: const EdgeInsets.all(10),
-                                                                    child: Column(
-                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                                      children: [
-                                                                        Text("Oops!! Mechanic not found!",
-                                                                          style: Styles.oopsmechanicNotFoundStyle,
-                                                                        ),
-                                                                        Text("No mechanic in your region",
-                                                                          style: Styles.smallTitleStyle1,
-                                                                        ),
-                                                                        Text("Try after sometime!",
-                                                                          style: Styles.TryAfterSomeTimetyle,
+                                                                        Container(
+                                                                          width: 100,
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.all(8.0),
+                                                                            child: Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                                              children: [
+                                                                                Column(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                      child: Text('120 km',
+                                                                                        style: Styles.smallTitleStyle1,),
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                                                                      child: Text('12 min',
+                                                                                        style: Styles.smallTitleStyle1,),
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.fromLTRB(0,3,0,3),
+                                                                                      child: Text('1245',
+                                                                                        style: Styles.totalAmountStyle,),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+
+
+                                                                              ],
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ],
                                                                     ),
                                                                   ),
                                                                 ),
+                                                              );
+                                                        },
+                                                      )
+                                                   : Padding(
+                                                    padding: const EdgeInsets.fromLTRB(15,0,15,15),
+                                                    child: Container(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Column(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                            children: <Widget>[
+                                                              Align(
+                                                                alignment: Alignment.center,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.fromLTRB(15,0,15,15),
+                                                                  child: Container(
+                                                                    height: 100,
+                                                                    width: 260,
+                                                                    decoration: const BoxDecoration(
+                                                                      borderRadius: BorderRadius.all(
+                                                                        Radius.circular(10),
+                                                                      ),
+                                                                      color: CustColors.pale_grey,
+                                                                    ),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.all(10),
+                                                                      child: Column(
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Text("Oops!! Mechanic not found!",
+                                                                            style: Styles.oopsmechanicNotFoundStyle,
+                                                                          ),
+                                                                          Text("No mechanic in your region",
+                                                                            style: Styles.smallTitleStyle1,
+                                                                          ),
+                                                                          Text("Try after sometime!",
+                                                                            style: Styles.TryAfterSomeTimetyle,
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                            Container(
-                                                                height: 120,
-                                                                child: SvgPicture.asset(
-                                                                  'assets/image/mechanicProfileView/mechanicNotFound.svg',
+                                                              Container(
                                                                   height: 120,
-                                                                  fit: BoxFit.cover,
-                                                                )
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                                  child: SvgPicture.asset(
+                                                                    'assets/image/mechanicProfileView/mechanicNotFound.svg',
+                                                                    height: 120,
+                                                                    fit: BoxFit.cover,
+                                                                  )
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                          }
+                                                  );
+                                            }
 
-                                        }),
-                                  ),
-                                ],
+                                          }),
+                                    ),
+                                  ],
+                                ),
                               )
                             ],
                           ),
