@@ -70,8 +70,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      //home: SplashScreen(),
-      home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
+      home: SplashScreen(),
       //home: RegularServiceListScreen(),
     );
   }
