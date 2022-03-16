@@ -83,6 +83,22 @@ class Styles {
     fontFamily: 'Samsung_SharpSans_Regular',
   );
 
+  static const smallTitleStyle1 = TextStyle(
+    color: CustColors.greyish_purple,
+    fontSize: 13,
+    height: 1.5,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Samsung_SharpSans_Regular',
+  );
+
+  static const smallTitleStyle2 = TextStyle(
+    color: CustColors.black_01,
+    fontSize: 13,
+    height: 1.5,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Samsung_SharpSans_Regular',
+  );
+
   static const largeTitleStyle = TextStyle(
     color: CustColors.azure,
     fontSize: 36.7,
@@ -112,6 +128,12 @@ class Styles {
   static const SelectLanguageWalkThroughStyle = TextStyle(
       color: Colors.black,
       fontSize: 10,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Samsung_SharpSans_Medium');
+
+  static const TryAfterSomeTimetyle = TextStyle(
+      color: Colors.black,
+      fontSize: 12,
       fontWeight: FontWeight.w600,
       fontFamily: 'Samsung_SharpSans_Medium');
 
@@ -319,6 +341,12 @@ class Styles {
       color: CustColors.light_navy);
   static const homeWelcomeSymbolTextStyle = TextStyle(
       fontFamily: 'Samsung_SharpSans_Bold',
+      fontWeight: FontWeight.w600,
+      fontSize: 15.4,
+      color: CustColors.cherry);
+
+  static const oopsmechanicNotFoundStyle = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Regular',
       fontWeight: FontWeight.w600,
       fontSize: 15.4,
       color: CustColors.cherry);

@@ -296,7 +296,9 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                         Container(
                           child: Column(
                             children: [
-                              Padding(
+                              waitingMechanic=="0"
+                              ? Container()
+                              : Padding(
                                 padding: const EdgeInsets.all(20),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
@@ -310,6 +312,8 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                   ),
                                 ),
                               ),
+
+
 
                               Column(
                                 children: [
@@ -429,7 +433,66 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                             );
                                                       },
                                                     )
-                                                 :Container();
+                                                 : Padding(
+                                                  padding: const EdgeInsets.fromLTRB(15,0,15,15),
+                                                  child: Container(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Column(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: <Widget>[
+                                                            Align(
+                                                              alignment: Alignment.center,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.fromLTRB(15,0,15,15),
+                                                                child: Container(
+                                                                  height: 100,
+                                                                  width: 260,
+                                                                  decoration: const BoxDecoration(
+                                                                    borderRadius: BorderRadius.all(
+                                                                      Radius.circular(10),
+                                                                    ),
+                                                                    color: CustColors.pale_grey,
+                                                                  ),
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.all(10),
+                                                                    child: Column(
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      children: [
+                                                                        Text("Oops!! Mechanic not found!",
+                                                                          style: Styles.oopsmechanicNotFoundStyle,
+                                                                        ),
+                                                                        Text("No mechanic in your region",
+                                                                          style: Styles.smallTitleStyle1,
+                                                                        ),
+                                                                        Text("Try after sometime!",
+                                                                          style: Styles.TryAfterSomeTimetyle,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                                height: 120,
+                                                                child: SvgPicture.asset(
+                                                                  'assets/image/mechanicProfileView/mechanicNotFound.svg',
+                                                                  height: 120,
+                                                                  fit: BoxFit.cover,
+                                                                )
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
                                           }
 
                                         }),
