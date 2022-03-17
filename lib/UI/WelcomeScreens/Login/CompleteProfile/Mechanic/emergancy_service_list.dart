@@ -303,7 +303,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                             ),
 
                                             Text(
-                                              '${emergencyServiceList[index].toString()}',
+                                              '${emergencyServiceList[index].serviceName.toString()}',
                                             ),
                                             SizedBox(
                                               width: size.width / 100 * 18,
