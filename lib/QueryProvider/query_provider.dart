@@ -462,7 +462,7 @@ class QueryProvider {
     token,
     enableDebug: true,
     isTokenThere: false,
-    );;
+    );
   }
 
 
@@ -569,7 +569,7 @@ class QueryProvider {
 
   serviceList(String token, String type) async {
     String _query = """
-   {
+{
   emeregency_or_regular_serviceList(id: $type) {
     id
     serviceName
@@ -591,7 +591,6 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
-
 
   selectCar() {}
 
