@@ -508,6 +508,26 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     });
+
+    _signinBloc.socialLoginResponse.listen((value) async {
+      if (value.status == "error") {
+        setState(() {
+          _isLoading = false;
+          socialLoginIsLoading = false;
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          socialLoginIsLoading = false;
+          _signinBloc.userDefault(value.data!.customerSocialLogin!.token.toString());
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  CustomerHomeScreen()));
+        });
+      }
+    });
   }
 
   void setIsSignedIn() async {
@@ -546,6 +566,8 @@ class _LoginScreenState extends State<LoginScreen> {
       print("result sucess user ${user.uid}");
       setState(() {
         socialLoginIsLoading = true;
+        _signinBloc.socialLogin(user.email.toString(), "");
+
       });
     } else {
 
@@ -567,30 +589,20 @@ class _LoginScreenState extends State<LoginScreen> {
     print("_loginWithFB entered2");
     print(result.status.toString() + "sdgdsgsg minnu");
     switch (result.status) {
-
-
       case FacebookLoginStatus.loggedIn:
-
         final token = result.accessToken.token;
         print("$token");
-
         final graphResponse = await http.get(
             Uri.parse('https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${result
                 .accessToken.token}'));
         final profile = JSON.jsonDecode(graphResponse.body);
-
         print("LoggedIn");
-
-
         print(profile.toString());
-        print(profile);
-
-
-
+        print(profile['email']);
           setState(() {
             userProfile = profile;
             socialLoginIsLoading = true;
-
+            _signinBloc.socialLogin(profile['email'].toString(), "");
           });
 
 
