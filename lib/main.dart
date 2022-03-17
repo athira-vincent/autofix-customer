@@ -71,7 +71,6 @@ class _MyAppState extends State<MyApp> {
         unselectedWidgetColor: CustColors.borderColor,
       ),
       home: SplashScreen(),
-      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
       //home: RegularServiceListScreen(),
     );
   }
