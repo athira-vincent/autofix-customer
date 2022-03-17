@@ -239,103 +239,115 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                                 ],
                               ),
+
                               Row(
                                 children: [
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: SvgPicture.asset(
-                                      'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Expanded(
-                                      child: Container(
-                                        height: 70,
-                                        width: 200,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Address",
-                                              style: Styles.waitingTextBlack17,
-                                            ),
-                                            Text(
-                                              "Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
-                                              style: Styles.awayTextBlack,
-                                              textAlign: TextAlign.start,
-                                              maxLines: 3,
-                                            ),
-                                          ],
+                                  Column(
+                                    children: [
+                                      Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: SvgPicture.asset(
+                                          'assets/image/mechanicProfileView/directionMechnanicTracking.svg',
                                         ),
                                       ),
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: FDottedLine(
-                                  color: CustColors.blue,
-                                  height: 40.0,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: SvgPicture.asset(
-                                      'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "3 mintues",
-                                          style: Styles.waitingTextBlack17,
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: FDottedLine(
+                                          color: CustColors.blue,
+                                          height: 60.0,
                                         ),
-                                        Text(
-                                          "Arrival time.",
-                                          style: Styles.awayTextBlack,
+                                      ),
+                                      Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: SvgPicture.asset(
+                                          'assets/image/mechanicProfileView/clockMechnanicTracking.svg',
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                  Spacer(),
-                                  Container(
-                                    child:
-                                        MaterialButton(
-                                          onPressed: () {
-
-                                          },
-                                          child: Container(
-                                            height: 30,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Arrived',
-                                                  textAlign: TextAlign.center,
-                                                  style: Styles.textButtonLabelSubTitle,
-                                                ),
-                                              ],
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: Container(
+                                          height: 60,
+                                          width: 200,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Address",
+                                                style: Styles.waitingTextBlack17,
+                                              ),
+                                              Text(
+                                                "Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
+                                                style: Styles.awayTextBlack,
+                                                textAlign: TextAlign.start,
+                                                maxLines: 3,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Container(
+                                              height: 40,
+                                              width: 150,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "3 mintues",
+                                                    style: Styles.waitingTextBlack17,
+                                                  ),
+                                                  Text(
+                                                    "Arrival time.",
+                                                    style: Styles.awayTextBlack,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                          color: CustColors.greyText,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  _setValue(10))),
-                                        ),
+                                          Container(
+                                            alignment: Alignment.bottomLeft,
+
+                                            child: MaterialButton(
+                                              onPressed: () {
+
+                                              },
+                                              child: Container(
+                                                height: 30,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Arrived',
+                                                      textAlign: TextAlign.center,
+                                                      style: Styles.textButtonLabelSubTitle,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              color: CustColors.greyText,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(
+                                                      _setValue(10))),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
+
                                 ],
                               ),
                             ],
