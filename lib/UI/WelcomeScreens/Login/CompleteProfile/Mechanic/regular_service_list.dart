@@ -108,7 +108,6 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   void initState() {
     super.initState();
     getSharedPrefData();
-    _serviceListBloc.postServiceListRequest(authToken, "1");
 
     _listenServiceListResponse();
     _listenAddServiceListResponse();
@@ -121,7 +120,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-
+      _serviceListBloc.postServiceListRequest(authToken, "1");
     });
   }
 
