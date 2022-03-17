@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -35,24 +36,16 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   double _setValue(double value) {
     return value * per + value;
   }
 
 
-
-
   MapType _currentMapType = MapType.terrain;
-
-  Completer<GoogleMapController> _controller = Completer();
-
+  GoogleMapController? _controller ;
   static const LatLng _center = const LatLng(10.0265, 76.3086);
-
   String? _mapStyle;
-
   Map<MarkerId, Marker> markers = {};
-
   final Set<Polyline>_polyline={};
   LatLng _lastMapPosition = _center;
   List<LatLng> latlng = [];
@@ -62,38 +55,33 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
 
 
-
   void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-    controller.setMapStyle(_mapStyle);
-    final marker = Marker(
-      markerId: MarkerId('place_name'),
-      position: LatLng(10.506402, 76.244164),
-      icon:  BitmapDescriptor.defaultMarker,
-    );
 
     setState(() {
+      _controller = controller;
+      _controller!.setMapStyle(_mapStyle).whenComplete(() {
+        print(">>>>>>>>>>>>>>>>>+++++++++++++++++  =true");
+      });
+      //_controller.complete(controller);
+      final marker = Marker(
+        markerId: MarkerId('place_name'),
+        position: LatLng(10.506402, 76.244164),
+        icon:  BitmapDescriptor.defaultMarker,
+      );
       markers[MarkerId('place_name')] = marker;
     });
-
     latlng.add(_new);
     latlng.add(_news);
     _polyline.add(Polyline(
       polylineId: PolylineId(_lastMapPosition.toString()),
       visible: true,
-      //latlng is List<LatLng>
       points: latlng,
-      color: Colors.blue,
+      color: CustColors.cherry,
     ));
-
   }
-
-
-
 
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
-
   String location ='Null, Press Button';
   String Address = 'search';
 
@@ -107,7 +95,11 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
       _mapStyle = string;
     });
-
+    /*DefaultAssetBundle.of(context).loadString('assets/map_style/map_style.txt').then((string) {
+      this._mapStyle = string;
+    }).catchError((error) {
+      log(error.toString());
+    });*/
 
   }
 
