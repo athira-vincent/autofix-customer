@@ -66,7 +66,7 @@ PODS:
   - firebase_core (1.11.0):
     - Firebase/CoreOnly (= 8.10.0)
     - Flutter
-  - firebase_storage (10.2.8):
+  - firebase_storage (10.2.9):
     - Firebase/Storage (= 8.10.0)
     - firebase_core
     - Flutter
@@ -146,20 +146,20 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - path_provider (0.0.1):
+  - path_provider_ios (0.0.1):
     - Flutter
   - PromisesObjC (2.0.0)
   - Reachability (3.2)
   - SDWebImage (5.12.3):
     - SDWebImage/Core (= 5.12.3)
   - SDWebImage/Core (5.12.3)
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.3)
-  - webview_flutter (0.0.1):
+  - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -176,10 +176,10 @@ DEPENDENCIES:
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - location (from `.symlinks/plugins/location/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -234,14 +234,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
@@ -255,7 +255,7 @@ SPEC CHECKSUMS:
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   firebase_auth: 02cd3ee1be134c956a4809d500d232e359bc00ad
   firebase_core: 2ca2d6cc8a11693e701b37126afae4800be5dbac
-  firebase_storage: 9341d60366cd3cc0a32755bc6f2ad05602e07982
+  firebase_storage: 9d3636cb1003bd6e3fd3fc2f5a90932f84f6b4b8
   FirebaseAuth: 59a2d2b933b5b79e18fb1e6ad230c6abdaa73d26
   FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
   FirebaseCoreDiagnostics: 3b40dfadef5b90433a60ae01f01e90fe87aa76aa
@@ -276,14 +276,14 @@ SPEC CHECKSUMS:
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 53179a2dba77246efa8a9b85f5c5b21f8f43e38f
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
-  webview_flutter: 3603125dfd3bcbc9d8d418c3f80aeecf331c068b
+  webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

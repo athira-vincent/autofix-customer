@@ -1,17 +1,13 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import 'package:auto_fix/UI/Customer/find_mechanic_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'home_customer_bloc.dart';
 
