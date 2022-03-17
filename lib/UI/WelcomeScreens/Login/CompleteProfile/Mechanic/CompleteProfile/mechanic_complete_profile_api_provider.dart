@@ -11,10 +11,8 @@ class MechanicCompleteProfileApiProvider {
 // ------------ Complete Profile Mechanic - Individual--------------
 
   Future<IndividualMechCompleteProfileMdl> getCompleteProfileMechIndividualRequest(
-      String token,String workSelection, String vehicleSpecialization,
-      String address, String apprentice_cert, String identification_cert) async {
-    Map<String, dynamic> _resp = await _queryProvider.completeProfileMechIndividual(token, workSelection,
-        vehicleSpecialization, address, apprentice_cert, identification_cert);
+      String token,String workSelection, String vehicleSpecialization, String address) async {
+    Map<String, dynamic> _resp = await _queryProvider.completeProfileMechIndividual(token, workSelection, vehicleSpecialization, address);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

@@ -12,10 +12,14 @@ class MechanicCompleteProfileBloc {
   final postCompleteProfileCorporate = PublishSubject<CorporateMechCompleteProfileMdl>();
   Stream<CorporateMechCompleteProfileMdl> get completeProfileCorporateResponse => postCompleteProfileCorporate.stream;
 
-  postCompleteProfileCorporateRequest(String token, String serviceType, String vehicleList, String address,
-      String MechanicNumber, String rcNumber,String existenceYear) async {
-
-   // CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporateRequest();
+  postCompleteProfileCorporateRequest() async {
+    String fullName = username;
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName = fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
+    CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporate();
     //postCompleteProfileCorporate.sink.add(_completeProfileMdl);
   }
 
@@ -23,12 +27,10 @@ class MechanicCompleteProfileBloc {
   final postCompleteProfileIndividual = PublishSubject<IndividualMechCompleteProfileMdl>();
   Stream<IndividualMechCompleteProfileMdl> get completeProfileIndividualResponse => postCompleteProfileIndividual.stream;
 
-  postCompleteProfileIndividualRequest(String token,String workSelection,
-      String vehicleSpecialization, String address, String apprentice_cert, String identification_cert) async {
+  postCompleteProfileIndividualRequest(String token,String workSelection, String vehicleSpecialization, String address) async {
 
     print(workSelection);
-    IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(token,workSelection,
-        vehicleSpecialization,address, apprentice_cert, identification_cert);
+    IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(token,workSelection,vehicleSpecialization,address);
     postCompleteProfileIndividual.sink.add(_completeProfileMdl);
   }
 
