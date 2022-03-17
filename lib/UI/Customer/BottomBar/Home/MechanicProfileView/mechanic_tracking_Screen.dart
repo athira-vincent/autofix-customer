@@ -61,8 +61,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   Set<Polyline> lines = {};
 
-
-
   void _onAddMarkerButtonPressed() {
     setState(() {
       _markers.add(Marker(
