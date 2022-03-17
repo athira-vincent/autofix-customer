@@ -569,7 +569,7 @@ class QueryProvider {
 
   serviceList(String token, String type) async {
     String _query = """
-    {
+   {
   emeregency_or_regular_serviceList(id: $type) {
     id
     serviceName
@@ -577,6 +577,7 @@ class QueryProvider {
     minAmount
     maxAmount
     categoryId
+    type
     status
   }
 }
@@ -594,15 +595,18 @@ class QueryProvider {
 
   selectCar() {}
 
-  completeProfileMechIndividual(String token,String workSelection, String vehicleSpecialization, String address) async {
+  completeProfileMechIndividual(String token,
+      String workSelection,
+      String vehicleSpecialization,
+      String address,String apprentice_cert, String identification_cert) async {
     String _query = """
     mutation {
   mechanic_work_selection_Individual(
     service_type: "$workSelection"
     vehicle: "$vehicleSpecialization"
     address: "$address"
-    apprentice_cert: "string"
-    identification_cert: "string"
+    apprentice_cert: "$apprentice_cert"
+    identification_cert: "$identification_cert"
   ) {
     id
     service_type

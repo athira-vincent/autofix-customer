@@ -72,7 +72,8 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   TextEditingController _apprenticeCertificateController = TextEditingController();
   FocusNode _apprenticeCertificateFocusNode = FocusNode();
 
-  File? _images;
+  File? _images,identificationProof_file,apprenticeCertificate_file;
+
   bool isloading = false;
   String? countryCode;
   double per = .10;
@@ -98,8 +99,11 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   List<String> noOfMechanicsSelectionList = ['2','3','4'];
   String? noOfMechanicsSelection = '' ;
 
-  String? _fileName;
+  String? _fileName_meansOfIdentification;
+  String? _fileName_apprenticeCertificate;
   String imageFirebaseUrl="";
+  String meansOfIdentificationFirebaseUrl="";
+  String certificateOfApprenticeFirebaseUrl="";
 
   String selectedVehicleId = "";
   String selectedVehicles = "";
@@ -232,7 +236,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                                             meansOfIdentificationSelection(),
                                             NextButtonMechanicIndividual(),
 
-
                                           ],
                                         ),
                                       ),
@@ -249,7 +252,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     children: [
                       completeYourProfileText(),
                       uploadMechanicProfileImage(size),
-
                       SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -339,7 +341,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     Container(
                       width: 150,
                       child: Text(
-                        'Upload your vechicle photo',
+                        'Upload Your \n Profile Photo',
                         textAlign: TextAlign.center,
                         style: Styles.textUploadYourProfilePic,
                       ),
@@ -375,7 +377,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                           ),
                           InkWell(
                             onTap: () {
-
                               _showDialogSelectPhoto();
                             },
                             child: Row(
@@ -595,7 +596,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget uploadApprenticeCertificateSelection() {
     return  InkWell(
       onTap: (){
-
+        _openFileExplorerApprenticeCertificate();
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -1006,12 +1007,15 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   : Container(
                     child: MaterialButton(
                       onPressed: () {
+
                         _completeProfileBloc.postCompleteProfileIndividualRequest(
-                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
+                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODUsImlhdCI6MTY0NzQyODMzNCwiZXhwIjoxNjQ3NTE0NzM0fQ.Yki8raBNQFKL9Karbd0U3tcfu53EtNMq_TQE6ELDdzw",
                           _workSelectionController.text,
                          // _chooseVechicleSpecializedController.text.toString(),
                           selectedVehicleId,
                           _addressController.text.toString(),
+                          certificateOfApprenticeFirebaseUrl,
+                          meansOfIdentificationFirebaseUrl
                         );
 
                        /* Navigator.pushReplacement(
@@ -1075,8 +1079,22 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: MaterialButton(
                       onPressed: () {
 
-                        _completeProfileBloc.postCompleteProfileCorporateRequest("aa", );
+                        _completeProfileBloc.postCompleteProfileCorporateRequest(
+                          "",
+                          _workSelectionController.text,
+                          selectedVehicleId,
+                          _addressController.text.toString(),
+                          "","",""
+                        );
 
+//                        --------------------------
+                        /*_completeProfileBloc.postCompleteProfileIndividualRequest(
+                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODUsImlhdCI6MTY0NzQyODMzNCwiZXhwIjoxNjQ3NTE0NzM0fQ.Yki8raBNQFKL9Karbd0U3tcfu53EtNMq_TQE6ELDdzw",
+                          _workSelectionController.text,
+                          // _chooseVechicleSpecializedController.text.toString(),
+                          selectedVehicleId,
+                          _addressController.text.toString(),
+                        );*/
 
                         /*Navigator.pushReplacement(
                           context,
@@ -1212,6 +1230,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                         _workSelectionController.text = workSelectionList[index];
                         if (_formKey.currentState!.validate()) {
                         } else {
+
                         }
                       });
 
@@ -1267,7 +1286,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         });
   }
 
-  void _openFileExplorerMeansOfIdentification() async {
+  _openFileExplorerApprenticeCertificate() async {
     try {
       FilePickerResult? file = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -1277,12 +1296,34 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
       if(file != null) {
 
         setState(() {
-
-          _fileName = file.toString(); //file1 is a global variable which i created
-          print(_fileName);
-
+          _fileName_apprenticeCertificate = file.toString(); //file1 is a global variable which i created
+          print(_fileName_apprenticeCertificate);
+          identificationProof_file = File(_fileName_apprenticeCertificate.toString());
+          _apprenticeCertificateController.text = _fileName_apprenticeCertificate.toString();
+          uploadApprenticeCertificateToFirebase(identificationProof_file!);
         });
+      }
+    } on PlatformException catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+    if (!mounted) return;
+  }
 
+  _openFileExplorerMeansOfIdentification() async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf','docx'], //here you can add any of extention what you need to pick
+      );
+      if(file != null) {
+
+        setState(() {
+          _fileName_meansOfIdentification = file.toString(); //file1 is a global variable which i created
+          print(_fileName_meansOfIdentification);
+           identificationProof_file = File(_fileName_meansOfIdentification.toString());
+          _identificationProofController.text = _fileName_meansOfIdentification.toString();
+           uploadIdentificationDocToFirebase(identificationProof_file!);
+        });
       }
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
@@ -1307,6 +1348,46 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         print("Error");
       }
       print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
+    });
+  }
+
+  Future uploadApprenticeCertificateToFirebase(File certificatePath) async {
+    String fileName = path.basename(certificatePath.path);
+    Reference reference = FirebaseStorage.instance.ref().child("MechanicApprenticeCertificate").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(certificatePath);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          certificateOfApprenticeFirebaseUrl = fileImageurl;
+        });
+
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> certificateOfApprenticeFirebaseUrl "+certificateOfApprenticeFirebaseUrl.toString());
+    });
+  }
+
+  Future uploadIdentificationDocToFirebase(File docPath) async {
+    String fileName = path.basename(docPath.path);
+    Reference reference = FirebaseStorage.instance.ref().child("MechanicIdentificationDoc").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(docPath);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          meansOfIdentificationFirebaseUrl = fileImageurl;
+        });
+
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> meansOfIdentificationFirebaseUrl " + meansOfIdentificationFirebaseUrl.toString());
     });
   }
 

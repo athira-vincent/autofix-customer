@@ -11,14 +11,14 @@ String serviceListMdlToJson(ServiceListMdl data) => json.encode(data.toJson());
 
 class ServiceListMdl {
   ServiceListMdl({
+    required this.data,
     required this.message,
     required this.status,
-    required this.data,
   });
 
+  Data? data;
   String message;
   String status;
-  Data? data;
 
   factory ServiceListMdl.fromJson(Map<String, dynamic> json) => ServiceListMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -57,6 +57,7 @@ class EmeregencyOrRegularServiceList {
     required this.minAmount,
     required this.maxAmount,
     required this.categoryId,
+    required this.type,
     required this.status,
   });
 
@@ -66,6 +67,7 @@ class EmeregencyOrRegularServiceList {
   String minAmount;
   String maxAmount;
   int categoryId;
+  dynamic type;
   int status;
 
   factory EmeregencyOrRegularServiceList.fromJson(Map<String, dynamic> json) => EmeregencyOrRegularServiceList(
@@ -75,6 +77,7 @@ class EmeregencyOrRegularServiceList {
     minAmount: json["minAmount"] == null ? null : json["minAmount"],
     maxAmount: json["maxAmount"] == null ? null : json["maxAmount"],
     categoryId: json["categoryId"] == null ? null : json["categoryId"],
+    type: json["type"],
     status: json["status"] == null ? null : json["status"],
   );
 
@@ -85,6 +88,7 @@ class EmeregencyOrRegularServiceList {
     "minAmount": minAmount == null ? null : minAmount,
     "maxAmount": maxAmount == null ? null : maxAmount,
     "categoryId": categoryId == null ? null : categoryId,
+    "type": type,
     "status": status == null ? null : status,
   };
 }
