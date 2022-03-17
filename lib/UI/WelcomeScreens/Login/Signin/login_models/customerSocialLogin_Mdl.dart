@@ -13,7 +13,7 @@ class CustomerSocialLoginMdl {
   CustomerSocialLoginMdl({
     required this.message,
     required this.status,
-    required this.data,
+    this.data,
   });
 
   String message;

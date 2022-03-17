@@ -33,7 +33,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  socialLogin(String email, String phoneNumber) async {
+  socialLogin( email,  phoneNumber) async {
     String _query;
     if(email=="")
       {

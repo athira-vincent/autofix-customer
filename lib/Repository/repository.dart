@@ -160,10 +160,14 @@ class Repository {
 
   // Get vehicleSpecialization
   Future<dynamic> getvehicleSpecializationList() => _vehicleSpecializationApiProvider.getVehicleSpecialization();
+
   //SignIn
   Future<dynamic> getSignIn(String userName, String password) =>
       _signinApiProvider.getSignInRequest(userName, password);
 
+  //socialLogin
+  Future<dynamic> socialLogin( email,  phoneNumber) =>
+      _signinApiProvider.socialLogin( email,  phoneNumber);
 
   //Forgot Password
   Future<dynamic> getForgotPassword(String email) =>
