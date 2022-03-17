@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart'
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Customer/customer_home_screen.dart';
+import '../../Mechanic/BottomBar/Home/FindYourCustomer/find_your_customer_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   
@@ -57,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>  CustomerHomeScreen()));
+              builder: (context) =>  FindYourCustomerScreen()));
 
 
       /*if (userType == TextStrings.user_customer) {
