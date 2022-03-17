@@ -156,7 +156,6 @@ class Repository {
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 
-
   // Get vehicleSpecialization
   Future<dynamic> getvehicleSpecializationList() => _vehicleSpecializationApiProvider.getVehicleSpecialization();
   //SignIn
