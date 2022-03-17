@@ -125,6 +125,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
