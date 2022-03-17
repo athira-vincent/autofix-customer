@@ -632,7 +632,15 @@ class QueryProvider {
     );
   }
 
-  completeProfileMechCorporate(String token,) async {
+  completeProfileMechCorporate(
+      String token,
+      String serviceType,
+      String vehicleSpecialization,
+      String address,
+      String mechanicNumber,
+      String rcNumber,
+      String existenceYear
+      ) async {
     String _query = """ 
     mutation {
   mechanic_work_selection_Corporate(

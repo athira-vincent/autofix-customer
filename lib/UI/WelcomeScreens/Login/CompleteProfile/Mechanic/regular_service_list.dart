@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class RegularServiceListScreen extends StatefulWidget {
@@ -36,6 +38,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   List<EmeregencyOrRegularServiceList> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
 
+  String authToken="";
 
   _listenServiceListResponse() {
     _serviceListBloc.postServiceList.listen((value) {
@@ -104,11 +107,22 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   @override
   void initState() {
     super.initState();
-    _serviceListBloc.postServiceListRequest("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE", "1");
+    getSharedPrefData();
+    _serviceListBloc.postServiceListRequest(authToken, "1");
 
     _listenServiceListResponse();
     _listenAddServiceListResponse();
 
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('authToken >>>>>>> '+authToken.toString());
+
+    });
   }
 
   @override
@@ -469,7 +483,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
+                        authToken,
                         serviceId,  feeList, timeList);
                   },
                   child: Container(

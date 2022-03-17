@@ -145,14 +145,31 @@ class Repository {
 
 
   // Mechanic Individual Complete Profile
-  Future<dynamic> getCompleteProfileMechIndividual(String token,String workSelection,
-      String vehicleSpecialization, address, String apprentice_cert, String identification_cert) =>
+  Future<dynamic> getCompleteProfileMechIndividual(
+      String token,
+      String workSelection,
+      String vehicleSpecialization,
+     String address, String apprentice_cert,
+      String identification_cert) =>
       _completeProfileMechanicApiProvider.getCompleteProfileMechIndividualRequest(
          token, workSelection, vehicleSpecialization,address, apprentice_cert, identification_cert );
 
-/*  // Mechanic Corporate Complete Profile
-  Future<dynamic> getCompleteProfileMechCorporate() =>
-      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest();*/
+  // Mechanic Corporate Complete Profile
+  Future<dynamic> getCompleteProfileMechCorporate(String token,
+      String serviceType,
+      String vehicleSpecialization,
+      String address,
+      String mechanicNumber,
+      String rcNumber,
+      String existenceYear) =>
+      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest(token,
+        serviceType,
+        mechanicNumber,
+        rcNumber,
+        vehicleSpecialization,
+        existenceYear,
+        address
+      );
 
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
