@@ -1,27 +1,13 @@
 // ignore_for_file: avoid_print
 
 import 'dart:async';
-
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
-import 'package:auto_fix/UI/Customer/find_mechanic_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
-import 'package:auto_fix/main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import '../../Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
 import '../../Customer/customer_home_screen.dart';
-import '../Login/PhoneLogin/otp_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   
