@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) =>  FindYourCustomerScreen()));
+              builder: (context) =>  CustomerHomeScreen()));
 
 
       /*if (userType == TextStrings.user_customer) {
