@@ -54,7 +54,6 @@ class CustomerSocialLogin {
     required this.token,
     required this.customer,
   });
-
   String token;
   Customer? customer;
 
