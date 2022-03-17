@@ -150,9 +150,9 @@ class Repository {
       _completeProfileMechanicApiProvider.getCompleteProfileMechIndividualRequest(
          token, workSelection, vehicleSpecialization,address, apprentice_cert, identification_cert );
 
-  // Mechanic Corporate Complete Profile
+/*  // Mechanic Corporate Complete Profile
   Future<dynamic> getCompleteProfileMechCorporate() =>
-      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest(,);
+      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest();*/
 
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
