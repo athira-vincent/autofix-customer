@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -38,124 +40,131 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     return value * per + value;
   }
 
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
-  final Set<Marker> _markers = {};
 
-  LatLng _lastMapPosition = _center;
 
   MapType _currentMapType = MapType.terrain;
 
   Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng _center = const LatLng(12.988827, 77.472091);
+  static const LatLng _center = const LatLng(10.0265, 76.3086);
 
   String? _mapStyle;
+
+  Map<MarkerId, Marker> markers = {};
+
+  final Set<Polyline>_polyline={};
+  LatLng _lastMapPosition = _center;
+  List<LatLng> latlng = [];
+  LatLng _new = LatLng(10.506402, 76.244164);
+  LatLng _news = LatLng(10.0265, 76.3086);
+
+
+
+
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
     controller.setMapStyle(_mapStyle);
-  }
+    final marker = Marker(
+      markerId: MarkerId('place_name'),
+      position: LatLng(10.506402, 76.244164),
+      icon:  BitmapDescriptor.defaultMarker,
+    );
 
-  Set<Polyline> lines = {};
-
-  void _onAddMarkerButtonPressed() {
     setState(() {
-      _markers.add(Marker(
-        // This marker id can be anything that uniquely identifies each marker.
-        markerId: MarkerId(_lastMapPosition.toString()),
-        position: _lastMapPosition,
-        infoWindow: InfoWindow(
-          title: 'Really cool place',
-          snippet: '5 Star Rating',
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
+      markers[MarkerId('place_name')] = marker;
     });
+
+    latlng.add(_new);
+    latlng.add(_news);
+    _polyline.add(Polyline(
+      polylineId: PolylineId(_lastMapPosition.toString()),
+      visible: true,
+      //latlng is List<LatLng>
+      points: latlng,
+      color: Colors.blue,
+    ));
+
   }
 
-  void _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
-  }
 
-  // Starting point latitude
-  double _originLatitude = 6.5212402;
-// Starting point longitude
-  double _originLongitude = 3.3679965;
-// Destination latitude
-  double _destLatitude = 6.849660;
-// Destination Longitude
-  double _destLongitude = 3.648190;
-// Markers to show points on the map
-  Map<MarkerId, Marker> markers = {};
 
-  PolylinePoints polylinePoints = PolylinePoints();
-  Map<PolylineId, Polyline> polylines = {};
 
-  // This method will add markers to the map based on the LatLng position
-  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
-    MarkerId markerId = MarkerId(id);
-    Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: position);
-    markers[markerId] = marker;
-  }
+  String CurrentLatitude ="10.506402";
+  String CurrentLongitude ="76.244164";
 
-  _addPolyLine(List<LatLng> polylineCoordinates) {
-    PolylineId id = PolylineId("poly");
-    Polyline polyline = Polyline(
-      polylineId: id,
-      points: polylineCoordinates,
-      width: 8,
-    );
-    polylines[id] = polyline;
-    setState(() {});
-  }
-
-  void _getPolyline() async {
-    List<LatLng> polylineCoordinates = [];
-
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "YOUR API KEY HERE",
-      PointLatLng(_originLatitude, _originLongitude),
-      PointLatLng(_destLatitude, _destLongitude),
-      travelMode: TravelMode.driving,
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    } else {
-      print(result.errorMessage);
-    }
-    _addPolyLine(polylineCoordinates);
-  }
+  String location ='Null, Press Button';
+  String Address = 'search';
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getCurrentCustomerLocation();
 
     rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
       _mapStyle = string;
     });
-    /// add origin marker origin marker
-    _addMarker(
-      LatLng(_originLatitude, _originLongitude),
-      "origin",
-      BitmapDescriptor.defaultMarker,
-    );
 
-    // Add destination marker
-    _addMarker(
-      LatLng(_destLatitude, _destLongitude),
-      "destination",
-      BitmapDescriptor.defaultMarkerWithHue(90),
-    );
 
-    _getPolyline();
+  }
+
+
+
+  Future<void> _getCurrentCustomerLocation() async {
+    Position position = await _getGeoLocationPosition();
+    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    setState(() {
+      CurrentLatitude = position.latitude.toString();
+      CurrentLongitude = position.longitude.toString();
+    });
+    print(location);
+    GetAddressFromLatLong(position);
+  }
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+
+  Future<void> GetAddressFromLatLong(Position position)async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+
   }
 
   @override
@@ -177,17 +186,16 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                     onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
                       target: _center,
-                      zoom: 11.0,
+                      zoom: 8.0,
                     ),
                     mapType: _currentMapType,
-                    markers: _markers,
-                    onCameraMove: _onCameraMove,
-                    polylines: Set<Polyline>.of(polylines.values),
+                    markers: markers.values.toSet(),
+                    polylines:_polyline,
                   ),
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                  padding: const EdgeInsets.fromLTRB(20,10,20,30),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -200,7 +208,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                       children: <Widget>[
 
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(20,20,20,20),
+                          padding: const EdgeInsets.fromLTRB(20,10,20,10),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
