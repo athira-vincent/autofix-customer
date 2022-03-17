@@ -522,7 +522,7 @@ class QueryProvider {
     token,
     enableDebug: true,
     isTokenThere: false,
-    );;
+    );
   }
 
 
@@ -556,7 +556,7 @@ class QueryProvider {
 
   serviceList(String token, String type) async {
     String _query = """
-   {
+{
   emeregency_or_regular_serviceList(id: $type) {
     id
     serviceName
@@ -578,6 +578,8 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
+  selectCar() {}
 
   completeProfileMechIndividual(String token,
       String workSelection,
@@ -616,7 +618,15 @@ class QueryProvider {
     );
   }
 
-  completeProfileMechCorporate(String token,) async {
+  completeProfileMechCorporate(
+      String token,
+      String serviceType,
+      String vehicleSpecialization,
+      String address,
+      String mechanicNumber,
+      String rcNumber,
+      String existenceYear
+      ) async {
     String _query = """ 
     mutation {
   mechanic_work_selection_Corporate(

@@ -12,23 +12,30 @@ class MechanicCompleteProfileBloc {
   final postCompleteProfileCorporate = PublishSubject<CorporateMechCompleteProfileMdl>();
   Stream<CorporateMechCompleteProfileMdl> get completeProfileCorporateResponse => postCompleteProfileCorporate.stream;
 
-  postCompleteProfileCorporateRequest(String token, String serviceType, String vehicleList, String address,
-      String MechanicNumber, String rcNumber,String existenceYear) async {
+  postCompleteProfileCorporateRequest(String token, String serviceType, String vehicleSpecialization,
+      String address, String mechanicNumber, String rcNumber, String existenceYear) async {
 
-   // CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporateRequest();
-    //postCompleteProfileCorporate.sink.add(_completeProfileMdl);
+    CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporate(
+        token, serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear);
+    postCompleteProfileCorporate.sink.add(_completeProfileMdl);
   }
 
   /// --------------- Mechanic - Individual - Complete profile Starts -------------------- ///
   final postCompleteProfileIndividual = PublishSubject<IndividualMechCompleteProfileMdl>();
   Stream<IndividualMechCompleteProfileMdl> get completeProfileIndividualResponse => postCompleteProfileIndividual.stream;
 
-  postCompleteProfileIndividualRequest(String token,String workSelection,
-      String vehicleSpecialization, String address, String apprentice_cert, String identification_cert) async {
+  postCompleteProfileIndividualRequest(
+      String token,
+      String workSelection,
+      String vehicleSpecialization,
+      String address,
+      String apprenticeCertificate,
+      String identification
+      ) async {
 
     print(workSelection);
-    IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(token,workSelection,
-        vehicleSpecialization,address, apprentice_cert, identification_cert);
+    IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(token,
+        workSelection,vehicleSpecialization,address, apprenticeCertificate, identification);
     postCompleteProfileIndividual.sink.add(_completeProfileMdl);
   }
 

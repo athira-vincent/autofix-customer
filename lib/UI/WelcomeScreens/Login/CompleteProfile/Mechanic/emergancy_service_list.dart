@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_a
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class EmergencyServiceListScreen extends StatefulWidget {
@@ -34,6 +36,29 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
   String selectedService = "";
   List<EmeregencyOrRegularServiceList> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
+
+  String authToken="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+    _serviceListBloc.postServiceListRequest(authToken, "2");
+    _listenServiceListResponse();
+    _listenAddServiceListResponse();
+    _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('authToken >>>>>>> '+authToken.toString());
+
+    });
+  }
 
   _listenServiceListResponse() {
     _serviceListBloc.postServiceList.listen((value) {
@@ -97,19 +122,6 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
         });
       }
     });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _serviceListBloc.postServiceListRequest("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE", "2");
-
-    _listenServiceListResponse();
-    _listenAddServiceListResponse();
-
-    _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
   }
 
   @override
@@ -434,7 +446,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                     print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODQsImlhdCI6MTY0NzM0MTEzMCwiZXhwIjoxNjQ3NDI3NTMwfQ.W1JWynpzAXTcSXcZo8gdrEmMlY69yUVhKhdiLdM-_IE",
+                        authToken,
                         serviceId,  feeList, timeList);
 
                   },

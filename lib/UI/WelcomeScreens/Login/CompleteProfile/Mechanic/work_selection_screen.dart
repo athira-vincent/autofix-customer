@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_bloc.dart';
@@ -28,6 +29,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class WorkSelectionScreen extends StatefulWidget {
@@ -108,11 +110,24 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   String selectedVehicleId = "";
   String selectedVehicles = "";
 
+  String authToken="";
+
   @override
   void initState() {
     super.initState();
+    getSharedPrefData();
     _listenCompleteProfileResponse();
 
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('authToken >>>>>>> '+authToken.toString());
+
+    });
   }
 
   _listenCompleteProfileResponse() {
@@ -1009,7 +1024,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       onPressed: () {
 
                         _completeProfileBloc.postCompleteProfileIndividualRequest(
-                          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODUsImlhdCI6MTY0NzQyODMzNCwiZXhwIjoxNjQ3NTE0NzM0fQ.Yki8raBNQFKL9Karbd0U3tcfu53EtNMq_TQE6ELDdzw",
+                            authToken,
                           _workSelectionController.text,
                          // _chooseVechicleSpecializedController.text.toString(),
                           selectedVehicleId,
@@ -1080,11 +1095,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       onPressed: () {
 
                         _completeProfileBloc.postCompleteProfileCorporateRequest(
-                          "",
+                            authToken,
                           _workSelectionController.text,
                           selectedVehicleId,
                           _addressController.text.toString(),
-                          "","",""
+                          _noOfMechanicsController.text.toString(),
+                          _rcNumberController.text.toString(),
+                          _yearOfExistenceController.text.toString()
                         );
 
 //                        --------------------------

@@ -11,8 +11,11 @@ class MechanicCompleteProfileApiProvider {
 // ------------ Complete Profile Mechanic - Individual--------------
 
   Future<IndividualMechCompleteProfileMdl> getCompleteProfileMechIndividualRequest(
-      String token,String workSelection, String vehicleSpecialization,
-      String address, String apprentice_cert, String identification_cert) async {
+      String token,
+      String workSelection,
+      String vehicleSpecialization,
+      String address,String apprentice_cert,
+      String identification_cert) async {
     Map<String, dynamic> _resp = await _queryProvider.completeProfileMechIndividual(token, workSelection,
         vehicleSpecialization, address, apprentice_cert, identification_cert);
     // ignore: unnecessary_null_comparison
@@ -33,8 +36,15 @@ class MechanicCompleteProfileApiProvider {
   //--------------- Complete Profile Mechanic - Corporate-----------------
 
   Future<CorporateMechCompleteProfileMdl> getCompleteProfileMechCorporateRequest(
-      String firstName,) async {
-    Map<String, dynamic> _resp = await _queryProvider.completeProfileMechCorporate(firstName);
+      String token,
+      String serviceType,
+      String vehicleSpecialization,
+      String address,
+      String mechanicNumber,
+      String rcNumber,
+      String existenceYear) async {
+    Map<String, dynamic> _resp = await _queryProvider.completeProfileMechCorporate(token,
+    serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
