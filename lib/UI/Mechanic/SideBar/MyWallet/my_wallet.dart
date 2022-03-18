@@ -39,18 +39,22 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                       children: [
                         appBarCustomUi(size),
                         profileImageAndWalletTotal(size),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: size.width * 9 / 100,
-                            right: size.width * 9 / 100,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              SubTitleTextRound(size,"Total job done","135"),
-                              SubTitleTextRound(size,"All payments","5000"),
-                              SubTitleTextRound(size,"Mothly collection","2000"),
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,15,0,0),
+                          child: Container(
+                            height: 120,
+                            margin: EdgeInsets.only(
+                              left: size.width * 9 / 100,
+                              right: size.width * 9 / 100,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SubTitleTextRound(size,"Total job done","135"),
+                                SubTitleTextRound(size,"All payments","5000"),
+                                SubTitleTextRound(size,"Mothly collection","2000"),
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -191,111 +195,107 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
   Widget profileImageAndWalletTotal(Size size) {
     return Container(
-      margin: EdgeInsets.only(
-        top: 0,
-        left: 10,
-        right: 10,
-      ),
-      //color: Colors.green,
-      child: Container(
-        //alignment: Alignment.center,
-        child: Wrap(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                    left: 2,
-                    right: 2,
-                    top: 2
-                  ),
-                  child: ClipRRect(
-                      //borderRadius: BorderRadius.circular(20.0),
-                      child:Container(
-                        margin: EdgeInsets.only(top: 8,left: 8,right: 8),
-                          child:Image.asset('assets/image/bg_wallet.png')),
-                  ),
+      height: 250,
+      width: 500,
+      child: Wrap(
+        children: [
+          Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.only(
+                  left: 2,
+                  right: 2,
+                  top: 2
                 ),
+                child: ClipRRect(
+                    //borderRadius: BorderRadius.circular(20.0),
+                    child:Container(
+                      margin: EdgeInsets.only(top: 26,left: 8,right: 8),
+                        child:Image.asset('assets/image/bg_wallet.png')),
+                ),
+              ),
 
-                Column(
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 120.0,
-                        height: 120.0,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child:Container(
-                                child:CircleAvatar(
-                                    radius: 75,
-                                    backgroundColor: Colors.white,
-                                    child: ClipOval(
-                                      child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                    )))
-                        ),
+              Column(
+                children: [
+                  Center(
+                    child: Container(
+                      width: 120.0,
+                      height: 120.0,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child:Container(
+                              child:CircleAvatar(
+                                  radius: 75,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                  )))
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 32,
-                        ),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child:Container(
-                              child:Container(
-                                  child: Text("Your balance ",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: "Samsung_SharpSans_Medium",
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                  ),)
-                              ),
-                            )
-
-                        ),
+                  ),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        top: 29,
+                        right: 33
                       ),
-                    ),
-                    Center(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 25,
-                        ),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child:Container(
                             child:Container(
-                              child:Container(
-                                  child: Text("₦ 5000",style: TextStyle(
-                                    fontSize: 25,
+                                child: Text("Your balance ",
+                                  style: TextStyle(
+                                    fontSize: 18,
                                     fontFamily: "Samsung_SharpSans_Medium",
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),)
-                              ),
+                                    fontWeight: FontWeight.w400,
+                                ),)
                             ),
+                          )
 
-                        ),
                       ),
                     ),
-                  ],
-                )
+                  ),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        top: 16,
+                          right: 33
+                      ),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child:Container(
+                            child:Container(
+                                child: Text("₦ 5000",style: TextStyle(
+                                  fontSize: 25,
+                                  fontFamily: "Samsung_SharpSans_Medium",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),)
+                            ),
+                          ),
+
+                      ),
+                    ),
+                  ),
+                ],
+              )
 
 
 
-              ],
-            ),
-          ],
+            ],
+          ),
+        ],
 
-        ),
       ),
     );
   }
 
   Widget BottomLightBackground(Size size) {
     return Container(
+      height: MediaQuery.of(context).size.height*.70,
       margin: EdgeInsets.only(
-          top: size.height * 25 / 100,
+          top: size.height * 35 / 100,
         left: size.width * 4 / 100,
         right: size.width * 4 / 100,
       ),
@@ -305,12 +305,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
             height: size.height * 70 /100,
             //height: MediaQuery.of(context).size.height * double.parse(widget.percentage.toString()),
             decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
-                topLeft: Radius.circular(10),
+              borderRadius: BorderRadius.all(
+               Radius.circular(10),
               ),
              // color: CustColors.whiteBlueish,
-              color: Colors.yellow
+              color: CustColors.whiteBlueish
             ),
             //child:  widget.child,
           )
@@ -320,17 +319,17 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
   Widget SubTitleTextRound(Size size,String titleText,String circleText) {
     return  Container(
-      height: size.height * 15 / 100,
+      height: size.height * 20 / 100,
       width: size.width * 20 / 100,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
               margin : EdgeInsets.only(
                   top: 2,
                   left: 2,
                   right: 2,
-                  bottom: 4
+                  bottom: 0
               ),
               child: Text(titleText,
               textAlign: TextAlign.center,
@@ -342,17 +341,22 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                // overflow: ,
               ),)),
 
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.white,
-            child: Text(
-              circleText,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: CustColors.light_navy,
-                fontWeight: FontWeight.w600,
-                fontFamily: "Samsung_SharpSans_Bold"
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0,5,0,0),
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.white,
+                child: Text(
+                  circleText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: CustColors.light_navy,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: "Samsung_SharpSans_Bold"
+                  ),
+                ),
               ),
             ),
           )
