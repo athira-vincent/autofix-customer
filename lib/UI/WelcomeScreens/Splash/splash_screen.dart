@@ -54,7 +54,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 authToken: '',
               )));*/
 
-
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
