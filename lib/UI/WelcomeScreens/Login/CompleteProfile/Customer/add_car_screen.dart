@@ -221,6 +221,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     Size size = MediaQuery.of(context).size;
     print('${_images?.path}' + ">>>>>>> image from Widget");
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
@@ -594,7 +595,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Engine Type' ).nameCheckingWithNumeric,
+                  'Engine Type' ).nameCheckingWithNumericAndBracket,
               controller: _engineTypeController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -1577,8 +1578,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
       ),
     );
   }
-
-
 
 
   Widget progressBarDarkBlue() {

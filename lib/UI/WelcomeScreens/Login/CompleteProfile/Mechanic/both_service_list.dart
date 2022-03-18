@@ -177,8 +177,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                   },
                     child: Container(
                       margin: EdgeInsets.only(
-                          left: size.width * 30 / 100 ,
-                          right: size.width * 30 / 100,
+                          left: size.width * 29 / 100 ,
+                          right: size.width * 29 / 100,
                         bottom: size.height * 0.9 / 100
                       ),
                       child: Text(isRegularSelected ? "Emergency " : "Regular",

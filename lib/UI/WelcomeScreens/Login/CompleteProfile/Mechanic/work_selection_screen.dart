@@ -565,6 +565,10 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
     // start the SecondScreen and wait for it to finish with a result
     List<VehicleSpecialization> vehicleSpecialisationList = [];
+    vehicleSpecialisationList.clear();
+    selectedVehicleId="";
+    selectedVehicles = "";
+    _chooseVechicleSpecializedController.text="";
     vehicleSpecialisationList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -603,7 +607,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           print ("Selected state @ sign up: " + selectedState );
           print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
           print ("Selected selectedVehicles @ sign up: " + selectedVehicles );
-
+          if (_formKey.currentState!.validate()) {
+          } else {
+          }
         }
 
     });
@@ -1324,6 +1330,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         print(fileName.toString());
         _apprenticeCertificateController.text = fileName.toString();
         certificateOfApprenticeFirebaseUrl = pdfUrl;
+        if (_formKey.currentState!.validate()) {
+        } else {
+        }
       });
 
       print(">>>>>>>>>>>>>>>> MechanicApprenticeCertificate " + pdfUrl);
@@ -1351,6 +1360,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         print(fileName.toString());
         _identificationProofController.text = fileName.toString();
         meansOfIdentificationFirebaseUrl = pdfUrl;
+        if (_formKey.currentState!.validate()) {
+        } else {
+        }
       });
 
       print(">>>>>>>>>>>>>>>> MechanicIDProof " + pdfUrl);
