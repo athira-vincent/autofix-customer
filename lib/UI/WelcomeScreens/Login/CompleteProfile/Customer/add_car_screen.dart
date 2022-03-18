@@ -1541,7 +1541,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 onPressed: () {
 
                   Navigator.pop(context);
-
                   setState(() {
 
                     _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
