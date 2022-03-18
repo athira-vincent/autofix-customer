@@ -44,7 +44,6 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-    _serviceListBloc.postServiceListRequest(authToken, "2");
     _listenServiceListResponse();
     _listenAddServiceListResponse();
     _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
@@ -56,7 +55,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-
+      _serviceListBloc.postServiceListRequest(authToken, "2");
     });
   }
 

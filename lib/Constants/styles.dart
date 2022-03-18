@@ -365,6 +365,12 @@ class Styles {
       fontSize: 15.4,
       color: CustColors.cherry);
 
+  static const appBarTextBlue = TextStyle(
+      fontSize: 18,
+      color: CustColors.light_navy,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
 
 
 }
