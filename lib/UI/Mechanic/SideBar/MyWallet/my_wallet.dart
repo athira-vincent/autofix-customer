@@ -38,9 +38,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                     Column(
                       children: [
                         appBarCustomUi(size),
-                        profileImageAndWalletTotal(size),
+                        profileImageAndWalletTotal(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,15,0,0),
+                          padding: const EdgeInsets.fromLTRB(0,40,0,0),
                           child: Container(
                             height: 120,
                             margin: EdgeInsets.only(
@@ -193,76 +193,81 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     );
   }
 
-  Widget profileImageAndWalletTotal(Size size) {
-    return Container(
-      height: 250,
-      width: 500,
-      child: Wrap(
-        children: [
-          Stack(
+  Widget profileImageAndWalletTotal() {
+    return Wrap(
+      children: [
+        Container(
+          height: 292,
+          width: 500,
+          child: Stack(
+            alignment: Alignment.topCenter,
             children: [
-              Container(
-                margin: EdgeInsets.only(
-                  left: 2,
-                  right: 2,
-                  top: 2
-                ),
-                child: ClipRRect(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8,26,8,0),
+                child: Container(
+                  child: ClipRRect(
                     //borderRadius: BorderRadius.circular(20.0),
                     child:Container(
-                      margin: EdgeInsets.only(top: 26,left: 8,right: 8),
                         child:Image.asset('assets/image/bg_wallet.png')),
+                  ),
                 ),
               ),
 
-              Column(
-                children: [
-                  Center(
-                    child: Container(
-                      width: 120.0,
-                      height: 120.0,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                              child:CircleAvatar(
-                                  radius: 75,
-                                  backgroundColor: Colors.white,
-                                  child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                  )))
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                child: Wrap(
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                        child: Container(
+                          width: 120.0,
+                          height: 120.0,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child:Container(
+                                  child:CircleAvatar(
+                                      radius: 75,
+                                      backgroundColor: Colors.white,
+                                      child: ClipOval(
+                                        child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                      )))
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        top: 29,
-                        right: 33
-                      ),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                            child:Container(
-                                child: Text("Your balance ",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: "Samsung_SharpSans_Medium",
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                ),)
-                            ),
-                          )
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: 29,
+                            right: 33
+                        ),
+                        child: Container(
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child:Container(
+                                child:Container(
+                                    child: Text("Your balance ",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: "Samsung_SharpSans_ um",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                      ),)
+                                ),
+                              )
 
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        top: 16,
-                          right: 33
-                      ),
-                      child: ClipRRect(
+                    Center(
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: 16,
+                            right: 33
+                        ),
+                        child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child:Container(
                             child:Container(
@@ -275,19 +280,19 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                             ),
                           ),
 
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
+                  ],
+                ),
+              ),
 
 
 
             ],
           ),
-        ],
-
-      ),
+        ),
+      ],
     );
   }
 
@@ -295,7 +300,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     return Container(
       height: MediaQuery.of(context).size.height*.70,
       margin: EdgeInsets.only(
-          top: size.height * 35 / 100,
+          top: MediaQuery.of(context).size.height*.28,
         left: size.width * 4 / 100,
         right: size.width * 4 / 100,
       ),
