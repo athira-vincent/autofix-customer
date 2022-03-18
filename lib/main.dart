@@ -72,8 +72,7 @@ class _MyAppState extends State<MyApp> {
         unselectedWidgetColor: CustColors.borderColor,
       ),
       home: SplashScreen(),
-     // home: BothServiceListScreen(),
-     // home: MechanicMyWalletScreen(),
+      //home: RegularServiceListScreen(),
     );
   }
 }
