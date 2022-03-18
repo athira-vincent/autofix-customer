@@ -81,6 +81,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
           style: Styles.appBarTextBlue,
         ),
         Spacer(),
+
       ],
     );
   }

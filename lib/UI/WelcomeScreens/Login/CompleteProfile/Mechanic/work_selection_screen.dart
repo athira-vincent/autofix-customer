@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
@@ -74,7 +75,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   TextEditingController _apprenticeCertificateController = TextEditingController();
   FocusNode _apprenticeCertificateFocusNode = FocusNode();
 
-  File? _images,identificationProof_file,apprenticeCertificate_file;
+  File? _images,_identificationProof_file,_apprenticeCertificate_file;
 
   bool isloading = false;
   String? countryCode;
@@ -1304,46 +1305,55 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   }
 
   _openFileExplorerApprenticeCertificate() async {
-    try {
-      FilePickerResult? file = await FilePicker.platform.pickFiles(
+    FirebaseStorage storage = FirebaseStorage.instance;
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['pdf','docx'], //here you can add any of extention what you need to pick
-      );
+        allowedExtensions: ['pdf','docx'],
+        withData: true
+    );
 
-      if(file != null) {
+    if (result != null) {
+      Uint8List? fileBytes = result.files.first.bytes;
+      String fileName = result.files.first.name;
 
-        setState(() {
-          _fileName_apprenticeCertificate = file.toString(); //file1 is a global variable which i created
-          print(_fileName_apprenticeCertificate);
-          identificationProof_file = File(_fileName_apprenticeCertificate.toString());
-          _apprenticeCertificateController.text = _fileName_apprenticeCertificate.toString();
-          uploadApprenticeCertificateToFirebase(identificationProof_file!);
-        });
-      }
-    } on PlatformException catch (e) {
-      print("Unsupported operation" + e.toString());
+      // Upload PDF file
+      TaskSnapshot taskSnapshot = await storage.ref('MechanicApprenticeCertificate/$fileName').putData(fileBytes!);
+      String pdfUrl = await taskSnapshot.ref.getDownloadURL();
+
+      setState(() {
+        print(fileName.toString());
+        _apprenticeCertificateController.text = fileName.toString();
+        certificateOfApprenticeFirebaseUrl = pdfUrl;
+      });
+
+      print(">>>>>>>>>>>>>>>> MechanicApprenticeCertificate " + pdfUrl);
     }
     if (!mounted) return;
   }
 
   _openFileExplorerMeansOfIdentification() async {
-    try {
-      FilePickerResult? file = await FilePicker.platform.pickFiles(
+    FirebaseStorage storage = FirebaseStorage.instance;
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['pdf','docx'], //here you can add any of extention what you need to pick
-      );
-      if(file != null) {
+        allowedExtensions: ['pdf','docx'],
+        withData: true
+    );
 
-        setState(() {
-          _fileName_meansOfIdentification = file.toString(); //file1 is a global variable which i created
-          print(_fileName_meansOfIdentification);
-           identificationProof_file = File(_fileName_meansOfIdentification.toString());
-          _identificationProofController.text = _fileName_meansOfIdentification.toString();
-           uploadIdentificationDocToFirebase(identificationProof_file!);
-        });
-      }
-    } on PlatformException catch (e) {
-      print("Unsupported operation" + e.toString());
+    if (result != null) {
+      Uint8List? fileBytes = result.files.first.bytes;
+      String fileName = result.files.first.name;
+
+      // Upload PDF file
+      TaskSnapshot taskSnapshot = await storage.ref('MechanicIDProof/$fileName').putData(fileBytes!);
+      String pdfUrl = await taskSnapshot.ref.getDownloadURL();
+
+      setState(() {
+        print(fileName.toString());
+        _identificationProofController.text = fileName.toString();
+        meansOfIdentificationFirebaseUrl = pdfUrl;
+      });
+
+      print(">>>>>>>>>>>>>>>> MechanicIDProof " + pdfUrl);
     }
     if (!mounted) return;
   }
@@ -1365,46 +1375,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         print("Error");
       }
       print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
-    });
-  }
-
-  Future uploadApprenticeCertificateToFirebase(File certificatePath) async {
-    String fileName = path.basename(certificatePath.path);
-    Reference reference = FirebaseStorage.instance.ref().child("MechanicApprenticeCertificate").child(fileName);
-    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
-    UploadTask uploadTask =  reference.putFile(certificatePath);
-    uploadTask.whenComplete(() async{
-      try{
-        String fileImageurl="";
-        fileImageurl = await reference.getDownloadURL();
-        setState(() {
-          certificateOfApprenticeFirebaseUrl = fileImageurl;
-        });
-
-      }catch(onError){
-        print("Error");
-      }
-      print(">>>>>>>>>>>>>>>> certificateOfApprenticeFirebaseUrl "+certificateOfApprenticeFirebaseUrl.toString());
-    });
-  }
-
-  Future uploadIdentificationDocToFirebase(File docPath) async {
-    String fileName = path.basename(docPath.path);
-    Reference reference = FirebaseStorage.instance.ref().child("MechanicIdentificationDoc").child(fileName);
-    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
-    UploadTask uploadTask =  reference.putFile(docPath);
-    uploadTask.whenComplete(() async{
-      try{
-        String fileImageurl="";
-        fileImageurl = await reference.getDownloadURL();
-        setState(() {
-          meansOfIdentificationFirebaseUrl = fileImageurl;
-        });
-
-      }catch(onError){
-        print("Error");
-      }
-      print(">>>>>>>>>>>>>>>> meansOfIdentificationFirebaseUrl " + meansOfIdentificationFirebaseUrl.toString());
     });
   }
 
