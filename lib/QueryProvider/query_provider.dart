@@ -35,7 +35,7 @@ class QueryProvider {
 
   socialLogin( email,  phoneNumber) async {
     String _query;
-    if(email=="")
+    if(email!="")
       {
         _query = """  
           mutation {
