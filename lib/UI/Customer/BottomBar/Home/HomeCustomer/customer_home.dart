@@ -224,11 +224,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
+    return SafeArea(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
             child: Column(
               children: [
                 searchYouService(),
