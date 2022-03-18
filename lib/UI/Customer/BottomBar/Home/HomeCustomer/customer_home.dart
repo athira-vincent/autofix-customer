@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import '../SearchService/search_service_screen.dart';
 import '../home_Bloc/home_customer_bloc.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
@@ -250,56 +251,83 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Widget searchYouService() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            flex:1,
-            child: SizedBox(
-              height: 35,
-              child: new TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search your Services',
-                  contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
-                  prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-
-                ),
+          /*Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.blue,
               ),
+              borderRadius: BorderRadius.circular(10.0),
             ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
+            child: Center(
+              child: Text('Search your Services'),
+            ),
+          ),*/
           Row(
             children: [
-              Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
-              SizedBox(
-                width: 50,
-                child: Column(
-                  children: [
-                    Text('Elenjikkal house Empyreal Garden',
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.visible,
-                      style: Styles.textLabelTitle_10,
+              Expanded(
+                flex:1,
+                child: SizedBox(
+                  height: 35,
+                  child:  TextField(
+                    controller: searchController,
+                    enabled: false,
+                    onTap: (){
+                      setState(() {
+                        print("clicked");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  SearchServiceScreen()));
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search your Services',
+                      contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
+                      prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+
                     ),
-                  ],
+                  ),
                 ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Row(
+                children: [
+                  Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+                  SizedBox(
+                    width: 50,
+                    child: Column(
+                      children: [
+                        Text('Elenjikkal house Empyreal Garden',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.textLabelTitle_10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
