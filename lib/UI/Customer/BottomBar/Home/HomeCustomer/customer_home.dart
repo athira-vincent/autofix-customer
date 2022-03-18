@@ -390,9 +390,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 1.3,
-                        crossAxisSpacing: .05,
+                        crossAxisCount: 4,
+                        childAspectRatio: .9,
+                        crossAxisSpacing: .08,
                         mainAxisSpacing: .05,
                       ),
                       itemBuilder: (context,index,) {
@@ -507,66 +507,66 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ),
         isRegularService==true
             ? Container(
-          child: StreamBuilder(
-              stream:  _homeCustomerBloc.regularServiceListResponse,
-              builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
-                print("${snapshot.hasData}");
-                print("${snapshot.connectionState}");
-                if(snapshot.hasData)
-                {
-                  return GridView.builder(
-                    itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1.3,
-                      crossAxisSpacing: .05,
-                      mainAxisSpacing: .05,
-                    ),
-                    itemBuilder: (context,index,) {
-                      return GestureDetector(
-                        onTap:(){
-
-                        },
-                        child:
-
-                        Container(
-
-                          child: Column(
-                            mainAxisAlignment:MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: CustColors.whiteBlueish,
-                                    borderRadius: BorderRadius.circular(11.0)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
-                                  style: Styles.textLabelTitleEmergencyServiceName,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.visible,),
-                              ),
-                            ],
+                child: StreamBuilder(
+                    stream:  _homeCustomerBloc.regularServiceListResponse,
+                    builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
+                      print("${snapshot.hasData}");
+                      print("${snapshot.connectionState}");
+                      if(snapshot.hasData)
+                      {
+                        return GridView.builder(
+                          itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            childAspectRatio: .9,
+                            crossAxisSpacing: .05,
+                            mainAxisSpacing: .05,
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }
-                else{
-                  return CircularProgressIndicator();
-                }
-              }
-          ),
-        )
+                          itemBuilder: (context,index,) {
+                            return GestureDetector(
+                              onTap:(){
+
+                              },
+                              child:
+
+                              Container(
+
+                                child: Column(
+                                  mainAxisAlignment:MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: CustColors.whiteBlueish,
+                                          borderRadius: BorderRadius.circular(11.0)
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15),
+                                        child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                        style: Styles.textLabelTitleEmergencyServiceName,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.visible,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      else{
+                        return CircularProgressIndicator();
+                      }
+                    }
+                ),
+              )
             : Container()
       ],
     );
