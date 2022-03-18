@@ -1540,7 +1540,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
               child: MaterialButton(
                 onPressed: () {
 
-
                   Navigator.pop(context);
 
                   setState(() {
