@@ -71,8 +71,8 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      //home: SplashScreen(),
-      home: BothServiceListScreen(),
+      home: SplashScreen(),
+     // home: BothServiceListScreen(),
      // home: MechanicMyWalletScreen(),
     );
   }
