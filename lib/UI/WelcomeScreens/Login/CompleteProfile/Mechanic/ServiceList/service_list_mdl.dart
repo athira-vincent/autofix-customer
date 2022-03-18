@@ -53,42 +53,42 @@ class EmeregencyOrRegularServiceList {
   EmeregencyOrRegularServiceList({
     required this.id,
     required this.serviceName,
+    required this.description,
     required this.icon,
     required this.minAmount,
     required this.maxAmount,
-    required this.categoryId,
     required this.type,
     required this.status,
   });
 
   String id;
   String serviceName;
+  String description;
   dynamic icon;
   String minAmount;
   String maxAmount;
-  int categoryId;
-  dynamic type;
+  String type;
   int status;
 
   factory EmeregencyOrRegularServiceList.fromJson(Map<String, dynamic> json) => EmeregencyOrRegularServiceList(
     id: json["id"] == null ? null : json["id"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
+    description: json["description"] == null ? null : json["description"],
     icon: json["icon"],
     minAmount: json["minAmount"] == null ? null : json["minAmount"],
     maxAmount: json["maxAmount"] == null ? null : json["maxAmount"],
-    categoryId: json["categoryId"] == null ? null : json["categoryId"],
-    type: json["type"],
+    type: json["type"] == null ? null : json["type"],
     status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "serviceName": serviceName == null ? null : serviceName,
+    "description": description == null ? null : description,
     "icon": icon,
     "minAmount": minAmount == null ? null : minAmount,
     "maxAmount": maxAmount == null ? null : maxAmount,
-    "categoryId": categoryId == null ? null : categoryId,
-    "type": type,
+    "type": type == null ? null : type,
     "status": status == null ? null : status,
   };
 }

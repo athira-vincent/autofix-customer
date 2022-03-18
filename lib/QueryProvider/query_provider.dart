@@ -560,10 +560,10 @@ class QueryProvider {
   emeregency_or_regular_serviceList(id: $type) {
     id
     serviceName
+    description
     icon
     minAmount
     maxAmount
-    categoryId
     type
     status
   }
