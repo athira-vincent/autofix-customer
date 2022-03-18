@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/SearchService/serviceSearchListAll_Mdl.dart';
 
 import 'ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 
@@ -64,4 +65,31 @@ class HomeCustomerApiProvider {
       return errorMsg;
     }
   }
+
+
+  Future<ServiceSearchListAllMdl>  postSearchServiceRequest(
+      token,
+      bookMechanicId,
+      serviceId,
+      serviceType)async {
+    Map<String, dynamic> _resp = await _queryProvider. postFindMechanicsListEmergencyRequest(
+        token,
+        bookMechanicId,
+        serviceId,
+        serviceType);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = ServiceSearchListAllMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return ServiceSearchListAllMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = ServiceSearchListAllMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 }

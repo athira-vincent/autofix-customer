@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
-import 'home_customer_bloc.dart';
+import '../home_Bloc/home_customer_bloc.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
 

@@ -130,6 +130,19 @@ class Repository {
           serviceId,
           serviceType);
 
+  // Search Service Request
+  Future<dynamic>  postSearchServiceRequest(
+      token,
+      search,
+      count,
+      categoryId)  =>
+      _homeCustomerApiProvider. postSearchServiceRequest(
+          token,
+          search,
+          count,
+          categoryId) ;
+
+
   // Make Brand List
   Future<dynamic> postMakeBrandRequest(
       token,) =>

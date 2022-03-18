@@ -22,7 +22,7 @@ import '../../../../../Widgets/CurvePainter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
-import '../HomeCustomer/home_customer_bloc.dart';
+import '../home_Bloc/home_customer_bloc.dart';
 
 
 class FindMechanicListScreen extends StatefulWidget {

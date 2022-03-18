@@ -526,6 +526,38 @@ class QueryProvider {
   }
 
 
+  postSearchServiceRequest(
+      token,
+      search,
+      count,
+      categoryId) async {
+    String _query = """ 
+     query
+      {
+        serviceListAll(search: "$search") {
+          id
+          serviceName
+          description
+          icon
+          minAmount
+          maxAmount
+          type
+          status
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
+
 
   fcmTokenUpdate(String fcmToken,String Authtoken) async {
     String _query = """
