@@ -249,7 +249,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget searchYouService() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           Expanded(
@@ -334,7 +334,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,5,20,5),
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
           child: Container(
             height: 35.0,
             margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
@@ -463,7 +463,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,5,20,5),
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
           child: Container(
             height: 35.0,
             margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
