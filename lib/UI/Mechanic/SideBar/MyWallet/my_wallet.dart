@@ -194,27 +194,27 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   }
 
   Widget profileImageAndWalletTotal() {
-    return Container(
-      height: 250,
-      width: 500,
-      child: Wrap(
-        children: [
-          Stack(
+    return Wrap(
+      children: [
+        Container(
+          height: 292,
+          width: 500,
+          child: Stack(
+            alignment: Alignment.topCenter,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                padding: const EdgeInsets.fromLTRB(8,26,8,0),
                 child: Container(
                   child: ClipRRect(
-                      //borderRadius: BorderRadius.circular(20.0),
-                      child:Container(
-                        margin: EdgeInsets.only(top: 26,left: 8,right: 8),
-                          child:Image.asset('assets/image/bg_wallet.png')),
+                    //borderRadius: BorderRadius.circular(20.0),
+                    child:Container(
+                        child:Image.asset('assets/image/bg_wallet.png')),
                   ),
                 ),
               ),
 
               Padding(
-                padding: const EdgeInsets.fromLTRB(0,10,0,0),
+                padding: const EdgeInsets.fromLTRB(0,0,0,0),
                 child: Wrap(
                   children: [
                     Center(
@@ -237,25 +237,27 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                       ),
                     ),
                     Center(
-                      child: Container(
-                        margin: EdgeInsets.only(
+                      child: Padding(
+                        padding: EdgeInsets.only(
                             top: 29,
                             right: 33
                         ),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child:Container(
+                        child: Container(
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
                               child:Container(
-                                  child: Text("Your balance ",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: "Samsung_SharpSans_ um",
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                    ),)
-                              ),
-                            )
+                                child:Container(
+                                    child: Text("Your balance ",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: "Samsung_SharpSans_ um",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                      ),)
+                                ),
+                              )
 
+                          ),
                         ),
                       ),
                     ),
@@ -289,9 +291,8 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
             ],
           ),
-        ],
-
-      ),
+        ),
+      ],
     );
   }
 
