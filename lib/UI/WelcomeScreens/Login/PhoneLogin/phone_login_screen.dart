@@ -3,10 +3,12 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../main.dart';
+import '../../../Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({Key? key}) : super(key: key);
@@ -32,7 +35,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
+  final SigninBloc _signinBloc = SigninBloc();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   bool _isLoading = false;
 
   double per = .10;
@@ -51,7 +56,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   void initState() {
     super.initState();
     _phoneNoController.addListener(onFocusChange);
-    _getForgotPwd();
+    _listenApis();
   }
 
   @override
@@ -59,35 +64,31 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
     super.dispose();
     _phoneNoFocusNode.removeListener(onFocusChange);
     _phoneNoController.dispose();
-    _forgotPasswordBloc.dispose();
   }
 
-  _getForgotPwd() {
-    _forgotPasswordBloc.postForgotPassword.listen((value) {
+  _listenApis() {
+    _signinBloc.socialLoginResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
-          FocusScope.of(context).unfocus();
+          _signinBloc.userDefault(value.data!.customerSocialLogin!.token.toString());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OtpVerificationScreen(
+                      userType: "0",
+                      userCategory: "0",
+                      phoneNumber: "${_phoneNoController.text}",
+                      otpNumber: "${value.data?.customerSocialLogin?.customer!.resetToken}",
+                      fromPage: "2",
+                    )),
+          );
         });
       }
     });
@@ -105,6 +106,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+          key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
             behavior: MyBehavior(),
@@ -272,18 +274,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          OtpVerificationScreen(
-                                                            userType: "0",
-                                                            userCategory: "0",
-                                                            phoneNumber: "",
-                                                            otpNumber: "",
-                                                            fromPage: "2",
-                                                          )),
-                                                );
+                                                print("${_phoneNoController.text}");
+                                                setState(() {
+                                                  _isLoading=true;
+
+                                                  _signinBloc.socialLogin("","${_phoneNoController.text}");                                                });
 
                                               },
                                               child: Container(

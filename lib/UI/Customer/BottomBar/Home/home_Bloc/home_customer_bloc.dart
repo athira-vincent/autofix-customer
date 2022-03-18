@@ -14,7 +14,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
-import 'ModelsCustomerHome/mechanics_Booking_Mdl.dart';
+import '../HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
+import '../SearchService/serviceSearchListAll_Mdl.dart';
 
 
 class HomeCustomerBloc {
@@ -91,6 +92,26 @@ class HomeCustomerBloc {
         serviceId,
         serviceType);
     postFindMechanicsListEmergency.sink.add(_mechaniclistForServicesMdl);
+  }
+
+  /// =============== Search Service Request  ================== ///
+
+
+  final postSearchService = BehaviorSubject<ServiceSearchListAllMdl>();
+  Stream<ServiceSearchListAllMdl> get postSearchServiceResponse => postSearchService.stream;
+
+  postSearchServiceRequest(
+      token,
+      search,
+      count,
+      categoryId) async {
+
+    ServiceSearchListAllMdl _serviceSearchListAllMdl = await repository.postSearchServiceRequest(
+        token,
+        search,
+        count,
+        categoryId);
+    postSearchService.sink.add(_serviceSearchListAllMdl);
   }
 
 

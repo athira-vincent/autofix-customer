@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
@@ -101,7 +102,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     getSharedPrefData();
     _phoneNoController.addListener(onFocusChange);
     textEditingController.text = widget.otpNumber;
-    _getForgotPwd();
     _listenOtpVerificationResponse();
 
     _getSignatureCode();
@@ -123,7 +123,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         setState(() {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-           if( widget.userType == TextStrings.user_customer)
+          if( widget.fromPage == "2")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  CustomerHomeScreen()));
+          }
+          else if( widget.userType == TextStrings.user_customer)
           {
             Navigator.pushReplacement(
               context,
@@ -132,7 +139,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
             );
           }
-        else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
+         else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
           {
             Navigator.pushReplacement(
               context,
@@ -141,7 +148,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
             );
           }
-        else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
+         else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
           {
             Navigator.pushReplacement(
               context,
@@ -150,8 +157,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
             );
           }
-        else if( widget.userType == '1')
-        {
+         else if( widget.userType == '1')
+          {
           Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
@@ -159,8 +166,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     LoginScreen()),
           );
         }
-        else
-        {
+         else
+          {
           Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
@@ -193,36 +200,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     SmsVerification.stopListening();
   }
 
-  _getForgotPwd() {
-    _forgotPasswordBloc.postForgotPassword.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
 
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-  }
 
   void onFocusChange() {
     setState(() {

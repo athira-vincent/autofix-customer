@@ -9,7 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
-import 'home_customer_bloc.dart';
+import '../SearchService/search_service_screen.dart';
+import '../home_Bloc/home_customer_bloc.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
 
@@ -224,11 +225,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
+    return SafeArea(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
             child: Column(
               children: [
                 searchYouService(),
@@ -248,57 +250,84 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget searchYouService() {
     return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Row(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
         children: [
-          Expanded(
-            flex:1,
-            child: SizedBox(
-              height: 35,
-              child: new TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search your Services',
-                  contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
-                  prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
-                      borderRadius: BorderRadius.circular(11.0)),
-
-                ),
+          /*Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.blue,
               ),
+              borderRadius: BorderRadius.circular(10.0),
             ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
+            child: Center(
+              child: Text('Search your Services'),
+            ),
+          ),*/
           Row(
             children: [
-              Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
-              SizedBox(
-                width: 50,
-                child: Column(
-                  children: [
-                    Text('Elenjikkal house Empyreal Garden',
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.visible,
-                      style: Styles.textLabelTitle_10,
+              Expanded(
+                flex:1,
+                child: SizedBox(
+                  height: 35,
+                  child:  TextField(
+                    controller: searchController,
+                    enabled: false,
+                    onTap: (){
+                      setState(() {
+                        print("clicked");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  SearchServiceScreen()));
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search your Services',
+                      contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
+                      prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustColors.light_navy),
+                          borderRadius: BorderRadius.circular(11.0)),
+
                     ),
-                  ],
+                  ),
                 ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Row(
+                children: [
+                  Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+                  SizedBox(
+                    width: 50,
+                    child: Column(
+                      children: [
+                        Text('Elenjikkal house Empyreal Garden',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.textLabelTitle_10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -333,7 +362,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,5,20,5),
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
           child: Container(
             height: 35.0,
             margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
@@ -389,9 +418,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 1.3,
-                        crossAxisSpacing: .05,
+                        crossAxisCount: 4,
+                        childAspectRatio: .9,
+                        crossAxisSpacing: .08,
                         mainAxisSpacing: .05,
                       ),
                       itemBuilder: (context,index,) {
@@ -462,7 +491,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,5,20,5),
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
           child: Container(
             height: 35.0,
             margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
@@ -506,66 +535,66 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ),
         isRegularService==true
             ? Container(
-          child: StreamBuilder(
-              stream:  _homeCustomerBloc.regularServiceListResponse,
-              builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
-                print("${snapshot.hasData}");
-                print("${snapshot.connectionState}");
-                if(snapshot.hasData)
-                {
-                  return GridView.builder(
-                    itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1.3,
-                      crossAxisSpacing: .05,
-                      mainAxisSpacing: .05,
-                    ),
-                    itemBuilder: (context,index,) {
-                      return GestureDetector(
-                        onTap:(){
-
-                        },
-                        child:
-
-                        Container(
-
-                          child: Column(
-                            mainAxisAlignment:MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: CustColors.whiteBlueish,
-                                    borderRadius: BorderRadius.circular(11.0)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
-                                  style: Styles.textLabelTitleEmergencyServiceName,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.visible,),
-                              ),
-                            ],
+                child: StreamBuilder(
+                    stream:  _homeCustomerBloc.regularServiceListResponse,
+                    builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
+                      print("${snapshot.hasData}");
+                      print("${snapshot.connectionState}");
+                      if(snapshot.hasData)
+                      {
+                        return GridView.builder(
+                          itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            childAspectRatio: .9,
+                            crossAxisSpacing: .05,
+                            mainAxisSpacing: .05,
                           ),
-                        ),
-                      );
-                    },
-                  );
-                }
-                else{
-                  return CircularProgressIndicator();
-                }
-              }
-          ),
-        )
+                          itemBuilder: (context,index,) {
+                            return GestureDetector(
+                              onTap:(){
+
+                              },
+                              child:
+
+                              Container(
+
+                                child: Column(
+                                  mainAxisAlignment:MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: CustColors.whiteBlueish,
+                                          borderRadius: BorderRadius.circular(11.0)
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15),
+                                        child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                        style: Styles.textLabelTitleEmergencyServiceName,
+                                        maxLines: 2,
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.visible,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      else{
+                        return CircularProgressIndicator();
+                      }
+                    }
+                ),
+              )
             : Container()
       ],
     );

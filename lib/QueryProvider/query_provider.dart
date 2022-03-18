@@ -35,7 +35,7 @@ class QueryProvider {
 
   socialLogin( email,  phoneNumber) async {
     String _query;
-    if(email=="")
+    if(email!="")
       {
         _query = """  
           mutation {
@@ -524,6 +524,38 @@ class QueryProvider {
     isTokenThere: false,
     );
   }
+
+
+  postSearchServiceRequest(
+      token,
+      search,
+      count,
+      categoryId) async {
+    String _query = """ 
+     query
+      {
+        serviceListAll(search: "$search") {
+          id
+          serviceName
+          description
+          icon
+          minAmount
+          maxAmount
+          type
+          status
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
 
 
 
