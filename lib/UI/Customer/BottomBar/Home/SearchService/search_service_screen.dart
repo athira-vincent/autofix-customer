@@ -66,7 +66,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postSearchServiceRequest("$authToken", "s","","");
-
     });
   }
 
