@@ -42,7 +42,7 @@ class InputValidator {
   }
 
   String? nameCheckingWithNumericAndBracket(String? value) {
-    String pattern = r'^[a-z A-Z 0-9,.\[\]\-]+$';
+    String pattern = r'^[a-z A-Z 0-9,.\[\]\-\/]+$';
     RegExp regExp = RegExp(pattern);
     if (value!.isEmpty && ch != "Last name") {
       return ch.toString() + " is " + TextStrings.errRequired;

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class WaitAdminApprovalScreen extends StatefulWidget {
@@ -14,6 +17,22 @@ class WaitAdminApprovalScreen extends StatefulWidget {
 }
 
 class _WaitAdminApprovalScreenState extends State<WaitAdminApprovalScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 3), () {
+      _changeScreen();
+    });
+  }
+
+  Future _changeScreen() async {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>  LoginScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

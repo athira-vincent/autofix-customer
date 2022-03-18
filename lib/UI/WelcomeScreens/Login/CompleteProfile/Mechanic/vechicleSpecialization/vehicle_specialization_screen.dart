@@ -35,6 +35,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
   void initState() {
     // TODO: implement initState
     super.initState();
+    vehicleSpecialisationList.clear();
     _specializationBloc.dialvehicleSpecializationListRequest();
     _populateCountryList();
   }
