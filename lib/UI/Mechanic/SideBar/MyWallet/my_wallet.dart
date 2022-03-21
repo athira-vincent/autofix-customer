@@ -1,9 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MechanicMyWalletScreen extends StatefulWidget {
@@ -40,7 +38,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                         appBarCustomUi(size),
                         profileImageAndWalletTotal(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,20,0,0),
+                          padding: const EdgeInsets.fromLTRB(0,12,0,0),
                           child: Container(
                             height: 120,
                             margin: EdgeInsets.only(
@@ -58,55 +56,50 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                           ),
                         ),
 
-                        Row(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                    top: size.height * 1.5 / 100,
-                                    left: size.width * 9 / 100,
-                                    right: size.width * 9 / 100,
-                                  ),
-                                  child: Text("Todays payments",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: "Samsung_SharpSans_Medium",
-                                      color: CustColors.light_navy,
-                                      fontWeight: FontWeight.w400,
-                                    ),)
+                        Container(
+                          margin: EdgeInsets.only(
+                           //top: size.height * .2 / 100,
+                            bottom: size.width * .2 / 100,
+                          ),
+                          child: Row(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                      top: size.height * 1.5 / 100,
+                                      left: size.width * 9 / 100,
+                                      right: size.width * 9 / 100,
+                                    ),
+                                    child: Text("Todays payments",
+                                      style: Styles.myWalletTitleText03,)
+                                ),
                               ),
-                            ),
-                            Spacer(),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                  margin: EdgeInsets.only(
-                                    top: size.height * 1.5 / 100,
-                                   //left: size.width * 9 / 100,
-                                    right: size.width * 9 / 100,
-                                  ),
-                                  child: Text("- ₦ 15000",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontFamily: "Samsung_SharpSans_Medium",
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                    ),)
+                              Spacer(),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                      top: size.height * 1.5 / 100,
+                                     //left: size.width * 9 / 100,
+                                      right: size.width * 10.5 / 100,
+                                    ),
+                                    child: Text("- ₦ 15000",
+                                      style: Styles.myWalletTitleText04,)
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
 
+                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
+                        //Spacer(),
                         listTileItem(size,"John Carlo","11:30","₦ 5000"),
 
                         listTileItem(size,"John Carlo","11:30","₦ 5000"),
 
                       ],
                     ),
-
-
-
                   ],
                 ),
               ),
@@ -189,12 +182,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                               child:Container(
                                 child:Container(
                                     child: Text("Your balance ",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: "Samsung_SharpSans_ um",
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400,
-                                      ),)
+                                      style: Styles.myWalletCardText02,)
                                 ),
                               )
 
@@ -212,15 +200,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                           borderRadius: BorderRadius.circular(20.0),
                           child:Container(
                             child:Container(
-                                child: Text("₦ 5000",style: TextStyle(
-                                  fontSize: 25,
-                                  fontFamily: "Samsung_SharpSans_Medium",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),)
+                                child: Text("₦ 5000",style: Styles.myWalletCardText01,)
                             ),
                           ),
-
                         ),
                       ),
                     ),
@@ -255,7 +237,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                Radius.circular(10),
               ),
               //color: CustColors.blackishgrey,
-               color: CustColors.whiteBlueish,
+              color: CustColors.whiteBlueish,
             ),
           )
       ),
@@ -278,13 +260,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
               ),
               child: Text(titleText,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12.5,
-                fontWeight: FontWeight.w200,
-                fontFamily: "Samsung_SharpSans_Medium",
-               // overflow: ,
-              ),)),
+              style: Styles.myWalletSubTitleTextRoundText01,)),
 
           Expanded(
             child: Padding(
@@ -295,12 +271,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                 child: Text(
                   circleText,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: CustColors.light_navy,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Samsung_SharpSans_Bold"
-                  ),
+                  style: Styles.myWalletSubTitleTextRoundText02,
                 ),
               ),
             ),
@@ -313,48 +284,64 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   Widget listTileItem(Size size, String customerName, String time, String amount){
     return Container(
       padding: EdgeInsets.only(
-          top: size.height * 1.5 / 100,
-          bottom: size.height * 1.5 / 100,
-          right: size.width * 1.2 / 100,
-          left: size.width * 1.2 / 100
+          top: size.height * 1 / 100,
+          bottom: size.height * 1 / 100,
       ),
       margin: EdgeInsets.only(
-        left: size.width * 9 / 100,
-        right: size.width * 9 / 100,
+        left: size.width * 8 / 100,
+        right: size.width * 8 / 100,
       ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(6),
-          ),
-          color: Colors.white
-      ),
-      //color: CustColors.white_02,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              Text("Customer",),
-              Text("John Carlo",),
-            ],
-          ),
-
-          Column(
-            children: [
-              Text("Time",),
-              Text("11:30",),
-            ],
-          ),
-
-          Container(
-            child: Text(
-              "₦ 5000",
-
+      child: Container(
+        padding: EdgeInsets.only(
+            top: size.height * 1.8 / 100,
+            bottom: size.height * 1.8 / 100,
+            right: size.width * 2.5 / 100,
+            left: size.width * 2.5 / 100
+        ),
+        margin: EdgeInsets.only(
+          left: size.width * 1.2 / 100,
+          right: size.width * 1.2 / 100,
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
             ),
-          )
+            color: Colors.white
+        ),
+        //color: CustColors.white_02,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Text("Customer",style: Styles.myWalletListTileTitle01,),
+                SizedBox(
+                  height: size.height * .7 / 100,
+                ),
+                Text(customerName,style: Styles.myWalletListTileTitle02,),
+              ],
+            ),
 
-        ],
+            Column(
+              children: [
+                Text("Time",style: Styles.myWalletListTileTitle01,),
+                SizedBox(
+                  height: size.height * .7 / 100,
+                ),
+                Text(time,style: Styles.myWalletListTileTitle02,),
+              ],
+            ),
+
+            Container(
+              child: Text(
+                amount,style: Styles.myWalletListTileTitle03,
+              ),
+            )
+
+          ],
+        ),
       ),
+
     );
 
   }
