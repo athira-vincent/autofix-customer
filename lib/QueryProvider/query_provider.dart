@@ -503,14 +503,12 @@ class QueryProvider {
         mechanicService {
           id
           fee
-          serviceId
           status
           userId
         }
         mechanicVehicle {
           id
           status
-          makeId
         }
       }
     }
