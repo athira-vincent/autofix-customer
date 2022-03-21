@@ -84,11 +84,11 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
               children: [
                 appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                timeAndLocationUi(size),
-                reviewsUi(size),
-                selectedServiceDetailsUi(size),
-                acceptAndSendRequestButton( size,context)
+                jobCompletedText(size),
+                estimatedAndTimeTakenUi(size),
+                selectedRepairDetailsUi(size),
+
+                RequestButton( size,context)
               ],
             ),
           ),
@@ -98,483 +98,241 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   }
 
   Widget appBarCustomUi(Size size) {
-    return Stack(
+    return Row(
       children: [
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.pop(context),
-            ),
-            Text(
-              'minnu',
-              textAlign: TextAlign.center,
-              style: Styles.appBarTextBlack,
-            ),
-            Spacer(),
-
-          ],
+        IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top:8.0),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(
-                    'experience',
-                    textAlign: TextAlign.center,
-                    style: Styles.experienceTextBlack,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: [
-
-                        Container(
-                          height: 60,
-                          width: 60,
-                          color: Colors.white,
-                          child: CustomPaint(
-                            painter: CurvePainter(),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '9 Year',
-                            textAlign: TextAlign.center,
-                            style: Styles.badgeTextStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        Text(
+          'Congratulations!! minnu',
+          textAlign: TextAlign.center,
+          style: Styles.appBarTextBlack,
         ),
+        Spacer(),
+
       ],
     );
   }
 
-  Widget profileImageAndKmAndReviewCount(Size size) {
+  Widget jobCompletedText(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,10,10,10),
       child: Container(
-        alignment: Alignment.center,
-        child: Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,10),
-              child: Stack(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedGray.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Text('1200 Km',
-                          style: Styles.appBarTextBlack17,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,110,155,0),
-                        child: Text('Away',
-                          style: Styles.awayTextBlack,),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(90,10,0,0),
-                    child: Container(
-                      width: 125.0,
-                      height: 125.0,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                              child:CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.white,
-                                  child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                  )))
-
-                      ),
-                    ),
-                  ),
-
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,75,0,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedWhite.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,75,10,0),
-                        child: Text('Reviews',
-                          style: Styles.appBarTextBlack17,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,110,10,0),
-                        child: RatingBar.builder(
-                          initialRating: 3.5,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 10,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 1),
-                          itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: CustColors.blue,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-
-                ],
-              ),
-            ),
-          ],
-
-        ),
-      ),
-    );
-  }
-
-  Widget timeAndLocationUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-      child: Container(
-        alignment: Alignment.center,
-        child:Row(
-          children: [
-            Row(
-              children: [
-                Icon(Icons.lock_clock, color: CustColors.light_navy,size: 35,),
-                SizedBox(
-                  width: 50,
-                  child: Column(
-                    children: [
-                      Text('3 Minutes',
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.visible,
-                        style: Styles.textLabelTitle_10,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Spacer(),
-            Row(
-              children: [
-                SizedBox(
-                  width: 50,
-                  child: Column(
-                    children: [
-                      Text('Location',
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.visible,
-                        style: Styles.textLabelTitle_10,
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
-
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget reviewsUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-      child: Container(
-        alignment: Alignment.center,
-        child:Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,0),
-              child: Container(
-                child: Text('Reviews',
-                  maxLines: 2,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.visible,
-                  style: Styles.appBarTextBlack,
-                ),
-              ),
-            ),
             Container(
-              child: ListView.builder(
-                itemCount:1,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context,index,) {
-                  return GestureDetector(
-                    onTap:(){
-
-                    },
-                    child:Column(
-                      mainAxisAlignment:MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: CustColors.whiteBlueish,
-                                borderRadius: BorderRadius.circular(11.0)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                    child: Container(
-                                      width: 80.0,
-                                      height: 80.0,
-                                      child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          child:Container(
-                                              child:CircleAvatar(
-                                                  radius: 50,
-                                                  backgroundColor: Colors.white,
-                                                  child: ClipOval(
-                                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                                  )))
-
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(2),
-                                            child: Text('Christopher',
-                                              style: Styles.textLabelTitle12,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,),
-                                          ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.all(2),
-                                            child: Text('Good service and  nice work…',
-                                              style: Styles.textLabelTitle12,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,),
-                                          ),
-
-                                          Row(
-                                            children: [
-                                              Spacer(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top:8),
-                                                child: Text('Read More',
-                                                  style: Styles.textLabelTitle12,
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                height: 140,
+                width: 160,
+                child: SvgPicture.asset(
+                  'assets/image/MechanicType/mechanic_work_completed.svg',
+                  fit: BoxFit.contain,
+                )
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            Text(
+              "Job Completed",
+              style: Styles.textSuccessfulTitleStyle03,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-                Container(
-                  height: 1,
-                  width: 110,
-                  color: CustColors.greyText,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Load more',
+
+  Widget selectedRepairDetailsUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,10,20,10),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(11.0)
+        ),
+        child:Padding(
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,0),
+                child: Container(
+                  child: Text('Repair Details',
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.visible,
-                    style: Styles.textLabelTitle_10,
+                    style: Styles.appBarTextBlack,
                   ),
                 ),
-                Container(
-                  height: 1,
-                  width: 110,
-                  color: CustColors.greyText,
-                ),
-
-
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget selectedServiceDetailsUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-      child: Container(
-        alignment: Alignment.center,
-        child:Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,0),
-              child: Container(
-                child: Text('Selected Service',
-                  maxLines: 2,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.visible,
-                  style: Styles.appBarTextBlack,
-                ),
               ),
-            ),
-            Container(
-              child: ListView.builder(
-                itemCount:5,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context,index,) {
+              Container(
+                child: ListView.builder(
+                  itemCount:5,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context,index,) {
 
 
 
-                  return GestureDetector(
-                    onTap:(){
+                    return GestureDetector(
+                      onTap:(){
 
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                      child: Container(
-                        alignment: Alignment.center,
-                        child:Row(
-                          children: [
-                            Row(
-                              children: [
-                                Text('id',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelTitle_10,
-                                ),
-                              ],
-                            ),
-                            Spacer(),
-                            Row(
-                              children: [
-                                Text('fees',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelTitle_10,
-                                ),
-                              ],
-                            ),
-                          ],
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child:Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('id',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  Text('fees',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                child: Row(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Total price including tax',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.appBarTextBlack17,
+                        ),
+                      ],
                     ),
-                  );
-                },
+                    Spacer(),
+                    Row(
+                      children: [
+                        Text('$totalFees',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.appBarTextBlack17,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,0),
-              child: Row(
-                children: [
-                  Row(
-                    children: [
-                      Text('Total Amount',
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.visible,
-                        style: Styles.appBarTextBlack17,
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  Row(
-                    children: [
-                      Text('$totalFees',
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.visible,
-                        style: Styles.appBarTextBlack17,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget acceptAndSendRequestButton(Size size, BuildContext context) {
+  Widget estimatedAndTimeTakenUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,10,20,10),
+      child: Container(
+        alignment: Alignment.center,
+        child:Padding(
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: CustColors.whiteBlueish,
+                      borderRadius: BorderRadius.circular(11.0)
+                  ),
+                   child:  Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       Container(
+                           height: 20,
+                           width: 20,
+                           child: SvgPicture.asset(
+                             'assets/image/MechanicType/mechanic_work_completed.svg',
+                             fit: BoxFit.contain,
+                           )
+                       ),
+                       Text(
+                         "Job Completed",
+                         style: Styles.textSuccessfulTitleStyle03,
+                       ),
+                     ],
+                   ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+
+              Expanded(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: CustColors.greyish,
+                      borderRadius: BorderRadius.circular(11.0)
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                          height: 20,
+                          width: 20,
+                          child: SvgPicture.asset(
+                            'assets/image/MechanicType/mechanic_work_completed.svg',
+                            fit: BoxFit.contain,
+                          )
+                      ),
+                      Text(
+                        "Job Completed",
+                        style: Styles.textSuccessfulTitleStyle03,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget RequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-        _showMechanicAcceptanceDialog(context);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  MechanicTrackingScreen()));
+
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -597,7 +355,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                 borderRadius: BorderRadius.circular(7),
               ),
               child:  Text(
-                "Accept & send request",
+                "Request Payment",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Corbel_Bold',

@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../../../../Mechanic/BottomBar/Home/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import '../SearchService/search_service_screen.dart';
 import '../home_Bloc/home_customer_bloc.dart';
@@ -261,7 +262,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  SearchServiceScreen()));
+                              builder: (context) =>  MechanicWorkCompletedScreen(authToken: "",mechanicId: "",)));
 
 
                   },
