@@ -147,13 +147,13 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       child: Container(
         alignment: Alignment.center,
         child:Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          padding: const EdgeInsets.fromLTRB(0,5,0,5),
           child: Row(
             children: [
               Expanded(
                 flex: 1,
                 child: Container(
-                  height: 70,
+                  height: 72,
                   decoration: BoxDecoration(
                       color: CustColors.whiteBlueish,
                       borderRadius: BorderRadius.circular(11.0)
@@ -203,9 +203,9 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
               Expanded(
                 flex: 1,
                 child: Container(
-                  height: 70,
+                  height: 72,
                   decoration: BoxDecoration(
-                      color: CustColors.grey_02,
+                      color: CustColors.cloudy_blue,
                       borderRadius: BorderRadius.circular(11.0)
                   ),
                   child:  Padding(
