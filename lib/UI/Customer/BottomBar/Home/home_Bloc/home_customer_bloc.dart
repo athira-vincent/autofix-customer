@@ -77,7 +77,7 @@ class HomeCustomerBloc {
   /// =============== Find Mechanics List Emergency ================== ///
 
 
-  final postFindMechanicsListEmergency = BehaviorSubject<MechaniclistForServicesMdl>();
+  final postFindMechanicsListEmergency = PublishSubject<MechaniclistForServicesMdl>();
   Stream<MechaniclistForServicesMdl> get findMechanicsListEmergencyResponse => postFindMechanicsListEmergency.stream;
 
   postFindMechanicsListEmergencyRequest(
@@ -97,7 +97,7 @@ class HomeCustomerBloc {
   /// =============== Search Service Request  ================== ///
 
 
-  final postSearchService = BehaviorSubject<ServiceSearchListAllMdl>();
+  final postSearchService = PublishSubject<ServiceSearchListAllMdl>();
   Stream<ServiceSearchListAllMdl> get postSearchServiceResponse => postSearchService.stream;
 
   postSearchServiceRequest(

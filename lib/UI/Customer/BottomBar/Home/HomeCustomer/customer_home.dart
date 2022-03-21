@@ -226,14 +226,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+        child: Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               children: [
-                searchYouService(),
+                searchYouService(context),
                 serviceBanners(),
                 emergencyService(),
                 regularService(),
@@ -244,66 +242,39 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 
-  Widget searchYouService() {
+  Widget searchYouService(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          /*Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blue,
-              ),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Center(
-              child: Text('Search your Services'),
-            ),
-          ),*/
           Row(
             children: [
               Expanded(
                 flex:1,
-                child: SizedBox(
-                  height: 35,
-                  child:  TextField(
-                    controller: searchController,
-                    enabled: false,
-                    onTap: (){
-                      setState(() {
-                        print("clicked");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  SearchServiceScreen()));
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Search your Services',
-                      contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
-                      prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: CustColors.light_navy),
-                          borderRadius: BorderRadius.circular(11.0)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: CustColors.light_navy),
-                          borderRadius: BorderRadius.circular(11.0)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: CustColors.light_navy),
-                          borderRadius: BorderRadius.circular(11.0)),
-                      disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: CustColors.light_navy),
-                          borderRadius: BorderRadius.circular(11.0)),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: CustColors.light_navy),
-                          borderRadius: BorderRadius.circular(11.0)),
+                child: InkWell(
+                  onTap: () {
 
+                      print("clicked");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  SearchServiceScreen()));
+
+
+                  },
+                  child: Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(11),
+                        border: Border.all(width: 1,color: CustColors.light_navy)),
+                    child: Row(
+                      children: [
+                        Icon(Icons.search_rounded, color: CustColors.light_navy),
+                        Text('Search your Services'),
+                      ],
                     ),
                   ),
                 ),

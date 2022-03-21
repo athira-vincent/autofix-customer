@@ -165,8 +165,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     return Scaffold(
       drawer: CustomerNavigationDrawerScreen(),
       key: scaffoldKey,
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
         child: AppBar(

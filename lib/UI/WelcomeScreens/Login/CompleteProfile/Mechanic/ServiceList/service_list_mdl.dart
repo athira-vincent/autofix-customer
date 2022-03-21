@@ -61,7 +61,7 @@ class EmeregencyOrRegularServiceList {
     required this.status,
   });
 
-  String id;
+  dynamic id;
   String serviceName;
   String description;
   dynamic icon;

@@ -163,9 +163,9 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
     getSharedPrefData();
     _listenServiceListResponse();
 
-    rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
+  /*  rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
       _mapStyle = string;
-    });
+    });*/
     /// add origin marker origin marker
     _addMarker(
       LatLng(_originLatitude, _originLongitude),
@@ -200,6 +200,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          waitingMechanic = "0";
         });
 
       } else {
@@ -216,7 +217,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
             }
 
           print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print("success postServiceList >>>>>>>  ${value.status}");
 
         });
       }
@@ -568,8 +569,14 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
-                                      child: Icon(Icons.arrow_back, color: Colors.black),
+                                    InkWell(
+                                      onTap:()
+                                      {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        child: Icon(Icons.arrow_back, color: Colors.black),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(15,0,15,0),

@@ -60,7 +60,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData +SearchServiceScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
@@ -81,7 +81,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print("sucess postServiceList >>>>>>>  ${value.status}");
 
         });
       }
@@ -157,13 +157,35 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
+                appBarCustomUi(size),
                 searchYouService(),
-                emergencyService()
+                emergencyService(),
+                SizedBox(
+                  height: 10,
+                ),
+                regularService(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget appBarCustomUi(Size size) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        Text(
+          'Search Services',
+          textAlign: TextAlign.center,
+          style: Styles.appBarTextBlue,
+        ),
+        Spacer(),
+      ],
     );
   }
 
@@ -183,45 +205,30 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                   contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
                   prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
+                      borderSide: BorderSide(color: CustColors.whiteBlueish),
                       borderRadius: BorderRadius.circular(11.0)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
+                      borderSide: BorderSide(color: CustColors.whiteBlueish),
                       borderRadius: BorderRadius.circular(11.0)),
                   enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
+                      borderSide: BorderSide(color: CustColors.whiteBlueish),
                       borderRadius: BorderRadius.circular(11.0)),
                   disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
+                      borderSide: BorderSide(color: CustColors.whiteBlueish),
                       borderRadius: BorderRadius.circular(11.0)),
                   errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustColors.light_navy),
+                      borderSide: BorderSide(color: CustColors.whiteBlueish),
                       borderRadius: BorderRadius.circular(11.0)),
 
                 ),
+                onChanged: (text) {
+                  print('First text field: $text');
+                  setState(() {
+                    _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}","","");
+                  });
+                },
               ),
             ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Row(
-            children: [
-              Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
-              SizedBox(
-                width: 50,
-                child: Column(
-                  children: [
-                    Text('Elenjikkal house Empyreal Garden',
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.visible,
-                      style: Styles.textLabelTitle_10,
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
         ],
       ),
@@ -229,31 +236,127 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
   }
 
   Widget emergencyService() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
-          child: Container(
-            height: 35.0,
-            margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Emergency Services',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
-                    style: Styles.textLabelTitle_Regular,
-                  ),
-                ),
-                Spacer(),
-                Icon(isEmergencyService==true?Icons.keyboard_arrow_down_rounded:Icons.keyboard_arrow_right, color: CustColors.light_navy,size: 30,),
-              ],
-            ),
-          ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,0,20,0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(11.0)
         ),
-        Container(
+        child: Column(
+          children: [
+
+            Container(
+                  child: StreamBuilder(
+                      stream:  _homeCustomerBloc.postSearchServiceResponse,
+                      builder: (context, AsyncSnapshot<ServiceSearchListAllMdl> snapshot) {
+                        print("${snapshot.hasData}");
+                        print("${snapshot.connectionState}");
+                        if(snapshot.hasData)
+                        {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10,5,10,5),
+                                child: Container(
+                                  height: 35.0,
+                                  margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('Emergency Services',
+                                          maxLines: 2,
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.visible,
+                                          style: Styles.textLabelTitle_Regular,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              ListView.builder(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data?.data?.serviceListAll?.length,
+                                itemBuilder: (context, index) {
+                                  return  GestureDetector(
+                                    onTap:(){
+
+                                      setState(() {
+                                        print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                        print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                        print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                        print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                        serviceIds.clear();
+                                        serviceIds.add('${snapshot.data?.data?.serviceListAll?[index].id}');
+                                        print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                                        _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                            authToken,
+                                            '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                            '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                            CurrentLatitude,
+                                            CurrentLongitude,
+                                            serviceIds);
+                                      });
+
+                                    },
+                                    child: snapshot.data?.data?.serviceListAll?[index].type =='1' && snapshot.data?.data?.serviceListAll?[index].type != null
+                                    ? Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(30,0,30,0),
+                                        child: Column(
+                                          mainAxisAlignment:MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(30,2,30,2),
+                                              child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                                style: Styles.textLabelTitleEmergencyServiceName,
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.visible,),
+                                            ),
+                                            Divider(),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                    : Container(),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                        else{
+                          return  Container();
+                        }
+
+                      }
+                  ),
+                )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget regularService() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,0,20,0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(11.0)
+        ),
+        child: Column(
+          children: [
+
+            Container(
               child: StreamBuilder(
                   stream:  _homeCustomerBloc.postSearchServiceResponse,
                   builder: (context, AsyncSnapshot<ServiceSearchListAllMdl> snapshot) {
@@ -261,61 +364,94 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                     print("${snapshot.connectionState}");
                     if(snapshot.hasData)
                     {
-                      return ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data?.data?.serviceListAll?.length,
-                        itemBuilder: (context, index) {
-                          return  GestureDetector(
-                            onTap:(){
-
-                              setState(() {
-                                print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                                print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                                print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                serviceIds.clear();
-                                serviceIds.add('${snapshot.data?.data?.serviceListAll![index].id}');
-                                print(">>>>>>>>>> ServiceId  $serviceIds");
-
-                                _homeCustomerBloc.postMechanicsBookingIDRequest(
-                                    authToken,
-                                    '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                                    '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                                    CurrentLatitude,
-                                    CurrentLongitude,
-                                    serviceIds);
-                              });
-
-                            },
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,5,10,5),
                             child: Container(
-                              child: Column(
-                                mainAxisAlignment:MainAxisAlignment.start,
+                              height: 35.0,
+                              margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
+                              child: Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(2),
-                                    child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
-                                      style: Styles.textLabelTitleEmergencyServiceName,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Regular Services',
                                       maxLines: 2,
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.visible,),
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.visible,
+                                      style: Styles.textLabelTitle_Regular,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          );
-                        },
+                          ),
+                          ListView.builder(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data?.data?.serviceListAll?.length,
+                            itemBuilder: (context, index) {
+                              return  GestureDetector(
+                                onTap:(){
+
+                                  setState(() {
+                                    print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                    print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                    print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                    print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                    serviceIds.clear();
+                                    serviceIds.add('${snapshot.data?.data?.serviceListAll?[index].id}');
+                                    print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                                    _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                        authToken,
+                                        '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                        '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                        CurrentLatitude,
+                                        CurrentLongitude,
+                                        serviceIds);
+                                  });
+
+                                },
+                                child: snapshot.data?.data?.serviceListAll?[index].type =='2' && snapshot.data?.data?.serviceListAll?[index].type != null
+                                    ? Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(30,0,30,0),
+                                    child: Column(
+                                      mainAxisAlignment:MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(30,2,30,2),
+                                          child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                            style: Styles.textLabelTitleEmergencyServiceName,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.start,
+                                            overflow: TextOverflow.visible,),
+                                        ),
+                                        Divider(),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                                    : Container(),
+                              );
+                            },
+                          ),
+                        ],
                       );
                     }
                     else{
-                      return CircularProgressIndicator();
+                      return  Container();
                     }
 
                   }
               ),
             )
-      ],
+          ],
+        ),
+      ),
     );
   }
 
