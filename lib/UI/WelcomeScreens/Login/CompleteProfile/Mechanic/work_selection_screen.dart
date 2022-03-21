@@ -1266,7 +1266,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         });
   }
 
-
   _showDialogNumberOfMecanicsSelection(List<String> noOfMechanicsSelectionList) async {
     showModalBottomSheet(
         context: context,

@@ -40,7 +40,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                         appBarCustomUi(size),
                         profileImageAndWalletTotal(),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,40,0,0),
+                          padding: const EdgeInsets.fromLTRB(0,20,0,0),
                           child: Container(
                             height: 120,
                             margin: EdgeInsets.only(
@@ -48,15 +48,60 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                               right: size.width * 9 / 100,
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SubTitleTextRound(size,"Total job done","135"),
                                 SubTitleTextRound(size,"All payments","5000"),
-                                SubTitleTextRound(size,"Mothly collection","2000"),
+                                SubTitleTextRound(size,"Monthly collection","2000"),
                               ],
                             ),
                           ),
-                        )
+                        ),
+
+                        Row(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: size.height * 1.5 / 100,
+                                    left: size.width * 9 / 100,
+                                    right: size.width * 9 / 100,
+                                  ),
+                                  child: Text("Todays payments",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      color: CustColors.light_navy,
+                                      fontWeight: FontWeight.w400,
+                                    ),)
+                              ),
+                            ),
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: size.height * 1.5 / 100,
+                                   //left: size.width * 9 / 100,
+                                    right: size.width * 9 / 100,
+                                  ),
+                                  child: Text("- ₦ 15000",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),)
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
+
+                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
+
                       ],
                     ),
 
@@ -85,111 +130,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
           style: Styles.appBarTextBlue,
         ),
         Spacer(),
-
       ],
-    );
-  }
-
-  Widget profileImageAndKmAndReviewCount1(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-      child: Container(
-        alignment: Alignment.center,
-        child: Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,10),
-              child: Stack(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedGray.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Text('1200 Km',
-                          style: Styles.appBarTextBlack17,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,110,155,0),
-                        child: Text('Away',
-                          style: Styles.awayTextBlack,),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(90,10,0,0),
-                    child: Container(
-                      width: 125.0,
-                      height: 125.0,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                              child:CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.white,
-                                  child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                  )))
-
-                      ),
-                    ),
-                  ),
-
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,75,0,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedWhite.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,75,10,0),
-                        child: Text('Reviews',
-                          style: Styles.appBarTextBlack17,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,110,10,0),
-                        child: RatingBar.builder(
-                          initialRating: 3.5,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 10,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 1),
-                          itemBuilder: (context, _) => Icon(
-                            Icons.star,
-                            color: CustColors.blue,
-                          ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-
-                ],
-              ),
-            ),
-          ],
-
-        ),
-      ),
     );
   }
 
@@ -313,10 +254,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
               borderRadius: BorderRadius.all(
                Radius.circular(10),
               ),
-             // color: CustColors.whiteBlueish,
-              color: CustColors.whiteBlueish
+              //color: CustColors.blackishgrey,
+                color: CustColors.whiteBlueish
             ),
-            //child:  widget.child,
           )
       ),
     );
@@ -364,26 +304,58 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                 ),
               ),
             ),
-          )
-          /*Stack(
-                                      children: [
-                                        Container(
-                                          color: Colors.red,
-                                            margin: EdgeInsets.only(
-                                              left: 3,
-                                              right: 3,
-                                              top: 3,
-                                              bottom: 3,
-                                            ),
-                                            child: Image.asset("assets/image/bg_round_white.png",
-                                              width: size.width * 20 /100,
-                                            )),
-                                        Center(child: Text("135"))
-                                      ],
-                                    )*/
+          ),
         ],
       ),
     );
   }
 
+  Widget listTileItem(Size size, String customerName, String time, String amount){
+    return Container(
+      padding: EdgeInsets.only(
+          top: size.height * 1.5 / 100,
+          bottom: size.height * 1.5 / 100,
+          right: size.width * 1.2 / 100,
+          left: size.width * 1.2 / 100
+      ),
+      margin: EdgeInsets.only(
+        left: size.width * 9 / 100,
+        right: size.width * 9 / 100,
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(6),
+          ),
+          color: Colors.white
+      ),
+      //color: CustColors.white_02,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              Text("Customer",),
+              Text("John Carlo",),
+            ],
+          ),
+
+          Column(
+            children: [
+              Text("Time",),
+              Text("11:30",),
+            ],
+          ),
+
+          Container(
+            child: Text(
+              "₦ 5000",
+
+            ),
+          )
+
+        ],
+      ),
+    );
+
+  }
 }
