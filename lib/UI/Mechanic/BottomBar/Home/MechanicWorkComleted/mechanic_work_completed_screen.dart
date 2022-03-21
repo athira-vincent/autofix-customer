@@ -141,116 +141,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     );
   }
 
-
-  Widget selectedRepairDetailsUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20,10,20,10),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
-            borderRadius: BorderRadius.circular(11.0)
-        ),
-        child:Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,0),
-                child: Container(
-                  child: Text('Repair Details',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
-                    style: Styles.appBarTextBlack,
-                  ),
-                ),
-              ),
-              Container(
-                child: ListView.builder(
-                  itemCount:5,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index,) {
-
-
-
-                    return GestureDetector(
-                      onTap:(){
-
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child:Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('id',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_10,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Row(
-                                children: [
-                                  Text('fees',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_10,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        Text('Total price including tax',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.visible,
-                          style: Styles.appBarTextBlack17,
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    Row(
-                      children: [
-                        Text('$totalFees',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.visible,
-                          style: Styles.appBarTextBlack17,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget estimatedAndTimeTakenUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,10,20,10),
@@ -268,43 +158,43 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                       color: CustColors.whiteBlueish,
                       borderRadius: BorderRadius.circular(11.0)
                   ),
-                   child:  Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Column(
-                       crossAxisAlignment: CrossAxisAlignment.start,
-                       children: [
-                         Text(
-                           "Estimated time",
-                           style: Styles.textLabelTitleEmergencyServiceName,
-                         ),
-                         Padding(
-                           padding: const EdgeInsets.fromLTRB(0,5,0,0),
-                           child: Row(
-                             mainAxisAlignment: MainAxisAlignment.start,
-                             crossAxisAlignment: CrossAxisAlignment.center,
-                             children: [
+                  child:  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Estimated time",
+                          style: Styles.textLabelTitleEmergencyServiceName,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
 
-                               Container(
-                                   height: 25,
-                                   width: 25,
-                                   child: SvgPicture.asset(
-                                     'assets/image/MechanicType/mechanic_work_clock.svg',
-                                     fit: BoxFit.contain,
-                                   )
-                               ),
-                               SizedBox(
-                                 width: 10,
-                               ),
-                               Text(
-                                 "20:02",
-                                 style: Styles.textSuccessfulTitleStyle03,
-                               ),
-                             ],
-                           ),
-                         ),
-                       ],
-                     ),
-                   ),
+                              Container(
+                                  height: 25,
+                                  width: 25,
+                                  child: SvgPicture.asset(
+                                    'assets/image/MechanicType/mechanic_work_clock.svg',
+                                    fit: BoxFit.contain,
+                                  )
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "20:02",
+                                style: Styles.textSuccessfulTitleStyle03,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
@@ -364,6 +254,117 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       ),
     );
   }
+
+
+  Widget selectedRepairDetailsUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,10,20,10),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(11.0)
+        ),
+        child:Padding(
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,0),
+                child: Container(
+                  child: Text('Repair Details',
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.visible,
+                    style: Styles.appBarTextBlack,
+                  ),
+                ),
+              ),
+              Container(
+                child: ListView.builder(
+                  itemCount:3,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context,index,) {
+
+
+
+                    return GestureDetector(
+                      onTap:(){
+
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child:Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Timing belt replacement',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_12,
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  Text('200',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                child: Row(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Total price including tax',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.appBarTextBlack17,
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Row(
+                      children: [
+                        Text('$totalFees',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.appBarTextBlack17,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 
 
   Widget RequestButton(Size size, BuildContext context) {
