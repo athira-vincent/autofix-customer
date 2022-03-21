@@ -263,60 +263,97 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
               Expanded(
                 flex: 1,
                 child: Container(
-                  alignment: Alignment.center,
+                  height: 70,
                   decoration: BoxDecoration(
                       color: CustColors.whiteBlueish,
                       borderRadius: BorderRadius.circular(11.0)
                   ),
-                   child:  Column(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       Container(
-                           height: 20,
-                           width: 20,
-                           child: SvgPicture.asset(
-                             'assets/image/MechanicType/mechanic_work_completed.svg',
-                             fit: BoxFit.contain,
-                           )
-                       ),
-                       Text(
-                         "Job Completed",
-                         style: Styles.textSuccessfulTitleStyle03,
-                       ),
-                     ],
+                   child:  Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                         Text(
+                           "Estimated time",
+                           style: Styles.textLabelTitleEmergencyServiceName,
+                         ),
+                         Padding(
+                           padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                           child: Row(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                             children: [
+
+                               Container(
+                                   height: 25,
+                                   width: 25,
+                                   child: SvgPicture.asset(
+                                     'assets/image/MechanicType/mechanic_work_clock.svg',
+                                     fit: BoxFit.contain,
+                                   )
+                               ),
+                               SizedBox(
+                                 width: 10,
+                               ),
+                               Text(
+                                 "20:02",
+                                 style: Styles.textSuccessfulTitleStyle03,
+                               ),
+                             ],
+                           ),
+                         ),
+                       ],
+                     ),
                    ),
                 ),
               ),
               SizedBox(
                 width: 10,
               ),
-
               Expanded(
                 flex: 1,
                 child: Container(
-                  alignment: Alignment.center,
+                  height: 70,
                   decoration: BoxDecoration(
-                      color: CustColors.greyish,
+                      color: CustColors.grey_02,
                       borderRadius: BorderRadius.circular(11.0)
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          height: 20,
-                          width: 20,
-                          child: SvgPicture.asset(
-                            'assets/image/MechanicType/mechanic_work_completed.svg',
-                            fit: BoxFit.contain,
-                          )
-                      ),
-                      Text(
-                        "Job Completed",
-                        style: Styles.textSuccessfulTitleStyle03,
-                      ),
-                    ],
+                  child:  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Time taken",
+                          style: Styles.textLabelTitleEmergencyServiceName,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+
+                              Container(
+                                  height: 25,
+                                  width: 25,
+                                  child: SvgPicture.asset(
+                                    'assets/image/MechanicType/mechanic_work_clock.svg',
+                                    fit: BoxFit.contain,
+                                  )
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "20:02",
+                                style: Styles.textSuccessfulTitleStyle03,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
