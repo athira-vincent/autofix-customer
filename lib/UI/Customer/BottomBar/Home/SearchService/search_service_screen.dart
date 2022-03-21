@@ -195,11 +195,11 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
       child: Row(
         children: [
           Expanded(
-            flex:1,
             child: SizedBox(
               height: 35,
-              child: new TextField(
+              child:  TextField(
                 controller: searchController,
+                autofocus: true,
                 decoration: InputDecoration(
                   hintText: 'Search your Services',
                   contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
@@ -222,10 +222,14 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
                 ),
                 onChanged: (text) {
-                  print('First text field: $text');
-                  setState(() {
-                    _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}","","");
-                  });
+
+                  if (text != null && text.isNotEmpty && text != "" ) {
+                    setState(() {
+                      print('First text field: $text');
+                      _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}","","");
+                    });
+                  }
+
                 },
               ),
             ),
