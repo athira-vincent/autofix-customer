@@ -255,7 +255,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                Radius.circular(10),
               ),
               //color: CustColors.blackishgrey,
-                color: CustColors.whiteBlueish
+               color: CustColors.whiteBlueish,
             ),
           )
       ),
