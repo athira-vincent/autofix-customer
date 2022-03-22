@@ -20,6 +20,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'UI/Mechanic/BottomBar/Home/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 
 
 void main() async {
@@ -74,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: SplashScreen(),
+      home: MyJobAppoinmentScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
     );
   }
