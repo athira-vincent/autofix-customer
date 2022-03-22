@@ -76,143 +76,13 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
-
               children: [
+
                 appBarCustomUi(size),
+                tabTitleBarCustomUi(size),
+                tabBodyCustomUi(size),
 
-                Container(
-                  height: 40,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 125,
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: (){
-                            setState(() {
-                              selectedService="1";
-                            });
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  alignment: Alignment.center,
-                                  height: 30,
-                                  child: Text('Upcoming Services')
-                              ),
-                              selectedService == "1"
-                              ? Container(
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: CustColors.light_navy,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30))
-                                ),
-                              )
-                              : Container(
-                                height: 10,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30))
-                                ),
-                              ),
 
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 130,
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: (){
-                            setState(() {
-                              selectedService="2";
-                            });
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  alignment: Alignment.center,
-                                  height: 30,
-                                  child: Text('Completed Services')
-                              ),
-                              selectedService == "2"
-                                  ? Container(
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                        color: CustColors.light_navy,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            topRight: Radius.circular(30))
-                                    ),
-                                  )
-                                  : Container(
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            topRight: Radius.circular(30))
-                                    ),
-                                  ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: InkWell(
-                              onTap: (){
-                                setState(() {
-                                  selectedService="3";
-                                });
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                      alignment: Alignment.center,
-                                      height: 30,
-                                      child: Text('All Services')
-                                  ),
-                                  selectedService == "3"
-                                      ? Container(
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                        color: CustColors.light_navy,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            topRight: Radius.circular(30))
-                                    ),
-                                  )
-                                      : Container(
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            topRight: Radius.circular(30))
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                      ),
-                    ],
-                  ),
-                ),
 
               ],
             ),
@@ -237,6 +107,239 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
         Spacer(),
 
       ],
+    );
+  }
+
+  Widget tabTitleBarCustomUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15,5,15,0),
+      child: Container(
+        height: 40,
+        child: Row(
+          children: [
+            Container(
+              width: 120,
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: (){
+                  setState(() {
+                    selectedService="1";
+                  });
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        height: 30,
+                        child: Text('Upcoming Services',
+                          style: Styles.textLabelSubTitlenavy,
+                        )
+                    ),
+                    selectedService == "1"
+                        ? Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30))
+                      ),
+                    )
+                        : Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30))
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: 2,),
+            Container(
+              width: 130,
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: (){
+                  setState(() {
+                    selectedService="2";
+                  });
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        height: 30,
+                        child: Text('Completed Services',
+                          style: Styles.textLabelSubTitlenavy,)
+                    ),
+                    selectedService == "2"
+                        ? Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30))
+                      ),
+                    )
+                        : Container(
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30))
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: 2,),
+            Expanded(
+              flex: 1,
+              child: Container(
+                alignment: Alignment.center,
+                child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      selectedService="3";
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          height: 30,
+                          child: Text('All Services',
+                            style: Styles.textLabelSubTitlenavy,
+                          )
+                      ),
+                      selectedService == "3"
+                          ? Container(
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: CustColors.light_navy,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))
+                        ),
+                      )
+                          : Container(
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30))
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget tabBodyCustomUi(Size size) {
+    return  Padding(
+      padding: const EdgeInsets.fromLTRB(10,0,10,0),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(11.0)
+        ),
+        height: MediaQuery.of(context).size.height * 0.80,
+        child: Column(
+          children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20,10,20,10),
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: CustColors.whiteBlueish,
+                        borderRadius: BorderRadius.circular(11.0)
+                    ),
+                    child:Padding(
+                      padding: const EdgeInsets.fromLTRB(5,5,5,5),
+                      child: Container(
+                        child: ListView.builder(
+                          itemCount:3,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context,index,) {
+
+
+
+                            return GestureDetector(
+                              onTap:(){
+
+                              },
+                              child:
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0,5,0,5),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(11.0)
+                                  ),
+                                  child:Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('Timing belt replacement',
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.visible,
+                                              style: Styles.textLabelTitle_12,
+                                            ),
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        Row(
+                                          children: [
+                                            Text('200',
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.visible,
+                                              style: Styles.textLabelTitle_10,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -46,6 +46,13 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelSubTitlenavy = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.light_navy,
+    fontSize: 10,
+  );
+
   static const textLabelTitle_10 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
