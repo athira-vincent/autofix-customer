@@ -53,6 +53,13 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelTitle_12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
   static const textLabelTitle_Regular = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w300,
@@ -245,6 +252,11 @@ class Styles {
       fontSize: 24,
       fontWeight: FontWeight.w600,
       fontFamily: 'Corbel_Bold');
+  static const textSuccessfulTitleStyle03 = TextStyle(
+      color: CustColors.light_navy,
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'Samsung_SharpSans_Medium');
   static const textSuccessfulTitle02Style = TextStyle(
       color: CustColors.brownish_grey,
       fontSize: 14,

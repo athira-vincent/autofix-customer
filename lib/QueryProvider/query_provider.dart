@@ -503,14 +503,12 @@ class QueryProvider {
         mechanicService {
           id
           fee
-          serviceId
           status
           userId
         }
         mechanicVehicle {
           id
           status
-          makeId
         }
       }
     }
@@ -534,7 +532,7 @@ class QueryProvider {
     String _query = """ 
      query
       {
-        serviceListAll(search: "$search") {
+        serviceListAll(search: "$search",count: null, categoryId: null) {
           id
           serviceName
           description

@@ -72,7 +72,7 @@ class HomeCustomerApiProvider {
       bookMechanicId,
       serviceId,
       serviceType)async {
-    Map<String, dynamic> _resp = await _queryProvider. postFindMechanicsListEmergencyRequest(
+    Map<String, dynamic> _resp = await _queryProvider. postSearchServiceRequest(
         token,
         bookMechanicId,
         serviceId,

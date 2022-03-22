@@ -43,30 +43,34 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           backgroundColor: Colors.white,
-          icon: Column(
-            children: [
-              Container(
-                  child: _index == 0
-                      ? Image.asset('assets/image/ic_home_active.png',
-                    width: _setValue(26),
-                    height: _setValue(26),
-                  )
-                      : SvgPicture.asset(
-                    'assets/image/ic_home_inactive.svg',
-                    width: _setValue(26),
-                    height: _setValue(26),
-                  )
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
-                child: Text(
-                  'Home',
-                  style: _index == 0
-                      ? Styles.homeActiveTextStyle
-                      : Styles.homeInactiveTextStyle,
+          icon: Container(
+            child: Column(
+              children: [
+                Container(
+                    width: _setValue(25),
+                    height: _setValue(25),
+                    child: _index == 0
+                        ? Image.asset('assets/image/ic_home_active.png',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
+                        : SvgPicture.asset(
+                      'assets/image/ic_home_inactive.svg',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                  child: Text(
+                    'Home',
+                    style: _index == 0
+                        ? Styles.homeActiveTextStyle
+                        : Styles.homeInactiveTextStyle,
+                  ),
+                ),
+              ],
+            ),
           ),
           label: ''
       ),
@@ -75,6 +79,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           icon: Column(
             children: [
               Container(
+                width: _setValue(25),
+                height: _setValue(25),
                 child: _index == 1
                     ? SvgPicture.asset(
                   'assets/image/ic_home_cart_active.svg',
@@ -105,6 +111,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           icon: Column(
             children: [
               Container(
+                width: _setValue(25),
+                height: _setValue(25),
                 child:
                 _index == 2
                     ? SvgPicture.asset(
@@ -136,6 +144,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           icon: Column(
             children: [
               Container(
+                width: _setValue(25),
+                height: _setValue(25),
                 child: _index == 3
                     ? SvgPicture.asset(
                   'assets/image/ic_home_profile_active.svg',
@@ -165,8 +175,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     return Scaffold(
       drawer: CustomerNavigationDrawerScreen(),
       key: scaffoldKey,
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
         child: AppBar(
@@ -275,8 +283,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          // borderRadius: BorderRadius.only(
-          //     topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
@@ -287,7 +294,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           //   topRight: Radius.circular(48),
           // ),
           child: SizedBox(
-            height: size.height * 0.090,
+            height: size.height * 0.092,
             child: BottomNavigationBar(
               selectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',
