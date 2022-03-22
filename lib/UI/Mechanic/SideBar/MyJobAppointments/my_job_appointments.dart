@@ -134,7 +134,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                         alignment: Alignment.center,
                         height: 30,
                         child: Text('Upcoming Services',
-                          style: Styles.textLabelSubTitlenavy,
+                          style: selectedService == "1" ? Styles.textLabelSubTitlenavy : Styles.textLabelSubTitlegrey,
                         )
                     ),
                     selectedService == "1"
@@ -179,7 +179,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                         alignment: Alignment.center,
                         height: 30,
                         child: Text('Completed Services',
-                          style: Styles.textLabelSubTitlenavy,)
+                          style: selectedService == "2" ? Styles.textLabelSubTitlenavy : Styles.textLabelSubTitlegrey,)
                     ),
                     selectedService == "2"
                         ? Container(
@@ -223,7 +223,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                           alignment: Alignment.center,
                           height: 30,
                           child: Text('All Services',
-                            style: Styles.textLabelSubTitlenavy,
+                            style: selectedService == "3" ? Styles.textLabelSubTitlenavy : Styles.textLabelSubTitlegrey,
                           )
                       ),
                       selectedService == "3"
@@ -266,78 +266,120 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
             borderRadius: BorderRadius.circular(11.0)
         ),
         height: MediaQuery.of(context).size.height * 0.80,
-        child: Column(
-          children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20,10,20,10),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5,5,5,5),
+          child: Container(
+            child: ListView.builder(
+              itemCount:3,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context,index,) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0,10,0,10),
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: CustColors.whiteBlueish,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(11.0)
                     ),
                     child:Padding(
-                      padding: const EdgeInsets.fromLTRB(5,5,5,5),
-                      child: Container(
-                        child: ListView.builder(
-                          itemCount:3,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context,index,) {
-
-
-
-                            return GestureDetector(
-                              onTap:(){
-
-                              },
-                              child:
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0,5,0,5),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(11.0)
-                                  ),
-                                  child:Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text('Timing belt replacement',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,
-                                              style: Styles.textLabelTitle_12,
-                                            ),
-                                          ],
-                                        ),
-                                        Spacer(),
-                                        Row(
-                                          children: [
-                                            Text('200',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,
-                                              style: Styles.textLabelTitle_10,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10,),
+                              Container(
+                                child: Text('Customer',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelTitle_12,
                                 ),
                               ),
-                            );
-                          },
-                        ),
+                              SizedBox(height: 5,),
+                              Container(
+                                child: Text('John Carlo',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelSubTitlegrey11,
+                                ),
+                              ),
+                              SizedBox(height: 10,),
+                              Container(
+                                child: Text('Address',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelTitle_12,
+                                ),
+                              ),
+                              SizedBox(height: 5,),
+                              Container(
+                                width: 150,
+                                child: Text('Elenjikkal House '
+                                  'Empyreal Garden '
+                                  'Opposite of Ceevees International Auditorium Anchery'
+                                  'Anchery P.O'
+                                  'Thrissur - 680006',
+                                  maxLines: 4,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelSubTitlegrey11,
+                                ),
+                              ),
+                              SizedBox(height: 10,),
+                            ],
+                          ),
+                          SizedBox(width: 10,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10,),
+                              Container(
+                                child: Text('Customer',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelTitle_12,
+                                ),
+                              ),
+                              SizedBox(height: 5,),
+                              Container(
+                                child: Text('John Carlo',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelSubTitlegrey11,
+                                ),
+                              ),
+                              SizedBox(height: 10,),
+                              Container(
+                                child: Text('Address',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: Styles.textLabelTitle_12,
+                                ),
+                              ),
+                              SizedBox(height: 10,),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-          ],
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

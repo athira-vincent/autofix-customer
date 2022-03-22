@@ -53,6 +53,21 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelSubTitlegrey = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.warm_grey03,
+    fontSize: 10,
+  );
+
+  static const textLabelSubTitlegrey11 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.warm_grey03,
+    fontSize: 11,
+  );
+
+
   static const textLabelTitle_10 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
