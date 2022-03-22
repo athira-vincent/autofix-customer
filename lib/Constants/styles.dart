@@ -384,5 +384,59 @@ class Styles {
       fontFamily:'Samsung_SharpSans_Medium'
   );
 
+  static const myWalletListTileTitle01 = TextStyle(
+    fontSize: 12,
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontWeight: FontWeight.w200,
+    color: Colors.black,
+  );
+  static const myWalletListTileTitle02 = TextStyle(
+    fontSize: 12,
+    fontFamily: "Samsung_SharpSans_Regular",
+    fontWeight: FontWeight.w100,
+    color: CustColors.warm_grey03,
+  );
 
+  static const myWalletListTileTitle03 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+  );
+  static const myWalletTitleText03 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: CustColors.light_navy,
+    fontWeight: FontWeight.w500,
+  );
+  static const myWalletTitleText04 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+  );
+  static const myWalletCardText02 =TextStyle(
+    fontSize: 20,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+  );
+  static const myWalletCardText01 = TextStyle(
+    fontSize: 30,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+  );
+  static const myWalletSubTitleTextRoundText01 = TextStyle(
+    color: Colors.black,
+    fontSize: 12.5,
+    fontWeight: FontWeight.w200,
+    fontFamily: "Samsung_SharpSans_Medium",
+  );
+  static const myWalletSubTitleTextRoundText02 = TextStyle(
+      fontSize: 18,
+      color: CustColors.light_navy,
+      fontWeight: FontWeight.w600,
+      fontFamily: "Samsung_SharpSans_Bold"
+  );
 }
