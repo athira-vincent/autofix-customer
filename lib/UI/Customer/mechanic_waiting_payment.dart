@@ -14,7 +14,7 @@ class MechanicWaitingPaymentScreen extends StatefulWidget {
 
 class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScreen> {
 
-  bool isExpanded = true;
+  bool isExpanded = false;
 
   @override
   void initState() {
@@ -67,7 +67,8 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                       borderRadius: BorderRadius.all(
                         Radius.circular(8),
                       ),
-                      color: Colors.yellow,
+                      //color: Colors.yellow,
+                      color: CustColors.whiteBlueish,
                     ),
                     child: Column(
                       children: [
@@ -99,7 +100,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                             top: size.height * 1.5 / 100,
                           ),
                           padding: EdgeInsets.only(
-                            left: size.width * 1.5 / 100,
+                            left: size.width * 2 / 100,
                             right: size.width * 1.5 /100,
                             top: size.height * 1 /100,
                             bottom: size.height * 1 /100,
@@ -108,7 +109,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                             borderRadius: BorderRadius.all(
                               Radius.circular(8),
                             ),
-                            color: Colors.purple,
+                            color: Colors.white,
                           ),
                           child: Column(
                             children: [
@@ -121,33 +122,51 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                                     fontWeight: FontWeight.w400,
                                     color: Colors.black
                                   ),),
-                                  Text("Price",style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: "Samsung_SharpSans_Medium",
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black
-                                  ),)
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      right: size.width * 2.7 / 100,
+                                    ),
+                                    child: Text("Price",style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: "Samsung_SharpSans_Medium",
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black
+                                    ),),
+                                  )
                                 ],
                               ),
 
-                              Container(
-                                //------------ isExpanded ? container of list - services list
+// ------------------ this Column widget will be replaced by list ---- item builder will return serviceDetailListItem()
 
-                              ),
+                              isExpanded ? Column(
+                                children: [
+                                  serviceDetailListItem(size,"Timing belt replacement","₦ 200"),
+                                  serviceDetailListItem(size,"Breakpad replacement","₦ 700"),
+                                  serviceDetailListItem(size,"Oil port leaking","₦ 500"),
+                                ],
+                              ) : Container(),
+
 
                               Container(
                                 margin: EdgeInsets.only(
-
+                                  top: size.height * 1.2 / 100,
+                                  bottom: size.height * 1.2 / 100
                                 ),
                                 child: Row(
                                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("Total price including tax ",style: TextStyle(
-
+                                        fontSize: 14,
+                                        fontFamily: "Samsung_SharpSans_Medium",
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black
                                     ),),
-
+                                   Spacer(),
                                     Text("₦ 1600",style: TextStyle(
-
+                                        fontSize: 14,
+                                        fontFamily: "Samsung_SharpSans_Medium",
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black
                                     ),),
                                     InkWell(
                                       onTap: (){
@@ -155,9 +174,18 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                                           isExpanded = !isExpanded;
                                         });
                                       },
-                                      child: Image.asset(
-                                        isExpanded ? "assets/image/ic_arrow_expand.png" :
-                                        "assets/image/ic_arrow_collapse.png",),
+                                      child: Container(
+                                        height: size.height * 1.5 / 100,
+                                        width: size.width * 1.5 / 100,
+                                        margin: EdgeInsets.only(
+                                          left: size.width * .9 / 100,
+                                          right: size.width * .2 / 100
+                                        ),
+                                        child: Image.asset(
+                                          isExpanded ? "assets/image/ic_arrow_collapse.png"
+                                              : "assets/image/ic_arrow_expand.png"
+                                          ,),
+                                      ),
                                     ),
                                     //---------- icon expand and  collapse
                                   ],
@@ -172,8 +200,6 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                     ),
 
                   ),
-
-
 
                   Align(
                     alignment: Alignment.centerRight,
@@ -255,6 +281,39 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                 color: Colors.black,
                 letterSpacing: .5
             ),)
+        ],
+      ),
+    );
+  }
+
+  Widget serviceDetailListItem(Size size,String serviceName, String serviceCost){
+    return Container(
+      margin: EdgeInsets.only(
+          top: size.height * 1.2 / 100,
+          bottom: size.height * 1.2 / 100
+      ),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(serviceName,style: TextStyle(
+              fontSize: 12,
+              fontFamily: "Samsung_SharpSans_Regular",
+              fontWeight: FontWeight.w400,
+              color: Colors.black
+          ),),
+          Spacer(),
+          Container(
+            margin: EdgeInsets.only(
+              right: size.width * 2.8 / 100,
+            ),
+            child: Text(serviceCost,style: TextStyle(
+                fontSize: 12,
+                fontFamily: "Samsung_SharpSans_Regular",
+                fontWeight: FontWeight.w400,
+                color: Colors.black
+            ),
+            ),
+          ),
         ],
       ),
     );
