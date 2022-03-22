@@ -416,7 +416,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
             return AlertDialog(
                 backgroundColor: Colors.white,
                 insetPadding: EdgeInsets.only(left: 20, right: 20),
-
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 contentPadding: const EdgeInsets.all(20),
