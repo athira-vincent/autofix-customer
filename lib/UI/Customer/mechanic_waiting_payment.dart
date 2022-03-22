@@ -50,6 +50,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                       right: size.width * 18 /100,
                       bottom: size.height * 1 /100,
                       top: size.height * 4 / 100,
+
                     ),
                       child: Image.asset("assets/image/img_payment_waiting_bg.png"),
                   ),
