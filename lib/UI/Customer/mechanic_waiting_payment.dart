@@ -68,7 +68,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                         Radius.circular(8),
                       ),
                       //color: Colors.yellow,
-                      color: CustColors.whiteBlueish,
+                      color : CustColors.whiteBlueish,
                     ),
                     child: Column(
                       children: [
