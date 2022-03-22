@@ -420,7 +420,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                    child: Text('Car',
+                                    child: Text('Cost',
                                       maxLines: 2,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.visible,
@@ -429,7 +429,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                                   ),
                                   SizedBox(height: 5,),
                                   Container(
-                                    child: Text('Toyota Corolla ',
+                                    child: Text('4000',
                                       maxLines: 2,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.visible,
@@ -444,7 +444,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                    child: Text('Car',
+                                    child: Text('Service ',
                                       maxLines: 2,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.visible,
@@ -453,7 +453,7 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                                   ),
                                   SizedBox(height: 5,),
                                   Container(
-                                    child: Text('Toyota Corolla ',
+                                    child: Text('Timing  belt replacement',
                                       maxLines: 2,
                                       textAlign: TextAlign.start,
                                       overflow: TextOverflow.visible,
