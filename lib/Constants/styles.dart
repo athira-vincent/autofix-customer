@@ -336,6 +336,23 @@ class Styles {
     letterSpacing: .3,
   );
 
+  static const badgeTextStyle1 = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 10,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w500,
+    letterSpacing: .3,
+  );
+
+  static const badgeTextStyle2 = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 6,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w500,
+    letterSpacing: .3,
+  );
+
+
   static const popUPTextStyle = TextStyle(
     fontFamily: "Samsung_SharpSans_Medium",
     fontSize: 10,

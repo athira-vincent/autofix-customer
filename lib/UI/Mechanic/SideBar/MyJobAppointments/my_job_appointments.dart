@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -342,34 +343,125 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SizedBox(height: 10,),
-                              Container(
-                                child: Text('Customer',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelTitle_12,
-                                ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        child: Text('Car',
+                                          maxLines: 2,
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.visible,
+                                          style: Styles.textLabelTitle_12,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Container(
+                                        child: Text('Toyota Corolla ',
+                                          maxLines: 2,
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.visible,
+                                          style: Styles.textLabelSubTitlegrey11,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left:2),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 25,
+                                            width: 50,
+                                            alignment: Alignment.center,
+                                            color: CustColors.blue,
+                                            child: Text('Emergency Service',
+                                              textAlign: TextAlign.center,
+                                              style: Styles.badgeTextStyle2,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5,),
+                                          Stack(
+                                            alignment: Alignment.topCenter,
+                                            children: [
+
+                                              Container(
+                                                height: 50,
+                                                width: 50,
+                                                color: Colors.white,
+                                                child: CustomPaint(
+                                                  painter: CurvePainter(),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '22/03/22',
+                                                  textAlign: TextAlign.center,
+                                                  style: Styles.badgeTextStyle1,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text('Car',
+                                      maxLines: 2,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.visible,
+                                      style: Styles.textLabelTitle_12,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Container(
+                                    child: Text('Toyota Corolla ',
+                                      maxLines: 2,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.visible,
+                                      style: Styles.textLabelSubTitlegrey11,
+                                    ),
+                                  ),
+                                ],
                               ),
                               SizedBox(height: 5,),
-                              Container(
-                                child: Text('John Carlo',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelSubTitlegrey11,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text('Car',
+                                      maxLines: 2,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.visible,
+                                      style: Styles.textLabelTitle_12,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Container(
+                                    child: Text('Toyota Corolla ',
+                                      maxLines: 2,
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.visible,
+                                      style: Styles.textLabelSubTitlegrey11,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10,),
-                              Container(
-                                child: Text('Address',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelTitle_12,
-                                ),
-                              ),
-                              SizedBox(height: 10,),
                             ],
                           ),
                         ],
