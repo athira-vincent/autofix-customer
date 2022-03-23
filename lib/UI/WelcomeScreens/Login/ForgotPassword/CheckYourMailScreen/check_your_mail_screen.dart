@@ -98,7 +98,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          backgroundColor: CustColors.whiteBlueish,
+          backgroundColor: Colors.white,
           body: ScrollConfiguration(
             behavior: MyBehavior(),
             child: SingleChildScrollView(

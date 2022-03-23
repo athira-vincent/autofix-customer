@@ -72,6 +72,7 @@ dependencies:
   geocoding: ^2.0.2
   file_picker: ^4.5.0
   fdottedline: ^1.0.1
+  slider_button: ^2.0.0
 
 
 
@@ -128,7 +129,7 @@ flutter:
     - assets/image/mechanicProfileView/directionMechnanicTracking.svg
     - assets/map_style/map_style.txt
     - assets/image/mechanicTracking/
-    - assets/image/MechanicType/mechanic_work_completed.svg
+    - assets/image/MechanicType/incomingRequestBg.svg
 
   fonts:
     - family: Montserrat_SemiBold

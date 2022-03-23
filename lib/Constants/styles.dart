@@ -199,6 +199,14 @@ class Styles {
     fontSize: 14,
   );
 
+  static const textLabelTitle16= TextStyle(
+    fontFamily: 'SharpSans_Bold',
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+    fontSize: 16,
+  );
+
+
 
   static const textLabelTitle12= TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',

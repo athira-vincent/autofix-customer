@@ -3,8 +3,6 @@ import 'dart:async';
 
 import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,14 +10,11 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/shared_pref_keys.dart';
 import '../../../../../Constants/styles.dart';
-import '../../../../../Widgets/CurvePainter.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 import '../HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 import '../home_Bloc/home_customer_bloc.dart';
