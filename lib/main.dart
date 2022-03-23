@@ -6,6 +6,8 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/Customer/mechanic_waiting_payment.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet.dart';
+import 'package:auto_fix/UI/Mechanic/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/service_type_selection_screen.dart';
@@ -20,7 +22,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'UI/Mechanic/BottomBar/Home/MechanicWorkComleted/mechanic_work_completed_screen.dart';
-import 'UI/Mechanic/mechanic_start_service.dart';
+
 
 
 void main() async {
@@ -77,7 +79,8 @@ class _MyAppState extends State<MyApp> {
       ),
       //home: SplashScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
-      home: MechanicStartServiceScreen(),
+      //home: MechanicStartServiceScreen(),
+      home: AddMoreServicesListScreen(),
     );
   }
 }

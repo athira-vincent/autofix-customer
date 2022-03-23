@@ -14,7 +14,7 @@ class MechanicStartServiceScreen extends StatefulWidget {
 
 class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
 
-  bool isExpanded = true;
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
