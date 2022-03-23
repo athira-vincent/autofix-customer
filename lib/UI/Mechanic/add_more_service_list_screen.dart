@@ -61,6 +61,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
                             Radius.circular(15),
+
                           ),
                           border: Border.all(
                               color: CustColors.pinkish_grey,
