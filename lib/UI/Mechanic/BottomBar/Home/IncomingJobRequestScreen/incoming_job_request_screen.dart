@@ -4,9 +4,11 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordSc
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:slider_button/slider_button.dart';
@@ -20,7 +22,7 @@ class IncomingJobRequestScreen extends StatefulWidget {
   }
 }
 
-class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
+class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> with TickerProviderStateMixin{
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -41,11 +43,23 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
 
   bool SliderVal=false;
 
+  int _counter = 0;
+  late AnimationController _controller;
+  int levelClock = 30;
+
 
   @override
   void initState() {
     super.initState();
     _getForgotPwd();
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(
+            seconds:
+            levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+    );
+
+    _controller.forward();
   }
 
   @override
@@ -281,15 +295,11 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
                                     style: Styles.textLabelSubTitle12,
                                   ),
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  //color: Colors.red,
-                                  child: Text(
-                                    "00:30",
-                                    textAlign: TextAlign.center,
-                                    softWrap: true,
-                                    style: Styles.textLabelTitle16,
-                                  ),
+                                Countdown(
+                                  animation: StepTween(
+                                    begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                                    end: 0,
+                                  ).animate(_controller),
                                 ),
                               ],
                             ),
