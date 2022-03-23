@@ -22,6 +22,7 @@ import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 import '../../../../../main.dart';
 import '../../../../Constants/shared_pref_keys.dart';
 import '../../../../Widgets/snackbar_widget.dart';
+import '../ForgotPassword/CheckYourMailScreen/check_your_mail_screen.dart';
 import '../Signup/signup_bloc.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -330,10 +331,23 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                               onPressed: () {
 
                                                 setState(() {
-                                                  _isLoading=true;
-                                                  print(textEditingController.text);
-                                                  print(authToken.toString());
-                                                  _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber);
+
+                                                  if(widget.fromPage=="3")
+                                                    {
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                CheckYourMailScreen()),
+                                                      );
+                                                    }
+                                                  else{
+                                                    _isLoading=true;
+                                                    print(textEditingController.text);
+                                                    print(authToken.toString());
+                                                    _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber);
+
+                                                  }
 
                                                 });
 
