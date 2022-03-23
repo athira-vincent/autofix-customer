@@ -5,7 +5,6 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/Customer/mechanic_waiting_payment.dart';
-import 'package:auto_fix/UI/Mechanic/BottomBar/Home/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet.dart';
 import 'package:auto_fix/UI/Mechanic/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_start_service_screen.dart';
@@ -79,7 +78,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: IncomingJobRequestScreen(),
+      home: SplashScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
       //home: AddMoreServicesListScreen(),
