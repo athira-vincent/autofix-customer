@@ -48,9 +48,6 @@ class _MyJobAppoinmentScreenState extends State<MyJobAppoinmentScreen> {
 
     getSharedPrefData();
     _listenServiceListResponse();
-
-
-
   }
 
   Future<void> getSharedPrefData() async {

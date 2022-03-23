@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: MyJobAppoinmentScreen(),
+      home: SplashScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
     );
   }
