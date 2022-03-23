@@ -51,10 +51,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
     _listenServiceListResponse();
-
 
 
   }
