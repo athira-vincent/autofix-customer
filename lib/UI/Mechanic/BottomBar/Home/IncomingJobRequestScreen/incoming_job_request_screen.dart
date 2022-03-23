@@ -39,6 +39,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
   }
   bool language_en_ar=true;
 
+  bool SliderVal=false;
+
 
   @override
   void initState() {
@@ -207,21 +209,26 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
 
                                 Container(
                                   height: 40,
-                                  width: 240,
+                                  width: SliderVal==false ? 240 : 40,
                                   alignment: Alignment.centerLeft,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: CustColors.light_navy,
+                                        color: SliderVal==false ? CustColors.light_navy : CustColors.white_02,
                                       ),
                                       borderRadius: BorderRadius.circular(50) // use instead of BorderRadius.all(Radius.circular(20))
                                   ),
-                                  child: SliderButton(
+                                  child:
+                                  SliderVal==false
+                                  ? SliderButton(
                                     buttonColor: CustColors.blue,
                                     backgroundColor: Colors.white,
                                     highlightedColor: CustColors.light_navy02,
                                     baseColor:  CustColors.light_navy,
                                       action: () {
                                         print('success');
+                                        setState(() {
+                                          SliderVal=true;
+                                        });
                                       },
                                       label: Text(
                                         "Slide to accept offer",
@@ -230,7 +237,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
                                       ),
                                       child: Container(
                                           height: 40,
-                                          width: 50,
+                                          width: 40,
                                           alignment: Alignment.centerRight,
                                           decoration: BoxDecoration(
                                               color: CustColors.blue,
@@ -242,6 +249,22 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> {
                                               size: 30.0,
                                               semanticLabel: 'Text to announce in accessibility modes',
                                           ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 40,
+                                      width: 50,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          CircularProgressIndicator(color: CustColors.light_navy,),
+                                          Icon(
+                                            Icons.check,
+                                            color:  CustColors.light_navy,
+                                            size: 30.0,
+                                            semanticLabel: 'Text to announce in accessibility modes',
+                                          ),
+                                        ],
                                       ),
                                     ),
                                 ),
