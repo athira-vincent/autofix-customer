@@ -46,6 +46,28 @@ class Styles {
     fontSize: 10,
   );
 
+  static const textLabelSubTitlenavy = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.light_navy,
+    fontSize: 10,
+  );
+
+  static const textLabelSubTitlegrey = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.warm_grey03,
+    fontSize: 10,
+  );
+
+  static const textLabelSubTitlegrey11 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.warm_grey03,
+    fontSize: 11,
+  );
+
+
   static const textLabelTitle_10 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
@@ -313,6 +335,23 @@ class Styles {
     fontWeight: FontWeight.w500,
     letterSpacing: .3,
   );
+
+  static const badgeTextStyle1 = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 10,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w500,
+    letterSpacing: .3,
+  );
+
+  static const badgeTextStyle2 = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 6,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w500,
+    letterSpacing: .3,
+  );
+
 
   static const popUPTextStyle = TextStyle(
     fontFamily: "Samsung_SharpSans_Medium",

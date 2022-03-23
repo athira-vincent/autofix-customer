@@ -22,6 +22,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'UI/Mechanic/BottomBar/Home/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 
 
 
