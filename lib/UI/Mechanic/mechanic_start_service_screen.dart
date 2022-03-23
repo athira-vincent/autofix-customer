@@ -1,6 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Mechanic/add_more_service_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
 
@@ -15,6 +17,19 @@ class MechanicStartServiceScreen extends StatefulWidget {
 class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
 
   bool isExpanded = false;
+
+  List<String> selectedServiceList = [];
+
+  String additionalServiceNames = "";
+  String selectedServiceName = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    additionalServiceNames = "Flat tyre";
+    selectedServiceName = "Lost /Locked keys";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +54,13 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                 children: [
                   mechanicStartServiceTitle(size),
                   mechanicStartServiceImage(size),
-                  mechanicEditSelectedService(size,"Timing  belt replacement"),
-                  mechanicAdditionalFaultService(size,"Breakpad replacement"),
+                  mechanicEditSelectedService(size,selectedServiceName),
+                  mechanicAdditionalFaultService(size, additionalServiceNames ),
                   InkWell(
                     onTap: (){
                       print(" on Tap - Add More");
+                      _awaitReturnValueFromSecondScreenOnAdd(context);
+
                     },
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -68,54 +85,60 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                       right: size.width * 27.5 / 100,
                       top: size.height * 6 / 100
                     ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.alarm_rounded,
-                                color: CustColors.light_navy,
-                              ),
-                              onPressed: (){
-                                print("Alarm");
-                              },
+                    child: Flexible(
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: size.width * 3.5 / 100,
+                              right: size.width * 3.5 / 100,
+                              top: size.height * 1 / 100,
+                              bottom: size.height * 1 / 100,
                             ),
-                            Text("25:00 ",
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontFamily: "SharpSans_Bold",
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/image/ic_alarm.svg',
+                                width: size.width * 4 / 100,
+                                height: size.height * 4 / 100,),
+                                Spacer(),
+                                Text("25:00 ",
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    fontFamily: "SharpSans_Bold",
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    letterSpacing: .7
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(13),
-                              ),
-                              border: Border.all(
-                                  color: CustColors.light_navy02,
-                                  width: 0.3
-                              )
                           ),
-                          /*margin: EdgeInsets.only(
+
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(13),
+                                ),
+                                border: Border.all(
+                                    color: CustColors.light_navy02,
+                                    width: 0.3
+                                )
+                            ),
+                            /*margin: EdgeInsets.only(
+                                left: size.width * 4 / 100,
+                                right: size.width * 4 / 100,
+                                top: size.height * 2.8 / 100
+                            ),*/
+                            padding: EdgeInsets.only(
                               left: size.width * 4 / 100,
                               right: size.width * 4 / 100,
-                              top: size.height * 2.8 / 100
-                          ),*/
-                          padding: EdgeInsets.only(
-                            left: size.width * 4 / 100,
-                            right: size.width * 3.5 / 100,
-                            top: size.height * 1.3 / 100,
-                            bottom: size.height * 1 / 100,
-                          ),
-                          child: Text("Total estimated time "),
-                        )
-                      ],
+                              top: size.height * 1 / 100,
+                              bottom: size.height * 1 / 100,
+                            ),
+                            child: Text("Total estimated time "),
+                          )
+                        ],
+                      ),
                     ),
                   ),
 
@@ -213,6 +236,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             ),
             onTap: (){
               print("onTap mechanicEditSelectedServices ");
+              //_awaitReturnValueFromSecondScreenOnEdit(context);
             },
           ),
           Divider(
@@ -332,5 +356,66 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       ),
     );
   }
+
+  void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    List<String> serviceList = [];
+    serviceList.clear();
+    additionalServiceNames = "";
+
+    //_chooseVechicleSpecializedController.text="";
+    serviceList = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddMoreServicesListScreen(isAddService: true,),
+        ));
+
+    setState(() {
+      for(int i = 0; i<serviceList.length ; i++){
+
+        if(serviceList.length-1 == i){
+          additionalServiceNames = additionalServiceNames + serviceList[i].toString();
+        }
+        else{
+          additionalServiceNames = additionalServiceNames + serviceList[i].toString() + " \n";
+        }
+      }
+      //selectedState = result;
+      if(serviceList!='[]')
+      {
+        /*_chooseVechicleSpecializedController.text = selectedVehicles;
+        print ("Selected state @ sign up: " + selectedState );
+        print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
+        print ("Selected selectedVehicles @ sign up: " + selectedVehicles );
+        if (_formKey.currentState!.validate()) {
+        } else {
+        }*/
+      }
+
+    });
+  }
+
+  /*void _awaitReturnValueFromSecondScreenOnEdit(BuildContext context) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    //List<String> serviceList = [];
+    //serviceList.clear();
+    //selectedServiceName = "";
+
+    //_chooseVechicleSpecializedController.text="";
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddMoreServicesListScreen(isAddService: false),
+        ));
+
+      if(result.isNotEmpty){
+        setState(() {
+          selectedServiceName = result;
+        });
+      }
+
+  }*/
 
 }
