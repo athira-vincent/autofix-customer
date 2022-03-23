@@ -78,10 +78,10 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      //home: SplashScreen(),
+      home: SplashScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-      home: AddMoreServicesListScreen(),
+      //home: AddMoreServicesListScreen(),
     );
   }
 }
