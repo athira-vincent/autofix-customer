@@ -283,7 +283,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                     ),
                                 ),
 
-
                                 Container(
                                   margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
                                   alignment: Alignment.center,
