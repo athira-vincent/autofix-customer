@@ -382,6 +382,35 @@ class Styles {
       fontWeight: FontWeight.w700,
       fontFamily:'Samsung_SharpSans_Medium'
   );
+  static const sparePartNameTextBlack17 = TextStyle(
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.w700,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const sparePartNameSubTextBlack = TextStyle(
+      fontSize: 10,
+      color:  CustColors.greyText2,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const sparePartOrginalPriceSubTextBlack = TextStyle(
+      fontSize: 11,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const sparePartOfferPriceSubTextBlack = TextStyle(
+      fontSize: 11,
+      color:  CustColors.greyText2,
+      decoration: TextDecoration.lineThrough,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
 
   static const awayTextBlack = TextStyle(
       fontSize: 11,
@@ -389,6 +418,8 @@ class Styles {
       fontWeight: FontWeight.w600,
       fontFamily:'Samsung_SharpSans_Medium'
   );
+
+
   static const homeActiveTextStyle = TextStyle(
       fontFamily: 'Samsung_SharpSans_Medium',
       fontSize: 9,
