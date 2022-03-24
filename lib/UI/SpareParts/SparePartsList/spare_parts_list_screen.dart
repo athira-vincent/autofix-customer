@@ -58,17 +58,11 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       home: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: SingleChildScrollView(
-                // ignore: avoid_unnecessary_containers
-                child: Column(
-                  children: [
-                    appBarCustomUi(),
-                    SparePartsListUi(),
-                  ],
-                ),
-              ),
+            body: Column(
+              children: [
+                appBarCustomUi(),
+                SparePartsListUi(),
+              ],
             )),
       ),
     );
@@ -109,50 +103,54 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   }
 
   Widget SparePartsListUi() {
-    return GridView.builder(
-      itemCount:8,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-      ),
-      itemBuilder: (context,index,) {
-        return GestureDetector(
-          onTap:(){
-
-          },
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: CustColors.greyText1),
-                borderRadius: BorderRadius.circular(0)
-            ),
-            child: Column(
-              mainAxisAlignment:MainAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.ice_skating,size: 100,color: CustColors.light_navy,),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Text('dgsgs',
-                    style: Styles.textLabelTitleEmergencyServiceName,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,),
-                ),
-              ],
-            ),
+    return Container(
+      child: Expanded(
+        child: GridView.builder(
+          itemCount:8,
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
           ),
-        );
-      },
+          itemBuilder: (context,index,) {
+            return InkWell(
+              onTap:(){
+
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: CustColors.greyText1),
+                    borderRadius: BorderRadius.circular(0)
+                ),
+                child: Column(
+                  mainAxisAlignment:MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: CustColors.whiteBlueish,
+                          borderRadius: BorderRadius.circular(11.0)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Icon(Icons.ice_skating,size: 100,color: CustColors.light_navy,),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Text('dgsgs',
+                        style: Styles.textLabelTitleEmergencyServiceName,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.visible,),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
