@@ -30,7 +30,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
-
   double _setValueFont(double value) {
     return value * perfont + value;
   }
