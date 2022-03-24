@@ -55,38 +55,108 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-          backgroundColor: Colors.white,
-          body: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              // ignore: avoid_unnecessary_containers
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height *0.40 ,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/forgotPwd/forgotPwd_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+      home: SafeArea(
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                // ignore: avoid_unnecessary_containers
+                child: Column(
+                  children: [
+                    appBarCustomUi(),
+                    SparePartsListUi(),
+                  ],
+                ),
               ),
-            ),
-          )),
+            )),
+      ),
     );
   }
+
+  Widget appBarCustomUi() {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            'Ford Fiesta',
+            textAlign: TextAlign.center,
+            style: Styles.appBarTextBlue,
+          ),
+        ),
+        Spacer(),
+        IconButton(
+          icon: Icon(Icons.search, color: Colors.black),
+          onPressed: () {
+
+
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.sort, color: Colors.black),
+          onPressed: () {
+
+
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget SparePartsListUi() {
+    return GridView.builder(
+      itemCount:8,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemBuilder: (context,index,) {
+        return GestureDetector(
+          onTap:(){
+
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: CustColors.greyText1),
+                borderRadius: BorderRadius.circular(0)
+            ),
+            child: Column(
+              mainAxisAlignment:MainAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: CustColors.whiteBlueish,
+                      borderRadius: BorderRadius.circular(11.0)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.ice_skating,size: 100,color: CustColors.light_navy,),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: Text('dgsgs',
+                    style: Styles.textLabelTitleEmergencyServiceName,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
 }
 
 class MyBehavior extends ScrollBehavior {

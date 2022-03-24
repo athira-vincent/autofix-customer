@@ -5,6 +5,7 @@ class CustColors {
   static const borderColor = Color(0xff707070);
   static const blue = Color(0xff2a569f);
   static const greyText = Color(0xff969696);
+  static const greyText1 = Color(0xffe2e2e2);
   static const MaterialColor materialBlue = MaterialColor(
     0xff2a569f,
     <int, Color>{
