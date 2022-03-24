@@ -47,6 +47,7 @@ class CustColors {
   static const warm_grey03= Color(0xff707070);
   static const black_04= Color(0xff363131);
   static const light_navy02= Color(0xff163788);
+  static const greyish_brown= Color(0xff5b5b5b);
 
   static const cherry= Color(0xffd00c39);
   static const warm_grey04= Color(0xffc4c5c7);
