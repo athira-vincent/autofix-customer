@@ -269,6 +269,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         right: size.width * 3.5 / 100,
         top: size.height * 1.3 / 100,
         bottom: size.height * 1 / 100,
+
       ),
       child: Column(
         children: [
