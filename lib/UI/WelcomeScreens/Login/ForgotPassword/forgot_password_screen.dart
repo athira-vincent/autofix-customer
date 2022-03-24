@@ -11,6 +11,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../main.dart';
+import '../PhoneLogin/otp_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -258,11 +261,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                   setState(() =>
                                                   _autoValidate = AutovalidateMode.always);
                                                 }*/
-                                                Navigator.pushReplacement(
+                                                Navigator.push(
                                                   context,
-                                                  new MaterialPageRoute(
+                                                  MaterialPageRoute(
                                                       builder: (context) =>
-                                                          LoginScreen()),
+                                                          OtpVerificationScreen(
+                                                            userType: "0",
+                                                            userCategory: "0",
+                                                            phoneNumber: "${9567383837}",
+                                                            otpNumber: "1234",
+                                                            fromPage: "3",
+                                                          )),
                                                 );
                                               },
                                               child: Container(

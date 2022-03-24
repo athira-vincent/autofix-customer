@@ -50,6 +50,7 @@ class CustColors {
   static const greyish_brown= Color(0xff5b5b5b);
 
   static const cherry= Color(0xffd00c39);
+  static const warm_grey04= Color(0xffc4c5c7);
 
 
 
