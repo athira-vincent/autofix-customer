@@ -270,13 +270,13 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
         children: [
           Text("₦ ",style: TextStyle(
               fontSize: 30,
-              fontFamily: "Samsung_SharpSans_Medium",
+              fontFamily: "SharpSans_Bold",
               fontWeight: FontWeight.bold,
               color: CustColors.light_navy
           ),),
           Text("1600",
             style: TextStyle(
-                fontFamily: "Samsung_SharpSans_Medium",
+                fontFamily: "SharpSans_Bold",
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
