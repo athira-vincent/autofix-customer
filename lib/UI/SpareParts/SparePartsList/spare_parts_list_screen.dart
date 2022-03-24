@@ -131,7 +131,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         height: 100,
-                        width: 150,
+                        width: double.infinity,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Image.network(
@@ -142,27 +142,27 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0,1,0,0),
+                            padding: const EdgeInsets.fromLTRB(0,2,0,0),
                             child: Text(
                               "Clutch assembly",
                               style: Styles.sparePartNameTextBlack17,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
                             child: Text(
                               "A2137635123. | Ford fiesta fort",
                               style: Styles.sparePartNameSubTextBlack,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
                             child: Container(
                               height: 20,
                               width: 50,
@@ -175,14 +175,14 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
                             child: Text(
                               "\$ 3000",
                               style: Styles.sparePartOrginalPriceSubTextBlack,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0,5,0,0),
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
                             child: Row(
                               children: [
                                 Text(
