@@ -499,6 +499,21 @@ class Styles {
     color: Colors.white,
     fontWeight: FontWeight.w400,
   );
+
+  static const addToCartText02 =TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const addToCartItemText02 =TextStyle(
+    fontSize: 13,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+  );
+
   static const myWalletCardText01 = TextStyle(
     fontSize: 30,
     fontFamily: "Samsung_SharpSans_Medium",

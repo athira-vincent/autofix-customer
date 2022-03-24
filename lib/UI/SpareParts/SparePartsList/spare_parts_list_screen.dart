@@ -33,7 +33,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-  bool language_en_ar=true;
+  bool addToCart=false;
 
 
   @override
@@ -58,10 +58,61 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       home: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: Column(
+            body: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                appBarCustomUi(),
-                SparePartsListUi(),
+                Column(
+                  children: [
+                    appBarCustomUi(),
+                    SparePartsListUi(),
+                  ],
+                ),
+                addToCart==false
+                ? Container()
+                : Padding(
+                  padding: const EdgeInsets.fromLTRB(8,8,8,8),
+                  child: Container(
+                    height: 65,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: CustColors.light_navy,
+                        border: Border.all(color:  CustColors.light_navy,),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(25,0,25,0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "1 items",
+                                style: Styles.addToCartItemText02,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                                child: Text(
+                                  "\$ 3000",
+                                  style: Styles.addToCartItemText02,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Text(
+                            "View Cart >",
+                            style: Styles.addToCartText02,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             )),
       ),
@@ -114,84 +165,87 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               childAspectRatio:0.7
           ),
           itemBuilder: (context,index,) {
-            return InkWell(
-              onTap:(){
-
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: CustColors.greyText1),
-                    borderRadius: BorderRadius.circular(0)
-                ),
-                child: Column(
-                  mainAxisAlignment:MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 100,
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
-                            "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-                            fit: BoxFit.cover,
-                          ),
+            return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: CustColors.greyText1),
+                  borderRadius: BorderRadius.circular(0)
+              ),
+              child: Column(
+                mainAxisAlignment:MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 100,
+                      width: double.infinity,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Image.network(
+                          "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,2,0,0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,2,0,0),
+                          child: Text(
+                            "Clutch assembly",
+                            style: Styles.sparePartNameTextBlack17,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          child: Text(
+                            "A2137635123. | Ford fiesta fort",
+                            style: Styles.sparePartNameSubTextBlack,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          child: Container(
+                            height: 20,
+                            width: 50,
+                            alignment: Alignment.center,
+                            color: CustColors.light_navy,
                             child: Text(
-                              "Clutch assembly",
-                              style: Styles.sparePartNameTextBlack17,
+                              "5% OFF",
+                              style: Styles.badgeTextStyle1,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Text(
-                              "A2137635123. | Ford fiesta fort",
-                              style: Styles.sparePartNameSubTextBlack,
-                            ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          child: Text(
+                            "\$ 3000",
+                            style: Styles.sparePartOrginalPriceSubTextBlack,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Container(
-                              height: 20,
-                              width: 50,
-                              alignment: Alignment.center,
-                              color: CustColors.light_navy,
-                              child: Text(
-                                "5% OFF",
-                                style: Styles.badgeTextStyle1,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "\$ 3000",
+                                style: Styles.sparePartOfferPriceSubTextBlack,
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Text(
-                              "\$ 3000",
-                              style: Styles.sparePartOrginalPriceSubTextBlack,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "\$ 3000",
-                                  style: Styles.sparePartOfferPriceSubTextBlack,
-                                ),
-                                Spacer(),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                              Spacer(),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                child: InkWell(
+                                  onTap: (){
+                                    print('gdfh');
+                                    setState(() {
+                                      addToCart = true;
+                                    });
+                                  },
                                   child: Container(
                                     height: 20,
                                     width: 70,
@@ -207,14 +261,14 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
