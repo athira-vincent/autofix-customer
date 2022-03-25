@@ -35,6 +35,9 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   }
   bool addToCart=false;
 
+  TextEditingController searchController = new TextEditingController();
+  StateSetter? setStateSearch;
+
 
   @override
   void initState() {
@@ -139,7 +142,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
           icon: Icon(Icons.search, color: Colors.black),
           onPressed: () {
 
-
+            _showModal(context);
           },
         ),
         IconButton(
@@ -276,6 +279,72 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       ),
     );
   }
+
+  void _showModal(context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(0.0)),
+        ),
+        context: context,
+        builder: (context) {
+          //3
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                setStateSearch = setState;
+                return Container(
+                  height: MediaQuery.of(context).size.height * .85,
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 35,
+                            child:  TextField(
+                              controller: searchController,
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                hintText: 'Search spare parts for your vehicle',
+                                contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
+                                prefixIcon:  Icon(Icons.search_rounded, color: CustColors.light_navy),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: CustColors.whiteBlueish),
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: CustColors.whiteBlueish),
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: CustColors.whiteBlueish),
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: CustColors.whiteBlueish),
+                                    borderRadius: BorderRadius.circular(0.0)),
+                                errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: CustColors.whiteBlueish),
+                                    borderRadius: BorderRadius.circular(0.0)),
+
+                              ),
+                              onChanged: (text) {
+
+                                if (text != null && text.isNotEmpty && text != "" ) {
+
+
+                                }
+
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        });
+  }
+
 
 
 }

@@ -12,6 +12,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'UI/SpareParts/FilterScreen/filter_screen.dart';
+import 'UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 
 
@@ -68,7 +69,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: FilterScreen(),
+      home: SparePartsListScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
       //home: AddMoreServicesListScreen(),
