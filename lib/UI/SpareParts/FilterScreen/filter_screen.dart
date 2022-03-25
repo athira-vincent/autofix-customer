@@ -143,11 +143,26 @@ class _FilterScreenState extends State<FilterScreen> {
 
                     SortByUi(),
 
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                      child: Divider(),
+                    ),
+
                     PriceUi(),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                      child: Divider(),
+                    ),
 
                     DiscountUi(),
 
-                    SizedBox(height: 30,),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                      child: Divider(),
+                    ),
+
+                    SizedBox(height: 35,),
 
                     ApplyFilterButtonUi(),
 
@@ -183,7 +198,7 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget SortByUi() {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,5,10,5),
+        padding: const EdgeInsets.fromLTRB(10,2,10,2),
         child: Column(
           mainAxisAlignment:MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +242,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              margin: EdgeInsets.only(right: 10, bottom: 10),
+                              margin: EdgeInsets.only(right: 10, bottom: 5),
                               decoration: BoxDecoration(
                                 color: selectedSortByVariables.contains('${sortByVariables[i]}')
                                     ? CustColors.light_navy
@@ -261,7 +276,7 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget PriceUi() {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,5,10,5),
+        padding: const EdgeInsets.fromLTRB(10,2,10,2),
         child: Column(
           mainAxisAlignment:MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +320,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              margin: EdgeInsets.only(right: 10, bottom: 10),
+                              margin: EdgeInsets.only(right: 10, bottom: 5),
                               decoration: BoxDecoration(
                                   color: selectedPriceVariables.contains('${priceVariables[i]}')
                                       ? CustColors.light_navy
@@ -339,7 +354,7 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget DiscountUi() {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,5,10,5),
+        padding: const EdgeInsets.fromLTRB(10,2,10,2),
         child: Column(
           mainAxisAlignment:MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,7 +398,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              margin: EdgeInsets.only(right: 10, bottom: 10),
+                              margin: EdgeInsets.only(right: 10, bottom: 5),
                               decoration: BoxDecoration(
                                   color: selectedDiscountVariables.contains('${discountVariables[i]}')
                                       ? CustColors.light_navy
