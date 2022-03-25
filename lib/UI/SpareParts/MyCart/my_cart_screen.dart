@@ -319,7 +319,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
               borderRadius: BorderRadius.circular(0)
           ),
           child: Row(
-            mainAxisAlignment:MainAxisAlignment.start,
+            mainAxisAlignment:MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SvgPicture.asset(
                 'assets/image/home_customer/mycartSucessflag.svg',height: 35,width: 35,
@@ -328,11 +329,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment:MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
                         child: Text(
                           "Buy all the  products in the cart",
                           style: Styles.sparePartNameTextBlack17,
