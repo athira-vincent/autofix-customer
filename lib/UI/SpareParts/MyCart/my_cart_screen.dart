@@ -107,6 +107,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 child: Column(
                   children: [
                     appBarCustomUi(),
+                    productsListUi(),
                   ],
                 ),
               ),
@@ -132,6 +133,171 @@ class _MyCartScreenState extends State<MyCartScreen> {
         ),
         Spacer(),
       ],
+    );
+  }
+
+  Widget productsListUi() {
+    return  ListView.builder(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount:4,
+      itemBuilder: (context, index) {
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: CustColors.whiteBlueish,
+              borderRadius: BorderRadius.circular(0.0)
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: CustColors.greyText1),
+                borderRadius: BorderRadius.circular(0)
+            ),
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 60,
+                    width: 90,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                        "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Text(
+                          "Ford fiesta",
+                          style: Styles.sparePartNameSubTextBlack,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Text(
+                          "Clutch assembly",
+                          style: Styles.sparePartNameTextBlack17,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,10),
+                        child: Text(
+                          "A2137635123. | Ford fiesta fort",
+                          style: Styles.sparePartNameSubTextBlack,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                        child: InkWell(
+                          onTap: (){
+
+                          },
+                          child: Container(
+                            height: 20,
+                            width: 70,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: CustColors.greyText3),
+                                borderRadius: BorderRadius.circular(4)
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 20,
+                                  width: 25,
+                                  color: Colors.transparent,
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    "-",
+                                    textAlign: TextAlign.start,
+                                    style: Styles.homeNameTextStyle,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "12",
+                                      textAlign: TextAlign.center,
+                                      style: Styles.homeActiveTextStyle,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 20,
+                                  width: 25,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "+",
+                                    style: Styles.homeNameTextStyle,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Icon(Icons.delete_outline_outlined, color: CustColors.light_navy),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Text(
+                          "\$ 3000",
+                          style: Styles.sparePartNameTextBlack17,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Container(
+                          height: 20,
+                          width: 50,
+                          alignment: Alignment.center,
+                          color: CustColors.light_navy,
+                          child: Text(
+                            "5% OFF",
+                            style: Styles.badgeTextStyle1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        );
+      },
     );
   }
 
