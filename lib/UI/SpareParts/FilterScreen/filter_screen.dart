@@ -42,6 +42,36 @@ class _FilterScreenState extends State<FilterScreen> {
   bool language_en_ar=true;
 
 
+  List<String> sortByVariables = [
+    "Price: Low to high",
+    "Price: High to Low",
+    "New arrivals",
+
+  ];
+
+
+  List<String> priceVariables = [
+    "\$300 - \$500",
+    "\$300 - \$2000",
+    "\$5000- \$7000",
+    "\$300 - \$500",
+    "\$3000 - \$2000",
+    "\$5000- \$7000",
+
+  ];
+
+  List<String> discountVariables = [
+    "10% Off",
+    "20% Off",
+    "25% Off",
+    "30% Off",
+    "40% Off",
+    "50% Off",
+    "60% Off",
+    "70% Off",
+  ];
+
+
   @override
   void initState() {
     super.initState();
@@ -114,7 +144,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
                     DiscountUi(),
 
-                    SizedBox(height: 40,),
+                    SizedBox(height: 30,),
 
                     ApplyFilterButtonUi(),
 
@@ -150,51 +180,51 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget SortByUi() {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+        padding: const EdgeInsets.fromLTRB(10,5,10,5),
         child: Column(
           mainAxisAlignment:MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(15,0,15,15),
+              padding: const EdgeInsets.fromLTRB(15,0,15,5),
               child: Text(
                 'Sort by',
-                style: TextStyle(color: Colors.black, fontSize: 11),
+                style: Styles.myWalletListTileTitle03,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,0,0),
-              child: GridView.builder(
-                itemCount:6,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 2.2
-                ),
-                itemBuilder: (context,index,) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 35,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          border: Border.all(color: CustColors.greyText1),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: Column(
-                        mainAxisAlignment:MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Price: Low to high',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
-                          )
-                        ],
-                      ),
+              padding: const EdgeInsets.all(5.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: ScrollController(),
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 1.0,
+                      runSpacing: 1.0,
+                      runAlignment: WrapAlignment.spaceEvenly,
+                      children:  [
+                        for(int i=0;i<sortByVariables.length;i++)
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            margin: EdgeInsets.only(right: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Text(
+                              '${sortByVariables[i]}',
+                              style: Styles.textLabelTitle_12,
+                            ),
+                          ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ],
@@ -206,51 +236,51 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget PriceUi() {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+        padding: const EdgeInsets.fromLTRB(10,5,10,5),
         child: Column(
           mainAxisAlignment:MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(15,0,15,15),
+              padding: const EdgeInsets.fromLTRB(15,0,15,5),
               child: Text(
                 'Price',
-                style: TextStyle(color: Colors.black, fontSize: 11),
+                style: Styles.myWalletListTileTitle03,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,0,0),
-              child: GridView.builder(
-                itemCount:6,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 2.2
-                ),
-                itemBuilder: (context,index,) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 35,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          border: Border.all(color: CustColors.greyText1),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: Column(
-                        mainAxisAlignment:MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Price: Low to high',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
-                          )
-                        ],
-                      ),
+              padding: const EdgeInsets.all(5.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: ScrollController(),
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 1.0,
+                      runSpacing: 1.0,
+                      runAlignment: WrapAlignment.spaceEvenly,
+                      children:  [
+                        for(int i=0;i<priceVariables.length;i++)
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            margin: EdgeInsets.only(right: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Text(
+                              '${priceVariables[i]}',
+                              style: Styles.textLabelTitle_12,
+                            ),
+                          ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ],
@@ -262,51 +292,51 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget DiscountUi() {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+        padding: const EdgeInsets.fromLTRB(10,5,10,5),
         child: Column(
           mainAxisAlignment:MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(15,0,15,15),
+              padding: const EdgeInsets.fromLTRB(15,0,15,5),
               child: Text(
                 'Discount',
-                style: TextStyle(color: Colors.black, fontSize: 11),
+                style: Styles.myWalletListTileTitle03,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,0,0),
-              child: GridView.builder(
-                itemCount:6,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 2.2
-                ),
-                itemBuilder: (context,index,) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 35,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          border: Border.all(color: CustColors.greyText1),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: Column(
-                        mainAxisAlignment:MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Price: Low to high',
-                            style: TextStyle(color: Colors.white, fontSize: 11),
-                          )
-                        ],
-                      ),
+              padding: const EdgeInsets.all(5.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                controller: ScrollController(),
+                child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 1.0,
+                      runSpacing: 1.0,
+                      runAlignment: WrapAlignment.spaceEvenly,
+                      children:  [
+                        for(int i=0;i<discountVariables.length;i++)
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            margin: EdgeInsets.only(right: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Text(
+                              '${discountVariables[i]}',
+                              style: Styles.textLabelTitle_12,
+                            ),
+                          ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ],
