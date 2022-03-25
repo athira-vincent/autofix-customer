@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordScreen/create_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
@@ -72,50 +73,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                 ),
                 addToCart==false
                 ? Container()
-                : Padding(
-                  padding: const EdgeInsets.fromLTRB(8,8,8,8),
-                  child: Container(
-                    height: 65,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy,
-                        border: Border.all(color:  CustColors.light_navy,),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(25,0,25,0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "1 items",
-                                style: Styles.addToCartItemText02,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                                child: Text(
-                                  "\$ 3000",
-                                  style: Styles.addToCartItemText02,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          Text(
-                            "View Cart >",
-                            style: Styles.addToCartText02,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                : ViewCartUi(),
               ],
             )),
       ),
@@ -275,6 +233,62 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+
+  Widget ViewCartUi() {
+    return InkWell(
+      onTap: (){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MyCartScreen()));
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8,8,8,8),
+        child: Container(
+          height: 65,
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustColors.light_navy,
+              border: Border.all(color:  CustColors.light_navy,),
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(25,0,25,0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "1 items",
+                      style: Styles.addToCartItemText02,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                      child: Text(
+                        "\$ 3000",
+                        style: Styles.addToCartItemText02,
+                      ),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Text(
+                  "View Cart >",
+                  style: Styles.addToCartText02,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
