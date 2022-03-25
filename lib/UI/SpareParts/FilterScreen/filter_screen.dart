@@ -215,7 +215,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                 border: Border.all(
                                   color: Colors.grey,
                                 ),
-                                borderRadius: BorderRadius.circular(15)),
+                                borderRadius: BorderRadius.circular(20)),
                             child: Text(
                               '${sortByVariables[i]}',
                               style: Styles.textLabelTitle_12,
@@ -271,7 +271,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                 border: Border.all(
                                   color: Colors.grey,
                                 ),
-                                borderRadius: BorderRadius.circular(15)),
+                                borderRadius: BorderRadius.circular(20)),
                             child: Text(
                               '${priceVariables[i]}',
                               style: Styles.textLabelTitle_12,
@@ -327,7 +327,7 @@ class _FilterScreenState extends State<FilterScreen> {
                                 border: Border.all(
                                   color: Colors.grey,
                                 ),
-                                borderRadius: BorderRadius.circular(15)),
+                                borderRadius: BorderRadius.circular(20)),
                             child: Text(
                               '${discountVariables[i]}',
                               style: Styles.textLabelTitle_12,
