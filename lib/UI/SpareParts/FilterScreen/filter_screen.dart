@@ -316,10 +316,43 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 
   Widget ApplyFilterButtonUi() {
-    return Container(
-      height: 50,
-      width: 50,
-      color: Colors.red,
+    return InkWell(
+      onTap: (){
+
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            Spacer(),
+            Container(
+              height: 35,
+              width:130,
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+              //padding: EdgeInsets.only(left: 20, right: 20),
+              decoration: BoxDecoration(
+                color: CustColors.light_navy,
+                border: Border.all(
+                  color: CustColors.blue,
+                  style: BorderStyle.solid,
+                  width: 0.70,
+                ),
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child:  Text(
+                "Apply filter",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Corbel_Bold',
+                    fontSize:
+                    ScreenSize().setValueFont(14.5),
+                    fontWeight: FontWeight.w800),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
