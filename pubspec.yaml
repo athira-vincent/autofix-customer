@@ -129,7 +129,6 @@ flutter:
     - assets/image/mechanicProfileView/directionMechnanicTracking.svg
     - assets/map_style/map_style.txt
     - assets/image/mechanicTracking/
-    - assets/image/MechanicType/incomingRequestBg.svg
 
   fonts:
     - family: Montserrat_SemiBold

@@ -97,14 +97,18 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
         ),
         Spacer(),
         IconButton(
-          icon: Icon(Icons.search, color: Colors.black),
+          icon: SvgPicture.asset(
+            'assets/image/home_customer/filterSearch.svg',height: 20,width: 20,
+          ),
           onPressed: () {
 
             _showModal(context);
           },
         ),
         IconButton(
-          icon: Icon(Icons.sort, color: Colors.black),
+          icon: SvgPicture.asset(
+            'assets/image/home_customer/filterIcon.svg',height: 20,width: 20,
+          ),
           onPressed: () {
 
 

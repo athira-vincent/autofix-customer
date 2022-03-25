@@ -108,6 +108,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   children: [
                     appBarCustomUi(),
                     productsListUi(),
+                    placeOrderUi(),
                   ],
                 ),
               ),
@@ -300,6 +301,78 @@ class _MyCartScreenState extends State<MyCartScreen> {
           )
         );
       },
+    );
+  }
+
+  Widget placeOrderUi() {
+    return  Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(0.0)
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: CustColors.greyText1),
+              borderRadius: BorderRadius.circular(0)
+          ),
+          child: Row(
+            mainAxisAlignment:MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset(
+                'assets/image/home_customer/mycartSucessflag.svg',height: 30,width: 30,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Text(
+                          "Buy all the  products in the cart",
+                          style: Styles.sparePartNameTextBlack17,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                      child: Text(
+                        "\$ 3000",
+                        style: Styles.sparePartNameTextBlack17,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                      child: Container(
+                        height: 20,
+                        width: 70,
+                        alignment: Alignment.center,
+                        color: CustColors.light_navy,
+                        child: Text(
+                          "Place order",
+                          style: Styles.badgeTextStyle1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )
     );
   }
 
