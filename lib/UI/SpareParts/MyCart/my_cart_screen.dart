@@ -109,6 +109,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     appBarCustomUi(),
                     productsListUi(),
                     placeOrderUi(),
+                    changeAddressUi(),
                   ],
                 ),
               ),
@@ -321,7 +322,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
             mainAxisAlignment:MainAxisAlignment.start,
             children: [
               SvgPicture.asset(
-                'assets/image/home_customer/mycartSucessflag.svg',height: 30,width: 30,
+                'assets/image/home_customer/mycartSucessflag.svg',height: 35,width: 35,
               ),
               Expanded(
                 child: Padding(
@@ -364,6 +365,87 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         child: Text(
                           "Place order",
                           style: Styles.badgeTextStyle1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )
+    );
+  }
+
+  Widget changeAddressUi() {
+    return  Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(0.0)
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: CustColors.greyText1),
+              borderRadius: BorderRadius.circular(0)
+          ),
+          child: Row(
+            mainAxisAlignment:MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset(
+                'assets/image/home_customer/myCartLocation.svg',height: 30,width: 30,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Text(
+                          "Delivering To: Savannah estate,plot 176",
+                          style: Styles.sparePartNameTextBlack17,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                        child: Text(
+                          "Beside oando filling station.",
+                          style: Styles.sparePartNameTextBlack17,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                      child: InkWell(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          height: 25,
+                          width: 90,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: CustColors.light_navy),
+                              borderRadius: BorderRadius.circular(4)
+                          ),
+                          child: Text(
+                            "Change Address",
+                            style: Styles.homeActiveTextStyle,
+                          ),
                         ),
                       ),
                     ),
