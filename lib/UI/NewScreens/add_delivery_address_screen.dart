@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ChangeDeliveryAddressScreen extends StatefulWidget {
+class AddDeliveryAddressScreen extends StatefulWidget {
 
-  ChangeDeliveryAddressScreen();
+  AddDeliveryAddressScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _ChangeDeliveryAddressScreenState();
+    return _AddDeliveryAddressScreenState();
   }
 }
 
-class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScreen> {
+class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -47,15 +47,7 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                         children: [
                           Text("Name"),
                           Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                    color: CustColors.almost_black,
-                                    width: 0.3
-                                )
-                            ),
+                            decoration: boxDecorationStyle,
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
@@ -100,15 +92,7 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                           ),
                           Text("Phone number"),
                           Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                    color: CustColors.almost_black,
-                                    width: 0.3
-                                )
-                            ),
+                            decoration: boxDecorationStyle,
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
@@ -156,16 +140,9 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
+
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(8),
-                                      ),
-                                      border: Border.all(
-                                          color: CustColors.almost_black,
-                                          width: 0.3
-                                      )
-                                  ),
+                                  decoration: boxDecorationStyle,
                                   child: TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     maxLines: 1,
@@ -210,22 +187,15 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                                 ),
                               ),
                               SizedBox(
-                                width: size.width * 7.5 / 100,
+                                width: size.width * 8 / 100,
                               ),
                               useMyLocationButton(size),
                             ],
                           ),
                           Text("Locality"),
+
                           Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                    color: CustColors.almost_black,
-                                    width: 0.3
-                                )
-                            ),
+                            decoration: boxDecorationStyle,
                             child: TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
@@ -274,14 +244,21 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                             children: [
                               Flexible(child: addressTypeOptions(size,"Home","assets/image/ic_home_outline.svg")),
                               SizedBox(
-                                width: size.width * 1 / 100,
+                                width: size.width * 1.5 / 100,
                               ),
                               Flexible(child: addressTypeOptions(size,"Work","assets/image/ic_work_outline.svg")),
                               SizedBox(
-                                width: size.width * 1 / 100,
+                                width: size.width * 1.5 / 100,
                               ),
                               Flexible(child: addressTypeOptions(size,"Other","assets/image/ic_location_outline.svg")),
                             ],
+                          ),
+
+                          InkWell(
+                            onTap: (){
+                              print("on tap saveAddress");
+                            },
+                              child: saveAddressButton(size)
                           )
                         ],
                       ),
@@ -335,10 +312,10 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
             color: CustColors.light_navy
         ),
         padding: EdgeInsets.only(
-          left: size.width * 4 / 100,
-          right: size.width * 4 / 100,
-          top: size.height * .5 / 100,
-          bottom: size.height * .5 / 100,
+          left: size.width * 3 / 100,
+          right: size.width * 3 / 100,
+          //top: size.height * .5 / 100,
+          //bottom: size.height * .5 / 100,
         ),
         child: Row(
           children: [
@@ -346,8 +323,8 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
               margin: EdgeInsets.only(
                 right: size.width * 1.5 / 100
               ),
-              width: size.width * 6 / 100,
-              height: size.height * 6 / 100,
+              width: size.width * 5 / 100,
+              height: size.height * 5 / 100,
                 child: SvgPicture.asset("assets/image/ic_zoom_location.svg",)
             ),
             Text(
@@ -365,17 +342,38 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
     );
   }
 
+  Widget saveAddressButton(Size size){
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
+            ),
+            color: CustColors.light_navy
+        ),
+        padding: EdgeInsets.only(
+          left: size.width * 3 / 100,
+          right: size.width * 3 / 100,
+          //top: size.height * .5 / 100,
+          //bottom: size.height * .5 / 100,
+        ),
+        child: Text(
+          "Use my location",
+          style: TextStyle(
+            fontSize: 14.3,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Samsung_SharpSans_Medium",
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget addressTypeOptions(Size size, String text, String imagePath){
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-          border: Border.all(
-              color: CustColors.almost_black,
-              width: 0.3
-          )
-      ),
+      decoration: boxDecorationStyle,
       padding: EdgeInsets.only(
         left: size.width * 3 / 100,
         right: size.width * 3 / 100,
@@ -388,8 +386,8 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
           Container(
             margin: EdgeInsets.only(right: size.width * 1 / 100),
             child: SvgPicture.asset(imagePath,
-            height: size.height * 3 / 100,
-            width: size.width * 3 / 100,),
+            height: size.height * 2.5 / 100,
+            width: size.width * 2.5 / 100,),
           ),
           Text(text)
         ],
@@ -397,4 +395,13 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
     );
   }
 
+  BoxDecoration boxDecorationStyle = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+      border: Border.all(
+          color: CustColors.greyish,
+          width: 0.3
+      )
+  );
 }
