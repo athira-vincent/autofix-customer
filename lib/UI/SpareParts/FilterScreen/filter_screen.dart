@@ -46,19 +46,20 @@ class _FilterScreenState extends State<FilterScreen> {
     "Price: Low to high",
     "Price: High to Low",
     "New arrivals",
-
   ];
 
+  List<String> selectedSortByVariables = [];
 
   List<String> priceVariables = [
     "\$300 - \$500",
     "\$300 - \$2000",
     "\$5000- \$7000",
-    "\$300 - \$500",
+    "\$300 - \$5000",
     "\$3000 - \$2000",
     "\$5000- \$7000",
-
   ];
+
+  List<String> selectedPriceVariables = [];
 
   List<String> discountVariables = [
     "10% Off",
@@ -70,6 +71,8 @@ class _FilterScreenState extends State<FilterScreen> {
     "60% Off",
     "70% Off",
   ];
+
+  List<String> selectedDiscountVariables = [];
 
 
   @override
@@ -167,7 +170,7 @@ class _FilterScreenState extends State<FilterScreen> {
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
-            'Ford Fiesta',
+            'Filter',
             textAlign: TextAlign.center,
             style: Styles.appBarTextBlue,
           ),
@@ -189,7 +192,7 @@ class _FilterScreenState extends State<FilterScreen> {
               padding: const EdgeInsets.fromLTRB(15,0,15,5),
               child: Text(
                 'Sort by',
-                style: Styles.myWalletListTileTitle03,
+                style: Styles.textFilterTitle03,
               ),
             ),
             Padding(
@@ -208,17 +211,39 @@ class _FilterScreenState extends State<FilterScreen> {
                       runAlignment: WrapAlignment.spaceEvenly,
                       children:  [
                         for(int i=0;i<sortByVariables.length;i++)
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            margin: EdgeInsets.only(right: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              '${sortByVariables[i]}',
-                              style: Styles.textLabelTitle_12,
+                          InkWell(
+                            onTap: (){
+                              setState(() {
+                                if(selectedSortByVariables.contains('${sortByVariables[i]}'))
+                                  {
+                                    selectedSortByVariables.remove('${sortByVariables[i]}');
+                                  }
+                                else
+                                  {
+                                    selectedSortByVariables.add('${sortByVariables[i]}');
+                                  }
+
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              margin: EdgeInsets.only(right: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                color: selectedSortByVariables.contains('${sortByVariables[i]}')
+                                    ? CustColors.light_navy
+                                    : Colors.white,
+                                  border: Border.all(
+                                    color: selectedSortByVariables.contains('${sortByVariables[i]}')
+                                        ? CustColors.light_navy
+                                        : CustColors.greyish,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                '${sortByVariables[i]}',
+                                style: selectedSortByVariables.contains('${sortByVariables[i]}')
+                                ? Styles.textFilterIncludeTitle_12
+                                : Styles.textFilterNotIncludeTitle_12,
+                              ),
                             ),
                           ),
                       ],
@@ -245,7 +270,7 @@ class _FilterScreenState extends State<FilterScreen> {
               padding: const EdgeInsets.fromLTRB(15,0,15,5),
               child: Text(
                 'Price',
-                style: Styles.myWalletListTileTitle03,
+                style: Styles.textFilterTitle03,
               ),
             ),
             Padding(
@@ -264,17 +289,39 @@ class _FilterScreenState extends State<FilterScreen> {
                       runAlignment: WrapAlignment.spaceEvenly,
                       children:  [
                         for(int i=0;i<priceVariables.length;i++)
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            margin: EdgeInsets.only(right: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              '${priceVariables[i]}',
-                              style: Styles.textLabelTitle_12,
+                          InkWell(
+                            onTap: (){
+                              setState(() {
+                                if(selectedPriceVariables.contains('${priceVariables[i]}'))
+                                {
+                                  selectedPriceVariables.remove('${priceVariables[i]}');
+                                }
+                                else
+                                {
+                                  selectedPriceVariables.add('${priceVariables[i]}');
+                                }
+
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              margin: EdgeInsets.only(right: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: selectedPriceVariables.contains('${priceVariables[i]}')
+                                      ? CustColors.light_navy
+                                      : Colors.white,
+                                  border: Border.all(
+                                    color: selectedPriceVariables.contains('${priceVariables[i]}')
+                                        ? CustColors.light_navy
+                                        : CustColors.greyish,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                '${priceVariables[i]}',
+                                style: selectedPriceVariables.contains('${priceVariables[i]}')
+                                    ? Styles.textFilterIncludeTitle_12
+                                    : Styles.textFilterNotIncludeTitle_12,
+                              ),
                             ),
                           ),
                       ],
@@ -301,7 +348,7 @@ class _FilterScreenState extends State<FilterScreen> {
               padding: const EdgeInsets.fromLTRB(15,0,15,5),
               child: Text(
                 'Discount',
-                style: Styles.myWalletListTileTitle03,
+                style: Styles.textFilterTitle03,
               ),
             ),
             Padding(
@@ -320,17 +367,39 @@ class _FilterScreenState extends State<FilterScreen> {
                       runAlignment: WrapAlignment.spaceEvenly,
                       children:  [
                         for(int i=0;i<discountVariables.length;i++)
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            margin: EdgeInsets.only(right: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              '${discountVariables[i]}',
-                              style: Styles.textLabelTitle_12,
+                          InkWell(
+                            onTap: (){
+                              setState(() {
+                                if(selectedDiscountVariables.contains('${discountVariables[i]}'))
+                                {
+                                  selectedDiscountVariables.remove('${discountVariables[i]}');
+                                }
+                                else
+                                {
+                                  selectedDiscountVariables.add('${discountVariables[i]}');
+                                }
+
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              margin: EdgeInsets.only(right: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: selectedDiscountVariables.contains('${discountVariables[i]}')
+                                      ? CustColors.light_navy
+                                      : Colors.white,
+                                  border: Border.all(
+                                    color: selectedDiscountVariables.contains('${discountVariables[i]}')
+                                        ? CustColors.light_navy
+                                        : CustColors.greyish,
+                                  ),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                '${discountVariables[i]}',
+                                style: selectedDiscountVariables.contains('${discountVariables[i]}')
+                                    ? Styles.textFilterIncludeTitle_12
+                                    : Styles.textFilterNotIncludeTitle_12,
+                              ),
                             ),
                           ),
                       ],
@@ -348,6 +417,10 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget ApplyFilterButtonUi() {
     return InkWell(
       onTap: (){
+
+        print("$selectedSortByVariables");
+        print("$selectedPriceVariables");
+        print("$selectedDiscountVariables");
 
       },
       child: Padding(

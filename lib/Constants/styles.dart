@@ -82,6 +82,27 @@ class Styles {
     fontSize: 12,
   );
 
+  static const textFilterTitle03 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+
+  static const textFilterNotIncludeTitle_12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+    fontSize: 11,
+  );
+
+  static const textFilterIncludeTitle_12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Bold',
+    fontWeight: FontWeight.w300,
+    color: Colors.white,
+    fontSize: 11,
+  );
+
   static const textLabelTitle_Regular = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w300,
