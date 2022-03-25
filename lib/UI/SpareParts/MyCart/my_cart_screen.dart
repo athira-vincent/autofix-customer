@@ -142,7 +142,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount:4,
+      itemCount:3,
       itemBuilder: (context, index) {
         return Container(
           width: double.infinity,
@@ -173,90 +173,92 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Text(
-                          "Ford fiesta",
-                          style: Styles.sparePartNameSubTextBlack,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          child: Text(
+                            "Ford fiesta",
+                            style: Styles.sparePartNameSubTextBlack,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Text(
-                          "Clutch assembly",
-                          style: Styles.sparePartNameTextBlack17,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          child: Text(
+                            "Clutch assembly",
+                            style: Styles.sparePartNameTextBlack17,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,10),
-                        child: Text(
-                          "A2137635123. | Ford fiesta fort",
-                          style: Styles.sparePartNameSubTextBlack,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,8,0,10),
+                          child: Text(
+                            "A2137635123. | Ford fiesta fort",
+                            style: Styles.sparePartNameSubTextBlack,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                        child: InkWell(
-                          onTap: (){
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                          child: InkWell(
+                            onTap: (){
 
-                          },
-                          child: Container(
-                            height: 20,
-                            width: 70,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: CustColors.greyText3),
-                                borderRadius: BorderRadius.circular(4)
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 20,
-                                  width: 25,
-                                  color: Colors.transparent,
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  alignment: Alignment.topCenter,
-                                  child: Text(
-                                    "-",
-                                    textAlign: TextAlign.start,
-                                    style: Styles.homeNameTextStyle,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.center,
+                            },
+                            child: Container(
+                              height: 20,
+                              width: 70,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: CustColors.greyText3),
+                                  borderRadius: BorderRadius.circular(4)
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 20,
+                                    width: 25,
+                                    color: Colors.transparent,
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    alignment: Alignment.topCenter,
                                     child: Text(
-                                      "12",
-                                      textAlign: TextAlign.center,
-                                      style: Styles.homeActiveTextStyle,
+                                      "-",
+                                      textAlign: TextAlign.start,
+                                      style: Styles.homeNameTextStyle,
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  height: 20,
-                                  width: 25,
-                                  color: Colors.transparent,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "+",
-                                    style: Styles.homeNameTextStyle,
+                                  Expanded(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "12",
+                                        textAlign: TextAlign.center,
+                                        style: Styles.homeActiveTextStyle,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Container(
+                                    height: 20,
+                                    width: 25,
+                                    color: Colors.transparent,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "+",
+                                      style: Styles.homeNameTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -281,11 +283,11 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         padding: const EdgeInsets.fromLTRB(0,8,0,0),
                         child: Container(
                           height: 20,
-                          width: 50,
+                          width: 70,
                           alignment: Alignment.center,
                           color: CustColors.light_navy,
                           child: Text(
-                            "5% OFF",
+                            "Place order",
                             style: Styles.badgeTextStyle1,
                           ),
                         ),
