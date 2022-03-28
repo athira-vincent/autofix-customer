@@ -29,7 +29,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
   bool _isLoading = false;
-
   double per = .10;
   double perfont = .10;
   double _setValue(double value) {
