@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/rate_mechanic_screen.dart';
+import 'package:auto_fix/UI/NewScreens/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/NewScreens/add_delivery_address_screen.dart';
 import 'package:auto_fix/UI/NewScreens/change_delivery_address_screen.dart';
 import 'package:auto_fix/UI/NewScreens/purchase_response_screen.dart';
@@ -75,11 +75,11 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: SplashScreen(),
+      //home: SplashScreen(),
       //home: MyCartScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-     // home: RateMechanicScreen(),
+      home: RateMechanicScreen(),
       //home: ChangeDeliveryAddressScreen(),
     );
   }

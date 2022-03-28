@@ -1,5 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Mechanic/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/NewScreens/add_more_service_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
