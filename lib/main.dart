@@ -16,7 +16,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
-import 'UI/Customer/SideBar/MyOrders/my_orders_list.dart';
 import 'UI/SpareParts/FilterScreen/filter_screen.dart';
 import 'UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
@@ -76,7 +75,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: MyOrdersListScreen(),
+      home: MyCartScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
      // home: RateMechanicScreen(),

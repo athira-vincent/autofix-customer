@@ -16,6 +16,8 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
 
   TextEditingController searchController = new TextEditingController();
 
+  List<String> myordersDummyList = [];
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +113,7 @@ class _MyOrdersListScreenState extends State<MyOrdersListScreen> {
       physics: NeverScrollableScrollPhysics(),
       itemCount:2,
       itemBuilder: (context, index) {
+        myordersDummyList.add('index');
         return Container(
             width: double.infinity,
             child: Container(

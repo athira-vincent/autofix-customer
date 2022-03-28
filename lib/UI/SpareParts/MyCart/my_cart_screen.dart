@@ -8,6 +8,7 @@ import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -107,8 +108,12 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     appBarCustomUi(),
                     productsListUi(),
                     placeOrderUi(),
+                    Divider(),
                     changeAddressUi(),
+                    Divider(),
                     selectedBillDetailsUi(),
+                    Divider(),
+                    continueButtonUi(),
                   ],
                 ),
               ),
@@ -125,7 +130,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Text(
             'My Cart',
             textAlign: TextAlign.center,
@@ -145,117 +150,190 @@ class _MyCartScreenState extends State<MyCartScreen> {
       physics: NeverScrollableScrollPhysics(),
       itemCount:2,
       itemBuilder: (context, index) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: CustColors.whiteBlueish,
-              borderRadius: BorderRadius.circular(0.0)
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: CustColors.greyText1),
-                borderRadius: BorderRadius.circular(0)
-            ),
-            child: Row(
-              mainAxisAlignment:MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 60,
-                    width: 90,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-                        fit: BoxFit.cover,
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10,0,10,0),
+              child: Container(
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment:MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,8,0,8),
+                      child: Container(
+                        height: 60,
+                        width: 90,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Image.network(
+                            "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                              child: Text(
+                                "Ford fiesta",
+                                style: Styles.sparePartNameSubTextBlack,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                              child: Text(
+                                "Clutch assembly",
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,8,0,10),
+                              child: Text(
+                                "A2137635123. | Ford fiesta fort",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Styles.sparePartNameSubTextBlack,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                              child: InkWell(
+                                onTap: (){
+
+                                },
+                                child: Container(
+                                  height: 20,
+                                  width: 70,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: CustColors.greyText3),
+                                      borderRadius: BorderRadius.circular(4)
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 20,
+                                        width: 25,
+                                        color: Colors.transparent,
+                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        alignment: Alignment.topCenter,
+                                        child: Text(
+                                          "-",
+                                          textAlign: TextAlign.start,
+                                          style: Styles.homeNameTextStyle,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "12",
+                                            textAlign: TextAlign.center,
+                                            style: Styles.homeActiveTextStyle,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 20,
+                                        width: 25,
+                                        color: Colors.transparent,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "+",
+                                          style: Styles.homeNameTextStyle,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                            child: SvgPicture.asset('assets/image/home_customer/deleteMyCart.svg',height: 20,width: 20,),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                            child: Text(
+                              "\$ 3000",
+                              style: Styles.sparePartNameTextBlack17,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                            child: Container(
+                              height: 20,
+                              width: 70,
+                              alignment: Alignment.center,
+                              color: CustColors.light_navy,
+                              child: Text(
+                                "Place order",
+                                style: Styles.badgeTextStyle1,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ),
+            ),
+            Divider(),
+
+          ],
+        );
+      },
+    );
+  }
+
+  Widget placeOrderUi() {
+    return  Padding(
+      padding: const EdgeInsets.fromLTRB(10,0,10,0),
+      child: Container(
+          width: double.infinity,
+          child: Container(
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/image/home_customer/mycartSucessflag.svg',height: 35,width: 35,
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment:MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
                           child: Text(
-                            "Ford fiesta",
-                            style: Styles.sparePartNameSubTextBlack,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                          child: Text(
-                            "Clutch assembly",
+                            "Buy all the  products in the cart",
                             style: Styles.sparePartNameTextBlack17,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,8,0,10),
-                          child: Text(
-                            "A2137635123. | Ford fiesta fort",
-                            style: Styles.sparePartNameSubTextBlack,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                          child: InkWell(
-                            onTap: (){
-
-                            },
-                            child: Container(
-                              height: 20,
-                              width: 70,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: CustColors.greyText3),
-                                  borderRadius: BorderRadius.circular(4)
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 20,
-                                    width: 25,
-                                    color: Colors.transparent,
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      "-",
-                                      textAlign: TextAlign.start,
-                                      style: Styles.homeNameTextStyle,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "12",
-                                        textAlign: TextAlign.center,
-                                        style: Styles.homeActiveTextStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 20,
-                                    width: 25,
-                                    color: Colors.transparent,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "+",
-                                      style: Styles.homeNameTextStyle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ),
                       ],
@@ -268,11 +346,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Icon(Icons.delete_outline_outlined, color: CustColors.light_navy),
-                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,8,0,0),
                         child: Text(
@@ -299,97 +372,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
               ],
             ),
           )
-        );
-      },
-    );
-  }
-
-  Widget placeOrderUi() {
-    return  Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
-            borderRadius: BorderRadius.circular(0.0)
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: CustColors.greyText1),
-              borderRadius: BorderRadius.circular(0)
-          ),
-          child: Row(
-            mainAxisAlignment:MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                'assets/image/home_customer/mycartSucessflag.svg',height: 35,width: 35,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment:MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                        child: Text(
-                          "Buy all the  products in the cart",
-                          style: Styles.sparePartNameTextBlack17,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                      child: Text(
-                        "\$ 3000",
-                        style: Styles.sparePartNameTextBlack17,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                      child: Container(
-                        height: 20,
-                        width: 70,
-                        alignment: Alignment.center,
-                        color: CustColors.light_navy,
-                        child: Text(
-                          "Place order",
-                          style: Styles.badgeTextStyle1,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
+      ),
     );
   }
 
   Widget changeAddressUi() {
-    return  Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
-            borderRadius: BorderRadius.circular(0.0)
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: CustColors.greyText1),
-              borderRadius: BorderRadius.circular(0)
-          ),
+    return  Padding(
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      child: Container(
+          width: double.infinity,
           child: Row(
             mainAxisAlignment:MainAxisAlignment.start,
             children: [
@@ -415,18 +406,24 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         padding: const EdgeInsets.fromLTRB(0,8,0,0),
                         child: Row(
                           children: [
-                            Text(
-                              "Beside oando filling station.",
-                              style: Styles.sparePartNameTextBlack17,
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                "Beside oando filling station.",
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  color: CustColors.whiteBlueish,
-                                  borderRadius: BorderRadius.circular(0.0)
+                                  color: CustColors.roseText1,
+                                  borderRadius: BorderRadius.circular(10)
                               ),
-                              child: Text(
-                                "Work",
-                                style: Styles.sparePartNameTextBlack17,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: Text(
+                                  "Work",
+                                  style: Styles.sparePartNameTextBlack17,
+                                ),
                               ),
                             ),
                           ],
@@ -450,7 +447,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         },
                         child: Container(
                           height: 25,
-                          width: 90,
+                          width: 60,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -458,7 +455,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               borderRadius: BorderRadius.circular(4)
                           ),
                           child: Text(
-                            "Change Address",
+                            "Change",
                             style: Styles.homeActiveTextStyle,
                           ),
                         ),
@@ -468,51 +465,51 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 ),
               ),
             ],
-          ),
-        )
+          )
+      ),
     );
   }
 
   Widget selectedBillDetailsUi() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,10,20,10),
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0.0)
         ),
         alignment: Alignment.center,
         child:Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          padding: const EdgeInsets.fromLTRB(0,5,0,5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,0),
+                padding: const EdgeInsets.fromLTRB(10,5,10,5),
                 child: Container(
                   child: Text('Bill Details',
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.visible,
-                    style: Styles.appBarTextBlack,
+                    style: Styles.appBarTextBlack17,
                   ),
                 ),
               ),
               Container(
                 child: ListView.builder(
-                  itemCount:3,
+                  itemCount:2,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context,index,) {
 
 
 
-                    return GestureDetector(
+                    return InkWell(
                       onTap:(){
 
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        padding: const EdgeInsets.fromLTRB(10,5,10,5),
                         child: Container(
                           alignment: Alignment.center,
                           child:Row(
@@ -547,7 +544,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                padding: const EdgeInsets.fromLTRB(10,5,10,5),
                 child: Row(
                   children: [
                     Row(
@@ -556,7 +553,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
-                          style: Styles.appBarTextBlack17,
+                          style: Styles.textLabelTitle_12,
                         ),
                       ],
                     ),
@@ -567,7 +564,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
-                          style: Styles.appBarTextBlack17,
+                          style: Styles.textLabelTitle_12,
                         ),
                       ],
                     ),
@@ -578,6 +575,59 @@ class _MyCartScreenState extends State<MyCartScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget continueButtonUi() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20,5,20,10),
+          child: Container(
+            margin: EdgeInsets.only(top: 5,bottom: 5),
+            child: _isLoading
+                ? Center(
+              child: Container(
+                height: _setValue(28),
+                width: _setValue(28),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      CustColors.peaGreen),
+                ),
+              ),
+            )
+                : Container(
+
+                  child: MaterialButton(
+                    onPressed: () {
+                      setState(() {
+
+                      });
+
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Continue',
+                            textAlign: TextAlign.center,
+                            style: Styles.textButtonLabelSubTitle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: CustColors.materialBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            _setValue(10))),
+                  ),
+                ),
+          ),
+        ),
+      ],
     );
   }
 
