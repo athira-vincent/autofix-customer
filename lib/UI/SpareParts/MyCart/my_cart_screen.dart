@@ -143,7 +143,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemCount:3,
+      itemCount:2,
       itemBuilder: (context, index) {
         return Container(
           width: double.infinity,
@@ -407,14 +407,29 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         padding: const EdgeInsets.fromLTRB(0,8,0,0),
                         child: Text(
                           "Delivering To: Savannah estate,plot 176",
+                          maxLines: 1,
                           style: Styles.sparePartNameTextBlack17,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                        child: Text(
-                          "Beside oando filling station.",
-                          style: Styles.sparePartNameTextBlack17,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Beside oando filling station.",
+                              style: Styles.sparePartNameTextBlack17,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: CustColors.whiteBlueish,
+                                  borderRadius: BorderRadius.circular(0.0)
+                              ),
+                              child: Text(
+                                "Work",
+                                style: Styles.sparePartNameTextBlack17,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -462,11 +477,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,10,20,10),
       child: Container(
-        alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
-            borderRadius: BorderRadius.circular(11.0)
+            borderRadius: BorderRadius.circular(0.0)
         ),
+        alignment: Alignment.center,
         child:Padding(
           padding: const EdgeInsets.fromLTRB(10,5,10,5),
           child: Column(
