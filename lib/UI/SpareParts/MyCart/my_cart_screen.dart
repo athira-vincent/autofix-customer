@@ -110,6 +110,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     productsListUi(),
                     placeOrderUi(),
                     changeAddressUi(),
+                    selectedBillDetailsUi(),
                   ],
                 ),
               ),
@@ -456,6 +457,115 @@ class _MyCartScreenState extends State<MyCartScreen> {
             ],
           ),
         )
+    );
+  }
+
+  Widget selectedBillDetailsUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,10,20,10),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: CustColors.whiteBlueish,
+            borderRadius: BorderRadius.circular(11.0)
+        ),
+        child:Padding(
+          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,0),
+                child: Container(
+                  child: Text('Bill Details',
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.visible,
+                    style: Styles.appBarTextBlack,
+                  ),
+                ),
+              ),
+              Container(
+                child: ListView.builder(
+                  itemCount:3,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context,index,) {
+
+
+
+                    return GestureDetector(
+                      onTap:(){
+
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child:Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Timing belt replacement',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_12,
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  Text('200',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                child: Row(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Total price including tax',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.appBarTextBlack17,
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Row(
+                      children: [
+                        Text('200',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.visible,
+                          style: Styles.appBarTextBlack17,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

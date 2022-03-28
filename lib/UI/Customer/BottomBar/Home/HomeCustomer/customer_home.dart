@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -145,22 +146,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                   serviceIds: serviceIds,
                   serviceType: 'emergency',
                   authToken: authToken,)));
-
-        });
-      }
-    });
-    _homeCustomerBloc.findMechanicsListEmergencyResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
-        });
-
-      } else {
-
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
 
         });
       }
@@ -382,74 +367,77 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
-                if(snapshot.hasData)
-                  {
-                    return GridView.builder(
-                      itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        childAspectRatio: .9,
-                        crossAxisSpacing: .08,
-                        mainAxisSpacing: .05,
-                      ),
-                      itemBuilder: (context,index,) {
-                        return GestureDetector(
-                          onTap:(){
+                print("+++++++++++++++${snapshot.data?.data?.emeregencyOrRegularServiceList?.length}++++++++++++++++");
 
-                            setState(() {
-                              print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                              print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                              print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                              print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                              serviceIds.clear();
-                              serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
-                              print(">>>>>>>>>> ServiceId  $serviceIds");
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return CircularProgressIndicator();
+                  default:
+                    return
+                      snapshot.data?.data?.emeregencyOrRegularServiceList?.length != 0 && snapshot.data?.data?.emeregencyOrRegularServiceList?.length != null
+                          ? GridView.builder(
+                              itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: .9,
+                                crossAxisSpacing: .08,
+                                mainAxisSpacing: .05,
+                              ),
+                              itemBuilder: (context,index,) {
+                                return GestureDetector(
+                                  onTap:(){
 
-                              _homeCustomerBloc.postMechanicsBookingIDRequest(
-                                  authToken,
-                                  '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                                  '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                                  CurrentLatitude,
-                                  CurrentLongitude,
-                                  serviceIds);
-                            });
+                                    setState(() {
+                                      print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                      print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                      print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                      print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                      serviceIds.clear();
+                                      serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
+                                      print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                          },
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment:MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: CustColors.whiteBlueish,
-                                      borderRadius: BorderRadius.circular(11.0)
+                                      _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                          authToken,
+                                          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                          CurrentLatitude,
+                                          CurrentLongitude,
+                                          serviceIds);
+                                    });
+
+                                  },
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisAlignment:MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: CustColors.whiteBlueish,
+                                              borderRadius: BorderRadius.circular(11.0)
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(2),
+                                          child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                            style: Styles.textLabelTitleEmergencyServiceName,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.visible,),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15),
-                                    child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2),
-                                  child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
-                                    style: Styles.textLabelTitleEmergencyServiceName,
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.visible,),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                else{
-                  return CircularProgressIndicator();
+                                );
+                              },
+                            )
+                          : Container();
                 }
-
               }
               ),
         )
@@ -511,57 +499,62 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                       print("${snapshot.hasData}");
                       print("${snapshot.connectionState}");
-                      if(snapshot.hasData)
-                      {
-                        return GridView.builder(
-                          itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            childAspectRatio: .9,
-                            crossAxisSpacing: .05,
-                            mainAxisSpacing: .05,
-                          ),
-                          itemBuilder: (context,index,) {
-                            return GestureDetector(
-                              onTap:(){
+                      print("+++++++++++++++${snapshot.data?.data?.emeregencyOrRegularServiceList?.length}++++++++++++++++");
 
-                              },
-                              child:
 
-                              Container(
-
-                                child: Column(
-                                  mainAxisAlignment:MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: CustColors.whiteBlueish,
-                                          borderRadius: BorderRadius.circular(11.0)
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(2),
-                                      child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
-                                        style: Styles.textLabelTitleEmergencyServiceName,
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.visible,),
-                                    ),
-                                  ],
-                                ),
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return CircularProgressIndicator();
+                        default:
+                          return
+                            snapshot.data?.data?.emeregencyOrRegularServiceList?.length != 0 && snapshot.data?.data?.emeregencyOrRegularServiceList?.length != null
+                                ? GridView.builder(
+                              itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: .9,
+                                crossAxisSpacing: .05,
+                                mainAxisSpacing: .05,
                               ),
-                            );
-                          },
-                        );
-                      }
-                      else{
-                        return CircularProgressIndicator();
+                              itemBuilder: (context,index,) {
+                                return GestureDetector(
+                                  onTap:(){
+
+                                  },
+                                  child:
+
+                                  Container(
+
+                                    child: Column(
+                                      mainAxisAlignment:MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: CustColors.whiteBlueish,
+                                              borderRadius: BorderRadius.circular(11.0)
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15),
+                                            child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(2),
+                                          child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                            style: Styles.textLabelTitleEmergencyServiceName,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.visible,),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                                : Container();
                       }
                     }
                 ),
@@ -664,7 +657,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 //for onTap to redirect to another screen
                 return Padding(
                   padding: const EdgeInsets.all(5),
-                  child: GestureDetector(
+                  child: InkWell(
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
@@ -682,8 +675,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       ),
                     ),
                     onTap: (){
-                      var url = imageList[i];
-                      print(url.toString());
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  SparePartsListScreen()));
                     },
                   ),
                 );
