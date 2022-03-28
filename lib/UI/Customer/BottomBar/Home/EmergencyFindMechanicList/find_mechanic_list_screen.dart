@@ -386,7 +386,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                     return progressBarLightRose();
                                                   default:
                                                     return
-                                                      snapshot.data?.data?.mechaniclistForServices?.length!=0
+                                                      snapshot.data?.data?.mechaniclistForServices?.length != 0 && snapshot.data?.data?.mechaniclistForServices?.length != null
                                                        ? ListView.builder(
                                                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                                             scrollDirection: Axis.vertical,

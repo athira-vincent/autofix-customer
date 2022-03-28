@@ -82,6 +82,27 @@ class Styles {
     fontSize: 12,
   );
 
+  static const textFilterTitle03 = TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+
+  static const textFilterNotIncludeTitle_12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+    fontSize: 11,
+  );
+
+  static const textFilterIncludeTitle_12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Bold',
+    fontWeight: FontWeight.w300,
+    color: Colors.white,
+    fontSize: 11,
+  );
+
   static const textLabelTitle_Regular = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w300,
@@ -382,6 +403,35 @@ class Styles {
       fontWeight: FontWeight.w700,
       fontFamily:'Samsung_SharpSans_Medium'
   );
+  static const sparePartNameTextBlack17 = TextStyle(
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.w700,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const sparePartNameSubTextBlack = TextStyle(
+      fontSize: 10,
+      color:  CustColors.greyText2,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const sparePartOrginalPriceSubTextBlack = TextStyle(
+      fontSize: 11,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const sparePartOfferPriceSubTextBlack = TextStyle(
+      fontSize: 11,
+      color:  CustColors.greyText2,
+      decoration: TextDecoration.lineThrough,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
 
   static const awayTextBlack = TextStyle(
       fontSize: 11,
@@ -389,6 +439,8 @@ class Styles {
       fontWeight: FontWeight.w600,
       fontFamily:'Samsung_SharpSans_Medium'
   );
+
+
   static const homeActiveTextStyle = TextStyle(
       fontFamily: 'Samsung_SharpSans_Medium',
       fontSize: 9,
@@ -468,6 +520,21 @@ class Styles {
     color: Colors.white,
     fontWeight: FontWeight.w400,
   );
+
+  static const addToCartText02 =TextStyle(
+    fontSize: 15,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const addToCartItemText02 =TextStyle(
+    fontSize: 13,
+    fontFamily: "Samsung_SharpSans_Medium",
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+  );
+
   static const myWalletCardText01 = TextStyle(
     fontSize: 30,
     fontFamily: "Samsung_SharpSans_Medium",
