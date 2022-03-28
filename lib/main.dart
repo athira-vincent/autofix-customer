@@ -3,7 +3,11 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/CommonScreens/payment_screen.dart';
+import 'package:auto_fix/UI/Customer/rate_mechanic_screen.dart';
+import 'package:auto_fix/UI/NewScreens/add_delivery_address_screen.dart';
+import 'package:auto_fix/UI/NewScreens/change_delivery_address_screen.dart';
+import 'package:auto_fix/UI/NewScreens/purchase_response_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,7 +78,8 @@ class _MyAppState extends State<MyApp> {
       home: MyCartScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-      //home: AddMoreServicesListScreen(),
+     // home: RateMechanicScreen(),
+      //home: ChangeDeliveryAddressScreen(),
     );
   }
 }
