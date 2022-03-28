@@ -4,6 +4,7 @@
   "welcome_to": "WELCOME TO",
   "next": "Next",
   "forgot_password": "Forgot password",
+  "text_forgot_password": "Forgot password?",
   "itsmemaria": "It's Me Maria!",
 
   "text_customer": "Customer",
@@ -34,6 +35,7 @@
   "text_hint_email": "Your email id",
   "text_phone": "Phone Number",
   "text_hint_phone": "Enter your Phone number",
+
   "text_state": "State/FCT",
   "text_hint_state": "Select your state/ FCT",
   "text_upload_photo": "Upload photo",
@@ -56,6 +58,23 @@
   "text_ministry_govt": "Ministry/Govt. Agency",
   "text_hint_ministry_govt": "Select your ministry/govt agency from list",
   "text_contact_person_head": "Contact Person / Head ",
-  "text_hint_contact_person_head": "Enter head of the department name"
+  "text_hint_contact_person_head": "Enter head of the department name",
+  "text_dont_have_account": "Don't have account?  ",
+  "text_or_login": "Or login with",
+  "text_phone_screen_desc": "Enter your phone number ,you will receive a 4 digit code for  phone number varification. Select your country code before enter your Number.",
+  "text_btn_send": "Send",
+  "text_back_to": "Back to ",
+  "text_enter_code": "Enter your code",
+  "text_otp_screen_desc": "Enter your code number to verify your phone \nEnter the 4 digit code .",
+  "text_otp_title": "4 digit Code",
+  "text_btn_verify": "Verify",
+  "text_dont_receive_code": "Didn’t receive code? ",
+  "text_try_again": "Try again",
+  "text_check_mail": "Check your mail",
+  "text_check_mail_screen_desc": "Please check your email , we have sent you an \nemail that contains a link to reset your password. ",
+  "text_btn_go_to_mail": "Go to email",
+  "text_check_spam": "Did not receive the email? Check your spam filter Or ",
+  "text_try_another": "try another email address "
+
 
 }

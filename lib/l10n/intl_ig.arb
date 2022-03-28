@@ -1,9 +1,10 @@
 {
   "helloWorld": "¡Hola Mundo!",
-  "login": "login!!!!",
+  "login": "Banye",
   "welcome_to": "Nnọọ",
   "next": "Osote",
   "forgot_password": "Forgot password!!!",
+  "text_forgot_password": "Chefuru okwuntughe?",
 
   "text_customer": "Onye ahịa",
   "text_mechanic": "Mekaniki",
@@ -55,6 +56,23 @@
     "text_ministry_govt": "Ministry/Govt. Agency",
     "text_hint_ministry_govt": "Select your ministry/govt agency from list",
     "text_contact_person_head": "Contact Person / Head ",
-    "text_hint_contact_person_head": "Enter head of the department name"
+    "text_hint_contact_person_head": "Enter head of the department name",
+    "text_dont_have_account": "Enweghị akaụntụ? ",
+    "text_or_login": "Ma ọ bụ banye na",
+    "text_phone_screen_desc": "Tinye nọmba ekwentị gị, ị ga-enweta koodu ọnụọgụ anọ maka mgbanwe nọmba ekwentị. Họrọ koodu obodo gị tupu itinye nọmba gị.",
+    "text_btn_send": "Ziga",
+    "text_back_to": "laghachi na ",
+    "text_enter_code": "Tinye koodu gị",
+    "text_otp_screen_desc": "Tinye nọmba koodu gị iji nyochaa ekwentị gị \nTinye koodu ọnụọgụ anọ .",
+    "text_otp_title": "Koodu ọnụọgụ 4",
+    "text_btn_verify": "Nyochaa",
+    "text_dont_receive_code": "Anataghị koodu? ",
+    "text_try_again": "Nwaa ọzọ",
+    "text_check_mail": "Lelee ozi gị",
+    "text_check_mail_screen_desc": "Biko lelee email gị, anyị eziterela gị email \n nwere njikọ iji tọgharịa paswọọdụ gị. ",
+    "text_btn_go_to_mail": "Gaa na email",
+    "text_check_spam": "Anataghị email ahụ? Lelee ihe nzacha spam gị ma ọ bụ ",
+    "text_try_another": "nwaa adreesị ozi-e ọzọ "
+
 
 }
