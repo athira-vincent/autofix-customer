@@ -79,17 +79,49 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isLoading = false;
   List<StateDetails> _countryData = [];
   List<String> orgTypeList = [
-    "Private",
-    "Public",
-    "Privet-Public"
+    "Business name",
+    "Private Limited Company",
+    "Public Limited Company",
+    "Incorporated Trustees",
+    "Non-Governmental Organization"
   ];
   List<String> ministryGovtList = [
-    "Federal Govt",
-    "State Govt",
-    "Locaal Govt",
-    "Ministry",
-    "Government Agency",
-  
+    "Federal Ministry of Aviation",
+    "Federal Ministry of Agriculture and natural  resources",
+    "Federal Ministry of Finance, budget and planning",
+    "Federal Ministry of Works and Housing",
+    "Federal Ministry of Defence",
+    "Federal Ministry of Niger Delta",
+    "Federal Ministry of Petroleum Resources",
+    "Federal Ministry of Education",
+    "Federal Ministry of Power",
+    "Federal Ministry of Envionment",
+    "Ministry of Education",
+    "Federal Ministry of Transport",
+    "Ministry of Agriculture",
+    "Ministry of Transport",
+    "Ministry of Home Affairs",
+    "Ministry of Finance",
+    "Ministry of Housing",
+    "Ministry of Works and Infrastructure",
+    "Lagos state sport commission",
+    "Federal Airports Authority of Nigeria",
+    "Nigeria Civil Aviation Authority",
+    "Nigerian Broadcasting Commission",
+    "Nigerian Television Authority",
+    "Nigerian Information Technology Development Agency",
+    "Central Bank of Nigeria",
+    "Corporate Affairs Commission",
+    "Nigeria Police Force",
+    "Federal Inland Revenue Service",
+    "Federal Mortgage Bank of Nigeria",
+    "Nigeria Delta Development Commission",
+    "Joint Admission and Matriculation Board",
+    "Department of Petroleum Resources",
+    "Nigerian Electricity Regulatory Commission",
+    "Nigerian Health Insurance Scheme",
+    "Nigerian Football Association",
+    "Nigerian Basketball Federation"
   ];
   bool isloading = false;
   String? countryCode;
@@ -1905,60 +1937,59 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                 ),*/
                                 Container(
-                                  height: 421 - 108,
-                                  padding:
-                                  EdgeInsets.only(top: _setValue(22.4)),
+                                  height: 421 ,
+                                  padding: EdgeInsets.only(top: _setValue(22.4)),
                                   child: ministryGovtList.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: ministryGovtList.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final dial_Code =
-                                            ministryGovtList[index];
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: ministryGovtList.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final dial_Code =
+                                                  ministryGovtList[index];
 
-                                            setState(() {
-                                              _ministryGovtController.text =
-                                                  dial_Code.toString();
-                                            });
+                                                  setState(() {
+                                                    _ministryGovtController.text =
+                                                        dial_Code.toString();
+                                                  });
 
-                                            Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${ministryGovtList[index]}',
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                        _setValueFont(12),
+                                                        fontFamily:
+                                                        'Corbel-Light',
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        color:
+                                                        Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${ministryGovtList[index]}',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                  _setValueFont(12),
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
                                     child: Text('No Results found.'),
                                   ),
