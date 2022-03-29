@@ -180,10 +180,12 @@ class SignupApiProvider {
 
   Future<OtpVerificationMdl> postOtpVerificationRequest(
       token,
-      otp,) async {
+      otp,
+      userTypeId) async {
     Map<String, dynamic> _resp = await _queryProvider.postOtpVerificationRequest(
       token,
-      otp,);
+      otp,
+      userTypeId);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

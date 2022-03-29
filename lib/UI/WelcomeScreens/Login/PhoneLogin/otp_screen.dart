@@ -31,6 +31,7 @@ class OtpVerificationScreen extends StatefulWidget {
   final String userCategory;
   final String phoneNumber;
   final String otpNumber;
+  final String userId;
   final String fromPage;
 
 
@@ -39,6 +40,7 @@ class OtpVerificationScreen extends StatefulWidget {
     required this.userCategory,
     required this.phoneNumber,
     required this.otpNumber,
+    required this.userId,
     required this.fromPage});
 
   @override
@@ -347,7 +349,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                     _isLoading=true;
                                                     print(textEditingController.text);
                                                     print(authToken.toString());
-                                                    _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber);
+                                                    _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'16');
 
                                                   }
 

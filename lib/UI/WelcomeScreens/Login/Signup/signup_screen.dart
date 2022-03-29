@@ -164,6 +164,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
                             otpNumber: "${value.data!.signUp!.genMechanic?.resetToken.toString()}",
+                            userId: "${value.data!.signUp!.genMechanic?.userId.toString()}",
                             fromPage: "1",)));
             }
           else
@@ -177,164 +178,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.customer?.phoneNo.toString()}",
                             otpNumber: "${value.data!.signUp!.generalCustomer?.resetToken.toString()}",
+                            userId: "${value.data!.signUp!.generalCustomer?.userId.toString()}",
                             fromPage: "1",)));
             }
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.signUpIndividuaMechanicResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-        setState(() {
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
-          print("success Auth token >>>>>>>  ${value.data!.mechanicSignUpIndividual!.token.toString()}");
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.mechanicSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(
-                        userType: widget.userType,
-                        userCategory: widget.userCategory,
-                        phoneNumber: "${value.data!.mechanicSignUpIndividual!.mechanic?.phoneNo.toString()}",
-                        otpNumber: "${value.data!.mechanicSignUpIndividual!.mechanic?.resetToken.toString()}",
-                        fromPage: "1",)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.signUpCorporateMechanicResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpMechanic >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-        setState(() {
-          print("success postSignUpMechanic >>>>>>>  ${value.status}");
-          print("success Auth token >>>>>>>  ${value.data!.mechanicSignUpCorporate!.token.toString()}");
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.mechanicSignUpCorporate!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(
-                        userType: widget.userType,
-                        userCategory: widget.userCategory,
-                        phoneNumber: "${value.data!.mechanicSignUpCorporate!.mechanic?.phoneNo.toString()}",
-                        otpNumber: "${value.data!.mechanicSignUpCorporate!.mechanic?.resetToken.toString()}",
-                        fromPage: "1",)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.signUpIndividualCustomerResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
-
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(
-                        userType: widget.userType,
-                        userCategory: widget.userCategory,
-                        phoneNumber: "${value.data!.customersSignUpIndividual!.customer?.phoneNo.toString()}",
-                        otpNumber: "${value.data!.customersSignUpIndividual!.customer?.resetToken.toString()}",
-                        fromPage: "1",)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.signUpCorporateCustomerResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          print("success Auth token >>>>>>>  ${value.data!.customersSignUpCorporate!.token.toString()}");
-
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.customersSignUpCorporate!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(
-                        userType: widget.userType,
-                        userCategory: widget.userCategory,
-                        phoneNumber: "${value.data!.customersSignUpCorporate!.customer?.phoneNo.toString()}",
-                        otpNumber: "${value.data!.customersSignUpCorporate!.customer?.resetToken.toString()}",
-                        fromPage: "1",)));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.signUpGovtBodiesCustomerResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          print("success Auth token >>>>>>>  ${value.data!.customersSignUpGovtBodies!.token.toString()}");
-
-          _isLoading = false;
-          _signupBloc.userDefault(value.data!.customersSignUpGovtBodies!.token.toString());
-          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OtpVerificationScreen(
-                        userType: widget.userType,
-                        userCategory: widget.userCategory,
-                        phoneNumber: "${value.data!.customersSignUpGovtBodies!.customer?.phoneNo.toString()}",
-                        otpNumber: "${value.data!.customersSignUpGovtBodies!.customer?.resetToken.toString()}",
-                        fromPage: "1",)));
           FocusScope.of(context).unfocus();
         });
       }
@@ -1489,8 +1335,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpMechanicIndividualRequest( _nameController.text,_emailController.text,
-            _stateController.text,  _passwordController.text, _phoneController.text, latitude, longitude, _yearOfExperienceController.text,imageFirebaseUrl);
+        _signupBloc.signUp(4,  _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "2",
+            "1", imageFirebaseUrl, "", "", "", "", "",
+            "", latitude, longitude, _yearOfExperienceController.text, "");
       });
       return true;
     }else{
@@ -1564,8 +1412,8 @@ class _SignupScreenState extends State<SignupScreen> {
         );
         _isLoading=true;
         _signupBloc.signUp(2,  _contactPersonController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "2",
-            "1", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
+            _phoneController.text, _passwordController.text,  _stateController.text, "1",
+            "2", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
             "", latitude, longitude, "", "");
       });
 
@@ -1648,8 +1496,11 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpMechanicCorporateRequest( _nameController.text,_emailController.text,
-            _stateController.text,  _passwordController.text, _phoneController.text, latitude, longitude, _yearOfExperienceController.text,_nameController.text,_orgTypeController.text,imageFirebaseUrl);
+        _signupBloc.signUp(5,   _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "2",
+            "2", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
+            "", latitude, longitude, _yearOfExperienceController.text, "");
+
       });
      return true;
 
@@ -1722,9 +1573,9 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(2,  _contactPersonController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "2",
-            "1", imageFirebaseUrl, "", "", _ministryGovtController.text, "Food Corporation of india", "Labour And Environment",
+        _signupBloc.signUp(3,  _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "1",
+            "3", imageFirebaseUrl, "", "", _ministryGovtController.text, "Food Corporation of india", "Labour And Environment",
             "Athira", latitude, longitude, "", "");
        });
       return true;

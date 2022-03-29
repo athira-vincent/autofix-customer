@@ -154,10 +154,12 @@ class SignupBloc {
   postOtpVerificationRequest(
       token,
       otp,
+      userTypeId
       ) async {
     OtpVerificationMdl vehicleCreateMdl = await repository.postOtpVerificationRequest(
       token,
-      otp,);
+      otp,
+      userTypeId);
     postOtpVerification.sink.add(vehicleCreateMdl);
   }
 

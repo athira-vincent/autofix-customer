@@ -538,13 +538,14 @@ class QueryProvider {
 
   postOtpVerificationRequest(
       token,
-      otp,) async {
+      otp,
+      userTypeId) async {
     String _query = """ 
     mutation {
-      otp_Verification(otpCode: "$otp") {
-        message
+        otp_Verification(otpCode: "$otp", userTypeId: $userTypeId) {
+          message
+        }
       }
-    }
 
     """;
     log(_query);
