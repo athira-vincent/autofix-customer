@@ -137,6 +137,52 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   _listenSignUpResponse() {
+    _signupBloc.signUpResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpMechanic >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpMechanic >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+        setState(() {
+          print("success postSignUpMechanic >>>>>>>  ${value.status}");
+          print("success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
+          _isLoading = false;
+          _signupBloc.userDefault(value.data!.signUp!.token.toString());
+          SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+          if(value.data?.signUp?.customer == null)
+            {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          OtpVerificationScreen(
+                            userType: widget.userType,
+                            userCategory: widget.userCategory,
+                            phoneNumber: "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
+                            otpNumber: "${value.data!.signUp!.genMechanic?.resetToken.toString()}",
+                            fromPage: "1",)));
+            }
+          else
+            {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          OtpVerificationScreen(
+                            userType: widget.userType,
+                            userCategory: widget.userCategory,
+                            phoneNumber: "${value.data!.signUp!.customer?.phoneNo.toString()}",
+                            otpNumber: "${value.data!.signUp!.generalCustomer?.resetToken.toString()}",
+                            fromPage: "1",)));
+            }
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
     _signupBloc.signUpIndividuaMechanicResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
@@ -1366,8 +1412,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpCustomerIndividualRequest( _nameController.text,_emailController.text,
-            _stateController.text,  _passwordController.text, _phoneController.text,imageFirebaseUrl);
+        _signupBloc.signUp(1,  _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "1",
+            "1", imageFirebaseUrl, "", "", "", "", "",
+            "", latitude, longitude, "", "");
       });
 
       return true;
@@ -1515,8 +1563,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpCustomerCorporateRequest(_contactPersonController.text,_emailController.text,
-            _stateController.text,  _passwordController.text, _phoneController.text,_nameController.text,_orgTypeController.text,imageFirebaseUrl);
+        _signupBloc.signUp(2,  _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "2",
+            "1", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
+            "", latitude, longitude, "", "");
       });
 
       return true;
@@ -1672,9 +1722,11 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.postSignUpCustomerGovtBodiesRequest( _contactPersonController.text,_emailController.text,
-            _stateController.text,  _passwordController.text, _phoneController.text,_ministryGovtController.text,_ministryGovtController.text,imageFirebaseUrl);
-      });
+        _signupBloc.signUp(2,  _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "2",
+            "1", imageFirebaseUrl, "", "", _ministryGovtController.text, "Food Corporation of india", "Labour And Environment",
+            "Athira", latitude, longitude, "", "");
+       });
       return true;
     }else{
       SnackBarWidget().setMaterialSnackBar( errorMsg, _scaffoldKey);
