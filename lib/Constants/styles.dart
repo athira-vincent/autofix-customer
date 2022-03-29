@@ -350,6 +350,13 @@ class Styles {
       fontFamily:'Samsung_SharpSans_Medium'
   );
 
+  static const appBarTextBlack15 = TextStyle(
+      fontSize: 15,
+      color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
   static const experienceTextBlack = TextStyle(
       fontSize: 10,
       color: Colors.black,

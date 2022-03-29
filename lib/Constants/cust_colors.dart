@@ -8,6 +8,8 @@ class CustColors {
   static const greyText1 = Color(0xffe2e2e2);
   static const greyText2 = Color(0xff838181);
   static const greyText3 = Color(0xff838181);
+  static const roseText1 = Color(0xfff2f2f2);
+
   static const MaterialColor materialBlue = MaterialColor(
     0xff2a569f,
     <int, Color>{
