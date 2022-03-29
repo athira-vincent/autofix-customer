@@ -16,8 +16,8 @@ class MakeBrandDetailsMdl {
     required this.data,
   });
 
-  String? message;
-  String? status;
+  String message;
+  String status;
   Data? data;
 
   factory MakeBrandDetailsMdl.fromJson(Map<String, dynamic> json) => MakeBrandDetailsMdl(
@@ -35,40 +35,44 @@ class MakeBrandDetailsMdl {
 
 class Data {
   Data({
-    required this.makeDetails,
+    required this.brandDetails,
   });
 
-  List<MakeDetail>? makeDetails;
+  List<BrandDetail>? brandDetails;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    makeDetails: json["makeDetails"] == null ? null : List<MakeDetail>.from(json["makeDetails"].map((x) => MakeDetail.fromJson(x))),
+    brandDetails: json["brandDetails"] == null ? null : List<BrandDetail>.from(json["brandDetails"].map((x) => BrandDetail.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "makeDetails": makeDetails == null ? null : List<dynamic>.from(makeDetails!.map((x) => x.toJson())),
+    "brandDetails": brandDetails == null ? null : List<dynamic>.from(brandDetails!.map((x) => x.toJson())),
   };
 }
 
-class MakeDetail {
-  MakeDetail({
+class BrandDetail {
+  BrandDetail({
     required this.id,
-    required this.makeName,
+    required this.brandName,
     required this.status,
+    required this.brandicon,
   });
 
   String id;
-  String makeName;
+  String brandName;
   int status;
+  dynamic brandicon;
 
-  factory MakeDetail.fromJson(Map<String, dynamic> json) => MakeDetail(
+  factory BrandDetail.fromJson(Map<String, dynamic> json) => BrandDetail(
     id: json["id"] == null ? null : json["id"],
-    makeName: json["makeName"] == null ? null : json["makeName"],
+    brandName: json["brandName"] == null ? null : json["brandName"],
     status: json["status"] == null ? null : json["status"],
+    brandicon: json["brandicon"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "makeName": makeName == null ? null : makeName,
+    "brandName": brandName == null ? null : brandName,
     "status": status == null ? null : status,
+    "brandicon": brandicon,
   };
 }

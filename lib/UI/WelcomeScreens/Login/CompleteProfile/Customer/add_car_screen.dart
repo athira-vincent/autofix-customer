@@ -163,7 +163,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       } else {
 
         setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.data!.makeDetails![0].makeName.toString()}");
+          print("success postSignUpCustomerIndividual >>>>>>>  ${value.data!.brandDetails![0].brandName.toString()}");
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
 
@@ -1206,45 +1206,50 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       builder: (context, AsyncSnapshot<MakeBrandDetailsMdl> snapshot) {
                         print("${snapshot.hasData}");
                         print("${snapshot.connectionState}");
-                        return ListView.builder(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data?.data?.makeDetails?.length,
-                          itemBuilder: (context, index) {
-                            if (snapshot.connectionState != ConnectionState.active) {
-                              print('connectionState');
-                              return Center(child: progressBarLightRose());
-                            }
-                            return  ListTile(
-                                  title: Text("${snapshot.data?.data!.makeDetails![index].makeName}",
-                                      style: TextStyle(
-                                          fontFamily: 'Corbel_Regular',
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 15,
-                                          color: Colors.black)),
-                                  onTap: () async {
-                                    Navigator.pop(context);
 
-                                    setState(() {
-                                      selectedmodel='';
-                                      _modelController.text ='';
-                                      engineList=[];
-                                      _engineTypeController.text='';
-                                      yearTypeList=[];
-                                      _yearController.text='';
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return CircularProgressIndicator();
+                          default:
+                            return
+                              snapshot.data?.data?.brandDetails?.length != 0 && snapshot.data?.data?.brandDetails?.length != null
+                                  ? ListView.builder(
+                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data?.data?.brandDetails?.length,
+                                        itemBuilder: (context, index) {
+                                          return  ListTile(
+                                            title: Text("${snapshot.data?.data!.brandDetails![index].brandName}",
+                                                style: TextStyle(
+                                                    fontFamily: 'Corbel_Regular',
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 15,
+                                                    color: Colors.black)),
+                                            onTap: () async {
+                                              Navigator.pop(context);
 
-                                      selectedBrand=snapshot.data?.data!.makeDetails![index].id;
-                                      _brandController.text = "${snapshot.data?.data!.makeDetails![index].makeName}";
-                                      if (_formKey.currentState!.validate()) {
-                                      } else {
-                                      }
-                                    });
+                                              setState(() {
+                                                selectedmodel='';
+                                                _modelController.text ='';
+                                                engineList=[];
+                                                _engineTypeController.text='';
+                                                yearTypeList=[];
+                                                _yearController.text='';
 
-                                  },
-                                );
-                          },
-                        );
+                                                selectedBrand=snapshot.data?.data!.brandDetails![index].id;
+                                                _brandController.text = "${snapshot.data?.data!.brandDetails![index].brandName}";
+                                                if (_formKey.currentState!.validate()) {
+                                                } else {
+                                                }
+                                              });
+
+                                            },
+                                          );
+                                        },
+                                      )
+                                  : Container();
+                        }
                       }),
                 )
               ),);
@@ -1269,55 +1274,63 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
                       print("${snapshot.hasData}");
                       print("${snapshot.connectionState}");
-                      return ListView.builder(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: snapshot.data?.data?.modelDetails?.length,
-                        itemBuilder: (context, index) {
-                          if (snapshot.connectionState != ConnectionState.active) {
-                            print('connectionState');
-                            return Center(child: progressBarLightRose());
-                          }
-                          return  ListTile(
-                            title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
-                                style: TextStyle(
-                                    fontFamily: 'Corbel_Regular',
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 15,
-                                    color: Colors.black)),
-                            onTap: () async {
-                              Navigator.pop(context);
-
-                              setState(() {
-                                engineList=[];
-                                _engineTypeController.text='';
-                                yearTypeList=[];
-                                _yearController.text='';
-
-                                selectedmodel=snapshot.data?.data!.modelDetails![index].id;
-                                _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
-
-                                final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                final splitNames= engineName.split(',');
-                                for (int i = 0; i < splitNames.length; i++){
-                                  engineList.add(splitNames[i]);
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return CircularProgressIndicator();
+                        default:
+                          return
+                            snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
+                                ? ListView.builder(
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data?.data?.modelDetails?.length,
+                              itemBuilder: (context, index) {
+                                if (snapshot.connectionState != ConnectionState.active) {
+                                  print('connectionState');
+                                  return Center(child: progressBarLightRose());
                                 }
+                                return  ListTile(
+                                  title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
+                                      style: TextStyle(
+                                          fontFamily: 'Corbel_Regular',
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                          color: Colors.black)),
+                                  onTap: () async {
+                                    Navigator.pop(context);
 
-                                final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
-                                final splityearsNames= yearsNames.split(',');
-                                for (int i = 0; i < splityearsNames.length; i++){
-                                  yearTypeList.add(splityearsNames[i]);
-                                }
-                                if (_formKey.currentState!.validate()) {
-                                } else {
-                                }
-                              });
+                                    setState(() {
+                                      engineList=[];
+                                      _engineTypeController.text='';
+                                      yearTypeList=[];
+                                      _yearController.text='';
 
-                            },
-                          );
-                        },
-                      );
+                                      selectedmodel=snapshot.data?.data!.modelDetails![index].id;
+                                      _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+
+                                      final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                      final splitNames= engineName.split(',');
+                                      for (int i = 0; i < splitNames.length; i++){
+                                        engineList.add(splitNames[i]);
+                                      }
+
+                                      final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
+                                      final splityearsNames= yearsNames.split(',');
+                                      for (int i = 0; i < splityearsNames.length; i++){
+                                        yearTypeList.add(splityearsNames[i]);
+                                      }
+                                      if (_formKey.currentState!.validate()) {
+                                      } else {
+                                      }
+                                    });
+
+                                  },
+                                );
+                              },
+                            )
+                                : Container();
+                      }
                     }),
               )
             ),);
