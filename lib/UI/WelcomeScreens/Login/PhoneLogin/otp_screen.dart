@@ -55,7 +55,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final SignupBloc _signupBloc = SignupBloc();
   FocusNode _phoneNoFocusNode = FocusNode();
   TextStyle _labelStylePhoneNo = TextStyle();
-
   int _otpCodeLength = 5;
   bool _isLoadingButton = false;
   bool _enableButton = false;
@@ -320,65 +319,61 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                           margin: EdgeInsets.only(top: 10.8),
                                           child: _isLoading
                                               ? Center(
-                                            child: Container(
-                                              height: _setValue(28),
-                                              width: _setValue(28),
-                                              child: CircularProgressIndicator(
-                                                valueColor: AlwaysStoppedAnimation<Color>(
-                                                    CustColors.peaGreen),
-                                              ),
-                                            ),
-                                          )
-                                              : Container(
-
-                                            child: MaterialButton(
-                                              onPressed: () {
-
-                                                setState(() {
-
-                                                  if(widget.fromPage=="3")
-                                                    {
-                                                      /*Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CheckYourMailScreen()),
-                                                      );*/
-                                                      /*_isLoading = true;
-                                                      print("textEditingController.text >> " + textEditingController.text);*/
-                                                      _onOtpCallBack( textEditingController.text, true);
-                                                    }
-                                                  else{
-                                                    _isLoading=true;
-                                                    print(textEditingController.text);
-                                                    print(authToken.toString());
-                                                    _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'16');
-
-                                                  }
-
-                                                });
-
-                                              },
-                                              child: Container(
-                                                height: 45,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      AppLocalizations.of(context)!.text_btn_verify,     // 'Verify',
-                                                      textAlign: TextAlign.center,
-                                                      style: Styles.textButtonLabelSubTitle,
+                                                  child: Container(
+                                                    height: _setValue(28),
+                                                    width: _setValue(28),
+                                                    child: CircularProgressIndicator(
+                                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                                          CustColors.peaGreen),
                                                     ),
-                                                  ],
+                                                  ),
+                                                )
+                                              : Container(
+                                                  child: MaterialButton(
+                                                    onPressed: () {
+
+                                                      setState(() {
+
+                                                        if(widget.fromPage=="3")
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      CheckYourMailScreen()),
+                                                            );
+                                                          }
+                                                        else{
+                                                          _isLoading=true;
+                                                          print(textEditingController.text);
+                                                          print(authToken.toString());
+                                                          _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'16');
+
+                                                        }
+
+                                                      });
+
+                                                    },
+                                                    child: Container(
+                                                      height: 45,
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Text(
+                                                            AppLocalizations.of(context)!.text_btn_verify,     // 'Verify',
+                                                            textAlign: TextAlign.center,
+                                                            style: Styles.textButtonLabelSubTitle,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    color: CustColors.materialBlue,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(
+                                                            _setValue(13))),
+                                                  ),
                                                 ),
-                                              ),
-                                              color: CustColors.materialBlue,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      _setValue(13))),
-                                            ),
-                                          ),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 15.8),

@@ -43,41 +43,6 @@ class Repository {
           accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
           head_of_dept, latitude, longitude, year_of_experience, shop_name) ;
 
-  // Customer Individual SignUp
-  Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,
-      String state, String password, String phone,String profilepic) =>
-      _signupApiProvider.getSignUpCustomerIndividualRequest(
-          firstName, lastName, email, state, password, phone,profilepic);
-
-  // Customer Corporate SignUp
-  Future<dynamic> getSignUpCustomeCorporate(String firstName, String lastName, String email,
-      String state, String password, String phone,String orgName,String orgType,String profilepic) =>
-      _signupApiProvider.getSignUpCustomerCorporateRequest(
-          firstName, lastName, email, state, password, phone,orgName,orgType,profilepic);
-
-  // Customer GovtBodies SignUp
-  Future<dynamic> getSignUpCustomeGovtBodies(String firstName, String lastName, String email,
-      String state, String password, String phone,String govt_agency,
-      String govt_type,String profilepic) =>
-      _signupApiProvider.getSignUpCustomerGovtBodiesRequest(
-          firstName, lastName, email, state, password, phone,govt_agency,govt_type,profilepic);
-
-
-  //  Mechanic Individual SignUp
-  Future<dynamic> getSignUpMechanicIndividual(String firstName, String lastName, String email,
-      String state, String password, String phone,String latitude, String longitude,
-      String year_of_experience,String profilepic) =>
-      _signupApiProvider.getSignUpMechanicIndividualRequest(
-          firstName, lastName, email, state, password, phone, latitude,  longitude,
-         year_of_experience,profilepic);
-
-  //  Mechanic Corporate SignUp
-  Future<dynamic> getSignUpMechanicCorporate(String firstName, String lastName, String email,
-      String state, String password, String phone,String latitude, String longitude,
-      String year_of_experience, orgName, orgType,String profilepic) =>
-      _signupApiProvider.getSignUpMechanicCorporateRequest(
-        firstName, lastName, email, state, password, phone, latitude,  longitude,
-        year_of_experience, orgName, orgType,profilepic);
 
 
   //AddCar Of Customer
