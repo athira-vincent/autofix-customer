@@ -92,6 +92,119 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+
+  signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
+           accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+           head_of_dept, latitude, longitude, year_of_experience, shop_name) async
+  {
+    String _query = """ 
+    mutation {
+        signUp(
+          type: $type
+          firstName: "$firstName"
+          lastName: "$lastName"
+          emailId: "$emailId"
+          phoneNo: "$phoneNo"
+          password: "$password"
+          state: "$state"
+          userTypeId: $userTypeId
+          accountType: $accountType
+          profilepic: "$profilepic"
+          org_name: "$org_name"
+          org_type: "$org_type"
+          govt_type: "$govt_type"
+          govt_agency: "$govt_agency"
+          ministry_name: "$ministry_name"
+          head_of_dept: "$head_of_dept"
+          latitude: ${double.parse(latitude.toString())}
+          longitude: ${double.parse(longitude.toString())}
+          year_of_experience: "$year_of_experience"
+          shop_name: "$shop_name"
+        ) {
+          token
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            accountType
+            status
+            jwtToken
+          }
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            userTypeId
+            accountType
+            jwtToken
+            status
+          }
+          vendor {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            accountType
+            status
+            jwtToken
+          }
+          generalCustomer {
+            id
+            org_name
+            org_type
+            userId
+            profilePic
+            state
+            resetToken
+            isProfileCompleted
+            govt_type
+            govt_agency
+            ministry_name
+            head_of_dept
+            status
+          }
+          genMechanic {
+            id
+            org_name
+            org_type
+            year_exp
+            userId
+            latitude
+            longitude
+            profilePic
+            otp_verified
+            state
+            resetToken
+            isProfileCompleted
+            status
+          }
+          genVendor {
+            id
+            userId
+            profilePic
+            state
+            resetToken
+            shop_name
+            isProfileCompleted
+            status
+          }
+          isProfileCompleted
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
   signUpCustomerIndividual(String firstName, String lastName, String email, String state,
       String password, String phoneNo, String profilepic) async {
     String _query = """ 
@@ -425,13 +538,14 @@ class QueryProvider {
 
   postOtpVerificationRequest(
       token,
-      otp,) async {
+      otp,
+      userTypeId) async {
     String _query = """ 
     mutation {
-      otp_Verification(otpCode: "$otp") {
-        message
+        otp_Verification(otpCode: "$otp", userTypeId: $userTypeId) {
+          message
+        }
       }
-    }
 
     """;
     log(_query);

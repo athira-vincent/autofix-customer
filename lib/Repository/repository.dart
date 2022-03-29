@@ -35,6 +35,14 @@ class Repository {
   Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList) =>
       _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
 
+  // SignUp
+  Future<dynamic> signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
+      accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+      head_of_dept, latitude, longitude, year_of_experience, shop_name)  =>
+      _signupApiProvider.signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
+          accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+          head_of_dept, latitude, longitude, year_of_experience, shop_name) ;
+
   // Customer Individual SignUp
   Future<dynamic> getSignUpCustomeIndividual(String firstName, String lastName, String email,
       String state, String password, String phone,String profilepic) =>
@@ -97,10 +105,12 @@ class Repository {
   //Otp Verification
   Future<dynamic> postOtpVerificationRequest(
       token,
-      otp,) =>
+      otp,
+      userTypeId) =>
       _signupApiProvider.postOtpVerificationRequest(
         token,
-        otp,);
+        otp,
+        userTypeId);
 
   //Mechanic Booking Id Request
   Future<dynamic> postMechanicsBookingIDRequest(
