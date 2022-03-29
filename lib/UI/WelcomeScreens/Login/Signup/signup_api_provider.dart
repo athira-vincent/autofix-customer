@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersI
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicCorporateSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicIndividualSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl.dart';
 
 import 'package:flutter/services.dart';
 
@@ -19,6 +20,26 @@ class SignupApiProvider {
 
   final QueryProvider _queryProvider = QueryProvider();
 
+  Future<SignUpMdl> signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
+      accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+      head_of_dept, latitude, longitude, year_of_experience, shop_name)  async {
+    Map<String, dynamic> _resp = await _queryProvider.signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
+        accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+        head_of_dept, latitude, longitude, year_of_experience, shop_name);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = SignUpMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return SignUpMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = SignUpMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 
 
   Future<CustomersSignUpIndividualMdl> getSignUpCustomerIndividualRequest(

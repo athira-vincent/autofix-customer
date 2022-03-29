@@ -21,6 +21,7 @@ import 'UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
 import 'UI/SpareParts/FilterScreen/filter_screen.dart';
 import 'UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
+import 'UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 
 
@@ -77,7 +78,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      home: SplashScreen(),
+      home: SignupScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
       //home: MechanicHomeScreen(),
