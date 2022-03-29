@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/customersI
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicCorporateSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/mechanicIndividualSignUp_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,7 +67,26 @@ class SignupBloc {
     postSignUpCorporateMechanic.sink.add(_signUpMdl);
   }
 
+  /// ---------------  SignUp Starts -------------------- ///
 
+
+  final postSignUp = PublishSubject<SignUpMdl>();
+  Stream<SignUpMdl> get signUpResponse => postSignUp.stream;
+
+  signUp(type, username, emailId, phoneNo, password, state, userTypeId,
+      accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+      head_of_dept, latitude, longitude, year_of_experience, shop_name) async {
+    String fullName = username.toString();
+    var names = fullName.split(' ');
+    String firstName = names[0];
+    String lastName= fullName.substring(names[0].length);
+    print(firstName);
+    print(lastName);
+    SignUpMdl _signUpMdl = await repository.signUp(type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
+        accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
+        head_of_dept, latitude, longitude, year_of_experience, shop_name) ;
+    postSignUp.sink.add(_signUpMdl);
+  }
 
   /// --------------- Customer SignUp Starts -------------------- ///
 
@@ -134,10 +154,12 @@ class SignupBloc {
   postOtpVerificationRequest(
       token,
       otp,
+      userTypeId
       ) async {
     OtpVerificationMdl vehicleCreateMdl = await repository.postOtpVerificationRequest(
       token,
-      otp,);
+      otp,
+      userTypeId);
     postOtpVerification.sink.add(vehicleCreateMdl);
   }
 
