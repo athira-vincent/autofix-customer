@@ -40,7 +40,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
   }
   bool language_en_ar=true;
 
-
   @override
   void initState() {
     super.initState();
