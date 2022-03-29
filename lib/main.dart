@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/NewScreens/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/NewScreens/add_delivery_address_screen.dart';
 import 'package:auto_fix/UI/NewScreens/change_delivery_address_screen.dart';
@@ -79,8 +81,7 @@ class _MyAppState extends State<MyApp> {
       //home: MyCartScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-      home: RateMechanicScreen(),
-      //home: ChangeDeliveryAddressScreen(),
+      home: MechanicHomeScreen(),
     );
   }
 }
