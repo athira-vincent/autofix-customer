@@ -210,7 +210,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ChangePasswordScreen()),
+                                                          ChangePasswordScreen(otpNumber: "1234",)),
                                                 );
                                               },
                                               child: Container(

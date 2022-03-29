@@ -6,7 +6,6 @@ import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/phone_login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -21,7 +20,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
@@ -491,8 +489,6 @@ class _LoginScreenState extends State<LoginScreen> {
       _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
     });*/
 
-
-
   }
 
 
@@ -506,7 +502,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefault(value.data!.customerSignIn!.token.toString());
+          _signinBloc.userDefault(value.data!.signIn!.token.toString());
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

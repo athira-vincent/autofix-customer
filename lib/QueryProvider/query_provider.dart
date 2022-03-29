@@ -5,9 +5,9 @@ import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 class QueryProvider {
 
   signIn(String userName, String password) async {
-    String _query = """  
- mutation {
-  customerSignIn(emailId: "$userName", password: "$password") {
+    String _query = """
+    mutation {
+  SignIn(emailId: "$userName", password: "$password", userTypeId: 1) {
     token
     customer {
       id
@@ -16,16 +16,74 @@ class QueryProvider {
       lastName
       emailId
       phoneNo
-      state
-      resetToken
-      userType
       accountType
-      profilePic
-      isProfile_Completed
-      otp_verified
+      status
+      jwtToken
+    }
+    mechanic {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      userTypeId
+      accountType
+      jwtToken
       status
     }
-    isProfile_Completed
+    vendor {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      accountType
+      status
+      jwtToken
+    }
+    generalCustomer {
+      id
+      org_name
+      org_type
+      userId
+      profilePic
+      state
+      resetToken
+      isProfileCompleted
+      govt_type
+      govt_agency
+      ministry_name
+      head_of_dept
+      status
+    }
+    genMechanic {
+      id
+      org_name
+      org_type
+      year_exp
+      userId
+      latitude
+      longitude
+      profilePic
+      otp_verified
+      state
+      resetToken
+      isProfileCompleted
+      status
+    }
+    genVendor {
+      id
+      userId
+      profilePic
+      state
+      resetToken
+      shop_name
+      isProfileCompleted
+      status
+    }
+    isProfileCompleted
   }
 }
     """;
@@ -489,7 +547,7 @@ class QueryProvider {
 
   selectCar() {}
 
-  completeProfileMechIndividual(String token,
+  completeProfileMechanicIndividual(String token,
       String workSelection,
       String vehicleSpecialization,
       String address,String apprentice_cert, String identification_cert) async {
@@ -514,7 +572,6 @@ class QueryProvider {
     userId
   }
 }
-
     """;
     log(_query);
     print(">>>> Token $token");
@@ -679,6 +736,25 @@ class QueryProvider {
           phoneNo
         }
       }
+     """;
+    log(_query);
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  createPassword(String otp,String newPswd, String confirmPswd ) async {
+    String _query = """
+        mutation {
+      ResetPassword(
+        otp: "$otp"
+        newPassword: "$newPswd"
+        confirmPassword: "$confirmPswd"
+      ) {
+        status
+        code
+        message
+      }
+    }
      """;
     log(_query);
     return await GqlClient.I.mutation(_query,

@@ -16,7 +16,7 @@ class MechanicCompleteProfileApiProvider {
       String vehicleSpecialization,
       String address,String apprentice_cert,
       String identification_cert) async {
-    Map<String, dynamic> _resp = await _queryProvider.completeProfileMechIndividual(token, workSelection,
+    Map<String, dynamic> _resp = await _queryProvider.completeProfileMechanicIndividual(token, workSelection,
         vehicleSpecialization, address, apprentice_cert, identification_cert);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {

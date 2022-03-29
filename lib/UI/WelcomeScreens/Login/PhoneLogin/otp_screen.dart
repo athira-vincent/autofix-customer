@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordScreen/create_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
@@ -336,12 +337,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                                                         if(widget.fromPage=="3")
                                                           {
-                                                            Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      CheckYourMailScreen()),
-                                                            );
+                                                            _isLoading = true;
+                                                            if(textEditingController.text == widget.otpNumber){
+                                                              Navigator.pushReplacement(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        ChangePasswordScreen(
+                                                                          otpNumber: textEditingController.text.toString(),
+                                                                        )),
+                                                              );
+                                                            }else{
+                                                              _isLoading = false;
+                                                            }
+
+
                                                           }
                                                         else{
                                                           _isLoading=true;

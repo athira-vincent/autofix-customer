@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordScreen/create_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
+  final String otpNumber;
+
+   ChangePasswordScreen(
+       {Key? key, required this.otpNumber}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -17,6 +21,9 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+
+  final CreatePasswordBloc _createPasswordBloc = CreatePasswordBloc();
+
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _confirmPwdController = TextEditingController();
   FocusNode _newPasswordFocusNode = FocusNode();
@@ -41,6 +48,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     super.initState();
     _newPasswordController.addListener(onFocusChange);
     _confirmPwdController.addListener(onFocusChange);
+    _getCreatePwd();
   }
 
   @override
@@ -50,6 +58,42 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     _newPasswordController.dispose();
     _confirmPwdFocusNode.removeListener(onFocusChange);
     _confirmPwdController.dispose();
+    _createPasswordBloc.dispose();
+  }
+
+  _getCreatePwd() {
+    _createPasswordBloc.postCreatePassword.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Password Reset Successful",
+                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginScreen()
+            ),
+          );
+          FocusScope.of(context).unfocus();
+        });
+      }
+    });
   }
 
   void onFocusChange() {
@@ -396,14 +440,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         _confirmPwdController.text = "";
       });
     } else {
+
+      _createPasswordBloc.postCreatePasswordRequest(
+          widget.otpNumber,pwds,cndpwd);
+
       setState(() {
+        _isLoading = true;
+      });
+      /*setState(() {
         // isLoading = true;
-        Navigator.pushReplacement(
+        *//*Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    LoginScreen()));
-      });
+                    LoginScreen()));*//*
+      });*/
     }
   }
 }

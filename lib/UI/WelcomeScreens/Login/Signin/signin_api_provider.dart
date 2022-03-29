@@ -15,7 +15,7 @@ class SigninApiProvider {
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
-        final errorMsg = SigninMdl(status: "error", message: _resp['message']);
+        final errorMsg = SigninMdl(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};
@@ -23,7 +23,7 @@ class SigninApiProvider {
       }
     } else {
       final errorMsg =
-          SigninMdl(status: "error", message: "No Internet connection");
+          SigninMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }
