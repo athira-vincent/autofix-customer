@@ -39,7 +39,6 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
             width: size.width,
             height: size.height,
             child: Container(
-              color: Colors.green,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -52,55 +51,31 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                           top: size.height * 2 / 100,
                           bottom: size.height * 2 / 100,
                         ),
-                        color: Colors.white70,
+                        //color: Colors.white70,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Select delivery address "),
-                            Container(
-                              padding: EdgeInsets.only(
-                                left: size.width * 2 / 100,
-                                right: size.width * 2 / 100,
-                                top: size.height * 1 / 100,
-                                bottom: size.height * 1 / 100
-                              ),
-                              decoration: boxDecorationStyle,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset("assets/image/ic_add.svg",
-                                    height: size.height * 3 / 100,width: size.width * 3 / 100,),
-                                  Text("Add new address ")
-                                ],
+                            Text("Select delivery address ",
+                              style: TextStyle(
+                                fontSize: 14.3,
+                                fontFamily: "Samsung_SharpSans_Medium",
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black
                               ),
                             ),
+                            addNewAddressButton(size),
 //---------------- replaced by list view ---------------
 //---------------- List view items ---------------------
-                            InkWell(
-                              onTap: (){
-                                setState(() {
-                                  isAddressSelected = true;
-                                });
-                              },
-                                child: addressWidget(size,true)),
+                            addressWidget(size,true,"assets/image/ic_work_blue.svg","Work"),
                             InkWell(
                                 onTap: (){
                                   setState(() {
                                     isAddressSelected = true;
                                   });
                                 },
-                                child: addressWidget(size,false)),
+                                child: addressWidget(size,false,"assets/image/ic_home_blue.svg","Home")),
 // ---------------- List view items ends here ----------
-                            Container(
-                              decoration: boxDecorationStyle,
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset("assets/image/ic_info_blue_white.svg",
-                                    height: size.height * 3 / 100,width: size.width * 3 / 100,),
-                                  Text("You  selected a different address as before. \nDelivery Charges may vary for this address . ")
-                                ],
-                              ),
-                            ),
+                            differentAddressWarning(size),
                           ],
                         ),
                       )
@@ -176,25 +151,50 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
     );
   }
 
-  BoxDecoration boxDecorationStyle = BoxDecoration(
-      borderRadius: BorderRadius.all(
-        Radius.circular(8),
-      ),
-      border: Border.all(
-          color: CustColors.greyish,
-          width: 0.3
-      )
-  );
-
-  Widget addressWidget(Size size,bool isAddressDefault,){
+  Widget addressWidget(Size size,bool isAddressDefault,String imagePath,String addressType){
     return Container(
-      decoration: boxDecorationStyle,
+      margin: EdgeInsets.only(
+        top: size.height * 2.8 / 100
+      ),
+      padding: EdgeInsets.only(
+        left: size.width * 2.5 / 100,
+        right: size.width * 2.5 / 100,
+        top: size.height * 2 / 100,
+        bottom: size.height * 2 / 100,
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+          border: Border.all(
+              color: isAddressSelected ? CustColors.light_navy : CustColors.greyish,
+              width: 0.3
+          ),
+          color: isAddressSelected ? CustColors.pale_blue : Colors.transparent
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text("George Dola "),
+              Container(
+                margin: EdgeInsets.only(
+                  right: size.width * 2.5 / 100,
+                  bottom: size.height * 1 / 100
+                ),
+                child: SvgPicture.asset(imagePath,
+                  height: size.height * 3 / 100,
+                  width: size.width * 3 / 100,
+                ),
+              ),
+              Text(addressType,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: "SharpSans_Bold",
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black
+                ),
+              ),
               isAddressDefault
                   ? Container(
                       padding: EdgeInsets.only(
@@ -204,7 +204,7 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                         bottom: size.height * .5 / 100,
                       ),
                       margin: EdgeInsets.only(
-                        left: size.width * 2 / 100
+                        left: size.width * 2 / 100,
                       ),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
@@ -232,13 +232,122 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                   : Container(),
             ],
           ),
-          Text("+234 9213213"),
-          Text("Savannah estate, plot 176"),
-          Text("Beside oando filling station"),
-          Text("Abuja Nigeria")
+          Text("George Dola ",
+            style: addressTextStyle01
+          ),
+          Text("+234 9213213",
+            style: addressTextStyle01,
+          ),
+          Text("Savannah estate, plot 176",
+            style: addressTextStyle02,),
+          Text("Beside oando filling station",
+            style: addressTextStyle03,
+          ),
+          Text("Abuja Nigeria",
+            style: addressTextStyle03,
+          )
         ],
       ),
     );
   }
+
+  Widget differentAddressWarning(Size size){
+    return Container(
+      decoration: boxDecorationStyle,
+      margin: EdgeInsets.only(
+        top: size.height * 2.8 / 100
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+              top: size.width * 3 / 100,
+              bottom: size.width * 3 / 100
+            ),
+            margin: EdgeInsets.only(
+              left: size.width * 5 / 100,
+              right: size.width * 2 / 100
+            ),
+            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+              height: size.height * 3 / 100,width: size.width * 3 / 100,),
+          ),
+          Text("You  selected a different address as before. \nDelivery Charges may vary for this address . ",
+            style: warningTextStyle01,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget addNewAddressButton(Size size){
+    return Container(
+      margin: EdgeInsets.only(
+          top: size.height * 2.8 / 100
+      ),
+      padding: EdgeInsets.only(
+          left: size.width * 2 / 100,
+          right: size.width * 2 / 100,
+          top: size.height * 1 / 100,
+          bottom: size.height * 1 / 100
+      ),
+      decoration: boxDecorationStyle,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.only(
+                right: size.width * 2.5 / 100
+            ),
+            child: SvgPicture.asset("assets/image/ic_add.svg",
+              height: size.height * 2.5 / 100,width: size.width * 2.5 / 100,),
+          ),
+          Text("Add new address ",
+            style: TextStyle(
+                fontSize: 14.3,
+                fontFamily: "SharpSans_Bold",
+                fontWeight: FontWeight.bold,
+                color: Colors.black
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration boxDecorationStyle = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+      border: Border.all(
+          color: CustColors.greyish,
+          width: 0.3
+      )
+  );
+
+  TextStyle addressTextStyle01 = TextStyle(
+      fontSize: 12,
+      fontFamily: "Samsung_SharpSans_Medium",
+      fontWeight: FontWeight.w600,
+      color: Colors.black
+  );
+
+  TextStyle addressTextStyle02 = TextStyle(
+      fontSize: 12,
+      fontFamily: "Samsung_SharpSans_Regular",
+      fontWeight: FontWeight.w500,
+      color: Colors.black
+  );
+  TextStyle addressTextStyle03 = TextStyle(
+      fontSize: 12,
+      fontFamily: "Samsung_SharpSans_Regular",
+      fontWeight: FontWeight.w400,
+      color: CustColors.warm_grey03
+  );
+  TextStyle warningTextStyle01 = TextStyle(
+      fontSize: 12,
+      fontFamily: "Samsung_SharpSans_Regular",
+      fontWeight: FontWeight.w600,
+      color: Colors.black
+  );
 
 }

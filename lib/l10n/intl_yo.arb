@@ -1,7 +1,8 @@
 {
   "helloWorld": "¡Hola Mundo!",
-  "login": "login!!!!",
+  "login": "Wo ile",
   "forgot_password": "Forgot password!!",
+  "text_forgot_password": "Gbagbe ọrọ aṣina bi?",
   "welcome_to": "WELCOME TO",
   "next": "Itele",
 
@@ -56,7 +57,24 @@
     "text_ministry_govt": "Ministry/Govt. Agency",
     "text_hint_ministry_govt": "Select your ministry/govt agency from list",
     "text_contact_person_head": "Contact Person / Head ",
-    "text_hint_contact_person_head": "Enter head of the department name"
+    "text_hint_contact_person_head": "Enter head of the department name",
+    "text_dont_have_account": "Ṣe ko ni akọọlẹ? ",
+    "text_or_login": "Tabi buwolu wọle pẹlu",
+    "text_phone_screen_desc": "Tẹ nọmba foonu rẹ sii, iwọ yoo gba koodu oni-nọmba mẹrin kan fun iyatọ nọmba foonu. Yan koodu orilẹ-ede rẹ ṣaaju tẹ Nọmba rẹ sii.",
+    "text_btn_send": "Firanṣẹ",
+    "text_back_to": "Pada si ",
+    "text_enter_code": "Tẹ koodu rẹ sii",
+    "text_otp_screen_desc": "Tẹ nọmba koodu rẹ sii lati jẹrisi foonu rẹ \n Tẹ koodu oni-nọmba mẹrin sii .",
+    "text_otp_title": "4 koodu oni-nọmba",
+    "text_btn_verify": "Jẹrisi",
+    "text_dont_receive_code": "Ko gba koodu? ",
+    "text_try_again": "Gbiyanju lẹẹkansi",
+    "text_check_mail": "Ṣayẹwo meeli rẹ",
+    "text_check_mail_screen_desc": "Jọwọ ṣayẹwo imeeli rẹ, a ti fi imeeli \n ranṣẹ si ọ ti o ni ọna asopọ kan lati tun ọrọ igbaniwọle rẹ ṣe. ",
+    "text_btn_go_to_mail": "Lọ si imeeli",
+    "text_check_spam": "Ko gba imeeli naa? Ṣayẹwo àwúrúju àlẹmọ Tabi ",
+    "text_try_another": "gbiyanju adirẹsi imeeli miiran "
+
 
 
 }

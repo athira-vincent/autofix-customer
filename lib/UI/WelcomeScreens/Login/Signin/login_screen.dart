@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    InkWell(
+                                   /* InkWell(
                                       onTap: (){
                                         if(language_en_ar==true)
                                         {
@@ -145,13 +145,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         }
 
                                       },
-                                      child: Container(
+                                      child:*/ Container(
                                         child: Text(
                                           AppLocalizations.of(context)!.login,
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
-                                    ),
+                                   // ),
                                     Padding(
                                       padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
                                       child: Column(
@@ -161,7 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Email',
+                                                Text(
+                                                  AppLocalizations.of(context)!.text_email,
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
@@ -171,12 +172,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   focusNode: _userNameFocusNode,
                                                   keyboardType: TextInputType.text,
                                                   validator:
-                                                  InputValidator(ch: "Your emailid").emptyChecking,
+                                                  InputValidator(
+                                                      ch: AppLocalizations.of(context)!.text_hint_email,
+                                                  ).emptyChecking,
                                                   controller: _userNameController,
                                                   cursorColor: CustColors.whiteBlueish,
                                                   decoration: InputDecoration(
                                                     isDense: true,
-                                                    hintText: 'Your emailid',
+                                                    hintText: AppLocalizations.of(context)!.text_hint_email,
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color: CustColors.greyish,
@@ -210,14 +213,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text('Password',
+                                                Text(AppLocalizations.of(context)!.text_password,
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
                                                   textAlignVertical: TextAlignVertical.center,
                                                   obscureText: !_passwordVisible!,
                                                   validator:
-                                                  InputValidator(ch: "Password").emptyChecking,
+                                                  InputValidator(ch:
+                                                    AppLocalizations.of(context)!.text_password
+                                                  ).emptyChecking,
                                                   // validator:
                                                   //     InputValidator(ch: "Password").passwordChecking,
                                                   controller: _passwordController,
@@ -252,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         },
                                                       ),
                                                     ),
-                                                    hintText: 'Password',
+                                                    hintText: AppLocalizations.of(context)!.text_password,
                                                     errorMaxLines: 3,
                                                     border: UnderlineInputBorder(
                                                       borderSide: BorderSide(
@@ -293,7 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       child: Container(
                                                         margin: EdgeInsets.only(top: _setValue(10)),
                                                         child: Text(
-                                                          'Forgot password?',
+                                                          AppLocalizations.of(context)!.text_forgot_password,
                                                           style: Styles.textLabelSubTitle,
                                                         ),
                                                       ),
@@ -338,7 +343,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
                                                       Text(
-                                                        'Login',
+                                                        AppLocalizations.of(context)!.login,
                                                         textAlign: TextAlign.center,
                                                         style: Styles.textButtonLabelSubTitle,
                                                       ),
@@ -359,11 +364,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                               text: TextSpan(
                                                 children: <TextSpan>[
                                                   TextSpan(
-                                                    text: "Don't have account?  ",
+                                                    text: AppLocalizations.of(context)!.text_dont_have_account,
                                                     style: Styles.textLabelSubTitle,
                                                   ),
                                                   TextSpan(
-                                                      text: 'Sign Up',
+                                                      text: AppLocalizations.of(context)!.text_sign_up,
                                                       style: Styles.textLabelTitle_10,
                                                       recognizer: TapGestureRecognizer()
                                                         ..onTap = () {
@@ -381,7 +386,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Container(
                                             margin: EdgeInsets.only(top: 15.8),
                                             child: Text(
-                                              'Or login with',
+                                              AppLocalizations.of(context)!.text_or_login,  //'Or login with',
                                               style: Styles.textLabelSubTitleAzure,
                                             ),
                                           ),

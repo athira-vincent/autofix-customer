@@ -1,9 +1,10 @@
 {
   "helloWorld": "¡Hola Mundo!",
-  "login": "login!!!!",
+  "login": "Shiga",
   "welcome_to": "WELCOME TO",
   "next": "Na gaba",
   "forgot_password": "Forgot password!!!",
+  "text_forgot_password": "Manta kalmar sirri?",
   "itsmemaria": "It's Me M¡Hola Mundo!maria!",
 
   "text_customer": "Abokin ciniki",
@@ -56,6 +57,22 @@
     "text_ministry_govt": "Ministry/Govt. Agency",
     "text_hint_ministry_govt": "Select your ministry/govt agency from list",
     "text_contact_person_head": "Contact Person / Head ",
-    "text_hint_contact_person_head": "Enter head of the department name"
+    "text_hint_contact_person_head": "Enter head of the department name",
+    "text_dont_have_account": "Ba ku da asusu? ",
+    "text_or_login": "Ko shiga da",
+    "text_phone_screen_desc": "Shigar da lambar wayar ku, za ku karɓi lambar lambobi 4 don bambanta lambar waya. Zaɓi lambar ƙasarku kafin shigar da lambar ku.",
+    "text_btn_send": "Aika",
+    "text_back_to": "Komawa zuwa ",
+    "text_enter_code": "Shigar da lambar ku",
+    "text_otp_screen_desc": "Shigar da lambar lambar ku don tabbatar da wayarku \n Shigar da lambar lambobi 4 .",
+    "text_otp_title": "Lambar lambobi 4",
+    "text_btn_verify": "Tabbatar",
+    "text_dont_receive_code": "Ba a karɓi lamba ba? ",
+    "text_try_again": "Gwada kuma",
+    "text_check_mail": "Duba wasiku",
+    "text_check_mail_screen_desc": "Da fatan za a duba imel ɗin ku, mun aiko muku da imel \n wanda ya ƙunshi hanyar haɗi don sake saita kalmar wucewa. ",
+    "text_btn_go_to_mail": "Je zuwa imel",
+    "text_check_spam": "Ba a karɓi imel ɗin ba? Bincika tace spam ɗinku Ko ",
+    "text_try_another": "gwada wani adireshin imel "
 
 }

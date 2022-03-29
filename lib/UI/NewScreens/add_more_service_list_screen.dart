@@ -21,7 +21,7 @@ class AddMoreServicesListScreen extends StatefulWidget {
 class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
   List<String> serviceList = [
-    "A","b","c","Spareparts delivery","d","e","f","g","h","i","j","K","l"
+    "A","Spareparts delivery01","c","Spareparts delivery","d","e","Spareparts delivery05","g","h","Spareparts delivery02","j","K","l"
   ];
   List<bool>? _serviceIsChecked;
   List<String>? selectedServiceList = [];

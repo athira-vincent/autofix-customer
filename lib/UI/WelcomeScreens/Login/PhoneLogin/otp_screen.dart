@@ -259,7 +259,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      'Enter your code',
+                                      AppLocalizations.of(context)!.text_enter_code,    //'Enter your code',
                                       style: Styles.textHeadLogin,
                                     ),
                                   ),
@@ -269,8 +269,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                     alignment: Alignment.centerLeft,
                                     //color: Colors.red,
                                     child: Text(
-                                      "Enter your code number to verify your phone "
-                                      "Enter the 4 digit code .",
+                                      AppLocalizations.of(context)!.text_otp_screen_desc,
+                                      /*"Enter your code number to verify your phone "
+                                      "Enter the 4 digit code .",*/
                                       textAlign: TextAlign.left,
                                       softWrap: true,
                                       style: Styles.textLabelSubTitle12,
@@ -287,7 +288,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             children: [
                                               Padding(
                                                 padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
-                                                child: Text('4 digit Code',
+                                                child: Text(
+                                                  AppLocalizations.of(context)!.text_otp_title,     //'4 digit Code',
                                                   style: Styles.textLabelTitle,
                                                 ),
                                               ),
@@ -359,7 +361,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      'Verify',
+                                                      AppLocalizations.of(context)!.text_btn_verify,     // 'Verify',
                                                       textAlign: TextAlign.center,
                                                       style: Styles.textButtonLabelSubTitle,
                                                     ),
@@ -380,11 +382,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                             text: TextSpan(
                                               children: <TextSpan>[
                                                 TextSpan(
-                                                  text: "Didn’t receive code? ",
+                                                  text: AppLocalizations.of(context)!.text_dont_receive_code,  //"Didn’t receive code? ",
                                                   style: Styles.textLabelSubTitle,
                                                 ),
                                                 TextSpan(
-                                                    text: 'Try again',
+                                                    text: AppLocalizations.of(context)!.text_try_again,   //'Try again',
                                                     style: Styles.textLabelTitle_10,
                                                     recognizer: TapGestureRecognizer()
                                                       ..onTap = () {

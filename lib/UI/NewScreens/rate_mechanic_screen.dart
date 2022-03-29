@@ -55,7 +55,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                               Container(
                                 height: size.height * 5 /100,
                                 child: VerticalDivider(
-                                  color: Colors.black,
+                                  color: CustColors.pale_grey01,
                                   width: 20,
                                   thickness: 2,
                                 ),
@@ -74,14 +74,13 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         margin: EdgeInsets.only(
                           top: size.height * 2.1 / 100
                         ),
-                        color: Colors.purpleAccent,
-                        //color: CustColors.pale_grey,
+                        //color: Colors.purpleAccent,
+                        color: CustColors.white_02,
                         child: Column(
                           children: [
-
                             Container(
                               margin: EdgeInsets.only(
-                                top: size.height * 4 / 100,
+                                top: size.height * 3.5 / 100,
                                 left: size.width * 39 / 100,
                                 right: size.width * 39 / 100
                               ),
@@ -100,24 +99,36 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                               margin: EdgeInsets.only(
                                 left: size.width * 30 / 100,
                                 right: size.width * 30 / 100,
-                                top: size.height * 3 / 100
+                                top: size.height * 1.5 / 100
                               ),
-                              child: Text("How was your experience with"),
+                              child: Text("How was your experience with",
+                                style: TextStyle(
+                                  fontSize: 10.7,
+                                  fontFamily: "Samsung_SharpSans_Medium",
+                                  fontWeight: FontWeight.w400,
+                                  color: CustColors.light_navy
+                                ),),
                             ),
                             Container(
                               margin: EdgeInsets.only(
                                   left: size.width * 30 / 100,
                                   right: size.width * 30 / 100,
-                                  top: size.height * .5 / 100
+                                  top: size.height * .25 / 100
                               ),
-                              child: Text("George Dola?"),
+                              child: Text("George Dola?",
+                                 style: TextStyle(
+                                  fontSize: 19,
+                                  fontFamily: "Samsung_SharpSans_Medium",
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black
+                              ),),
                             ),
 
                             Container(
                               margin: EdgeInsets.only(
                                   left: size.width * 10 / 100,
                                   right: size.width * 10 / 100,
-                                  top: size.height * 3 / 100
+                                  top: size.height * 2.5 / 100
                               ),
                               child: RatingBar(
                                 initialRating: _initialRating,
@@ -143,12 +154,19 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                               margin: EdgeInsets.only(
                                   left: size.width * 6 / 100,
                                   right: size.width * 6 / 100,
-                                  top: size.height * 5 / 100
+                                  top: size.height * 4 / 100
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Write a review"),
+                                  Text("Write a review",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black
+                                    ),
+                                  ),
                                   Text("32/450"),
                                 ],
                               ),
@@ -164,13 +182,13 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                                     Radius.circular(8),
                                   ),
                                   border: Border.all(
-                                      color: CustColors.light_navy,
+                                      color: CustColors.pinkish_grey02,
                                       width: 0.3
                                   )
                               ),
                               child: TextFormField(
                                 //text color : greyish_brown
-                                minLines: 1,
+                                minLines: 3,
                                 maxLines: 5,  // allow user to enter 5 line in textfield
                                 keyboardType: TextInputType.multiline,  // user keyboard will have a button to move cursor to next line
                                 //controller: _Textcontroller,
@@ -183,8 +201,6 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                                 print("On Press Continue");
                               },
                             ),
-
-
                           ],
                         ),
 
@@ -221,7 +237,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
         left: size.width * 4.9 /100,
         right: size.width * 4.9 /100,
         //bottom: size.height * 4 /100,
-        top: size.height * 3.1 / 100,
+        top: size.height * 2.5 / 100,
       ),
       child: Image.asset("assets/image/img_rate_mechanic_bg.png"),
     );
