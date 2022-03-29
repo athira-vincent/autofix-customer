@@ -55,7 +55,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final SignupBloc _signupBloc = SignupBloc();
   FocusNode _phoneNoFocusNode = FocusNode();
   TextStyle _labelStylePhoneNo = TextStyle();
-
   int _otpCodeLength = 5;
   bool _isLoadingButton = false;
   bool _enableButton = false;
