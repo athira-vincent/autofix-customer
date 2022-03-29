@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
       home: SplashScreen(),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-      home: MechanicHomeScreen(),
+      //home: MechanicHomeScreen(),
     );
   }
 }

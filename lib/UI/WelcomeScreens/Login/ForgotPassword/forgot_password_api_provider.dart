@@ -4,7 +4,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_
 class ForgotPasswordApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
   Future<ForgotPasswordMdl> getForgotPasswordRequest(String email) async {
-    Map<String, dynamic> _resp = await _queryProvider.mechanicForgotPassword(email);
+    Map<String, dynamic> _resp = await _queryProvider.forgotPassword(email);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

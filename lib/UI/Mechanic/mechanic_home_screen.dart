@@ -225,13 +225,13 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 child: Stack(
                   children: [
                         GestureDetector(
-                        onTap: () {},
-                          child: SvgPicture.asset(
-                            'assets/image/notification_icon.svg',
-                            width: 22,
-                            height: 22,
+                          onTap: () {},
+                            child: SvgPicture.asset(
+                              'assets/image/notification_icon.svg',
+                              width: 22,
+                              height: 22,
+                            ),
                           ),
-                        ),
                     Positioned(
                       right: 0,
                       child: _counter > 0 ? Container(
@@ -268,7 +268,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         children: [
           Container(
             width: double.infinity,
-            /*child: _index == 0
+           /* child: _index == 0
                 ? HomeCustomerUIScreen()
                 : _index == 1 ? CustomerCartScreen()
                 : _index == 2 ? CustomerMyProfileScreen()

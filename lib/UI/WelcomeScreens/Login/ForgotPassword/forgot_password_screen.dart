@@ -250,7 +250,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                /*if (_formKey.currentState!.validate()) {
+                                                if (_formKey.currentState!.validate()) {
                                                   _forgotPasswordBloc.postForgotPasswordRequest(
                                                       _emailController.text);
 
@@ -260,8 +260,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                 } else {
                                                   setState(() =>
                                                   _autoValidate = AutovalidateMode.always);
-                                                }*/
-                                                Navigator.push(
+                                                }
+                                                /*Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
@@ -272,7 +272,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                             otpNumber: "1234",
                                                             fromPage: "3",
                                                           )),
-                                                );
+                                                );*/
                                               },
                                               child: Container(
                                                 height: 45,

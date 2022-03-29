@@ -792,13 +792,15 @@ class QueryProvider {
     );
   }
 
-  mechanicForgotPassword(String email) async {
+  forgotPassword(String email) async {
     String _query = """
-          mutation{
-      mechanicForgotPassword(emailId: "$email"){
-        resetToken
+            mutation {
+        ForgotPassword(emailId: "$email", userTypeId: 1) {
+          resetToken
+          userId
+          phoneNo
+        }
       }
-    }
      """;
     log(_query);
     return await GqlClient.I.mutation(_query,
