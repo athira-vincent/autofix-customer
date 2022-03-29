@@ -83,8 +83,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             backgroundColor: CustColors.peaGreen,
           ));
 
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
+          /*Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OtpVerificationScreen(
+                      userType: "0",
+                      userCategory: "0",
+                      phoneNumber: "${9567383837}",
+                      otpNumber: "1234",
+                      fromPage: "3",
+                    )),
+          );
           FocusScope.of(context).unfocus();
         });
       }
