@@ -215,7 +215,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,

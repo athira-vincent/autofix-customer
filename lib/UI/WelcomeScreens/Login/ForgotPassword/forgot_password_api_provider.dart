@@ -9,7 +9,7 @@ class ForgotPasswordApiProvider {
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg =
-            ForgotPasswordMdl(status: "error", message: _resp['message']);
+            ForgotPasswordMdl(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};
@@ -17,7 +17,7 @@ class ForgotPasswordApiProvider {
       }
     } else {
       final errorMsg =
-          ForgotPasswordMdl(status: "error", message: "No Internet connection");
+          ForgotPasswordMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }
