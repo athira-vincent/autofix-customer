@@ -95,7 +95,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       phoneNumber: "${value.data!.forgotPassword!.phoneNo}",
                       otpNumber: value.data!.forgotPassword!.resetToken.toString(),
                       fromPage: "3",
-                      userId: value.data!.forgotPassword!.userId.toString(),
+                      platformId: '1',
                     )),
           );
           FocusScope.of(context).unfocus();

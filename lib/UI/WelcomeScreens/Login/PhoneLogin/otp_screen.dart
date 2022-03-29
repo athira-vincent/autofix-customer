@@ -31,7 +31,7 @@ class OtpVerificationScreen extends StatefulWidget {
   final String userCategory;
   final String phoneNumber;
   final String otpNumber;
-  final String userId;
+  final String platformId;
   final String fromPage;
 
 
@@ -40,7 +40,7 @@ class OtpVerificationScreen extends StatefulWidget {
     required this.userCategory,
     required this.phoneNumber,
     required this.otpNumber,
-    required this.userId,
+    required this.platformId,
     required this.fromPage});
 
   @override

@@ -196,7 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
                             otpNumber: "${value.data!.signUp!.genMechanic?.resetToken.toString()}",
-                            userId: "1",
+                            platformId: "1",
                             fromPage: "1",)));
             }
           else
@@ -210,7 +210,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.customer?.phoneNo.toString()}",
                             otpNumber: "${value.data!.signUp!.generalCustomer?.resetToken.toString()}",
-                            userId: "1",
+                            platformId: "1",
                             fromPage: "1",)));
             }
           FocusScope.of(context).unfocus();
