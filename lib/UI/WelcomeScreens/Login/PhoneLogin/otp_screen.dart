@@ -216,7 +216,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
@@ -338,12 +338,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                                                   if(widget.fromPage=="3")
                                                     {
-                                                      Navigator.pushReplacement(
+                                                      /*Navigator.pushReplacement(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 CheckYourMailScreen()),
-                                                      );
+                                                      );*/
+                                                      /*_isLoading = true;
+                                                      print("textEditingController.text >> " + textEditingController.text);*/
+                                                      _onOtpCallBack( textEditingController.text, true);
                                                     }
                                                   else{
                                                     _isLoading=true;
