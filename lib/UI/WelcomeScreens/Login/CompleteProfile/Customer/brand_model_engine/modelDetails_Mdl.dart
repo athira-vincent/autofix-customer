@@ -57,7 +57,7 @@ class ModelDetail {
     required this.years,
     required this.makeId,
     required this.status,
-    required this.make,
+    required this.vehicleBrand,
   });
 
   String id;
@@ -66,7 +66,7 @@ class ModelDetail {
   String years;
   int makeId;
   int status;
-  Make? make;
+  VehicleBrand? vehicleBrand;
 
   factory ModelDetail.fromJson(Map<String, dynamic> json) => ModelDetail(
     id: json["id"] == null ? null : json["id"],
@@ -75,7 +75,7 @@ class ModelDetail {
     years: json["years"] == null ? null : json["years"],
     makeId: json["makeId"] == null ? null : json["makeId"],
     status: json["status"] == null ? null : json["status"],
-    make: json["make"] == null ? null : Make.fromJson(json["make"]),
+    vehicleBrand: json["vehicleBrand"] == null ? null : VehicleBrand.fromJson(json["vehicleBrand"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -85,30 +85,34 @@ class ModelDetail {
     "years": years == null ? null : years,
     "makeId": makeId == null ? null : makeId,
     "status": status == null ? null : status,
-    "make": make == null ? null : make?.toJson(),
+    "vehicleBrand": vehicleBrand == null ? null : vehicleBrand!.toJson(),
   };
 }
 
-class Make {
-  Make({
+class VehicleBrand {
+  VehicleBrand({
     required this.id,
-    required this.makeName,
+    required this.brandName,
     required this.status,
+    required this.brandicon,
   });
 
   String id;
-  String makeName;
+  String brandName;
   int status;
+  dynamic brandicon;
 
-  factory Make.fromJson(Map<String, dynamic> json) => Make(
+  factory VehicleBrand.fromJson(Map<String, dynamic> json) => VehicleBrand(
     id: json["id"] == null ? null : json["id"],
-    makeName: json["makeName"] == null ? null : json["makeName"],
+    brandName: json["brandName"] == null ? null :json["brandName"],
     status: json["status"] == null ? null : json["status"],
+    brandicon: json["brandicon"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "makeName": makeName == null ? null : makeName,
+    "brandName": brandName == null ? null : brandName,
     "status": status == null ? null : status,
+    "brandicon": brandicon,
   };
 }

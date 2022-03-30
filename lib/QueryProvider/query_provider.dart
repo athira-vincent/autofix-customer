@@ -283,7 +283,7 @@ class QueryProvider {
           engineName: "$engineName"
           lastMaintenance: "$lastMaintenance"
           milege: "$milege"
-          makeId:  ${int.parse(makeId.toString())}
+          vehicleBrandId: ${int.parse(makeId.toString())}
           vehicleModelId: ${int.parse(vehicleModelId.toString())}
           vehiclePic: "$vehiclePic"
         ) {
@@ -297,9 +297,10 @@ class QueryProvider {
           userId
           makeId
           vehicleModelId
+          vehiclePic
           status
         }
-      }
+      }   
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
@@ -309,12 +310,12 @@ class QueryProvider {
   postMakeBrandRequest(
       token,) async {
     String _query = """ 
-    query
     {
-      makeDetails {
+      brandDetails {
         id
-        makeName
+        brandName
         status
+        brandicon
       }
     }
 
@@ -340,14 +341,14 @@ class QueryProvider {
         years
         makeId
         status
-        make {
+        vehicleBrand {
           id
-          makeName
+          brandName
           status
+          brandicon
         }
       }
     }
-
     """;
     log(_query);
     return await GqlClient.I.query01(
