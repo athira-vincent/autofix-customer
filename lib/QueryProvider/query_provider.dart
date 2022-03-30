@@ -583,7 +583,7 @@ class QueryProvider {
     );
   }
 
-  completeProfileMechCorporate(
+  completeProfileMechanicCorporate(
       String token,
       String serviceType,
       String vehicleSpecialization,
