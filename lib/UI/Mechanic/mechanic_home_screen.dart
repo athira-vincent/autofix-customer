@@ -253,7 +253,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                         ),
                       ) : Container(),
                     ),
-
                   ],
                 ),
               ),
