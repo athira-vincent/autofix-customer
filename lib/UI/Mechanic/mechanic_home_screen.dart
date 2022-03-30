@@ -23,7 +23,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   double per = .10;
   double perfont = .10;
 
-
   double _setValue(double value) {
     return value * per + value;
   }
