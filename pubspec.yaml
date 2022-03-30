@@ -62,6 +62,9 @@ dependencies:
   firebase_core: 1.11.0
   firebase_auth: 2.0.0
   firebase_storage: ^10.2.8
+  firebase_messaging: 10.0.4
+  dio: ^4.0.4
+
   animations: ^2.0.0
   country_code_picker: ^2.0.2
   sms_otp_auto_verify: ^2.1.0

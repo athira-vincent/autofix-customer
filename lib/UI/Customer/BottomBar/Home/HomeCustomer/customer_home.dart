@@ -2,6 +2,8 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -26,6 +28,10 @@ class HomeCustomerUIScreen extends StatefulWidget {
 }
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
+
+
+  String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
 
   TextEditingController searchController = new TextEditingController();
@@ -72,10 +78,90 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
+    callOnFcmApiSendPushNotifications(1);
+
     _getCurrentCustomerLocation();
     _listenServiceListResponse();
 
   }
+
+  void registerNotification() async {
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      // TODO: handle the received notifications
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+
+  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have $length new order',
+        'title': 'New Orders',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+        'screen': 'screenA',
+        'message': 'ACTION'
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to': 'eCBxvR1ZSNWWUqyqlQPtgO:APA91bFDwk8N-bxpVLVrhylF_gG4ota7JnHJKQErONodQbE9ppf8t0LWd7sYNt6RgRTysPTlW2GI2yIbRg76tjJ1MSgmhaeLIHr0dJuFbDEt42lNLGjGwz6glPHpuq6DjfmRoehcWk9L',
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        print('notification sending success');
+      } else {
+        print('notification sending failed');
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }
+
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
