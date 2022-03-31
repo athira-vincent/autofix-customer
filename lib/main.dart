@@ -18,6 +18,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
+import 'UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
 import 'UI/SpareParts/FilterScreen/filter_screen.dart';
 import 'UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
@@ -83,7 +84,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-      home: HomeCustomerUIScreen(),
+      home: CustomerHomeScreen(),
     );
   }
 }

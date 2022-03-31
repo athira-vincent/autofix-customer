@@ -55,8 +55,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String? _mapStyle;
 
   void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+
     controller.setMapStyle(_mapStyle);
+    _controller.complete(controller);
   }
 
   Set<Polyline> lines = {};
