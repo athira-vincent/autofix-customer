@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: MechanicStartServiceScreen(),
-      home: MechanicTrackingScreen(),
+      home: SplashScreen(),
     );
   }
 }
