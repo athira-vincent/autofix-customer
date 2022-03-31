@@ -96,39 +96,38 @@ class _MyCartScreenState extends State<MyCartScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            body: ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: SingleChildScrollView(
-                // ignore: avoid_unnecessary_containers
-                child: Column(
-                  children: [
-                    appBarCustomUi(),
-                    productsListUi(),
-                    placeOrderUi(),
-                    Divider(),
-                    changeAddressUi(),
-                    Divider(),
-                    selectedBillDetailsUi(),
-                    Divider(),
-                    continueButtonUi(),
-                  ],
-                ),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+          backgroundColor: Colors.white,
+          body: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              // ignore: avoid_unnecessary_containers
+              child: Column(
+                children: [
+                  appBarCustomUi(),
+                  productsListUi(),
+                  placeOrderUi(),
+                  Divider(),
+                  changeAddressUi(),
+                  Divider(),
+                  selectedBillDetailsUi(),
+                  Divider(),
+                  continueButtonUi(),
+                ],
               ),
-            )),
-      ),
+            ),
+          )),
     );
   }
 
   Widget appBarCustomUi() {
     return Row(
       children: [
-        IconButton(
+        /*IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
-        ),
+        ),*/
         Padding(
           padding: const EdgeInsets.all(15),
           child: Text(
@@ -406,23 +405,27 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         padding: const EdgeInsets.fromLTRB(0,8,0,0),
                         child: Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(4),
+                            Flexible(
                               child: Text(
                                 "Beside oando filling station.",
                                 style: Styles.sparePartNameTextBlack17,
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: CustColors.roseText1,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Text(
-                                  "Work",
-                                  style: Styles.sparePartNameTextBlack17,
+                            Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: Container(
+                                height: 20,
+                                width: 45,
+                                decoration: BoxDecoration(
+                                    color: CustColors.roseText1,
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(
+                                    "Work",
+                                    style: Styles.sparePartNameTextBlack17,
+                                  ),
                                 ),
                               ),
                             ),

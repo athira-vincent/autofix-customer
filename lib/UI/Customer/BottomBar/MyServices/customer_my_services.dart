@@ -69,21 +69,20 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
 
-                appBarCustomUi(size),
-                tabTitleBarCustomUi(size),
-                tabBodyCustomUi(size),
-
+              appBarCustomUi(size),
+              tabTitleBarCustomUi(size),
+              tabBodyCustomUi(size),
 
 
-              ],
-            ),
+
+            ],
           ),
         ),
       ),
@@ -92,7 +91,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
 
   Widget appBarCustomUi(Size size) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(left: 20,top: 10),
       child: Row(
         children: [
           Text(
