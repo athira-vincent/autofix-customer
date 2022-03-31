@@ -92,10 +92,10 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     super.initState();
     _getCurrentCustomerLocation();
 
-    rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
-    /*DefaultAssetBundle.of(context).loadString('assets/map_style/map_style.txt').then((string) {
+    /*DefaultAssetBundle.of(context).loadString('assets/map_style/map_style.json').then((string) {
       this._mapStyle = string;
     }).catchError((error) {
       log(error.toString());
