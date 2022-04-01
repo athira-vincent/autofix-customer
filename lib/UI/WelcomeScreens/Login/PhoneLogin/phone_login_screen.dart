@@ -76,7 +76,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefault(value.data!.customerSocialLogin!.token.toString());
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -85,7 +85,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       userType: "0",
                       userCategory: "0",
                       phoneNumber: "${_phoneNoController.text}",
-                      otpNumber: "${value.data?.customerSocialLogin?.customer!.resetToken}",
+                      otpNumber: "${value.data?.socialLogin?.user!.otpCode}",
                       userTypeId: "1",
                       fromPage: "2",
                     )),

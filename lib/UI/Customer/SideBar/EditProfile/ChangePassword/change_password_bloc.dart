@@ -5,17 +5,17 @@ import 'package:rxdart/rxdart.dart';
 
 class ChangePasswordBloc {
   final Repository repository = Repository();
-  final postCreatePassword = PublishSubject<ChangePasswordMdl>();
-  Stream<ChangePasswordMdl> get createPasswordResponse =>
-      postCreatePassword.stream;
+  final postChangePassword = PublishSubject<ChangePasswordMdl>();
+  Stream<ChangePasswordMdl> get changePasswordResponse =>
+      postChangePassword.stream;
   dispose() {
-    postCreatePassword.close();
+    postChangePassword.close();
   }
 
-  postCreatePasswordRequest(
-    String otp, String newPassword, String confirmPassword
+  postChangePasswordRequest(
+      String token, String email,String oldPassword, String newPassword, String confirmPassword
   ) async {
-    ChangePasswordMdl _createPasswordMdl = await repository.getCreatePassword(otp,newPassword,confirmPassword);
-    postCreatePassword.sink.add(_createPasswordMdl);
+    ChangePasswordMdl _changePasswordMdl = await repository.getChangePassword(token,email,oldPassword,newPassword,confirmPassword);
+    postChangePassword.sink.add(_changePasswordMdl);
   }
 }

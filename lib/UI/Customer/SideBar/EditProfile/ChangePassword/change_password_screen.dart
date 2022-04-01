@@ -9,10 +9,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ChangePasswordScreen extends StatefulWidget {
-  final String otpNumber;
 
    ChangePasswordScreen(
-       {Key? key, required this.otpNumber}) : super(key: key);
+       {Key? key,}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -62,7 +61,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   _getCreatePwd() {
-    _createPasswordBloc.postCreatePassword.listen((value) {
+    _createPasswordBloc.postChangePassword.listen((value) {
+      print(value);
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -84,12 +84,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             backgroundColor: CustColors.peaGreen,
           ));
 
-          Navigator.push(
+          /*Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => LoginScreen()
             ),
-          );
+          );*/
           FocusScope.of(context).unfocus();
         });
       }
@@ -147,218 +147,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              child: Text(
-                                'Create password',
-                                style: Styles.textHeadLogin,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 10, right: 10, top: 15,bottom: 10),
-                              padding: EdgeInsets.all(5),
-                              alignment: Alignment.centerLeft,
-                              //color: Colors.red,
-                              child: Text(
-                                "Create new password.Your new password must "
-                                "be different from previous used passwords.",
-                                textAlign: TextAlign.justify,
-                                softWrap: true,
-                                style: Styles.textLabelSubTitle12,
-                              ),
-                            ),
-
-                            Container(
-                              margin: EdgeInsets.only(top: 20.5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(AppLocalizations.of(context)!.text_password,
-                                    style: Styles.textLabelTitle,
-                                  ),
-                                  TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    obscureText: _passwordVisible,
-                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
-                                    controller: _newPasswordController,
-                                    focusNode: _newPasswordFocusNode,
-                                    maxLines: 1,
-                                    style: Styles.textLabelSubTitle,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      suffixIconConstraints: BoxConstraints(
-                                        minWidth: 25,
-                                        minHeight: 25,
-                                      ),
-                                      suffixIcon: Container(
-                                        width: 5,
-                                        height: 10,
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                          iconSize: 15,
-                                          padding: EdgeInsets.zero,
-                                          icon: Icon(
-                                            // Based on passwordVisible state choose the icon
-                                            _passwordVisible
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
-                                            color: Colors.grey,
-                                          ),
-                                          onPressed: () {
-                                            // Update the state i.e. toogle the state of passwordVisible variable
-                                            setState(() {
-                                              _passwordVisible = !_passwordVisible;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      hintText: AppLocalizations.of(context)!.text_password,
-                                      errorMaxLines: 3,
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: CustColors.greyish,
-                                          width: .5,
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: CustColors.greyish,
-                                          width: .5,
-                                        ),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: CustColors.greyish,
-                                          width: .5,
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        vertical: 12.8,
-                                        horizontal: 0.0,
-                                      ),
-                                      hintStyle: Styles.textLabelSubTitle,),
-                                  ),
-                                  /*Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ForgotPasswordScreen()));
-                                                      },
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(top: _setValue(10)),
-                                                        child: Text(
-                                                          'Forgot password?',
-                                                          style: Styles.textLabelSubTitle,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )*/
-                                ],
-                              ),
-                            ),
-
-                            Container(
-                              margin: EdgeInsets.only(top: 20.5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(AppLocalizations.of(context)!.text_confirm_password,
-                                    style: Styles.textLabelTitle,
-                                  ),
-                                  TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    obscureText: _confirmPasswordVisible,
-                                    validator:
-                                    InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
-                                    controller: _confirmPwdController,
-                                    focusNode: _confirmPwdFocusNode,
-                                    maxLines: 1,
-                                    style: Styles.textLabelSubTitle,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      suffixIconConstraints: BoxConstraints(
-                                        minWidth: 25,
-                                        minHeight: 25,
-                                      ),
-                                      suffixIcon: Container(
-                                        width: 5,
-                                        height: 10,
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                          iconSize: 15,
-                                          padding: EdgeInsets.zero,
-                                          icon: Icon(
-                                            // Based on passwordVisible state choose the icon
-                                            _confirmPasswordVisible
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
-                                            color: Colors.grey,
-                                          ),
-                                          onPressed: () {
-                                            // Update the state i.e. toogle the state of passwordVisible variable
-                                            setState(() {
-                                              _confirmPasswordVisible = !_confirmPasswordVisible;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      hintText: AppLocalizations.of(context)!.text_password,
-                                      errorMaxLines: 3,
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: CustColors.greyish,
-                                          width: .5,
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: CustColors.greyish,
-                                          width: .5,
-                                        ),
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: CustColors.greyish,
-                                          width: .5,
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                        vertical: 12.8,
-                                        horizontal: 0.0,
-                                      ),
-                                      hintStyle: Styles.textLabelSubTitle,),
-                                  ),
-                                  /*Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ForgotPasswordScreen()));
-                                                      },
-                                                      child: Container(
-                                                        margin: EdgeInsets.only(top: _setValue(10)),
-                                                        child: Text(
-                                                          'Forgot password?',
-                                                          style: Styles.textLabelSubTitle,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )*/
-                                ],
-                              ),
-                            ),
 
                             Padding(
                               padding:  EdgeInsets.only(left: _setValue(15.5), right: _setValue(15.5)),
@@ -441,8 +229,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       });
     } else {
 
-      _createPasswordBloc.postCreatePasswordRequest(
-          widget.otpNumber,pwds,cndpwd);
+      _createPasswordBloc.postChangePasswordRequest(
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4Nzk0NjIwLCJleHAiOjE2NDg4ODEwMjB9.FF3rFlaVphjFF1A5-QsVVgVLuiyCdEc5U81cYruazts",
+        "athiras152@gmail.com",
+        "Abc@123",
+        "Abc@123#",
+        "Abc@123#"
+      );
 
       setState(() {
         _isLoading = true;

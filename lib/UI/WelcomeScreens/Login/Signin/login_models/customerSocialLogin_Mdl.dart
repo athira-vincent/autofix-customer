@@ -35,56 +35,55 @@ class CustomerSocialLoginMdl {
 
 class Data {
   Data({
-    required this.customerSocialLogin,
+    required this.socialLogin,
   });
 
-  CustomerSocialLogin? customerSocialLogin;
+  SocialLogin? socialLogin;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    customerSocialLogin: json["customerSocialLogin"] == null ? null : CustomerSocialLogin.fromJson(json["customerSocialLogin"]),
+    socialLogin: json["socialLogin"] == null ? null : SocialLogin.fromJson(json["socialLogin"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "customerSocialLogin": customerSocialLogin == null ? null : customerSocialLogin!.toJson(),
+    "socialLogin": socialLogin == null ? null : socialLogin!.toJson(),
   };
 }
 
-class CustomerSocialLogin {
-  CustomerSocialLogin({
+class SocialLogin {
+  SocialLogin({
     required this.token,
-    required this.customer,
+    required this.user,
   });
 
   String token;
-  Customer? customer;
+  User? user;
 
-  factory CustomerSocialLogin.fromJson(Map<String, dynamic> json) => CustomerSocialLogin(
+  factory SocialLogin.fromJson(Map<String, dynamic> json) => SocialLogin(
     token: json["token"] == null ? null : json["token"],
-    customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
+    user: json["user"] == null ? null : User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
     "token": token == null ? null : token,
-    "customer": customer == null ? null : customer!.toJson(),
+    "user": user == null ? null : user!.toJson(),
   };
 }
 
-class Customer {
-  Customer({
+class User {
+  User({
     required this.id,
     required this.userCode,
     required this.firstName,
     required this.lastName,
     required this.emailId,
     required this.phoneNo,
-    required this.state,
-    required this.resetToken,
-    required this.userType,
-    required this.accountType,
-    required this.profilePic,
-    required this.isProfileCompleted,
-    required this.otpVerified,
     required this.status,
+    required this.userTypeId,
+    required this.jwtToken,
+    required this.fcmToken,
+    required this.otpCode,
+    required this.isProfile,
+    required this.otpVerified,
   });
 
   int id;
@@ -93,30 +92,28 @@ class Customer {
   String lastName;
   String emailId;
   String phoneNo;
-  String state;
-  String resetToken;
-  int userType;
-  int accountType;
-  dynamic profilePic;
-  int isProfileCompleted;
-  int otpVerified;
   int status;
+  int userTypeId;
+  String jwtToken;
+  dynamic fcmToken;
+  dynamic otpCode;
+  int isProfile;
+  int otpVerified;
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"] == null ? null : json["id"],
     userCode: json["userCode"] == null ? null : json["userCode"],
     firstName: json["firstName"] == null ? null : json["firstName"],
     lastName: json["lastName"] == null ? null : json["lastName"],
     emailId: json["emailId"] == null ? null : json["emailId"],
     phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
-    state: json["state"] == null ? null : json["state"],
-    resetToken: json["resetToken"] == null ? null : json["resetToken"],
-    userType: json["userType"] == null ? null : json["userType"],
-    accountType: json["accountType"] == null ? null : json["accountType"],
-    profilePic: json["profilePic"],
-    isProfileCompleted: json["isProfile_Completed"] == null ? null : json["isProfile_Completed"],
-    otpVerified: json["otp_verified"] == null ? null : json["otp_verified"],
     status: json["status"] == null ? null : json["status"],
+    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
+    jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
+    fcmToken: json["fcmToken"],
+    otpCode: json["otpCode"],
+    isProfile: json["isProfile"] == null ? null : json["isProfile"],
+    otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -126,13 +123,12 @@ class Customer {
     "lastName": lastName == null ? null : lastName,
     "emailId": emailId == null ? null : emailId,
     "phoneNo": phoneNo == null ? null : phoneNo,
-    "state": state == null ? null : state,
-    "resetToken": resetToken == null ? null : resetToken,
-    "userType": userType == null ? null : userType,
-    "accountType": accountType == null ? null : accountType,
-    "profilePic": profilePic,
-    "isProfile_Completed": isProfileCompleted == null ? null : isProfileCompleted,
-    "otp_verified": otpVerified == null ? null : otpVerified,
     "status": status == null ? null : status,
+    "userTypeId": userTypeId == null ? null : userTypeId,
+    "jwtToken": jwtToken == null ? null : jwtToken,
+    "fcmToken": fcmToken,
+    "otpCode": otpCode,
+    "isProfile": isProfile == null ? null : isProfile,
+    "otpVerified": otpVerified == null ? null : otpVerified,
   };
 }

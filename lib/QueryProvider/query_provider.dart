@@ -66,53 +66,51 @@ class QueryProvider {
     if(email!="")
       {
         _query = """  
-          mutation {
-            customerSocialLogin(emailId: "$email") {
-              token
-              customer {
-                id
-                userCode
-                firstName
-                lastName
-                emailId
-                phoneNo
-                state
-                resetToken
-                userType
-                accountType
-                profilePic
-                isProfile_Completed
-                otp_verified
-                status
-              }
-            }
-          }
-    """;
+        mutation {
+      socialLogin(emailId: "$email") {
+        token
+        user {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+        }
+      }
+    }      
+     """;
       }
     else
       {
         _query = """  
-            mutation {
-             customerSocialLogin(phoneNo: "$phoneNumber") {
-              token
-              customer {
-                id
-                userCode
-                firstName
-                lastName
-                emailId
-                phoneNo
-                state
-                resetToken
-                userType
-                accountType
-                profilePic
-                isProfile_Completed
-                otp_verified
-                status
-              }
-            }
-          }
+             mutation {
+      socialLogin(emailId: "$phoneNumber") {
+        token
+        user {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+        }
+      }
+    } 
     """;
       }
 
@@ -739,6 +737,30 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  changePassword(String token, String email,String oldPswd, String newPswd, String confirmPswd ) async {
+    String _query = """
+      mutation {
+    ChangePassword(
+      emailId: "$email"
+      password: "$oldPswd"
+      newPassword: "$newPswd"
+      confirmPassword: "$confirmPswd"
+    ) {
+      status
+      code
+      message
+    }
+  }
+     """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
 
   mechanicAddServiceList(String token,String serviceList, String costList, String timeList) async {

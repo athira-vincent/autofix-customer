@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/NewScreens/rate_mechanic_screen.dart';
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }
