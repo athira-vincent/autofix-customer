@@ -30,8 +30,6 @@ import 'UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isIOS) {
@@ -66,6 +64,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
@@ -87,7 +86,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
       //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
-      home: CustomerHomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
