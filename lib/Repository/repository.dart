@@ -3,7 +3,7 @@ import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_a
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordScreen/create_password_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
@@ -21,7 +21,7 @@ class Repository {
 
   final _signinApiProvider = SigninApiProvider();
   final _forgotPasswordApiProvider = ForgotPasswordApiProvider();
-  final _createPasswordApiProvider = CreatePasswordApiProvider();
+  final _createPasswordApiProvider = ResetPasswordApiProvider();
   final _fcmTokenUpdateApiProvider = FcmTokenUpdateApiProvider();
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   final _completeProfileMechanicApiProvider = MechanicCompleteProfileApiProvider();
@@ -183,6 +183,13 @@ class Repository {
   //Reset Password
   Future<dynamic> getCreatePassword(String otp, String newPassword, String confirmPassword) =>
       _createPasswordApiProvider.getCreatePasswordRequest(otp,newPassword,confirmPassword);
+
+/*
+  //Change Password
+  Future<dynamic> getCreatePassword(String otp, String newPassword, String confirmPassword) =>
+      _createPasswordApiProvider.getCreatePasswordRequest(otp,newPassword,confirmPassword);
+*/
+
 
   //FcmTokenUpdate
   Future<dynamic> getcmTokenUpdateRequest(String fcm,String Authtoken) =>

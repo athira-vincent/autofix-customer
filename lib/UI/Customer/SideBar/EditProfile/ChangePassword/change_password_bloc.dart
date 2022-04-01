@@ -1,12 +1,12 @@
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordScreen/create_password_mdl.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_mdl.dart';
 
 import 'package:rxdart/rxdart.dart';
 
-class CreatePasswordBloc {
+class ChangePasswordBloc {
   final Repository repository = Repository();
-  final postCreatePassword = PublishSubject<CreatePasswordMdl>();
-  Stream<CreatePasswordMdl> get createPasswordResponse =>
+  final postCreatePassword = PublishSubject<ChangePasswordMdl>();
+  Stream<ChangePasswordMdl> get createPasswordResponse =>
       postCreatePassword.stream;
   dispose() {
     postCreatePassword.close();
@@ -15,7 +15,7 @@ class CreatePasswordBloc {
   postCreatePasswordRequest(
     String otp, String newPassword, String confirmPassword
   ) async {
-    CreatePasswordMdl _createPasswordMdl = await repository.getCreatePassword(otp,newPassword,confirmPassword);
+    ChangePasswordMdl _createPasswordMdl = await repository.getCreatePassword(otp,newPassword,confirmPassword);
     postCreatePassword.sink.add(_createPasswordMdl);
   }
 }

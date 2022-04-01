@@ -2,6 +2,7 @@
 //
 //     final signinMdl = signinMdlFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 SigninMdl signinMdlFromJson(String str) => SigninMdl.fromJson(json.decode(str));
@@ -51,58 +52,46 @@ class Data {
 class SignIn {
   SignIn({
     required this.token,
-    required this.customer,
-    required this.mechanic,
+    required this.user,
     required this.vendor,
-    required this.generalCustomer,
-    required this.genMechanic,
-    required this.genVendor,
-    required this.isProfileCompleted,
+    required this.admin,
   });
 
   String? token;
-  Customer? customer;
-  dynamic mechanic;
+  User? user;
   dynamic vendor;
-  GeneralCustomer? generalCustomer;
-  dynamic genMechanic;
-  dynamic genVendor;
-  int? isProfileCompleted;
+  dynamic admin;
 
   factory SignIn.fromJson(Map<String, dynamic> json) => SignIn(
     token: json["token"] == null ? null : json["token"],
-    customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
-    mechanic: json["mechanic"],
+    user: json["user"] == null ? null : User.fromJson(json["user"]),
     vendor: json["vendor"],
-    generalCustomer: json["generalCustomer"] == null ? null : GeneralCustomer.fromJson(json["generalCustomer"]),
-    genMechanic: json["genMechanic"],
-    genVendor: json["genVendor"],
-    isProfileCompleted: json["isProfileCompleted"] == null ? null : json["isProfileCompleted"],
+    admin: json["admin"],
   );
 
   Map<String, dynamic> toJson() => {
     "token": token == null ? null : token,
-    "customer": customer == null ? null : customer!.toJson(),
-    "mechanic": mechanic,
+    "user": user == null ? null : user!.toJson(),
     "vendor": vendor,
-    "generalCustomer": generalCustomer == null ? null : generalCustomer!.toJson(),
-    "genMechanic": genMechanic,
-    "genVendor": genVendor,
-    "isProfileCompleted": isProfileCompleted == null ? null : isProfileCompleted,
+    "admin": admin,
   };
 }
 
-class Customer {
-  Customer({
+class User {
+  User({
     required this.id,
     required this.userCode,
     required this.firstName,
     required this.lastName,
     required this.emailId,
     required this.phoneNo,
-    required this.accountType,
     required this.status,
+    required this.userTypeId,
     required this.jwtToken,
+    required this.fcmToken,
+    required this.otpCode,
+    required this.isProfile,
+    required this.otpVerified,
   });
 
   int id;
@@ -111,20 +100,28 @@ class Customer {
   String lastName;
   String emailId;
   String phoneNo;
-  int accountType;
   int status;
+  int userTypeId;
   String jwtToken;
+  dynamic fcmToken;
+  dynamic otpCode;
+  int isProfile;
+  int otpVerified;
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"] == null ? null : json["id"],
     userCode: json["userCode"] == null ? null : json["userCode"],
     firstName: json["firstName"] == null ? null : json["firstName"],
     lastName: json["lastName"] == null ? null : json["lastName"],
     emailId: json["emailId"] == null ? null : json["emailId"],
     phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
-    accountType: json["accountType"] == null ? null : json["accountType"],
     status: json["status"] == null ? null : json["status"],
+    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
+    fcmToken: json["fcmToken"],
+    otpCode: json["otpCode"],
+    isProfile: json["isProfile"] == null ? null : json["isProfile"],
+    otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -134,72 +131,12 @@ class Customer {
     "lastName": lastName == null ? null : lastName,
     "emailId": emailId == null ? null : emailId,
     "phoneNo": phoneNo == null ? null : phoneNo,
-    "accountType": accountType == null ? null : accountType,
     "status": status == null ? null : status,
+    "userTypeId": userTypeId == null ? null : userTypeId,
     "jwtToken": jwtToken == null ? null : jwtToken,
-  };
-}
-
-class GeneralCustomer {
-  GeneralCustomer({
-    required this.id,
-    required this.orgName,
-    required this.orgType,
-    required this.userId,
-    required this.profilePic,
-    required this.state,
-    required this.resetToken,
-    required this.isProfileCompleted,
-    required this.govtType,
-    required this.govtAgency,
-    required this.ministryName,
-    required this.headOfDept,
-    required this.status,
-  });
-
-  String id;
-  dynamic orgName;
-  dynamic orgType;
-  int userId;
-  String profilePic;
-  String state;
-  String resetToken;
-  int isProfileCompleted;
-  dynamic govtType;
-  dynamic govtAgency;
-  dynamic ministryName;
-  dynamic headOfDept;
-  int status;
-
-  factory GeneralCustomer.fromJson(Map<String, dynamic> json) => GeneralCustomer(
-    id: json["id"] == null ? null : json["id"],
-    orgName: json["org_name"],
-    orgType: json["org_type"],
-    userId: json["userId"] == null ? null : json["userId"],
-    profilePic: json["profilePic"] == null ? null : json["profilePic"],
-    state: json["state"] == null ? null : json["state"],
-    resetToken: json["resetToken"] == null ? null : json["resetToken"],
-    isProfileCompleted: json["isProfileCompleted"] == null ? null : json["isProfileCompleted"],
-    govtType: json["govt_type"],
-    govtAgency: json["govt_agency"],
-    ministryName: json["ministry_name"],
-    headOfDept: json["head_of_dept"],
-    status: json["status"] == null ? null : json["status"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "org_name": orgName,
-    "org_type": orgType,
-    "userId": userId == null ? null : userId,
-    "profilePic": profilePic == null ? null : profilePic,
-    "state": state == null ? null : state,
-    "resetToken": resetToken == null ? null : resetToken,
-    "isProfileCompleted": isProfileCompleted == null ? null : isProfileCompleted,
-    "govt_type": govtType,
-    "govt_agency": govtAgency,
-    "ministry_name": ministryName,
-    "head_of_dept": headOfDept,
-    "status": status == null ? null : status,
+    "fcmToken": fcmToken,
+    "otpCode": otpCode,
+    "isProfile": isProfile == null ? null : isProfile,
+    "otpVerified": otpVerified == null ? null : otpVerified,
   };
 }

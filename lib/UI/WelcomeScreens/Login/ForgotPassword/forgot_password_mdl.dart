@@ -51,24 +51,28 @@ class Data {
 
 class ForgotPassword {
   ForgotPassword({
-    required this.resetToken,
+    required this.otpCode,
     required this.userId,
+    required this.userTypeId,
     required this.phoneNo,
   });
 
-  String? resetToken;
-  int? userId;
-  String? phoneNo;
+  String otpCode;
+  int userId;
+  int userTypeId;
+  String phoneNo;
 
   factory ForgotPassword.fromJson(Map<String, dynamic> json) => ForgotPassword(
-    resetToken: json["resetToken"] == null ? null : json["resetToken"],
+    otpCode: json["otpCode"] == null ? null : json["otpCode"],
     userId: json["userId"] == null ? null : json["userId"],
+    userTypeId: json["userTypeId"] == null ? null : json["userTypeId"],
     phoneNo: json["phoneNo"] == null ? null : json["phoneNo"],
   );
 
   Map<String, dynamic> toJson() => {
-    "resetToken": resetToken == null ? null : resetToken,
+    "otpCode": otpCode == null ? null : otpCode,
     "userId": userId == null ? null : userId,
+    "userTypeId": userTypeId == null ? null : userTypeId,
     "phoneNo": phoneNo == null ? null : phoneNo,
   };
 }
