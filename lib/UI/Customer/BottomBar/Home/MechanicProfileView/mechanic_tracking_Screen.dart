@@ -37,11 +37,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
-
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-
   final Set<Marker> _markers = {};
 
   LatLng _lastMapPosition = _center;
