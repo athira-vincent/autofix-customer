@@ -1,6 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/CreatePasswordScreen/create_password_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +8,21 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
-class ChangePasswordScreen extends StatefulWidget {
+class ResetPasswordScreen extends StatefulWidget {
   final String otpNumber;
 
-   ChangePasswordScreen(
+  ResetPasswordScreen(
        {Key? key, required this.otpNumber}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ChangePasswordScreenState();
+    return _ResetPasswordScreenState();
   }
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
-  final CreatePasswordBloc _createPasswordBloc = CreatePasswordBloc();
+  final ResetPasswordBloc _createPasswordBloc = ResetPasswordBloc();
 
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _confirmPwdController = TextEditingController();

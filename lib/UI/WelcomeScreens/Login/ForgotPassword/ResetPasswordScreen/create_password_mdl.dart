@@ -5,12 +5,12 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-CreatePasswordMdl createPasswordMdlFromJson(String str) => CreatePasswordMdl.fromJson(json.decode(str));
+ResetPasswordMdl createPasswordMdlFromJson(String str) => ResetPasswordMdl.fromJson(json.decode(str));
 
-String createPasswordMdlToJson(CreatePasswordMdl data) => json.encode(data.toJson());
+String createPasswordMdlToJson(ResetPasswordMdl data) => json.encode(data.toJson());
 
-class CreatePasswordMdl {
-  CreatePasswordMdl({
+class ResetPasswordMdl {
+  ResetPasswordMdl({
     required this.data,
     required this.status,
     required this.message
@@ -20,7 +20,7 @@ class CreatePasswordMdl {
   String? status;
   String? message;
 
-  factory CreatePasswordMdl.fromJson(Map<String, dynamic> json) => CreatePasswordMdl(
+  factory ResetPasswordMdl.fromJson(Map<String, dynamic> json) => ResetPasswordMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"] == null ? null : json["message"],
     status: json["status"] == null ? null : json["status"],

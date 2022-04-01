@@ -93,7 +93,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       userType: "0",
                       userCategory: "0",
                       phoneNumber: "${value.data!.forgotPassword!.phoneNo}",
-                      otpNumber: value.data!.forgotPassword!.resetToken.toString(),
+                      otpNumber: value.data!.forgotPassword!.otpCode.toString(),
                       fromPage: "3",
                       userTypeId: '1',
                     )),

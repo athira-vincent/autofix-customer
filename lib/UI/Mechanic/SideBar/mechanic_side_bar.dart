@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart'
 import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -158,11 +159,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 18.76,
             ),
           ),
-          /*onTap: () {
+          onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerMyVehicleScreen()));
-          },*/
+                MaterialPageRoute(builder: (context) => MyJobAppoinmentScreen()));
+          },
         ),
 
         ListTile(
@@ -244,11 +245,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             alignment: Alignment(-1.18, 0),
             child: Text(
               "Logout",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
@@ -279,11 +276,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             title: Text(
               "Privacy policy",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
               print(" on Tap Privacy policy");
@@ -296,11 +289,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               "Help & support Center",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
               print("on Tap Help & support Center");
@@ -313,11 +302,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               "Terms & conditions",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
               //_logout();

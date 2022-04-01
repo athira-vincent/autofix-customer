@@ -6,86 +6,56 @@ class QueryProvider {
 
   signIn(String userName, String password) async {
     String _query = """
-    mutation {
-  SignIn(emailId: "$userName", password: "$password", userTypeId: 1) {
-    token
-    customer {
-      id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      accountType
-      status
-      jwtToken
+      mutation {
+    SignIn(emailId: "$userName", password: "$password", platformId: 1) {
+      token
+      user {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        status
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+      }
+      vendor {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+      }
+      admin {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+      }
     }
-    mechanic {
-      id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      userTypeId
-      accountType
-      jwtToken
-      status
-    }
-    vendor {
-      id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      accountType
-      status
-      jwtToken
-    }
-    generalCustomer {
-      id
-      org_name
-      org_type
-      userId
-      profilePic
-      state
-      resetToken
-      isProfileCompleted
-      govt_type
-      govt_agency
-      ministry_name
-      head_of_dept
-      status
-    }
-    genMechanic {
-      id
-      org_name
-      org_type
-      year_exp
-      userId
-      latitude
-      longitude
-      profilePic
-      otp_verified
-      state
-      resetToken
-      isProfileCompleted
-      status
-    }
-    genVendor {
-      id
-      userId
-      profilePic
-      state
-      resetToken
-      shop_name
-      isProfileCompleted
-      status
-    }
-    isProfileCompleted
   }
-}
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
@@ -738,13 +708,14 @@ class QueryProvider {
 
   forgotPassword(String email) async {
     String _query = """
-            mutation {
-        ForgotPassword(emailId: "$email", userTypeId: 1) {
-          resetToken
-          userId
-          phoneNo
-        }
+          mutation {
+      ForgotPassword(emailId: "$email", platformId: 1) {
+        otpCode
+        userId
+        userTypeId
+        phoneNo
       }
+    }
      """;
     log(_query);
     return await GqlClient.I.mutation(_query,

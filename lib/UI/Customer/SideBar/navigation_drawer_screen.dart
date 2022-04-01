@@ -242,11 +242,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             alignment: Alignment(-1.21, 0),
             child: Text(
               "My Appointments",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
@@ -270,11 +266,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             alignment: Alignment(-1.21, 0),
             child: Text(
               "Edit profile",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
@@ -326,11 +318,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             alignment: Alignment(-1.18, 0),
             child: Text(
               "Logout",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
           ),
           leading: Container(
@@ -361,11 +349,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             title: Text(
               "Privacy policy",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
               print(" on Tap Privacy policy");
@@ -378,11 +362,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               "Help & support Center",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
               print("on Tap Help & support Center");
@@ -395,11 +375,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               "Terms & conditions",
-              style: TextStyle(
-                  fontFamily: 'Corbel_Regular',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14.5,
-                  color: CustColors.blue),
+              style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
               //_logout();
