@@ -29,18 +29,18 @@ class SignupBloc {
   final postSignUp = PublishSubject<SignUpMdl>();
   Stream<SignUpMdl> get signUpResponse => postSignUp.stream;
 
-  signUp(type, username, emailId, phoneNo, password, state, userTypeId,
-      accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-      head_of_dept, latitude, longitude, year_of_experience, shop_name) async {
+  signUp(type, username,emailId, phoneNo, password, state,
+      fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+      ministryName, hod, latitude, longitude, yearExp, shopName,) async {
     String fullName = username.toString();
     var names = fullName.split(' ');
     String firstName = names[0];
     String lastName= fullName.substring(names[0].length);
     print(firstName);
     print(lastName);
-    SignUpMdl _signUpMdl = await repository.signUp(type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
-        accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-        head_of_dept, latitude, longitude, year_of_experience, shop_name) ;
+    SignUpMdl _signUpMdl = await repository.signUp( type, firstName, lastName, emailId, phoneNo, password, state,
+      fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+      ministryName, hod, latitude, longitude, yearExp, shopName,) ;
     postSignUp.sink.add(_signUpMdl);
   }
 

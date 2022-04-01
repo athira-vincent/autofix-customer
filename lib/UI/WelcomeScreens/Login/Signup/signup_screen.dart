@@ -211,7 +211,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userType: widget.userType,
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
-                            otpNumber: "${value.data!.signUp!.genMechanic?.resetToken.toString()}",
+                            otpNumber: "${value.data!.signUp!.mechanic?.otpCode.toString()}",
                             platformId: "1",
                             fromPage: "1",)));
             }
@@ -225,7 +225,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userType: widget.userType,
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.customer?.phoneNo.toString()}",
-                            otpNumber: "${value.data!.signUp!.generalCustomer?.resetToken.toString()}",
+                            otpNumber: "${value.data!.signUp!.customer?.otpCode.toString()}",
                             platformId: "1",
                             fromPage: "1",)));
             }
@@ -1307,9 +1307,8 @@ class _SignupScreenState extends State<SignupScreen> {
         );
         _isLoading=true;
         _signupBloc.signUp(1,  _nameController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "1",
-            "1", imageFirebaseUrl, "", "", "", "", "",
-            "", latitude, longitude, "", "");
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "1", "1", imageFirebaseUrl, "", "", "", "", latitude, longitude, "", "");
       });
 
       return true;
@@ -1383,10 +1382,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(4,  _nameController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "2",
-            "1", imageFirebaseUrl, "", "", "", "", "",
-            "", latitude, longitude, _yearOfExperienceController.text, "");
+        _signupBloc.signUp(4, _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "2", "1", imageFirebaseUrl,"", "",
+            "", "", latitude, longitude,  _yearOfExperienceController.text, "");
       });
       return true;
     }else{
@@ -1459,10 +1458,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(2,  _contactPersonController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "1",
-            "2", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
-            "", latitude, longitude, "", "");
+        _signupBloc.signUp(2, _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "1", "2", imageFirebaseUrl,_nameController.text, _orgTypeController.text,
+            "", "", latitude, longitude, "", "");
       });
 
       return true;
@@ -1544,10 +1543,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(5,   _nameController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "2",
-            "2", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
-            "", latitude, longitude, _yearOfExperienceController.text, "");
+        _signupBloc.signUp(5, _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "2", "2", imageFirebaseUrl,_nameController.text, _orgTypeController.text,
+            "", "", latitude, longitude,  _yearOfExperienceController.text, "");
 
       });
      return true;
@@ -1621,10 +1620,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(3,  _contactPersonController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "1",
-            "3", imageFirebaseUrl, "", "", _ministryGovtController.text, "Food Corporation of india", "Labour And Environment",
-            "Athira", latitude, longitude, "", "");
+        _signupBloc.signUp(3, _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "1", "3", imageFirebaseUrl,_nameController.text, _orgTypeController.text,
+            _ministryGovtController.text, "", latitude, longitude, "", "");
        });
       return true;
     }else{
