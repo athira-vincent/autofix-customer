@@ -344,7 +344,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                   child: MaterialButton(
                                                     onPressed: () {
                                                       setState(() {
-
                                                         if(widget.fromPage=="3")
                                                           {
                                                             _isLoading = true;
