@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -105,6 +106,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
 
   String? selectedBrand = '' ;
+
+  List<String> modelList = [];
   String? selectedmodel = '' ;
 
   List<String> engineList = [];
@@ -113,14 +116,65 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> yearTypeList = [];
   String? selectedYearType = '' ;
 
+  String location ='Null, Press Button';
+  String Address = 'search';
+  String latitude = '10.5075868';
+  String longitude = '76.2424536';
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getCurrentCustomerLocation();
     getSharedPrefData();
     _listenAddCarResponse();
   }
+
+  Future<void> _getCurrentCustomerLocation() async {
+    Position position = await _getGeoLocationPosition();
+    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    print(location);
+    setState(() {
+      latitude = position.latitude.toString();
+      longitude = position.longitude.toString();
+    });
+  }
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -128,7 +182,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _addCarBloc.postMakeBrandRequest(authToken);
+      _addCarBloc.postModelDetailRequest(authToken,"");
     });
   }
 
@@ -136,7 +190,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     _addCarBloc.postModelDetail.listen((value) {
       if (value.status == "error") {
         setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+         // SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
           print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
           print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
@@ -144,33 +198,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
       } else {
 
-        setState(() {
-          _showDialogForModel();
 
-
-        });
       }
     });
-    _addCarBloc.postMakeBrand.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.data!.brandDetails![0].brandName.toString()}");
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-
-        });
-      }
-    });
-    _addCarBloc.postAddCar.listen((value) {
+    _addCarBloc.addCarResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
@@ -208,6 +239,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
              }
 
 
+          SnackBarWidget().setMaterialSnackBar( "Successfully Created", _scaffoldKey);
 
 
         });
@@ -481,7 +513,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           }
         else
           {
-            await  _addCarBloc.postModelDetailRequest(authToken,selectedBrand);
+            _showDialogForModel();
 
           }
 
@@ -965,14 +997,16 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               print('sucess');
                               _addCarBloc. postAddCarRequest(
                                   authToken,
+                                  _brandController.text.toString(),
+                                  _modelController.text.toString(),
+                                  selectedengine,
                                   selectedYearType ,
                                   _plateNumberController.text,
-                                  selectedengine,
                                   _lastMaintenanceController.text,
                                   _lowerValue.toString(),
-                                  selectedBrand,
-                                  selectedmodel,
-                                  imageFirebaseUrl
+                                  imageFirebaseUrl,
+                                  latitude,
+                                  longitude
                               );
                             });
                           } else {
@@ -1050,16 +1084,18 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           setState(() {
                             _isLoading = false;
                             print('sucess');
-                            _addCarBloc. postAddCarRequest(
+                              _addCarBloc. postAddCarRequest(
                               authToken,
-                              selectedYearType ,
-                               _plateNumberController.text,
+                              _brandController.text.toString(),
+                              _modelController.text.toString(),
                               selectedengine,
+                              selectedYearType ,
+                              _plateNumberController.text,
                               _lastMaintenanceController.text,
                               _lowerValue.toString(),
-                              selectedBrand,
-                              selectedmodel,
-                              imageFirebaseUrl
+                              imageFirebaseUrl,
+                              latitude,
+                              longitude
                             );
                           });
                         } else {
@@ -1202,8 +1238,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 child:
                 Container(
                   child: StreamBuilder(
-                      stream:  _addCarBloc.MakeBrandResponse,
-                      builder: (context, AsyncSnapshot<MakeBrandDetailsMdl> snapshot) {
+                      stream:  _addCarBloc.ModelDetailResponse,
+                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
                         print("${snapshot.hasData}");
                         print("${snapshot.connectionState}");
 
@@ -1212,15 +1248,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             return CircularProgressIndicator();
                           default:
                             return
-                              snapshot.data?.data?.brandDetails?.length != 0 && snapshot.data?.data?.brandDetails?.length != null
+                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
                                   ? ListView.builder(
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
-                                        itemCount: snapshot.data?.data?.brandDetails?.length,
+                                        itemCount: snapshot.data?.data?.modelDetails?.length,
                                         itemBuilder: (context, index) {
                                           return  ListTile(
-                                            title: Text("${snapshot.data?.data!.brandDetails![index].brandName}",
+                                            title: Text("${snapshot.data?.data!.modelDetails![index].brandName}",
                                                 style: TextStyle(
                                                     fontFamily: 'Corbel_Regular',
                                                     fontWeight: FontWeight.normal,
@@ -1231,14 +1267,22 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
                                               setState(() {
                                                 selectedmodel='';
+                                                  modelList = [];
                                                 _modelController.text ='';
                                                 engineList=[];
                                                 _engineTypeController.text='';
                                                 yearTypeList=[];
                                                 _yearController.text='';
 
-                                                selectedBrand=snapshot.data?.data!.brandDetails![index].id;
-                                                _brandController.text = "${snapshot.data?.data!.brandDetails![index].brandName}";
+                                                selectedBrand=snapshot.data?.data!.modelDetails![index].id;
+                                                _brandController.text = "${snapshot.data?.data!.modelDetails![index].brandName}";
+
+                                                final modelName= "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                                final splitNames= modelName.split(',');
+                                                for (int i = 0; i < splitNames.length; i++){
+                                                  modelList.add(splitNames[i]);
+                                                }
+
                                                 if (_formKey.currentState!.validate()) {
                                                 } else {
                                                 }
@@ -1281,54 +1325,52 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           return
                             snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
                                 ? ListView.builder(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data?.data?.modelDetails?.length,
-                              itemBuilder: (context, index) {
-                                if (snapshot.connectionState != ConnectionState.active) {
-                                  print('connectionState');
-                                  return Center(child: progressBarLightRose());
-                                }
-                                return  ListTile(
-                                  title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
-                                      style: TextStyle(
-                                          fontFamily: 'Corbel_Regular',
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 15,
-                                          color: Colors.black)),
-                                  onTap: () async {
-                                    Navigator.pop(context);
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data?.data?.modelDetails?.length,
+                                    itemBuilder: (context, index) {
+                                      return modelList.contains('${snapshot.data?.data!.modelDetails![index].modelName}')
+                                      ?   ListTile(
+                                        title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
+                                            style: TextStyle(
+                                                fontFamily: 'Corbel_Regular',
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 15,
+                                                color: Colors.black)),
+                                        onTap: () async {
+                                          Navigator.pop(context);
 
-                                    setState(() {
-                                      engineList=[];
-                                      _engineTypeController.text='';
-                                      yearTypeList=[];
-                                      _yearController.text='';
+                                          setState(() {
+                                            engineList=[];
+                                            _engineTypeController.text='';
+                                            yearTypeList=[];
+                                            _yearController.text='';
 
-                                      selectedmodel=snapshot.data?.data!.modelDetails![index].id;
-                                      _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                            selectedmodel=snapshot.data?.data!.modelDetails![index].id;
+                                            _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
 
-                                      final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                      final splitNames= engineName.split(',');
-                                      for (int i = 0; i < splitNames.length; i++){
-                                        engineList.add(splitNames[i]);
-                                      }
+                                            final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                            final splitNames= engineName.split(',');
+                                            for (int i = 0; i < splitNames.length; i++){
+                                              engineList.add(splitNames[i]);
+                                            }
 
-                                      final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
-                                      final splityearsNames= yearsNames.split(',');
-                                      for (int i = 0; i < splityearsNames.length; i++){
-                                        yearTypeList.add(splityearsNames[i]);
-                                      }
-                                      if (_formKey.currentState!.validate()) {
-                                      } else {
-                                      }
-                                    });
+                                            final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
+                                            final splityearsNames= yearsNames.split(',');
+                                            for (int i = 0; i < splityearsNames.length; i++){
+                                              yearTypeList.add(splityearsNames[i]);
+                                            }
+                                            if (_formKey.currentState!.validate()) {
+                                            } else {
+                                            }
+                                          });
 
-                                  },
-                                );
-                              },
-                            )
+                                        },
+                                      )
+                                      :  Container();
+                                    },
+                                  )
                                 : Container();
                       }
                     }),

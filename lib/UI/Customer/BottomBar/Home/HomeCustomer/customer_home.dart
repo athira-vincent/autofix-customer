@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -652,7 +653,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget upcomingServices() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20,20,0,20),
+      padding: const EdgeInsets.fromLTRB(10,20,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -663,43 +664,45 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
-              style: Styles.textLabelTitle_Regular,
+              style: Styles.sparepartsForYourModelsStyle,
             ),
           ),
           Container(
-            margin: EdgeInsets.all(5),
-            child: CarouselSlider.builder(
+            height: 200,
+            margin: EdgeInsets.all(0),
+            child: ListView.builder(
               itemCount: imageList.length,
-              options: CarouselOptions(
-                height: 200,
-                autoPlay: false,
-                autoPlayInterval: Duration(seconds: 3),
-                reverse: false,
-                aspectRatio: 5,
-              ),
-              itemBuilder: (context, i, id){
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, i, ){
                 //for onTap to redirect to another screen
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.white,)
-                      ),
-                      //ClipRRect for image border radius
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
-                          imageList[i],
-                          width: 600,
-                          fit: BoxFit.cover,
+                  padding: const EdgeInsets.all(5),
+                  child: InkWell(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 180,
+                          width: 250,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.white,)
+                          ),
+                          //ClipRRect for image border radius
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.network(
+                              imageList[i],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     onTap: (){
-                      var url = imageList[i];
-                      print(url.toString());
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  SparePartsListScreen()));
                     },
                   ),
                 );
@@ -713,7 +716,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget sparePartsServices() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(10,10,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -724,41 +727,40 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
-              style: Styles.serviceSelectionTitle01Style,
+              style: Styles.sparepartsForYourModelsStyle,
             ),
           ),
           Container(
-            margin: EdgeInsets.all(5),
-            child: CarouselSlider.builder(
+            height: 200,
+            margin: EdgeInsets.all(0),
+            child: ListView.builder(
               itemCount: imageList.length,
-              options: CarouselOptions(
-                height: 200,
-                autoPlay: false,
-                autoPlayInterval: Duration(seconds: 3),
-                reverse: false,
-                aspectRatio: 16/8,
-                viewportFraction: 0.5
-              ),
-              itemBuilder: (context, i, id){
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, i, ){
                 //for onTap to redirect to another screen
                 return Padding(
                   padding: const EdgeInsets.all(5),
                   child: InkWell(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.white,)
-                      ),
-                      //ClipRRect for image border radius
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
-                          imageList[i],
-                          width: 200,
-                          height: 200,
-                          fit: BoxFit.cover,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 160,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.white,)
+                          ),
+                          //ClipRRect for image border radius
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.network(
+                              imageList[i],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
+                        Text('Gear'),
+                      ],
                     ),
                     onTap: (){
                       Navigator.push(

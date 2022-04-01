@@ -251,46 +251,45 @@ class QueryProvider {
 
 
   postAddCarRequest(
-      token,
-      year,
-      plateNo,
-      engineName,
-      lastMaintenance,
-      milege,
-      makeId,
-      vehicleModelId,
-      vehiclePic) async {
-    String _query = """ 
-    mutation {
-        vehicleCreate(
-          year: "$year"
-          plateNo: "$plateNo"
-          engineName: "$engineName"
-          lastMaintenance: "$lastMaintenance"
-          milege: "$milege"
-          vehicleBrandId: ${int.parse(makeId.toString())}
-          vehicleModelId: ${int.parse(vehicleModelId.toString())}
-          vehiclePic: "$vehiclePic"
-        ) {
-          id
-          year
-          plateNo
-          engineName
-          milege
-          lastMaintenance
-          defaultVehicle
-          userId
-          makeId
-          vehicleModelId
-          vehiclePic
-          status
+      token, brand, model, engine, year,
+      plateNo, lastMaintenance, milege,
+      vehiclePic, latitude, longitude,
+      ) async {
+          String _query = """ 
+         mutation {
+            vehicleCreate(
+              brand: "$brand"
+              model: "$model"
+              engine: "$engine"
+              year: "$year"
+              plateNo: "$plateNo"
+              lastMaintenance: "$lastMaintenance"
+              milege: "$milege"
+              vehiclePic: "$vehiclePic"
+              latitude: ${double.parse(latitude.toString())}
+              longitude: ${double.parse(longitude.toString())}
+            ) {
+              id
+              brand
+              model
+              engine
+              year
+              plateNo
+              lastMaintenance
+              milege
+              vehiclePic
+              latitude
+              longitude
+              defaultVehicle
+              status
+            }
+          }
+  
+          """;
+          log(_query);
+          return await GqlClient.I.mutation11(_query,
+              enableDebug: true,token: token, isTokenThere: true, variables: {});
         }
-      }   
-    """;
-    log(_query);
-    return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
-  }
 
   postMakeBrandRequest(
       token,) async {
@@ -317,23 +316,17 @@ class QueryProvider {
   postModelDetailRequest(
       token,type) async {
     String _query = """ 
-    query
-    {
-      modelDetails(type: "$type") {
+   {
+      modelDetails(id: null) {
         id
         modelName
         engineName
         years
-        makeId
+        brandName
         status
-        vehicleBrand {
-          id
-          brandName
-          status
-          brandicon
-        }
       }
     }
+
     """;
     log(_query);
     return await GqlClient.I.query01(

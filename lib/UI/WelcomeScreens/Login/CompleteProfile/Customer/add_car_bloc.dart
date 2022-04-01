@@ -18,26 +18,14 @@ class AddCarBloc {
 
 
   postAddCarRequest(
-      token,
-      year,
-      plateNo,
-      engineName,
-      lastMaintenance,
-      milege,
-      makeId,
-      vehicleModelId,
-      vehiclePic
+      token, brand, model, engine, year,
+      plateNo, lastMaintenance, milege,
+      vehiclePic, latitude, longitude,
   ) async {
     VehicleCreateMdl vehicleCreateMdl = await repository.postAddCarRequest(
-      token,
-      year,
-      plateNo,
-      engineName,
-      lastMaintenance,
-      milege,
-      makeId,
-      vehicleModelId,
-        vehiclePic);
+      token, brand, model, engine, year,
+      plateNo, lastMaintenance, milege,
+      vehiclePic, latitude, longitude,);
     postAddCar.sink.add(vehicleCreateMdl);
   }
 

@@ -31,8 +31,6 @@ import 'UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isIOS) {
@@ -67,6 +65,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,

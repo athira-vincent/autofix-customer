@@ -55,27 +55,24 @@ class ModelDetail {
     required this.modelName,
     required this.engineName,
     required this.years,
-    required this.makeId,
+    required this.brandName,
     required this.status,
-    required this.vehicleBrand,
   });
 
   String id;
   String modelName;
   String engineName;
   String years;
-  int makeId;
+  String brandName;
   int status;
-  VehicleBrand? vehicleBrand;
 
   factory ModelDetail.fromJson(Map<String, dynamic> json) => ModelDetail(
     id: json["id"] == null ? null : json["id"],
     modelName: json["modelName"] == null ? null : json["modelName"],
     engineName: json["engineName"] == null ? null : json["engineName"],
     years: json["years"] == null ? null : json["years"],
-    makeId: json["makeId"] == null ? null : json["makeId"],
+    brandName: json["brandName"] == null ? null : json["brandName"],
     status: json["status"] == null ? null : json["status"],
-    vehicleBrand: json["vehicleBrand"] == null ? null : VehicleBrand.fromJson(json["vehicleBrand"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -83,36 +80,7 @@ class ModelDetail {
     "modelName": modelName == null ? null : modelName,
     "engineName": engineName == null ? null : engineName,
     "years": years == null ? null : years,
-    "makeId": makeId == null ? null : makeId,
-    "status": status == null ? null : status,
-    "vehicleBrand": vehicleBrand == null ? null : vehicleBrand!.toJson(),
-  };
-}
-
-class VehicleBrand {
-  VehicleBrand({
-    required this.id,
-    required this.brandName,
-    required this.status,
-    required this.brandicon,
-  });
-
-  String id;
-  String brandName;
-  int status;
-  dynamic brandicon;
-
-  factory VehicleBrand.fromJson(Map<String, dynamic> json) => VehicleBrand(
-    id: json["id"] == null ? null : json["id"],
-    brandName: json["brandName"] == null ? null :json["brandName"],
-    status: json["status"] == null ? null : json["status"],
-    brandicon: json["brandicon"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
     "brandName": brandName == null ? null : brandName,
     "status": status == null ? null : status,
-    "brandicon": brandicon,
   };
 }

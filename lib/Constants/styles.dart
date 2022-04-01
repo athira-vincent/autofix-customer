@@ -328,6 +328,14 @@ class Styles {
     letterSpacing: .3,
   );
 
+  static const sparepartsForYourModelsStyle = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 12.7,
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    letterSpacing: .3,
+  );
+
 
   static const searchTextStyle01 =  TextStyle(
     color: CustColors.warm_grey02,

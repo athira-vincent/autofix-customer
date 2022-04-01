@@ -51,25 +51,13 @@ class Repository {
 
   //AddCar Of Customer
   Future<dynamic> postAddCarRequest(
-      token,
-      year,
-      plateNo,
-      engineName,
-      lastMaintenance,
-      milege,
-      makeId,
-      vehicleModelId,
-      vehiclePic) =>
+      token, brand, model, engine, year,
+      plateNo, lastMaintenance, milege,
+      vehiclePic, latitude, longitude,) =>
       _addCarApiProvider.postAddCarRequest(
-        token,
-        year,
-        plateNo,
-        engineName,
-        lastMaintenance,
-        milege,
-        makeId,
-        vehicleModelId,
-          vehiclePic);
+        token, brand, model, engine, year,
+        plateNo, lastMaintenance, milege,
+        vehiclePic, latitude, longitude,);
 
   //Otp Verification
   Future<dynamic> postOtpVerificationRequest(
