@@ -4,8 +4,8 @@ import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_p
 
 class ChangePasswordApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
-  Future<ChangePasswordMdl> getCreatePasswordRequest(String otp,String newPswd, String confirmPswd) async {
-    Map<String, dynamic> _resp = await _queryProvider.createPassword(otp,newPswd,confirmPswd);
+  Future<ChangePasswordMdl> getChangePasswordRequest(String token, String email,String oldPswd, String newPswd, String confirmPswd) async {
+    Map<String, dynamic> _resp = await _queryProvider.changePassword(token, email,oldPswd,newPswd,confirmPswd);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

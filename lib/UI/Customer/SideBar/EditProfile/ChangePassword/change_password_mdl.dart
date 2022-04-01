@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final createPasswordMdl = createPasswordMdlFromJson(jsonString);
+//     final changePasswordMdl = changePasswordMdlFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
@@ -35,32 +35,32 @@ class ChangePasswordMdl {
 
 class Data {
   Data({
-    required this.resetPassword,
+    required this.changePassword,
   });
 
-  ResetPassword? resetPassword;
+  ChangePassword? changePassword;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    resetPassword: json["ResetPassword"] == null ? null : ResetPassword.fromJson(json["ResetPassword"]),
+    changePassword: json["ChangePassword"] == null ? null : ChangePassword.fromJson(json["ChangePassword"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "ResetPassword": resetPassword == null ? null : resetPassword!.toJson(),
+    "ChangePassword": changePassword == null ? null : changePassword!.toJson(),
   };
 }
 
-class ResetPassword {
-  ResetPassword({
+class ChangePassword {
+  ChangePassword({
     required this.status,
     required this.code,
     required this.message,
   });
 
-  String? status;
-  String? code;
-  String? message;
+  String status;
+  String code;
+  String message;
 
-  factory ResetPassword.fromJson(Map<String, dynamic> json) => ResetPassword(
+  factory ChangePassword.fromJson(Map<String, dynamic> json) => ChangePassword(
     status: json["status"] == null ? null : json["status"],
     code: json["code"] == null ? null : json["code"],
     message: json["message"] == null ? null : json["message"],

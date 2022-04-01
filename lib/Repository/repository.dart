@@ -1,5 +1,6 @@
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
@@ -22,6 +23,7 @@ class Repository {
   final _signinApiProvider = SigninApiProvider();
   final _forgotPasswordApiProvider = ForgotPasswordApiProvider();
   final _createPasswordApiProvider = ResetPasswordApiProvider();
+  final _changePasswordApiProvider = ChangePasswordApiProvider();
   final _fcmTokenUpdateApiProvider = FcmTokenUpdateApiProvider();
   final _genrateAuthorizationApiProvider = GenerateAuthorizationApiProvider();
   final _completeProfileMechanicApiProvider = MechanicCompleteProfileApiProvider();
@@ -164,6 +166,11 @@ class Repository {
   Future<dynamic> socialLogin( email,  phoneNumber) =>
       _signinApiProvider.socialLogin( email,  phoneNumber);
 
+  //phoneLogin
+  Future<dynamic> phoneLogin( phoneNumber) =>
+      _signinApiProvider.phoneLogin( phoneNumber);
+
+
   //Forgot Password
   Future<dynamic> getForgotPassword(String email) =>
       _forgotPasswordApiProvider.getForgotPasswordRequest(email);
@@ -172,11 +179,9 @@ class Repository {
   Future<dynamic> getCreatePassword(String otp, String newPassword, String confirmPassword) =>
       _createPasswordApiProvider.getCreatePasswordRequest(otp,newPassword,confirmPassword);
 
-/*
   //Change Password
-  Future<dynamic> getCreatePassword(String otp, String newPassword, String confirmPassword) =>
-      _createPasswordApiProvider.getCreatePasswordRequest(otp,newPassword,confirmPassword);
-*/
+  Future<dynamic> getChangePassword(String token, String email, String oldPassword, String newPassword, String confirmPassword) =>
+      _changePasswordApiProvider.getChangePasswordRequest(token, email,oldPassword,newPassword,confirmPassword);
 
 
   //FcmTokenUpdate

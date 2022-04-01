@@ -520,7 +520,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
-          _signinBloc.userDefault(value.data!.customerSocialLogin!.token.toString());
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
