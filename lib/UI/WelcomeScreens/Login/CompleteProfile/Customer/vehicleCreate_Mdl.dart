@@ -16,8 +16,8 @@ class VehicleCreateMdl {
     required this.data,
   });
 
-  String? message;
-  String? status;
+  String message;
+  String status;
   Data? data;
 
   factory VehicleCreateMdl.fromJson(Map<String, dynamic> json) => VehicleCreateMdl(
@@ -52,55 +52,63 @@ class Data {
 class VehicleCreate {
   VehicleCreate({
     required this.id,
+    required this.brand,
+    required this.model,
+    required this.engine,
     required this.year,
     required this.plateNo,
-    required this.engineName,
-    required this.milege,
     required this.lastMaintenance,
+    required this.milege,
+    required this.vehiclePic,
+    required this.latitude,
+    required this.longitude,
     required this.defaultVehicle,
-    required this.userId,
-    required this.makeId,
-    required this.vehicleModelId,
     required this.status,
   });
 
   String id;
+  String brand;
+  String model;
+  String engine;
   String year;
   String plateNo;
-  String engineName;
-  String milege;
   String lastMaintenance;
+  String milege;
+  String vehiclePic;
+  double latitude;
+  double longitude;
   int defaultVehicle;
-  String userId;
-  int makeId;
-  int vehicleModelId;
   int status;
 
   factory VehicleCreate.fromJson(Map<String, dynamic> json) => VehicleCreate(
     id: json["id"] == null ? null : json["id"],
+    brand: json["brand"] == null ? null : json["brand"],
+    model: json["model"] == null ? null : json["model"],
+    engine: json["engine"] == null ? null : json["engine"],
     year: json["year"] == null ? null : json["year"],
     plateNo: json["plateNo"] == null ? null : json["plateNo"],
-    engineName: json["engineName"] == null ? null : json["engineName"],
-    milege: json["milege"] == null ? null : json["milege"],
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
+    milege: json["milege"] == null ? null : json["milege"],
+    vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
+    latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
+    longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],
-    userId: json["userId"] == null ? null : json["userId"],
-    makeId: json["makeId"] == null ? null : json["makeId"],
-    vehicleModelId: json["vehicleModelId"] == null ? null : json["vehicleModelId"],
     status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
+    "brand": brand == null ? null : brand,
+    "model": model == null ? null : model,
+    "engine": engine == null ? null : engine,
     "year": year == null ? null : year,
     "plateNo": plateNo == null ? null : plateNo,
-    "engineName": engineName == null ? null : engineName,
-    "milege": milege == null ? null : milege,
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
+    "milege": milege == null ? null : milege,
+    "vehiclePic": vehiclePic == null ? null : vehiclePic,
+    "latitude": latitude == null ? null : latitude,
+    "longitude": longitude == null ? null : longitude,
     "defaultVehicle": defaultVehicle == null ? null : defaultVehicle,
-    "userId": userId == null ? null : userId,
-    "makeId": makeId == null ? null : makeId,
-    "vehicleModelId": vehicleModelId == null ? null : vehicleModelId,
     "status": status == null ? null : status,
   };
 }
