@@ -111,7 +111,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     });
 
 
-    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+   /* final postUrl = 'https://fcm.googleapis.com/fcm/send';
     // print('userToken>>>${appData.fcmToken}'); //alp dec 28
 
     final data = {
@@ -159,7 +159,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       }
     } catch (e) {
       print('exception $e');
-    }
+    }*/
   }
 
 

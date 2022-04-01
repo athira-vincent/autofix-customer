@@ -16,6 +16,7 @@ import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -154,9 +155,12 @@ class _SignupScreenState extends State<SignupScreen> {
   String latitude = '10.5075868';
   String longitude = '76.2424536';
 
+  String Fcmtoken ="";
+
   @override
   void initState() {
     super.initState();
+    callOnFcmApiSendPushNotifications();
     _getCurrentCustomerLocation();
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
@@ -167,6 +171,18 @@ class _SignupScreenState extends State<SignupScreen> {
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
   }
+
+  Future<void> callOnFcmApiSendPushNotifications() async {
+
+    FirebaseMessaging.instance.getToken().then((value) {
+      setState(() {
+        Fcmtoken = value.toString();
+        print("Instance ID (Fcm Token): +++++++++ +++++ +++++ SignUp " + Fcmtoken.toString());
+
+      });
+    });
+  }
+
 
   _listenSignUpResponse() {
     _signupBloc.signUpResponse.listen((value) {
