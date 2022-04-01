@@ -32,7 +32,7 @@ class OtpVerificationScreen extends StatefulWidget {
   final String userCategory;
   final String phoneNumber;
   final String otpNumber;
-  final String platformId;
+  final String userTypeId;
   final String fromPage;
 
 
@@ -41,7 +41,7 @@ class OtpVerificationScreen extends StatefulWidget {
     required this.userCategory,
     required this.phoneNumber,
     required this.otpNumber,
-    required this.platformId,
+    required this.userTypeId,
     required this.fromPage});
 
   @override
@@ -112,7 +112,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   _listenOtpVerificationResponse() {
-    _signupBloc.postOtpVerification.listen((value) {
+    _signupBloc.otpVerificationResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
@@ -126,7 +126,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         setState(() {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
-          if( widget.fromPage == "2")
+          if( widget.fromPage == "3")
+          {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ChangePasswordScreen(
+                        otpNumber: textEditingController.text.toString(),
+                      )),
+            );
+          }
+          else if( widget.fromPage == "2")
           {
             Navigator.pushReplacement(
                 context,
@@ -357,7 +368,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           _isLoading=true;
                                                           print(textEditingController.text);
                                                           print(authToken.toString());
-                                                          _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'16');
+                                                          _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
 
                                                         }
 

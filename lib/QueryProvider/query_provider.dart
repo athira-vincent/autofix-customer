@@ -365,11 +365,11 @@ class QueryProvider {
       otp,
       userTypeId) async {
     String _query = """ 
-    mutation {
-        otp_Verification(otpCode: "$otp", userTypeId: $userTypeId) {
-          message
+       mutation {
+          otp_Verification(otpCode: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
+            verified
+          }
         }
-      }
 
     """;
     log(_query);

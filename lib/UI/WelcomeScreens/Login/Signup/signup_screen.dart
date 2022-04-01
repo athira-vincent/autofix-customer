@@ -212,7 +212,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
                             otpNumber: "${value.data!.signUp!.mechanic?.otpCode.toString()}",
-                            platformId: "1",
+                            userTypeId: "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
                             fromPage: "1",)));
             }
           else
@@ -226,7 +226,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.customer?.phoneNo.toString()}",
                             otpNumber: "${value.data!.signUp!.customer?.otpCode.toString()}",
-                            platformId: "1",
+                            userTypeId: "${value.data!.signUp!.customer?.userTypeId.toString()}",
                             fromPage: "1",)));
             }
           FocusScope.of(context).unfocus();
@@ -885,6 +885,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                               ),
                                             ) : Container(),
 
+                                            widget.userType == TextStrings.user_customer?
                                             Container(
                                               margin: EdgeInsets.only(top: _setValue(15.5)),
                                               child: Column(
@@ -938,7 +939,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   ),
                                                 ],
                                               ),
-                                            ),
+                                            ) : Container(),
+
+
 
                                             Container(
                                               margin: EdgeInsets.only(top: 20.5),

@@ -86,7 +86,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       userCategory: "0",
                       phoneNumber: "${_phoneNoController.text}",
                       otpNumber: "${value.data?.customerSocialLogin?.customer!.resetToken}",
-                      platformId: "1",
+                      userTypeId: "1",
                       fromPage: "2",
                     )),
           );

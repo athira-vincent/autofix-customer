@@ -16,8 +16,8 @@ class OtpVerificationMdl {
     required this.data,
   });
 
-  String? message;
-  String? status;
+  String message;
+  String status;
   Data? data;
 
   factory OtpVerificationMdl.fromJson(Map<String, dynamic> json) => OtpVerificationMdl(
@@ -51,16 +51,16 @@ class Data {
 
 class OtpVerification {
   OtpVerification({
-    required this.message,
+    required this.verified,
   });
 
-  String message;
+  int verified;
 
   factory OtpVerification.fromJson(Map<String, dynamic> json) => OtpVerification(
-    message: json["message"] == null ? null : json["message"],
+    verified: json["verified"] == null ? null : json["verified"],
   );
 
   Map<String, dynamic> toJson() => {
-    "message": message == null ? null : message,
+    "verified": verified == null ? null : verified,
   };
 }
