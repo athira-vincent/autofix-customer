@@ -332,7 +332,7 @@ class Styles {
     fontFamily: "Samsung_SharpSans_Medium",
     fontSize: 12.7,
     color: Colors.black,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w400,
     letterSpacing: .3,
   );
 
