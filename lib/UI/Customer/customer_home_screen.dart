@@ -1,10 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Cart/customer_cart.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -175,109 +175,114 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     return Scaffold(
       drawer: CustomerNavigationDrawerScreen(),
       key: scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
-        child: AppBar(
-          actions: [],
-          automaticallyImplyLeading: false,
-          flexibleSpace: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(
-                    left: 21, top: 20 + MediaQuery.of(context).padding.top),
-                child: GestureDetector(
-                    onTap: () {
-                      scaffoldKey.currentState?.openDrawer();
-                    },
-                    child: Image.asset(
-                      'assets/image/ic_drawer.png',
-                      width: 30,
-                      height: 30,
-                    )),
-              ),
-
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      top: 25 + MediaQuery.of(context).padding.top, left: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        //"Hi $_userName",
-                        "Welcome",
-                        style: Styles.homeWelcomeTextStyle,
-                      ),
-                      Text(
-                        " Athira",
-                        style: Styles.homeNameTextStyle,
-                      ),
-                      Text(
-                        " !",
-                        style: Styles.homeWelcomeSymbolTextStyle,
-                      ),
-                    ],
+      appBar: _index == 0
+        ? PreferredSize(
+            preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
+            child: AppBar(
+              actions: [],
+              automaticallyImplyLeading: false,
+              flexibleSpace: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 21, top: 20 + MediaQuery.of(context).padding.top),
+                    child: GestureDetector(
+                        onTap: () {
+                          scaffoldKey.currentState?.openDrawer();
+                        },
+                        child: Image.asset(
+                          'assets/image/ic_drawer.png',
+                          width: 30,
+                          height: 30,
+                        )),
                   ),
-                ),
-              ),
 
-              Container(
-                margin: EdgeInsets.only(
-                     top: 25 + MediaQuery.of(context).padding.top,
-                  right: size.width * 4.2/100
-                ),
-                child: Stack(
-                  children: [
-                        GestureDetector(
-                        onTap: () {},
-                          child: SvgPicture.asset(
-                            'assets/image/notification_icon.svg',
-                            width: 22,
-                            height: 22,
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 25 + MediaQuery.of(context).padding.top, left: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            //"Hi $_userName",
+                            "Welcome",
+                            style: Styles.homeWelcomeTextStyle,
                           ),
-                        ),
-                    Positioned(
-                      right: 0,
-                      child: _counter > 0 ? Container(
-                        padding: EdgeInsets.all(1),
-                        decoration: new BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: new Text(
-                         '$_counter',
-                          style: new TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
+                          Text(
+                            " Athira",
+                            style: Styles.homeNameTextStyle,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ) : Container(),
+                          Text(
+                            " !",
+                            style: Styles.homeWelcomeSymbolTextStyle,
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
 
-                  ],
-                ),
+                  Container(
+                    margin: EdgeInsets.only(
+                         top: 25 + MediaQuery.of(context).padding.top,
+                      right: size.width * 4.2/100
+                    ),
+                    child: Stack(
+                      children: [
+                            GestureDetector(
+                            onTap: () {},
+                              child: SvgPicture.asset(
+                                'assets/image/notification_icon.svg',
+                                width: 22,
+                                height: 22,
+                              ),
+                            ),
+                        Positioned(
+                          right: 0,
+                          child: _counter > 0 ? Container(
+                            padding: EdgeInsets.all(1),
+                            decoration: new BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 12,
+                              minHeight: 12,
+                            ),
+                            child: new Text(
+                             '$_counter',
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ) : Container(),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+              backgroundColor: Colors.white,
+              shadowColor: Colors.white,
+            ),
+          )
+        : PreferredSize(
+              preferredSize: Size.fromHeight(0),
+              child: Container()
           ),
-          backgroundColor: Colors.white,
-          shadowColor: Colors.white,
-        ),
-      ),
       body: Stack(
         children: [
           Container(
             width: double.infinity,
             child: _index == 0
                 ? HomeCustomerUIScreen()
-                : _index == 1 ? CustomerCartScreen()
-                : _index == 2 ? CustomerMyProfileScreen()
-                : CustomerMyServiceScreen(),
+                : _index == 1 ? MyCartScreen()
+                : _index == 2 ? CustomerMyServicesScreen()
+                : CustomerMyProfileScreen(),
           ),
         ],
       ),

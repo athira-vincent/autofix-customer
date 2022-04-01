@@ -37,27 +37,18 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
-
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-
   final Set<Marker> _markers = {};
 
   LatLng _lastMapPosition = _center;
-
-  MapType _currentMapType = MapType.terrain;
 
   Completer<GoogleMapController> _controller = Completer();
 
   static const LatLng _center = const LatLng(12.988827, 77.472091);
 
   String? _mapStyle;
-
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-    controller.setMapStyle(_mapStyle);
-  }
 
   Set<Polyline> lines = {};
 
@@ -138,7 +129,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     // TODO: implement initState
     super.initState();
 
-    rootBundle.loadString('assets/map_style/map_style.txt').then((string) {
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
     /// add origin marker origin marker
@@ -172,18 +163,21 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
 
 
-                Expanded(
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 11.0,
-                    ),
-                    mapType: _currentMapType,
-                    markers: _markers,
-                    onCameraMove: _onCameraMove,
-                    polylines: Set<Polyline>.of(polylines.values),
+                GoogleMap(
+                  onMapCreated: (GoogleMapController controller){
+                    print("$_mapStyle  >>>>>>>>>>>>>>>>>>>_mapStyle");
+
+                    controller.setMapStyle(_mapStyle);
+                    _controller.complete(controller);
+                  },
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11.0,
                   ),
+                 // mapType: _currentMapType,
+                  markers: _markers,
+                  onCameraMove: _onCameraMove,
+                  polylines: Set<Polyline>.of(polylines.values),
                 ),
 
                 Padding(
@@ -191,7 +185,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
+
                       borderRadius: BorderRadius.circular(20),
+                        boxShadow: [new BoxShadow(
+                          color: CustColors.roseText1,
+                          blurRadius: 10.0,
+                        ),]
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -344,6 +343,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
+                          boxShadow: [new BoxShadow(
+                            color: CustColors.roseText1,
+                            blurRadius: 10.0,
+                          ),],
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(

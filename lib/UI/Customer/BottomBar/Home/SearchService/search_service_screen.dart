@@ -98,7 +98,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
       CurrentLongitude = position.longitude.toString();
     });
     print(location);
-    GetAddressFromLatLong(position);
+    //GetAddressFromLatLong(position);
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -256,90 +256,93 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                       builder: (context, AsyncSnapshot<ServiceSearchListAllMdl> snapshot) {
                         print("${snapshot.hasData}");
                         print("${snapshot.connectionState}");
-                        if(snapshot.hasData)
-                        {
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(10,5,10,5),
-                                child: Container(
-                                  height: 35.0,
-                                  margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Emergency Services',
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelTitle_Regular,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              ListView.builder(
-                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: snapshot.data?.data?.serviceListAll?.length,
-                                itemBuilder: (context, index) {
-                                  return  GestureDetector(
-                                    onTap:(){
 
-                                      setState(() {
-                                        print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                                        print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                                        print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                        print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                        serviceIds.clear();
-                                        serviceIds.add('${snapshot.data?.data?.serviceListAll?[index].id}');
-                                        print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                                        _homeCustomerBloc.postMechanicsBookingIDRequest(
-                                            authToken,
-                                            '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                                            '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                                            CurrentLatitude,
-                                            CurrentLongitude,
-                                            serviceIds);
-                                      });
-
-                                    },
-                                    child: snapshot.data?.data?.serviceListAll?[index].type =='1' && snapshot.data?.data?.serviceListAll?[index].type != null
-                                    ? Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(30,0,30,0),
-                                        child: Column(
-                                          mainAxisAlignment:MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(30,2,30,2),
-                                              child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
-                                                style: Styles.textLabelTitleEmergencyServiceName,
-                                                maxLines: 2,
-                                                textAlign: TextAlign.start,
-                                                overflow: TextOverflow.visible,),
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return CircularProgressIndicator();
+                          default:
+                            return
+                              snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
+                                  ? Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+                                          child: Container(
+                                            height: 35.0,
+                                            margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('Emergency Services',
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.start,
+                                                    overflow: TextOverflow.visible,
+                                                    style: Styles.textLabelTitle_Regular,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Divider(),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                    : Container(),
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        }
-                        else{
-                          return  Container();
-                        }
+                                        ListView.builder(
+                                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data?.data?.serviceListAll?.length,
+                                          itemBuilder: (context, index) {
+                                            return  GestureDetector(
+                                              onTap:(){
 
+                                                setState(() {
+                                                  print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                                  print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                                  print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                                  print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                                  serviceIds.clear();
+                                                  serviceIds.add('${snapshot.data?.data?.serviceListAll?[index].id}');
+                                                  print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                                                  _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                                      authToken,
+                                                      '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                                      '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                                      CurrentLatitude,
+                                                      CurrentLongitude,
+                                                      serviceIds);
+                                                });
+
+                                              },
+                                              child: snapshot.data?.data?.serviceListAll?[index].type =='1' && snapshot.data?.data?.serviceListAll?[index].type != null
+                                                  ? Container(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(30,0,30,0),
+                                                  child: Column(
+                                                    mainAxisAlignment:MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.fromLTRB(30,2,30,2),
+                                                        child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                                          style: Styles.textLabelTitleEmergencyServiceName,
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,),
+                                                      ),
+                                                      Divider(),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                                  : Container(),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    )
+                                  : Container();
+                        }
                       }
                   ),
                 )
