@@ -303,23 +303,17 @@ class QueryProvider {
   postModelDetailRequest(
       token,type) async {
     String _query = """ 
-    query
-    {
-      modelDetails(type: "$type") {
+   {
+      modelDetails(id: null) {
         id
         modelName
         engineName
         years
-        makeId
+        brandName
         status
-        vehicleBrand {
-          id
-          brandName
-          status
-          brandicon
-        }
       }
     }
+
     """;
     log(_query);
     return await GqlClient.I.query01(

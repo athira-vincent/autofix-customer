@@ -105,6 +105,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
 
   String? selectedBrand = '' ;
+
+  List<String> modelList = [];
   String? selectedmodel = '' ;
 
   List<String> engineList = [];
@@ -128,7 +130,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _addCarBloc.postMakeBrandRequest(authToken);
+      _addCarBloc.postModelDetailRequest(authToken,"");
     });
   }
 
@@ -136,7 +138,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     _addCarBloc.postModelDetail.listen((value) {
       if (value.status == "error") {
         setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+         // SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
           print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
           print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
@@ -144,30 +146,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
       } else {
 
-        setState(() {
-          _showDialogForModel();
 
-
-        });
-      }
-    });
-    _addCarBloc.postMakeBrand.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.data!.brandDetails![0].brandName.toString()}");
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-
-        });
       }
     });
     _addCarBloc.postAddCar.listen((value) {
@@ -481,7 +460,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           }
         else
           {
-            await  _addCarBloc.postModelDetailRequest(authToken,selectedBrand);
+            _showDialogForModel();
 
           }
 
@@ -1202,8 +1181,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 child:
                 Container(
                   child: StreamBuilder(
-                      stream:  _addCarBloc.MakeBrandResponse,
-                      builder: (context, AsyncSnapshot<MakeBrandDetailsMdl> snapshot) {
+                      stream:  _addCarBloc.ModelDetailResponse,
+                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
                         print("${snapshot.hasData}");
                         print("${snapshot.connectionState}");
 
@@ -1212,15 +1191,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             return CircularProgressIndicator();
                           default:
                             return
-                              snapshot.data?.data?.brandDetails?.length != 0 && snapshot.data?.data?.brandDetails?.length != null
+                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
                                   ? ListView.builder(
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
-                                        itemCount: snapshot.data?.data?.brandDetails?.length,
+                                        itemCount: snapshot.data?.data?.modelDetails?.length,
                                         itemBuilder: (context, index) {
                                           return  ListTile(
-                                            title: Text("${snapshot.data?.data!.brandDetails![index].brandName}",
+                                            title: Text("${snapshot.data?.data!.modelDetails![index].brandName}",
                                                 style: TextStyle(
                                                     fontFamily: 'Corbel_Regular',
                                                     fontWeight: FontWeight.normal,
@@ -1231,14 +1210,22 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
                                               setState(() {
                                                 selectedmodel='';
+                                                  modelList = [];
                                                 _modelController.text ='';
                                                 engineList=[];
                                                 _engineTypeController.text='';
                                                 yearTypeList=[];
                                                 _yearController.text='';
 
-                                                selectedBrand=snapshot.data?.data!.brandDetails![index].id;
-                                                _brandController.text = "${snapshot.data?.data!.brandDetails![index].brandName}";
+                                                selectedBrand=snapshot.data?.data!.modelDetails![index].id;
+                                                _brandController.text = "${snapshot.data?.data!.modelDetails![index].brandName}";
+
+                                                final modelName= "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                                final splitNames= modelName.split(',');
+                                                for (int i = 0; i < splitNames.length; i++){
+                                                  modelList.add(splitNames[i]);
+                                                }
+
                                                 if (_formKey.currentState!.validate()) {
                                                 } else {
                                                 }
@@ -1281,54 +1268,52 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           return
                             snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
                                 ? ListView.builder(
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data?.data?.modelDetails?.length,
-                              itemBuilder: (context, index) {
-                                if (snapshot.connectionState != ConnectionState.active) {
-                                  print('connectionState');
-                                  return Center(child: progressBarLightRose());
-                                }
-                                return  ListTile(
-                                  title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
-                                      style: TextStyle(
-                                          fontFamily: 'Corbel_Regular',
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 15,
-                                          color: Colors.black)),
-                                  onTap: () async {
-                                    Navigator.pop(context);
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data?.data?.modelDetails?.length,
+                                    itemBuilder: (context, index) {
+                                      return modelList.contains('${snapshot.data?.data!.modelDetails![index].modelName}')
+                                      ?   ListTile(
+                                        title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
+                                            style: TextStyle(
+                                                fontFamily: 'Corbel_Regular',
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 15,
+                                                color: Colors.black)),
+                                        onTap: () async {
+                                          Navigator.pop(context);
 
-                                    setState(() {
-                                      engineList=[];
-                                      _engineTypeController.text='';
-                                      yearTypeList=[];
-                                      _yearController.text='';
+                                          setState(() {
+                                            engineList=[];
+                                            _engineTypeController.text='';
+                                            yearTypeList=[];
+                                            _yearController.text='';
 
-                                      selectedmodel=snapshot.data?.data!.modelDetails![index].id;
-                                      _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                            selectedmodel=snapshot.data?.data!.modelDetails![index].id;
+                                            _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
 
-                                      final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                      final splitNames= engineName.split(',');
-                                      for (int i = 0; i < splitNames.length; i++){
-                                        engineList.add(splitNames[i]);
-                                      }
+                                            final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                            final splitNames= engineName.split(',');
+                                            for (int i = 0; i < splitNames.length; i++){
+                                              engineList.add(splitNames[i]);
+                                            }
 
-                                      final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
-                                      final splityearsNames= yearsNames.split(',');
-                                      for (int i = 0; i < splityearsNames.length; i++){
-                                        yearTypeList.add(splityearsNames[i]);
-                                      }
-                                      if (_formKey.currentState!.validate()) {
-                                      } else {
-                                      }
-                                    });
+                                            final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
+                                            final splityearsNames= yearsNames.split(',');
+                                            for (int i = 0; i < splityearsNames.length; i++){
+                                              yearTypeList.add(splityearsNames[i]);
+                                            }
+                                            if (_formKey.currentState!.validate()) {
+                                            } else {
+                                            }
+                                          });
 
-                                  },
-                                );
-                              },
-                            )
+                                        },
+                                      )
+                                      :  Container();
+                                    },
+                                  )
                                 : Container();
                       }
                     }),
