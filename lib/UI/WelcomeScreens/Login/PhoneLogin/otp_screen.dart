@@ -359,8 +359,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                               _isLoading = false;
                                                               SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
                                                             }
-
-
                                                           }
                                                         else{
                                                           _isLoading=true;
