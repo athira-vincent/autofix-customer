@@ -523,7 +523,7 @@ class QueryProvider {
 
   serviceList(String token, String type) async {
     String _query = """
-{
+    {
   emeregency_or_regular_serviceList(id: $type) {
     id
     serviceName
@@ -533,6 +533,13 @@ class QueryProvider {
     maxAmount
     type
     status
+    categoryId
+    category {
+      id
+      categoryName
+      icon
+      status
+    }
   }
 }
      """;

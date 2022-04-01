@@ -9,6 +9,9 @@ import 'package:auto_fix/UI/NewScreens/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/NewScreens/add_delivery_address_screen.dart';
 import 'package:auto_fix/UI/NewScreens/change_delivery_address_screen.dart';
 import 'package:auto_fix/UI/NewScreens/purchase_response_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +85,8 @@ class _MyAppState extends State<MyApp> {
       ),
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
-      //home: MechanicStartServiceScreen(),
-      home: SplashScreen(),
+     //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
+      home: CustomerHomeScreen(),
     );
   }
 }

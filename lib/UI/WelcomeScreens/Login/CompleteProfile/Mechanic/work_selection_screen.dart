@@ -19,7 +19,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Utility/check_network.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -75,7 +74,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   TextEditingController _apprenticeCertificateController = TextEditingController();
   FocusNode _apprenticeCertificateFocusNode = FocusNode();
 
-  File? _images,_identificationProof_file,_apprenticeCertificate_file;
+  File? _images;
 
   bool isloading = false;
   String? countryCode;
@@ -216,6 +215,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
     Size size = MediaQuery.of(context).size;
     print('${_images?.path}' + ">>>>>>> image from Widget");
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: ScrollConfiguration(
@@ -223,7 +223,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           child: SingleChildScrollView(
             child: SafeArea(
               child:
-              widget.userCategory==TextStrings.user_category_individual
+              widget.userCategory == TextStrings.user_category_individual
                 ? Column(
                     children: [
                       completeYourProfileText(),
@@ -607,9 +607,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           print ("Selected state @ sign up: " + selectedState );
           print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
           print ("Selected selectedVehicles @ sign up: " + selectedVehicles );
-          if (_formKey.currentState!.validate()) {
+         /* if (_formKey.currentState!.validate()) {
           } else {
-          }
+          }*/
         }
 
     });
@@ -642,7 +642,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch :'Upload certificate of apprentice ').nameChecking,
+                  ch :'Upload certificate of apprentice ').emptyChecking,
               controller: _apprenticeCertificateController,
               cursorColor: CustColors.whiteBlueish,
 
@@ -772,7 +772,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     RegExp('[a-zA-Z ]')),
               ],
               validator: InputValidator(
-                  ch :'Means of identification' ).nameChecking,
+                  ch :'Means of identification' ).emptyChecking,
               controller: _identificationProofController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
@@ -1030,15 +1030,23 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: MaterialButton(
                       onPressed: () {
 
-                        _completeProfileBloc.postCompleteProfileIndividualRequest(
-                            authToken,
-                          _workSelectionController.text,
-                         // _chooseVechicleSpecializedController.text.toString(),
-                          selectedVehicleId,
-                          _addressController.text.toString(),
-                          certificateOfApprenticeFirebaseUrl,
-                          meansOfIdentificationFirebaseUrl
-                        );
+                        if (_formKey.currentState!.validate()) {
+                          //_isLoading = true;
+                          _completeProfileBloc.postCompleteProfileIndividualRequest(
+                              authToken,
+                              _workSelectionController.text,
+                              // _chooseVechicleSpecializedController.text.toString(),
+                              selectedVehicleId,
+                              _addressController.text.toString(),
+                              certificateOfApprenticeFirebaseUrl,
+                              meansOfIdentificationFirebaseUrl
+                          );
+                        } else {
+                          print("individual _formKey.currentState!.validate() - else");
+                          setState(() => _autoValidate = AutovalidateMode.always);
+                        }
+
+
 
                        /* Navigator.pushReplacement(
                           context,
@@ -1101,15 +1109,20 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                     child: MaterialButton(
                       onPressed: () {
 
-                        _completeProfileBloc.postCompleteProfileCorporateRequest(
-                            authToken,
-                          _workSelectionController.text,
-                          selectedVehicleId,
-                          _addressController.text.toString(),
-                          _noOfMechanicsController.text.toString(),
-                          _rcNumberController.text.toString(),
-                          _yearOfExistenceController.text.toString()
-                        );
+                        if (_formKey.currentState!.validate()) {
+                          _completeProfileBloc.postCompleteProfileCorporateRequest(
+                              authToken,
+                              _workSelectionController.text,
+                              selectedVehicleId,
+                              _addressController.text.toString(),
+                              _noOfMechanicsController.text.toString(),
+                              _rcNumberController.text.toString(),
+                              _yearOfExistenceController.text.toString()
+                          );
+                        } else {
+                          print("_corporate - formKey.currentState!.validate() - else");
+                          setState(() => _autoValidate = AutovalidateMode.always);
+                        }
 
 //                        --------------------------
                         /*_completeProfileBloc.postCompleteProfileIndividualRequest(
@@ -1252,10 +1265,10 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
                         selectedworkSelection=_workSelectionList[index];
                         _workSelectionController.text = workSelectionList[index];
-                        if (_formKey.currentState!.validate()) {
+                        /*if (_formKey.currentState!.validate()) {
                         } else {
 
-                        }
+                        }*/
                       });
 
                     },
@@ -1296,9 +1309,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
                         noOfMechanicsSelection=noOfMechanicsSelectionList[index];
                         _noOfMechanicsController.text = noOfMechanicsSelectionList[index];
-                        if (_formKey.currentState!.validate()) {
+                        /*if (_formKey.currentState!.validate()) {
                         } else {
-                        }
+                        }*/
                       });
 
                     },
@@ -1329,9 +1342,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         print(fileName.toString());
         _apprenticeCertificateController.text = fileName.toString();
         certificateOfApprenticeFirebaseUrl = pdfUrl;
-        if (_formKey.currentState!.validate()) {
+        /*if (_formKey.currentState!.validate()) {
         } else {
-        }
+        }*/
       });
 
       print(">>>>>>>>>>>>>>>> MechanicApprenticeCertificate " + pdfUrl);
@@ -1359,9 +1372,9 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
         print(fileName.toString());
         _identificationProofController.text = fileName.toString();
         meansOfIdentificationFirebaseUrl = pdfUrl;
-        if (_formKey.currentState!.validate()) {
+        /*if (_formKey.currentState!.validate()) {
         } else {
-        }
+        }*/
       });
 
       print(">>>>>>>>>>>>>>>> MechanicIDProof " + pdfUrl);

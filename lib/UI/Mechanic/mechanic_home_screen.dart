@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,71 +67,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 ),
               ],
             ),
-          ),
-          label: ''
-      ),
-      BottomNavigationBarItem(
-          backgroundColor: Colors.white,
-          icon: Column(
-            children: [
-              Container(
-                width: _setValue(25),
-                height: _setValue(25),
-                child: _index == 1
-                    ? SvgPicture.asset(
-                  'assets/image/ic_home_cart_active.svg',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                )
-                    : Image.asset(
-                  'assets/image/ic_home_cart_inactive.png',
-                  width: _setValue(28),
-                  height: _setValue(28),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
-                child: Text(
-                  'Cart',
-                  style: _index == 1
-                      ? Styles.homeActiveTextStyle
-                      : Styles.homeInactiveTextStyle,
-                ),
-              ),
-            ],
-          ),
-          label: ''
-      ),
-      BottomNavigationBarItem(
-          backgroundColor: Colors.white,
-          icon: Column(
-            children: [
-              Container(
-                width: _setValue(25),
-                height: _setValue(25),
-                child:
-                _index == 2
-                    ? SvgPicture.asset(
-                      'assets/image/ic_home_service_active.svg',
-                      width: _setValue(26),
-                      height: _setValue(26),
-                    )
-                    : Image.asset(
-                  'assets/image/ic_home_service_inactive.png',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
-                child: Text(
-                  'My services ',
-                  style: _index == 2
-                      ? Styles.homeActiveTextStyle
-                      : Styles.homeInactiveTextStyle,
-                ),
-              ),
-            ],
           ),
           label: ''
       ),
@@ -267,11 +204,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         children: [
           Container(
             width: double.infinity,
-           /* child: _index == 0
-                ? HomeCustomerUIScreen()
-                : _index == 1 ? CustomerCartScreen()
-                : _index == 2 ? CustomerMyProfileScreen()
-                : CustomerMyServiceScreen(),*/
+            child: _index == 0
+                ? MechanicHomeUIScreen()
+                : MechanicMyProfileScreen(),
           ),
         ],
       ),

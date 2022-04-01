@@ -80,7 +80,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           emergencyServiceList = value.data!.emeregencyOrRegularServiceList!;
 
           for(int i=0;i<emergencyServiceList.length;i++){
-            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id,emergencyServiceList[i].minAmount, "00:30", false));
+            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minAmount, "00:30", false));
           }
           _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
           print(_emergencyIsChecked!.length);
@@ -127,6 +127,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
           height: size.height,
@@ -153,8 +154,8 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                 Container(
                   margin: EdgeInsets.only(
                     top: size.height * 0.026,
-                    left: size.width * 0.025,
-                    right: size.width * 0.078,
+                    /*left: size.width * 0.025,
+                    right: size.width * 0.078,*/
                   ),
                   height: ScreenSize().setValue(36.3),
                   decoration: BoxDecoration(
@@ -217,13 +218,13 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                         bottom: size.height * 0.019
                     ),
                     color: CustColors.pale_grey,
-                    height: size.height * 0.82, //0.764
+                    height: size.height * 0.80, //0.764
                     child: Container(
                       margin: EdgeInsets.only(
                           left: size.width * 0.049,
                           right: size.width * 0.049,
                           //top: size.height * 0.03,
-                          bottom: size.height * 0.032
+                          bottom: size.height * 0.030
                       ),
                       child: Column(
                         children: [
@@ -231,96 +232,96 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                             child: Container(
                               child:  emergencyServiceList.length != 0
                                   ? ListView.separated(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: emergencyServiceList.length,
-                                itemBuilder: (context, index) {
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: emergencyServiceList.length,
+                                    itemBuilder: (context, index) {
 
-                                  TextEditingController _rateController=TextEditingController();
-                                  TextEditingController _timeController = TextEditingController();
-                                  _rateController.text = emergencyServiceList[index].minAmount.toString();
-                                  _timeController.text = "30:00";
-                                  _rateController.addListener(() {
-                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
-                                    selectedServiceMdlList.removeAt(index);
-                                    selectedServiceMdlList.insert(index,temp);
-                                  });
-                                  _timeController.addListener(() {
-                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable);
-                                    selectedServiceMdlList.removeAt(index);
-                                    selectedServiceMdlList.insert(index,temp);
-                                  });
-                                  //print(regularServiceList[index].minAmount.toString() + ">>>Min amt");
-                                  //print(regularServiceList[index].isEditable.toString() + ">>>isEditable amt");
-                                  //_rateController.text = regularServiceList![index].minAmount.toString();
-                                  return InkWell(
-                                      onTap: () {
-                                        final brandName = emergencyServiceList[index];
-                                        //final brandId = regularServiceList[index].id;
-                                        /* setState(() {
-                                         _brandController.text =
-                                             brandName.toString();
-                                         selectedBrandId =
-                                             int.parse(brandId!);
-                                         _modelController.clear();
-                                         selectedModelId = 0;
-                                         _engineController.clear();
-                                         selectedEngineId = 0;
-                                         _allModelBloc
-                                             .postAllModelDataRequest(
-                                             selectedBrandId!,
-                                             token);
-                                       });*/
-                                        print(">>>>>");
-                                        //print(brandId);
-                                        //Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        /*margin: EdgeInsets.only(
-                                            left: 5,
-                                            right: 5,
-                                          ),*/
-                                        child: Row(
-                                          children: [
-                                            Transform.scale(
-                                              scale: .8,
-                                              child: Checkbox(
-                                                value: _emergencyIsChecked![index],
-                                                onChanged: (bool? val){
-                                                  setState(() {
-                                                    this._emergencyIsChecked![index] = val!;
-                                                    //isChecked ? false : true;
-                                                   /* val ?
-                                                    selectedServiceList.add(emergencyServiceList[index])
-                                                        :
-                                                    selectedServiceList.remove(emergencyServiceList[index]);*/
-                                                    print("sgsjhgj 001 $val");
-                                                    if(val){
-                                                      var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
-                                                      selectedServiceMdlList.removeAt(index);
-                                                      selectedServiceMdlList.insert(index,
-                                                          temp);
-                                                    }else{
-                                                      //serviceSpecialisationList.remove(regularServiceList[index]);
-                                                      var temp= SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
-                                                      selectedServiceMdlList.removeAt(index);
-                                                      selectedServiceMdlList.insert(index,temp
-                                                      );
-                                                    }
-                                                    print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
-                                                  });
-                                                },
+                                    TextEditingController _rateController=TextEditingController();
+                                    TextEditingController _timeController = TextEditingController();
+                                    _rateController.text = emergencyServiceList[index].minAmount.toString();
+                                    _timeController.text = "30:00";
+                                    _rateController.addListener(() {
+                                      var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
+                                      selectedServiceMdlList.removeAt(index);
+                                      selectedServiceMdlList.insert(index,temp);
+                                    });
+                                    _timeController.addListener(() {
+                                      var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable);
+                                      selectedServiceMdlList.removeAt(index);
+                                      selectedServiceMdlList.insert(index,temp);
+                                    });
+                                    //print(regularServiceList[index].minAmount.toString() + ">>>Min amt");
+                                    //print(regularServiceList[index].isEditable.toString() + ">>>isEditable amt");
+                                    //_rateController.text = regularServiceList![index].minAmount.toString();
+                                    return Container(
+                                      child: Row(
+                                        children: [
+                                          Transform.scale(
+                                            scale: .4,
+                                            child: Checkbox(
+                                              value: _emergencyIsChecked![index],
+                                              onChanged: (bool? val){
+                                                setState(() {
+                                                  this._emergencyIsChecked![index] = val!;
+                                                  //isChecked ? false : true;
+                                                 /* val ?
+                                                  selectedServiceList.add(emergencyServiceList[index])
+                                                      :
+                                                  selectedServiceList.remove(emergencyServiceList[index]);*/
+                                                  print("sgsjhgj 001 $val");
+                                                  if(val){
+                                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
+                                                    selectedServiceMdlList.removeAt(index);
+                                                    selectedServiceMdlList.insert(index,
+                                                        temp);
+                                                  }else{
+                                                    //serviceSpecialisationList.remove(regularServiceList[index]);
+                                                    var temp= SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
+                                                    selectedServiceMdlList.removeAt(index);
+                                                    selectedServiceMdlList.insert(index,temp
+                                                    );
+                                                  }
+                                                  print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
+                                                });
+                                              },
+                                            ),
+                                          ),
+
+                                          Text(
+                                            '${emergencyServiceList[index].serviceName.toString()}',
+                                          ),
+
+                                          SizedBox(
+                                            width: size.width / 100 * 18,
+                                          ),
+
+                                          Container(
+                                            width: size.width * 15 / 100,
+                                            height: size.height * 4 / 100,
+                                            padding: EdgeInsets.only(
+                                                top: size.height * 1 / 100,
+                                                bottom: size.width * 1 / 100
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(2.8),
                                               ),
+                                              border: Border.all(
+                                                  color: CustColors.pinkish_grey02,
+                                                  width: 0.3
+                                              ),
+                                              //color: Colors.redAccent,
                                             ),
-
-                                            Text(
-                                              '${emergencyServiceList[index].serviceName.toString()}',
-                                            ),
-                                            SizedBox(
-                                              width: size.width / 100 * 18,
-                                            ),
-                                            Flexible(
+                                            child: Center(
                                               child: TextFormField(
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                    vertical: 12.5,
+                                                    horizontal: 6.0,
+                                                  ),
+                                                ),
                                                 validator: (value){
                                                   if(value!.isEmpty){
                                                     return "Fill field";
@@ -345,12 +346,38 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                                 //readOnly: _regularIsChecked![index],
                                               ),
                                             ),
-                                            SizedBox(
-                                              width: size.width / 100 * 5,
+                                          ),
+
+                                          SizedBox(
+                                            width: size.width / 100 * 5,
+                                          ),
+
+                                          Container(
+                                            width: size.width * 15 / 100,
+                                            height: size.height * 4 / 100,
+                                            padding: EdgeInsets.only(
+                                                top: size.height * 1 / 100,
+                                                bottom: size.width * 1 / 100
                                             ),
-                                            //Text("00 : 30")
-                                            Flexible(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(2.8),
+                                              ),
+                                              border: Border.all(
+                                                  color: CustColors.pinkish_grey02,
+                                                  width: 0.3
+                                              ),
+                                              //color: Colors.redAccent,
+                                            ),
+                                            child: Center(
                                               child: TextFormField(
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                    vertical: 12.5,
+                                                    horizontal: 6.0,
+                                                  ),
+                                                ),
                                                 validator: (value){
                                                   if(value!.isEmpty){
                                                     return "Fill field";
@@ -375,25 +402,26 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                                 //readOnly: _regularIsChecked![index],
                                               ),
                                             ),
+                                          ),
 
-                                          ],
-                                        ),
-                                      ));
-                                },
-                                separatorBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                      margin: EdgeInsets.only(
-                                          top: ScreenSize().setValue(10),
-                                          left: 5,
-                                          right: 5,
-                                          bottom: ScreenSize().setValue(10)),
-                                      child: Divider(
-                                        height: 0,
-                                      ));
-                                },
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                    separatorBuilder: (BuildContext context, int index) {
+                                      return Container(
+                                         /* margin: EdgeInsets.only(
+                                              top: ScreenSize().setValue(10),
+                                              left: 5,
+                                              right: 5,
+                                              bottom: ScreenSize().setValue(10)),*/
+                                          child: Divider(
+                                            height: 0,
+                                          ));
+                                    },
                               )
                                   : Center(
-                                child: Text('No Results found.'),
+                                      child: Text('No Results found.'),
                               ),
                             ),
                           ),
@@ -449,28 +477,33 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                         serviceId,  feeList, timeList);
 
                   },
-                  child: Container(
-                    height: size.height * 0.045,
-                    width: size.width * 0.246,
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
-                    //padding: EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      color: CustColors.light_navy,
-                      border: Border.all(
-                        color: CustColors.blue,
-                        style: BorderStyle.solid,
-                        width: 0.70,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      height: size.height * 0.045,
+                      width: size.width * 0.246,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                          right: size.width * 7 / 100,
+                          top: size.height * 1.9 / 100
                       ),
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                    child:  Text(
-                      "Next",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Corbel_Bold',
-                          fontSize: ScreenSize().setValueFont(14.5),
-                          fontWeight: FontWeight.w800),
+                      decoration: BoxDecoration(
+                        color: CustColors.light_navy,
+                        border: Border.all(
+                          color: CustColors.blue,
+                          style: BorderStyle.solid,
+                          width: 0.70,
+                        ),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child:  Text(
+                        "Next",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Corbel_Bold',
+                            fontSize: ScreenSize().setValueFont(14.5),
+                            fontWeight: FontWeight.w800),
+                      ),
                     ),
                   ),
                 ),

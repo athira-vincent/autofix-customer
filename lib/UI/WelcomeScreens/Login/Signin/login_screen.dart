@@ -141,7 +141,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                             language_en_ar=true;
                                           });
                                         }
-
                                       },
                                       child:*/ Container(
                                         child: Text(
@@ -202,7 +201,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     ),
                                                     hintStyle: Styles.textLabelSubTitle,),
                                                 ),
-
                                               ],
                                             ),
                                           ),

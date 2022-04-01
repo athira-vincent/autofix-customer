@@ -98,10 +98,10 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           for(int i=0;i<allServiceList.length;i++){
             if(allServiceList[i].type.toString() == "1"){
               emergencyServiceList.add(allServiceList[i]);
-              selectedServiceMdlEmergencyList.add(SelectedServicesMdl(allServiceList[i].id,allServiceList[i].minAmount, "00:30", false));
+              selectedServiceMdlEmergencyList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
             }else{
               regularServiceList.add(allServiceList[i]);
-              selectedServiceMdlRegularList.add(SelectedServicesMdl(allServiceList[i].id,allServiceList[i].minAmount, "00:30", false));
+              selectedServiceMdlRegularList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
             }
           }
           _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
@@ -152,6 +152,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
           child: Container(
@@ -174,7 +175,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         isRegularSelected = !isRegularSelected ;
                         print("isRegularSelected >>>>>> " +isRegularSelected.toString());
                       });
-                  },
+                    },
                     child: Container(
                       margin: EdgeInsets.only(
                           left: size.width * 29 / 100 ,
@@ -199,7 +200,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
 
             ),
-      ),
+          ),
         ),
       ),
     );
@@ -747,173 +748,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
       ),
     );
   }
-
-  /*Widget nextButtons(Size size) {
-    return  Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(top: _setValue(0.5),bottom: _setValue(25.5)),
-      child: Row(
-        children: [
-          Container(
-            child: Container(
-              margin: EdgeInsets.only(top: 20.8),
-              child: _isLoading
-                  ? Center(
-                child: Container(
-                  height: _setValue(28),
-                  width: _setValue(28),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
-                  ),
-                ),
-              )
-                  : Container(
-
-                child: MaterialButton(
-                  onPressed: () {
-                    setState(() {
-                      _isAddMore = true;
-                      _isLoading = true;
-                      print('true');
-                    });
-                    if (_formKey.currentState!.validate()) {
-
-                      setState(() {
-                        _isLoading = false;
-                        print('sucess');
-                        _addCarBloc. postAddCarRequest(
-                            authToken,
-                            selectedYearType ,
-                            _plateNumberController.text,
-                            selectedengine,
-                            _lastMaintenanceController.text,
-                            _lowerValue.toString(),
-                            selectedBrand,
-                            selectedmodel,
-                            imageFirebaseUrl
-                        );
-                      });
-                    } else {
-                      setState(() {
-                        _isLoading = false;
-                        print('error');
-                      });
-                    }
-
-
-                  },
-                  child: Container(
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Add More',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
-                        ),
-                      ],
-                    ),
-                  ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
-              ),
-            ),
-          ),
-          Spacer(),
-          Container(
-            child: Container(
-              margin: EdgeInsets.only(top: 20.8),
-              child: _isLoading
-                  ? Center(
-                child: Container(
-                  height: _setValue(28),
-                  width: _setValue(28),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
-                  ),
-                ),
-              )
-                  : Container(
-                child: MaterialButton(
-                  onPressed: () {
-                    print( authToken + "  " +
-                        selectedYearType! + "  " +
-                        'kl-34 A213' + "  " +
-                        selectedengine! +  "  " +
-                        _lastMaintenanceController.text + "  " +
-                        _plateNumberController.text + "  " +
-                        _lowerValue.toString() + "  " +
-                        selectedBrand! + "  " +
-                        selectedmodel! + " >>>>>>>>>>>> " +
-                        _brandController.text.toString() + "  " +
-                        _modelController.text + "  " +
-                        _engineTypeController.text + "  " +
-                        _yearController.text + "  " +
-                        _lastMaintenanceController.text + "  " +
-                        _plateNumberController.text + "  " +
-                        _lowerValue.toString() );
-                    setState(() {
-                      _isLoading = true;
-                      _isAddMore = false;
-                      print('true');
-                    });
-                    if (_formKey.currentState!.validate()) {
-
-                      setState(() {
-                        _isLoading = false;
-                        print('sucess');
-                        _addCarBloc. postAddCarRequest(
-                            authToken,
-                            selectedYearType ,
-                            _plateNumberController.text,
-                            selectedengine,
-                            _lastMaintenanceController.text,
-                            _lowerValue.toString(),
-                            selectedBrand,
-                            selectedmodel,
-                            imageFirebaseUrl
-                        );
-                      });
-                    } else {
-                      setState(() {
-                        _isLoading = false;
-                        print('error');
-                      });
-                    }
-                  },
-                  child: Container(
-                    height: 45,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Next',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
-                        ),
-                      ],
-                    ),
-                  ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ) ;
-  }*/
 
   Widget nextButtons(Size size) {
     return InkWell(

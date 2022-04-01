@@ -59,9 +59,11 @@ class EmeregencyOrRegularServiceList {
     required this.maxAmount,
     required this.type,
     required this.status,
+    required this.categoryId,
+    required this.category,
   });
 
-  dynamic id;
+  int id;
   String serviceName;
   String description;
   dynamic icon;
@@ -69,6 +71,8 @@ class EmeregencyOrRegularServiceList {
   String maxAmount;
   String type;
   int status;
+  int categoryId;
+  dynamic category;
 
   factory EmeregencyOrRegularServiceList.fromJson(Map<String, dynamic> json) => EmeregencyOrRegularServiceList(
     id: json["id"] == null ? null : json["id"],
@@ -79,6 +83,8 @@ class EmeregencyOrRegularServiceList {
     maxAmount: json["maxAmount"] == null ? null : json["maxAmount"],
     type: json["type"] == null ? null : json["type"],
     status: json["status"] == null ? null : json["status"],
+    categoryId: json["categoryId"] == null ? null : json["categoryId"],
+    category: json["category"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -90,5 +96,7 @@ class EmeregencyOrRegularServiceList {
     "maxAmount": maxAmount == null ? null : maxAmount,
     "type": type == null ? null : type,
     "status": status == null ? null : status,
+    "categoryId": categoryId == null ? null : categoryId,
+    "category": category,
   };
 }

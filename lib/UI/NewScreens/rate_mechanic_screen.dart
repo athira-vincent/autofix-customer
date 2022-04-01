@@ -1,6 +1,9 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,7 +20,9 @@ class RateMechanicScreen extends StatefulWidget {
 class _RateMechanicScreenState extends State<RateMechanicScreen> {
 
   late double _rating;
-  double _initialRating = 0.5;
+  double _initialRating = 0.0;
+  int textTotalCount = 350,textCount = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +172,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                                       color: Colors.black
                                     ),
                                   ),
-                                  Text("32/450"),
+                                  Text("$textCount/$textTotalCount"),
                                 ],
                               ),
                             ),
@@ -187,14 +192,37 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                                   )
                               ),
                               child: TextFormField(
-                                //text color : greyish_brown
-                                minLines: 3,
-                                maxLines: 5,  // allow user to enter 5 line in textfield
-                                keyboardType: TextInputType.multiline,  // user keyboard will have a button to move cursor to next line
-                                //controller: _Textcontroller,
+                                onChanged: (val){
+                                  setState(() {
+                                    //print(val);
+                                    if(val.length <= textTotalCount ) {
+                                      textCount = val.length;
+                                    }
+                                  });
+                                },
+                                //maxLength: 350,
+                                textAlignVertical: TextAlignVertical.center,
+                                maxLines: 4,
+                                style: Styles.reviewTextStyle01,
+                               // focusNode: _userNameFocusNode,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(350)
+                                ],
+                                keyboardType: TextInputType.multiline,
+                                validator: InputValidator(ch: "text",).emptyChecking,
+                                //controller: _userNameController,
+                                cursorColor: CustColors.whiteBlueish,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                  hintText: "Specify your feedback ",
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12.8,
+                                    horizontal: 6.0,
+                                  ),
+                                  hintStyle: Styles.reviewTextStyle01,),
                               ),
                             ),
-
                             InkWell(
                               child: postReviewButton(size),
                               onTap: (){

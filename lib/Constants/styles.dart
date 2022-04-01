@@ -560,4 +560,18 @@ class Styles {
       fontWeight: FontWeight.w600,
       fontFamily: "Samsung_SharpSans_Bold"
   );
+  static const reviewTextStyle01 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w400,
+    color: CustColors.greyish_brown,
+    fontSize: 13,
+    //height: 1.5
+  );
+  static const navDrawerTextStyle02 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w400,
+    color: CustColors.black_05,
+    fontSize: 14.3,
+    //height: 1.5
+  );
 }
