@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_screen.dart';
 import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
@@ -342,9 +343,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                               : Container(
                                                   child: MaterialButton(
                                                     onPressed: () {
-
                                                       setState(() {
-
                                                         if(widget.fromPage=="3")
                                                           {
                                                             _isLoading = true;
@@ -359,6 +358,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                               );
                                                             }else{
                                                               _isLoading = false;
+                                                              SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
                                                             }
 
 
