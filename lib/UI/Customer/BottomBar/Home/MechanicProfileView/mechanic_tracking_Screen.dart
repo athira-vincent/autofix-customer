@@ -162,7 +162,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
               children: [
 
 
-
                 GoogleMap(
                   onMapCreated: (GoogleMapController controller){
                     print("$_mapStyle  >>>>>>>>>>>>>>>>>>>_mapStyle");
