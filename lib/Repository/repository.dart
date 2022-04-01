@@ -178,6 +178,11 @@ class Repository {
   Future<dynamic> socialLogin( email,  phoneNumber) =>
       _signinApiProvider.socialLogin( email,  phoneNumber);
 
+  //phoneLogin
+  Future<dynamic> phoneLogin( phoneNumber) =>
+      _signinApiProvider.phoneLogin( phoneNumber);
+
+
   //Forgot Password
   Future<dynamic> getForgotPassword(String email) =>
       _forgotPasswordApiProvider.getForgotPasswordRequest(email);

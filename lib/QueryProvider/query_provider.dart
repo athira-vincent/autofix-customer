@@ -118,6 +118,22 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  phoneLogin(  phoneNumber) async {
+    String _query = """
+    mutation {
+  signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
+    otp
+    phoneNo
+    id
+    userTypeId
+    jwtToken
+  }
+}
+    """;
+
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
 
   signUp( type, firstName, lastName, emailId, phoneNo, password, state,
   fcmToken, userTypeId, userType, profilepic, orgName, orgType,

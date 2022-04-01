@@ -67,7 +67,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   }
 
   _listenApis() {
-    _signinBloc.socialLoginResponse.listen((value) async {
+    _signinBloc.phoneLoginResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -76,7 +76,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());
+          _signinBloc.userDefault(value.data!.signInPhoneNo!.jwtToken.toString());
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -85,8 +85,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       userType: "0",
                       userCategory: "0",
                       phoneNumber: "${_phoneNoController.text}",
-                      otpNumber: "${value.data?.socialLogin?.user!.otpCode}",
-                      userTypeId: "1",
+                      otpNumber: "${value.data?.signInPhoneNo?.otp}",
+                      userTypeId: "${value.data?.signInPhoneNo?.userTypeId}",
                       fromPage: "2",
                     )),
           );
@@ -106,6 +106,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
@@ -283,7 +284,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                 setState(() {
                                                   _isLoading=true;
 
-                                                  _signinBloc.socialLogin("","${_phoneNoController.text}");                                                });
+                                                  _signinBloc.phoneLogin("${_phoneNoController.text}");                                                });
 
                                               },
                                               child: Container(
