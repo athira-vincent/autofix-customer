@@ -16,6 +16,7 @@ import 'package:auto_fix/Widgets/indicator_widget.dart';
 
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -154,9 +155,12 @@ class _SignupScreenState extends State<SignupScreen> {
   String latitude = '10.5075868';
   String longitude = '76.2424536';
 
+  String Fcmtoken ="";
+
   @override
   void initState() {
     super.initState();
+    callOnFcmApiSendPushNotifications();
     _getCurrentCustomerLocation();
     _signupBloc.dialStatesListRequest();
     _populateCountryList();
@@ -167,6 +171,18 @@ class _SignupScreenState extends State<SignupScreen> {
     // _stateFocusNode.unfocus();
     // _stateFocusNode.canRequestFocus = false;
   }
+
+  Future<void> callOnFcmApiSendPushNotifications() async {
+
+    FirebaseMessaging.instance.getToken().then((value) {
+      setState(() {
+        Fcmtoken = value.toString();
+        print("Instance ID (Fcm Token): +++++++++ +++++ +++++ SignUp " + Fcmtoken.toString());
+
+      });
+    });
+  }
+
 
   _listenSignUpResponse() {
     _signupBloc.signUpResponse.listen((value) {
@@ -195,8 +211,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             userType: widget.userType,
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
-                            otpNumber: "${value.data!.signUp!.genMechanic?.resetToken.toString()}",
-                            platformId: "1",
+                            otpNumber: "${value.data!.signUp!.mechanic?.otpCode.toString()}",
+                            userTypeId: "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
                             fromPage: "1",)));
             }
           else
@@ -209,8 +225,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             userType: widget.userType,
                             userCategory: widget.userCategory,
                             phoneNumber: "${value.data!.signUp!.customer?.phoneNo.toString()}",
-                            otpNumber: "${value.data!.signUp!.generalCustomer?.resetToken.toString()}",
-                            platformId: "1",
+                            otpNumber: "${value.data!.signUp!.customer?.otpCode.toString()}",
+                            userTypeId: "${value.data!.signUp!.customer?.userTypeId.toString()}",
                             fromPage: "1",)));
             }
           FocusScope.of(context).unfocus();
@@ -869,6 +885,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                               ),
                                             ) : Container(),
 
+                                            widget.userType == TextStrings.user_customer?
                                             Container(
                                               margin: EdgeInsets.only(top: _setValue(15.5)),
                                               child: Column(
@@ -922,7 +939,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   ),
                                                 ],
                                               ),
-                                            ),
+                                            ) : Container(),
+
+
 
                                             Container(
                                               margin: EdgeInsets.only(top: 20.5),
@@ -1291,9 +1310,8 @@ class _SignupScreenState extends State<SignupScreen> {
         );
         _isLoading=true;
         _signupBloc.signUp(1,  _nameController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "1",
-            "1", imageFirebaseUrl, "", "", "", "", "",
-            "", latitude, longitude, "", "");
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "1", "1", imageFirebaseUrl, "", "", "", "", latitude, longitude, "", "");
       });
 
       return true;
@@ -1367,10 +1385,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(4,  _nameController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "2",
-            "1", imageFirebaseUrl, "", "", "", "", "",
-            "", latitude, longitude, _yearOfExperienceController.text, "");
+        _signupBloc.signUp(4, _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "2", "1", imageFirebaseUrl,"", "",
+            "", "", latitude, longitude,  _yearOfExperienceController.text, "");
       });
       return true;
     }else{
@@ -1443,10 +1461,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(2,  _contactPersonController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "1",
-            "2", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
-            "", latitude, longitude, "", "");
+        _signupBloc.signUp(2, _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "1", "2", imageFirebaseUrl,_nameController.text, _orgTypeController.text,
+            "", "", latitude, longitude, "", "");
       });
 
       return true;
@@ -1528,10 +1546,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(5,   _nameController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "2",
-            "2", imageFirebaseUrl, _nameController.text, _orgTypeController.text, "", "", "",
-            "", latitude, longitude, _yearOfExperienceController.text, "");
+        _signupBloc.signUp(5, _nameController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "2", "2", imageFirebaseUrl,_nameController.text, _orgTypeController.text,
+            "", "", latitude, longitude,  _yearOfExperienceController.text, "");
 
       });
      return true;
@@ -1605,10 +1623,10 @@ class _SignupScreenState extends State<SignupScreen> {
             "\n c password " + _confirmPwdController.text
         );
         _isLoading=true;
-        _signupBloc.signUp(3,  _contactPersonController.text,_emailController.text,
-            _phoneController.text, _passwordController.text,  _stateController.text, "1",
-            "3", imageFirebaseUrl, "", "", _ministryGovtController.text, "Food Corporation of india", "Labour And Environment",
-            "Athira", latitude, longitude, "", "");
+        _signupBloc.signUp(3, _contactPersonController.text,_emailController.text,
+            _phoneController.text, _passwordController.text,  _stateController.text, "$Fcmtoken",
+            "1", "3", imageFirebaseUrl,_nameController.text, _orgTypeController.text,
+            _ministryGovtController.text, "", latitude, longitude, "", "");
        });
       return true;
     }else{

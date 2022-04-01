@@ -33,7 +33,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   double _setValue(double value) {
     return value * per + value;
   }
@@ -160,7 +159,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-
 
 
                 GoogleMap(

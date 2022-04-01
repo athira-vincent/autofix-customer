@@ -15,12 +15,13 @@ class SignupApiProvider {
 
   final QueryProvider _queryProvider = QueryProvider();
 
-  Future<SignUpMdl> signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
-      accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-      head_of_dept, latitude, longitude, year_of_experience, shop_name)  async {
-    Map<String, dynamic> _resp = await _queryProvider.signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
-        accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-        head_of_dept, latitude, longitude, year_of_experience, shop_name);
+  Future<SignUpMdl> signUp( type, firstName, lastName, emailId, phoneNo, password, state,
+      fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+      ministryName, hod, latitude, longitude, yearExp, shopName,)  async {
+    Map<String, dynamic> _resp = await _queryProvider.signUp( type, firstName, lastName,
+      emailId, phoneNo, password, state,
+      fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+      ministryName, hod, latitude, longitude, yearExp, shopName,);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

@@ -38,12 +38,12 @@ class Repository {
       _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
 
   // SignUp
-  Future<dynamic> signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
-      accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-      head_of_dept, latitude, longitude, year_of_experience, shop_name)  =>
-      _signupApiProvider.signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
-          accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-          head_of_dept, latitude, longitude, year_of_experience, shop_name) ;
+  Future<dynamic> signUp( type, firstName, lastName, emailId, phoneNo, password, state,
+      fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+      ministryName, hod, latitude, longitude, yearExp, shopName,)  =>
+      _signupApiProvider.signUp( type, firstName, lastName, emailId, phoneNo, password, state,
+        fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+        ministryName, hod, latitude, longitude, yearExp, shopName,) ;
 
 
 

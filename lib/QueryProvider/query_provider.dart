@@ -121,33 +121,32 @@ class QueryProvider {
   }
 
 
-  signUp(  type, firstName, lastName, emailId, phoneNo, password, state, userTypeId,
-           accountType, profilepic, org_name, org_type, govt_type, govt_agency, ministry_name,
-           head_of_dept, latitude, longitude, year_of_experience, shop_name) async
+  signUp( type, firstName, lastName, emailId, phoneNo, password, state,
+  fcmToken, userTypeId, userType, profilepic, orgName, orgType,
+  ministryName, hod, latitude, longitude, yearExp, shopName,) async
   {
     String _query = """ 
     mutation {
         signUp(
-          type: $type
+          type: ${int.parse(type.toString())}
           firstName: "$firstName"
           lastName: "$lastName"
           emailId: "$emailId"
           phoneNo: "$phoneNo"
           password: "$password"
           state: "$state"
-          userTypeId: $userTypeId
-          accountType: $accountType
+          fcmToken:"$fcmToken"
+          userTypeId: ${int.parse(userTypeId.toString())}
+          userType: ${int.parse(userType.toString())}
           profilepic: "$profilepic"
-          org_name: "$org_name"
-          org_type: "$org_type"
-          govt_type: "$govt_type"
-          govt_agency: "$govt_agency"
-          ministry_name: "$ministry_name"
-          head_of_dept: "$head_of_dept"
+          orgName: "$orgName"
+          orgType:"$orgType"
+          ministryName: "$ministryName"
+          hod: "$hod"
           latitude: ${double.parse(latitude.toString())}
           longitude: ${double.parse(longitude.toString())}
-          year_of_experience: "$year_of_experience"
-          shop_name: "$shop_name"
+          yearExp:"$yearExp"
+          shopName: "$shopName"
         ) {
           token
           customer {
@@ -157,9 +156,13 @@ class QueryProvider {
             lastName
             emailId
             phoneNo
-            accountType
+            userTypeId
             status
             jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
           }
           mechanic {
             id
@@ -169,8 +172,11 @@ class QueryProvider {
             emailId
             phoneNo
             userTypeId
-            accountType
             jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
             status
           }
           vendor {
@@ -180,38 +186,35 @@ class QueryProvider {
             lastName
             emailId
             phoneNo
-            accountType
+            userTypeId
             status
             jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
           }
           generalCustomer {
             id
-            org_name
-            org_type
+            custType
+            orgName
+            orgType
             userId
             profilePic
             state
-            resetToken
-            isProfileCompleted
-            govt_type
-            govt_agency
-            ministry_name
-            head_of_dept
+            ministryName
+            hod
             status
           }
           genMechanic {
             id
-            org_name
-            org_type
-            year_exp
+            orgName
+            orgType
+            yearExp
+            mechType
             userId
-            latitude
-            longitude
             profilePic
-            otp_verified
             state
-            resetToken
-            isProfileCompleted
             status
           }
           genVendor {
@@ -219,14 +222,12 @@ class QueryProvider {
             userId
             profilePic
             state
-            resetToken
-            shop_name
-            isProfileCompleted
+            shopName
             status
           }
-          isProfileCompleted
         }
       }
+
     """;
     log(_query);
     return await GqlClient.I.mutation(_query,
@@ -334,11 +335,11 @@ class QueryProvider {
       otp,
       userTypeId) async {
     String _query = """ 
-    mutation {
-        otp_Verification(otpCode: "$otp", userTypeId: $userTypeId) {
-          message
+       mutation {
+          otp_Verification(otpCode: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
+            verified
+          }
         }
-      }
 
     """;
     log(_query);
