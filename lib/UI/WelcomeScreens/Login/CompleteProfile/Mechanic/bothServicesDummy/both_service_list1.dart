@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/bothServicesDummy/categoryListMdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/bothServicesDummy/serviceListAllBothMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,6 +38,9 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
   List<CategoryList> emergencyServiceList = [];
   List<CategoryList> regularServiceList = [];
 
+  List<ServiceListAll> regularServiceList1 = [];
+
+
   List<CategoryList> selectedRegularServiceList = [];
   List<CategoryList> selectedEmergencyServiceList = [];
 
@@ -59,12 +63,13 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    isRegularSelected = false;
+    isRegularSelected = true;
     getSharedPrefData();
     _listenServiceListResponse();
 
     _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
     _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
+
   }
 
   Future<void> getSharedPrefData() async {
@@ -73,8 +78,8 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postCatListRegularRequest(authToken, "2");
       _serviceListBloc.postCatListEmergencyRequest(authToken, "1");
+      _serviceListBloc.postCatListRegularRequest(authToken, "2");
     });
   }
 
@@ -96,13 +101,9 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
             if(allServiceList[i].catType.toString() == "1"){
               emergencyServiceList.add(allServiceList[i]);
               selectedServiceMdlEmergencyList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
-            }else{
-              regularServiceList.add(allServiceList[i]);
-              selectedServiceMdlRegularList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
             }
           }
           _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
-          _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
 
         });
       }
@@ -117,21 +118,35 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
       } else {
 
         setState(() {
-
           allServiceList = value.data!.categoryList!;
-
+          _regularIsChecked = List<bool>.filled(allServiceList.length, false);
           for(int i=0;i<allServiceList.length;i++){
-            if(allServiceList[i].catType.toString() == "1"){
+
+
+            if(allServiceList[i].type.toString() == "1"){
               emergencyServiceList.add(allServiceList[i]);
               selectedServiceMdlEmergencyList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
             }else{
               regularServiceList.add(allServiceList[i]);
               selectedServiceMdlRegularList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
+
             }
           }
-          _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
-          _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
 
+        });
+      }
+    });
+    _serviceListBloc.postServiceAllRegularListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          regularServiceList1 = value.data!.serviceListAll!;
         });
       }
     });
@@ -195,235 +210,6 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
         ),
       ),
     );
-  }
-
-  Widget regularServiceListUi(Size size) {
-   return Container(
-     color: CustColors.pale_grey,
-     child: Column(
-       children: [
-         Container(
-             margin: EdgeInsets.only(
-                 left: size.width * 30 / 100 ,
-                 right: size.width * 30 / 100,
-                 top: size.height * 4 / 100
-             ),
-             child: Text("Regular",
-                softWrap: true,
-                style: Styles.TitleTextBlack,
-             )
-         ),
-         Container(
-           margin: EdgeInsets.only(
-             top: size.height * 3.6 / 100,
-             left: size.width * 5.6 / 100,
-             right: size.width * 5.6 / 100,
-           ),
-           height: ScreenSize().setValue(36.3),
-           decoration: BoxDecoration(
-             color: Colors.white,
-             borderRadius: BorderRadius.all(
-               Radius.circular(
-                 ScreenSize().setValue(5),
-               ),
-             ),
-             boxShadow: [
-               BoxShadow(
-                 color: CustColors.pinkish_grey,
-                 spreadRadius: 0,
-                 blurRadius: 1.5,
-               ),
-             ],
-           ),
-           child: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: [
-               Container(
-                 margin: EdgeInsets.only(left: ScreenSize().setValue(20)),
-                 child: Icon(
-                   Icons.search,
-                   size: 20,
-                   color: CustColors.light_navy,
-                 ),
-               ),
-               Flexible(
-                 child: Container(
-                   margin: EdgeInsets.only(left: ScreenSize().setValue(15)),
-                   alignment: Alignment.center,
-                   height: ScreenSize().setValue(36.3),
-                   child: Center(
-                     child: TextFormField(
-                       keyboardType: TextInputType.text,
-                       textAlignVertical: TextAlignVertical.center,
-                       textAlign: TextAlign.left,
-                       style: Styles.searchTextStyle01,
-                       decoration: InputDecoration(
-                           hintText: "Search Your Service",
-                           border: InputBorder.none,
-                           contentPadding: new EdgeInsets.only(bottom: 15),
-                           hintStyle: Styles.searchTextStyle01
-                       ),
-
-                     ),
-                   ),
-                 ),
-               ),
-             ],
-           ),
-         ),
-         Container(
-           child: StreamBuilder(
-               stream:  _serviceListBloc.serviceListResponse,
-               builder: (context, AsyncSnapshot<CategoryListMdl> snapshot) {
-                 print("${snapshot.hasData}");
-                 print("${snapshot.connectionState}");
-
-                 switch (snapshot.connectionState) {
-                   case ConnectionState.waiting:
-                     return CircularProgressIndicator();
-                   default:
-                     return
-                       snapshot.data?.data?.categoryList?.length != 0 && snapshot.data?.data?.categoryList?.length != null
-                           ? ListView.builder(
-                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                 scrollDirection: Axis.vertical,
-                                 shrinkWrap: true,
-                                 itemCount: snapshot.data?.data?.categoryList?.length,
-                                 itemBuilder: (context, index) {
-                                   TextEditingController _rateController=TextEditingController();
-                                   TextEditingController _timeController = TextEditingController();
-                                   _rateController.text = regularServiceList[index].minAmount.toString();
-                                   _timeController.text = "30:00";
-                                   _rateController.addListener(() {
-                                     var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,_rateController.text,  selectedServiceMdlRegularList[index].time, selectedServiceMdlRegularList[index].isEnable);
-                                     selectedServiceMdlRegularList.removeAt(index);
-                                     selectedServiceMdlRegularList.insert(index,temp);
-                                   });
-                                   _timeController.addListener(() {
-                                     var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, _timeController.text, selectedServiceMdlRegularList[index].isEnable);
-                                     selectedServiceMdlRegularList.removeAt(index);
-                                     selectedServiceMdlRegularList.insert(index,temp);
-                                   });
-                                   return   InkWell(
-                                       onTap: () {
-                                         print(">>>>>");
-                                       },
-                                       child: Container(
-                                         /*margin: EdgeInsets.only(
-                                                        left: 5,
-                                                        right: 5,
-                                                      ),*/
-                                         child: Row(
-                                           children: [
-                                             Transform.scale(
-                                               scale: .8,
-                                               child: Checkbox(
-                                                 value: _regularIsChecked![index],
-                                                 onChanged: (bool? val){
-                                                   setState(() {
-                                                     this._regularIsChecked![index] = val!;
-                                                     //isChecked ? false : true;
-                                                     /* val ?
-                                                                selectedServiceList.add(emergencyServiceList[index])
-                                                                    :
-                                                                selectedServiceList.remove(emergencyServiceList[index]);*/
-                                                     print("sgsjhgj 001 $val");
-                                                     if(val){
-                                                       var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, selectedServiceMdlRegularList[index].time, val);
-                                                       selectedServiceMdlRegularList.removeAt(index);
-                                                       selectedServiceMdlRegularList.insert(index,
-                                                           temp);
-                                                     }else{
-                                                       //serviceSpecialisationList.remove(regularServiceList[index]);
-                                                       var temp= SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, selectedServiceMdlRegularList[index].time, val);
-                                                       selectedServiceMdlRegularList.removeAt(index);
-                                                       selectedServiceMdlRegularList.insert(index,temp
-                                                       );
-                                                     }
-                                                     print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
-                                                   });
-                                                 },
-                                               ),
-                                             ),
-
-                                             Text(
-                                               '${regularServiceList[index].catName.toString()}',
-                                             ),
-                                             SizedBox(
-                                               width: size.width / 100 * 18,
-                                             ),
-                                             Flexible(
-                                               child: TextFormField(
-                                                 validator: (value){
-                                                   if(value!.isEmpty){
-                                                     return "Fill field";
-                                                   }
-                                                   else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                     return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                   }
-                                                   else{
-                                                     return null;
-                                                   }
-                                                 },
-                                                 cursorColor: CustColors.light_navy,
-                                                 keyboardType: TextInputType.number,
-                                                 inputFormatters: <TextInputFormatter>[
-                                                   FilteringTextInputFormatter.digitsOnly,
-                                                 ],
-                                                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                 //initialValue: '${regularServiceList[index].serviceName.toString()}',
-                                                 controller: _rateController,
-                                                 style: Styles.searchTextStyle02,
-                                                 enabled: _regularIsChecked![index],
-                                                 //readOnly: _regularIsChecked![index],
-                                               ),
-                                             ),
-                                             SizedBox(
-                                               width: size.width / 100 * 5,
-                                             ),
-                                             //Text("00 : 30")
-                                             Flexible(
-                                               child: TextFormField(
-                                                 validator: (value){
-                                                   if(value!.isEmpty){
-                                                     return "Fill field";
-                                                   }
-                                                   /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                                  return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                                }*/
-                                                   else{
-                                                     return null;
-                                                   }
-                                                 },
-                                                 cursorColor: CustColors.light_navy,
-                                                 inputFormatters: <TextInputFormatter>[
-                                                   FilteringTextInputFormatter.digitsOnly,
-                                                 ],
-                                                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                 keyboardType: TextInputType.datetime,
-                                                 //initialValue: '${regularServiceList[index].serviceName.toString()}',
-                                                 controller: _timeController,
-                                                 style: Styles.searchTextStyle02,
-                                                 enabled: _regularIsChecked![index],
-                                                 //readOnly: _regularIsChecked![index],
-                                               ),
-                                             ),
-
-                                           ],
-                                         ),
-                                       ));
-                                 },
-                               )
-                           : Center(
-                               child: Text('No Results found.'),
-                             );
-                 }
-               }),
-         )
-       ],
-     ),
-   );
   }
 
   Widget emergencyServiceListUi(Size size) {
@@ -662,6 +448,324 @@ class _BothServiceList1ScreenState extends State<BothServiceList1Screen> {
                                           ));
                                     },
                                   )
+                              : Center(
+                                  child: Text('No Results found.'),
+                                );
+                    }
+                  }),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget regularServiceListUi(Size size) {
+    return Container(
+      color: CustColors.pale_grey,
+      child: Column(
+        children: [
+          Container(
+              margin: EdgeInsets.only(
+                  left: size.width * 30 / 100 ,
+                  right: size.width * 30 / 100,
+                  top: size.height * 4 / 100
+              ),
+              child: Text("Regular",
+                softWrap: true,
+                style: Styles.TitleTextBlack,
+              )
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: size.height * 3.6 / 100,
+              left: size.width * 5.6 / 100,
+              right: size.width * 5.6 / 100,
+            ),
+            height: ScreenSize().setValue(36.3),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  ScreenSize().setValue(5),
+                ),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: CustColors.pinkish_grey,
+                  spreadRadius: 0,
+                  blurRadius: 1.5,
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: ScreenSize().setValue(20)),
+                  child: Icon(
+                    Icons.search,
+                    size: 20,
+                    color: CustColors.light_navy,
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: EdgeInsets.only(left: ScreenSize().setValue(15)),
+                    alignment: Alignment.center,
+                    height: ScreenSize().setValue(36.3),
+                    child: Center(
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        textAlignVertical: TextAlignVertical.center,
+                        textAlign: TextAlign.left,
+                        style: Styles.searchTextStyle01,
+                        decoration: InputDecoration(
+                            hintText: "Search Your Service",
+                            border: InputBorder.none,
+                            contentPadding: new EdgeInsets.only(bottom: 15),
+                            hintStyle: Styles.searchTextStyle01
+                        ),
+
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: StreamBuilder(
+                  stream:  _serviceListBloc.serviceListResponse,
+                  builder: (context, AsyncSnapshot<CategoryListMdl> snapshot) {
+                    print("${snapshot.hasData}");
+                    print("${snapshot.connectionState}");
+
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return CircularProgressIndicator();
+                      default:
+                        return
+                          snapshot.data?.data?.categoryList?.length != 0 && snapshot.data?.data?.categoryList?.length != null
+                              ? ListView.builder(
+                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data?.data?.categoryList?.length,
+                                  itemBuilder: (context, index) {
+
+                                    return   InkWell(
+                                        onTap: () {
+                                          print(">>>>>");
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              /*margin: EdgeInsets.only(
+                                                                    left: 5,
+                                                                    right: 5,
+                                                                  ),*/
+                                              child: Row(
+                                                children: [
+                                                  Transform.scale(
+                                                    scale: .8,
+                                                    child: Checkbox(
+                                                      value: _regularIsChecked![index],
+                                                      onChanged: (bool? val){
+                                                        setState(() {
+                                                          this._regularIsChecked![index] = val!;
+                                                          //isChecked ? false : true;
+                                                          /* val ?
+                                                                            selectedServiceList.add(emergencyServiceList[index])
+                                                                                :
+                                                                            selectedServiceList.remove(emergencyServiceList[index]);*/
+                                                          print("sgsjhgj 001 $val");
+                                                          if(val){
+                                                            _serviceListBloc.postserviceListAllBothRequest(authToken,selectedServiceMdlRegularList[index].serviceId);
+                                                            var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, selectedServiceMdlRegularList[index].time, val);
+                                                            selectedServiceMdlRegularList.removeAt(index);
+                                                            selectedServiceMdlRegularList.insert(index, temp);
+                                                          }else{
+                                                            //serviceSpecialisationList.remove(regularServiceList[index]);
+                                                            var temp= SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, selectedServiceMdlRegularList[index].time, val);
+                                                            selectedServiceMdlRegularList.removeAt(index);
+                                                            selectedServiceMdlRegularList.insert(index,temp);
+                                                          }
+                                                          print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+
+                                                  Text(
+                                                    '${regularServiceList[index].catName.toString()}',
+                                                  ),
+                                                  SizedBox(
+                                                    width: size.width / 100 * 18,
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                            _regularIsChecked![index] == true
+                                            ? Container(
+                                                  child: StreamBuilder(
+                                                      stream:  _serviceListBloc.postServiceAllRegularListResponse,
+                                                      builder: (context, AsyncSnapshot<ServiceListAllBothMdl> snapshot) {
+                                                        print("${snapshot.hasData}");
+                                                        print("${snapshot.connectionState}");
+
+                                                        switch (snapshot.connectionState) {
+                                                          case ConnectionState.waiting:
+                                                            return CircularProgressIndicator();
+                                                          default:
+                                                            return
+                                                              snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
+                                                                  ? ListView.builder(
+                                                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                        scrollDirection: Axis.vertical,
+                                                                        shrinkWrap: true,
+                                                                        itemCount: snapshot.data?.data?.serviceListAll?.length,
+                                                                        itemBuilder: (context, index) {
+                                                                          TextEditingController _rateController=TextEditingController();
+                                                                          TextEditingController _timeController = TextEditingController();
+                                                                          _rateController.text = regularServiceList1[index].minPrice.toString();
+                                                                          _timeController.text = "30:00";
+                                                                          _rateController.addListener(() {
+                                                                            var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,_rateController.text,  selectedServiceMdlRegularList[index].time, selectedServiceMdlRegularList[index].isEnable);
+                                                                            selectedServiceMdlRegularList.removeAt(index);
+                                                                            selectedServiceMdlRegularList.insert(index,temp);
+                                                                          });
+                                                                          _timeController.addListener(() {
+                                                                            var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, _timeController.text, selectedServiceMdlRegularList[index].isEnable);
+                                                                            selectedServiceMdlRegularList.removeAt(index);
+                                                                            selectedServiceMdlRegularList.insert(index,temp);
+                                                                          });
+                                                                          return   InkWell(
+                                                                              onTap: () {
+                                                                                print(">>>>>");
+                                                                              },
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  Container(
+                                                                                    /*margin: EdgeInsets.only(
+                                                                                left: 5,
+                                                                                right: 5,
+                                                                              ),*/
+                                                                                    child: Row(
+                                                                                      children: [
+                                                                                        Transform.scale(
+                                                                                          scale: .8,
+                                                                                          child: Checkbox(
+                                                                                            value: _regularIsChecked![index],
+                                                                                            onChanged: (bool? val){
+                                                                                              setState(() {
+                                                                                                this._regularIsChecked![index] = val!;
+                                                                                                //isChecked ? false : true;
+                                                                                                /* val ?
+                                                                                        selectedServiceList.add(emergencyServiceList[index])
+                                                                                            :
+                                                                                        selectedServiceList.remove(emergencyServiceList[index]);*/
+                                                                                                print("sgsjhgj 001 $val");
+                                                                                                if(val){
+                                                                                                  var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, selectedServiceMdlRegularList[index].time, val);
+                                                                                                  selectedServiceMdlRegularList.removeAt(index);
+                                                                                                  selectedServiceMdlRegularList.insert(index, temp);
+                                                                                                }else{
+                                                                                                  //serviceSpecialisationList.remove(regularServiceList[index]);
+                                                                                                  var temp= SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,selectedServiceMdlRegularList[index].amount, selectedServiceMdlRegularList[index].time, val);
+                                                                                                  selectedServiceMdlRegularList.removeAt(index);
+                                                                                                  selectedServiceMdlRegularList.insert(index,temp);
+                                                                                                }
+                                                                                                print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
+                                                                                              });
+                                                                                            },
+                                                                                          ),
+                                                                                        ),
+
+                                                                                        Text(
+                                                                                          '${regularServiceList1[index].serviceName.toString()}',
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          width: size.width / 100 * 18,
+                                                                                        ),
+                                                                                        Flexible(
+                                                                                          child: TextFormField(
+                                                                                            validator: (value){
+                                                                                              if(value!.isEmpty){
+                                                                                                return "Fill field";
+                                                                                              }
+                                                                                              else if(int.parse(value) < int.parse(regularServiceList1[index].minPrice) || int.parse(value) > int.parse(regularServiceList1[index].maxPrice)){
+                                                                                                return regularServiceList1[index].minPrice + " - " + regularServiceList1[index].maxPrice;
+                                                                                              }
+                                                                                              else{
+                                                                                                return null;
+                                                                                              }
+                                                                                            },
+                                                                                            cursorColor: CustColors.light_navy,
+                                                                                            keyboardType: TextInputType.number,
+                                                                                            inputFormatters: <TextInputFormatter>[
+                                                                                              FilteringTextInputFormatter.digitsOnly,
+                                                                                            ],
+                                                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                            //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                                                                            controller: _rateController,
+                                                                                            style: Styles.searchTextStyle02,
+                                                                                            enabled: _regularIsChecked![index],
+                                                                                            //readOnly: _regularIsChecked![index],
+                                                                                          ),
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          width: size.width / 100 * 5,
+                                                                                        ),
+                                                                                        //Text("00 : 30")
+                                                                                        Flexible(
+                                                                                          child: TextFormField(
+                                                                                            validator: (value){
+                                                                                              if(value!.isEmpty){
+                                                                                                return "Fill field";
+                                                                                              }
+                                                                                              /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
+                                                                                          return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
+                                                                                        }*/
+                                                                                              else{
+                                                                                                return null;
+                                                                                              }
+                                                                                            },
+                                                                                            cursorColor: CustColors.light_navy,
+                                                                                            inputFormatters: <TextInputFormatter>[
+                                                                                              FilteringTextInputFormatter.digitsOnly,
+                                                                                            ],
+                                                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                            keyboardType: TextInputType.datetime,
+                                                                                            //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                                                                            controller: _timeController,
+                                                                                            style: Styles.searchTextStyle02,
+                                                                                            enabled: _regularIsChecked![index],
+                                                                                            //readOnly: _regularIsChecked![index],
+                                                                                          ),
+                                                                                        ),
+
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ));
+                                                                        },
+                                                                      )
+                                                                  : Center(
+                                                                      child: Text('No Results found.'),
+                                                                    );
+                                                        }
+                                                      }),
+                                                )
+                                            :Container(),
+                                          ],
+                                        ));
+                                  },
+                                )
                               : Center(
                                   child: Text('No Results found.'),
                                 );

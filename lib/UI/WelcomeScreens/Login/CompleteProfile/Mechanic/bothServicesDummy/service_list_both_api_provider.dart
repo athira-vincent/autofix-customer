@@ -15,7 +15,7 @@ class ServiceListApiBothProvider {
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
-        final errorMsg = ServiceListAllBothMdl(status: "error", message: _resp['message'], data: null);
+        final errorMsg = ServiceListAllBothMdl(status: "error", message: _resp['message'].toString(), data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};

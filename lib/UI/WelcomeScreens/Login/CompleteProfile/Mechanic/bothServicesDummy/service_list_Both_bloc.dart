@@ -42,12 +42,12 @@ class ServiceListBothBloc {
   /// =============== Regular Service list ==================
 
 
-  final postServiceAllRegularList = BehaviorSubject<ServiceListAllBothMdl>();
+  final postServiceAllRegularList = PublishSubject<ServiceListAllBothMdl>();
   Stream<ServiceListAllBothMdl> get postServiceAllRegularListResponse => postServiceAllRegularList.stream;
 
   postserviceListAllBothRequest(String token, String type) async {
     print(">>>>>>>>>>>>>>>----- token" + token);
-    ServiceListAllBothMdl serviceListAllBothMdl = await repository.postserviceListAllBothRequest(token,2);
+    ServiceListAllBothMdl serviceListAllBothMdl = await repository.postserviceListAllBothRequest(token,type);
     postServiceAllRegularList.sink.add(serviceListAllBothMdl);
   }
 
