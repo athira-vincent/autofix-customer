@@ -15,9 +15,10 @@ class MechanicCompleteProfileApiProvider {
       String workSelection,
       String vehicleSpecialization,
       String address,String apprentice_cert,
-      String identification_cert) async {
+      String identification_cert,
+      String photoUrl) async {
     Map<String, dynamic> _resp = await _queryProvider.completeProfileMechanicIndividual(token, workSelection,
-        vehicleSpecialization, address, apprentice_cert, identification_cert);
+        vehicleSpecialization, address, apprentice_cert, identification_cert,photoUrl);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -42,9 +43,10 @@ class MechanicCompleteProfileApiProvider {
       String address,
       String mechanicNumber,
       String rcNumber,
-      String existenceYear) async {
+      String existenceYear,
+      String photoUrl) async {
     Map<String, dynamic> _resp = await _queryProvider.completeProfileMechanicCorporate(token,
-    serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear);
+    serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear, photoUrl);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

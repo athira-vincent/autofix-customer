@@ -24,7 +24,6 @@ class CorporateMechCompleteProfileMdl {
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"] ,
     status:  json["status"] ,
-
   );
 
   Map<String, dynamic> toJson() => {
@@ -51,50 +50,58 @@ class Data {
 class MechanicWorkSelectionCorporate {
   MechanicWorkSelectionCorporate({
     required this.id,
-    required this.serviceType,
+    required this.workType,
+    required this.brands,
     required this.apprenticeCert,
+    required this.profilePic,
     required this.address,
     required this.identificationCert,
-    required this.noMechanics,
+    required this.numMech,
     required this.rcNumber,
-    required this.yearExistence,
+    required this.yearExist,
     required this.status,
     required this.userId,
   });
 
   String id;
-  String serviceType;
+  String workType;
+  String brands;
   dynamic apprenticeCert;
+  String profilePic;
   String address;
   dynamic identificationCert;
-  String noMechanics;
+  String numMech;
   String rcNumber;
-  String yearExistence;
+  String yearExist;
   int status;
   int userId;
 
   factory MechanicWorkSelectionCorporate.fromJson(Map<String, dynamic> json) => MechanicWorkSelectionCorporate(
     id: json["id"] == null ? null : json["id"],
-    serviceType: json["service_type"] == null ? null : json["service_type"],
+    workType: json["workType"] == null ? null : json["workType"],
+    brands: json["brands"] == null ? null : json["brands"],
     apprenticeCert: json["apprentice_cert"],
+    profilePic: json["profilePic"] == null ? null : json["profilePic"],
     address: json["address"] == null ? null : json["address"],
     identificationCert: json["identification_cert"],
-    noMechanics: json["no_mechanics"] == null ? null : json["no_mechanics"],
-    rcNumber: json["rc_number"] == null ? null : json["rc_number"],
-    yearExistence: json["year_existence"] == null ? null : json["year_existence"],
+    numMech: json["numMech"] == null ? null : json["numMech"],
+    rcNumber: json["rcNumber"] == null ? null : json["rcNumber"],
+    yearExist: json["yearExist"] == null ? null : json["yearExist"],
     status: json["status"] == null ? null : json["status"],
     userId: json["userId"] == null ? null : json["userId"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "service_type": serviceType == null ? null : serviceType,
+    "workType": workType == null ? null : workType,
+    "brands": brands == null ? null : brands,
     "apprentice_cert": apprenticeCert,
+    "profilePic": profilePic == null ? null : profilePic,
     "address": address == null ? null : address,
     "identification_cert": identificationCert,
-    "no_mechanics": noMechanics == null ? null : noMechanics,
-    "rc_number": rcNumber == null ? null : rcNumber,
-    "year_existence": yearExistence == null ? null : yearExistence,
+    "numMech": numMech == null ? null : numMech,
+    "rcNumber": rcNumber == null ? null : rcNumber,
+    "yearExist": yearExist == null ? null : yearExist,
     "status": status == null ? null : status,
     "userId": userId == null ? null : userId,
   };

@@ -536,28 +536,31 @@ class QueryProvider {
   completeProfileMechanicIndividual(String token,
       String workSelection,
       String vehicleSpecialization,
-      String address,String apprentice_cert, String identification_cert) async {
+      String address,String apprentice_cert, String identification_cert, String photoUrl) async {
     String _query = """
-    mutation {
-  mechanic_work_selection_Individual(
-    service_type: "$workSelection"
-    vehicle: "$vehicleSpecialization"
-    address: "$address"
-    apprentice_cert: "$apprentice_cert"
-    identification_cert: "$identification_cert"
-  ) {
-    id
-    service_type
-    apprentice_cert
-    address
-    identification_cert
-    no_mechanics
-    rc_number
-    year_existence
-    status
-    userId
-  }
-}
+        mutation {
+      mechanic_work_selection_Individual(
+        workType: "$workSelection"
+        vehicle: "$vehicleSpecialization"
+        address: "$address"
+        apprentice_cert: "$apprentice_cert"
+        identification_cert: "$identification_cert"
+        profilePic: "$photoUrl"
+      ) {
+        id
+        workType
+        brands
+        apprentice_cert
+        profilePic
+        address
+        identification_cert
+        numMech
+        rcNumber
+        yearExist
+        status
+        userId
+      }
+    }
     """;
     log(_query);
     print(">>>> Token $token");
@@ -576,26 +579,30 @@ class QueryProvider {
       String address,
       String mechanicNumber,
       String rcNumber,
-      String existenceYear
+      String existenceYear,
+      String photoUrl
       ) async {
     String _query = """ 
     mutation {
   mechanic_work_selection_Corporate(
-    service_type: "1,2"
-    vehicle: "1"
-    address: "string"
-    no_mechanics: "string"
-    rc_number: "string"
-    year_existence: "string"
+    workType: "$serviceType"
+    vehicle: "$vehicleSpecialization"
+    address: "$address"
+    numMech: "$mechanicNumber"
+    rcNumber: "$rcNumber"
+    yearExist: "$existenceYear"
+    profilePic: "$photoUrl"
   ) {
     id
-    service_type
+    workType
+    brands
     apprentice_cert
+    profilePic
     address
     identification_cert
-    no_mechanics
-    rc_number
-    year_existence
+    numMech
+    rcNumber
+    yearExist
     status
     userId
   }

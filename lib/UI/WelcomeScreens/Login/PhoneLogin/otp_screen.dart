@@ -355,11 +355,19 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                                           otpNumber: textEditingController.text.toString(),
                                                                         )),
                                                               );
-                                                            }else{
+                                                            }
+                                                            else{
                                                               _isLoading = false;
                                                               SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
                                                             }
                                                           }
+                                                        /*else if(widget.fromPage == "2"){
+                                                          _isLoading=true;
+                                                          print(textEditingController.text);
+                                                          print(authToken.toString());
+
+                                                          _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
+                                                        }*/
                                                         else{
                                                           _isLoading=true;
                                                           print(textEditingController.text);
