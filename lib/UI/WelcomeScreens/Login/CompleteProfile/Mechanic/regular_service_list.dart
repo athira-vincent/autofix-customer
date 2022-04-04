@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
@@ -25,19 +26,54 @@ class RegularServiceListScreen extends StatefulWidget {
 class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
 
+  final CategoryListBloc _categoryListBloc = CategoryListBloc();
   final ServiceListBloc _serviceListBloc = ServiceListBloc();
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
 
-  List<EmeregencyOrRegularServiceList> regularServiceList = [];
-  List<EmeregencyOrRegularServiceList> selectedServiceList = [];
+  List<ServiceListAll> regularServiceList = [];
+  List<ServiceListAll> selectedServiceList = [];
   List<bool>? _regularIsChecked;
 
   String title = "";
   String selectedService = "";
-  List<EmeregencyOrRegularServiceList> serviceSpecialisationList =[];
+  List<ServiceListAll> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
 
   String authToken="";
+
+  _listenCategoryListResponse() {
+    _categoryListBloc.postCategoryList.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          //_isLoading = false;
+        });
+
+      } else {
+
+        /*setState(() {
+          print("success postServiceList >>>>>>>  ${value.status}");
+          //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
+
+          //_isLoading = false;
+          print(value.data!.serviceListAll!.length);
+          regularServiceList = value.data!.serviceListAll!;
+
+          for(int i=0;i<regularServiceList.length;i++){
+            selectedServiceMdlList.add(SelectedServicesMdl(regularServiceList[i].id.toString(),regularServiceList[i].minPrice, "00:30", false));
+          }
+          _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
+          print(_regularIsChecked!.length);
+
+          //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
+          //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
+
+        });*/
+      }
+    });
+  }
 
   _listenServiceListResponse() {
     _serviceListBloc.postServiceList.listen((value) {
@@ -56,11 +92,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
-          print(value.data!.emeregencyOrRegularServiceList!.length);
-          regularServiceList = value.data!.emeregencyOrRegularServiceList!;
+          print(value.data!.serviceListAll!.length);
+          regularServiceList = value.data!.serviceListAll!;
 
           for(int i=0;i<regularServiceList.length;i++){
-            selectedServiceMdlList.add(SelectedServicesMdl(regularServiceList[i].id.toString(),regularServiceList[i].minAmount, "00:30", false));
+            selectedServiceMdlList.add(SelectedServicesMdl(regularServiceList[i].id.toString(),regularServiceList[i].minPrice, "00:30", false));
           }
           _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
           print(_regularIsChecked!.length);
@@ -119,7 +155,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "1");
+      _categoryListBloc.postCategoryListRequest(authToken, null, null, "1");
+      //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
 
@@ -249,7 +286,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                       //print(regularServiceList[index].minAmount.toString() + ">>>Min amt");
                                       //print(regularServiceList[index].isEditable.toString() + ">>>isEditable amt");
                                       //_rateController.text = regularServiceList![index].minAmount.toString();
-                                      _rateController.text=regularServiceList[index].minAmount.toString();
+                                      _rateController.text=regularServiceList[index].minPrice.toString();
                                       _timeController.text = "30:00";
                                       _rateController.addListener(() {
                                         var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
@@ -338,8 +375,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                                       if(value!.isEmpty){
                                                         return "Fill field";
                                                       }
-                                                      else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                        return regularServiceList[index].minAmount + "-" + regularServiceList[index].maxAmount;
+                                                      else if(int.parse(value) < int.parse(regularServiceList[index].minPrice) || int.parse(value) > int.parse(regularServiceList[index].maxPrice)){
+                                                        return regularServiceList[index].minPrice + "-" + regularServiceList[index].maxPrice;
                                                       }
                                                       else{
                                                         return null;

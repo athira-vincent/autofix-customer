@@ -1,4 +1,3 @@
-
 // To parse this JSON data, do
 //
 //     final addServicesMdl = addServicesMdlFromJson(jsonString);

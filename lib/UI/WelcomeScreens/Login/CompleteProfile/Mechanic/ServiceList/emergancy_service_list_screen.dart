@@ -27,14 +27,14 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
 
 
-  List<EmeregencyOrRegularServiceList> emergencyServiceList = [];
-  List<EmeregencyOrRegularServiceList> selectedServiceList = [];
+  List<ServiceListAll> emergencyServiceList = [];
+  List<ServiceListAll> selectedServiceList = [];
 
   String title = "";
   List<bool>? _emergencyIsChecked;
 
   String selectedService = "";
-  List<EmeregencyOrRegularServiceList> serviceSpecialisationList =[];
+  List<ServiceListAll> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
 
   String authToken="";
@@ -55,7 +55,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "2");
+      _serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
 
@@ -76,11 +76,11 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
-          print(value.data!.emeregencyOrRegularServiceList!.length);
-          emergencyServiceList = value.data!.emeregencyOrRegularServiceList!;
+          print(value.data!.serviceListAll!.length);
+          emergencyServiceList = value.data!.serviceListAll!;
 
           for(int i=0;i<emergencyServiceList.length;i++){
-            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minAmount, "00:30", false));
+            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minPrice, "00:30", false));
           }
           _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
           print(_emergencyIsChecked!.length);
@@ -239,7 +239,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
 
                                     TextEditingController _rateController=TextEditingController();
                                     TextEditingController _timeController = TextEditingController();
-                                    _rateController.text = emergencyServiceList[index].minAmount.toString();
+                                    _rateController.text = emergencyServiceList[index].minPrice.toString();
                                     _timeController.text = "30:00";
                                     _rateController.addListener(() {
                                       var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
@@ -326,8 +326,8 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                                   if(value!.isEmpty){
                                                     return "Fill field";
                                                   }
-                                                  else if(int.parse(value) < int.parse(emergencyServiceList[index].minAmount) || int.parse(value) > int.parse(emergencyServiceList[index].maxAmount)){
-                                                    return emergencyServiceList[index].minAmount + " - " + emergencyServiceList[index].maxAmount;
+                                                  else if(int.parse(value) < int.parse(emergencyServiceList[index].minPrice) || int.parse(value) > int.parse(emergencyServiceList[index].maxPrice)){
+                                                    return emergencyServiceList[index].minPrice + " - " + emergencyServiceList[index].maxPrice;
                                                   }
                                                   else{
                                                     return null;

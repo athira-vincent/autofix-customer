@@ -454,16 +454,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
-                print("+++++++++++++++${snapshot.data?.data?.emeregencyOrRegularServiceList?.length}++++++++++++++++");
+                print("+++++++++++++++${snapshot.data?.data?.serviceListAll?.length}++++++++++++++++");
 
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return CircularProgressIndicator();
                   default:
                     return
-                      snapshot.data?.data?.emeregencyOrRegularServiceList?.length != 0 && snapshot.data?.data?.emeregencyOrRegularServiceList?.length != null
+                      snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
                           ? GridView.builder(
-                              itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                              itemCount:snapshot.data?.data?.serviceListAll?.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -482,7 +482,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                       print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                                       print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
                                       serviceIds.clear();
-                                      serviceIds.add('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].id}');
+                                      serviceIds.add('${snapshot.data?.data?.serviceListAll![index].id}');
                                       print(">>>>>>>>>> ServiceId  $serviceIds");
 
                                       _homeCustomerBloc.postMechanicsBookingIDRequest(
@@ -511,7 +511,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(2),
-                                          child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                          child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
                                             style: Styles.textLabelTitleEmergencyServiceName,
                                             maxLines: 2,
                                             textAlign: TextAlign.center,
@@ -586,7 +586,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
                       print("${snapshot.hasData}");
                       print("${snapshot.connectionState}");
-                      print("+++++++++++++++${snapshot.data?.data?.emeregencyOrRegularServiceList?.length}++++++++++++++++");
+                      print("+++++++++++++++${snapshot.data?.data?.serviceListAll?.length}++++++++++++++++");
 
 
                       switch (snapshot.connectionState) {
@@ -594,9 +594,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           return CircularProgressIndicator();
                         default:
                           return
-                            snapshot.data?.data?.emeregencyOrRegularServiceList?.length != 0 && snapshot.data?.data?.emeregencyOrRegularServiceList?.length != null
+                            snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
                                 ? GridView.builder(
-                              itemCount:snapshot.data?.data?.emeregencyOrRegularServiceList?.length,
+                              itemCount:snapshot.data?.data?.serviceListAll?.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -629,7 +629,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(2),
-                                          child: Text('${snapshot.data?.data?.emeregencyOrRegularServiceList![index].serviceName}',
+                                          child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
                                             style: Styles.textLabelTitleEmergencyServiceName,
                                             maxLines: 2,
                                             textAlign: TextAlign.center,

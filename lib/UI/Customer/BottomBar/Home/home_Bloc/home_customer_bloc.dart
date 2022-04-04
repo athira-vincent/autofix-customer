@@ -23,7 +23,7 @@ class HomeCustomerBloc {
 
   postRegularServiceListRequest(String token, String type) async {
 
-    ServiceListMdl _serviceListMdl = await repository.getServiceList(token,type);
+    ServiceListMdl _serviceListMdl = await repository.getServiceList(token, null, null, "1");
     postRegularServiceList.sink.add(_serviceListMdl);
   }
 
@@ -36,7 +36,7 @@ class HomeCustomerBloc {
 
   postEmergencyServiceListRequest(String token, String type) async {
 
-    ServiceListMdl _serviceListMdl = await repository.getServiceList(token,type);
+    ServiceListMdl _serviceListMdl = await repository.getServiceList(token, null, null, "1");
     postEmergencyServiceList.sink.add(_serviceListMdl);
   }
 

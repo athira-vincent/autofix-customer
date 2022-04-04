@@ -35,68 +35,60 @@ class ServiceListMdl {
 
 class Data {
   Data({
-    required this.emeregencyOrRegularServiceList,
+    required this.serviceListAll,
   });
 
-  List<EmeregencyOrRegularServiceList>? emeregencyOrRegularServiceList;
+  List<ServiceListAll>? serviceListAll;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    emeregencyOrRegularServiceList: json["emeregency_or_regular_serviceList"] == null ? null : List<EmeregencyOrRegularServiceList>.from(json["emeregency_or_regular_serviceList"].map((x) => EmeregencyOrRegularServiceList.fromJson(x))),
+    serviceListAll: json["serviceListAll"] == null ? null : List<ServiceListAll>.from(json["serviceListAll"].map((x) => ServiceListAll.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "emeregency_or_regular_serviceList": emeregencyOrRegularServiceList == null ? null : List<dynamic>.from(emeregencyOrRegularServiceList!.map((x) => x.toJson())),
+    "serviceListAll": serviceListAll == null ? null : List<dynamic>.from(serviceListAll!.map((x) => x.toJson())),
   };
 }
 
-class EmeregencyOrRegularServiceList {
-  EmeregencyOrRegularServiceList({
+class ServiceListAll {
+  ServiceListAll({
     required this.id,
     required this.serviceName,
     required this.description,
     required this.icon,
-    required this.minAmount,
-    required this.maxAmount,
-    required this.type,
-    required this.status,
+    required this.minPrice,
+    required this.maxPrice,
     required this.categoryId,
-    required this.category,
+    required this.status,
   });
 
-  int id;
+  String id;
   String serviceName;
-  String description;
+  dynamic description;
   dynamic icon;
-  String minAmount;
-  String maxAmount;
-  String type;
-  int status;
+  String minPrice;
+  String maxPrice;
   int categoryId;
-  dynamic category;
+  int status;
 
-  factory EmeregencyOrRegularServiceList.fromJson(Map<String, dynamic> json) => EmeregencyOrRegularServiceList(
+  factory ServiceListAll.fromJson(Map<String, dynamic> json) => ServiceListAll(
     id: json["id"] == null ? null : json["id"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
-    description: json["description"] == null ? null : json["description"],
+    description: json["description"],
     icon: json["icon"],
-    minAmount: json["minAmount"] == null ? null : json["minAmount"],
-    maxAmount: json["maxAmount"] == null ? null : json["maxAmount"],
-    type: json["type"] == null ? null : json["type"],
-    status: json["status"] == null ? null : json["status"],
+    minPrice: json["minPrice"] == null ? null : json["minPrice"],
+    maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
     categoryId: json["categoryId"] == null ? null : json["categoryId"],
-    category: json["category"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "serviceName": serviceName == null ? null : serviceName,
-    "description": description == null ? null : description,
+    "description": description,
     "icon": icon,
-    "minAmount": minAmount == null ? null : minAmount,
-    "maxAmount": maxAmount == null ? null : maxAmount,
-    "type": type == null ? null : type,
-    "status": status == null ? null : status,
+    "minPrice": minPrice == null ? null : minPrice,
+    "maxPrice": maxPrice == null ? null : maxPrice,
     "categoryId": categoryId == null ? null : categoryId,
-    "category": category,
+    "status": status == null ? null : status,
   };
 }
