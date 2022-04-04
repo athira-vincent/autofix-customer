@@ -121,14 +121,14 @@ class QueryProvider {
   phoneLogin(  phoneNumber) async {
     String _query = """
     mutation {
-  signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
-    otp
-    phoneNo
-    id
-    userTypeId
-    jwtToken
-  }
-}
+      signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
+        otp
+        phoneNo
+        id
+        userTypeId
+        jwtToken
+      }
+    }
     """;
 
     return await GqlClient.I.mutation(_query,
@@ -335,6 +335,38 @@ class QueryProvider {
       enableDebug: true,
       isTokenThere: true,
     );
+  }
+
+
+  postPhoneLoginOtpVerificationRequest(
+      token,
+      otp,
+      userTypeId) async {
+      String _query = """ 
+         mutation {
+            signIn_Otp(otp: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
+              token
+              user {
+                id
+                userCode
+                firstName
+                lastName
+                emailId
+                phoneNo
+                status
+                userTypeId
+                jwtToken
+                fcmToken
+                otpCode
+                isProfile
+                otpVerified
+              }
+            }
+          }
+      """;
+      log(_query);
+      return await GqlClient.I.mutation11(_query,
+          enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
   postOtpVerificationRequest(
@@ -796,5 +828,80 @@ class QueryProvider {
     );
   }
 
+  postCustFetchProfileRequest(
+      token) async {
+    String _query = """ 
+     query
+     {
+        customer_Details(jwtToken: "$token") {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            accountType
+            status
+            jwtToken
+            fcmToke
+            otpCode
+            customer 
+                    {
+                    id
+                    custType
+                    orgName
+                    orgType
+                    userId
+                    profilePic
+                    state
+                    ministryName
+                    hod
+                    status
+                  }
+          }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postCustVehicleListRequest(
+      token) async {
+    String _query = """ 
+     query
+     {
+        Cust_vehicle_list {
+          id
+          year
+          brand
+          model
+          engine
+          plateNo
+          milege
+          lastMaintenance
+          latitude
+          longitude
+          vehiclePic
+          userId
+          status
+          defaultVehicle
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 
 }

@@ -7,7 +7,8 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../PhoneLogin/otp_Verification_Mdl.dart';
+import '../PhoneLogin/OtpModels/otp_Verification_Mdl.dart';
+import '../PhoneLogin/OtpModels/phoneLoginOtpVerificationMdl.dart';
 
 class SignupBloc {
 
@@ -58,11 +59,33 @@ class SignupBloc {
       otp,
       userTypeId
       ) async {
-    OtpVerificationMdl vehicleCreateMdl = await repository.postOtpVerificationRequest(
+    OtpVerificationMdl _otpVerificationMdl = await repository.postOtpVerificationRequest(
       token,
       otp,
       userTypeId);
-    postOtpVerification.sink.add(vehicleCreateMdl);
+    postOtpVerification.sink.add(_otpVerificationMdl);
+  }
+
+
+
+
+  /// --------------- Phone Login Otp Verification Starts -------------------- ///
+
+
+  final postPhoneLoginOtpVerification = PublishSubject<PhoneLoginOtpVerificationMdl>();
+  Stream<PhoneLoginOtpVerificationMdl> get phoneLoginOtpVerificationResponse => postPhoneLoginOtpVerification.stream;
+
+
+  postPhoneLoginOtpVerificationRequest(
+      token,
+      otp,
+      userTypeId
+      ) async {
+    PhoneLoginOtpVerificationMdl phoneOtpVerificationMdl = await repository.postPhoneLoginOtpVerificationRequest(
+        token,
+        otp,
+        userTypeId);
+    postPhoneLoginOtpVerification.sink.add(phoneOtpVerificationMdl);
   }
 
 

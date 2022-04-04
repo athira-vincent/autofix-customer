@@ -9,7 +9,8 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl
 import 'package:flutter/services.dart';
 
 import '../../../Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
-import '../PhoneLogin/otp_Verification_Mdl.dart';
+import '../PhoneLogin/OtpModels/otp_Verification_Mdl.dart';
+import '../PhoneLogin/OtpModels/phoneLoginOtpVerificationMdl.dart';
 
 class SignupApiProvider {
 
@@ -61,6 +62,29 @@ class SignupApiProvider {
     }
   }
 
+
+  Future<PhoneLoginOtpVerificationMdl> postPhoneLoginOtpVerificationRequest(
+      token,
+      otp,
+      userTypeId) async {
+    Map<String, dynamic> _resp = await _queryProvider.postPhoneLoginOtpVerificationRequest(
+        token,
+        otp,
+        userTypeId);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = PhoneLoginOtpVerificationMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return PhoneLoginOtpVerificationMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = PhoneLoginOtpVerificationMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 
 
 

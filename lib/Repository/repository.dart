@@ -69,6 +69,16 @@ class Repository {
         otp,
         userTypeId);
 
+  //Phone Login Otp Verification
+  Future<dynamic> postPhoneLoginOtpVerificationRequest(
+      token,
+      otp,
+      userTypeId) =>
+      _signupApiProvider.postPhoneLoginOtpVerificationRequest(
+          token,
+          otp,
+          userTypeId);
+
   //Mechanic Booking Id Request
   Future<dynamic> postMechanicsBookingIDRequest(
       token,
@@ -197,5 +207,16 @@ class Repository {
           userId, type);
 
 
+  // Fetch Profile Request
+  Future<dynamic>  postCustFetchProfileRequest(
+      token)  =>
+      _homeCustomerApiProvider.postCustFetchProfileRequest(
+          token);
+
+  //  Vehicle List Request
+  Future<dynamic>  postCustVehicleListRequest(
+      token)  =>
+      _homeCustomerApiProvider.postCustVehicleListRequest(
+          token);
 
 }
