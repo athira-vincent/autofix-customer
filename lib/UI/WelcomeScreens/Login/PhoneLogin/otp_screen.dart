@@ -192,6 +192,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         });
       }
     });
+    _signupBloc.postPhoneLoginOtpVerification.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
+          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          _isLoading = false;
+        });
+
+      } else {
+
+
+      }
+    });
   }
 
 

@@ -337,6 +337,38 @@ class QueryProvider {
     );
   }
 
+
+  postPhoneLoginOtpVerificationRequest(
+      token,
+      otp,
+      userTypeId) async {
+      String _query = """ 
+         mutation {
+            signIn_Otp(otp: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
+              token
+              user {
+                id
+                userCode
+                firstName
+                lastName
+                emailId
+                phoneNo
+                status
+                userTypeId
+                jwtToken
+                fcmToken
+                otpCode
+                isProfile
+                otpVerified
+              }
+            }
+          }
+      """;
+      log(_query);
+      return await GqlClient.I.mutation11(_query,
+          enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
   postOtpVerificationRequest(
       token,
       otp,

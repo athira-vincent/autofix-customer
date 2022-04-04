@@ -69,6 +69,16 @@ class Repository {
         otp,
         userTypeId);
 
+  //Phone Login Otp Verification
+  Future<dynamic> postPhoneLoginOtpVerificationRequest(
+      token,
+      otp,
+      userTypeId) =>
+      _signupApiProvider.postPhoneLoginOtpVerificationRequest(
+          token,
+          otp,
+          userTypeId);
+
   //Mechanic Booking Id Request
   Future<dynamic> postMechanicsBookingIDRequest(
       token,
