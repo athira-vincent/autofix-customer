@@ -904,4 +904,60 @@ class QueryProvider {
     );
   }
 
+
+  postCatListBothRequest(
+      token,type) async {
+    String _query = """ 
+     query
+     {
+        category_list(catType: $type) {
+          id
+          catType
+          catName
+          icon
+          status
+        }
+      }
+
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+
+  postserviceListAllBothRequest(
+      token,type) async {
+    String _query = """ 
+     query
+     {
+        serviceListAll(search: null, count: null, categoryId: $type) {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+
+
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 }
