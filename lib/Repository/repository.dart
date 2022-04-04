@@ -204,5 +204,16 @@ class Repository {
           userId, type);
 
 
+  // Fetch Profile Request
+  Future<dynamic>  postCustFetchProfileRequest(
+      token)  =>
+      _homeCustomerApiProvider.postCustFetchProfileRequest(
+          token);
+
+  //  Vehicle List Request
+  Future<dynamic>  postCustVehicleListRequest(
+      token)  =>
+      _homeCustomerApiProvider.postCustVehicleListRequest(
+          token);
 
 }

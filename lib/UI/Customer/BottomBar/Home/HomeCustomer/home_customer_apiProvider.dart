@@ -3,6 +3,8 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/SearchService/serviceSearchListAll_Mdl.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
 
 import 'ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 
@@ -89,5 +91,45 @@ class HomeCustomerApiProvider {
       return errorMsg;
     }
   }
+
+  Future<CustVehicleListMdl>   postCustVehicleListRequest(
+      token)async {
+    Map<String, dynamic> _resp = await _queryProvider. postCustVehicleListRequest(
+        token,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustVehicleListMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustVehicleListMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CustVehicleListMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  Future<CustomerDetailsMdl>   postCustFetchProfileRequest(
+      token)async {
+    Map<String, dynamic> _resp = await _queryProvider. postCustFetchProfileRequest(
+      token,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustomerDetailsMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustomerDetailsMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CustomerDetailsMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
 
 }

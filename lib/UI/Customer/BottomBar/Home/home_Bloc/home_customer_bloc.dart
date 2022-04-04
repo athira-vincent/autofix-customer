@@ -1,6 +1,8 @@
 
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
@@ -102,6 +104,34 @@ class HomeCustomerBloc {
         count,
         categoryId);
     postSearchService.sink.add(_serviceSearchListAllMdl);
+  }
+
+
+  /// =============== Fetch Profile Request ================== ///
+
+  final postFetchProfile = PublishSubject<CustomerDetailsMdl>();
+  Stream<CustomerDetailsMdl> get postFetchProfileResponse => postFetchProfile.stream;
+
+  postCustFetchProfileRequest(
+      token,) async {
+
+    CustomerDetailsMdl _customerDetailsMdl = await repository.postCustFetchProfileRequest(
+        token,);
+    postFetchProfile.sink.add(_customerDetailsMdl);
+  }
+
+
+  /// =============== Vehicle List Request ================== ///
+
+  final postCustVehicleList = PublishSubject<CustVehicleListMdl>();
+  Stream<CustVehicleListMdl> get postCustVehicleListResponse => postCustVehicleList.stream;
+
+  postCustVehicleListRequest(
+      token,) async {
+
+    CustVehicleListMdl _custVehicleListMdl = await repository.postCustVehicleListRequest(
+      token,);
+    postCustVehicleList.sink.add(_custVehicleListMdl);
   }
 
 
