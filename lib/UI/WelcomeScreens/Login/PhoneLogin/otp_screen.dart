@@ -196,13 +196,19 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       if (value.status == "error") {
         setState(() {
           SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
+          print("message postPhoneLoginOtpVerification >>>>>>>  ${value.message}");
+          print("errrrorr postPhoneLoginOtpVerification >>>>>>>  ${value.status}");
           _isLoading = false;
         });
 
       } else {
-
+        if( widget.fromPage == "2")
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  CustomerHomeScreen()));
+        }
 
       }
     });
@@ -374,6 +380,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                               SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
                                                             }
                                                           }
+                                                        else if(widget.fromPage=="2")
+                                                        {
+                                                          _isLoading = true;
+                                                          if(textEditingController.text == widget.otpNumber){
+                                                            _signupBloc.postPhoneLoginOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
+
+                                                          }else{
+                                                            _isLoading = false;
+                                                            SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
+                                                          }
+                                                        }
                                                         else{
                                                           _isLoading=true;
                                                           print(textEditingController.text);
@@ -381,9 +398,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
 
                                                         }
-
                                                       });
-
                                                     },
                                                     child: Container(
                                                       height: 45,
