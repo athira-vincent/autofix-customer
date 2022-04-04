@@ -1036,10 +1036,11 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                               authToken,
                               _workSelectionController.text,
                               // _chooseVechicleSpecializedController.text.toString(),
-                              selectedVehicleId,
+                              //selectedVehicleId,
+                              selectedVehicles,
                               _addressController.text.toString(),
                               certificateOfApprenticeFirebaseUrl,
-                              meansOfIdentificationFirebaseUrl
+                              meansOfIdentificationFirebaseUrl,imageFirebaseUrl
                           );
                         } else {
                           print("individual _formKey.currentState!.validate() - else");
@@ -1113,11 +1114,13 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                           _completeProfileBloc.postCompleteProfileCorporateRequest(
                               authToken,
                               _workSelectionController.text,
-                              selectedVehicleId,
+                              //selectedVehicleId,
+                              selectedVehicles,
                               _addressController.text.toString(),
                               _noOfMechanicsController.text.toString(),
                               _rcNumberController.text.toString(),
-                              _yearOfExistenceController.text.toString()
+                              _yearOfExistenceController.text.toString(),
+                               imageFirebaseUrl
                           );
                         } else {
                           print("_corporate - formKey.currentState!.validate() - else");

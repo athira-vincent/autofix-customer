@@ -140,9 +140,10 @@ class Repository {
       String workSelection,
       String vehicleSpecialization,
      String address, String apprentice_cert,
-      String identification_cert) =>
+      String identification_cert,
+      String photoUrl) =>
       _completeProfileMechanicApiProvider.getCompleteProfileMechIndividualRequest(
-         token, workSelection, vehicleSpecialization,address, apprentice_cert, identification_cert );
+         token, workSelection, vehicleSpecialization,address, apprentice_cert, identification_cert,photoUrl );
 
   // Mechanic Corporate Complete Profile
   Future<dynamic> getCompleteProfileMechCorporate(String token,
@@ -151,14 +152,16 @@ class Repository {
       String address,
       String mechanicNumber,
       String rcNumber,
-      String existenceYear) =>
+      String existenceYear,
+      String photoUrl) =>
       _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest(token,
         serviceType,
         mechanicNumber,
         rcNumber,
         vehicleSpecialization,
         existenceYear,
-        address
+        address,
+        photoUrl
       );
 
   // Get State

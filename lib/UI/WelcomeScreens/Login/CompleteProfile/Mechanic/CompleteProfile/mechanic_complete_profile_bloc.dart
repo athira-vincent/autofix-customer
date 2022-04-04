@@ -13,10 +13,10 @@ class MechanicCompleteProfileBloc {
   Stream<CorporateMechCompleteProfileMdl> get completeProfileCorporateResponse => postCompleteProfileCorporate.stream;
 
   postCompleteProfileCorporateRequest(String token, String serviceType, String vehicleSpecialization,
-      String address, String mechanicNumber, String rcNumber, String existenceYear) async {
+      String address, String mechanicNumber, String rcNumber, String existenceYear, String photoUrl) async {
 
     CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporate(
-        token, serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear);
+        token, serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear,photoUrl);
     postCompleteProfileCorporate.sink.add(_completeProfileMdl);
   }
 
@@ -30,12 +30,13 @@ class MechanicCompleteProfileBloc {
       String vehicleSpecialization,
       String address,
       String apprenticeCertificate,
-      String identification
+      String identification,
+      String photoUrl
       ) async {
 
     print(workSelection);
     IndividualMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechIndividual(token,
-        workSelection,vehicleSpecialization,address, apprenticeCertificate, identification);
+        workSelection,vehicleSpecialization,address, apprenticeCertificate, identification, photoUrl);
     postCompleteProfileIndividual.sink.add(_completeProfileMdl);
   }
 
