@@ -819,42 +819,41 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
               margin: EdgeInsets.only(top: 10),
               child: _isLoading
                   ? Center(
-                child: Container(
-                  height: _setValue(28),
-                  width: _setValue(28),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
-                  ),
-                ),
-              )
-                  : Container(
-
-                child: MaterialButton(
-                  onPressed: () {
-
-                  },
-                  child: Container(
-                    height: 45,
-                    width: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Save',
-                          textAlign: TextAlign.center,
-                          style: Styles.textButtonLabelSubTitle,
+                      child: Container(
+                        height: _setValue(28),
+                        width: _setValue(28),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              CustColors.peaGreen),
                         ),
-                      ],
+                      ),
+                    )
+                  : Container(
+                    child: MaterialButton(
+                      onPressed: () {
+
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 100,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Save',
+                              textAlign: TextAlign.center,
+                              style: Styles.textButtonLabelSubTitle,
+                            ),
+                          ],
+                        ),
+                      ),
+                      color: CustColors.materialBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              _setValue(10))),
                     ),
                   ),
-                  color: CustColors.materialBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          _setValue(10))),
-                ),
-              ),
             ),
           ),
         ],
