@@ -421,8 +421,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                   });
 
                                 },
-                                child: snapshot.data?.data?.serviceListAll?[index].type =='2' && snapshot.data?.data?.serviceListAll?[index].type != null
-                                    ? Container(
+                                child: Container(
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(30,0,30,0),
                                     child: Column(
@@ -442,7 +441,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                     ),
                                   ),
                                 )
-                                    : Container(),
                               );
                             },
                           ),

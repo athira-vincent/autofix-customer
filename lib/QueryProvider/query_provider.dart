@@ -484,9 +484,8 @@ class QueryProvider {
           serviceName
           description
           icon
-          minAmount
-          maxAmount
-          type
+          minPrice
+          maxPrice
           status
         }
       }
