@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/bothServicesDummy/service_list_both_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
@@ -30,6 +31,9 @@ class Repository {
   final _completeProfileMechanicApiProvider = MechanicCompleteProfileApiProvider();
   final _serviceListApiProvider = ServiceListApiProvider();
   final _addServiceListApiProvider = AddServicesApiProvider();
+
+  final _serviceListApiBothProvider =ServiceListApiBothProvider();
+
   final _categoryListApiProvider = CategoryListApiProvider();
 
   // Add Mechanic Service List
@@ -224,5 +228,20 @@ class Repository {
       token)  =>
       _homeCustomerApiProvider.postCustVehicleListRequest(
           token);
+
+
+
+  //  postserviceListAllBothRequest Request
+  Future<dynamic>  postserviceListAllBothRequest(
+      token,type)  =>
+      _serviceListApiBothProvider.postserviceListAllBothRequest(
+          token,type);
+
+
+  //  postCatListBothRequest Request
+  Future<dynamic>  postCatListBothRequest(
+      token,type)  =>
+      _serviceListApiBothProvider.postCatListBothRequest(
+          token,type);
 
 }
