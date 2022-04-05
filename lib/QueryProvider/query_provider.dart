@@ -531,27 +531,42 @@ class QueryProvider {
   }
 
 
-  serviceList(String token, String type) async {
+  serviceList(String token, searchText, count, categoryId ) async {
     String _query = """
     {
-  emeregency_or_regular_serviceList(id: $type) {
-    id
-    serviceName
-    description
-    icon
-    minAmount
-    maxAmount
-    type
-    status
-    categoryId
-    category {
+      serviceListAll(search: $searchText, count: $count, categoryId: $categoryId) {
+        id
+        serviceName
+        description
+        icon
+        minPrice
+        maxPrice
+        categoryId
+        status
+      }
+    }
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  categoryList(String token, searchText, count, categoryId ) async {
+    String _query = """
+    {
+    category_list(catType: $categoryId) {
       id
-      categoryName
+      catType
+      catName
       icon
       status
     }
   }
-}
      """;
     log(_query);
     print("Token >>>>>>> $token");
@@ -814,10 +829,10 @@ class QueryProvider {
   mechanicAddServiceList(String token,String serviceList, String costList, String timeList) async {
     String _query = """ 
     mutation {
-  mechanic_service_add(services: "$serviceList", fee: $costList, time: $timeList) {
-    message
-  }
-}
+      mechanic_service_add(services: "$serviceList", fee: $costList, time: $timeList) {
+        message
+      }
+    }
     """;
     log(_query);
     return await GqlClient.I.query01(

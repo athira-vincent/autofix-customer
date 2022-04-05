@@ -2,6 +2,7 @@ import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/bothServicesDummy/service_list_both_api_provider.dart';
@@ -33,14 +34,20 @@ class Repository {
 
   final _serviceListApiBothProvider =ServiceListApiBothProvider();
 
+  final _categoryListApiProvider = CategoryListApiProvider();
 
   // Add Mechanic Service List
-  Future<dynamic> getServiceList(String token, String type) =>
-      _serviceListApiProvider.getServiceListRequest(token,type);
+  Future<dynamic> getServiceList(String token, searchText, count, categoryId) =>
+      _serviceListApiProvider.getServiceListRequest(token,searchText, count, categoryId);
 
   // Service List
   Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList) =>
       _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
+
+  //  Category List
+  Future<dynamic> getCategoryList(String token, searchText, count, categoryId) =>
+      _categoryListApiProvider.getCategoryListRequest(token,searchText, count, categoryId);
+
 
   // SignUp
   Future<dynamic> signUp( type, firstName, lastName, emailId, phoneNo, password, state,

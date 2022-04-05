@@ -30,12 +30,12 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
 
 
-  List<EmeregencyOrRegularServiceList> allServiceList = [];
-  List<EmeregencyOrRegularServiceList> emergencyServiceList = [];
-  List<EmeregencyOrRegularServiceList> regularServiceList = [];
+  List<ServiceListAll> allServiceList = [];
+  List<ServiceListAll> emergencyServiceList = [];
+  List<ServiceListAll> regularServiceList = [];
 
-  List<EmeregencyOrRegularServiceList> selectedRegularServiceList = [];
-  List<EmeregencyOrRegularServiceList> selectedEmergencyServiceList = [];
+  List<ServiceListAll> selectedRegularServiceList = [];
+  List<ServiceListAll> selectedEmergencyServiceList = [];
 
   String title = "";
   late bool isRegularSelected;
@@ -71,7 +71,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "3");
+      _serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
 
@@ -92,16 +92,16 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
-          print(value.data!.emeregencyOrRegularServiceList!.length);
-          allServiceList = value.data!.emeregencyOrRegularServiceList!;
+          print(value.data!.serviceListAll!.length);
+          allServiceList = value.data!.serviceListAll!;
 
           for(int i=0;i<allServiceList.length;i++){
-            if(allServiceList[i].type.toString() == "1"){
+            if(allServiceList[i].categoryId.toString() == "1"){
               emergencyServiceList.add(allServiceList[i]);
-              selectedServiceMdlEmergencyList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
+              selectedServiceMdlEmergencyList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minPrice, "00:30", false));
             }else{
               regularServiceList.add(allServiceList[i]);
-              selectedServiceMdlRegularList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minAmount, "00:30", false));
+              selectedServiceMdlRegularList.add(SelectedServicesMdl(allServiceList[i].id.toString(),allServiceList[i].minPrice, "00:30", false));
             }
           }
           _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
@@ -309,7 +309,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
                            TextEditingController _rateController=TextEditingController();
                            TextEditingController _timeController = TextEditingController();
-                           _rateController.text = regularServiceList[index].minAmount.toString();
+                           _rateController.text = regularServiceList[index].minPrice.toString();
                            _timeController.text = "30:00";
                            _rateController.addListener(() {
                              var temp =   SelectedServicesMdl(selectedServiceMdlRegularList[index].serviceId,_rateController.text,  selectedServiceMdlRegularList[index].time, selectedServiceMdlRegularList[index].isEnable);
@@ -396,8 +396,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                            if(value!.isEmpty){
                                              return "Fill field";
                                            }
-                                           else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                             return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
+                                           else if(int.parse(value) < int.parse(regularServiceList[index].minPrice) || int.parse(value) > int.parse(regularServiceList[index].maxPrice)){
+                                             return regularServiceList[index].minPrice + " - " + regularServiceList[index].maxPrice;
                                            }
                                            else{
                                              return null;
@@ -580,7 +580,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
                             TextEditingController _rateController=TextEditingController();
                             TextEditingController _timeController = TextEditingController();
-                            _rateController.text = emergencyServiceList[index].minAmount.toString();
+                            _rateController.text = emergencyServiceList[index].minPrice.toString();
                             _timeController.text = "30:00";
                             _rateController.addListener(() {
                               var temp =   SelectedServicesMdl(selectedServiceMdlEmergencyList[index].serviceId,_rateController.text,  selectedServiceMdlEmergencyList[index].time, selectedServiceMdlEmergencyList[index].isEnable);
@@ -667,8 +667,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                             if(value!.isEmpty){
                                               return "Fill field";
                                             }
-                                            else if(int.parse(value) < int.parse(emergencyServiceList[index].minAmount) || int.parse(value) > int.parse(emergencyServiceList[index].maxAmount)){
-                                              return emergencyServiceList[index].minAmount + " - " + emergencyServiceList[index].maxAmount;
+                                            else if(int.parse(value) < int.parse(emergencyServiceList[index].minPrice) || int.parse(value) > int.parse(emergencyServiceList[index].maxPrice)){
+                                              return emergencyServiceList[index].minPrice + " - " + emergencyServiceList[index].maxPrice;
                                             }
                                             else{
                                               return null;

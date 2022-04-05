@@ -13,9 +13,9 @@ class ServiceListBloc {
 
   /// =============== regular services list ==================
 
-  postServiceListRequest(String token, String type) async {
+  postServiceListRequest(String token, searchText, count, categoryId) async {
     print(">>>>>>>>>>>>>>>----- token" + token);
-    ServiceListMdl _serviceListMdl = await repository.getServiceList(token,type);
+    ServiceListMdl _serviceListMdl = await repository.getServiceList(token, searchText, count, categoryId);
     postServiceList.sink.add(_serviceListMdl);
   }
 
