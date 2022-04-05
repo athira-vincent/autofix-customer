@@ -43,22 +43,20 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
   String? selectedworkSelection = '' ;
 
+
+  TextEditingController _addressController = TextEditingController();
+  FocusNode _addressFocusNode = FocusNode();
+
+  TextEditingController _yearOfExistenceController = TextEditingController();
+  FocusNode _yearOfExistenceFocusNode = FocusNode();
+
+
   TextEditingController _photoController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPwdController = TextEditingController();
-  TextEditingController _orgTypeController = TextEditingController();
-  TextEditingController _ministryGovtController = TextEditingController();
-  TextEditingController _contactPersonController = TextEditingController();
-  TextEditingController _yearOfExperienceController = TextEditingController();
-  FocusNode _phoneFocusNode = FocusNode();
   FocusNode _photoFocusNode = FocusNode();
-  FocusNode _passwordFocusNode = FocusNode();
-  FocusNode _confirmPswdFocusNode = FocusNode();
-  FocusNode _orgTypeFocusNode = FocusNode();
-  FocusNode _ministryGovtFocusNode = FocusNode();
-  FocusNode _contactPersonFocusNode = FocusNode();
-  FocusNode _yearOfExperienceFocusNode = FocusNode();
+
+  TextEditingController _phoneController = TextEditingController();
+  FocusNode _phoneFocusNode = FocusNode();
+
 
 
   bool editProfileEnabled = false;
@@ -106,6 +104,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 EmailTextUi(),
                 StateTextUi(),
                 WorkTextUi(),
+                AddressTextUi(),
+                YearOfExperienceTextUi()
               ],
             ),
           ),
@@ -592,7 +592,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       editProfileEnabled == false
                           ? Text(
-                        'Your work',
+                        'Your work selection',
                         textAlign: TextAlign.center,
                         style: Styles.textLabelSubTitle,
                       )
@@ -608,6 +608,183 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         child: Icon(Icons.edit,size: 15, color: CustColors.blue),
                       )
                   )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget AddressTextUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.location_history_outlined, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Container(
+                          height: 25,
+                          width: 300,
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            enabled: editProfileEnabled,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _addressFocusNode,
+                            keyboardType: TextInputType.name,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9 ]')),
+                            ],
+                            validator: InputValidator(
+                                ch :'Address').nameCheckingWithNumeric,
+                            controller: _addressController,
+                            cursorColor: CustColors.whiteBlueish,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'Address',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                      ),
+                      editProfileEnabled == false
+                          ? Text(
+                        'Your address',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget YearOfExperienceTextUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.badge_outlined, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Container(
+                          height: 25,
+                          width: 300,
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _yearOfExistenceFocusNode,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                            ],
+                            validator: InputValidator(
+                                ch : 'Year of existence' ).nameCheckingWithNumeric,
+                            controller: _yearOfExistenceController,
+                            cursorColor: CustColors.whiteBlueish,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'Experience',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                      ),
+                      editProfileEnabled == false
+                          ? Text(
+                              'Your experience',
+                              textAlign: TextAlign.center,
+                              style: Styles.textLabelSubTitle,
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
                   : Container(),
             ],
           ),
