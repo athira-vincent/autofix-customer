@@ -30,21 +30,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   FocusNode _nameFocusNode = FocusNode();
 
 
-  double per = .10;
-  double perfont = .10;
-  double height = 0;
-  String selectedState = "";
+  bool editProfileEnabled = false;
 
-  double totalFees = 0.0;
   String authToken="";
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
@@ -80,7 +68,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
-
               children: [
                 appBarCustomUi(size),
                 profileImageAndKmAndReviewCount(size),
@@ -140,17 +127,33 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(50,75,155,0),
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Edit Profile',
-                                style: Styles.appBarTextBlack17,),
-                            ],
+                        child: InkWell(
+                          onTap: (){
+                            setState(() {
+                              print('editProfileEnabled $editProfileEnabled');
+                              if(editProfileEnabled)
+                              {
+                                editProfileEnabled=false;
+                              }
+                              else
+                              {
+                                editProfileEnabled=true;
+                              }
+                              print('editProfileEnabled $editProfileEnabled');
+                            });
+                          },
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 15,
+                                  color: CustColors.blue,
+                                ),
+                                Text('Edit Profile',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -219,66 +222,81 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   Widget NameTextUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-                color: CustColors.whiteBlueish,
-                borderRadius: BorderRadius.circular(11.0)
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Icon(Icons.person, color: CustColors.blue),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10,0,10,0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: TextFormField(
-                      textAlignVertical: TextAlignVertical.center,
-                      maxLines: 1,
-                      style: Styles.appBarTextBlack15,
-                      focusNode: _nameFocusNode,
-                      keyboardType: TextInputType.name,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp('[a-zA-Z ]')),
-                      ],
-                      validator: InputValidator(
-                          ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
-                      controller: _nameController,
-                      cursorColor: CustColors.whiteBlueish,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        hintText:  'Name',
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 2.8,
-                          horizontal: 0.0,
-                        ),
-                        hintStyle: Styles.appBarTextBlack15,),
-                    ),
-                  ),
-                  Text(
-                    'Your name',
-                    textAlign: TextAlign.center,
-                    style: Styles.textLabelSubTitle,
-                  ),
-                ],
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.person, color: CustColors.blue),
+                ),
               ),
-            ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _nameFocusNode,
+                          keyboardType: TextInputType.name,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z ]')),
+                          ],
+                          validator: InputValidator(
+                              ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                          controller: _nameController,
+                          cursorColor: CustColors.whiteBlueish,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText:  'Name',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+                      Text(
+                        'Your name',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+              ? Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                )
+              )
+              : Container(),
+            ],
           ),
-          Spacer(),
-
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
         ],
       ),
     );
