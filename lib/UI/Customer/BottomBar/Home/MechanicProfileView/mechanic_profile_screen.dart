@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/styles.dart';
 import '../../../../../Widgets/CurvePainter.dart';
-import '../HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 
 class MechanicProfileViewScreen extends StatefulWidget {
 

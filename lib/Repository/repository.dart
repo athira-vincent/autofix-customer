@@ -48,6 +48,10 @@ class Repository {
   Future<dynamic> getCategoryList(String token, searchText, count, categoryId) =>
       _categoryListApiProvider.getCategoryListRequest(token,searchText, count, categoryId);
 
+  //  Category List Home Request
+  Future<dynamic> getCategoryListHomeRequest(String token,categoryId) =>
+      _homeCustomerApiProvider.getCategoryListHomeRequest(token,categoryId);
+
 
   // SignUp
   Future<dynamic> signUp( type, firstName, lastName, emailId, phoneNo, password, state,

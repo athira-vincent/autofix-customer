@@ -1,7 +1,10 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +32,7 @@ class HomeCustomerUIScreen extends StatefulWidget {
 }
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
+
 
 
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
@@ -451,19 +455,19 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         ? Container(
           child: StreamBuilder(
               stream:  _homeCustomerBloc.emergencyServiceListResponse,
-              builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
+              builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
                 print("${snapshot.hasData}");
                 print("${snapshot.connectionState}");
-                print("+++++++++++++++${snapshot.data?.data?.serviceListAll?.length}++++++++++++++++");
+                print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
 
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return CircularProgressIndicator();
                   default:
                     return
-                      snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
+                      snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
                           ? GridView.builder(
-                              itemCount:snapshot.data?.data?.serviceListAll?.length,
+                              itemCount:snapshot.data?.data?.categoryList?[0].service?.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -482,7 +486,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                       print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                                       print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
                                       serviceIds.clear();
-                                      serviceIds.add('${snapshot.data?.data?.serviceListAll![index].id}');
+                                      serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
                                       print(">>>>>>>>>> ServiceId  $serviceIds");
 
                                       _homeCustomerBloc.postMechanicsBookingIDRequest(
@@ -511,7 +515,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(2),
-                                          child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                          child: Text('${snapshot.data?.data?.categoryList?[0].service?[index].serviceName}',
                                             style: Styles.textLabelTitleEmergencyServiceName,
                                             maxLines: 2,
                                             textAlign: TextAlign.center,
@@ -583,10 +587,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             ? Container(
                 child: StreamBuilder(
                     stream:  _homeCustomerBloc.regularServiceListResponse,
-                    builder: (context, AsyncSnapshot<ServiceListMdl> snapshot) {
+                    builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
                       print("${snapshot.hasData}");
                       print("${snapshot.connectionState}");
-                      print("+++++++++++++++${snapshot.data?.data?.serviceListAll?.length}++++++++++++++++");
+                      print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
 
 
                       switch (snapshot.connectionState) {
@@ -594,9 +598,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           return CircularProgressIndicator();
                         default:
                           return
-                            snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
+                            snapshot.data?.data?.categoryList?.length != 0 && snapshot.data?.data?.categoryList?.length != null
                                 ? GridView.builder(
-                              itemCount:snapshot.data?.data?.serviceListAll?.length,
+                              itemCount:snapshot.data?.data?.categoryList?.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -629,7 +633,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(2),
-                                          child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                          child: Text('${snapshot.data?.data?.categoryList![index].catName}',
                                             style: Styles.textLabelTitleEmergencyServiceName,
                                             maxLines: 2,
                                             textAlign: TextAlign.center,

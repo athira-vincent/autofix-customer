@@ -842,6 +842,39 @@ class QueryProvider {
     );
   }
 
+  categoryListHome(String token,  categoryId ) async {
+    String _query = """
+      {
+      category_list(catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
   postCustFetchProfileRequest(
       token) async {
     String _query = """ 

@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +17,6 @@ import '../../../../../Constants/cust_colors.dart';
 import '../../../../../Constants/shared_pref_keys.dart';
 import '../../../../../Constants/styles.dart';
 
-import '../HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 import '../home_Bloc/home_customer_bloc.dart';
 
 
