@@ -450,7 +450,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                     else{
                       return  Container();
                     }
-
                   }
               ),
             )
