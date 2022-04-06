@@ -459,7 +459,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
     );
   }
 
-
 }
 
 class Choice {
