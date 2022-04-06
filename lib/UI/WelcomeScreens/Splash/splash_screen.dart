@@ -2,14 +2,11 @@
 import 'dart:async';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
-import '../../Customer/customer_home_screen.dart';
-import '../../Mechanic/BottomBar/Home/FindYourCustomer/find_your_customer_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   

@@ -1,16 +1,14 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../../Constants/cust_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
-import '../home_Bloc/home_customer_bloc.dart';
 
 class SearchServiceScreen extends StatefulWidget {
 
@@ -314,27 +312,27 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                 });
 
                                               },
-                                              child: snapshot.data?.data?.serviceListAll?[index].type =='1' && snapshot.data?.data?.serviceListAll?[index].type != null
+                                              child: snapshot.data?.data?.serviceListAll?[index].category?.catType.toString() =='1' && snapshot.data?.data?.serviceListAll?[index].category?.catType != null
                                                   ? Container(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.fromLTRB(30,0,30,0),
-                                                  child: Column(
-                                                    mainAxisAlignment:MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.fromLTRB(30,2,30,2),
-                                                        child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
-                                                          style: Styles.textLabelTitleEmergencyServiceName,
-                                                          maxLines: 2,
-                                                          textAlign: TextAlign.start,
-                                                          overflow: TextOverflow.visible,),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.fromLTRB(30,0,30,0),
+                                                        child: Column(
+                                                          mainAxisAlignment:MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.fromLTRB(30,2,30,2),
+                                                              child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                                                style: Styles.textLabelTitleEmergencyServiceName,
+                                                                maxLines: 2,
+                                                                textAlign: TextAlign.start,
+                                                                overflow: TextOverflow.visible,),
+                                                            ),
+                                                            Divider(),
+                                                          ],
+                                                        ),
                                                       ),
-                                                      Divider(),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
+                                                    )
                                                   : Container(),
                                             );
                                           },
@@ -421,26 +419,28 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                   });
 
                                 },
-                                child: Container(
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(30,0,30,0),
-                                    child: Column(
-                                      mainAxisAlignment:MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(30,2,30,2),
-                                          child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
-                                            style: Styles.textLabelTitleEmergencyServiceName,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            overflow: TextOverflow.visible,),
-                                        ),
-                                        Divider(),
-                                      ],
-                                    ),
-                                  ),
-                                )
+                                child: snapshot.data?.data?.serviceListAll?[index].category?.catType.toString() =='2' && snapshot.data?.data?.serviceListAll?[index].category?.catType != null
+                                    ? Container(
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(30,0,30,0),
+                                            child: Column(
+                                              mainAxisAlignment:MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.fromLTRB(30,2,30,2),
+                                                  child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                                    style: Styles.textLabelTitleEmergencyServiceName,
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.start,
+                                                    overflow: TextOverflow.visible,),
+                                                ),
+                                                Divider(),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                    : Container(),
                               );
                             },
                           ),

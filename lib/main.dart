@@ -2,38 +2,13 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
-import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_screen.dart';
-import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
-import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
-import 'package:auto_fix/UI/NewScreens/rate_mechanic_screen.dart';
-import 'package:auto_fix/UI/NewScreens/add_delivery_address_screen.dart';
-import 'package:auto_fix/UI/NewScreens/change_delivery_address_screen.dart';
-import 'package:auto_fix/UI/NewScreens/purchase_response_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/bothServicesDummy/both_service_list1.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/SearchService/search_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'UI/Customer/BottomBar/Home/HomeCustomer/customer_home.dart';
-import 'UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
-import 'UI/Customer/BottomBar/Home/SearchService/search_service_screen.dart';
-import 'UI/Mechanic/BottomBar/MyProfile/mechanic_my_profile.dart';
-import 'UI/SpareParts/FilterScreen/filter_screen.dart';
-import 'UI/SpareParts/MyCart/my_cart_screen.dart';
-import 'UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
-import 'UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
-import 'UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
-import 'UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 
 void main() async {
@@ -92,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
-      home: SplashScreen(),
+      home: SearchServiceScreen(),
     );
   }
 }

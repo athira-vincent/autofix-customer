@@ -477,19 +477,35 @@ class QueryProvider {
       count,
       categoryId) async {
     String _query = """ 
-     query
-      {
-        serviceListAll(search: "$search",count: null, categoryId: null) {
+    query
+    {
+        serviceListAll(search: "$search", count: null, categoryId: null) {
           id
           serviceName
           description
           icon
           minPrice
           maxPrice
+          categoryId
           status
+          category {
+            id
+            catType
+            catName
+            icon
+            status
+            service{
+              serviceName
+              status
+              description
+              id
+              icon
+              minPrice
+              maxPrice
+            }
+          }
         }
       }
-
     """;
     log(_query);
     return await GqlClient.I.query01(

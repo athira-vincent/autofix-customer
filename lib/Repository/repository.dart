@@ -11,7 +11,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
 
-import '../UI/Customer/BottomBar/Home/HomeCustomer/home_customer_apiProvider.dart';
+import '../UI/Customer/BottomBar/Home/home_Customer_ApiProvier/home_customer_apiProvider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
 

@@ -1,5 +1,4 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
