@@ -1,8 +1,8 @@
 
 import 'dart:async';
 
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/MechanicProfileView/mechanic_profile_screen.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

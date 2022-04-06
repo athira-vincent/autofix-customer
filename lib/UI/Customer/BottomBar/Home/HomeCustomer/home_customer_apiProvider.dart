@@ -1,10 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/mechaniclist_for_services_Mdl.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/models_CustomerHome/mechanics_Booking_Mdl.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/SearchService/serviceSearchListAll_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
 
