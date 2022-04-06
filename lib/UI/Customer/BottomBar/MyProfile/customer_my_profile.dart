@@ -1,13 +1,22 @@
+
+import 'dart:io';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as path;
 
 class CustomerMyProfileScreen extends StatefulWidget {
 
@@ -20,6 +29,13 @@ class CustomerMyProfileScreen extends StatefulWidget {
 }
 
 class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
+
+
+  final CustomerProfileBloc _fetchProfileBloc = CustomerProfileBloc();
+  final CustomerEditProfileBloc _changeProfileBloc = CustomerEditProfileBloc();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -35,13 +51,16 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   bool editProfileEnabled = false;
   String selectedState = "";
   String authToken="";
+  String _userName = "", _imageUrl = "";
+  final picker = ImagePicker();
+  File? _images;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-    _listenServiceListResponse();
+    _listenFetchProfileResponse();
   }
 
   Future<void> getSharedPrefData() async {
@@ -50,13 +69,54 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-
     });
+
+    _fetchProfileBloc.postCustomerProfileRequest(authToken);
   }
 
 
-  _listenServiceListResponse() {
+  _listenFetchProfileResponse() {
+    _fetchProfileBloc.postCustomerProfile.listen((value) {
+        if (value.status == "error") {
+          setState(() {
+           // _isLoading = false;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(value.message.toString(),
+                  style: const TextStyle(
+                      fontFamily: 'Roboto_Regular', fontSize: 14)),
+              duration: const Duration(seconds: 2),
+              backgroundColor: CustColors.peaGreen,
+            ));
+          });
+        } else {
+          setState(() {
+            //_isLoading = false;
+            /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Password Reset Enabled.\nCheck Your mail",
+                  style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+              duration: Duration(seconds: 2),
+              backgroundColor: CustColors.peaGreen,
+            ));*/
+            setProfileData(value);
+          });
+        }
+      });
+  }
 
+  void setProfileData(CustomerProfileMdl value){
+    _nameController.text = value.data!.customerDetails!.firstName.toString() ;
+    _emailController.text = value.data!.customerDetails!.emailId.toString();
+    _phoneController.text = value.data!.customerDetails!.phoneNo.toString();
+    _stateController.text = value.data!.customerDetails!.customer![0].state.toString();
+    _userName = value.data!.customerDetails!.firstName.toString();
+    _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _fetchProfileBloc.dispose();
   }
 
   @override
@@ -68,15 +128,21 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                NameTextUi(size),
-                EmailTextUi(size),
-                PhoneTextUi(size),
-                StateTextUi(size),
-              ],
+            child: Form(
+              autovalidateMode: _autoValidate,
+              key: _formKey,
+              child: Column(
+                children: [
+                  appBarCustomUi(size),
+                  profileImageAndKmAndReviewCount(size),
+                  NameTextUi(size),
+                  EmailTextUi(size),
+                  PhoneTextUi(size),
+                  StateTextUi(size),
+
+                  saveChangeButton(size),
+                ],
+              ),
             ),
           ),
         ),
@@ -88,7 +154,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 10 / 100,
-        top: size.height * 3.3 / 100
+        //top: size.height * 3.3 / 100
       ),
       child: Stack(
         children: [
@@ -99,7 +165,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 onPressed: () => Navigator.pop(context),
               ),*/
               Text(
-                'David John',
+                '$_userName',
                 textAlign: TextAlign.center,
                 style: Styles.appBarTextBlack,
               ),
@@ -114,14 +180,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   Widget profileImageAndKmAndReviewCount(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      padding: const EdgeInsets.fromLTRB(10,5,10,10),
       child: Container(
        // color: Colors.red,
         alignment: Alignment.center,
         child: Wrap(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,10,10),
+              padding: const EdgeInsets.fromLTRB(10,5,10,10),
               child: Stack(
                 children: [
                   Stack(
@@ -129,7 +195,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,65,155,0),
-                        child: Image.asset(
+                        child:
+                        Image.asset(
                           'assets/image/mechanicProfileView/curvedGray.png',
                           width: 150,
                           height: 150,
@@ -174,20 +241,52 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
                   Align(
                     alignment: Alignment.center,
-                    child: Container(
-                      width: 125.0,
-                      height: 125.0,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                              child:CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.white,
-                                  child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                  )))
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            width: 125.0,
+                            height: 125.0,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child:Container(
+                                    child:CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: Colors.white,
+                                        child: ClipOval(
+                                          child: _imageUrl == null
+                                              ?
+                                          SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg')
+                                              :
+                                          Image.network(_imageUrl,
+                                            width: 150,
+                                            height: 150,
+                                            fit: BoxFit.cover,),
+                                        )))
 
-                      ),
+                            ),
+                          ),
+                        ),
+                        editProfileEnabled == true
+                            ?
+                        InkWell(
+                          onTap: (){
+                            _showDialogSelectPhoto();
+                            print("on tap photo ");
+                          },
+                          child: Center(
+                            child: Container(
+                              child: Image.asset(
+                                "assets/image/ic_camera_black.png",
+                                //height: size.height * 7 / 100,
+                                width: size.width * 7 / 100,
+                              ),
+                            ),
+                          ),
+                        )
+                            :
+                        Container(),
+                      ],
                     ),
                   ),
 
@@ -259,6 +358,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Container(
                         child: TextFormField(
+                          enabled: editProfileEnabled,
+                          readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
                           style: Styles.appBarTextBlack15,
@@ -350,6 +451,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Container(
                         child: TextFormField(
+                          enabled: editProfileEnabled,
+                          readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
                           style: Styles.appBarTextBlack15,
@@ -440,6 +543,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Container(
                         child: TextFormField(
+                          enabled: editProfileEnabled,
+                          readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
                           style: Styles.appBarTextBlack15,
@@ -593,6 +698,42 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     );
   }
 
+  Widget saveChangeButton (Size size){
+    return InkWell(
+      onTap: (){
+
+        if (_formKey.currentState!.validate()) {
+          //_isLoading = true;
+
+          _changeProfileBloc.postCustomerEditProfileRequest(
+              authToken,
+              _nameController.text.toString(),"",
+              selectedState, 1,
+              _imageUrl);
+
+        } else {
+          print("individual _formKey.currentState!.validate() - else");
+          setState(() => _autoValidate = AutovalidateMode.always);
+        }
+
+      },
+      child: Container(
+        width: size.width,
+        height: size.height * 7 / 100,
+        color: CustColors.light_navy,
+        margin: EdgeInsets.only(
+          bottom: size.height * 2 / 100
+        ),
+        //padding: ,
+        child: Center(
+          child: Text(
+            "Save changes",
+            style: Styles.addToCartText02,
+          ),
+        ),
+      ),
+    );
+  }
 
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
 
@@ -606,6 +747,94 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
       selectedState = result;
       _stateController.text = selectedState;
       print ("Selected state @ sign up: " + selectedState );
+    });
+  }
+
+  _showDialogSelectPhoto() async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+              height: 115.0,
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.camera_alt,
+                      color: CustColors.blue,
+                    ),
+                    title: Text("Camera",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      XFile? image = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 30);
+
+                      setState(() {
+                        if (image != null) {
+                          _images = File(image.path);
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          //_photoController.text = fileName;
+                        }
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.image,
+                      color: CustColors.blue,
+                    ),
+                    title: Text("Gallery",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      XFile? image = (await picker.pickImage(
+                          source: ImageSource.gallery, imageQuality: 30));
+                      setState(() {
+                        if (image != null) {
+                          _images = (File(image.path));
+                          uploadImageToFirebase(_images!);
+                          String fileName = path.basename(image.path);
+                          //_photoController.text = fileName;
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ));
+        });
+  }
+
+
+  Future uploadImageToFirebase(File images) async {
+    String fileName = path.basename(images.path);
+    Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
+    print(">>>>>>>>>>>>>>>> reference"+reference.toString());
+    UploadTask uploadTask =  reference.putFile(images);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl="";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          _imageUrl = fileImageurl;
+        });
+
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+_imageUrl.toString());
     });
   }
 

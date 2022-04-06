@@ -874,7 +874,6 @@ class QueryProvider {
                   }
           }
       }
-
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -884,6 +883,31 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+  postCustEditProfileRequest(
+    String token, firstName,  lastName,  state, status, imageUrl) async {
+    String _query = """  
+      mutation {
+      customer_Individual_profile_update(
+        firstName: "$firstName"
+        lastName: "$lastName"
+        state: "$state"
+        status: $status
+        profilepic: "$imageUrl"
+      ) {
+        message
+      }
+    }  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 
   postCustVehicleListRequest(
       token) async {

@@ -1,6 +1,8 @@
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
@@ -19,6 +21,8 @@ import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecializati
 class Repository {
   final _signupApiProvider = SignupApiProvider();
   final _homeCustomerApiProvider = HomeCustomerApiProvider();
+  final _customerFetchProfileApiProvider = CustomerProfileApiProvider();
+  final _customerEditProfileApiProvider = CustomerEditProfileApiProvider();
   final _addCarApiProvider = AddCarApiProvider();
   final _vehicleSpecializationApiProvider = vehicleSpecializationApiProvider();
 
@@ -220,8 +224,14 @@ class Repository {
   // Fetch Profile Request
   Future<dynamic>  postCustFetchProfileRequest(
       token)  =>
-      _homeCustomerApiProvider.postCustFetchProfileRequest(
+      _customerFetchProfileApiProvider.postCustFetchProfileRequest(
           token);
+
+  // Update Profile Request
+  Future<dynamic>  postCustEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl)  =>
+      _customerEditProfileApiProvider.postCustEditProfileRequest(
+           token, firstName,  lastName,  state, status, imageUrl);
 
   //  Vehicle List Request
   Future<dynamic>  postCustVehicleListRequest(
