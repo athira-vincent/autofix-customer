@@ -146,7 +146,9 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
     _listenServiceListResponse();
     _listenAddServiceListResponse();
+    // will change soon...........
     _listenCategoryListResponse();
+
   }
 
   Future<void> getSharedPrefData() async {
