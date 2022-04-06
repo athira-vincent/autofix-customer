@@ -1,4 +1,13 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
+import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomerMyProfileScreen extends StatefulWidget {
 
@@ -11,15 +20,593 @@ class CustomerMyProfileScreen extends StatefulWidget {
 }
 
 class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
+
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+
+  FocusNode _nameFocusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _stateFocusNode = FocusNode();
+
+
+  bool editProfileEnabled = false;
+  String selectedState = "";
+  String authToken="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+    _listenServiceListResponse();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+
+    });
+  }
+
+
+  _listenServiceListResponse() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Center(
-          child: Text("My Profile"),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                appBarCustomUi(size),
+                profileImageAndKmAndReviewCount(size),
+                NameTextUi(size),
+                EmailTextUi(size),
+                PhoneTextUi(size),
+                StateTextUi(size),
+              ],
+            ),
+          ),
         ),
       ),
     );
+  }
+
+  Widget appBarCustomUi(Size size) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: size.width * 10 / 100,
+        top: size.height * 3.3 / 100
+      ),
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              /*IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.pop(context),
+              ),*/
+              Text(
+                'David John',
+                textAlign: TextAlign.center,
+                style: Styles.appBarTextBlack,
+              ),
+              Spacer(),
+
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget profileImageAndKmAndReviewCount(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      child: Container(
+       // color: Colors.red,
+        alignment: Alignment.center,
+        child: Wrap(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10,10,10,10),
+              child: Stack(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,65,155,0),
+                        child: Image.asset(
+                          'assets/image/mechanicProfileView/curvedGray.png',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+                            print('editProfileEnabled $editProfileEnabled');
+                            if(editProfileEnabled)
+                            {
+                              editProfileEnabled=false;
+                            }
+                            else
+                            {
+                              editProfileEnabled=true;
+                            }
+                            print('editProfileEnabled $editProfileEnabled');
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: size.width * 18 / 100,
+                            top: size.height * 10 / 100
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 15,
+                                color: CustColors.blue,
+                              ),
+                              Text('Edit Profile',
+                                style: Styles.appBarTextBlack17,),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 125.0,
+                      height: 125.0,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child:Container(
+                              child:CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                  )))
+
+                      ),
+                    ),
+                  ),
+
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(155,65,0,0),
+                        child: Image.asset(
+                          'assets/image/mechanicProfileView/curvedWhite.png',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: size.width * 55 / 100,
+                            top: size.height * 10 / 100
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.logout,
+                              size: 15,
+                              color: CustColors.blue,
+                            ),
+                            Text('Logout',
+                              style: Styles.appBarTextBlack17,),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+          ],
+
+        ),
+      ),
+    );
+  }
+
+  Widget NameTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.person, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _nameFocusNode,
+                          keyboardType: TextInputType.name,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z ]')),
+                          ],
+                          validator: InputValidator(
+                              ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                          controller: _nameController,
+                          cursorColor: CustColors.light_navy,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText:  'Name',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+                      editProfileEnabled != true
+                          ?
+                      Text(
+                        'Your name',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                          :
+                      Container(),
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget EmailTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: SvgPicture.asset('assets/image/ic_email.svg',
+                    height: size.height * 2 / 100,
+                    width: size.width * 2 / 100,
+                  ),
+                  //child: Icon(Icons.mail, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _emailFocusNode,
+                          keyboardType: TextInputType.emailAddress,
+                          /*inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z ]')),
+                          ],*/
+                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
+                          controller: _emailController,
+                          cursorColor: CustColors.light_navy,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText:  'Email',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+                      editProfileEnabled != true
+                          ?
+                      Text(
+                        'Your email id',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                          :
+                      Container(),
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                    )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget PhoneTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: SvgPicture.asset('assets/image/ic_phone.svg',
+                    height: size.height * 2 / 100,
+                    width: size.width * 2 / 100,
+                  ),
+                  //child: Icon(Icons.mail, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _phoneFocusNode,
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
+                          controller: _phoneController,
+                          cursorColor: CustColors.light_navy,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText:  'Phone',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+                      editProfileEnabled != true
+                          ?
+                      Text(
+                        'Your phone number',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                          :
+                      Container(),
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget StateTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: (){
+              if(editProfileEnabled == true){
+                _awaitReturnValueFromSecondScreen(context);
+              }
+            },
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: CustColors.whiteBlueish,
+                      borderRadius: BorderRadius.circular(11.0)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SvgPicture.asset('assets/image/ic_location.svg',
+                      height: size.height * 2.5 / 100,
+                      width: size.width * 2.5 / 100,
+                    ),
+                    //child: Icon(Icons.mail, color: CustColors.blue),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: TextFormField(
+                            readOnly: true,
+                            enabled: false,
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _stateFocusNode,
+                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
+                            controller: _stateController,
+                            cursorColor: CustColors.light_navy,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'State',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                        editProfileEnabled != true
+                        ?
+                        Text(
+                          'Your state',
+                          textAlign: TextAlign.center,
+                          style: Styles.textLabelSubTitle,
+                        )
+                        :
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ),
+                Spacer(),
+                editProfileEnabled == true
+                    ? Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                    )
+                )
+                    : Container(),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+
+  void _awaitReturnValueFromSecondScreen(BuildContext context) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectStateScreen(),
+        ));
+    setState(() {
+      selectedState = result;
+      _stateController.text = selectedState;
+      print ("Selected state @ sign up: " + selectedState );
+    });
   }
 
 }
