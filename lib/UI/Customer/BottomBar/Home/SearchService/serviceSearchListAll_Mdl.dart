@@ -75,8 +75,8 @@ class ServiceListAll {
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
     description: json["description"] == null ? null : json["description"],
     icon: json["icon"],
-    minAmount: json["minAmount"] == null ? null : json["minAmount"],
-    maxAmount: json["maxAmount"] == null ? null : json["maxAmount"],
+    minAmount: json["minPrice"] == null ? null : json["minPrice"],
+    maxAmount: json["maxPrice"] == null ? null : json["maxPrice"],
     type: json["type"] == null ? null : json["type"],
     status: json["status"] == null ? null : json["status"],
   );
