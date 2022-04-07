@@ -48,7 +48,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
   String? selectedworkSelection = '' ;
 
-
   TextEditingController _addressController = TextEditingController();
   FocusNode _addressFocusNode = FocusNode();
 
