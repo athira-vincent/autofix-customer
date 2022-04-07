@@ -51,7 +51,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   bool editProfileEnabled = false;
   String selectedState = "";
   String authToken="";
-  String _userName = "", _imageUrl = "";
+  String _userName = "", _imageUrl = "", _userType = "";
   final picker = ImagePicker();
   File? _images;
 
@@ -110,6 +110,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _stateController.text = value.data!.customerDetails!.customer![0].state.toString();
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
+    _userType = value.data!.customerDetails!.customer![0].custType.toString();
+    print(">>>>>>>>>>>>> _userType : " + _userType);
   }
 
   @override
@@ -128,21 +130,39 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Form(
-              autovalidateMode: _autoValidate,
-              key: _formKey,
-              child: Column(
-                children: [
-                  appBarCustomUi(size),
-                  profileImageAndKmAndReviewCount(size),
-                  NameTextUi(size),
-                  EmailTextUi(size),
-                  PhoneTextUi(size),
-                  StateTextUi(size),
+            child: Column(
+              children: [
+                appBarCustomUi(size),
+                profileImageAndKmAndReviewCount(size),
+                Form(
+                    autovalidateMode: _autoValidate,
+                    key: _formKey,
+                    child:
+                      _userType == "1"
+                          ?
+                          Column(
+                            children: [
+                              NameTextUi(size),
+                              EmailTextUi(size),
+                              PhoneTextUi(size),
+                              StateTextUi(size),
+                              saveChangeButton(size),
+                            ],
+                          )
+                          :
+                          Column(
+                            children: [
+                              NameTextUi(size),
+                              // --------------------- Industry
+                              EmailTextUi(size),
+                              PhoneTextUi(size),
+                              //StateTextUi(size),
 
-                  saveChangeButton(size),
-                ],
-              ),
+                            ],
+                          )
+                  ,
+                )
+              ],
             ),
           ),
         ),
@@ -680,10 +700,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 Spacer(),
                 editProfileEnabled == true
                     ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                      )
                 )
                     : Container(),
               ],
