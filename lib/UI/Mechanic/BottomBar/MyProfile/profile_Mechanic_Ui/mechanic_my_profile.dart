@@ -1061,6 +1061,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           }
                         else
                           {
+                            _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
                             print("Cooperate");
                         }
                       });

@@ -15,6 +15,17 @@ class MechanicProfileBloc {
     postMechanicProfile.sink.add(_MechanicProfileMdl);
   }
 
+
+  final postMechanicEditIndividualProfile = PublishSubject<MechanicProfileMdl>();
+  Stream<MechanicProfileMdl> get MechanicEditIndividualProfileResponse => postMechanicEditIndividualProfile.stream;
+
+  postMechanicEditProfileIndividualRequest(
+      String token,
+      ) async {
+    MechanicProfileMdl _MechanicProfileMdl = await repository.postMechanicEditProfileIndividualRequest(token);
+    postMechanicProfile.sink.add(_MechanicProfileMdl);
+  }
+
   dispose() {
     postMechanicProfile.close();
   }

@@ -3,7 +3,9 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_mdl.dart';
 
 class MechanicProfileApiProvider {
+
   final QueryProvider _queryProvider = QueryProvider();
+
   Future<MechanicProfileMdl> postMechanicFetchProfileRequest(
       token)async {
     Map<String, dynamic> _resp = await _queryProvider. postMechanicFetchProfileRequest(
