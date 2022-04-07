@@ -933,6 +933,30 @@ class QueryProvider {
     );
   }
 
+  postCustEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl) async {
+    String _query = """  
+      mutation {
+      customer_Individual_profile_update(
+        firstName: "$firstName"
+        lastName: "$lastName"
+        state: "$state"
+        status: $status
+        profilepic: "$imageUrl"
+      ) {
+        message
+      }
+    }  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 
   postMechanicFetchProfileRequest(
       token) async {
@@ -988,30 +1012,54 @@ class QueryProvider {
     );
   }
 
-
-  postCustEditProfileRequest(
-    String token, firstName,  lastName,  state, status, imageUrl) async {
+  postMechanicEditProfileIndividualRequest(
+      String token, firstName,  lastName,  state, status, imageUrl) async {
     String _query = """  
       mutation {
-      customer_Individual_profile_update(
-        firstName: "$firstName"
-        lastName: "$lastName"
-        state: "$state"
-        status: $status
-        profilepic: "$imageUrl"
-      ) {
-        message
-      }
-    }  
+          mechanic_signUp_Individual_Update(
+            firstName: "string"
+            lastName: "string"
+            state: "string"
+            profilepic: "string"
+            status: 1
+            year_of_experience: "string"
+          ) {
+            message
+          }
+        }
+ 
     """;
     log(_query);
-    return await GqlClient.I.query01(
-      _query,
-      token,
-      enableDebug: true,
-      isTokenThere: true,
-    );
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
+
+  postMechanicEditProfileCorporateRequest(
+      String token, firstName,  lastName,  state, status, imageUrl) async {
+    String _query = """  
+      mutation {
+          mechanic_signUp_Corporate_Update(
+            firstName: "string"
+            lastName: "string"
+            state: "string"
+            profilepic: "string"
+            status: 1
+            year_of_experience: "string"
+            org_Name: "string"
+            org_Type: "string"
+          ) {
+            message
+          }
+        }
+ 
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
+
+
 
 
   postCustVehicleListRequest(

@@ -1,6 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -24,9 +26,13 @@ class MechanicMyProfileScreen extends StatefulWidget {
 
 class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
+  MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
+
   double per = .10;
   double perfont = .10;
   bool _isLoading = false;
+  String _userName = "", _imageUrl = "", _userType = "";
+
 
   double _setValue(double value) {
     return value * per + value;
@@ -83,12 +89,45 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
 
     });
   }
 
   _listenServiceListResponse() {
 
+    _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          setProfileData(value);
+        });
+      }
+    });
+  }
+
+
+  void setProfileData(MechanicProfileMdl value){
+    _nameController.text = value.data!.mechanicDetails!.firstName.toString() ;
+    _emailController.text = value.data!.mechanicDetails!.emailId.toString();
+    _phoneController.text = value.data!.mechanicDetails!.phoneNo.toString();
+    _stateController.text = value.data!.mechanicDetails!.mechanic![0].state.toString();
+    _yearOfExistenceController.text = value.data!.mechanicDetails!.mechanic![0].yearExp.toString();
+    _userName = value.data!.mechanicDetails!.firstName.toString();
+    _imageUrl = value.data!.mechanicDetails!.mechanic![0].profilePic.toString();
+    _userType = value.data!.mechanicDetails!.mechanic![0].mechType.toString();
+    print(">>>>>>>>>>>>> _userType : " + _userType);
   }
 
 
@@ -370,10 +409,11 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
+                        width: 250,
                         child: TextFormField(
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
-                          style: Styles.textLabelSubTitle,
+                          style: Styles.appBarTextBlack15,
                           focusNode: _emailFocusNode,
                           enabled: editProfileEnabled,
                           keyboardType: TextInputType.emailAddress,
@@ -803,28 +843,29 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   }
 
   Widget NextButtonMechanicIndividual() {
-    return  Container(
-      width: double.infinity,
-      margin: EdgeInsets.fromLTRB(20,5,20,20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: _isLoading
-                  ? Center(
-                      child: Container(
-                        height: _setValue(28),
-                        width: _setValue(28),
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustColors.peaGreen),
-                        ),
+    return editProfileEnabled==true
+        ?  Container(
+          width: double.infinity,
+          margin: EdgeInsets.fromLTRB(20,5,20,20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: _isLoading
+                      ? Center(
+                    child: Container(
+                      height: _setValue(28),
+                      width: _setValue(28),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
                       ),
-                    )
-                  : Container(
+                    ),
+                  )
+                      : Container(
                     child: MaterialButton(
                       onPressed: () {
 
@@ -850,11 +891,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _setValue(10))),
                     ),
                   ),
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        )
+        :  Container();
   }
 
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
