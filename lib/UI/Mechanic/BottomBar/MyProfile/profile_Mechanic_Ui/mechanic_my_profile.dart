@@ -103,6 +103,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
+      _isLoading=true;
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
 
     });
@@ -166,7 +167,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 OrgNameTextUi(),
                 OrgTypeTextUi(),
                 YearOfExperienceTextUi(),
-                NextButtonMechanicIndividual()
+                NextButton()
               ],
             ),
           ),
@@ -1033,7 +1034,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget NextButtonMechanicIndividual() {
+  Widget NextButton() {
     return editProfileEnabled==true
         ?  Container(
           width: double.infinity,
@@ -1052,6 +1053,17 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                   child: MaterialButton(
                     onPressed: () {
 
+                      setState(() {
+                        print("$_userType");
+                        if(_userType == "1")
+                          {
+                            print("Individual");
+                          }
+                        else
+                          {
+                            print("Cooperate");
+                        }
+                      });
                     },
                     child: Container(
                       height: 50,
