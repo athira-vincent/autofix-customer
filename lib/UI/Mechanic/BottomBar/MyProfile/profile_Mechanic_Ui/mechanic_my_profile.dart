@@ -67,6 +67,20 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   TextEditingController _phoneController = TextEditingController();
   FocusNode _phoneFocusNode = FocusNode();
 
+  TextEditingController _orgTypeController = TextEditingController();
+  FocusNode _orgTypeFocusNode = FocusNode();
+  bool isloading = false;
+  List<String> orgTypeList = [
+    "Business name",
+    "Private Limited Company",
+    "Public Limited Company",
+    "Incorporated Trustees",
+    "Non-Governmental Organization"
+  ];
+
+  TextEditingController _orgNameController = TextEditingController();
+  FocusNode _orgNameFocusNode = FocusNode();
+
 
 
   bool editProfileEnabled = false;
@@ -124,6 +138,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _phoneController.text = value.data!.mechanicDetails!.phoneNo.toString();
     _stateController.text = value.data!.mechanicDetails!.mechanic![0].state.toString();
     _yearOfExistenceController.text = value.data!.mechanicDetails!.mechanic![0].yearExp.toString();
+    _orgNameController.text = value.data!.mechanicDetails!.mechanic![0].orgName.toString();
+    _orgTypeController.text = value.data!.mechanicDetails!.mechanic![0].orgType.toString();
     _userName = value.data!.mechanicDetails!.firstName.toString();
     _imageUrl = value.data!.mechanicDetails!.mechanic![0].profilePic.toString();
     _userType = value.data!.mechanicDetails!.mechanic![0].mechType.toString();
@@ -147,8 +163,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 EmailTextUi(),
                 PhoneTextUi(),
                 StateTextUi(),
-                //WorkTextUi(),
-                //AddressTextUi(),
+                OrgNameTextUi(),
+                OrgTypeTextUi(),
                 YearOfExperienceTextUi(),
                 NextButtonMechanicIndividual()
               ],
@@ -564,7 +580,99 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget WorkTextUi() {
+  Widget OrgNameTextUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.person, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 25,
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            enabled: editProfileEnabled,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _orgNameFocusNode,
+                            keyboardType: TextInputType.name,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z ]')),
+                            ],
+                            validator: InputValidator(
+                                ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                            controller: _orgNameController,
+                            cursorColor: CustColors.whiteBlueish,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'Organization Name',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                        editProfileEnabled == false
+                            ? Container(
+                              child: Text(
+                                  'Your organization name',
+                                  textAlign: TextAlign.start,
+                                  style: Styles.textLabelSubTitle,
+                                ),
+                            )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget OrgTypeTextUi() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
       child: Column(
@@ -595,33 +703,28 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
                             if(editProfileEnabled == true)
                             {
-                              _showDialogForWorkSelection(workSelectionList);
+                              showOrganisationTypeSelector();
                             }
 
 
                           },
                           child: Container(
                             height: 25,
-                            width: 300,
+                            width: 400,
                             child: TextFormField(
+                              enabled: false,
+                              readOnly: true,
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
                               style: Styles.appBarTextBlack15,
-                              focusNode: _workSelectionFocusNode,
-                              keyboardType: TextInputType.name,
-                              enabled: false,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp('[a-zA-Z ]')),
-                              ],
-                              validator: InputValidator(
-                                  ch :
-                                  'Work Selection').nameChecking,
-                              controller: _workSelectionController,
+                              focusNode: _orgTypeFocusNode,
+                              keyboardType: TextInputType.text,
+                              //validator: InputValidator(ch: AppLocalizations.of(context)!.text_hint_organization_type).emptyChecking,
+                              controller: _orgTypeController,
                               cursorColor: CustColors.whiteBlueish,
                               decoration: InputDecoration(
                                 isDense: true,
-                                hintText:  'Work',
+                                hintText:  'State',
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
@@ -638,7 +741,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       editProfileEnabled == false
                           ? Text(
-                        'Your work selection',
+                        'Your organization type',
                         textAlign: TextAlign.center,
                         style: Styles.textLabelSubTitle,
                       )
@@ -1033,6 +1136,196 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         });
   }
 
+  void showOrganisationTypeSelector() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return BottomSheet(
+                onClosing: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20))),
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      height: 421,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                              width: double.maxFinite,
+                              child: Column(children: [
+                                /*Container(
+                                  height: _setValue(36.3),
+                                  margin: EdgeInsets.only(
+                                      left: _setValue(41.3),
+                                      right: _setValue(41.3),
+                                      top: _setValue(20.3)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        _setValue(20),
+                                      ),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black38,
+                                        spreadRadius: 0,
+                                        blurRadius: 1.5,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: _setValue(23.4)),
+                                          alignment: Alignment.center,
+                                          height: _setValue(36.3),
+                                          child: Center(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                              onChanged: (text) {
+                                                setState(() {
+                                                  _countryData.clear();
+                                                  isloading = true;
+                                                });
+                                                _signupBloc.searchStates(text);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Corbel_Regular',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: CustColors.blue),
+                                              decoration: InputDecoration(
+                                                hintText: "Search Your  State",
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
+                                                hintStyle: TextStyle(
+                                                  color: CustColors.greyText,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Corbel-Light',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: _setValue(25),
+                                            height: _setValue(25),
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            decoration: BoxDecoration(
+                                              color: CustColors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            child: Image.asset(
+                                              'assets/images/search.png',
+                                              width: _setValue(10.4),
+                                              height: _setValue(10.4),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),*/
+                                Container(
+                                  height: 421 - 108,
+                                  padding:
+                                  EdgeInsets.only(top: _setValue(22.4)),
+                                  child: orgTypeList.length != 0
+                                      ? ListView.separated(
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: orgTypeList.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final dial_Code = orgTypeList[index];
+                                                  setState(() {
+                                                    _orgTypeController.text = dial_Code.toString();
+                                                  });
+
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${orgTypeList[index]}',
+                                                    style: TextStyle(
+                                                        fontSize:12,
+                                                        fontFamily:
+                                                        'Corbel-Light',
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        color:
+                                                        Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
+                                          },
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
+                                      : Center(
+                                    child: Text('No Results found.'),
+                                  ),
+                                ),
+                              ])),
+                          Center(
+                            child: isloading
+                                ? CircularProgressIndicator()
+                                : Text(''),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          });
+        });
+  }
 
 
 }
