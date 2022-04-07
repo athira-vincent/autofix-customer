@@ -1,12 +1,13 @@
 // ignore_for_file: avoid_print
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/SearchService/serviceSearchListAll_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
 
-import 'ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
 
 class HomeCustomerApiProvider {
 
@@ -126,6 +127,24 @@ class HomeCustomerApiProvider {
       }
     } else {
       final errorMsg = CustomerDetailsMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  Future<CategoryListHomeMdl> getCategoryListHomeRequest(
+      String token, categoryId) async {
+    Map<String, dynamic> _resp = await _queryProvider.categoryListHome(token,  categoryId);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CategoryListHomeMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CategoryListHomeMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CategoryListHomeMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

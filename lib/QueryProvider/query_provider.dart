@@ -477,19 +477,35 @@ class QueryProvider {
       count,
       categoryId) async {
     String _query = """ 
-     query
-      {
-        serviceListAll(search: "$search",count: null, categoryId: null) {
+    query
+    {
+        serviceListAll(search: "$search", count: null, categoryId: null) {
           id
           serviceName
           description
           icon
           minPrice
           maxPrice
+          categoryId
           status
+          category {
+            id
+            catType
+            catName
+            icon
+            status
+            service{
+              serviceName
+              status
+              description
+              id
+              icon
+              minPrice
+              maxPrice
+            }
+          }
         }
       }
-
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -839,6 +855,39 @@ class QueryProvider {
       token,
       enableDebug: true,
       isTokenThere: true,
+    );
+  }
+
+  categoryListHome(String token,  categoryId ) async {
+    String _query = """
+      {
+      category_list(catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
     );
   }
 

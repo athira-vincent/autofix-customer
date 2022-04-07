@@ -1,13 +1,13 @@
 
 import 'package:auto_fix/Repository/repository.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechaniclist_for_services_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
-import '../../../../WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
-import '../HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
-import '../SearchService/serviceSearchListAll_Mdl.dart';
 
 
 class HomeCustomerBloc {
@@ -18,25 +18,25 @@ class HomeCustomerBloc {
   /// =============== Regular services list ================== ///
 
 
-  final postRegularServiceList = BehaviorSubject<ServiceListMdl>();
-  Stream<ServiceListMdl> get regularServiceListResponse => postRegularServiceList.stream;
+  final postRegularServiceList = BehaviorSubject<CategoryListHomeMdl>();
+  Stream<CategoryListHomeMdl> get regularServiceListResponse => postRegularServiceList.stream;
 
-  postRegularServiceListRequest(String token, String type) async {
+  postRegularServiceListRequest(String token, String categoryId) async {
 
-    ServiceListMdl _serviceListMdl = await repository.getServiceList(token, null, null, "1");
+    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId);
     postRegularServiceList.sink.add(_serviceListMdl);
   }
 
 
-  /// =============== Regular services list ================== ///
+  /// =============== Emergency services list ================== ///
 
 
-  final postEmergencyServiceList = BehaviorSubject<ServiceListMdl>();
-  Stream<ServiceListMdl> get emergencyServiceListResponse => postEmergencyServiceList.stream;
+  final postEmergencyServiceList = BehaviorSubject<CategoryListHomeMdl>();
+  Stream<CategoryListHomeMdl> get emergencyServiceListResponse => postEmergencyServiceList.stream;
 
-  postEmergencyServiceListRequest(String token, String type) async {
+  postEmergencyServiceListRequest(String token, String categoryId) async {
 
-    ServiceListMdl _serviceListMdl = await repository.getServiceList(token, null, null, "1");
+    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId);
     postEmergencyServiceList.sink.add(_serviceListMdl);
   }
 

@@ -29,7 +29,7 @@ class ServiceSearchListAllMdl {
   Map<String, dynamic> toJson() => {
     "message": message == null ? null : message,
     "status": status == null ? null : status,
-    "data": data == null ? null : data!.toJson(),
+    "data": data == null ? null : data?.toJson(),
   };
 }
 
@@ -55,40 +55,80 @@ class ServiceListAll {
     required this.serviceName,
     required this.description,
     required this.icon,
-    required this.minAmount,
-    required this.maxAmount,
-    required this.type,
+    required this.minPrice,
+    required this.maxPrice,
+    required this.categoryId,
     required this.status,
+    required this.category,
   });
 
   String id;
   String serviceName;
-  String description;
+  dynamic description;
   dynamic icon;
-  String minAmount;
-  String maxAmount;
-  String type;
+  String minPrice;
+  String maxPrice;
+  int categoryId;
   int status;
+  Category? category;
 
   factory ServiceListAll.fromJson(Map<String, dynamic> json) => ServiceListAll(
     id: json["id"] == null ? null : json["id"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
-    description: json["description"] == null ? null : json["description"],
+    description: json["description"],
     icon: json["icon"],
-    minAmount: json["minPrice"] == null ? null : json["minPrice"],
-    maxAmount: json["maxPrice"] == null ? null : json["maxPrice"],
-    type: json["type"] == null ? null : json["type"],
+    minPrice: json["minPrice"] == null ? null : json["minPrice"],
+    maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
+    categoryId: json["categoryId"] == null ? null : json["categoryId"],
     status: json["status"] == null ? null : json["status"],
+    category: json["category"] == null ? null : Category.fromJson(json["category"]),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "serviceName": serviceName == null ? null : serviceName,
-    "description": description == null ? null : description,
+    "description": description,
     "icon": icon,
-    "minAmount": minAmount == null ? null : minAmount,
-    "maxAmount": maxAmount == null ? null : maxAmount,
-    "type": type == null ? null : type,
+    "minPrice": minPrice == null ? null : minPrice,
+    "maxPrice": maxPrice == null ? null : maxPrice,
+    "categoryId": categoryId == null ? null : categoryId,
     "status": status == null ? null : status,
+    "category": category == null ? null : category?.toJson(),
+  };
+}
+
+class Category {
+  Category({
+    required this.id,
+    required this.catType,
+    required this.catName,
+    required this.icon,
+    required this.status,
+    required this.service,
+  });
+
+  String id;
+  int catType;
+  String catName;
+  dynamic icon;
+  int status;
+  dynamic service;
+
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
+    id: json["id"] == null ? null : json["id"],
+    catType: json["catType"] == null ? null : json["catType"],
+    catName: json["catName"] == null ? null : json["catName"],
+    icon: json["icon"],
+    status: json["status"] == null ? null : json["status"],
+    service: json["service"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "catType": catType == null ? null : catType,
+    "catName": catName == null ? null : catName,
+    "icon": icon,
+    "status": status == null ? null : status,
+    "service": service,
   };
 }

@@ -8,7 +8,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signUp_models/signUp_Mdl
 
 import 'package:flutter/services.dart';
 
-import '../../../Customer/BottomBar/Home/HomeCustomer/ModelsCustomerHome/mechanics_Booking_Mdl.dart';
 import '../PhoneLogin/OtpModels/otp_Verification_Mdl.dart';
 import '../PhoneLogin/OtpModels/phoneLoginOtpVerificationMdl.dart';
 

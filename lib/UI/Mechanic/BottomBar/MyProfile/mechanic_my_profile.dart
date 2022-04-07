@@ -1,7 +1,9 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
+import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,11 +11,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../../../Constants/text_strings.dart';
-import '../../../../Widgets/input_validator.dart';
-import '../../../Customer/BottomBar/Home/MechanicProfileView/mechanic_tracking_Screen.dart';
-import '../../../WelcomeScreens/Login/Signup/StateList/state_list.dart';
 
 class MechanicMyProfileScreen extends StatefulWidget {
 

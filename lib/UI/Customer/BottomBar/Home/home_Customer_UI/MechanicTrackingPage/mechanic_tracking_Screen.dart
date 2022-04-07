@@ -1,18 +1,13 @@
 import 'dart:async';
 
-import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../../../../../Constants/cust_colors.dart';
-import '../../../../../Constants/styles.dart';
-import '../../../../../Widgets/CurvePainter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 
