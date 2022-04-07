@@ -933,6 +933,62 @@ class QueryProvider {
     );
   }
 
+
+  postMechanicFetchProfileRequest(
+      token) async {
+    String _query = """ 
+      query
+      {
+        mechanic_Details(jwtToken: "$token") {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          userTypeId
+          accountType
+          jwtToken
+          status
+          mechanic {
+            id
+            orgName
+            orgType
+            yearExp
+            mechType
+            userId
+            profilePic
+            state
+            status
+          }
+          mechanicService {
+            id
+            fee
+            status
+            service{
+              serviceName
+              description
+              minPrice
+              maxPrice
+              categoryId
+              id
+              icon
+            }
+            userId
+          }
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+
   postCustEditProfileRequest(
     String token, firstName,  lastName,  state, status, imageUrl) async {
     String _query = """  
