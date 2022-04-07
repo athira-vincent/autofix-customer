@@ -846,55 +846,42 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     return editProfileEnabled==true
         ?  Container(
           width: double.infinity,
-          margin: EdgeInsets.fromLTRB(20,5,20,20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: _isLoading
-                      ? Center(
-                    child: Container(
-                      height: _setValue(28),
-                      width: _setValue(28),
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            CustColors.peaGreen),
-                      ),
-                    ),
-                  )
-                      : Container(
-                    child: MaterialButton(
-                      onPressed: () {
-
-                      },
-                      child: Container(
-                        height: 45,
-                        width: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Save',
-                              textAlign: TextAlign.center,
-                              style: Styles.textButtonLabelSubTitle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      color: CustColors.materialBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              _setValue(10))),
+          child: _isLoading
+              ? Center(
+                  child: Container(
+                    height: _setValue(28),
+                    width: _setValue(28),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          CustColors.peaGreen),
                     ),
                   ),
+                )
+              : Container(
+                  child: MaterialButton(
+                    onPressed: () {
+
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Save',
+                            textAlign: TextAlign.center,
+                            style: Styles.textButtonLabelSubTitle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: CustColors.materialBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            _setValue(0))),
+                  ),
                 ),
-              ),
-            ],
-          ),
         )
         :  Container();
   }
