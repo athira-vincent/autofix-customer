@@ -231,11 +231,24 @@ class Repository {
       _customerFetchProfileApiProvider.postCustFetchProfileRequest(
           token);
 
-  // Update Profile Request
-  Future<dynamic>  postCustEditProfileRequest(
+  // Update Customer - individual Profile Request
+  Future<dynamic>  postCustIndividualEditProfileRequest(
       String token, firstName,  lastName,  state, status, imageUrl)  =>
-      _customerEditProfileApiProvider.postCustEditProfileRequest(
+      _customerEditProfileApiProvider.postCustIndividualEditProfileRequest(
            token, firstName,  lastName,  state, status, imageUrl);
+
+  // Update Customer - corporate Profile Request
+  Future<dynamic>  postCustCorporateEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl, orgName, orgType)  =>
+      _customerEditProfileApiProvider.postCustCorporateEditProfileRequest(
+          token, firstName,  lastName,  state, status, imageUrl, orgName, orgType );
+
+  // Update Customer - government Profile Request
+  Future<dynamic>  postCustGovernmentEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl, ministryName)  =>
+      _customerEditProfileApiProvider.postCustGovernmentEditProfileRequest(
+          token, firstName,  lastName,  state, status, imageUrl, ministryName);
+
 
   //  Vehicle List Request
   Future<dynamic>  postCustVehicleListRequest(

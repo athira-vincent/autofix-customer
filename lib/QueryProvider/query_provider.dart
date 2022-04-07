@@ -933,7 +933,7 @@ class QueryProvider {
     );
   }
 
-  postCustEditProfileRequest(
+  postCustIndividualEditProfileRequest(
     String token, firstName,  lastName,  state, status, imageUrl) async {
     String _query = """  
       mutation {
@@ -947,6 +947,57 @@ class QueryProvider {
         message
       }
     }  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postCustCorporateEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl, orgName, orgType) async {
+    String _query = """  
+     mutation {
+  customer_Corporate_profile_update(
+      firstName: "$firstName"
+      lastName: "$lastName"
+      state: "$state"
+      status: $status
+      profilepic: "$imageUrl"
+      org_name: "$orgName"
+      org_type: "$orgType"
+    ) {
+      message
+    }
+  }  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postCustGovernmentEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl, ministryName) async {
+    String _query = """  
+     mutation {
+      customer_GovtBodies_profile_update(
+        firstName: "$firstName"
+        lastName: "$lastName"
+        state: "$state"
+        profilepic: "$imageUrl"
+        status: $status
+        ministry_name: "$ministryName"
+      ) {
+        message
+      }
+    } 
     """;
     log(_query);
     return await GqlClient.I.query01(
