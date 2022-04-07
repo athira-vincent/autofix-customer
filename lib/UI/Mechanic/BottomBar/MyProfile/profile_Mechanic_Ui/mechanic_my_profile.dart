@@ -145,9 +145,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 profileImageAndKmAndReviewCount(),
                 NameTextUi(),
                 EmailTextUi(),
+                PhoneTextUi(),
                 StateTextUi(),
-                WorkTextUi(),
-                AddressTextUi(),
+                //WorkTextUi(),
+                //AddressTextUi(),
                 YearOfExperienceTextUi(),
                 NextButtonMechanicIndividual()
               ],
@@ -653,6 +654,93 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         child: Icon(Icons.edit,size: 15, color: CustColors.blue),
                       )
                   )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget PhoneTextUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.phone, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          enabled: editProfileEnabled,
+                          readOnly: !editProfileEnabled,
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _phoneFocusNode,
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
+                          controller: _phoneController,
+                          cursorColor: CustColors.light_navy,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText:  'Phone',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+                      editProfileEnabled != true
+                          ?
+                      Text(
+                        'Your phone number',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                          :
+                      Container(),
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
                   : Container(),
             ],
           ),
