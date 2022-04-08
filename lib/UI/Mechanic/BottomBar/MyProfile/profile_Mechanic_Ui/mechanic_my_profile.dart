@@ -30,6 +30,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   double per = .10;
   double perfont = .10;
+  bool _isLoadingPage = true;
   bool _isLoading = false;
   String _userName = "", _imageUrl = "", _userType = "";
 
@@ -103,7 +104,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _isLoading=true;
+      _isLoadingPage=true;
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
 
     });
@@ -114,7 +115,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
-          _isLoading = false;
+          _isLoadingPage = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -125,8 +126,36 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         });
       } else {
         setState(() {
-          _isLoading = false;
+          _isLoadingPage = false;
           setProfileData(value);
+        });
+      }
+    });
+    _mechanicProfileBloc.MechanicEditIndividualProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoadingPage = false;
+          editProfileEnabled = false;
+        });
+      } else {
+        setState(() {
+          _isLoadingPage = true;
+          editProfileEnabled = false;
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+        });
+      }
+    });
+    _mechanicProfileBloc.postMechanicEditCorporateProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoadingPage = false;
+          editProfileEnabled = false;
+        });
+      } else {
+        setState(() {
+          _isLoadingPage = true;
+          editProfileEnabled = false;
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
         });
       }
     });
@@ -156,20 +185,38 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
+            child: Stack(
               children: [
-                appBarCustomUi(),
-                profileImageAndKmAndReviewCount(),
-                NameTextUi(),
-                EmailTextUi(),
-                PhoneTextUi(),
-                StateTextUi(),
-                OrgNameTextUi(),
-                OrgTypeTextUi(),
-                YearOfExperienceTextUi(),
-                NextButton()
+                Column(
+                        children: [
+                          appBarCustomUi(),
+                          profileImageAndKmAndReviewCount(),
+                          NameTextUi(),
+                          EmailTextUi(),
+                          PhoneTextUi(),
+                          StateTextUi(),
+                          OrgNameTextUi(),
+                          OrgTypeTextUi(),
+                          YearOfExperienceTextUi(),
+                          NextButton()
+                        ],
+                      ),
+                Visibility(
+                  visible: _isLoadingPage,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            ),
+            )
           ),
         ),
       ),
@@ -420,6 +467,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -433,7 +481,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           maxLines: 1,
                           style: Styles.appBarTextBlack15,
                           focusNode: _emailFocusNode,
-                          enabled: editProfileEnabled,
+                          enabled: false,
                           keyboardType: TextInputType.emailAddress,
                           validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
                           controller: _emailController,
@@ -453,26 +501,16 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
-                      editProfileEnabled == false
-                          ? Text(
+                      Text(
                             'Your email',
                             textAlign: TextAlign.center,
                             style: Styles.textLabelSubTitle,
                           )
-                          : Container(),
                     ],
                   ),
                 ),
               ),
               Spacer(),
-              editProfileEnabled == true
-                  ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
-              )
-                  : Container(),
             ],
           ),
           Padding(
@@ -502,6 +540,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -599,7 +638,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Container(
@@ -691,6 +730,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -788,6 +828,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -796,7 +837,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     children: [
                       Container(
                         child: TextFormField(
-                          enabled: editProfileEnabled,
+                          enabled: false,
                           readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
@@ -824,28 +865,17 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
-                      editProfileEnabled != true
-                          ?
+
                       Text(
                         'Your phone number',
                         textAlign: TextAlign.center,
                         style: Styles.textLabelSubTitle,
                       )
-                          :
-                      Container(),
                     ],
                   ),
                 ),
               ),
               Spacer(),
-              editProfileEnabled == true
-                  ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
-              )
-                  : Container(),
             ],
           ),
           Padding(
@@ -875,6 +905,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -964,6 +995,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -1058,10 +1090,29 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         if(_userType == "1")
                           {
                             print("Individual");
+                            _isLoadingPage=true;
+                            _mechanicProfileBloc.postMechanicEditProfileIndividualRequest(
+                              authToken,
+                              _nameController.text,
+                              _nameController.text,
+                              _stateController.text,
+                              "",
+                              1,
+                              _yearOfExistenceController.text,);
                           }
                         else
                           {
-                            _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+                            _isLoadingPage=true;
+                            _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
+                              authToken,
+                              _nameController.text,
+                              _nameController.text,
+                              _stateController.text,
+                              "",
+                              1,
+                              _yearOfExistenceController.text,
+                              _orgNameController.text,
+                              _orgTypeController.text,);
                             print("Cooperate");
                         }
                       });

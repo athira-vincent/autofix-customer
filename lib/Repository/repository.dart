@@ -237,14 +237,19 @@ class Repository {
 
 
   // Fetch Profile Mechanic Request
-  Future<dynamic>  postMechanicFetchProfileRequest(
-      token)  =>
-      _mechanicProfileApiProvider.postMechanicFetchProfileRequest(
-          token);
-
-  // Edit Profile Mechanic Request
-  Future<dynamic>  postMechanicEditProfileIndividualRequest(token)  =>
+  Future<dynamic>  postMechanicFetchProfileRequest(token)  =>
       _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token);
+
+  // Edit Profile Mechanic Individual Request
+  Future<dynamic>  postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic, status, year_of_experience,)  =>
+      _mechanicProfileApiProvider.postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic, status, year_of_experience,);
+
+  // Edit Profile Mechanic Corporate Request
+  Future<dynamic>  postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
+      status, year_of_experience, org_Name, org_Type,)  =>
+      _mechanicProfileApiProvider.postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
+        status, year_of_experience, org_Name, org_Type,);
+
 
   // Update Profile Request
   Future<dynamic>  postCustEditProfileRequest(

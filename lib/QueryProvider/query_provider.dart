@@ -1012,17 +1012,17 @@ class QueryProvider {
     );
   }
 
-  postMechanicEditProfileIndividualRequest(
-      String token, firstName,  lastName,  state, status, imageUrl) async {
+  postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic,
+      status, year_of_experience,) async {
     String _query = """  
       mutation {
           mechanic_signUp_Individual_Update(
-            firstName: "string"
-            lastName: "string"
-            state: "string"
-            profilepic: "string"
+           firstName: "$firstName"
+            lastName: "$lastName"
+            state: "$state"
+            profilepic: "$profilepic"
             status: 1
-            year_of_experience: "string"
+            year_of_experience: "$year_of_experience"
           ) {
             message
           }
@@ -1034,19 +1034,19 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
-  postMechanicEditProfileCorporateRequest(
-      String token, firstName,  lastName,  state, status, imageUrl) async {
+  postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
+      status, year_of_experience, org_Name, org_Type,) async {
     String _query = """  
       mutation {
           mechanic_signUp_Corporate_Update(
-            firstName: "string"
-            lastName: "string"
-            state: "string"
-            profilepic: "string"
+            firstName: "$firstName"
+            lastName: "$lastName"
+            state: "$state"
+            profilepic: "$profilepic"
             status: 1
-            year_of_experience: "string"
-            org_Name: "string"
-            org_Type: "string"
+            year_of_experience: "$year_of_experience"
+            org_Name: "$org_Name"
+            org_Type: "$org_Type"
           ) {
             message
           }
