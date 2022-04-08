@@ -134,11 +134,13 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _mechanicProfileBloc.MechanicEditIndividualProfileResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoading = false;
           _isLoadingPage = false;
           editProfileEnabled = false;
         });
       } else {
         setState(() {
+          _isLoading = false;
           _isLoadingPage = true;
           editProfileEnabled = false;
           _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
@@ -148,11 +150,13 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _mechanicProfileBloc.postMechanicEditCorporateProfileResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoading = false;
           _isLoadingPage = false;
           editProfileEnabled = false;
         });
       } else {
         setState(() {
+          _isLoading = false;
           _isLoadingPage = true;
           editProfileEnabled = false;
           _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
@@ -1090,7 +1094,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         if(_userType == "1")
                           {
                             print("Individual");
-                            _isLoadingPage=true;
+                            _isLoading = true;
                             _mechanicProfileBloc.postMechanicEditProfileIndividualRequest(
                               authToken,
                               _nameController.text,
@@ -1102,7 +1106,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           }
                         else
                           {
-                            _isLoadingPage=true;
+                            _isLoading = true;
                             _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
                               authToken,
                               _nameController.text,
