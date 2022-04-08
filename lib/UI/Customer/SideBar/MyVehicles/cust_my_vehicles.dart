@@ -68,20 +68,26 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 children: [
                   Column(
                     children: [
-                      Container(
-                          decoration: BoxDecoration(
-                              color: CustColors.blue,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: CustColors.blue,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              ),
                             ),
-                          ),
-                          child: Column(
-                            children: [
-                              appBarCustomUi(),
-                              titleUi(),
-                            ],
-                          )
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                              child: Column(
+                                children: [
+                                  appBarCustomUi(),
+                                  titleUi(),
+                                ],
+                              ),
+                            )
+                        ),
                       ),
                     ],
                   ),
@@ -147,7 +153,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           ],
         ),
         Container(
-          height: 180,
+          height: 150,
           margin: EdgeInsets.all(0),
           child: ListView.builder(
             itemCount: imageList.length,
@@ -182,6 +188,42 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 ),
               );
             },
+          ),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Your Default Vehicle',
+                textAlign: TextAlign.center,
+                style: Styles.badgeTextStyle1,
+              ),
+            ),
+          ],
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20,20,20,20),
+          child: Container(
+              decoration: BoxDecoration(
+                color: CustColors.blueLight,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(15),
+                  topLeft: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                child: Column(
+                  children: [
+                    appBarCustomUi(),
+                  ],
+                ),
+              )
           ),
         ),
       ],
