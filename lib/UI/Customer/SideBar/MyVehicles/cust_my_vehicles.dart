@@ -1,6 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,9 +20,14 @@ class CustomerMyVehicleScreen extends StatefulWidget {
 
 class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
+
   String authToken = "";
   bool _isLoadingPage = false;
   bool _isLoadingButton = false;
+
+  CustVehicleList? custVehicleList;
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -65,11 +72,36 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
 
+      _homeCustomerBloc.postCustVehicleListRequest(authToken);
+
     });
   }
 
   _listenServiceListResponse() {
+    _homeCustomerBloc.postCustVehicleListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
 
+      } else {
+
+        setState(() {
+
+          custVehicleList = value.data?.custVehicleList?[0];
+          _brandController.text = '${custVehicleList?.brand.toString()}';
+          _modelController.text = '${custVehicleList?.model.toString()}';
+          _engineTypeController.text = '${custVehicleList?.engine.toString()}';
+          _yearController.text = '${custVehicleList?.year.toString()}';
+          _lastMaintenanceController.text = '${custVehicleList?.lastMaintenance.toString()}';
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("sucess postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
   }
 
 
@@ -86,7 +118,60 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           child: SingleChildScrollView(
               child: Stack(
                 children: [
-                  Column(
+                  StreamBuilder(
+                      stream:  _homeCustomerBloc.postCustVehicleListResponse,
+                      builder: (context, AsyncSnapshot<CustVehicleListMdl> snapshot) {
+                        print("${snapshot.hasData}");
+                        print("${snapshot.connectionState}");
+
+
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                height: MediaQuery.of(context).size.height,
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      CustColors.peaGreen),
+                                ),
+                              ),
+                            );
+                          default:
+                            return
+                              snapshot.data?.data?.custVehicleList?.length != 0 && snapshot.data?.data?.custVehicleList?.length != null
+                                  ? Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                color: CustColors.blue,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(15),
+                                                  bottomRight: Radius.circular(15),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                                                child: Column(
+                                                  children: [
+                                                    appBarCustomUi(snapshot),
+                                                    mainBodyUi(snapshot),
+                                                  ],
+                                                ),
+                                              )
+                                          ),
+                                        ),
+                                        SubMainBodyUi(snapshot),
+                                      ],
+                                    )
+                                  : Container();
+                        }
+                      }
+                  ),
+                  /*Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
@@ -103,15 +188,15 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                               child: Column(
                                 children: [
                                   appBarCustomUi(),
-                                  titleUi(),
+                                  mainBodyUi(),
                                 ],
                               ),
                             )
                         ),
                       ),
-                      bodyUi(),
+                      SubMainBodyUi(),
                     ],
-                  ),
+                  ),*/
                   Visibility(
                     visible: _isLoadingPage,
                     child: Align(
@@ -135,7 +220,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   }
 
 
-  Widget appBarCustomUi() {
+  Widget appBarCustomUi(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return Stack(
       children: [
         Row(
@@ -157,7 +242,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget titleUi() {
+  Widget mainBodyUi(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return Column(
       children: [
         Row(
@@ -177,7 +262,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           height: 150,
           margin: EdgeInsets.all(0),
           child: ListView.builder(
-            itemCount: imageList.length,
+            itemCount: snapshot.data?.data?.custVehicleList?.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, i, ){
               //for onTap to redirect to another screen
@@ -196,15 +281,29 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                         //ClipRRect for image border radius
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
-                            imageList[i],
-                            fit: BoxFit.cover,
-                          ),
+                          child:  snapshot.data?.data?.custVehicleList?[i].vehiclePic != null && snapshot.data?.data?.custVehicleList?[i].vehiclePic.trim() !=""
+                              ? FadeInImage.assetNetwork(
+                                  placeholder: 'assets/images/DummyChildRoundG1.png',
+                                  image:'${snapshot.data?.data?.custVehicleList?[i].vehiclePic}',
+                                  fit: BoxFit.cover,
+                                )
+                              :Image.asset(
+                                'assets/images/DummyChildRoundG1.png',
+                                fit: BoxFit.fill,
+                              ),
                         ),
                       ),
                     ],
                   ),
                   onTap: (){
+                    setState(() {
+                      custVehicleList = snapshot.data?.data?.custVehicleList?[i];
+                      _brandController.text = '${custVehicleList?.brand.toString()}';
+                      _modelController.text = '${custVehicleList?.model.toString()}';
+                      _engineTypeController.text = '${custVehicleList?.engine.toString()}';
+                      _yearController.text = '${custVehicleList?.year.toString()}';
+                      _lastMaintenanceController.text = '${custVehicleList?.lastMaintenance.toString()}';
+                    });
                   },
                 ),
               );
@@ -226,7 +325,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         ),
 
         Padding(
-          padding: const EdgeInsets.fromLTRB(20,20,20,20),
+          padding: const EdgeInsets.fromLTRB(15,20,15,20),
           child: Container(
               decoration: BoxDecoration(
                 color: CustColors.blueLight,
@@ -241,7 +340,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 padding: const EdgeInsets.fromLTRB(0,0,0,0),
                 child: Column(
                   children: [
-                    appBarCustomUi(),
+                    deafultVechicleDetailsUi(custVehicleList!),
                   ],
                 ),
               )
@@ -251,7 +350,85 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget bodyUi() {
+
+  Widget deafultVechicleDetailsUi(CustVehicleList custVehicleList) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color:Colors.white )
+            ),
+            //ClipRRect for image border radius
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.network(
+                custVehicleList.vehiclePic,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  custVehicleList.model,
+                  maxLines: 1,
+                  textAlign: TextAlign.start,
+                  style: Styles.appBarTextWhite,
+                ),
+                Text(
+                  custVehicleList.brand,
+                  maxLines: 1,
+                  textAlign: TextAlign.start,
+                  style: Styles.appBarTextWhite,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 50,
+              width: 1,
+              color: Colors.white,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  custVehicleList.lastMaintenance,
+                  textAlign: TextAlign.start,
+                  maxLines: 1,
+                  style: Styles.appBarTextWhite,
+                ),
+                Text(
+                  custVehicleList.year,
+                  maxLines: 1,
+                  textAlign: TextAlign.start,
+                  style: Styles.appBarTextWhite,
+                ),
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget SubMainBodyUi(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -276,11 +453,11 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                       padding: const EdgeInsets.all(15),
                       child: Column(
                         children: [
-                          brandTextSelection(),
-                          modelTextSelection(),
-                          engineTypeTextSelection(),
-                          yearTypeTextSelection(),
-                          lastMaintenanceTextSelection(),
+                          brandTextSelection(snapshot),
+                          modelTextSelection(snapshot),
+                          engineTypeTextSelection(snapshot),
+                          yearTypeTextSelection(snapshot),
+                          lastMaintenanceTextSelection(snapshot),
                         ],
                       ),
                     ),
@@ -295,7 +472,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
 
 
-  Widget brandTextSelection() {
+  Widget brandTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
       margin: EdgeInsets.only(top: 15),
       child: Column(
@@ -363,7 +540,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget modelTextSelection() {
+  Widget modelTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
@@ -432,7 +609,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget engineTypeTextSelection() {
+  Widget engineTypeTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
@@ -493,7 +670,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget yearTypeTextSelection() {
+  Widget yearTypeTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
@@ -554,7 +731,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget lastMaintenanceTextSelection() {
+  Widget lastMaintenanceTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
       margin: EdgeInsets.only(top: 20,bottom: 20),
       child: Column(

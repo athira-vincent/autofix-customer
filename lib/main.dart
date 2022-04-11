@@ -2,9 +2,11 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/SearchService/search_service_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -67,7 +69,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-      //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
+     // home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
       home: CustomerMyVehicleScreen(),

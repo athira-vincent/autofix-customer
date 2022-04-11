@@ -97,6 +97,8 @@ class HomeCustomerApiProvider {
       token)async {
     Map<String, dynamic> _resp = await _queryProvider. postCustVehicleListRequest(
         token,);
+
+    print('$_resp >>>>>>>>>>>>>>>>>>+++++++++++++++++++_resp');
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
