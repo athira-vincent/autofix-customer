@@ -125,14 +125,11 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             child: SingleChildScrollView(
                 child: Stack(
                   children: [
-
                     StreamBuilder(
                         stream:  _homeCustomerBloc.postCustVehicleListResponse,
                         builder: (context, AsyncSnapshot<CustVehicleListMdl> snapshot) {
                           print("${snapshot.hasData}");
                           print("${snapshot.connectionState}");
-
-
                           switch (snapshot.connectionState) {
                             case ConnectionState.waiting:
                               return Align(
@@ -178,32 +175,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                           }
                         }
                     ),
-                    /*Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  color: CustColors.blue,
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                                child: Column(
-                                  children: [
-                                    appBarCustomUi(),
-                                    mainBodyUi(),
-                                  ],
-                                ),
-                              )
-                          ),
-                        ),
-                        SubMainBodyUi(),
-                      ],
-                    ),*/
                     Visibility(
                       visible: _isLoadingPage,
                       child: Align(
@@ -281,23 +252,25 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                   child: Column(
                     children: [
                       Container(
-                        height: 130,
-                        width: 130,
+                        height: 120,
+                        width: 120,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: snapshot.data?.data?.custVehicleList?[i].id == custVehicleList?.id ? Colors.white : Colors.transparent,)
                         ),
                         //ClipRRect for image border radius
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child:  snapshot.data?.data?.custVehicleList?[i].vehiclePic != null && snapshot.data?.data?.custVehicleList?[i].vehiclePic.trim() !=""
+                          borderRadius: BorderRadius.circular(10),
+                          child: snapshot.data?.data?.custVehicleList?[i].vehiclePic != ""
                               ? FadeInImage.assetNetwork(
-                                  placeholder: 'assets/images/DummyChildRoundG1.png',
+                                  placeholder: 'assets/image/CustomerType/dummyCar.png',
                                   image:'${snapshot.data?.data?.custVehicleList?[i].vehiclePic}',
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                 )
-                              :Image.asset(
-                                'assets/images/DummyChildRoundG1.png',
+                              : Image.asset(
+                                'assets/image/CustomerType/dummyCar.png',
+                                height: 50,
+                                width: 50,
                                 fit: BoxFit.fill,
                               ),
                         ),
@@ -306,6 +279,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                   ),
                   onTap: (){
                     setState(() {
+                      print('>>>>>>>>>>${snapshot.data?.data?.custVehicleList?[i].vehiclePic.toString()}>>>>>>>');
                       custVehicleList = snapshot.data?.data?.custVehicleList?[i];
                       _brandController.text = '${custVehicleList?.brand.toString()}';
                       _modelController.text = '${custVehicleList?.model.toString()}';
@@ -374,31 +348,42 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             //ClipRRect for image border radius
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                custVehicleList.vehiclePic,
-                fit: BoxFit.cover,
-              ),
+              child:  '${custVehicleList.vehiclePic}' != null && '${custVehicleList.vehiclePic}' != ""
+                  ? FadeInImage.assetNetwork(
+                      placeholder: 'assets/image/CustomerType/dummyCar.png',
+                      image:'${custVehicleList.vehiclePic}',
+                      fit: BoxFit.fill,
+                    )
+                  : Image.asset(
+                      'assets/image/CustomerType/dummyCar.png',
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.fill,
+                    ),
             ),
           ),
           Expanded(
             flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  custVehicleList.model,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: Styles.appBarTextWhite,
-                ),
-                Text(
-                  custVehicleList.brand,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: Styles.appBarTextWhite,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    custVehicleList.model,
+                    maxLines: 1,
+                    textAlign: TextAlign.start,
+                    style: Styles.appBarTextWhite,
+                  ),
+                  Text(
+                    custVehicleList.brand,
+                    maxLines: 1,
+                    textAlign: TextAlign.start,
+                    style: Styles.appBarTextWhite,
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
