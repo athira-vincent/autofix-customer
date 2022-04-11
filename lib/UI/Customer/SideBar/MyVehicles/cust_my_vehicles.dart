@@ -159,7 +159,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                                   ),
                                                 ),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                                                  padding: const EdgeInsets.fromLTRB(5,0,0,20),
                                                   child: Column(
                                                     children: [
                                                       mainBodyUi(snapshot),
@@ -231,16 +231,15 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Your Cars',
+                'Your cars',
                 textAlign: TextAlign.center,
-                style: Styles.badgeTextStyle1,
+                style: Styles.myVechicleYourCarTextStyle,
               ),
             ),
           ],
         ),
         Container(
           height: 150,
-          margin: EdgeInsets.all(0),
           child: ListView.builder(
             itemCount: snapshot.data?.data?.custVehicleList?.length,
             scrollDirection: Axis.horizontal,
@@ -249,30 +248,60 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               return Padding(
                 padding: const EdgeInsets.all(5),
                 child: InkWell(
-                  child: Column(
+                  child: Stack(
+                    alignment: Alignment.centerRight,
                     children: [
                       Container(
                         height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: snapshot.data?.data?.custVehicleList?[i].id == custVehicleList?.id ? Colors.white : Colors.transparent,)
-                        ),
-                        //ClipRRect for image border radius
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: snapshot.data?.data?.custVehicleList?[i].vehiclePic != ""
-                              ? FadeInImage.assetNetwork(
-                                  placeholder: 'assets/image/CustomerType/dummyCar.png',
-                                  image:'${snapshot.data?.data?.custVehicleList?[i].vehiclePic}',
-                                  fit: BoxFit.fill,
-                                )
-                              : Image.asset(
-                                'assets/image/CustomerType/dummyCar.png',
-                                height: 50,
-                                width: 50,
-                                fit: BoxFit.fill,
+                        width: 130,
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 120,
+                              width: 120,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(23),
+                                  border: Border.all(
+                                    color: snapshot.data?.data?.custVehicleList?[i].id == custVehicleList?.id
+                                        ? Colors.white
+                                        : Colors.transparent,
+                                    width: 2,)
                               ),
+                              //ClipRRect for image border radius
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: snapshot.data?.data?.custVehicleList?[i].vehiclePic != ""
+                                    ? FadeInImage.assetNetwork(
+                                        placeholder: 'assets/image/CustomerType/dummyCar.png',
+                                        image:'${snapshot.data?.data?.custVehicleList?[i].vehiclePic}',
+                                        fit: BoxFit.fill,
+                                      )
+                                    : Image.asset(
+                                      'assets/image/CustomerType/dummyCar.png',
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.fill,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 65,
+                        child: Container(
+                          width: 25,
+                          height: 25,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(
+                                50,
+                              ),
+                            ),
+                          ),
+                          child: Icon(Icons.delete_outline_sharp, color: CustColors.blue,size: 18,),
                         ),
                       ),
                     ],
@@ -301,7 +330,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               child: Text(
                 'Your Default Vehicle',
                 textAlign: TextAlign.center,
-                style: Styles.badgeTextStyle1,
+                style: Styles.myVechicleYourCarTextStyle,
               ),
             ),
           ],

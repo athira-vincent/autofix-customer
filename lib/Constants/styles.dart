@@ -395,6 +395,14 @@ class Styles {
     letterSpacing: .3,
   );
 
+  static const myVechicleYourCarTextStyle = TextStyle(
+    fontFamily: "Samsung_SharpSans_Bold",
+    fontSize: 12,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w700,
+    letterSpacing: .3,
+  );
+
   static const badgeTextStyle2 = TextStyle(
     fontFamily: "Samsung_SharpSans_Medium",
     fontSize: 6,
