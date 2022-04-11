@@ -350,7 +350,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-
   Widget deafultVechicleDetailsUi(CustVehicleList custVehicleList) {
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -469,8 +468,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
       ],
     );
   }
-
-
 
   Widget brandTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
