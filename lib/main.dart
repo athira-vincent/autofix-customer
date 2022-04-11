@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
-      statusBarColor: CustColors.blue, //or set color with: Color(0xFF0000FF)
+      statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,

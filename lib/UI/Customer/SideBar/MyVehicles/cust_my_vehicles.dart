@@ -117,7 +117,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             child: AppBar(
                 flexibleSpace: appBarCustomUi(),
                 elevation: 0,
-                backgroundColor: CustColors.blue,
+                backgroundColor: CustColors.light_navy,
             ),
           ),
           backgroundColor: Colors.white,
@@ -152,7 +152,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                             padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                             child: Container(
                                                 decoration: BoxDecoration(
-                                                  color: CustColors.blue,
+                                                  color: CustColors.light_navy,
                                                   borderRadius: BorderRadius.only(
                                                     bottomLeft: Radius.circular(15),
                                                     bottomRight: Radius.circular(15),
@@ -326,7 +326,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(15,0,15,0),
               child: Text(
                 'Your Default Vehicle',
                 textAlign: TextAlign.center,
@@ -337,7 +337,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         ),
 
         Padding(
-          padding: const EdgeInsets.fromLTRB(15,20,15,20),
+          padding: const EdgeInsets.fromLTRB(15,15,15,15),
           child: Container(
               decoration: BoxDecoration(
                 color: CustColors.blueLight,
@@ -394,7 +394,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           Expanded(
             flex: 1,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(25,0,0,0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -403,20 +403,20 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                     custVehicleList.model,
                     maxLines: 1,
                     textAlign: TextAlign.start,
-                    style: Styles.appBarTextWhite,
+                    style: Styles.myVechicleDetailsTextStyle,
                   ),
                   Text(
                     custVehicleList.brand,
                     maxLines: 1,
                     textAlign: TextAlign.start,
-                    style: Styles.appBarTextWhite,
+                    style: Styles.myVechicleDetailsTextStyle,
                   ),
                 ],
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8,8,30,8),
             child: Container(
               height: 50,
               width: 1,
@@ -425,23 +425,26 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           ),
           Expanded(
             flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  custVehicleList.lastMaintenance,
-                  textAlign: TextAlign.start,
-                  maxLines: 1,
-                  style: Styles.appBarTextWhite,
-                ),
-                Text(
-                  custVehicleList.year,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: Styles.appBarTextWhite,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0,0,0,0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    custVehicleList.lastMaintenance,
+                    textAlign: TextAlign.start,
+                    maxLines: 1,
+                    style: Styles.myVechicleDetailsTextStyle,
+                  ),
+                  Text(
+                    custVehicleList.year,
+                    maxLines: 1,
+                    textAlign: TextAlign.start,
+                    style: Styles.myVechicleDetailsTextStyle,
+                  ),
+                ],
+              ),
             ),
           ),
 
