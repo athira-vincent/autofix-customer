@@ -385,9 +385,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                         {
                                                           _isLoading = true;
                                                           if(textEditingController.text == widget.otpNumber){
-                                                            _signupBloc.postPhoneLoginOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
-
-                                                          }else{
+                                                            //_signupBloc.postPhoneLoginOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
+                                                                if( widget.fromPage == "2")
+                                                                {
+                                                                  Navigator.pushReplacement(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>  CustomerHomeScreen()));
+                                                                }
+                                                          }
+                                                          else
+                                                          {
                                                             _isLoading = false;
                                                             SnackBarWidget().setMaterialSnackBar( "Otp Verification failed", _scaffoldKey);
                                                           }
@@ -396,7 +404,71 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           _isLoading=true;
                                                           print(textEditingController.text);
                                                           print(authToken.toString());
-                                                          _signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
+                                                          _isLoading = false;
+                                                          if( widget.fromPage == "3")
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      ResetPasswordScreen(
+                                                                        otpNumber: textEditingController.text.toString(),
+                                                                      )),
+                                                            );
+                                                          }
+                                                          else if( widget.fromPage == "2")
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>  CustomerHomeScreen()));
+                                                          }
+                                                          else if( widget.userType == TextStrings.user_customer)
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                            );
+                                                          }
+                                                          else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                            );
+                                                          }
+                                                          else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                            );
+                                                          }
+                                                          else if( widget.userType == '1')
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      LoginScreen()),
+                                                            );
+                                                          }
+                                                          else
+                                                          {
+                                                            Navigator.pushReplacement(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      LoginScreen()),
+                                                            );
+                                                          }
+                                                          //_signupBloc.postOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
 
                                                         }
                                                       });
