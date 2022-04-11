@@ -276,7 +276,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                         width: 130,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            border: Border.all(color: i==0 ? Colors.white : Colors.transparent,)
+                            border: Border.all(color: snapshot.data?.data?.custVehicleList?[i].id == custVehicleList?.id ? Colors.white : Colors.transparent,)
                         ),
                         //ClipRRect for image border radius
                         child: ClipRRect(
@@ -361,7 +361,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             width: 50,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color:Colors.white )
+                border: Border.all(color:Colors.transparent )
             ),
             //ClipRRect for image border radius
             child: ClipRRect(
