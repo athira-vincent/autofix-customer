@@ -105,114 +105,122 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-              child: Stack(
-                children: [
-                  StreamBuilder(
-                      stream:  _homeCustomerBloc.postCustVehicleListResponse,
-                      builder: (context, AsyncSnapshot<CustVehicleListMdl> snapshot) {
-                        print("${snapshot.hasData}");
-                        print("${snapshot.connectionState}");
+      home: SafeArea(
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: AppBar(
+                flexibleSpace: appBarCustomUi(),
+                elevation: 0,
+                backgroundColor: CustColors.blue,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: SingleChildScrollView(
+                child: Stack(
+                  children: [
+
+                    StreamBuilder(
+                        stream:  _homeCustomerBloc.postCustVehicleListResponse,
+                        builder: (context, AsyncSnapshot<CustVehicleListMdl> snapshot) {
+                          print("${snapshot.hasData}");
+                          print("${snapshot.connectionState}");
 
 
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: MediaQuery.of(context).size.height,
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Align(
                                 alignment: Alignment.center,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      CustColors.peaGreen),
+                                child: Container(
+                                  height: MediaQuery.of(context).size.height,
+                                  alignment: Alignment.center,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        CustColors.peaGreen),
+                                  ),
+                                ),
+                              );
+                            default:
+                              return
+                                snapshot.data?.data?.custVehicleList?.length != 0 && snapshot.data?.data?.custVehicleList?.length != null
+                                    ? Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: CustColors.blue,
+                                                  borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(15),
+                                                    bottomRight: Radius.circular(15),
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                                                  child: Column(
+                                                    children: [
+                                                      mainBodyUi(snapshot),
+                                                    ],
+                                                  ),
+                                                )
+                                            ),
+                                          ),
+                                          SubMainBodyUi(snapshot),
+                                        ],
+                                      )
+                                    : Container();
+                          }
+                        }
+                    ),
+                    /*Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: CustColors.blue,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
                                 ),
                               ),
-                            );
-                          default:
-                            return
-                              snapshot.data?.data?.custVehicleList?.length != 0 && snapshot.data?.data?.custVehicleList?.length != null
-                                  ? Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                color: CustColors.blue,
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(15),
-                                                  bottomRight: Radius.circular(15),
-                                                ),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                                                child: Column(
-                                                  children: [
-                                                    appBarCustomUi(snapshot),
-                                                    mainBodyUi(snapshot),
-                                                  ],
-                                                ),
-                                              )
-                                          ),
-                                        ),
-                                        SubMainBodyUi(snapshot),
-                                      ],
-                                    )
-                                  : Container();
-                        }
-                      }
-                  ),
-                  /*Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: CustColors.blue,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                              child: Column(
-                                children: [
-                                  appBarCustomUi(),
-                                  mainBodyUi(),
-                                ],
-                              ),
-                            )
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                                child: Column(
+                                  children: [
+                                    appBarCustomUi(),
+                                    mainBodyUi(),
+                                  ],
+                                ),
+                              )
+                          ),
                         ),
-                      ),
-                      SubMainBodyUi(),
-                    ],
-                  ),*/
-                  Visibility(
-                    visible: _isLoadingPage,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
+                        SubMainBodyUi(),
+                      ],
+                    ),*/
+                    Visibility(
+                      visible: _isLoadingPage,
+                      child: Align(
                         alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustColors.peaGreen),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CustColors.peaGreen),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              )
+                  ],
+                )
+            ),
           ),
         ),
       ),
@@ -220,7 +228,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   }
 
 
-  Widget appBarCustomUi(AsyncSnapshot<CustVehicleListMdl> snapshot) {
+
+  Widget appBarCustomUi() {
     return Stack(
       children: [
         Row(
