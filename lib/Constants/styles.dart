@@ -25,6 +25,20 @@ class Styles {
     fontSize: 10,
   );
 
+  static const MyVechiclesSubTitle = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
+  static const MyVechiclesSubTitleBlue = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Bold',
+    fontWeight: FontWeight.w500,
+    color: CustColors.light_navy,
+    fontSize: 18,
+  );
+
   static const textLabelSubTitleRed = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w500,

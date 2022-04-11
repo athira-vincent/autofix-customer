@@ -462,22 +462,38 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             key: _formKey,
             child: Container(
               margin: EdgeInsets.only(
-                left: 20, right: 20,top:20, bottom: 20),
+                left: 25, right: 25,top:20, bottom: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding:EdgeInsets.only(
+                        left: 0, right: 0,top:20, bottom: 20),
+                    child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Selected vehicle details",
+                            style: Styles.MyVechiclesSubTitleBlue,
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
                   Container(
                     decoration: BoxDecoration(
                       color: CustColors.pale_grey,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
                       ),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: Column(
                         children: [
+
                           brandTextSelection(snapshot),
                           modelTextSelection(snapshot),
                           engineTypeTextSelection(snapshot),
@@ -497,7 +513,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   Widget brandTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
-      margin: EdgeInsets.only(top: 15),
+      margin: EdgeInsets.only(top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -507,7 +523,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               children: [
                 Text(
                   "Brand",
-                  style: Styles.textLabelTitle,
+                  style: Styles.MyVechiclesSubTitle,
                 ),
                 Spacer(),
 
@@ -565,7 +581,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   Widget modelTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -575,7 +591,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               children: [
                 Text(
                   "Model",
-                  style: Styles.textLabelTitle,
+                  style: Styles.MyVechiclesSubTitle,
                 ),
                 Spacer(),
 
@@ -634,14 +650,14 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   Widget engineTypeTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
 
             "Select Engine Type",
-            style: Styles.textLabelTitle,
+            style: Styles.MyVechiclesSubTitle,
           ),
           TextFormField(
             textAlignVertical: TextAlignVertical.center,
@@ -695,14 +711,14 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   Widget yearTypeTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
 
             "Select Year",
-            style: Styles.textLabelTitle,
+            style: Styles.MyVechiclesSubTitle,
           ),
           TextFormField(
             textAlignVertical: TextAlignVertical.center,
@@ -756,13 +772,13 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   Widget lastMaintenanceTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  Container(
-      margin: EdgeInsets.only(top: 20,bottom: 20),
+      margin: EdgeInsets.only(top: 10,bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Last maintenance",
-            style: Styles.textLabelTitle,
+            style: Styles.MyVechiclesSubTitle,
           ),
           TextFormField(
             textAlignVertical: TextAlignVertical.center,
