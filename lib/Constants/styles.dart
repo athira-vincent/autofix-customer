@@ -184,6 +184,13 @@ class Styles {
     fontFamily: 'Samsung_SharpSans_Regular',
   );
 
+  static const smallTitleStyle01 = TextStyle(
+    color: CustColors.light_navy,
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Samsung_SharpSans_Bold',
+  );
+
   static const smallTitleStyle2 = TextStyle(
     color: CustColors.black_01,
     fontSize: 13,
@@ -318,6 +325,13 @@ class Styles {
   static const mechanicNameStyle = TextStyle(
     color: CustColors.black_03,
     fontSize: 19,
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+  );
+
+  static const mechanicNameStyle01 = TextStyle(
+    color: CustColors.black_03,
+    fontSize: 22,
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
   );

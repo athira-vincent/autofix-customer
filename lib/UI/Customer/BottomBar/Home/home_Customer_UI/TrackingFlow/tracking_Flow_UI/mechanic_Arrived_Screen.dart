@@ -222,8 +222,8 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(2),
-                                      child: Text('dgdfyd',
-                                        style: Styles.mechanicNameStyle,
+                                      child: Text('George Dola',
+                                        style: Styles.mechanicNameStyle01,
                                         maxLines: 1,
                                         textAlign: TextAlign.start,
                                         overflow: TextOverflow.visible,),
@@ -231,8 +231,8 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
 
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                      child: Text('1280 Reviews',
-                                        style: Styles.smallTitleStyle1,),
+                                      child: Text('Started diagnostic test!',
+                                        style: Styles.smallTitleStyle01,),
                                     ),
                                   ],
                                 ),
