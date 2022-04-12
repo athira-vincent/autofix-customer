@@ -156,11 +156,11 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
                 Container(
                   width: double.infinity,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15,15,15,15),
+                    padding: const EdgeInsets.fromLTRB(20,20,20,20),
                     child: Text(
-                      "Your mechanic added some additional services after his diagnostic test , it may cause additional cost than you expected.",
+                      "Hi.. John Eric congratulations!  Your mechanic reached near you . He fix your vehicle faults.",
                       style: Styles.infoTextLabelTitleWhite,
-                      textAlign: TextAlign.justify,
+                      textAlign: TextAlign.start,
                     ),
                   ),
                 ),
