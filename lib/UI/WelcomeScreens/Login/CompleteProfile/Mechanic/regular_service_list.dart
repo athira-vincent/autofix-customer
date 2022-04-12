@@ -60,7 +60,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
           for(int i = 0; i < regularServiceList.length;i++){
             for(int x = 0; x < regularServiceList[i].service!.length; x++){
-              selectedServiceMdlList.add(SelectedServicesMdl(regularServiceList[i].service![x].id.toString(),regularServiceList[i].service![x].minPrice, "00:30", false));
+              selectedServiceMdlList.add(SelectedServicesMdl(i,x,regularServiceList[i].service![x].id.toString(),regularServiceList[i].service![x].minPrice, regularServiceList[i].service![x].maxPrice, "00:30", false));
             }
 
           }
@@ -246,7 +246,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                 ?
                             ListView.builder(
                               itemBuilder: (BuildContext context, int index) =>
-                                  _buildTiles(regularServiceList[index],size),
+                                  _buildTiles(regularServiceList[index],size, index),
                               itemCount: regularServiceList.length,
                             )
                                 :
@@ -288,15 +288,17 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       //print("time 001 ${selectedServiceMdlList[i].isEnable}");
                     }
 
+                    print(selectedService);
+
                     for(int m = 0 ; m< selectedService.length; m++){
                       if( m != selectedService.length-1){
-                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" + ", ";
-                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}",""";
-                        timeList = timeList + """ "${selectedServiceMdlList[m].time}",""";
+                        serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
+                        feeList = feeList + """ "${selectedService[m].minAmount}",""";
+                        timeList = timeList + """ "${selectedService[m].time}",""";
                       }else{
-                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" ;
-                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}" """;
-                        timeList = timeList + """ "${selectedServiceMdlList[m].time}" """;
+                        serviceId = serviceId + "${selectedService[m].serviceId}" ;
+                        feeList = feeList + """ "${selectedService[m].minAmount}" """;
+                        timeList = timeList + """ "${selectedService[m].time}" """;
                       }
 
                     }
@@ -316,7 +318,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     }
                     */
 
-                    print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
+                    print(" >>>> serviceId " +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
                         authToken,
@@ -364,7 +366,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
 
 
-  Widget _buildTiles(CategoryList root, Size size,) {
+  Widget _buildTiles(CategoryList root, Size size,int parentIndex) {
 
     if (root.service!.isEmpty) return ListTile(title: Text(root.catName));
     return ExpansionTile(
@@ -384,21 +386,22 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
           //scrollDirection: Axis.vertical,
           itemCount:  root.service!.length,
           itemBuilder: (context, index) {
-           // _regularIsChecked = List<bool>.filled(root.service!.length, false);
 
-            TextEditingController _rateController=TextEditingController();
+            TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
             _rateController.text = root.service![index].minPrice.toString();
             _timeController.text = "30:00";
             _rateController.addListener(() {
-              var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
-              selectedServiceMdlList.removeAt(index);
-              selectedServiceMdlList.insert(index,temp);
+              int itemIndex = getItemIndex(parentIndex,index);
+              var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,_rateController.text, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, selectedServiceMdlList[itemIndex].isEnable);
+              selectedServiceMdlList.removeAt(itemIndex);
+              selectedServiceMdlList.insert(itemIndex,temp);
             });
             _timeController.addListener(() {
-              var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable);
-              selectedServiceMdlList.removeAt(index);
-              selectedServiceMdlList.insert(index,temp);
+              int itemIndex = getItemIndex(parentIndex,index);
+              var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
+              selectedServiceMdlList.removeAt(itemIndex);
+              selectedServiceMdlList.insert(itemIndex,temp);
             });
 
             return Container(
@@ -407,26 +410,26 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                   Transform.scale(
                     scale: .4,
                     child: Checkbox(
-                      value: _regularIsChecked![index],
+                      value: _regularIsChecked![getItemIndex(parentIndex,index)],
                       //value: false,
                       onChanged: (bool? val){
                         setState(() {
-                          this._regularIsChecked![index] = val!;
-                          //isChecked ? false : true;
-                          /* val ?
-                                                  selectedServiceList.add(emergencyServiceList[index])
-                                                      :
-                                                  selectedServiceList.remove(emergencyServiceList[index]);*/
+                          this._regularIsChecked![getItemIndex(parentIndex,index)] = val!;
+
                           print("sgsjhgj 001 $val");
                           if(val){
-                            var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
-                            selectedServiceMdlList.removeAt(index);
-                            selectedServiceMdlList.insert(index, temp);
+                            int itemIndex = getItemIndex(parentIndex,index);
+                            print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
+                            var temp =   SelectedServicesMdl(parentIndex,index,selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, val);
+                            selectedServiceMdlList.removeAt(itemIndex);
+                            selectedServiceMdlList.insert(itemIndex, temp);
                           }else{
+                            int itemIndex = getItemIndex(parentIndex,index);
+                            print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
                             //serviceSpecialisationList.remove(regularServiceList[index]);
-                            var temp= SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, selectedServiceMdlList[index].time, val);
-                            selectedServiceMdlList.removeAt(index);
-                            selectedServiceMdlList.insert(index,temp);
+                            var temp= SelectedServicesMdl(parentIndex,index,selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, val);
+                            selectedServiceMdlList.removeAt(itemIndex);
+                            selectedServiceMdlList.insert(itemIndex,temp);
                           }
                           //print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
                         });
@@ -470,8 +473,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                           if(value!.isEmpty){
                             return "Fill field";
                           }
-                          else if(int.parse(value) < int.parse(root.service![index].minPrice) || int.parse(value) > int.parse(root.service![index].maxPrice)){
-                            return root.service![index].minPrice + " - " + root.service![index].maxPrice;
+                          else if(int.parse(value) < int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount) || int.parse(value) > int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
+                            return selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount + " - " + selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
                           }
                           else{
                             return null;
@@ -486,8 +489,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                         //initialValue: '${regularServiceList[index].serviceName.toString()}',
                         controller: _rateController,
                         style: Styles.searchTextStyle02,
-                        enabled: _regularIsChecked![index],
-                        readOnly: _regularIsChecked![index],
+                        enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                        //readOnly: _regularIsChecked![getItemIndex(parentIndex,index)],
                       ),
                     ),
                   ),
@@ -532,15 +535,15 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                           }
                         },
                         cursorColor: CustColors.light_navy,
-                        inputFormatters: <TextInputFormatter>[
+                        /*inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly,
-                        ],
+                        ],*/
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         keyboardType: TextInputType.datetime,
                         //initialValue: '${regularServiceList[index].serviceName.toString()}',
                         controller: _timeController,
                         style: Styles.searchTextStyle02,
-                        enabled: _regularIsChecked![index],
+                        enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
                         //readOnly: _regularIsChecked![index],
                       ),
                     ),
@@ -558,13 +561,23 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   }
 
 
+  int getItemIndex(int parentIndex, int childIndex){
+    int itemIndex = selectedServiceMdlList.indexWhere((item) => item.parentIndex == parentIndex && item.childIndex == childIndex);
+    print("itemIndex >>>>>>>> " + itemIndex.toString());
+    return itemIndex;
+  }
+
+
 }
 class SelectedServicesMdl{
+  final int parentIndex;
+  final int childIndex;
   final String serviceId;
-  final String amount;
+  final String minAmount;
+  final String maxAmount;
   final String time;
   final bool isEnable;
-  SelectedServicesMdl(this.serviceId, this.amount, this.time,this.isEnable);
+  SelectedServicesMdl(this.parentIndex, this.childIndex,this.serviceId, this.minAmount, this.maxAmount, this.time,this.isEnable);
 }
 
 
