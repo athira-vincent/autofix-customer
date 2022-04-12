@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart'
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerMyVehicleScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   bool _isLoadingPage = false;
   bool _isLoadingButton = false;
 
+  CustVehicleList? custVehicleListDefaultValue;
   CustVehicleList? custVehicleList;
 
   final List<String> imageList = [
@@ -89,12 +91,12 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
         setState(() {
 
-          custVehicleList = value.data?.custVehicleList?[0];
-          _brandController.text = '${custVehicleList?.brand.toString()}';
-          _modelController.text = '${custVehicleList?.model.toString()}';
-          _engineTypeController.text = '${custVehicleList?.engine.toString()}';
-          _yearController.text = '${custVehicleList?.year.toString()}';
-          _lastMaintenanceController.text = '${custVehicleList?.lastMaintenance.toString()}';
+          custVehicleListDefaultValue = value.data?.custVehicleList?[0];
+          _brandController.text = '${custVehicleListDefaultValue?.brand.toString()}';
+          _modelController.text = '${custVehicleListDefaultValue?.model.toString()}';
+          _engineTypeController.text = '${custVehicleListDefaultValue?.engine.toString()}';
+          _yearController.text = '${custVehicleListDefaultValue?.year.toString()}';
+          _lastMaintenanceController.text = '${custVehicleListDefaultValue?.lastMaintenance.toString()}';
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("sucess postServiceList >>>>>>>  ${value.status}");
@@ -263,7 +265,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(23),
                                   border: Border.all(
-                                    color: snapshot.data?.data?.custVehicleList?[i].id == custVehicleList?.id
+                                    color: snapshot.data?.data?.custVehicleList?[i].id == custVehicleListDefaultValue?.id
                                         ? Colors.white
                                         : Colors.transparent,
                                     width: 2,)
@@ -277,12 +279,16 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                         image:'${snapshot.data?.data?.custVehicleList?[i].vehiclePic}',
                                         fit: BoxFit.fill,
                                       )
-                                    : Image.asset(
-                                      'assets/image/CustomerType/dummyCar.png',
-                                      height: 50,
-                                      width: 50,
-                                      fit: BoxFit.fill,
-                                    ),
+                                    :  Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(25),
+                                          child: SvgPicture.asset(
+                                              'assets/image/CustomerType/dummyCar00.svg',
+                                              fit: BoxFit.contain,
+                                            ),
+                                        ),
+                                    )
                               ),
                             ),
                           ],
@@ -293,15 +299,10 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                         child: Container(
                           width: 25,
                           height: 25,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(
-                                50,
-                              ),
-                            ),
+                          child: SvgPicture.asset(
+                            'assets/image/CustomerType/myvehicleDelete.svg',
+                            fit: BoxFit.contain,
                           ),
-                          child: Icon(Icons.delete_outline_sharp, color: CustColors.blue,size: 18,),
                         ),
                       ),
                     ],
@@ -310,11 +311,11 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                     setState(() {
                       print('>>>>>>>>>>${snapshot.data?.data?.custVehicleList?[i].vehiclePic.toString()}>>>>>>>');
                       custVehicleList = snapshot.data?.data?.custVehicleList?[i];
-                      _brandController.text = '${custVehicleList?.brand.toString()}';
-                      _modelController.text = '${custVehicleList?.model.toString()}';
-                      _engineTypeController.text = '${custVehicleList?.engine.toString()}';
-                      _yearController.text = '${custVehicleList?.year.toString()}';
-                      _lastMaintenanceController.text = '${custVehicleList?.lastMaintenance.toString()}';
+                      _brandController.text = '${snapshot.data?.data?.custVehicleList?[i].brand.toString()}';
+                      _modelController.text = '${snapshot.data?.data?.custVehicleList?[i].model.toString()}';
+                      _engineTypeController.text = '${snapshot.data?.data?.custVehicleList?[i].engine.toString()}';
+                      _yearController.text = '${snapshot.data?.data?.custVehicleList?[i].year.toString()}';
+                      _lastMaintenanceController.text = '${snapshot.data?.data?.custVehicleList?[i].lastMaintenance.toString()}';
                     });
                   },
                 ),
@@ -352,7 +353,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 padding: const EdgeInsets.fromLTRB(0,0,0,0),
                 child: Column(
                   children: [
-                    deafultVechicleDetailsUi(custVehicleList!),
+                    deafultVechicleDetailsUi(custVehicleListDefaultValue!),
                   ],
                 ),
               )
@@ -362,7 +363,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     );
   }
 
-  Widget deafultVechicleDetailsUi(CustVehicleList custVehicleList) {
+  Widget deafultVechicleDetailsUi(CustVehicleList custVehicleListDefaultValue) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
@@ -377,18 +378,22 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             //ClipRRect for image border radius
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
-              child:  '${custVehicleList.vehiclePic}' != null && '${custVehicleList.vehiclePic}' != ""
+              child:  '${custVehicleListDefaultValue.vehiclePic}' != null && '${custVehicleListDefaultValue.vehiclePic}' != ""
                   ? FadeInImage.assetNetwork(
                       placeholder: 'assets/image/CustomerType/dummyCar.png',
-                      image:'${custVehicleList.vehiclePic}',
+                      image:'${custVehicleListDefaultValue.vehiclePic}',
                       fit: BoxFit.fill,
                     )
-                  : Image.asset(
-                      'assets/image/CustomerType/dummyCar.png',
-                      height: 50,
-                      width: 50,
-                      fit: BoxFit.fill,
-                    ),
+                  : Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(
+                          'assets/image/CustomerType/dummyCar00.svg',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    )
             ),
           ),
           Expanded(
@@ -400,13 +405,13 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    custVehicleList.model,
+                    custVehicleListDefaultValue.model,
                     maxLines: 1,
                     textAlign: TextAlign.start,
                     style: Styles.myVechicleDetailsTextStyle,
                   ),
                   Text(
-                    custVehicleList.brand,
+                    custVehicleListDefaultValue.brand,
                     maxLines: 1,
                     textAlign: TextAlign.start,
                     style: Styles.myVechicleDetailsTextStyle,
@@ -432,13 +437,13 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    custVehicleList.lastMaintenance,
+                    custVehicleListDefaultValue.lastMaintenance,
                     textAlign: TextAlign.start,
                     maxLines: 1,
                     style: Styles.myVechicleDetailsTextStyle,
                   ),
                   Text(
-                    custVehicleList.year,
+                    custVehicleListDefaultValue.year,
                     maxLines: 1,
                     textAlign: TextAlign.start,
                     style: Styles.myVechicleDetailsTextStyle,
@@ -489,18 +494,24 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                         Radius.circular(15),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: [
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            children: [
 
-                          brandTextSelection(snapshot),
-                          modelTextSelection(snapshot),
-                          engineTypeTextSelection(snapshot),
-                          yearTypeTextSelection(snapshot),
-                          lastMaintenanceTextSelection(snapshot),
-                        ],
-                      ),
+                              brandTextSelection(snapshot),
+                              modelTextSelection(snapshot),
+                              engineTypeTextSelection(snapshot),
+                              yearTypeTextSelection(snapshot),
+                              lastMaintenanceTextSelection(snapshot),
+
+                            ],
+                          ),
+                        ),
+                        setAsDefaultLife(snapshot),
+                      ],
                     ),
                   ),
                 ],
@@ -826,6 +837,37 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               hintStyle: Styles.textLabelSubTitle,),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget setAsDefaultLife(AsyncSnapshot<CustVehicleListMdl> snapshot) {
+    return  InkWell(
+      onTap: (){
+        setState(() {
+          custVehicleListDefaultValue = custVehicleList;
+        });
+      },
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: CustColors.light_navy,
+          borderRadius: BorderRadius.only(
+            bottomRight:Radius.circular(15),
+            bottomLeft:Radius.circular(15),
+
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15,0,15,0),
+          child: Text(
+            'Set as default vehicle',
+            textAlign: TextAlign.center,
+            style: Styles.myVechicleYourCarTextStyle,
+          ),
+        ),
       ),
     );
   }

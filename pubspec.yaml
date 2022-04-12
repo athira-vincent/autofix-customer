@@ -134,7 +134,7 @@ flutter:
     - assets/image/mechanicTracking/
     - assets/image/MechanicType/incomingRequestBg.svg
     - assets/image/IconsRatingBar/
-    - assets/image/CustomerType/mechanicArrivedBg.svg
+    - assets/image/CustomerType/myvehicleDelete.svg
 
   fonts:
     - family: Montserrat_SemiBold
