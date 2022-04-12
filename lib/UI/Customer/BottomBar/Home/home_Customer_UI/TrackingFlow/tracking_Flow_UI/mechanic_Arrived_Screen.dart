@@ -78,10 +78,7 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
 
               children: [
                 appBarCustomUi(size),
-                Container(
-                    height: MediaQuery.of(context).size.height * 0.38,
-                    child: bagroundBgText(size)
-                ),
+                bagroundBgText(size),
                 diagonosisCurvedUi( size),
 
               ],
@@ -93,62 +90,70 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
   }
 
   Widget appBarCustomUi(Size size) {
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.arrow_back, color:  CustColors.light_navy,),
-          onPressed: () => Navigator.pop(context),
-        ),
-        Text(
-          'Mechanic arrived',
-          textAlign: TextAlign.center,
-          style: Styles.appBarTextBlue2,
-        ),
-        Spacer(),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.10,
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.arrow_back, color:  CustColors.light_navy,),
+            onPressed: () => Navigator.pop(context),
+          ),
+          Text(
+            'Mechanic arrived',
+            textAlign: TextAlign.center,
+            style: Styles.appBarTextBlue2,
+          ),
+          Spacer(),
 
-      ],
-    );
-  }
-
-  Widget bagroundBgText(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10,15,10,10),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                height: 180,
-                width: double.infinity,
-                child: SvgPicture.asset(
-                  'assets/image/CustomerType/mechanicArrivedBg.svg',
-                  fit: BoxFit.contain,
-                )
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget diagonosisCurvedUi(Size size) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.50,
-          decoration: BoxDecoration(
-              color: CustColors.light_navy,
-              borderRadius: BorderRadius.circular(20)
+  Widget bagroundBgText(Size size) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.30,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              height: 180,
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10,15,10,10),
+                child: SvgPicture.asset(
+                  'assets/image/CustomerType/mechanicArrivedBg.svg',
+                  fit: BoxFit.contain,
+                ),
+              )
           ),
+        ],
+      ),
+    );
+  }
 
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  height: 140,
+
+  Widget diagonosisCurvedUi(Size size) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.50,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: CustColors.light_navy,
+                  borderRadius: BorderRadius.only(
+                      topLeft:Radius.circular(20),
+                      topRight:Radius.circular(20)
+                  ),
+            ),
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
                   width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(15,15,15,15),
@@ -158,49 +163,103 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
                       textAlign: TextAlign.justify,
                     ),
                   ),
-              ),
-            ],
-          ),
-        ),
-
-        Container(
-          decoration: BoxDecoration(
-              color: CustColors.rusty_red,
-              borderRadius: BorderRadius.circular(20)
+                ),
+              ],
+            ),
           ),
 
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 150,
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(15,15,15,15),
-                  child: Text(
-                    "may cause additional cost than you expected.",
-                    style: Styles.infoTextLabelTitle,
-                    textAlign: TextAlign.justify,
+          Padding(
+            padding: const EdgeInsets.only(top: 70),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft:Radius.circular(20),
+                      topRight:Radius.circular(20)
                   ),
+              ),
+
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 120,
+                      width: double.infinity,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: CustColors.pale_grey,
+                          borderRadius: BorderRadius.only(
+                              topLeft:Radius.circular(20),
+                              topRight:Radius.circular(20)
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20,10,20,10),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 80.0,
+                                height: 80.0,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child:Container(
+                                        child:CircleAvatar(
+                                            radius: 50,
+                                            backgroundColor: Colors.white,
+                                            child: ClipOval(
+                                              child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                            )))
+
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(2),
+                                      child: Text('dgdfyd',
+                                        style: Styles.mechanicNameStyle,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.visible,),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
+                                      child: Text('1280 Reviews',
+                                        style: Styles.smallTitleStyle1,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: infoText(),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                color: Colors.red,
-                width: double.infinity,
-                child: infoText(),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
 
   Widget infoText() {
     return  Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(20,50,20,10),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -237,11 +296,11 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(5,5,5,5),
                   child: Text(
                     "Wait for some time.  Mechanic started diagnostic test. He will finalise the service you needed  ",
-                    style: Styles.infoTextLabelTitle,
-                    textAlign: TextAlign.justify,
+                    style: Styles.infoTextLabelTitle01,
+                    textAlign: TextAlign.start,
                   ),
                 ),
               ),
