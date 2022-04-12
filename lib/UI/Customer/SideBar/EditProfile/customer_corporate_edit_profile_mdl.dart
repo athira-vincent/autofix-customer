@@ -1,13 +1,13 @@
 // To parse this JSON data, do
 //
-//     final customerEditProfileMdl = customerEditProfileMdlFromJson(jsonString);
+//     final customerCorporateEditProfileMdl = customerCorporateEditProfileMdlFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-CustomerCorporateEditProfileMdl customerEditProfileMdlFromJson(String str) => CustomerCorporateEditProfileMdl.fromJson(json.decode(str));
+CustomerCorporateEditProfileMdl customerCorporateEditProfileMdlFromJson(String str) => CustomerCorporateEditProfileMdl.fromJson(json.decode(str));
 
-String customerEditProfileMdlToJson(CustomerCorporateEditProfileMdl data) => json.encode(data.toJson());
+String customerCorporateEditProfileMdlToJson(CustomerCorporateEditProfileMdl data) => json.encode(data.toJson());
 
 class CustomerCorporateEditProfileMdl {
   CustomerCorporateEditProfileMdl({
@@ -35,28 +35,28 @@ class CustomerCorporateEditProfileMdl {
 
 class Data {
   Data({
-    required this.customerIndividualProfileUpdate,
+    required this.customerCorporateProfileUpdate,
   });
 
-  CustomerIndividualProfileUpdate? customerIndividualProfileUpdate;
+  CustomerCorporateProfileUpdate? customerCorporateProfileUpdate;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    customerIndividualProfileUpdate: json["customer_Individual_profile_update"] == null ? null : CustomerIndividualProfileUpdate.fromJson(json["customer_Individual_profile_update"]),
+    customerCorporateProfileUpdate: json["customer_Corporate_profile_update"] == null ? null : CustomerCorporateProfileUpdate.fromJson(json["customer_Corporate_profile_update"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "customer_Individual_profile_update": customerIndividualProfileUpdate == null ? null : customerIndividualProfileUpdate!.toJson(),
+    "customer_Corporate_profile_update": customerCorporateProfileUpdate == null ? null : customerCorporateProfileUpdate!.toJson(),
   };
 }
 
-class CustomerIndividualProfileUpdate {
-  CustomerIndividualProfileUpdate({
+class CustomerCorporateProfileUpdate {
+  CustomerCorporateProfileUpdate({
     required this.message,
   });
 
   String message;
 
-  factory CustomerIndividualProfileUpdate.fromJson(Map<String, dynamic> json) => CustomerIndividualProfileUpdate(
+  factory CustomerCorporateProfileUpdate.fromJson(Map<String, dynamic> json) => CustomerCorporateProfileUpdate(
     message: json["message"] == null ? null : json["message"],
   );
 

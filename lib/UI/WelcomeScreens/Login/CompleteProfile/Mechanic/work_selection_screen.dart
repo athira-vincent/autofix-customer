@@ -1265,7 +1265,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                       Navigator.pop(context);
 
                       setState(() {
-
                         selectedworkSelection=_workSelectionList[index];
                         _workSelectionController.text = workSelectionList[index];
                         /*if (_formKey.currentState!.validate()) {
@@ -1316,7 +1315,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                         } else {
                         }*/
                       });
-
                     },
                   );
                 },

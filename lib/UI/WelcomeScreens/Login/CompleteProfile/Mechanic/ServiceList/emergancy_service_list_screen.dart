@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
@@ -27,14 +28,14 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
 
 
-  List<ServiceListAll> emergencyServiceList = [];
-  List<ServiceListAll> selectedServiceList = [];
+  List<Service> emergencyServiceList = [];
+  List<Service> selectedServiceList = [];
 
   String title = "";
   List<bool>? _emergencyIsChecked;
 
   String selectedService = "";
-  List<ServiceListAll> serviceSpecialisationList =[];
+  List<Service> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
 
   String authToken="";
@@ -76,8 +77,8 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
-          print(value.data!.serviceListAll!.length);
-          emergencyServiceList = value.data!.serviceListAll!;
+          print(value.data!.categoryList![0].service!.length);
+          emergencyServiceList = value.data!.categoryList![0].service!;
 
           for(int i=0;i<emergencyServiceList.length;i++){
             selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minPrice, "00:30", false));
@@ -457,20 +458,20 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
 
                     for(int m = 0 ; m< selectedService.length; m++){
                       if( m != selectedService.length-1){
-                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" + ", ";
-                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}",""";
-                        timeList = timeList + """ "${selectedServiceMdlList[m].time}",""";
+                        serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
+                        feeList = feeList + """ "${selectedService[m].amount}",""";
+                        timeList = timeList + """ "${selectedService[m].time}",""";
                       }else{
-                        serviceId = serviceId + "${selectedServiceMdlList[m].serviceId}" ;
-                        feeList = feeList + """ "${selectedServiceMdlList[m].amount}" """;
-                        timeList = timeList + """ "${selectedServiceMdlList[m].time}" """;
+                        serviceId = serviceId + "${selectedService[m].serviceId}" ;
+                        feeList = feeList + """ "${selectedService[m].amount}" """;
+                        timeList = timeList + """ "${selectedService[m].time}" """;
                       }
                     }
                     serviceId = serviceId ;
                     feeList = feeList + "]";
                     timeList = timeList + "]";
 
-                    print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
+                    print(" >>>> serviceId " +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
                         authToken,

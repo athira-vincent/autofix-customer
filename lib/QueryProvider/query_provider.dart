@@ -545,7 +545,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-
+//-------------------------- remove after merge on 11/04/2022-----------------------------------------
   serviceList(String token, searchText, count, categoryId ) async {
     String _query = """
     {
@@ -582,6 +582,39 @@ class QueryProvider {
       status
     }
   }
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+//-------------------------- remove after merge on 11/04/2022-----------------------------------------
+
+  serviceListWithCategory(String token, categoryType ) async {
+    String _query = """
+    {
+      category_list(catType: $categoryType) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
      """;
     log(_query);
     print("Token >>>>>>> $token");

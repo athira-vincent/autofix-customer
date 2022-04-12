@@ -44,6 +44,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
   TextEditingController _orgTypeController = TextEditingController();
+  TextEditingController _ministryGovtController = TextEditingController();
 
 
   FocusNode _nameFocusNode = FocusNode();
@@ -51,6 +52,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   FocusNode _phoneFocusNode = FocusNode();
   FocusNode _stateFocusNode = FocusNode();
   FocusNode _orgTypeFocusNode = FocusNode();
+  FocusNode _ministryGovtFocusNode = FocusNode();
 
   List<String> orgTypeList = [
     "Business name",
@@ -59,6 +61,46 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     "Incorporated Trustees",
     "Non-Governmental Organization"
   ];
+
+  List<String> ministryGovtList = [
+    "Federal Ministry of Aviation",
+    "Federal Ministry of Agriculture and natural  resources",
+    "Federal Ministry of Finance, budget and planning",
+    "Federal Ministry of Works and Housing",
+    "Federal Ministry of Defence",
+    "Federal Ministry of Niger Delta",
+    "Federal Ministry of Petroleum Resources",
+    "Federal Ministry of Education",
+    "Federal Ministry of Power",
+    "Federal Ministry of Envionment",
+    "Ministry of Education",
+    "Federal Ministry of Transport",
+    "Ministry of Agriculture",
+    "Ministry of Transport",
+    "Ministry of Home Affairs",
+    "Ministry of Finance",
+    "Ministry of Housing",
+    "Ministry of Works and Infrastructure",
+    "Lagos state sport commission",
+    "Federal Airports Authority of Nigeria",
+    "Nigeria Civil Aviation Authority",
+    "Nigerian Broadcasting Commission",
+    "Nigerian Television Authority",
+    "Nigerian Information Technology Development Agency",
+    "Central Bank of Nigeria",
+    "Corporate Affairs Commission",
+    "Nigeria Police Force",
+    "Federal Inland Revenue Service",
+    "Federal Mortgage Bank of Nigeria",
+    "Nigeria Delta Development Commission",
+    "Joint Admission and Matriculation Board",
+    "Department of Petroleum Resources",
+    "Nigerian Electricity Regulatory Commission",
+    "Nigerian Health Insurance Scheme",
+    "Nigerian Football Association",
+    "Nigerian Basketball Federation"
+  ];
+
 
   bool isloading = false;
 
@@ -76,7 +118,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   bool editProfileEnabled = false;
   String selectedState = "";
   String authToken="";
-  String _userName = "", _imageUrl = "", _userType = "2";
+  String _userName = "", _imageUrl = "", _userType = "", _orgName = "";
   final picker = ImagePicker();
   File? _images;
 
@@ -133,10 +175,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _emailController.text = value.data!.customerDetails!.emailId.toString();
     _phoneController.text = value.data!.customerDetails!.phoneNo.toString();
     _stateController.text = value.data!.customerDetails!.customer![0].state.toString();
+    _orgTypeController.text = value.data!.customerDetails!.customer![0].orgType.toString();
+
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
-    _orgTypeController.text = value.data!.customerDetails!.customer![0].orgType.toString();
-   // _userType = value.data!.customerDetails!.customer![0].custType.toString();
+    _userType = value.data!.customerDetails!.customer![0].custType.toString();
+    _orgName = value.data!.customerDetails!.customer![0].orgName.toString();
+
     print(">>>>>>>>>>>>> _userType : " + _userType);
   }
 
@@ -185,7 +230,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               EmailTextUi(size),
                               PhoneTextUi(size),
                               StateTextUi(size),
-                              corporateSaveChangeButton(size),
+                              editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
                             ],
                           )
                             :
@@ -196,8 +241,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             NameTextUi(size),
                             EmailTextUi(size),
                             PhoneTextUi(size),
-
-                            governmentSaveChangeButton(size),
+                            editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
                           ],
                         ),
                 )
@@ -224,7 +268,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 onPressed: () => Navigator.pop(context),
               ),*/
               Text(
-                '$_userName',
+                _userType == "1" ? '$_userName' : _orgName,
                 textAlign: TextAlign.center,
                 style: Styles.appBarTextBlack,
               ),
@@ -448,7 +492,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       editProfileEnabled != true
                           ?
                       Text(
-                        'Your name',
+                       _userType == "1" ? 'Your name' : 'Contact person',
                         textAlign: TextAlign.center,
                         style: Styles.textLabelSubTitle,
                       )
@@ -763,7 +807,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           InkWell(
             onTap: (){
               if(editProfileEnabled == true){
-                _awaitReturnValueFromSecondScreen(context);
+                print("on tap Ministry/Govt. agency ");
+                showMinistryGovtSelector();
               }
             },
             child: Row(
@@ -796,9 +841,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             textAlignVertical: TextAlignVertical.center,
                             maxLines: 1,
                             style: Styles.appBarTextBlack15,
-                            focusNode: _stateFocusNode,
-                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
-                            controller: _stateController,
+                            focusNode: _ministryGovtFocusNode,
+                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_ministry_govt).emptyChecking,
+                            controller: _ministryGovtController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
@@ -995,8 +1040,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               _nameController.text.toString(), "",
               selectedState, 1,
               _imageUrl,
-            "",       // org name
-            _orgTypeController.text.toString()
+              _orgName,       // org name
+              _orgTypeController.text.toString()
           );
 
         } else {
@@ -1143,7 +1188,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         });
   }
 
-
   Future uploadImageToFirebase(File images) async {
     String fileName = path.basename(images.path);
     Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
@@ -1214,6 +1258,201 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                             ),
                                             child: Text(
                                               '${orgTypeList[index]}',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                  _setValueFont(12),
+                                                  fontFamily:
+                                                  'Corbel-Light',
+                                                  fontWeight:
+                                                  FontWeight.w600,
+                                                  color:
+                                                  Color(0xff0b0c0d)),
+                                            ),
+                                          ));
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context,
+                                        int index) {
+                                      return Container(
+                                          margin: EdgeInsets.only(
+                                              top: _setValue(12.7),
+                                              left: _setValue(41.3),
+                                              right: _setValue(41.3),
+                                              bottom: _setValue(12.9)),
+                                          child: Divider(
+                                            height: 0,
+                                          ));
+                                    },
+                                  )
+                                      : Center(
+                                    child: Text('No Results found.'),
+                                  ),
+                                ),
+                              ])),
+                          Center(
+                            child: isloading
+                                ? CircularProgressIndicator()
+                                : Text(''),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          });
+        });
+  }
+
+  void showMinistryGovtSelector() {
+    _signupBloc.searchStates("");
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return BottomSheet(
+                onClosing: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20))),
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      height: 421,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                              width: double.maxFinite,
+                              child: Column(children: [
+                                /*Container(
+                                  height: _setValue(36.3),
+                                  margin: EdgeInsets.only(
+                                      left: _setValue(41.3),
+                                      right: _setValue(41.3),
+                                      top: _setValue(20.3)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        _setValue(20),
+                                      ),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black38,
+                                        spreadRadius: 0,
+                                        blurRadius: 1.5,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: _setValue(23.4)),
+                                          alignment: Alignment.center,
+                                          height: _setValue(36.3),
+                                          child: Center(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                              onChanged: (text) {
+                                                setState(() {
+                                                  _countryData.clear();
+                                                  isloading = true;
+                                                });
+                                                _signupBloc.searchStates(text);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Corbel_Regular',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: CustColors.blue),
+                                              decoration: InputDecoration(
+                                                hintText: "Search Your  State",
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
+                                                hintStyle: TextStyle(
+                                                  color: CustColors.greyText,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Corbel-Light',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: _setValue(25),
+                                            height: _setValue(25),
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            decoration: BoxDecoration(
+                                              color: CustColors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            child: Image.asset(
+                                              'assets/images/search.png',
+                                              width: _setValue(10.4),
+                                              height: _setValue(10.4),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),*/
+                                Container(
+                                  height: 421 ,
+                                  padding: EdgeInsets.only(top: _setValue(22.4)),
+                                  child: ministryGovtList.length != 0
+                                      ? ListView.separated(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: ministryGovtList.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          onTap: () {
+                                            final dial_Code =
+                                            ministryGovtList[index];
+
+                                            setState(() {
+                                              _ministryGovtController.text =
+                                                  dial_Code.toString();
+                                            });
+
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              left: _setValue(41.3),
+                                              right: _setValue(41.3),
+                                            ),
+                                            child: Text(
+                                              '${ministryGovtList[index]}',
                                               style: TextStyle(
                                                   fontSize:
                                                   _setValueFont(12),
