@@ -335,7 +335,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        padding: const EdgeInsets.fromLTRB(5,10,5,10),
                         child: Container(
                           alignment: Alignment.center,
                           child:Row(
@@ -350,16 +350,55 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                                   ),
                                 ],
                               ),
-                              Spacer(),
-                              Row(
-                                children: [
-                                  Text('200',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_10,
-                                  ),
-                                ],
+                              Expanded(
+                                flex: 1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+
+                                    Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: SvgPicture.asset(
+                                          'assets/image/CustomerType/extraServiceMoneyBag.svg',
+                                          fit: BoxFit.contain,
+                                        )
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "\$ 256",
+                                      style: Styles.textLabelTitle_12,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+
+                                    Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: SvgPicture.asset(
+                                          'assets/image/MechanicType/mechanic_work_clock.svg',
+                                          fit: BoxFit.contain,
+                                        )
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "45 Min",
+                                      style: Styles.textLabelTitle_12,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),

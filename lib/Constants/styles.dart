@@ -332,11 +332,14 @@ class Styles {
       fontSize: 24,
       fontWeight: FontWeight.w600,
       fontFamily: 'Corbel_Bold');
+
   static const textSuccessfulTitleStyle03 = TextStyle(
       color: CustColors.light_navy,
       fontSize: 18,
       fontWeight: FontWeight.w400,
       fontFamily: 'Samsung_SharpSans_Medium');
+
+
   static const textSuccessfulTitle02Style = TextStyle(
       color: CustColors.brownish_grey,
       fontSize: 14,
