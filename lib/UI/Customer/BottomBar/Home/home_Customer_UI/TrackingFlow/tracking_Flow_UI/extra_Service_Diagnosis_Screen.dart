@@ -80,7 +80,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
               children: [
                 appBarCustomUi(size),
                 infoText(),
-                jobCompletedText(size),
+                bagroundBgText(size),
 
                 selectedRepairDetailsUi(size),
                 estimatedAndTimeTakenUi(size),
@@ -166,7 +166,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
     );
   }
 
-  Widget jobCompletedText(Size size) {
+  Widget bagroundBgText(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,15,10,10),
       child: Container(

@@ -78,11 +78,12 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
 
               children: [
                 appBarCustomUi(size),
-                jobCompletedText(size),
-                estimatedAndTimeTakenUi(size),
-                selectedRepairDetailsUi(size),
+                Container(
+                    height: MediaQuery.of(context).size.height * 0.38,
+                    child: bagroundBgText(size)
+                ),
+                diagonosisCurvedUi( size),
 
-                RequestButton( size,context)
               ],
             ),
           ),
@@ -95,13 +96,13 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
     return Row(
       children: [
         IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color:  CustColors.light_navy,),
           onPressed: () => Navigator.pop(context),
         ),
         Text(
-          'Congratulations!! minnu',
+          'Mechanic arrived',
           textAlign: TextAlign.center,
-          style: Styles.appBarTextBlack,
+          style: Styles.appBarTextBlue2,
         ),
         Spacer(),
 
@@ -109,25 +110,21 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
     );
   }
 
-  Widget jobCompletedText(Size size) {
+  Widget bagroundBgText(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      padding: const EdgeInsets.fromLTRB(10,15,10,10),
       child: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                height: 140,
-                width: 160,
+                height: 180,
+                width: double.infinity,
                 child: SvgPicture.asset(
-                  'assets/image/MechanicType/mechanic_work_completed.svg',
+                  'assets/image/CustomerType/mechanicArrivedBg.svg',
                   fit: BoxFit.contain,
                 )
-            ),
-            Text(
-              "Job Completed",
-              style: Styles.textSuccessfulTitleStyle03,
             ),
           ],
         ),
@@ -135,221 +132,117 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
     );
   }
 
-  Widget estimatedAndTimeTakenUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20,10,20,10),
-      child: Container(
-        alignment: Alignment.center,
-        child:Padding(
-          padding: const EdgeInsets.fromLTRB(0,5,0,5),
-          child: Row(
+  Widget diagonosisCurvedUi(Size size) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height * 0.50,
+          decoration: BoxDecoration(
+              color: CustColors.light_navy,
+              borderRadius: BorderRadius.circular(20)
+          ),
+
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 72,
-                  decoration: BoxDecoration(
-                      color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
-                  child:  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Estimated time",
-                          style: Styles.textLabelTitleEmergencyServiceName,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,5,0,0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-
-                              Container(
-                                  height: 25,
-                                  width: 25,
-                                  child: SvgPicture.asset(
-                                    'assets/image/MechanicType/mechanic_work_clock.svg',
-                                    fit: BoxFit.contain,
-                                  )
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "20:02",
-                                style: Styles.textSuccessfulTitleStyle03,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+              Container(
+                  height: 140,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15,15,15,15),
+                    child: Text(
+                      "Your mechanic added some additional services after his diagnostic test , it may cause additional cost than you expected.",
+                      style: Styles.infoTextLabelTitleWhite,
+                      textAlign: TextAlign.justify,
                     ),
                   ),
-                ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 72,
-                  decoration: BoxDecoration(
-                      color: CustColors.cloudy_blue,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
-                  child:  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Time taken",
-                          style: Styles.textLabelTitleEmergencyServiceName,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,5,0,0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-
-                              Container(
-                                  height: 25,
-                                  width: 25,
-                                  child: SvgPicture.asset(
-                                    'assets/image/MechanicType/mechanic_work_clock.svg',
-                                    fit: BoxFit.contain,
-                                  )
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "20:02",
-                                style: Styles.textSuccessfulTitleStyle03,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
             ],
           ),
         ),
-      ),
-    );
-  }
 
+        Container(
+          decoration: BoxDecoration(
+              color: CustColors.rusty_red,
+              borderRadius: BorderRadius.circular(20)
+          ),
 
-  Widget selectedRepairDetailsUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20,10,20,10),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
-            borderRadius: BorderRadius.circular(11.0)
-        ),
-        child:Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,0),
-                child: Container(
-                  child: Text('Repair Details',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
-                    style: Styles.appBarTextBlack,
+              Container(
+                height: 150,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15,15,15,15),
+                  child: Text(
+                    "may cause additional cost than you expected.",
+                    style: Styles.infoTextLabelTitle,
+                    textAlign: TextAlign.justify,
                   ),
                 ),
               ),
               Container(
-                child: ListView.builder(
-                  itemCount:3,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index,) {
+                color: Colors.red,
+                width: double.infinity,
+                child: infoText(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
 
-
-                    return GestureDetector(
-                      onTap:(){
-
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child:Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Timing belt replacement',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_12,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Row(
-                                children: [
-                                  Text('200',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_10,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+  Widget infoText() {
+    return  Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: CustColors.pale_grey,
+          border: Border.all(
+              color: CustColors.grey_03
+          ),
+          borderRadius: BorderRadius.all(
+              Radius.circular(5.0) //         <--- border radius here
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                      color: CustColors.light_navy,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          50,
                         ),
                       ),
-                    );
-                  },
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/image/CustomerType/extraServiceInfo.svg',
+                      fit: BoxFit.contain,
+                    )
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        Text('Total price including tax',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.visible,
-                          style: Styles.appBarTextBlack17,
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    Row(
-                      children: [
-                        Text('$totalFees',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.visible,
-                          style: Styles.appBarTextBlack17,
-                        ),
-                      ],
-                    ),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Wait for some time.  Mechanic started diagnostic test. He will finalise the service you needed  ",
+                    style: Styles.infoTextLabelTitle,
+                    textAlign: TextAlign.justify,
+                  ),
                 ),
               ),
             ],

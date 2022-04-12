@@ -96,6 +96,13 @@ class Styles {
     fontSize: 12,
   );
 
+  static const infoTextLabelTitleWhite = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+    fontSize: 12,
+  );
+
 
   static const textLabelTitle_12 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
