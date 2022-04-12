@@ -89,9 +89,24 @@ class Styles {
     fontSize: 10,
   );
 
+  static const infoTextLabelTitle = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
+
   static const textLabelTitle_12 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w400,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
+  static const textLabelTitle001 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w600,
     color: Colors.black,
     fontSize: 12,
   );
@@ -368,6 +383,13 @@ class Styles {
   static const appBarTextBlack = TextStyle(
       fontSize: 18,
       color: Colors.black,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const appBarTextBlue2 = TextStyle(
+      fontSize: 18,
+      color: CustColors.light_navy,
       fontWeight: FontWeight.w600,
       fontFamily:'Samsung_SharpSans_Medium'
   );

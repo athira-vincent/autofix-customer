@@ -1,4 +1,6 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,22 +9,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../../Constants/cust_colors.dart';
-import '../../../../../Constants/styles.dart';
-import '../../../../../Widgets/CurvePainter.dart';
-
-class MechanicWorkCompletedScreen extends StatefulWidget {
+class MechanicArrivedScreen extends StatefulWidget {
 
 
-  MechanicWorkCompletedScreen();
+  MechanicArrivedScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicWorkCompletedScreenState();
+    return _MechanicArrivedScreenState();
   }
 }
 
-class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScreen> {
+class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
 
 
   double per = .10;
