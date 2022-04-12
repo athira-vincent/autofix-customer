@@ -63,7 +63,7 @@ class CustColors {
   static const pinkish_grey02= Color(0xfffcecdcd);
   static const azul= Color(0xff2e5ae8);
   static const green= Color(0xff26ce34);
-
+  static const white_03= Color(0xfff9f9f9);
 
 
 

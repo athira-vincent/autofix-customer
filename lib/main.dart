@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/SearchService/search_service_screen.dart';
 import 'package:auto_fix/UI/NewScreens/customer_approved_screen.dart';
+import 'package:auto_fix/UI/NewScreens/mechanic_started_work_screen.dart';
 import 'package:auto_fix/UI/NewScreens/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
@@ -72,7 +73,7 @@ class _MyAppState extends State<MyApp> {
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
       //home: SplashScreen(),
-      home: RegularServiceListScreen(),
+      home: MechanicStartedServiceScreen(),
     );
   }
 }
