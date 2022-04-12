@@ -118,6 +118,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
+          color: CustColors.pale_grey,
           border: Border.all(
               color: CustColors.grey_03
           ),
@@ -311,7 +312,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: CustColors.whiteBlueish,
+            color: CustColors.pale_grey,
             borderRadius: BorderRadius.circular(11.0)
         ),
         child:Padding(
