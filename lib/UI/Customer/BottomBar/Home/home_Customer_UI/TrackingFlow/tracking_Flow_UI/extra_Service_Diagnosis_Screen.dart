@@ -219,7 +219,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                       height: 72,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          color: CustColors.whiteBlueish,
+                          color: CustColors.grey_03,
                           borderRadius: BorderRadius.circular(11.0)
                       ),
                       child:  Row(
@@ -267,7 +267,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                     Container(
                       height: 72,
                       decoration: BoxDecoration(
-                          color: CustColors.cloudy_blue,
+                          color: CustColors.grey_03,
                           borderRadius: BorderRadius.circular(11.0)
                       ),
                       child:  Row(
