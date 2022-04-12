@@ -201,17 +201,22 @@ class _MechanicArrivedScreenState extends State<MechanicArrivedScreen> {
                           child: Row(
                             children: [
                               Container(
-                                width: 80.0,
-                                height: 80.0,
+                                width: 90,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(60),
+                                    border: Border.all(
+                                      color: CustColors.light_navy,
+                                      width: 2,)
+                                ),
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),
-                                    child:Container(
-                                        child:CircleAvatar(
-                                            radius: 50,
-                                            backgroundColor: Colors.white,
-                                            child: ClipOval(
-                                              child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                            )))
+                                    child:CircleAvatar(
+                                        radius: 60,
+                                        backgroundColor: CustColors.light_navy,
+                                        child: ClipOval(
+                                          child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        ))
 
                                 ),
                               ),
