@@ -212,7 +212,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                       padding: const EdgeInsets.fromLTRB(0,5,0,5),
                       child: Text(
                         "Total estimated time",
-                        style: Styles.textLabelTitleEmergencyServiceName,
+                        style: Styles.textLabelTitle001,
                       ),
                     ),
                     Container(
@@ -261,7 +261,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                       padding: const EdgeInsets.fromLTRB(0,5,0,5),
                       child: Text(
                         "Total estimated cost",
-                        style: Styles.textLabelTitleEmergencyServiceName,
+                        style: Styles.textLabelTitle001,
                       ),
                     ),
                     Container(
@@ -335,7 +335,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(5,10,5,10),
+                        padding: const EdgeInsets.fromLTRB(2,10,2,10),
                         child: Container(
                           alignment: Alignment.center,
                           child:Row(
@@ -343,13 +343,14 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                               Row(
                                 children: [
                                   Text('Timing belt replacement',
-                                    maxLines: 2,
+                                    maxLines: 1,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
                                     style: Styles.textLabelTitle_12,
                                   ),
                                 ],
                               ),
+                              SizedBox(width: 5,),
                               Expanded(
                                 flex: 1,
                                 child: Row(
@@ -375,6 +376,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                                   ],
                                 ),
                               ),
+                              SizedBox(width: 5,),
                               Expanded(
                                 flex: 1,
                                 child: Row(
