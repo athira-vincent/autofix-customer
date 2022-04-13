@@ -56,7 +56,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final SignupBloc _signupBloc = SignupBloc();
   FocusNode _phoneNoFocusNode = FocusNode();
   TextStyle _labelStylePhoneNo = TextStyle();
-  int _otpCodeLength = 5;
+  int _otpCodeLength = 4;
   bool _isLoadingButton = false;
   bool _enableButton = false;
   String _otpCode ="";
@@ -333,7 +333,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                     codeLength: _otpCodeLength,
                                                     alignment: MainAxisAlignment.center,
                                                     defaultBoxSize: 50.0,
-                                                    margin: 5,
+                                                    margin: 10,
                                                     selectedBoxSize: 50.0,
                                                     textStyle: TextStyle(fontSize: 16),
                                                     defaultDecoration: _pinPutDecoration,
