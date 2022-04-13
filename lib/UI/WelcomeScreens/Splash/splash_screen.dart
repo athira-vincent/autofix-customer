@@ -45,18 +45,10 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
-     /* Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  FindMechanicListScreen(bookingId: '20',
-                authToken: '',
-              )));*/
-
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) =>  CustomerHomeScreen()));
-
 
       /*if (userType == TextStrings.user_customer) {
         if (_isDefaultVehicleAvailable == null ||
@@ -80,17 +72,6 @@ class _SplashScreenState extends State<SplashScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>  LoginScreen()));
-      /*  Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  CustomerHomeScreen()));*/
-       /* Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    AddCarScreen(
-                      userType: 'customer',
-                      userCategory: 'individual',)));*/
       }
     }
   }

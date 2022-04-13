@@ -487,13 +487,22 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                       serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
                                       print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                                      _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>  FindMechanicListScreen(
+                                                bookingId: '01',
+                                                serviceIds: serviceIds,
+                                                serviceType: 'emergency',
+                                                authToken: authToken,)));
+
+                                     /* _homeCustomerBloc.postMechanicsBookingIDRequest(
                                           authToken,
                                           '${_homeCustomerBloc.dateConvert(DateTime.now())}',
                                           '${_homeCustomerBloc.timeConvert(DateTime.now())}',
                                           CurrentLatitude,
                                           CurrentLongitude,
-                                          serviceIds);
+                                          serviceIds);*/
                                     });
 
                                   },
