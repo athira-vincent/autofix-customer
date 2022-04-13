@@ -984,30 +984,38 @@ class _AddCarScreenState extends State<AddCarScreen> {
           Container(
             child: Container(
               margin: EdgeInsets.only(top: 20.8),
-              child: _isLoading
-                  ? Center(
-                child: Container(
-                  height: _setValue(28),
-                  width: _setValue(28),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
-                  ),
-                ),
-              )
+              child: _isAddMore
+                  ? Container(
+                     height: 45,
+                     width: 110,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10),
+                        ),
+                            color: CustColors.materialBlue,
+                      ),
+                    child: Center(
+                        child: Container(
+                          height: _setValue(25),
+                          width: _setValue(25),
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white),
+                          ),
+                        ),
+                      ),
+                  )
                   : Container(
-
+                      height: 45,
+                      width: 110,
                       child: MaterialButton(
                         onPressed: () {
                           setState(() {
                             _isAddMore = true;
-                            _isLoading = true;
+                            _isLoading = false;
                             print('true');
                           });
                           if (_formKey.currentState!.validate()) {
-
                             setState(() {
-                              _isLoading = false;
                               print('sucess');
                               _addCarBloc. postAddCarRequest(
                                   authToken,
@@ -1059,17 +1067,28 @@ class _AddCarScreenState extends State<AddCarScreen> {
             child: Container(
               margin: EdgeInsets.only(top: 20.8),
               child: _isLoading
-                  ? Center(
-                      child: Container(
-                        height: _setValue(28),
-                        width: _setValue(28),
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustColors.peaGreen),
+                  ? Container(
+                      height: 45,
+                      width: 90,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10),
+                        ),
+                        color: CustColors.materialBlue,
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: _setValue(25),
+                          width: _setValue(25),
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white),
+                          ),
                         ),
                       ),
                     )
                   : Container(
+                    height: 45,
+                    width: 90,
                     child: MaterialButton(
                       onPressed: () {
                         print( authToken + "  " +
@@ -1096,7 +1115,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         if (_formKey.currentState!.validate()) {
 
                           setState(() {
-                            _isLoading = false;
                             print('sucess');
                               _addCarBloc. postAddCarRequest(
                               authToken,
