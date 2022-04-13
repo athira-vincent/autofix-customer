@@ -74,10 +74,10 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: CustColors.materialBlue,
         unselectedWidgetColor: CustColors.borderColor,
       ),
-     // home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
+      home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
-      home: SplashScreen(),
+      //home: LoginScreen(),
     );
   }
 }

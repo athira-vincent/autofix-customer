@@ -763,6 +763,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
             validator: InputValidator(
                 ch :'Plate number').nameCheckingWithNumeric,
             controller: _plateNumberController,
+            onChanged: (value){
+              setState(() {
+                if (_formKey.currentState!.validate()) {
+                } else {
+                }
+              });
+            },
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
               isDense: true,
@@ -839,6 +846,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ch :
                   'Last maintenance date' ).nameCheckingWithNumeric,
               controller: _lastMaintenanceController,
+              onChanged: (value){
+                setState(() {
+                  if (_formKey.currentState!.validate()) {
+                  } else {
+                  }
+                });
+              },
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
                 isDense: true,

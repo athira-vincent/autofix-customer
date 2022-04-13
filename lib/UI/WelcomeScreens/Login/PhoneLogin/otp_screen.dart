@@ -329,7 +329,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                 padding:  EdgeInsets.only(top: _setValue(15.5), bottom: _setValue(0.5)),
                                                 child: TextFieldPin(
                                                     textController: textEditingController,
-                                                    autoFocus: true,
+                                                    autoFocus: false,
                                                     codeLength: _otpCodeLength,
                                                     alignment: MainAxisAlignment.center,
                                                     defaultBoxSize: 50.0,
