@@ -78,8 +78,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               emergencyCategoryList.add(allList[i]);
               for( int x = 0; x < emergencyCategoryList[i].service!.length; i++){
                 emergencyServiceList.add(emergencyCategoryList[i].service![x]);
-                emergencyServiceMdlList.add(
-                    SelectedServicesMdl(i,x,emergencyCategoryList[i].service![x].id.toString(),
+                emergencyServiceMdlList.add(SelectedServicesMdl(i,x,emergencyCategoryList[i].service![x].id.toString(),
                         emergencyCategoryList[i].service![x].minPrice,
                         emergencyCategoryList[i].service![x].maxPrice, "00:30", false));
               }
@@ -98,7 +97,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
           print("emergencyServiceMdlList.length >>> "+ emergencyServiceMdlList.length.toString());
           print("regularServiceMdlList.length >>> "+ regularServiceMdlList.length.toString());
-
           _emergencyIsChecked = List<bool>.filled(emergencyServiceMdlList.length, false);
           _regularIsChecked = List<bool>.filled(regularServiceMdlList.length, false);
 
