@@ -3,20 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MechanicStartedServiceScreen extends StatefulWidget {
+class MechanicWorkProgressScreen extends StatefulWidget {
 
-  MechanicStartedServiceScreen();
+  MechanicWorkProgressScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicStartedServiceScreenState();
+    return _MechanicWorkProgressScreenState();
   }
 }
 
-class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScreen> {
+class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> {
 
 
-  String workStatus = "3";      // 1 - testing - screen 075,  2 - started working - screen 078,   3 - completed - screen 079
+  String workStatus = "3";      // 1 - arrived - screen 075,  2 - started working - screen 078,   3 - completed - screen 079
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +63,17 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
       margin: EdgeInsets.only(
         left: size.width * 6 /100,
         // bottom: size.height * 1 /100,
-        top: size.height * 3.4 / 100,
+        top: size.height * 3 / 100,
       ),
-      child: Text("Mechanic start repair",style: TextStyle(
+      child: Text(
+        workStatus == "1" ?
+          "Mechanic arrived"
+            :
+            workStatus == "2" ?
+              "Mechanic start repair"
+                :
+        "Job completed",
+        style: TextStyle(
         fontSize: 16,
         fontFamily: "Samsung_SharpSans_Medium",
         fontWeight: FontWeight.w400,
@@ -104,7 +112,14 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
               "1",
               size.height * 14 / 100,
               Text(
-                "Hi.. John Eric congratulations!  Your mechanic started repair your vehicle . Wait for the count down stop.",
+                workStatus == "1" ?
+                  "Hi.. John Eric congratulations! Your mechanic reached near you. \nHe fix your vehicle faults."
+                    :
+                    workStatus == "2" ?
+                      "Hi.. John Eric congratulations! Your mechanic started repair your vehicle. \nWait for the count down stop."
+                    :
+                "Hi.. John Eric congratulations!  Your mechanic completed hisWork wait for the payment process",
+
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.white,
@@ -322,40 +337,29 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
 
   Widget startedWorkScreenSuccess(Size size){
     return Container(
-     child: Stack(
-       alignment: Alignment.center,
+     child: Column(
        children: [
          Container(
-           color: Colors.teal,                    // -------------------- bg image not get from Abhijith
-         ),
-         Container(
            margin: EdgeInsets.only(
-             top: size.height * 12 / 100
+             left: size.width * 2.5 / 100,
+             right: size.width * 2.5 / 100
            ),
-           child: Column(
-             children: [
-               SvgPicture.asset("assets/image/ic_success_blue_white.svg",
-                 height: size.height * 10 / 100,width: size.width * 12 / 100,),
+             child: SvgPicture.asset(
+               "assets/image/img_success_bg.svg",
+               height: size.height * 28 / 100,
+               width:size.width * 90 / 100,)),
 
-               Container(
-                 margin: EdgeInsets.only(
-                   top: size.height * 3 / 100
-                 ),
-                 child: Text("Job Completed successfully!",
-                   style: TextStyle(
-                   fontFamily: "Samsung_SharpSans_Medium",
-                     fontWeight: FontWeight.w700,
-                     fontSize: 18,
-                     color: CustColors.light_navy
-                 ),),
-               )
-             ],
+         Container(
+           alignment: Alignment.bottomCenter,
+           child: Text("Job Completed successfully!",
+             style: TextStyle(
+               fontSize: 20,
+               color: CustColors.light_navy
+             ),
            ),
-         )
-
+         ),
        ],
      ),
-
     );
   }
 
