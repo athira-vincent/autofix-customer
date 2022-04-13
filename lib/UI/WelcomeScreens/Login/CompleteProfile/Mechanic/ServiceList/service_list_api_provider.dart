@@ -1,7 +1,6 @@
 
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 
 class ServiceListApiProvider {
 

@@ -1,6 +1,5 @@
 
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
-//import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 
 import '../../../../../../Repository/repository.dart';
 import 'package:rxdart/rxdart.dart';
