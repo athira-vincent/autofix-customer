@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -123,7 +124,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
 
   Widget customerApprovedScreenStartWorkText(Size size){
     return Container(
-      decoration: boxDecorationStyle,
+      decoration: Styles.boxDecorationStyle,
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
@@ -154,7 +155,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
 
   Widget customerApprovedScreenWarningText(Size size){
     return Container(
-      decoration: boxDecorationStyle,
+      decoration: Styles.boxDecorationStyle,
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
@@ -279,16 +280,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
       ),
     );
   }
-
-  BoxDecoration boxDecorationStyle = BoxDecoration(
-      borderRadius: BorderRadius.all(
-        Radius.circular(8),
-      ),
-      border: Border.all(
-          color: CustColors.greyish,
-          width: 0.3
-      )
-  );
 
   TextStyle warningTextStyle01 = TextStyle(
       fontSize: 12,

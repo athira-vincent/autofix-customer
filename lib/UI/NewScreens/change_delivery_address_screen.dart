@@ -253,7 +253,7 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
 
   Widget differentAddressWarning(Size size){
     return Container(
-      decoration: boxDecorationStyle,
+      decoration: Styles.boxDecorationStyle,
       margin: EdgeInsets.only(
         top: size.height * 2.8 / 100
       ),
@@ -290,7 +290,7 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
           top: size.height * 1 / 100,
           bottom: size.height * 1 / 100
       ),
-      decoration: boxDecorationStyle,
+      decoration: Styles.boxDecorationStyle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -314,15 +314,7 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
     );
   }
 
-  BoxDecoration boxDecorationStyle = BoxDecoration(
-      borderRadius: BorderRadius.all(
-        Radius.circular(8),
-      ),
-      border: Border.all(
-          color: CustColors.greyish,
-          width: 0.3
-      )
-  );
+
 
   TextStyle addressTextStyle01 = TextStyle(
       fontSize: 12,

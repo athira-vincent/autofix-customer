@@ -672,4 +672,13 @@ class Styles {
     fontSize: 14.3,
     //height: 1.5
   );
+  static BoxDecoration boxDecorationStyle = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+      border: Border.all(
+          color: CustColors.greyish,
+          width: 0.3
+      )
+  );
 }

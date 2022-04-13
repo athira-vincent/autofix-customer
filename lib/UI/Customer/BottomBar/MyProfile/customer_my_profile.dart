@@ -244,7 +244,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
                           ],
                         ),
-                )
+                ),
               ],
             ),
           ),
