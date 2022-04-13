@@ -11,6 +11,7 @@ import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -152,6 +153,10 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+/*
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
+      _mapStyle = string;
+    });*/
 
     getSharedPrefData();
     _listenServiceListResponse();
@@ -239,7 +244,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                     target: _center,
                     zoom: 11.0,
                   ),
-                  mapType: _currentMapType,
+                  //mapType: _currentMapType,
                   markers: _markers,
                   onCameraMove: _onCameraMove,
                   polylines: Set<Polyline>.of(polylines.values),
