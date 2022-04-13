@@ -166,7 +166,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -624,13 +623,21 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
             _timeController.text = "30:00";
             _rateController.addListener(() {
               int itemIndex = getItemIndex(parentIndex,index);
-              var temp =   SelectedServicesMdl(parentIndex, index, regularServiceMdlList[itemIndex].serviceId,_rateController.text, regularServiceMdlList[itemIndex].maxAmount, regularServiceMdlList[itemIndex].time, regularServiceMdlList[itemIndex].isEnable);
+              var temp =   SelectedServicesMdl(parentIndex, index,
+                  regularServiceMdlList[itemIndex].serviceId,_rateController.text,
+                  regularServiceMdlList[itemIndex].maxAmount,
+                  regularServiceMdlList[itemIndex].time,
+                  regularServiceMdlList[itemIndex].isEnable);
               regularServiceMdlList.removeAt(itemIndex);
               regularServiceMdlList.insert(itemIndex,temp);
             });
             _timeController.addListener(() {
               int itemIndex = getItemIndex(parentIndex,index);
-              var temp =   SelectedServicesMdl(parentIndex, index, regularServiceMdlList[itemIndex].serviceId,regularServiceMdlList[itemIndex].minAmount, regularServiceMdlList[itemIndex].maxAmount, _timeController.text, regularServiceMdlList[itemIndex].isEnable);
+              var temp =   SelectedServicesMdl(parentIndex, index,
+                  regularServiceMdlList[itemIndex].serviceId,
+                  regularServiceMdlList[itemIndex].minAmount,
+                  regularServiceMdlList[itemIndex].maxAmount,
+                  _timeController.text, regularServiceMdlList[itemIndex].isEnable);
               regularServiceMdlList.removeAt(itemIndex);
               regularServiceMdlList.insert(itemIndex,temp);
             });
@@ -651,14 +658,22 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                           if(val){
                             int itemIndex = getItemIndex(parentIndex,index);
                             print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
-                            var temp =   SelectedServicesMdl(parentIndex,index,regularServiceMdlList[itemIndex].serviceId,regularServiceMdlList[itemIndex].minAmount, regularServiceMdlList[itemIndex].maxAmount, regularServiceMdlList[itemIndex].time, val);
+                            var temp =   SelectedServicesMdl(parentIndex,index,
+                                regularServiceMdlList[itemIndex].serviceId,
+                                regularServiceMdlList[itemIndex].minAmount,
+                                regularServiceMdlList[itemIndex].maxAmount,
+                                regularServiceMdlList[itemIndex].time, val);
                             regularServiceMdlList.removeAt(itemIndex);
                             regularServiceMdlList.insert(itemIndex, temp);
                           }else{
                             int itemIndex = getItemIndex(parentIndex,index);
                             print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
                             //serviceSpecialisationList.remove(regularServiceList[index]);
-                            var temp= SelectedServicesMdl(parentIndex,index,regularServiceMdlList[itemIndex].serviceId,regularServiceMdlList[itemIndex].minAmount, regularServiceMdlList[itemIndex].maxAmount, regularServiceMdlList[itemIndex].time, val);
+                            var temp= SelectedServicesMdl(parentIndex,index,
+                                regularServiceMdlList[itemIndex].serviceId,
+                                regularServiceMdlList[itemIndex].minAmount,
+                                regularServiceMdlList[itemIndex].maxAmount,
+                                regularServiceMdlList[itemIndex].time, val);
                             regularServiceMdlList.removeAt(itemIndex);
                             regularServiceMdlList.insert(itemIndex,temp);
                           }
