@@ -15,6 +15,9 @@ class MechanicStartedServiceScreen extends StatefulWidget {
 
 class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScreen> {
 
+
+  String workStatus = "3";      // 1 - testing - screen 075,  2 - started working - screen 078,   3 - completed - screen 079
+
   @override
   Widget build(BuildContext context) {
 
@@ -35,6 +38,16 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
                       startedWorkScreenTitleImage(size),
 
                       startedWorkScreenBottomCurve(size),
+
+                      workStatus == "1"
+                          ?
+                      startedWorkScreenWarningText(size)
+                          :
+                      workStatus == "2"
+                          ?
+                      startedWorkScreenTimer(size)
+                          :
+                      startedWorkScreenSuccess(size),
                     ],
                 ),
               ),
@@ -117,7 +130,6 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
     );
   }
 
-
   Widget curvedBottomContainer(Size size,String colorsInt,double height, Widget child){
     return Container(
       height: height,
@@ -138,13 +150,11 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
     );
   }
 
-
   Widget mechanicImageAndName(Size size){
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 2 / 100
       ),
-      color: Colors.lightGreen,
       child: Row(
         children: [
           Stack(
@@ -200,18 +210,62 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
               ),)
             ],
           ),
+
           //customerApprovedScreenTimer(size)
         ],
       ),
     );
   }
 
-  /*Widget customerApprovedScreenTimer(Size size){
+  Widget startedWorkScreenWarningText(Size size){
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+          border: Border.all(
+              color: CustColors.greyish,
+              width: 0.3
+          )
+      ),
+      margin: EdgeInsets.only(
+          left: size.width * 6 / 100,
+          right: size.width * 6 / 100,
+          top: size.height * 4.8 / 100
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+                top: size.width * 3 / 100,
+                bottom: size.width * 3 / 100
+            ),
+            margin: EdgeInsets.only(
+                left: size.width * 5 / 100,
+                right: size.width * 2 / 100
+            ),
+            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+              height: size.height * 3 / 100,width: size.width * 3 / 100,),
+          ),
+          Text("Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: "Samsung_SharpSans_Regular",
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget startedWorkScreenTimer(Size size){
     return Container(
       margin: EdgeInsets.only(
           left: size.width * 27.5 / 100,
           right: size.width * 27.5 / 100,
-          top: size.height * 4.3 / 100
+          top: size.height * 3.3 / 100
       ),
       child: Flexible(
         child: Column(
@@ -264,6 +318,45 @@ class _MechanicStartedServiceScreenState extends State<MechanicStartedServiceScr
         ),
       ),
     );
-  }*/
+  }
+
+  Widget startedWorkScreenSuccess(Size size){
+    return Container(
+     child: Stack(
+       alignment: Alignment.center,
+       children: [
+         Container(
+           color: Colors.teal,                    // -------------------- bg image not get from Abhijith
+         ),
+         Container(
+           margin: EdgeInsets.only(
+             top: size.height * 12 / 100
+           ),
+           child: Column(
+             children: [
+               SvgPicture.asset("assets/image/ic_success_blue_white.svg",
+                 height: size.height * 10 / 100,width: size.width * 12 / 100,),
+
+               Container(
+                 margin: EdgeInsets.only(
+                   top: size.height * 3 / 100
+                 ),
+                 child: Text("Job Completed successfully!",
+                   style: TextStyle(
+                   fontFamily: "Samsung_SharpSans_Medium",
+                     fontWeight: FontWeight.w700,
+                     fontSize: 18,
+                     color: CustColors.light_navy
+                 ),),
+               )
+             ],
+           ),
+         )
+
+       ],
+     ),
+
+    );
+  }
 
 }
