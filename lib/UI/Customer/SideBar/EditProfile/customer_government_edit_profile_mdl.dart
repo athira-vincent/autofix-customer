@@ -5,12 +5,12 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-CustomerEditProfileMdl customerEditProfileMdlFromJson(String str) => CustomerEditProfileMdl.fromJson(json.decode(str));
+CustomerGovernmentEditProfileMdl customerEditProfileMdlFromJson(String str) => CustomerGovernmentEditProfileMdl.fromJson(json.decode(str));
 
-String customerEditProfileMdlToJson(CustomerEditProfileMdl data) => json.encode(data.toJson());
+String customerEditProfileMdlToJson(CustomerGovernmentEditProfileMdl data) => json.encode(data.toJson());
 
-class CustomerEditProfileMdl {
-  CustomerEditProfileMdl({
+class CustomerGovernmentEditProfileMdl {
+  CustomerGovernmentEditProfileMdl({
     required this.data,
     required this.status,
     required this.message
@@ -20,7 +20,7 @@ class CustomerEditProfileMdl {
   String? status;
   String? message;
 
-  factory CustomerEditProfileMdl.fromJson(Map<String, dynamic> json) => CustomerEditProfileMdl(
+  factory CustomerGovernmentEditProfileMdl.fromJson(Map<String, dynamic> json) => CustomerGovernmentEditProfileMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"] == null ? null : json["message"],
     status: json["status"] == null ? null : json["status"],

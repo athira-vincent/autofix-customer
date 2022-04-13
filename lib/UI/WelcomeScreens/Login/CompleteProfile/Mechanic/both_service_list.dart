@@ -92,8 +92,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
-          print(value.data!.serviceListAll!.length);
-          allServiceList = value.data!.serviceListAll!;
+          //print(value.data!.serviceListAll!.length);
+          //allServiceList = value.data!.serviceListAll!;
 
           for(int i=0;i<allServiceList.length;i++){
             if(allServiceList[i].categoryId.toString() == "1"){

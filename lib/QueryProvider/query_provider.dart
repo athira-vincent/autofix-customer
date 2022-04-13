@@ -545,7 +545,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-
+//-------------------------- remove after merge on 11/04/2022-----------------------------------------
   serviceList(String token, searchText, count, categoryId ) async {
     String _query = """
     {
@@ -582,6 +582,39 @@ class QueryProvider {
       status
     }
   }
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+//-------------------------- remove after merge on 11/04/2022-----------------------------------------
+
+  serviceListWithCategory(String token, categoryType ) async {
+    String _query = """
+    {
+      category_list(catType: $categoryType) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
      """;
     log(_query);
     print("Token >>>>>>> $token");
@@ -933,8 +966,8 @@ class QueryProvider {
     );
   }
 
-  postCustEditProfileRequest(
-      String token, firstName,  lastName,  state, status, imageUrl) async {
+  postCustIndividualEditProfileRequest(
+    String token, firstName,  lastName,  state, status, imageUrl) async {
     String _query = """  
       mutation {
       customer_Individual_profile_update(
@@ -947,6 +980,57 @@ class QueryProvider {
         message
       }
     }  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postCustCorporateEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl, orgName, orgType) async {
+    String _query = """  
+     mutation {
+  customer_Corporate_profile_update(
+      firstName: "$firstName"
+      lastName: "$lastName"
+      state: "$state"
+      status: $status
+      profilepic: "$imageUrl"
+      org_name: "$orgName"
+      org_type: "$orgType"
+    ) {
+      message
+    }
+  }  
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postCustGovernmentEditProfileRequest(
+      String token, firstName,  lastName,  state, status, imageUrl, ministryName) async {
+    String _query = """  
+     mutation {
+      customer_GovtBodies_profile_update(
+        firstName: "$firstName"
+        lastName: "$lastName"
+        state: "$state"
+        profilepic: "$imageUrl"
+        status: $status
+        ministry_name: "$ministryName"
+      ) {
+        message
+      }
+    } 
     """;
     log(_query);
     return await GqlClient.I.query01(

@@ -1,5 +1,6 @@
 
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
+//import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 
 import '../../../../../../Repository/repository.dart';
 import 'package:rxdart/rxdart.dart';
@@ -8,14 +9,14 @@ class ServiceListBloc {
 
   final Repository repository = Repository();
 
-  final postServiceList = PublishSubject<ServiceListMdl>();
-  Stream<ServiceListMdl> get serviceListResponse => postServiceList.stream;
+  final postServiceList = PublishSubject<CategoryServiceListMdl>();
+  Stream<CategoryServiceListMdl> get serviceListResponse => postServiceList.stream;
 
   /// =============== regular services list ==================
 
   postServiceListRequest(String token, searchText, count, categoryId) async {
     print(">>>>>>>>>>>>>>>----- token" + token);
-    ServiceListMdl _serviceListMdl = await repository.getServiceList(token, searchText, count, categoryId);
+    CategoryServiceListMdl _serviceListMdl = await repository.getServiceList(token, categoryId);
     postServiceList.sink.add(_serviceListMdl);
   }
 
