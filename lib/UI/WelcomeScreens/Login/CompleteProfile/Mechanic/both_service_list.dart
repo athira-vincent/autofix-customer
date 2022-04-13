@@ -72,31 +72,37 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
           allList = value.data!.categoryList!;
 
+          print("allList.length.toString() >>> " + allList.length.toString());
 
           for(int i = 0; i < allList.length; i++){
             if(allList[i].catType.toString() == "1"){
               emergencyCategoryList.add(allList[i]);
-              for( int x = 0; x < emergencyCategoryList[i].service!.length; i++){
-                emergencyServiceList.add(emergencyCategoryList[i].service![x]);
+              for(int x = 0; x < allList[i].service!.length; x++){
+                emergencyServiceList.add(allList[i].service![x]);
                 emergencyServiceMdlList.add(
-                    SelectedServicesMdl(i,x,emergencyCategoryList[i].service![x].id.toString(),
-                        emergencyCategoryList[i].service![x].minPrice,
-                        emergencyCategoryList[i].service![x].maxPrice, "00:30", false));
+                    SelectedServicesMdl(i,x,allList[i].service![x].id.toString(),
+                        allList[i].service![x].minPrice,
+                        allList[i].service![x].maxPrice, "00:30", false));
               }
             }
             else{
               regularCategoryList.add(allList[i]);
-              for( int x = 0; x < regularCategoryList[i].service!.length; i++){
-                regularServiceList.add(regularCategoryList[i].service![x]);
+              for( int x = 0; x < allList[i].service!.length; x++){
+                regularServiceList.add(allList[i].service![x]);
                 regularServiceMdlList.add(
-                    SelectedServicesMdl(i,x,regularCategoryList[i].service![x].id.toString(),
-                        regularCategoryList[i].service![x].minPrice,
-                        regularCategoryList[i].service![x].maxPrice, "00:30", false));
+                    SelectedServicesMdl(i,x,allList[i].service![x].id.toString(),
+                        allList[i].service![x].minPrice,
+                        allList[i].service![x].maxPrice, "00:30", false));
               }
             }
           }
 
+          print("emergencyCategoryList.length >>> "+ emergencyCategoryList.length.toString());
+          print("emergencyServiceList.length >>> "+ emergencyServiceList.length.toString());
           print("emergencyServiceMdlList.length >>> "+ emergencyServiceMdlList.length.toString());
+
+          print("regularCategoryList.length >>> "+ regularCategoryList.length.toString());
+          print("regularServiceList.length >>> "+ regularServiceList.length.toString());
           print("regularServiceMdlList.length >>> "+ regularServiceMdlList.length.toString());
 
           _emergencyIsChecked = List<bool>.filled(emergencyServiceMdlList.length, false);
@@ -155,7 +161,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('authToken >>>>>>> ' + authToken.toString());
+      print('authToken >>>>>>> '+authToken.toString());
       _serviceListBloc.postServiceListRequest(authToken, null, null, null );
     });
   }
