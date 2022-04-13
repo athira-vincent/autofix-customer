@@ -1,6 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -24,9 +26,14 @@ class MechanicMyProfileScreen extends StatefulWidget {
 
 class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
+  MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
+
   double per = .10;
   double perfont = .10;
+  bool _isLoadingPage = true;
   bool _isLoading = false;
+  String _userName = "", _imageUrl = "", _userType = "";
+
 
   double _setValue(double value) {
     return value * per + value;
@@ -48,7 +55,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
   String? selectedworkSelection = '' ;
 
-
   TextEditingController _addressController = TextEditingController();
   FocusNode _addressFocusNode = FocusNode();
 
@@ -61,6 +67,20 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   TextEditingController _phoneController = TextEditingController();
   FocusNode _phoneFocusNode = FocusNode();
+
+  TextEditingController _orgTypeController = TextEditingController();
+  FocusNode _orgTypeFocusNode = FocusNode();
+  bool isloading = false;
+  List<String> orgTypeList = [
+    "Business name",
+    "Private Limited Company",
+    "Public Limited Company",
+    "Incorporated Trustees",
+    "Non-Governmental Organization"
+  ];
+
+  TextEditingController _orgNameController = TextEditingController();
+  FocusNode _orgNameFocusNode = FocusNode();
 
 
 
@@ -84,12 +104,80 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
+      _isLoadingPage=true;
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
 
     });
   }
 
   _listenServiceListResponse() {
 
+    _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoadingPage = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          _isLoadingPage = false;
+          setProfileData(value);
+        });
+      }
+    });
+    _mechanicProfileBloc.MechanicEditIndividualProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoading = false;
+          _isLoadingPage = false;
+          editProfileEnabled = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _isLoadingPage = true;
+          editProfileEnabled = false;
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+        });
+      }
+    });
+    _mechanicProfileBloc.postMechanicEditCorporateProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoading = false;
+          _isLoadingPage = false;
+          editProfileEnabled = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _isLoadingPage = true;
+          editProfileEnabled = false;
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+        });
+      }
+    });
+  }
+
+
+  void setProfileData(MechanicProfileMdl value){
+    _nameController.text = value.data!.mechanicDetails!.firstName.toString() ;
+    _emailController.text = value.data!.mechanicDetails!.emailId.toString();
+    _phoneController.text = value.data!.mechanicDetails!.phoneNo.toString();
+    _stateController.text = value.data!.mechanicDetails!.mechanic![0].state.toString();
+    _yearOfExistenceController.text = value.data!.mechanicDetails!.mechanic![0].yearExp.toString();
+    _orgNameController.text = value.data!.mechanicDetails!.mechanic![0].orgName.toString();
+    _orgTypeController.text = value.data!.mechanicDetails!.mechanic![0].orgType.toString();
+    _userName = value.data!.mechanicDetails!.firstName.toString();
+    _imageUrl = value.data!.mechanicDetails!.mechanic![0].profilePic.toString();
+    _userType = value.data!.mechanicDetails!.mechanic![0].mechType.toString();
+    print(">>>>>>>>>>>>> _userType : " + _userType);
   }
 
 
@@ -101,19 +189,38 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
+            child: Stack(
               children: [
-                appBarCustomUi(),
-                profileImageAndKmAndReviewCount(),
-                NameTextUi(),
-                EmailTextUi(),
-                StateTextUi(),
-                WorkTextUi(),
-                AddressTextUi(),
-                YearOfExperienceTextUi(),
-                NextButtonMechanicIndividual()
+                Column(
+                        children: [
+                          appBarCustomUi(),
+                          profileImageAndKmAndReviewCount(),
+                          NameTextUi(),
+                          EmailTextUi(),
+                          PhoneTextUi(),
+                          StateTextUi(),
+                          OrgNameTextUi(),
+                          OrgTypeTextUi(),
+                          YearOfExperienceTextUi(),
+                          NextButton()
+                        ],
+                      ),
+                Visibility(
+                  visible: _isLoadingPage,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            ),
+            )
           ),
         ),
       ),
@@ -364,6 +471,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -371,12 +479,13 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
+                        width: 250,
                         child: TextFormField(
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
-                          style: Styles.textLabelSubTitle,
+                          style: Styles.appBarTextBlack15,
                           focusNode: _emailFocusNode,
-                          enabled: editProfileEnabled,
+                          enabled: false,
                           keyboardType: TextInputType.emailAddress,
                           validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
                           controller: _emailController,
@@ -396,26 +505,16 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
-                      editProfileEnabled == false
-                          ? Text(
+                      Text(
                             'Your email',
                             textAlign: TextAlign.center,
                             style: Styles.textLabelSubTitle,
                           )
-                          : Container(),
                     ],
                   ),
                 ),
               ),
               Spacer(),
-              editProfileEnabled == true
-                  ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
-              )
-                  : Container(),
             ],
           ),
           Padding(
@@ -445,6 +544,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -524,7 +624,99 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget WorkTextUi() {
+  Widget OrgNameTextUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.person, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 25,
+                          child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            enabled: editProfileEnabled,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _orgNameFocusNode,
+                            keyboardType: TextInputType.name,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z ]')),
+                            ],
+                            validator: InputValidator(
+                                ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                            controller: _orgNameController,
+                            cursorColor: CustColors.whiteBlueish,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'Organization Name',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                        editProfileEnabled == false
+                            ? Container(
+                              child: Text(
+                                  'Your organization name',
+                                  textAlign: TextAlign.start,
+                                  style: Styles.textLabelSubTitle,
+                                ),
+                            )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget OrgTypeTextUi() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
       child: Column(
@@ -542,6 +734,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -555,33 +748,28 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
                             if(editProfileEnabled == true)
                             {
-                              _showDialogForWorkSelection(workSelectionList);
+                              showOrganisationTypeSelector();
                             }
 
 
                           },
                           child: Container(
                             height: 25,
-                            width: 300,
+                            width: 400,
                             child: TextFormField(
+                              enabled: false,
+                              readOnly: true,
                               textAlignVertical: TextAlignVertical.center,
                               maxLines: 1,
                               style: Styles.appBarTextBlack15,
-                              focusNode: _workSelectionFocusNode,
-                              keyboardType: TextInputType.name,
-                              enabled: false,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp('[a-zA-Z ]')),
-                              ],
-                              validator: InputValidator(
-                                  ch :
-                                  'Work Selection').nameChecking,
-                              controller: _workSelectionController,
+                              focusNode: _orgTypeFocusNode,
+                              keyboardType: TextInputType.text,
+                              //validator: InputValidator(ch: AppLocalizations.of(context)!.text_hint_organization_type).emptyChecking,
+                              controller: _orgTypeController,
                               cursorColor: CustColors.whiteBlueish,
                               decoration: InputDecoration(
                                 isDense: true,
-                                hintText:  'Work',
+                                hintText:  'State',
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
@@ -598,7 +786,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       editProfileEnabled == false
                           ? Text(
-                        'Your work selection',
+                        'Your organization type',
                         textAlign: TextAlign.center,
                         style: Styles.textLabelSubTitle,
                       )
@@ -615,6 +803,83 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       )
                   )
                   : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget PhoneTextUi() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.phone, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          enabled: false,
+                          readOnly: !editProfileEnabled,
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _phoneFocusNode,
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
+                          controller: _phoneController,
+                          cursorColor: CustColors.light_navy,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText:  'Phone',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+
+                      Text(
+                        'Your phone number',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
             ],
           ),
           Padding(
@@ -644,6 +909,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -733,6 +999,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
                   child: Column(
@@ -803,59 +1070,79 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget NextButtonMechanicIndividual() {
-    return  Container(
-      width: double.infinity,
-      margin: EdgeInsets.fromLTRB(20,5,20,20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              child: _isLoading
-                  ? Center(
-                      child: Container(
-                        height: _setValue(28),
-                        width: _setValue(28),
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustColors.peaGreen),
-                        ),
-                      ),
-                    )
-                  : Container(
-                    child: MaterialButton(
-                      onPressed: () {
-
-                      },
-                      child: Container(
-                        height: 45,
-                        width: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Save',
-                              textAlign: TextAlign.center,
-                              style: Styles.textButtonLabelSubTitle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      color: CustColors.materialBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              _setValue(10))),
+  Widget NextButton() {
+    return editProfileEnabled==true
+        ?  Container(
+          width: double.infinity,
+          child: _isLoading
+              ? Center(
+                  child: Container(
+                    height: _setValue(28),
+                    width: _setValue(28),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          CustColors.peaGreen),
                     ),
                   ),
-            ),
-          ),
-        ],
-      ),
-    );
+                )
+              : Container(
+                  child: MaterialButton(
+                    onPressed: () {
+
+                      setState(() {
+                        print("$_userType");
+                        if(_userType == "1")
+                          {
+                            print("Individual");
+                            _isLoading = true;
+                            _mechanicProfileBloc.postMechanicEditProfileIndividualRequest(
+                              authToken,
+                              _nameController.text,
+                              _nameController.text,
+                              _stateController.text,
+                              "",
+                              1,
+                              _yearOfExistenceController.text,);
+                          }
+                        else
+                          {
+                            _isLoading = true;
+                            _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
+                              authToken,
+                              _nameController.text,
+                              _nameController.text,
+                              _stateController.text,
+                              "",
+                              1,
+                              _yearOfExistenceController.text,
+                              _orgNameController.text,
+                              _orgTypeController.text,);
+                            print("Cooperate");
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Save',
+                            textAlign: TextAlign.center,
+                            style: Styles.textButtonLabelSubTitle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: CustColors.materialBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            _setValue(0))),
+                  ),
+                ),
+        )
+        :  Container();
   }
 
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
@@ -917,6 +1204,196 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         });
   }
 
+  void showOrganisationTypeSelector() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return BottomSheet(
+                onClosing: () {},
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(20))),
+                builder: (BuildContext context) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      height: 421,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                              width: double.maxFinite,
+                              child: Column(children: [
+                                /*Container(
+                                  height: _setValue(36.3),
+                                  margin: EdgeInsets.only(
+                                      left: _setValue(41.3),
+                                      right: _setValue(41.3),
+                                      top: _setValue(20.3)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                        _setValue(20),
+                                      ),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black38,
+                                        spreadRadius: 0,
+                                        blurRadius: 1.5,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              left: _setValue(23.4)),
+                                          alignment: Alignment.center,
+                                          height: _setValue(36.3),
+                                          child: Center(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.visiblePassword,
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                              onChanged: (text) {
+                                                setState(() {
+                                                  _countryData.clear();
+                                                  isloading = true;
+                                                });
+                                                _signupBloc.searchStates(text);
+                                              },
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Corbel_Regular',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: CustColors.blue),
+                                              decoration: InputDecoration(
+                                                hintText: "Search Your  State",
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    new EdgeInsets.only(
+                                                        bottom: 15),
+                                                hintStyle: TextStyle(
+                                                  color: CustColors.greyText,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Corbel-Light',
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: _setValue(25),
+                                            height: _setValue(25),
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            decoration: BoxDecoration(
+                                              color: CustColors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                  20,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                right: _setValue(19)),
+                                            child: Image.asset(
+                                              'assets/images/search.png',
+                                              width: _setValue(10.4),
+                                              height: _setValue(10.4),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),*/
+                                Container(
+                                  height: 421 - 108,
+                                  padding:
+                                  EdgeInsets.only(top: _setValue(22.4)),
+                                  child: orgTypeList.length != 0
+                                      ? ListView.separated(
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: orgTypeList.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final dial_Code = orgTypeList[index];
+                                                  setState(() {
+                                                    _orgTypeController.text = dial_Code.toString();
+                                                  });
+
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${orgTypeList[index]}',
+                                                    style: TextStyle(
+                                                        fontSize:12,
+                                                        fontFamily:
+                                                        'Corbel-Light',
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        color:
+                                                        Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
+                                          },
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
+                                      : Center(
+                                    child: Text('No Results found.'),
+                                  ),
+                                ),
+                              ])),
+                          Center(
+                            child: isloading
+                                ? CircularProgressIndicator()
+                                : Text(''),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          });
+        });
+  }
 
 
 }

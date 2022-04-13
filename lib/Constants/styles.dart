@@ -25,6 +25,20 @@ class Styles {
     fontSize: 10,
   );
 
+  static const MyVechiclesSubTitle = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
+  static const MyVechiclesSubTitleBlue = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Bold',
+    fontWeight: FontWeight.w500,
+    color: CustColors.light_navy,
+    fontSize: 18,
+  );
+
   static const textLabelSubTitleRed = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w500,
@@ -75,9 +89,38 @@ class Styles {
     fontSize: 10,
   );
 
+  static const infoTextLabelTitle = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
+  static const infoTextLabelTitle01 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+    fontSize: 11,
+  );
+
+  static const infoTextLabelTitleWhite = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+    fontSize: 12,
+  );
+
+
   static const textLabelTitle_12 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w400,
+    color: Colors.black,
+    fontSize: 12,
+  );
+
+  static const textLabelTitle001 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w600,
     color: Colors.black,
     fontSize: 12,
   );
@@ -139,6 +182,13 @@ class Styles {
     height: 1.5,
     fontWeight: FontWeight.w300,
     fontFamily: 'Samsung_SharpSans_Regular',
+  );
+
+  static const smallTitleStyle01 = TextStyle(
+    color: CustColors.light_navy,
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Samsung_SharpSans_Bold',
   );
 
   static const smallTitleStyle2 = TextStyle(
@@ -279,6 +329,13 @@ class Styles {
     fontWeight: FontWeight.w500,
   );
 
+  static const mechanicNameStyle01 = TextStyle(
+    color: CustColors.black_03,
+    fontSize: 22,
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w500,
+  );
+
   static const totalAmountStyle = TextStyle(
     color: CustColors.black_03,
     fontSize: 17,
@@ -303,11 +360,14 @@ class Styles {
       fontSize: 24,
       fontWeight: FontWeight.w600,
       fontFamily: 'Corbel_Bold');
+
   static const textSuccessfulTitleStyle03 = TextStyle(
       color: CustColors.light_navy,
       fontSize: 18,
       fontWeight: FontWeight.w400,
       fontFamily: 'Samsung_SharpSans_Medium');
+
+
   static const textSuccessfulTitle02Style = TextStyle(
       color: CustColors.brownish_grey,
       fontSize: 14,
@@ -358,6 +418,20 @@ class Styles {
       fontFamily:'Samsung_SharpSans_Medium'
   );
 
+  static const appBarTextBlue2 = TextStyle(
+      fontSize: 18,
+      color: CustColors.light_navy,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
+  static const appBarTextWhite= TextStyle(
+      fontSize: 18,
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+      fontFamily:'Samsung_SharpSans_Medium'
+  );
+
   static const appBarTextBlack15 = TextStyle(
       fontSize: 15,
       color: Colors.black,
@@ -385,6 +459,22 @@ class Styles {
     fontSize: 10,
     color: CustColors.white_02,
     fontWeight: FontWeight.w500,
+    letterSpacing: .3,
+  );
+
+  static const myVechicleYourCarTextStyle = TextStyle(
+    fontFamily: "Samsung_SharpSans_Bold",
+    fontSize: 12,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w700,
+    letterSpacing: .3,
+  );
+
+  static const myVechicleDetailsTextStyle = TextStyle(
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontSize: 11,
+    color: CustColors.white_02,
+    fontWeight: FontWeight.w700,
     letterSpacing: .3,
   );
 

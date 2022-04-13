@@ -13,11 +13,8 @@ import '../../../../../Widgets/CurvePainter.dart';
 
 class MechanicWorkCompletedScreen extends StatefulWidget {
 
-  final String mechanicId;
-  final String authToken;
 
-
-  MechanicWorkCompletedScreen({required this.mechanicId,required this.authToken,});
+  MechanicWorkCompletedScreen();
 
   @override
   State<StatefulWidget> createState() {

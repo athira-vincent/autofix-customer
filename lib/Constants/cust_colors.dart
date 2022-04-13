@@ -4,6 +4,7 @@ class CustColors {
   static const peaGreen = Color(0xff18582E);
   static const borderColor = Color(0xff707070);
   static const blue = Color(0xff2a569f);
+  static const blueLight = Color(0xff2c4d9b);
   static const greyText = Color(0xff969696);
   static const greyText1 = Color(0xffe2e2e2);
   static const greyText2 = Color(0xff838181);
@@ -37,6 +38,7 @@ class CustColors {
   static const black_01= Color(0xffd6d6d6);
   static const black_02= Color(0xffdbdbdb);
   static const grey_02= Color(0xffbebebe);
+  static const grey_03= Color(0xffe2e3e6);
 
   static const black_03= Color(0xff120d0d);
   static const pinkish_grey= Color(0xffc7c0c0);

@@ -3,11 +3,11 @@ import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_a
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_api_provider.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/bothServicesDummy/service_list_both_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
@@ -22,6 +22,8 @@ class Repository {
   final _signupApiProvider = SignupApiProvider();
   final _homeCustomerApiProvider = HomeCustomerApiProvider();
   final _customerFetchProfileApiProvider = CustomerProfileApiProvider();
+  final _mechanicProfileApiProvider = MechanicProfileApiProvider();
+
   final _customerEditProfileApiProvider = CustomerEditProfileApiProvider();
   final _addCarApiProvider = AddCarApiProvider();
   final _vehicleSpecializationApiProvider = vehicleSpecializationApiProvider();
@@ -36,7 +38,6 @@ class Repository {
   final _serviceListApiProvider = ServiceListApiProvider();
   final _addServiceListApiProvider = AddServicesApiProvider();
 
-  final _serviceListApiBothProvider =ServiceListApiBothProvider();
 
   final _categoryListApiProvider = CategoryListApiProvider();
 
@@ -225,14 +226,35 @@ class Repository {
           userId, type);
 
 
-  // Fetch Profile Request
+  // Fetch Profile Customer Request
   Future<dynamic>  postCustFetchProfileRequest(
       token)  =>
       _customerFetchProfileApiProvider.postCustFetchProfileRequest(
           token);
 
+
+
+  // Fetch Profile Mechanic Request
+  Future<dynamic>  postMechanicFetchProfileRequest(token)  =>
+      _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token);
+
+  // Edit Profile Mechanic Individual Request
+  Future<dynamic>  postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic, status, year_of_experience,)  =>
+      _mechanicProfileApiProvider.postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic, status, year_of_experience,);
+
+  // Edit Profile Mechanic Corporate Request
+  Future<dynamic>  postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
+      status, year_of_experience, org_Name, org_Type,)  =>
+      _mechanicProfileApiProvider.postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
+        status, year_of_experience, org_Name, org_Type,);
+
+
+  // Update Profile Request
+  Future<dynamic>  postCustEditProfileRequest(
+
   // Update Customer - individual Profile Request
   Future<dynamic>  postCustIndividualEditProfileRequest(
+
       String token, firstName,  lastName,  state, status, imageUrl)  =>
       _customerEditProfileApiProvider.postCustIndividualEditProfileRequest(
            token, firstName,  lastName,  state, status, imageUrl);
@@ -255,20 +277,5 @@ class Repository {
       token)  =>
       _homeCustomerApiProvider.postCustVehicleListRequest(
           token);
-
-
-
-  //  postserviceListAllBothRequest Request
-  Future<dynamic>  postserviceListAllBothRequest(
-      token,type)  =>
-      _serviceListApiBothProvider.postserviceListAllBothRequest(
-          token,type);
-
-
-  //  postCatListBothRequest Request
-  Future<dynamic>  postCatListBothRequest(
-      token,type)  =>
-      _serviceListApiBothProvider.postCatListBothRequest(
-          token,type);
 
 }
