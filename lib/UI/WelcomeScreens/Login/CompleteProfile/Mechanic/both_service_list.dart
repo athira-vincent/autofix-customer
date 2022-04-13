@@ -104,7 +104,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("regularCategoryList.length >>> "+ regularCategoryList.length.toString());
           print("regularServiceList.length >>> "+ regularServiceList.length.toString());
           print("regularServiceMdlList.length >>> "+ regularServiceMdlList.length.toString());
-
           _emergencyIsChecked = List<bool>.filled(emergencyServiceMdlList.length, false);
           _regularIsChecked = List<bool>.filled(regularServiceMdlList.length, false);
 
