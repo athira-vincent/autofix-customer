@@ -249,8 +249,6 @@ class Repository {
         status, year_of_experience, org_Name, org_Type,);
 
 
-  // Update Profile Request
-  Future<dynamic>  postCustEditProfileRequest(
 
   // Update Customer - individual Profile Request
   Future<dynamic>  postCustIndividualEditProfileRequest(
