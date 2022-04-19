@@ -3,17 +3,17 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MechanicDirectPaymentScreen extends StatefulWidget {
+class DirectPaymentScreen extends StatefulWidget {
 
-  MechanicDirectPaymentScreen();
+  DirectPaymentScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicDirectPaymentScreenState();
+    return _DirectPaymentScreenState();
   }
 }
 
-class _MechanicDirectPaymentScreenState extends State<MechanicDirectPaymentScreen> {
+class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
   bool isMechanicApp = false;
 
