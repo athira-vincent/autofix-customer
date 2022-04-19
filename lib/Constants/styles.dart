@@ -681,4 +681,25 @@ class Styles {
           width: 0.3
       )
   );
+
+  static BoxDecoration rateBoxDecorationStyle01 = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+      /*border: Border.all(
+          //color: CustColors.greyish,
+          width: 0.3
+      ),*/
+      color: CustColors.pale_grey02
+  );
+  static BoxDecoration rateBoxDecorationStyle02 = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+     /* border: Border.all(
+          color: CustColors.greyish,
+          width: 0.3
+      ),*/
+     color: CustColors.cloudy_blue
+  );
 }

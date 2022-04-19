@@ -144,7 +144,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
               left: size.width * 5 / 100,
               right: size.width * 2 / 100,
             ),
-            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+            child: SvgPicture.asset("assets/image/ic_warning_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Text(
@@ -200,6 +200,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     fontFamily: "Samsung_SharpSans_Regular",
     fontWeight: FontWeight.w600,
     color: Colors.black,
+    letterSpacing: .7,
   );
 
 }
