@@ -14,6 +14,7 @@ class PaymentSuccessScreen extends StatefulWidget {
 }
 
 class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery

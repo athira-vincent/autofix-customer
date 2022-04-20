@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
+import 'package:auto_fix/UI/NewScreens/booking_success_screen.dart';
 import 'package:auto_fix/UI/NewScreens/direct_payment_screen.dart';
 import 'package:auto_fix/UI/NewScreens/direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/NewScreens/mechanic_work_progress_screen.dart';
@@ -84,7 +85,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
-      home: PaymentFailedScreen(),
+      home: BookingSuccessScreen(),
       //home: SplashScreen(),
     );
   }
