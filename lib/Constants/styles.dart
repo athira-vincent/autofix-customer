@@ -702,4 +702,15 @@ class Styles {
       ),*/
      color: CustColors.cloudy_blue
   );
+
+  static BoxDecoration bannerTextBoxDecorationStyle = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
+     /* border: Border.all(
+          color: CustColors.greyish,
+          width: 0.3
+      ),*/
+      color: CustColors.pale_grey
+  );
 }
