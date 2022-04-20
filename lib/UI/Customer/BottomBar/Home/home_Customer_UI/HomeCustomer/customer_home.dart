@@ -4,11 +4,13 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/NewScreens/mechanic_list_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,8 +72,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   List<String> serviceIds =[];
 
+  double per = .10;
 
-
+  double _setValue(double value) {
+    return value * per + value;
+  }
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -304,7 +310,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               children: [
                 searchYouService(context),
                 serviceBanners(),
-                emergencyService(),
+                emergencyService(size),
                 regularService(),
                 upcomingServices(),
                 sparePartsServices()
@@ -403,7 +409,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
-  Widget emergencyService() {
+  Widget emergencyService(Size size) {
     return Column(
       children: [
         Padding(
@@ -479,22 +485,23 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                   onTap:(){
 
                                     setState(() {
-                                      print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                                      print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                                      print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                      print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                      serviceIds.clear();
-                                      serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
-                                      print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>  FindMechanicListScreen(
-                                                bookingId: '01',
-                                                serviceIds: serviceIds,
-                                                serviceType: 'emergency',
-                                                authToken: authToken,)));
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              contentPadding: EdgeInsets.all(0.0),
+                                              content: StatefulBuilder(
+                                                  builder: (BuildContext context, StateSetter monthYear) {
+                                                    return  setupAlertDialogMonthAndYear(
+                                                      snapshot.data?.data?.categoryList?[0].service?[index],
+                                                      snapshot.data?.data?.categoryList![index],
+                                                      size
+                                                    );
+                                                  }
+                                              ),
+                                            );
+                                          });
 
                                      /* _homeCustomerBloc.postMechanicsBookingIDRequest(
                                           authToken,
@@ -503,6 +510,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                           CurrentLatitude,
                                           CurrentLongitude,
                                           serviceIds);*/
+
                                     });
 
                                   },
@@ -599,7 +607,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       print("${snapshot.connectionState}");
                       print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
 
-
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
                           return CircularProgressIndicator();
@@ -619,12 +626,24 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                               itemBuilder: (context,index,) {
                                 return GestureDetector(
                                   onTap:(){
+                                    print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                    print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                    print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                    print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                    serviceIds.clear();
+                                    serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
+                                    print(">>>>>>>>>> ServiceId  $serviceIds");
 
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>  MechanicListScreen(
+                                              bookingId: '01',
+                                              serviceIds: serviceIds,
+                                              serviceType: 'regular',
+                                              authToken: authToken,)));
                                   },
-                                  child:
-
-                                  Container(
-
+                                  child: Container(
                                     child: Column(
                                       mainAxisAlignment:MainAxisAlignment.start,
                                       children: [
@@ -801,6 +820,191 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
+  Widget setupAlertDialogMonthAndYear(Service? service,CategoryList? categoryList, Size size ) {
+    return Container(
+      height: 300.0, // Change as per your requirement
+      child: Column(
+        children: [
+          Container(
+              width: double.infinity,
+              height: 50,
+              color: CustColors.light_navy,
+              alignment: Alignment.center,
+              child: Text(service!.serviceName,
+                style: Styles.textButtonLabelSubTitle,)
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              top: size.height * 2.5 / 100,
+              bottom: size.height * 2.5 / 100,
+              left: size.width * 4 / 100,
+              right: size.width * 4 / 100
+            ),
+            child: Row(
+             children: [
+               Container(
+                 padding: EdgeInsets.only(
+                   top: size.height * 1.5 / 100,
+                   bottom: size.height * 1.5 / 100,
+                   left: size.width * 2 / 100,
+                   right: size.width * 2 / 100
+                 ),
+                 decoration: Styles.serviceIconBoxDecorationStyle,
+                 child: Icon(choices[0].icon, size: 35, color: CustColors.light_navy,),
+               ),
+               SizedBox(
+                 width: size.width * 8 / 100,
+               ),
+               Container(
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: [
+                     Text("Estimated cost",
+                       style: TextStyle(
+                         fontSize: 18,
+                         color: Colors.black,
+                         fontFamily: "Samsung_SharpSans_Medium",
+                         fontWeight: FontWeight.w600,
+                         letterSpacing: .6,
+                         height: 1.7
+                       ),
+                     ),
+                     Text("₦ "+ service.minPrice,
+                       style: TextStyle(
+                           fontSize: 22,
+                           color: Colors.black,
+                           fontFamily: "SharpSans_Bold",
+                           fontWeight: FontWeight.w600,
+                           letterSpacing: .6,
+                           height: 1.7
+                       ),
+                     )
+                   ],
+                 ),
+               )
+             ],
+            ),
+          ),
+          
+          InfoTextWidget(size),
+
+          Container(
+            margin: EdgeInsets.only(
+                //left: size.width * 4 / 100,
+                //right: size.width * 4 / 100,
+                top: size.height * 1.5 / 100
+            ),
+            child: _isLoading
+                ? Center(
+              child: Container(
+                height: _setValue(28),
+                width: _setValue(28),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      CustColors.peaGreen),
+                ),
+              ),
+            )
+                : MaterialButton(
+                  onPressed: () {
+
+                    Navigator.pop(context);
+                    /*setState(() {
+
+                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
+                      if (_formKey.currentState!.validate()) {
+                      } else {
+                      }
+                    });*/
+                                      print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                      print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                      print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                      print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                      serviceIds.clear();
+                                      serviceIds.add('${categoryList!.id}');
+                                      print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>  FindMechanicListScreen(
+                                                bookingId: '01',
+                                                serviceIds: serviceIds,
+                                                serviceType: 'emergency',
+                                                authToken: authToken,)));
+
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                      left: size.width * 2.5 / 100,
+                      right: size.width * 2.5 / 100,
+                      top: size.height * 1 / 100,
+                      bottom: size.height * 1 / 100
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                            Radius.circular(6),
+                      ),
+                        color: CustColors.light_navy
+                    ),
+                    child: Text(
+                      'Find available mechanics ',
+                      textAlign: TextAlign.center,
+                      style: Styles.textButtonLabelSubTitle,
+                    ),
+                  ),
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget InfoTextWidget(Size size){
+    return Container(
+      decoration: Styles.boxDecorationStyle,
+      margin: EdgeInsets.only(
+          left: size.width * 4 / 100,
+          right: size.width * 4 / 100,
+          top: size.height * .2 / 100
+      ),
+      padding: EdgeInsets.only(
+          top: size.height * 1 / 100,
+          bottom: size.height * 1 / 100,
+          right: size.width * 2.3 / 100,
+      ),
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(
+              left: size.width * 2 / 100,
+              right: size.width * 2.5 / 100,
+            ),
+            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+              height: size.height * 2.5 / 100,width: size.width * 2.5 / 100,),
+          ),
+          Expanded(
+            child: Text(
+              "This cost may change for different mechanics due to change in Service charge or due to distance from your location",
+              textAlign: TextAlign.justify,
+              style: warningTextStyle01,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  TextStyle warningTextStyle01 = TextStyle(
+    fontSize: 12,
+    fontFamily: "Samsung_SharpSans_Regular",
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+    letterSpacing: .7,
+    wordSpacing: .7
+  );
 
 }
 

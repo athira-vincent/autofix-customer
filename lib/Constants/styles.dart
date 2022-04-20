@@ -707,10 +707,17 @@ class Styles {
       borderRadius: BorderRadius.all(
         Radius.circular(8),
       ),
-     /* border: Border.all(
-          color: CustColors.greyish,
+      color: CustColors.pale_grey
+  );
+
+  static BoxDecoration serviceIconBoxDecorationStyle = BoxDecoration(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+      /*border: Border.all(
+          //color: CustColors.greyish,
           width: 0.3
       ),*/
-      color: CustColors.pale_grey
+      color: CustColors.white_02
   );
 }
