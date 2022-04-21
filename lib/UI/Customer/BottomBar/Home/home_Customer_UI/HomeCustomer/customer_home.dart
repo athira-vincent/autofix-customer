@@ -4,7 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import 'package:auto_fix/UI/NewScreens/mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -495,7 +495,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   builder: (BuildContext context, StateSetter monthYear) {
                                                     return  setupAlertDialogMonthAndYear(
                                                       snapshot.data?.data?.categoryList?[0].service?[index],
-                                                      snapshot.data?.data?.categoryList![index],
+                                                      //snapshot.data?.data?.categoryList![index],
+                                                       snapshot.data?.data?.categoryList![0],
                                                       size
                                                     );
                                                   }

@@ -184,6 +184,16 @@ class Styles {
     fontFamily: 'Samsung_SharpSans_Regular',
   );
 
+  static const smallTitleStyle3 = TextStyle(
+    color: CustColors.warm_grey03,
+    fontSize: 15,
+    height: 1.5,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Samsung_SharpSans_Regular',
+    letterSpacing: .4,
+    wordSpacing: .3,
+  );
+
   static const smallTitleStyle01 = TextStyle(
     color: CustColors.light_navy,
     fontSize: 10,
@@ -236,6 +246,16 @@ class Styles {
       fontSize: 12,
       fontWeight: FontWeight.w600,
       fontFamily: 'Samsung_SharpSans_Medium');
+
+  static const TryAfterSomeTimetyle01 = TextStyle(
+      color: Colors.black,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Samsung_SharpSans_Medium',
+      letterSpacing: .4,
+      wordSpacing: .3,
+      height: 1.7
+  );
 
   static const LanguageWalkThroughStyle = TextStyle(
       color: Colors.black,
@@ -580,6 +600,16 @@ class Styles {
       fontWeight: FontWeight.w600,
       fontSize: 15.4,
       color: CustColors.cherry);
+
+  static const oopsmechanicNotFoundStyle01 = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Medium',
+      fontWeight: FontWeight.w800,
+      fontSize: 18,
+      color: CustColors.light_navy,
+      letterSpacing: .5,
+      wordSpacing: .5,
+      height: 1.7
+  );
 
   static const appBarTextBlue = TextStyle(
       fontSize: 18,
