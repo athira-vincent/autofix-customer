@@ -276,6 +276,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                             mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
                                             authToken: '$authToken',
                                             mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
+                                            isEmergency: false,
                                           )));
                                 },
                                 child: Padding(

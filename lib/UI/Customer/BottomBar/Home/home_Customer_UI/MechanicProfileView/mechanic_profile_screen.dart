@@ -16,10 +16,12 @@ class MechanicProfileViewScreen extends StatefulWidget {
 
   final String mechanicId;
   final String authToken;
+  final bool isEmergency;
   final MechaniclistForService mechaniclistForService;
 
 
-  MechanicProfileViewScreen({required this.mechanicId,required this.authToken,required this.mechaniclistForService});
+  MechanicProfileViewScreen({required this.mechanicId,required this.authToken,
+    required this.mechaniclistForService, required this.isEmergency});
 
   @override
   State<StatefulWidget> createState() {
@@ -90,7 +92,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                 timeAndLocationUi(size),
                 reviewsUi(size),
                 selectedServiceDetailsUi(size),
-                acceptAndSendRequestButton( size,context)
+                widget.isEmergency ? acceptAndSendRequestButton( size,context) : acceptAndContinueButton(size, context),
               ],
             ),
           ),
@@ -600,6 +602,47 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               ),
               child:  Text(
                 "Accept & send request",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Corbel_Bold',
+                    fontSize:
+                    ScreenSize().setValueFont(14.5),
+                    fontWeight: FontWeight.w800),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget acceptAndContinueButton(Size size, BuildContext context) {
+    return InkWell(
+      onTap: (){
+        print("on press acceptAndContinueButton");
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            Spacer(),
+            Container(
+              height: 45,
+              width:200,
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+              //padding: EdgeInsets.only(left: 20, right: 20),
+              decoration: BoxDecoration(
+                color: CustColors.light_navy,
+                border: Border.all(
+                  color: CustColors.blue,
+                  style: BorderStyle.solid,
+                  width: 0.70,
+                ),
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child:  Text(
+                "Accept & continue",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Corbel_Bold',
