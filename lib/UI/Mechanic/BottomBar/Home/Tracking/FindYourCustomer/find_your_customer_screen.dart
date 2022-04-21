@@ -12,11 +12,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:auto_fix/Constants/cust_colors.dart';
 
-import '../../../../../Constants/cust_colors.dart';
-import '../../../../../Constants/styles.dart';
-import '../../../../../Widgets/CurvePainter.dart';
 import 'package:flutter/services.dart' show rootBundle;
+
+import '../../../../../../Constants/cust_colors.dart';
+import '../../../../../../Constants/styles.dart';
+
 
 
 class FindYourCustomerScreen extends StatefulWidget {

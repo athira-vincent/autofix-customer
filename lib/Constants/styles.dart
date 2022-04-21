@@ -526,7 +526,8 @@ class Styles {
       fontSize: 14,
       color: Colors.black,
       fontWeight: FontWeight.w700,
-      fontFamily:'Samsung_SharpSans_Medium'
+      fontFamily:'Samsung_SharpSans_Medium',
+      letterSpacing: .4
   );
   static const sparePartNameTextBlack17 = TextStyle(
       fontSize: 12,
