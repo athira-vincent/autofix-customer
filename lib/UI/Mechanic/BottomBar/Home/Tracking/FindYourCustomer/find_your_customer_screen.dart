@@ -230,7 +230,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                       ],
                                     ),
                                   ),
-
                                 ],
                               ),
 
