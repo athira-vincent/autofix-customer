@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Customer/PaymentScreens/payment_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -202,28 +203,36 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
 
                   ),
 
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        right: size.width * 4 / 100
-                      ),
-                      padding: EdgeInsets.only(
-                        top: size.height * 1 / 100,
-                        bottom: size.height * 1 / 100,
-                        left: size.width * 2.5 / 100,
-                        right: size.width * 2.5 / 100
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PaymentScreen()));
+                    },
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          right: size.width * 4 / 100
                         ),
-                        color: CustColors.light_navy,
+                        padding: EdgeInsets.only(
+                          top: size.height * 1 / 100,
+                          bottom: size.height * 1 / 100,
+                          left: size.width * 2.5 / 100,
+                          right: size.width * 2.5 / 100
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                          color: CustColors.light_navy,
+                        ),
+                        child: Text("Payment options",
+                          style: TextStyle(
+                            color: Colors.white,
+                        ),),
                       ),
-                      child: Text("Payment options",
-                        style: TextStyle(
-                          color: Colors.white,
-                      ),),
                     ),
                   ),
 

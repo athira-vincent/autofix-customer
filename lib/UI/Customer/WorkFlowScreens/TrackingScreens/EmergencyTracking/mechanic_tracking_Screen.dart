@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     _addPolyLine(polylineCoordinates);
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -143,6 +143,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     _getPolyline();
   }
 
+  void changeScreen(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -154,7 +160,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-
 
                 GoogleMap(
                   onMapCreated: (GoogleMapController controller){

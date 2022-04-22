@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -227,6 +228,10 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                               child: postReviewButton(size),
                               onTap: (){
                                 print("On Press Continue");
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CustomerHomeScreen()));
                               },
                             ),
                           ],

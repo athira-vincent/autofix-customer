@@ -1,11 +1,15 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MechanicWorkProgressScreen extends StatefulWidget {
 
-  MechanicWorkProgressScreen();
+  final String workStatus;
+
+  MechanicWorkProgressScreen({required this.workStatus,});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,7 +20,33 @@ class MechanicWorkProgressScreen extends StatefulWidget {
 class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> {
 
 
-  String workStatus = "3";      // 1 - arrived - screen 075,  2 - started working - screen 078,   3 - completed - screen 079
+  String workStatus = "";      // 1 - arrived - screen 075,  2 - started working - screen 078,   3 - completed - screen 079
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    workStatus = widget.workStatus.toString();
+  }
+
+  void changeScreen(){
+    if(workStatus == "1"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ExtraServiceDiagonsisScreen()));
+    }else if(workStatus == "2"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",)));
+    }else if(workStatus == "3"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MechanicWaitingPaymentScreen()));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

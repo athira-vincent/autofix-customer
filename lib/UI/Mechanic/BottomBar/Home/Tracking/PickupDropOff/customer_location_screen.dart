@@ -462,7 +462,6 @@ class _PickUpCustomerLocationScreenState extends State<PickUpCustomerLocationScr
                                         ],
                                       ),
                                     ),
-
                                   ],
                                 ),
                               ],
