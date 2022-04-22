@@ -150,6 +150,7 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
 
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         home: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.white,
@@ -447,7 +448,6 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
                         ),
                       ),
                     ),
-
                   ]
               ),
             ),
