@@ -9,8 +9,9 @@ import '../../Widgets/screen_size.dart';
 class AddMoreServicesListScreen extends StatefulWidget {
 
   final bool isAddService;
+  bool isMechanicApp;
 
-  AddMoreServicesListScreen({ required this.isAddService});
+  AddMoreServicesListScreen({ required this.isAddService,required this.isMechanicApp});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,8 +22,15 @@ class AddMoreServicesListScreen extends StatefulWidget {
 class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
   List<String> serviceList = [
-    "A","Spareparts delivery01","c","Spareparts delivery","d","e","Spareparts delivery05","g","h","Spareparts delivery02","j","K","l"
+    "A",
+    "Spareparts delivery01",
+    "c","Spareparts delivery","d",
+    "e","Spareparts delivery05","g",
+    "h","Spareparts delivery02","j",
+    "Fuel problem","K",
+    "l","relay of urgent mechanism"
   ];
+
   List<bool>? _serviceIsChecked;
   List<String>? selectedServiceList = [];
   @override
