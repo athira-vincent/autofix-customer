@@ -1,8 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
+import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
@@ -17,12 +19,25 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
 
 class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScreen> {
 
+  TextEditingController _serviceTypeController = TextEditingController();
+  FocusNode _serviceTypeFocusNode = FocusNode();
+
+  TextEditingController _serviceDateController = TextEditingController();
+  FocusNode _serviceDateFocusNode = FocusNode();
+
   List<String> selectedServiceList = [];
+  String selectedServiceType = "";
 
   List<String> serviceTypeList = [
     "Mobile Mechanic",
     "Pick up & Drop off"
   ];
+  DateTime selectedDate = DateTime.now();
+
+  double per = .10;
+  double _setValue(double value) {
+    return value * per + value;
+  }
 
   String additionalServiceNames = "";
 
@@ -55,7 +70,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             appBarUiWidget(size),
                             serviceCartWidget(size),
                             totalEstimateWidget(size),
-
+                            dateTextSelection(size),
+                            serviceTypeTextSelection(size),
+                            findMechanicButtonWidget(size)
                           ],
                       ),
                     ],
@@ -191,13 +208,22 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       ),
       child: Container(
         padding: EdgeInsets.only(
-            bottom: size.height * 2.5 / 100
+            bottom: size.height * 1.5 / 100
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              child: Text("Total service estimate"),
+              child: Text("Total service estimate",
+                style: TextStyle(
+                    fontSize: 15,
+                    fontFamily: "SharpSans_Bold",
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: .4,
+                    wordSpacing: .5
+                ),
+              ),
             ),
             Row(
               //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -348,9 +374,24 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   Widget serviceListItemWidget(Size size, int index){
     return Container(
-      padding: EdgeInsets.all(2.5),
+      padding: EdgeInsets.only(
+        top: size.height * 4 / 100,
+        bottom: size.height * 3 / 100,
+        left: size.width * 2 / 100,
+        right: size.width * 2 / 100
+      ),
       margin:  EdgeInsets.only(top: 1,bottom: 1),
-      color: CustColors.azure,
+      decoration: BoxDecoration(
+        //color: CustColors.white_02,
+        borderRadius: BorderRadius.all(
+          Radius.circular(2),
+        ),
+        border: Border.all(
+          color: CustColors.pinkish_grey04,
+          width: 0.1,
+        ),
+      ),
+      //color: CustColors.azure,
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -446,11 +487,192 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               ),
             ],
           ),
-          Divider(
+          /*Divider(
             color: CustColors.pinkish_grey04,
             height: 15,
-          )
+          )*/
         ],
+      ),
+    );
+  }
+
+  Widget dateTextSelection(Size size) {
+    return  InkWell(
+      onTap: () async {
+        //_showDialogForWorkSelection(serviceTypeList);
+        _selectDate(context);
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          left: size.width * 6 /100,
+          right: size.width * 6 /100,
+          // bottom: size.height * 1 /100,
+          top: size.height * 2 / 100,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Select your service date",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _serviceDateFocusNode,
+              keyboardType: TextInputType.text,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch : 'Service Date').emptyChecking,
+              controller: _serviceDateController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
+                hintText: "Vehicle ready for service on",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget serviceTypeTextSelection(Size size) {
+    return  InkWell(
+      onTap: (){
+        _showDialogForWorkSelection(serviceTypeList);
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          left: size.width * 6 /100,
+          right: size.width * 6 /100,
+          // bottom: size.height * 1 /100,
+          top: size.height * 2 / 100,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Select your service type",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _serviceTypeFocusNode,
+              keyboardType: TextInputType.name,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch : 'Service Type').emptyChecking,
+              controller: _serviceTypeController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
+                hintText:
+                "Take my vehicle to the mechanic ",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget findMechanicButtonWidget(Size size){
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        margin: EdgeInsets.only(
+            right: size.width * 6 / 100,
+            top: size.height * 2.5 / 100
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
+            ),
+            color: CustColors.light_navy
+        ),
+        padding: EdgeInsets.only(
+          left: size.width * 4 / 100,
+          right: size.width * 4 / 100,
+          top: size.height * 1 / 100,
+          bottom: size.height * 1 / 100,
+        ),
+        child: Text(
+          "Find available mechanics",
+          style: TextStyle(
+            fontSize: 14.3,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Samsung_SharpSans_Medium",
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }
@@ -489,5 +711,66 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     });
   }
+
+  _showDialogForWorkSelection(List<String> _serviceTypeList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: _serviceTypeList.length,
+                itemBuilder: (context, index) {
+                  return  ListTile(
+                    title: Text("${_serviceTypeList[index]}",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+
+                      setState(() {
+                        selectedServiceType = _serviceTypeList[index];
+                        _serviceTypeController.text = _serviceTypeList[index];
+                        /*if (_formKey.currentState!.validate()) {
+                        } else {
+
+                        }*/
+                      });
+
+                    },
+                  );
+                },
+              ),
+            ),);
+        });
+  }
+
+  _selectDate(BuildContext context) async {
+    final DateTime? selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2025),
+    );
+    if (selected != null && selected != selectedDate)
+      setState(() {
+        //selectedDate = selected;
+        String selectedDateFormated = selected.day.toString() + "/"
+            + selected.month.toString() + "/" + selected.year.toString();
+        print("selectedDateFormated : " + selectedDateFormated);
+        _serviceDateController.text = selectedDateFormated.toString();
+      });
+  }
+
 
 }

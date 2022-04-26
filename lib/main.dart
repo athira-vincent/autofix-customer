@@ -6,6 +6,8 @@ import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/NewScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/NewScreens/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
@@ -72,7 +74,8 @@ class _MyAppState extends State<MyApp> {
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
       //home: SplashScreen(),
-      home: ExtraServiceDiagonsisScreen(isEmergency: false),
+      //home: CustomerHomeScreen(),
+      home: MechanicHomeScreen(),
     );
   }
 }

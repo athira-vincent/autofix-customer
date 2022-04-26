@@ -1,7 +1,9 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/my_services_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -61,6 +63,72 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   child: Text(
                     'Home',
                     style: _index == 0
+                        ? Styles.homeActiveTextStyle
+                        : Styles.homeInactiveTextStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          label: ''
+      ),
+      BottomNavigationBarItem(
+          backgroundColor: Colors.white,
+          icon: Container(
+            child: Column(
+              children: [
+                Container(
+                    width: _setValue(25),
+                    height: _setValue(25),
+                    child: _index == 1
+                        ? Image.asset('assets/image/ic_home_price_fault_active.png',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
+                        : SvgPicture.asset(
+                      'assets/image/ic_home_inactive.svg',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                  child: Text(
+                    'Add price',
+                    style: _index == 1
+                        ? Styles.homeActiveTextStyle
+                        : Styles.homeInactiveTextStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          label: ''
+      ),
+      BottomNavigationBarItem(
+          backgroundColor: Colors.white,
+          icon: Container(
+            child: Column(
+              children: [
+                Container(
+                    width: _setValue(25),
+                    height: _setValue(25),
+                    child: _index == 2
+                        ? SvgPicture.asset('assets/image/ic_home_service_active.svg',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
+                        : Image.asset(
+                      'assets/image/ic_home_service_inactive.png',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                  child: Text(
+                    'My services',
+                    style: _index == 2
                         ? Styles.homeActiveTextStyle
                         : Styles.homeInactiveTextStyle,
                   ),
@@ -205,13 +273,14 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
             width: double.infinity,
             child: _index == 0
                 ? MechanicHomeUIScreen()
+                : _index == 1 ? MechanicAddPriceScreen()
+                : _index == 2 ? MechanicMyServiceScreen()
                 : MechanicMyProfileScreen(),
           ),
         ],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
