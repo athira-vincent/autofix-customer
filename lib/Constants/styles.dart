@@ -703,6 +703,23 @@ class Styles {
     fontSize: 14.3,
     //height: 1.5
   );
+  static const appBarTextWhite01 = TextStyle(
+      fontSize: 16,
+      color: Colors.white,
+      fontWeight: FontWeight.w700,
+      fontFamily:'Samsung_SharpSans_Medium',
+      letterSpacing: .4
+  );
+
+  static const warningTextStyle01 = TextStyle(
+    fontSize: 12,
+    fontFamily: "Samsung_SharpSans_Regular",
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+    letterSpacing: .7,
+    //wordSpacing: .7
+  );
+
   static BoxDecoration boxDecorationStyle = BoxDecoration(
       borderRadius: BorderRadius.all(
         Radius.circular(8),

@@ -152,7 +152,7 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
           Expanded(
             child: Text(
               "Congratulations! Service booking successful. We will remind you about this service on the selected date, and we will send you the mechanic location soon.",
-              style: warningTextStyle01,
+              style: Styles.warningTextStyle01,
             ),
           )
         ],
@@ -192,14 +192,5 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
       ),
     );
   }
-
-  TextStyle warningTextStyle01 = TextStyle(
-    fontSize: 12,
-    fontFamily: "Samsung_SharpSans_Regular",
-    fontWeight: FontWeight.w600,
-    color: Colors.black,
-    letterSpacing: .7,
-    //wordSpacing: .7
-  );
 
 }

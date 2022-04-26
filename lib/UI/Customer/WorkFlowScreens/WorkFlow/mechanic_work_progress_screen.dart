@@ -20,7 +20,10 @@ class MechanicWorkProgressScreen extends StatefulWidget {
 class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> {
 
 
-  String workStatus = "";      // 1 - arrived - screen 075,  2 - started working - screen 078,   3 - completed - screen 079
+  String workStatus = "";     // 1 - arrived - screen 075,
+                              // 2 - started working - screen 078,
+                              // 3 - completed - screen 079,
+                              // 4 - ready to pickup vehicle - screen 094
 
   @override
   void initState() {
@@ -69,15 +72,15 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
                       startedWorkScreenBottomCurve(size),
 
-                      workStatus == "1"
-                          ?
-                      startedWorkScreenWarningText(size)
-                          :
                       workStatus == "2"
                           ?
                       startedWorkScreenTimer(size)
                           :
-                      startedWorkScreenSuccess(size),
+                      workStatus == "3"
+                          ?
+                      startedWorkScreenSuccess(size)
+                          :
+                      startedWorkScreenWarningText(size) ,
                     ],
                 ),
               ),
@@ -102,7 +105,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             workStatus == "2" ?
               "Mechanic start repair"
                 :
-        "Job completed",
+            workStatus == "3"?
+            "Job completed"
+                :
+            "Ready to pick up your vehicle ",
         style: TextStyle(
         fontSize: 16,
         fontFamily: "Samsung_SharpSans_Medium",
@@ -148,7 +154,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                     workStatus == "2" ?
                       "Hi.. John Eric congratulations! Your mechanic started repair your vehicle. \nWait for the count down stop."
                     :
-                "Hi.. John Eric congratulations!  Your mechanic completed hisWork wait for the payment process",
+                        workStatus == "3" ?
+                          "Hi.. John Eric congratulations!  Your mechanic completed his Work wait for the payment process"
+                    :
+                      "Hi.. John Eric congratulations!  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
 
                 style: TextStyle(
                   fontSize: 13,
@@ -241,13 +250,19 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("George Dola", style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: "Samsung_SharpSans_Medium",
-                fontWeight: FontWeight.bold,
-              ),),
-              Text("Started repair", style: TextStyle(
+              Text(
+                "George Dola",
+                  style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontFamily: "Samsung_SharpSans_Medium",
+                  fontWeight: FontWeight.bold,
+                ),),
+              Text(
+               //workStatus == "1" ? "Started diagnostic test!" :
+                workStatus == "2" ? "Started repair" :
+                workStatus == "3" ? "Completed his work" : "Started diagnostic test!",
+                style: TextStyle(
                 fontSize: 8,
                 color: CustColors.light_navy,
                 fontFamily: "Samsung_SharpSans_Medium",
@@ -292,7 +307,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
-          Text("Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
+          Text(
+            "Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
             style: TextStyle(
               fontSize: 12,
               fontFamily: "Samsung_SharpSans_Regular",
@@ -304,6 +320,49 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       ),
     );
   }
+
+  /*Widget startedWorkScreenWarningText(Size size){
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+          border: Border.all(
+              color: CustColors.greyish,
+              width: 0.3
+          )
+      ),
+      margin: EdgeInsets.only(
+          left: size.width * 6 / 100,
+          right: size.width * 6 / 100,
+          top: size.height * 4.8 / 100
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+                top: size.width * 3 / 100,
+                bottom: size.width * 3 / 100
+            ),
+            margin: EdgeInsets.only(
+                left: size.width * 5 / 100,
+                right: size.width * 2 / 100
+            ),
+            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+              height: size.height * 3 / 100,width: size.width * 3 / 100,),
+          ),
+          Text("Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: "Samsung_SharpSans_Regular",
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
+    );
+  }*/
 
   Widget startedWorkScreenTimer(Size size){
     return Container(

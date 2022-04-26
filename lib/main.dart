@@ -3,8 +3,11 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/NewScreens/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/NewScreens/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
       //home: SplashScreen(),
-      home: ScheduleRegularServiceScreen(),
+      home: PickedUpVehicleScreen(),
     );
   }
 }

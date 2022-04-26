@@ -87,7 +87,6 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                             child: nextButton(size)
                         )
                       : Container(),
-
                 ],
               ),
             ),
