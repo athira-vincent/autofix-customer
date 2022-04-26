@@ -13,8 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ExtraServiceDiagonsisScreen extends StatefulWidget {
 
+  final bool isEmergency;
 
-  ExtraServiceDiagonsisScreen();
+  ExtraServiceDiagonsisScreen(
+      {required this.isEmergency,}
+      );
 
   @override
   State<StatefulWidget> createState() {
@@ -111,7 +114,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       ],
     );
   }
-
 
   Widget infoText() {
     return  Padding(
@@ -233,7 +235,10 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                               height: 25,
                               width: 25,
                               child: SvgPicture.asset(
-                                'assets/image/MechanicType/mechanic_work_clock.svg',
+                                widget.isEmergency ?
+                                'assets/image/MechanicType/mechanic_work_clock.svg'
+                                :
+                                'assets/image/ic_calendar_blue.svg',
                                 fit: BoxFit.contain,
                               )
                           ),
@@ -241,7 +246,10 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                             width: 10,
                           ),
                           Text(
-                            "20:02 Min",
+                            widget.isEmergency ?
+                            "20:02 Min"
+                            :
+                            "12 Jan 2022",
                             style: Styles.textSuccessfulTitleStyle03,
                           ),
                         ],
@@ -305,7 +313,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       ),
     );
   }
-
 
   Widget selectedRepairDetailsUi(Size size) {
     return Padding(
@@ -418,8 +425,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       ),
     );
   }
-
-
 
   Widget RequestButton(Size size, BuildContext context) {
     return InkWell(

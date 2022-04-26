@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
       //home: SplashScreen(),
-      home: PickedUpVehicleScreen(),
+      home: ExtraServiceDiagonsisScreen(isEmergency: false),
     );
   }
 }

@@ -37,7 +37,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => ExtraServiceDiagonsisScreen()));
+              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)));
     }else if(workStatus == "2"){
       Navigator.pushReplacement(
           context,
