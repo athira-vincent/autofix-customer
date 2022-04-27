@@ -1,4 +1,6 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -24,6 +26,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
   String Address = 'search';
+
+  final List<String> imageList = [
+    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
+    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
+    "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
+    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
+  ];
 
   void initState() {
     // TODO: implement initState
@@ -61,7 +70,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       String? token = value;
       print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
     });
-
 
     /* final postUrl = 'https://fcm.googleapis.com/fcm/send';
     // print('userToken>>>${appData.fcmToken}'); //alp dec 28
@@ -182,7 +190,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-
   }
 
   @override
@@ -192,19 +199,275 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            color: Colors.yellow,
-            child: Center(
-              child: Text(
-                  "Mechanic Home UI Screen"
-              ),
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                mechanicLocation(context),
+                upcomingServices(),
+                brandSpecialization(size),
+                dashBoardItemsWidget(size),
+                emergencyServiceReminder(size)
+              ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget mechanicLocation(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+          SizedBox(
+            width: 50,
+            child: Column(
+              children: [
+                Text('Elenjikkal house Empyreal Garden',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.textLabelTitle_10,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget upcomingServices() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,20,0,0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Upcoming Services',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: Styles.sparepartsForYourModelsStyle,
+            ),
+          ),
+          Container(
+            height: 200,
+            margin: EdgeInsets.all(0),
+            child: ListView.builder(
+              itemCount: imageList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, i, ){
+                //for onTap to redirect to another screen
+                return Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: InkWell(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 180,
+                          width: 250,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.white,)
+                          ),
+                          //ClipRRect for image border radius
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.network(
+                              imageList[i],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: (){
+
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget brandSpecialization(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,20,0,0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'My brand specialisation ',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: Styles.sparepartsForYourModelsStyle,
+            ),
+          ),
+          Container(
+            height: 200,
+            margin: EdgeInsets.all(0),
+            child: ListView.builder(
+              itemCount: imageList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, i, ){
+                //for onTap to redirect to another screen
+                return Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: InkWell(
+                    child: brandSpecializationListItem(size,i),
+                    onTap: (){
+
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget brandSpecializationListItem(Size size,int i) {
+    return Column(
+      children: [
+        Container(
+          height: size.height * 12 / 100,
+          width: size.width * 24 / 100,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(7),
+              border: Border.all(
+                color: Colors.white,
+              ),
+            color: CustColors.pale_grey
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 6 / 100,
+            right: size.width * 6 / 100,
+            top: size.height * 3.5 / 100,
+            bottom: size.height * 3.5 / 100
+          ),
+          //ClipRRect for image border radius
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Image.network(
+              imageList[i],
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget dashBoardItemsWidget(Size size,) {
+    return Container(
+      color: CustColors.pale_grey,
+      //color: CustColors.green,
+      padding: EdgeInsets.only(
+          left: size.width * 4.5 / 100,
+          right: size.width * 4.5 / 100,
+          top: size.height * 4 / 100,
+          bottom: size.height * 4 / 100
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: size.height * 18 / 100,
+            width: size.width * 40 / 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.white,
+                ),
+                color: Colors.white,
+            ),
+            padding: EdgeInsets.only(
+                left: size.width * 10 / 100,
+                right: size.width * 10 / 100,
+                top: size.height * 5 / 100,
+                bottom: size.height * 5 / 100
+            ),
+            //ClipRRect for image border radius
+            child: ClipRRect(
+              //borderRadius: BorderRadius.circular(5),
+              child: Image.network(
+                imageList[0],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            height: size.height * 18 / 100,
+            width: size.width * 40 / 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.white,
+                ),
+                color: Colors.white,
+            ),
+            padding: EdgeInsets.only(
+                left: size.width * 10 / 100,
+                right: size.width * 10 / 100,
+                top: size.height * 5 / 100,
+                bottom: size.height * 5 / 100
+            ),
+            //ClipRRect for image border radius
+            child: ClipRRect(
+              //borderRadius: BorderRadius.circular(5),
+              child: Image.network(
+                imageList[1],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget emergencyServiceReminder(Size size){
+    return Container(
+      height: size.height * 10 / 100,
+      width: size.width,
+      color: Colors.yellow,
+      margin: EdgeInsets.only(
+        left: size.width * 5 / 100
+      ),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Text("You have one Emergency service "),
+              Text("Service from Eric John.   [ HONDA CITY ]")
+            ],
+          ),
+          Stack(
+            children: [
+
+            ],
+          )
+        ],
       ),
     );
   }

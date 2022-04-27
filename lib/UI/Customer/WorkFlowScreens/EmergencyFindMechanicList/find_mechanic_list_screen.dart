@@ -405,7 +405,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                               builder: (context) =>  MechanicProfileViewScreen(mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
                                                                                 authToken: '$authToken',
                                                                                 mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
-                                                                                isEmergency: true,
+                                                                                isEmergency: true, serviceModel: "",
                                                                               )));
                                                                     },
                                                                     child: Padding(

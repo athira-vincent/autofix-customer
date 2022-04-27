@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -25,7 +26,6 @@ class _PickedUpVehicleScreenState extends State<PickedUpVehicleScreen> {
               child: Container(
                 width: size.width,
                 height: size.height,
-                color: Colors.green,
                 //color: Colors.green,
                 child: Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,14 @@ class _PickedUpVehicleScreenState extends State<PickedUpVehicleScreen> {
                     warningTextWidget(size),
                     titleImageWidget(size),
                     estimatedDateWidget(size),
-                    backToHomeButton(size)
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerHomeScreen()));
+                      },
+                        child: backToHomeButton(size))
                   ],
                 ),
               ),
@@ -185,7 +192,7 @@ class _PickedUpVehicleScreenState extends State<PickedUpVehicleScreen> {
           bottom: size.height * 1 / 100,
         ),
         child: Text(
-          "Go to home",
+          "Back to home",
           style: TextStyle(
             fontSize: 14.3,
             fontWeight: FontWeight.w600,

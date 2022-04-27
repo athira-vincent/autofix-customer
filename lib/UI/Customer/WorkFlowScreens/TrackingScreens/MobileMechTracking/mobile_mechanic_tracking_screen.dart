@@ -14,18 +14,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
-class PickUpDropOffTrackingScreen extends StatefulWidget {
+class MobileMechTrackingScreen extends StatefulWidget {
 
 
-  PickUpDropOffTrackingScreen();
+  MobileMechTrackingScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _PickUpDropOffTrackingScreenState();
+    return _MobileMechTrackingScreenState();
   }
 }
 
-class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScreen> {
+class _MobileMechTrackingScreenState extends State<MobileMechTrackingScreen> {
 
   String authToken = "";
 
@@ -85,6 +85,18 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
       log(error.toString());
     });*/
 
+    Timer(const Duration(seconds: 5), () {
+      changeScreen();
+    });
+
+  }
+
+  void changeScreen(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MechanicWorkProgressScreen(
+              workStatus: "5",)));
   }
 
   Future<void> _getCurrentCustomerLocation() async {
@@ -389,15 +401,7 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
                                     width: size.width * 32 / 100,fit: BoxFit.fitHeight,
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MechanicWorkProgressScreen(
-                                              workStatus: "4",)));
-                                  },
-                                    child: backToHomeButton(size)),
+
                               ]
                           ),
                         ),
@@ -465,38 +469,6 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
     );
   }
 
-  Widget backToHomeButton(Size size){
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 6.2 / 100,
-            top: size.height * .7 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
-            ),
-            color: CustColors.light_navy
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 5.8 / 100,
-          right: size.width * 5.8 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-          "Back to home",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
 
 
 }

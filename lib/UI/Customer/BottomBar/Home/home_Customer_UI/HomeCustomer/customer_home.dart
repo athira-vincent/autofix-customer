@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/RegularFindMechanicList/mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -633,14 +634,17 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>  MechanicListScreen(
+                                            builder: (context) =>  ScheduleRegularServiceScreen(
                                               bookingId: '01',
                                               serviceIds: serviceIds,
                                               serviceType: 'regular',
                                               authToken: authToken,)));
+
+
                                   },
                                   child: Container(
                                     child: Column(

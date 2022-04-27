@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -429,10 +430,18 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   Widget RequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+        if(widget.isEmergency){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+        }else{
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PickedUpVehicleScreen()));
+        }
+
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),

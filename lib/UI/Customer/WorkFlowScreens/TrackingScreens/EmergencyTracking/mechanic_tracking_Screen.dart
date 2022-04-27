@@ -141,6 +141,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
 
     _getPolyline();
+    Timer(const Duration(seconds: 5), () {
+      changeScreen();
+    });
   }
 
   void changeScreen(){

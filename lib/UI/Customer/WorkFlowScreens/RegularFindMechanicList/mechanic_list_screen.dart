@@ -16,9 +16,11 @@ class MechanicListScreen extends StatefulWidget {
   final String authToken;
   final List<String> serviceIds;
   final String serviceType;
+  final String serviceModel;
 
-
-  MechanicListScreen({required this.bookingId,required this.authToken,required this.serviceIds,required this.serviceType});
+  MechanicListScreen({required this.bookingId,
+    required this.authToken,required this.serviceIds,
+    required this.serviceType,required this.serviceModel});
 
 
   @override
@@ -33,14 +35,14 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   List<MechaniclistForService>? mechanicListForServices = [
-     MechaniclistForService(id: "1",
+    MechaniclistForService(id: "1",
       userCode: "012",firstName: "athira",
       lastName: "a",phoneNo: "123454676",emailId: "athira@gmail.com",
       state: "kerala",accountType: 1,userType: 1,isProfileCompleted: 1,profilePic: "",status: 1,
       mechanicService: [new MechanicService(id: "1",status: 1, fee: "2000", serviceId: 1, userId: 1)],
       mechanicVehicle: [new MechanicVehicle(status: 1, id: "1", makeId: 1)]
     ),
-     MechaniclistForService(id: "12",
+    MechaniclistForService(id: "12",
         userCode: "014",firstName: "Ammu",
         lastName: "a",phoneNo: "123454676",emailId: "ammu@gmail.com",
         state: "kerala",accountType: 1,userType: 1,isProfileCompleted: 1,profilePic: "",status: 1,
@@ -273,11 +275,15 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>  MechanicProfileViewScreen(
-                                            mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
+                                            //mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
+                                            //mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
                                             authToken: '$authToken',
-                                            mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
                                             isEmergency: false,
+                                            mechaniclistForService: mechanicListForServices![0],
+                                            mechanicId: "1",serviceModel: widget.serviceModel,
+
                                           )));
+
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.fromLTRB(10,6,10,0),

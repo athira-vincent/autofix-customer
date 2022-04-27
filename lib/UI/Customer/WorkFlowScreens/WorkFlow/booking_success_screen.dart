@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -33,7 +34,14 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
                       infoTextWidget(size),
                       titleImageWidget(size),
                       warningTextWidget(size),
-                      backToHomeButton(size)
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CustomerHomeScreen()));
+                        },
+                          child: backToHomeButton(size))
                     ]
                 )
               )

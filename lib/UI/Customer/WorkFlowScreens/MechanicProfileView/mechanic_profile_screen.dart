@@ -3,6 +3,9 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,11 +21,12 @@ class MechanicProfileViewScreen extends StatefulWidget {
   final String authToken;
   final bool isEmergency;
   final MechaniclistForService mechaniclistForService;
+  final String serviceModel;
 
 
   MechanicProfileViewScreen({required this.mechanicId,required this.authToken,
     required this.mechaniclistForService,
-    required this.isEmergency});
+    required this.isEmergency,required this.serviceModel});
 
   @override
   State<StatefulWidget> createState() {
@@ -620,6 +624,26 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     return InkWell(
       onTap: (){
         print("on press acceptAndContinueButton");
+        if(widget.serviceModel == "Pick up & Drop off"){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PickUpDropOffTrackingScreen()));
+        }
+        if(widget.serviceModel == "Mobile Mechanic"){
+          _showMechanicAcceptanceDialog(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MobileMechTrackingScreen()));
+        }
+        if(widget.serviceModel == "Take Vehicle to Mechanic"){
+          _showMechanicAcceptanceDialog(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BookingSuccessScreen()));
+        }
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),

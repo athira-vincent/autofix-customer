@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
-  ScheduleRegularServiceScreen();
+  final String bookingId;
+  final String authToken;
+  final List<String> serviceIds;
+  final String serviceType;
+
+  ScheduleRegularServiceScreen({required this.bookingId,
+    required this.authToken,required this.serviceIds,required this.serviceType});
 
   @override
   State<StatefulWidget> createState() {
@@ -26,11 +33,12 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   FocusNode _serviceDateFocusNode = FocusNode();
 
   List<String> selectedServiceList = [];
-  String selectedServiceType = "";
+  String selectedServiceModel = "";
 
-  List<String> serviceTypeList = [
+  List<String> serviceModelList = [
     "Mobile Mechanic",
-    "Pick up & Drop off"
+    "Pick up & Drop off",
+    "Take Vehicle to Mechanic"
   ];
   DateTime selectedDate = DateTime.now();
 
@@ -72,7 +80,20 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             totalEstimateWidget(size),
                             dateTextSelection(size),
                             serviceTypeTextSelection(size),
-                            findMechanicButtonWidget(size)
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>  MechanicListScreen(
+                                          bookingId: widget.bookingId,
+                                          serviceIds: widget.serviceIds,
+                                          serviceType: widget.serviceType,
+                                          authToken: widget.authToken,
+                                          serviceModel : selectedServiceModel
+                                        )));
+                              },
+                                child: findMechanicButtonWidget(size))
                           ],
                       ),
                     ],
@@ -226,7 +247,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               ),
             ),
             Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   height: size.height * 8 / 100,
@@ -455,6 +476,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               ),
             ],
           ),
+          SizedBox(
+            width: size.width * 1 / 100,
+          ),
           Column(
             //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -573,7 +597,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget serviceTypeTextSelection(Size size) {
     return  InkWell(
       onTap: (){
-        _showDialogForWorkSelection(serviceTypeList);
+        _showDialogForWorkSelection(serviceModelList);
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -739,7 +763,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       Navigator.pop(context);
 
                       setState(() {
-                        selectedServiceType = _serviceTypeList[index];
+                        selectedServiceModel = _serviceTypeList[index];
                         _serviceTypeController.text = _serviceTypeList[index];
                         /*if (_formKey.currentState!.validate()) {
                         } else {

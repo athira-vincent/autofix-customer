@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
@@ -24,12 +26,16 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                               // 2 - started working - screen 078,
                               // 3 - completed - screen 079,
                               // 4 - ready to pickup vehicle - screen 094
+                              // 5 - mechanic reached your location - screen 102
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     workStatus = widget.workStatus.toString();
+    Timer(const Duration(seconds: 5), () {
+      changeScreen();
+    });
   }
 
   void changeScreen(){
@@ -48,6 +54,18 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           context,
           MaterialPageRoute(
               builder: (context) => MechanicWaitingPaymentScreen()));
+    }
+    else if(workStatus == "4"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,)));
+    }
+    else if(workStatus == "5"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: false,)));
     }
   }
 
