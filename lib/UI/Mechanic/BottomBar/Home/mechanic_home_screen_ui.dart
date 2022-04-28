@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -206,7 +207,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             child: Column(
               children: [
                 mechanicLocation(context),
-                upcomingServices(),
+                upcomingServices(size),
                 brandSpecialization(size),
                 dashBoardItemsWidget(size),
                 emergencyServiceReminder(size)
@@ -220,7 +221,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   Widget mechanicLocation(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(
+          right: 8.0, left: 8.0, top: 2,bottom: 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -243,15 +245,15 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     );
   }
 
-  Widget upcomingServices() {
+  Widget upcomingServices(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,20,0,0),
+      padding: const EdgeInsets.fromLTRB(10,2,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
             child: Text('Upcoming Services',
               maxLines: 2,
               textAlign: TextAlign.center,
@@ -260,7 +262,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             ),
           ),
           Container(
-            height: 200,
+            height: 185,
             margin: EdgeInsets.all(0),
             child: ListView.builder(
               itemCount: imageList.length,
@@ -268,7 +270,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
               itemBuilder: (context, i, ){
                 //for onTap to redirect to another screen
                 return Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.only(
+                    left: 5,),
                   child: InkWell(
                     child: Column(
                       children: [
@@ -282,10 +285,55 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           //ClipRRect for image border radius
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
-                            child: Image.network(
+                            child: Stack(
+                              children: [
+                                Image.asset("assets/image/img_mech_home_service_bg.png"),
+                                Column(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: size.width * 2 / 100,
+                                        right: size.width * 2 / 100,
+                                        top: size.height * 4 / 100,
+                                        //bottom: size.height * 2 / 100,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("02-12-2021",style: TextStyle(color: Colors.white,
+                                              fontSize: 15),),
+
+                                          Text("09:30 AM",style: TextStyle(color: Colors.white,
+                                              fontSize: 15),)
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: size.width * 2 / 100,
+                                        right: size.width * 2 / 100,
+                                        top: size.height * 4 / 100,
+                                        //bottom: size.height * 2.5 / 100,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Service from Eric John. ",style: TextStyle(color: Colors.white,
+                                              fontSize: 15),),
+
+                                          Text(" [ HONDA CITY ]",style: TextStyle(color: Colors.white,
+                                              fontSize: 15),)
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            /*child: Image.network(
                               imageList[i],
                               fit: BoxFit.cover,
-                            ),
+                            ),*/
                           ),
                         ),
                       ],
@@ -305,13 +353,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   Widget brandSpecialization(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,20,0,0),
+      padding: const EdgeInsets.fromLTRB(10,2,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
             child: Text(
               'My brand specialisation ',
               maxLines: 2,
@@ -321,7 +369,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             ),
           ),
           Container(
-            height: 200,
+            height: size.height * 15 / 100,
             margin: EdgeInsets.all(0),
             child: ListView.builder(
               itemCount: imageList.length,
@@ -410,9 +458,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             //ClipRRect for image border radius
             child: ClipRRect(
               //borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                imageList[0],
-                fit: BoxFit.cover,
+              child: SvgPicture.asset(
+               "assets/image/ic_home_wallet.svg",
+                //fit: BoxFit.cover,
               ),
             ),
           ),
@@ -435,9 +483,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             //ClipRRect for image border radius
             child: ClipRRect(
               //borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                imageList[1],
-                fit: BoxFit.cover,
+              child: SvgPicture.asset(
+                "assets/image/ic_home_job_review.svg",
+                //fit: BoxFit.cover,
               ),
             ),
           ),
@@ -450,22 +498,29 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     return Container(
       height: size.height * 10 / 100,
       width: size.width,
-      color: Colors.yellow,
+      color: Colors.white,
       margin: EdgeInsets.only(
-        left: size.width * 5 / 100
+       // left: size.width * 5 / 100,
+        bottom: size.height * .5 / 100
+      ),
+      padding: EdgeInsets.only(
+        left: size.width * 5 / 100,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("You have one Emergency service "),
-              Text("Service from Eric John.   [ HONDA CITY ]")
+              Text("You have one Emergency service ",
+                style: TextStyle(color: CustColors.light_navy),),
+              Text("Service from Eric John.   [ HONDA CITY ]", )
             ],
           ),
-          Stack(
-            children: [
-
-            ],
+          SvgPicture.asset(
+              "assets/image/img_mech_home_car_bg.svg",
+            height: size.height * 10 / 100,
           )
         ],
       ),

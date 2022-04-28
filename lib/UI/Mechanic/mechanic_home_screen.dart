@@ -86,7 +86,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       height: _setValue(26),
                     )
                         : SvgPicture.asset(
-                      'assets/image/ic_home_inactive.svg',
+                      'assets/image/ic_home_price_fault_inactive.png.svg',
                       width: _setValue(26),
                       height: _setValue(26),
                     )
@@ -221,44 +221,49 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 ),
               ),
 
-              Container(
-                margin: EdgeInsets.only(
-                     top: 25 + MediaQuery.of(context).padding.top,
-                  right: size.width * 4.2/100
-                ),
-                child: Stack(
-                  children: [
-                        GestureDetector(
-                          onTap: () {},
-                            child: SvgPicture.asset(
-                              'assets/image/notification_icon.svg',
-                              width: 22,
-                              height: 22,
+              InkWell(
+                onTap: (){
+                  print("on tap notification icon");
+                },
+                child: Container(
+                  margin: EdgeInsets.only(
+                       top: 25 + MediaQuery.of(context).padding.top,
+                    right: size.width * 4.2/100
+                  ),
+                  child: Stack(
+                    children: [
+                          GestureDetector(
+                            onTap: () {},
+                              child: SvgPicture.asset(
+                                'assets/image/notification_icon.svg',
+                                width: 22,
+                                height: 22,
+                              ),
                             ),
+                      Positioned(
+                        right: 0,
+                        child: _counter > 0 ? Container(
+                          padding: EdgeInsets.all(1),
+                          decoration: new BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                    Positioned(
-                      right: 0,
-                      child: _counter > 0 ? Container(
-                        padding: EdgeInsets.all(1),
-                        decoration: new BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        constraints: BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: new Text(
-                         '$_counter',
-                          style: new TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
+                          constraints: BoxConstraints(
+                            minWidth: 12,
+                            minHeight: 12,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ) : Container(),
-                    ),
-                  ],
+                          child: new Text(
+                           '$_counter',
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ) : Container(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
