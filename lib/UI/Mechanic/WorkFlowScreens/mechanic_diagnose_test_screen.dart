@@ -1,20 +1,23 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class MechanicStartServiceScreen extends StatefulWidget {
+class MechanicDiagnoseTestScreen extends StatefulWidget {
 
-  MechanicStartServiceScreen();
+  final String serviceModel;
+
+  MechanicDiagnoseTestScreen({required this.serviceModel});
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicStartServiceScreenState();
+    return _MechanicDiagnoseTestScreenState();
   }
 }
 
-class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
+class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen> {
 
   bool isExpanded = false;
 
@@ -66,12 +69,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                       alignment: Alignment.centerRight,
                         child: Container(
                           margin: EdgeInsets.only(
-                            right: size.width * 8 / 100,
+                            right: size.width * 6 / 100,
                             top: size.height * 1.2 / 100
                           ),
                             child: Text("Add more",
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 12,
                                 fontFamily: "SharpSans_Bold",
                                 fontWeight: FontWeight.w700,
                                 color: CustColors.light_navy,
@@ -79,70 +82,16 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                             ))),
                   ),
 
-                  Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 27.5 / 100,
-                      right: size.width * 27.5 / 100,
-                      top: size.height * 6 / 100
-                    ),
-                    child: Flexible(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: size.width * 3.5 / 100,
-                              right: size.width * 3.5 / 100,
-                              top: size.height * 1 / 100,
-                              bottom: size.height * 1 / 100,
-                            ),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/image/ic_alarm.svg',
-                                width: size.width * 4 / 100,
-                                height: size.height * 4 / 100,),
-                                Spacer(),
-                                Text("25:00 ",
-                                  style: TextStyle(
-                                    fontSize: 36,
-                                    fontFamily: "SharpSans_Bold",
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    letterSpacing: .7
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                  mechanicEstimateDetailsArea(size),
 
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(13),
-                                ),
-                                border: Border.all(
-                                    color: CustColors.light_navy02,
-                                    width: 0.3
-                                )
-                            ),
-                            /*margin: EdgeInsets.only(
-                                left: size.width * 4 / 100,
-                                right: size.width * 4 / 100,
-                                top: size.height * 2.8 / 100
-                            ),*/
-                            padding: EdgeInsets.only(
-                              left: size.width * 4 / 100,
-                              right: size.width * 4 / 100,
-                              top: size.height * 1 / 100,
-                              bottom: size.height * 1 / 100,
-                            ),
-                            child: Text("Total estimated time "),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  mechanicStartServiceButton(size),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomerApprovedScreen(serviceModel: widget.serviceModel,)));
+                    },
+                      child: mechanicStartServiceButton(size)),
                 ],
               ),
             ),
@@ -331,7 +280,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       child: Container(
         margin: EdgeInsets.only(
             right: size.width * 4 / 100,
-            top: size.height * 5.2 / 100
+            //top: size.height * 5.2 / 100
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
@@ -346,7 +295,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           bottom: size.height * 1 / 100,
         ),
         child: Text(
-          "Start work",
+          "Send estimate",
           style: TextStyle(
             fontSize: 14.3,
             fontWeight: FontWeight.w600,
@@ -354,6 +303,129 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             color: Colors.white,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget mechanicEstimateDetailsArea(Size size){
+    return Container(
+      //height: size.height * 28 / 100,
+      margin: EdgeInsets.only(
+        left: size.width * 4 / 100,
+        right: size.width * 4 / 100,
+        top: size.height * 10 / 100,
+        bottom: size.height * 10 / 100,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            //width: size.width / 3,
+            padding: EdgeInsets.only(
+              left: size.width * 3.5 / 100,
+              right: size.width * 3.5 / 100,
+              top: size.height * 1 / 100,
+              bottom: size.height * 1 / 100,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset('assets/image/ic_calendar_blue.svg',
+                      width: size.width * 3 / 100,
+                      height: size.height * 3 / 100,),
+                    Text(" 12 Jan 2022 ",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: "SharpSans_Bold",
+                          fontWeight: FontWeight.bold,
+                          color: CustColors.light_navy,
+                          letterSpacing: .7
+                      ),
+                    ),
+
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                      //left: size.width * 4 / 100,
+                      //right: size.width * 4 / 100,
+                      top: size.height * 1.5 / 100
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(13),
+                      ),
+                      border: Border.all(
+                          color: CustColors.light_navy02,
+                          width: 0.3
+                      )
+                  ),
+                  padding: EdgeInsets.only(
+                    left: size.width * 3 / 100,
+                    right: size.width * 3 / 100,
+                    top: size.height * 1 / 100,
+                    bottom: size.height * 1 / 100,
+                  ),
+                  child: Text("Estimated return date"),
+                )
+              ],
+            ),
+          ),
+          Container(
+            //width: size.width / 3,
+            padding: EdgeInsets.only(
+              left: size.width * 3.5 / 100,
+              right: size.width * 3.5 / 100,
+              top: size.height * 1 / 100,
+              bottom: size.height * 1 / 100,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset('assets/image/CustomerType/extraServiceMoneyBag.svg',
+                      width: size.width * 3 / 100,
+                      height: size.height * 3 / 100,),
+                    Text(" ₦ 55 ",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: "SharpSans_Bold",
+                          fontWeight: FontWeight.bold,
+                          color: CustColors.light_navy,
+                          letterSpacing: .7
+                      ),
+                    ),
+
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    //left: size.width * 4 / 100,
+                    //right: size.width * 4 / 100,
+                      top: size.height * 1.5 / 100
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(13),
+                      ),
+                      border: Border.all(
+                          color: CustColors.light_navy02,
+                          width: 0.3
+                      )
+                  ),
+                  padding: EdgeInsets.only(
+                    left: size.width * 3 / 100,
+                    right: size.width * 3 / 100,
+                    top: size.height * 1 / 100,
+                    bottom: size.height * 1 / 100,
+                  ),
+                  child: Text(" Estimated price "),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

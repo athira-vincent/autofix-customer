@@ -2,13 +2,18 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/payment_failed_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DirectPaymentScreen extends StatefulWidget {
 
   bool isMechanicApp;
-  DirectPaymentScreen({required this.isMechanicApp});
+  bool isPaymentFailed;
+  DirectPaymentScreen({
+    required this.isMechanicApp,
+    required this.isPaymentFailed
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -56,6 +61,12 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
   void changeScreen(){
     if(widget.isMechanicApp){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MechanicHomeScreen()));
+    }
+    if(!widget.isMechanicApp && widget.isPaymentFailed){
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

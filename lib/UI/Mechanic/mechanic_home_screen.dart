@@ -229,7 +229,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  IncomingJobRequestScreen()));
+                          builder: (context) =>  IncomingJobRequestScreen(serviceModel: "2",)));
 
                 },
                 child: Container(

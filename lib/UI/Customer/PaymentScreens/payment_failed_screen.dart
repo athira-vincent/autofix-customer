@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/UI/Customer/PaymentScreens/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -116,8 +118,20 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
+            onTap: (){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PaymentScreen()));
+            },
               child: returnToPaymentOptionButton(size)),
           InkWell(
+            onTap: (){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DirectPaymentScreen(isMechanicApp: true,isPaymentFailed: true,)));
+            },
               child: directPaymentButton(size)),
         ],
       ),

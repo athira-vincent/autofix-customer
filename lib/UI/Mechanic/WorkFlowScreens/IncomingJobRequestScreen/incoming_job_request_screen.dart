@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -8,12 +11,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:slider_button/slider_button.dart';
 
 class IncomingJobRequestScreen extends StatefulWidget {
-  const IncomingJobRequestScreen({Key? key}) : super(key: key);
+  final String serviceModel;
+
+   IncomingJobRequestScreen(
+       {required this.serviceModel});
 
   @override
   State<StatefulWidget> createState() {
@@ -54,11 +59,35 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
-            seconds:
-            levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+            seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
     );
 
     _controller.forward();
+
+    Timer(const Duration(seconds: 8), () {
+      changeScreen();
+    });
+
+  }
+
+  void changeScreen(){
+    if (widget.serviceModel == "0"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
+    }else if (widget.serviceModel == "1"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
+    }else if (widget.serviceModel == "2"){
+      /*Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));*/
+    }
+
   }
 
   @override
@@ -132,7 +161,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                           children: [
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: SvgPicture.asset('assets/image/MechanicType/incomingRequestBg.svg',height: MediaQuery.of(context).size.height *0.32,),
+                              child: SvgPicture.asset('assets/image/MechanicType/incomingRequestBg.svg',
+                                height: MediaQuery.of(context).size.height *0.32,),
                             ),
                           ],
                         ),

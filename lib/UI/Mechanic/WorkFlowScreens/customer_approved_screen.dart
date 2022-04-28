@@ -1,11 +1,15 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomerApprovedScreen extends StatefulWidget {
 
-  CustomerApprovedScreen();
+  final String serviceModel;
+
+  CustomerApprovedScreen({required this.serviceModel});
 
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +18,9 @@ class CustomerApprovedScreen extends StatefulWidget {
 }
 
 class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
+
+  bool isStartedWork = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -42,7 +49,29 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
 
                   customerApprovedScreenTimer(size),
 
-                  mechanicStartServiceButton(size),
+                  InkWell(
+                    onTap: (){
+
+                      if(widget.serviceModel == "1"){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerHomeScreen()));
+                      }
+                      else if(isStartedWork){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MechanicWorkCompletedScreen()));
+                      }
+                      else{
+                        setState(() {
+                          isStartedWork = !isStartedWork;
+                        });
+                      }
+
+                    },
+                      child: mechanicStartServiceButton(size)),
                 ],
               ),
             ),
@@ -269,7 +298,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
           bottom: size.height * 1 / 100,
         ),
         child: Text(
-          "Start work",
+          isStartedWork ? "Work Finished" : "Start repair",
           style: TextStyle(
             fontSize: 14.3,
             fontWeight: FontWeight.w600,

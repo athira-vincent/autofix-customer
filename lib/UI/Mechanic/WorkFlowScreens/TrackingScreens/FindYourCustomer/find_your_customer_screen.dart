@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +25,9 @@ import '../../../../../../Constants/styles.dart';
 
 class FindYourCustomerScreen extends StatefulWidget {
 
-  FindYourCustomerScreen();
+  final String serviceModel;
+
+  FindYourCustomerScreen({required this.serviceModel});
 
   @override
   State<StatefulWidget> createState() {
@@ -314,6 +318,18 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
+                                                if(widget.serviceModel == "0"){
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => MechanicStartServiceScreen(serviceModel: widget.serviceModel,)));
+                                                }
+                                                else if(widget.serviceModel == "1"){
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
+                                                }
 
                                               },
                                               child: Container(
@@ -340,7 +356,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                       ),
                                     ],
                                   ),
-
                                 ],
                               ),
                             ],

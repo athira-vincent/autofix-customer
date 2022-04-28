@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                 jobCompletedText(size),
                 estimatedAndTimeTakenUi(size),
                 selectedRepairDetailsUi(size),
-
                 RequestButton( size,context)
               ],
             ),
@@ -366,7 +366,10 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   Widget RequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DirectPaymentScreen(isMechanicApp: true,isPaymentFailed: true,)));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),

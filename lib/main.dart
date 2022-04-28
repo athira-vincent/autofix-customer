@@ -11,7 +11,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_prog
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
-import 'package:auto_fix/UI/NewScreens/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
