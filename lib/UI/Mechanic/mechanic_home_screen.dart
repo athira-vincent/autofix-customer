@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/my_services_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -224,6 +225,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
               InkWell(
                 onTap: (){
                   print("on tap notification icon");
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  IncomingJobRequestScreen()));
+
                 },
                 child: Container(
                   margin: EdgeInsets.only(
@@ -232,14 +239,11 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   ),
                   child: Stack(
                     children: [
-                          GestureDetector(
-                            onTap: () {},
-                              child: SvgPicture.asset(
-                                'assets/image/notification_icon.svg',
-                                width: 22,
-                                height: 22,
-                              ),
-                            ),
+                          SvgPicture.asset(
+                            'assets/image/notification_icon.svg',
+                            width: 22,
+                            height: 22,
+                          ),
                       Positioned(
                         right: 0,
                         child: _counter > 0 ? Container(
