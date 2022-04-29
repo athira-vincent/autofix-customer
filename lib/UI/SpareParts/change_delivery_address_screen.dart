@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/SpareParts/add_delivery_address_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -63,7 +64,14 @@ class _ChangeDeliveryAddressScreenState extends State<ChangeDeliveryAddressScree
                                 color: Colors.black
                               ),
                             ),
-                            addNewAddressButton(size),
+                            InkWell(
+                              onTap: (){
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddDeliveryAddressScreen()));
+                              },
+                                child: addNewAddressButton(size)),
 //---------------- replaced by list view ---------------
 //---------------- List view items ---------------------
                             addressWidget(size,true,"assets/image/ic_work_blue.svg","Work"),

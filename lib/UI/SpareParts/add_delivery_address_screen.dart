@@ -47,6 +47,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                   InkWell(
                       onTap: (){
                         print("on tap saveAddress");
+                        Navigator.pop(context);
                       },
                       child: saveAddressButton(size)
                   )

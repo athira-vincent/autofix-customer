@@ -81,11 +81,17 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           context,
           MaterialPageRoute(
               builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
+     // PickUpCustomerLocationScreen
     }else if (widget.serviceModel == "2"){
-      /*Navigator.pushReplacement(
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));*/
+              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
+    }else if (widget.serviceModel == "3"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
     }
 
   }

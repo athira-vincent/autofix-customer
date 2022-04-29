@@ -330,6 +330,12 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                                       MaterialPageRoute(
                                                           builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
                                                 }
+                                                else if(widget.serviceModel == "2" || widget.serviceModel == "3"){
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
+                                                }
 
                                               },
                                               child: Container(

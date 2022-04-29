@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
+
+import '../Customer/customer_home_screen.dart';
 
 class PurchaseResponseScreen extends StatefulWidget {
 
@@ -16,6 +20,19 @@ class PurchaseResponseScreen extends StatefulWidget {
 }
 
 class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer(const Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PurchaseResponseScreen(isSuccess: true,)));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -41,6 +58,10 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
                   InkWell(
                     onTap: (){
                       print("on tap button");
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomerHomeScreen()));
                     },
                       child: doneButton(size)
                   ),

@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
+import 'package:auto_fix/UI/SpareParts/purchase_response_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -445,7 +447,10 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       padding: const EdgeInsets.fromLTRB(0,0,5,0),
                       child: InkWell(
                         onTap: (){
-
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChangeDeliveryAddressScreen()));
                         },
                         child: Container(
                           height: 25,
@@ -602,9 +607,14 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
                   child: MaterialButton(
                     onPressed: () {
+
                       setState(() {
 
                       });
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PurchaseResponseScreen(isSuccess: false,)));
 
                     },
                     child: Container(

@@ -298,6 +298,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
           bottom: size.height * 1 / 100,
         ),
         child: Text(
+          widget.serviceModel == "1" ? "Back to home" :
           isStartedWork ? "Work Finished" : "Start repair",
           style: TextStyle(
             fontSize: 14.3,

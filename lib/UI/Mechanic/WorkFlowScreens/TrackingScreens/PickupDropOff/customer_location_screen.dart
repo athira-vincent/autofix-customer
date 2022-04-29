@@ -23,7 +23,9 @@ import '../../../../../../Constants/styles.dart';
 
 class PickUpCustomerLocationScreen extends StatefulWidget {
 
-  PickUpCustomerLocationScreen();
+  final String serviceModel;
+
+  PickUpCustomerLocationScreen({required this.serviceModel});
 
   @override
   State<StatefulWidget> createState() {

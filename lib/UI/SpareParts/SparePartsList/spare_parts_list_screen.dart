@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/SpareParts/FilterScreen/filter_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
@@ -109,7 +110,9 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
             'assets/image/home_customer/filterIcon.svg',height: 20,width: 20,
           ),
           onPressed: () {
-
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  FilterScreen()));
 
           },
         ),

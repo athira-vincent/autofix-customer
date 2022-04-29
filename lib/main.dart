@@ -114,8 +114,8 @@ class _MyAppState extends State<MyApp> {
         mechanicId: "1",
       ),*/
       //home: SplashScreen(),
-      home: MechanicHomeScreen(),
-      //home: CustomerHomeScreen(),
+      //home: MechanicHomeScreen(),
+      home: CustomerHomeScreen(),
     );
   }
 }

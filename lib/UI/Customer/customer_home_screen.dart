@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dar
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
+import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -279,7 +280,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
             width: double.infinity,
             child: _index == 0
                 ? HomeCustomerUIScreen()
-                : _index == 1 ? MyCartScreen()
+                : _index == 1 ? SparePartsListScreen()
                 : _index == 2 ? CustomerMyServicesScreen()
                 : CustomerMyProfileScreen(),
           ),
