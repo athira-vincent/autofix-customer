@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
       //home: AddCarScreen(userCategory:TextStrings.user_customer ,userType: TextStrings.user_category_individual),
       //home: MechanicWorkCompletedScreen(authToken: "",mechanicId: "",),
      //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_mechanic),
-      /*home: MechanicProfileViewScreen(
+     /* home: MechanicProfileViewScreen(
         authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAsInVzZXJUeXBlSWQiOjEsImlhdCI6MTY1MTA1MTU4NSwiZXhwIjoxNjUxMTM3OTg1fQ.44G0n2QgaAaZlO4A6XbpCB9FqH9Y9pczWyHzE77gNaY',
         isEmergency: true,
         mechaniclistForService: mechanicListForServices[0],
