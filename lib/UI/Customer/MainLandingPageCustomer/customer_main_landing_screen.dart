@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
-class CustomerHomeScreen extends StatefulWidget {
+class CustomerMainLandingScreen extends StatefulWidget {
 
-  CustomerHomeScreen();
+  CustomerMainLandingScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _CustomerHomeScreenState();
+    return _CustomerMainLandingScreenState();
   }
 }
 
-class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
+class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
 
   int _index = 0;
   int _counter = 0;
@@ -291,10 +291,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           ],
         ),
         child: ClipRRect(
-          // borderRadius: BorderRadius.only(
-          //   topLeft: Radius.circular(48),
-          //   topRight: Radius.circular(48),
-          // ),
           child: SizedBox(
             height: size.height * 0.092,
             child: BottomNavigationBar(
@@ -323,4 +319,5 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       ),
     );
   }
+
 }

@@ -12,7 +12,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicProfileView/mechani
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
-import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';

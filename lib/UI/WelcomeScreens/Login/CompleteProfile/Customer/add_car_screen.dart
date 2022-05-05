@@ -19,7 +19,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../Customer/customer_home_screen.dart';
+import '../../../../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'brand_model_engine/makeBrandDetails_Mdl.dart';
 import 'brand_model_engine/modelDetails_Mdl.dart';
 import 'package:path/path.dart' as path;
@@ -233,7 +233,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                    context,
                    MaterialPageRoute(
                        builder: (context) =>
-                           CustomerHomeScreen()));
+                           CustomerMainLandingScreen()));
                FocusScope.of(context).unfocus();
                _isAddMore = false;
              }

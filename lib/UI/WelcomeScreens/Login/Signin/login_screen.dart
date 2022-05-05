@@ -23,7 +23,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
 
-import '../../../Customer/customer_home_screen.dart';
+import '../../../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -504,7 +504,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  CustomerHomeScreen()));
+                  builder: (context) =>  CustomerMainLandingScreen()));
         });
       }
     });
@@ -524,7 +524,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  CustomerHomeScreen()));
+                  builder: (context) =>  CustomerMainLandingScreen()));
         });
       }
     });
