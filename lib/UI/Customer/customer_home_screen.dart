@@ -291,10 +291,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           ],
         ),
         child: ClipRRect(
-          // borderRadius: BorderRadius.only(
-          //   topLeft: Radius.circular(48),
-          //   topRight: Radius.circular(48),
-          // ),
           child: SizedBox(
             height: size.height * 0.092,
             child: BottomNavigationBar(
