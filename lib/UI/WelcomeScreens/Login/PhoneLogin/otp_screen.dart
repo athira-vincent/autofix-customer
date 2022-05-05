@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
-import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_screen.dart';
@@ -141,7 +141,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  CustomerHomeScreen()));
+                    builder: (context) =>  CustomerMainLandingScreen()));
           }
           else if( widget.userType == TextStrings.user_customer)
           {
@@ -207,7 +207,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  CustomerHomeScreen()));
+                  builder: (context) =>  CustomerMainLandingScreen()));
         }
 
       }
@@ -391,7 +391,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                                   Navigator.pushReplacement(
                                                                       context,
                                                                       MaterialPageRoute(
-                                                                          builder: (context) =>  CustomerHomeScreen()));
+                                                                          builder: (context) =>  CustomerMainLandingScreen()));
                                                                 }
                                                           }
                                                           else
@@ -421,7 +421,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                             Navigator.pushReplacement(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                    builder: (context) =>  CustomerHomeScreen()));
+                                                                    builder: (context) =>  CustomerMainLandingScreen()));
                                                           }
                                                           else if( widget.userType == TextStrings.user_customer)
                                                           {

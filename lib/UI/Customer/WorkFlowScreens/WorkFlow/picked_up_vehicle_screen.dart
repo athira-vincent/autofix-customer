@@ -1,6 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -39,7 +39,7 @@ class _PickedUpVehicleScreenState extends State<PickedUpVehicleScreen> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CustomerHomeScreen()));
+                                builder: (context) => CustomerMainLandingScreen()));
                       },
                         child: backToHomeButton(size))
                   ],

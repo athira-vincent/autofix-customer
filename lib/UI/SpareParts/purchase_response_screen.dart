@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
-import '../Customer/customer_home_screen.dart';
+import '../Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 
 class PurchaseResponseScreen extends StatefulWidget {
 
@@ -61,7 +61,7 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomerHomeScreen()));
+                              builder: (context) => CustomerMainLandingScreen()));
                     },
                       child: doneButton(size)
                   ),

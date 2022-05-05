@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
-class CustomerHomeScreen extends StatefulWidget {
+class CustomerMainLandingScreen extends StatefulWidget {
 
-  CustomerHomeScreen();
+  CustomerMainLandingScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _CustomerHomeScreenState();
+    return _CustomerMainLandingScreenState();
   }
 }
 
-class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
+class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
 
   int _index = 0;
   int _counter = 0;
@@ -319,4 +319,5 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       ),
     );
   }
+
 }

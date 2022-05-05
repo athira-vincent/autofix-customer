@@ -1,7 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/RateMechanic/rate_mechanic_screen.dart';
-import 'package:auto_fix/UI/Customer/customer_home_screen.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -123,7 +123,7 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CustomerHomeScreen()));
+                      builder: (context) => CustomerMainLandingScreen()));
             },
               child: reviewLaterButton(size)),
           InkWell(
