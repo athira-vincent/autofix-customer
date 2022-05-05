@@ -1,3 +1,5 @@
+import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
+import 'package:auto_fix/ApiProvider/mechanic_ApiProvider.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
@@ -19,6 +21,11 @@ import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecializati
 
 
 class Repository {
+
+
+  final _customerApiProvider = CustomerApiProvider();
+  final _mechanicApiProvider = MechanicApiProvider();
+
   final _signupApiProvider = SignupApiProvider();
   final _homeCustomerApiProvider = HomeCustomerApiProvider();
   final _customerFetchProfileApiProvider = CustomerProfileApiProvider();
