@@ -228,12 +228,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           print(" authToken >>>>>>>  $authToken");
           print(" serviceIds >>>>>>>  $serviceIds");
           print(" serviceType >>>>>>>  emergency");
+          print(" serviceType >>>>>>>  mechanicBooking  >>>>>>>>>>  ${value}");
+          print("{value.data?.mechanicBooking?['id'] >>>>> ${value.data?.mechanicBooking?.id}");
 
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>  FindMechanicListScreen(
-                    bookingId: '${value.data?.mechanicsBooking?.id}',
+                  bookingId: '${value.data?.mechanicBooking?.id}',
                   serviceIds: serviceIds,
                   serviceType: 'emergency',
                   authToken: authToken,)));
@@ -242,7 +244,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       }
     });
   }
-
 
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
@@ -289,7 +290,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-
   Future<void> GetAddressFromLatLong(Position position)async {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
     print(placemarks);
@@ -322,8 +322,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
 
-
-
   Widget searchYouService(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -341,7 +339,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>  SearchServiceScreen()));
-
 
                   },
                   child: Container(
@@ -425,7 +422,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             child: InkWell(
               onTap: (){
                 setState(() {
-
                   if(isEmergencyService==true)
                     {
                       isEmergencyService=false;
@@ -496,23 +492,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                       snapshot.data?.data?.categoryList?[0].service?[index],
                                                       //snapshot.data?.data?.categoryList![index],
                                                        snapshot.data?.data?.categoryList![0],
-                                                      size
+                                                      size,
                                                     );
                                                   }
                                               ),
                                             );
                                           });
-
-                                     /* _homeCustomerBloc.postMechanicsBookingIDRequest(
-                                          authToken,
-                                          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                                          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                                          CurrentLatitude,
-                                          CurrentLongitude,
-                                          serviceIds);*/
-
                                     });
-
                                   },
                                   child: Container(
                                     child: Column(
@@ -525,7 +511,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(15),
-                                            child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                            child: snapshot.data?.data?.categoryList?[0].service?[index].icon.toString().length != 0
+                                                ?
+                                            Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
+                                              width: 35,
+                                              //height: 35,
+                                              fit: BoxFit.cover,)
+                                                :
+                                            Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                            //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                           ),
                                         ),
                                         Padding(
@@ -634,7 +628,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
-
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -643,7 +636,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                               serviceIds: serviceIds,
                                               serviceType: 'regular',
                                               authToken: authToken,)));
-
 
                                   },
                                   child: Container(
@@ -914,7 +906,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                     Navigator.pop(context);
                     /*setState(() {
-
                       _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
                       if (_formKey.currentState!.validate()) {
                       } else {
@@ -928,15 +919,24 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                       serviceIds.add('${categoryList!.id}');
                                       print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>  FindMechanicListScreen(
-                                                bookingId: '01',
-                                                serviceIds: serviceIds,
-                                                serviceType: 'emergency',
-                                                authToken: authToken,)));
+                          _homeCustomerBloc.postMechanicsBookingIDRequest(
+                                          authToken,
+                                          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                                          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                                          CurrentLatitude,
+                                          CurrentLongitude,
+                                          serviceIds,
+                                          //"2", "1", "1000", "1", null
+                                          null, null, null, null, null
+                           );
 
+                    /*Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) =>  FindMechanicListScreen(
+                              bookingId: '01',
+                              serviceIds: serviceIds,
+                              serviceType: 'emergency',
+                              authToken: authToken,)));*/
                   },
                   child: Container(
                     width: double.infinity,

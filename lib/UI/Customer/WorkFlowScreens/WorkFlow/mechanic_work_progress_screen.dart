@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,7 +34,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     // TODO: implement initState
     super.initState();
     workStatus = widget.workStatus.toString();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 10), () {
       changeScreen();
     });
   }
@@ -126,13 +127,11 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             workStatus == "3"?
             "Job completed"
                 :
-            "Ready to pick up your vehicle ",
-        style: TextStyle(
-        fontSize: 16,
-        fontFamily: "Samsung_SharpSans_Medium",
-        fontWeight: FontWeight.w400,
-        color: CustColors.light_navy,
-      ),),
+            workStatus == "4"?
+            "Ready to pick up your vehicle "
+                :
+            "Mechanic reached your location.",
+        style: Styles.workProgressTitleText,),
     );
   }
 

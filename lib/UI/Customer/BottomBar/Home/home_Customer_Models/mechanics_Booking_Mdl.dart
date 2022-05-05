@@ -11,9 +11,9 @@ String mechanicsBookingMdlToJson(MechanicsBookingMdl data) => json.encode(data.t
 
 class MechanicsBookingMdl {
   MechanicsBookingMdl({
+    required this.data,
     required this.message,
     required this.status,
-    required this.data,
   });
 
   String message;
@@ -21,9 +21,9 @@ class MechanicsBookingMdl {
   Data? data;
 
   factory MechanicsBookingMdl.fromJson(Map<String, dynamic> json) => MechanicsBookingMdl(
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"] == null ? null : json["message"],
     status: json["status"] == null ? null : json["status"],
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,72 +35,92 @@ class MechanicsBookingMdl {
 
 class Data {
   Data({
-    required this.mechanicsBooking,
+    required this.mechanicBooking,
   });
 
-  MechanicsBooking? mechanicsBooking;
+  MechanicBooking? mechanicBooking;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    mechanicsBooking: json["mechanics_Booking"] == null ? null : MechanicsBooking.fromJson(json["mechanics_Booking"]),
+    mechanicBooking: json["mechanicBooking"] == null ? null : MechanicBooking.fromJson(json["mechanicBooking"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "mechanics_Booking": mechanicsBooking == null ? null : mechanicsBooking!.toJson(),
+    "mechanicBooking": mechanicBooking == null ? null : mechanicBooking!.toJson(),
   };
 }
 
-class MechanicsBooking {
-  MechanicsBooking({
+class MechanicBooking {
+  MechanicBooking({
     required this.id,
-    required this.date,
-    required this.time,
+    required this.bookedDate,
+    required this.bookedTime,
     required this.latitude,
     required this.longitude,
-    required this.paymentMethod,
-    required this.userId,
+    required this.customerId,
+    required this.mechanicId,
     required this.status,
     required this.isAccepted,
+    required this.isCompleted,
     required this.vehicleId,
-    required this.serviceId,
+    required this.totalPrice,
+    required this.tax,
+    required this.commission,
+    required this.serviceCharge,
+    required this.totalTime,
   });
 
-  String id;
-  String date;
-  String time;
+  int id;
+  String bookedDate;
+  String bookedTime;
   double latitude;
   double longitude;
-  dynamic paymentMethod;
-  int userId;
+  int customerId;
+  dynamic mechanicId;
   int status;
-  int isAccepted;
+  dynamic isAccepted;
+  dynamic isCompleted;
   int vehicleId;
-  dynamic serviceId;
+  dynamic totalPrice;
+  int tax;
+  int commission;
+  int serviceCharge;
+  dynamic totalTime;
 
-  factory MechanicsBooking.fromJson(Map<String, dynamic> json) => MechanicsBooking(
+  factory MechanicBooking.fromJson(Map<String, dynamic> json) => MechanicBooking(
     id: json["id"] == null ? null : json["id"],
-    date: json["date"] == null ? null : json["date"],
-    time: json["time"] == null ? null : json["time"],
+    bookedDate: json["bookedDate"] == null ? null : json["bookedDate"],
+    bookedTime: json["bookedTime"] == null ? null : json["bookedTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
-    paymentMethod: json["paymentMethod"],
-    userId: json["userId"] == null ? null : json["userId"],
+    customerId: json["customerId"] == null ? null : json["customerId"],
+    mechanicId: json["mechanicId"],
     status: json["status"] == null ? null : json["status"],
-    isAccepted: json["isAccepted"] == null ? null : json["isAccepted"],
+    isAccepted: json["isAccepted"],
+    isCompleted: json["isCompleted"],
     vehicleId: json["vehicleId"] == null ? null : json["vehicleId"],
-    serviceId: json["serviceId"],
+    totalPrice: json["totalPrice"],
+    tax: json["tax"] == null ? null : json["tax"],
+    commission: json["commission"] == null ? null : json["commission"],
+    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
+    totalTime: json["totalTime"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "date": date == null ? null : date,
-    "time": time == null ? null : time,
+    "bookedDate": bookedDate == null ? null : bookedDate,
+    "bookedTime": bookedTime == null ? null : bookedTime,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
-    "paymentMethod": paymentMethod,
-    "userId": userId == null ? null : userId,
+    "customerId": customerId == null ? null : customerId,
+    "mechanicId": mechanicId,
     "status": status == null ? null : status,
-    "isAccepted": isAccepted == null ? null : isAccepted,
+    "isAccepted": isAccepted,
+    "isCompleted": isCompleted,
     "vehicleId": vehicleId == null ? null : vehicleId,
-    "serviceId": serviceId,
+    "totalPrice": totalPrice,
+    "tax": tax == null ? null : tax,
+    "commission": commission == null ? null : commission,
+    "serviceCharge": serviceCharge == null ? null : serviceCharge,
+    "totalTime": totalTime,
   };
 }

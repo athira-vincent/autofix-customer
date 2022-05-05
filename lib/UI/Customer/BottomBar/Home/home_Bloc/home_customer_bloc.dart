@@ -48,20 +48,16 @@ class HomeCustomerBloc {
   Stream<MechanicsBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
 
   postMechanicsBookingIDRequest(
-      token,
-      date,
-      time,
-      latitude,
-      longitude,
-      serviceId) async {
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
 
     MechanicsBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
-        token,
-        date,
-        time,
-        latitude,
-        longitude,
-        serviceId);
+        token, date, time,
+        latitude, longitude,
+        serviceId, mechanicId, reqType,
+        totalPrice, paymentType, travelTime);
     postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
   }
 

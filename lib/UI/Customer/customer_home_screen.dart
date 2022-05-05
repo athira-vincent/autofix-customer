@@ -1,10 +1,8 @@
-import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
-import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -260,7 +258,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                             ),
                           ) : Container(),
                         ),
-
                       ],
                     ),
                   ),

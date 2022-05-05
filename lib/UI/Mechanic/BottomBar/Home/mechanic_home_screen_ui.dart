@@ -139,7 +139,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   }
 
-
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';

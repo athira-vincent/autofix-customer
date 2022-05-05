@@ -236,8 +236,6 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
               alignment: Alignment.bottomCenter,
               children: [
 
-
-
                 GoogleMap(
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
@@ -312,7 +310,6 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                   ),
                                 ),
                               ),
-
 
                               waitingMechanic=="0"
                                   ? Padding(
@@ -516,8 +513,6 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                           ),
                                                                                         ],
                                                                                       ),
-
-
                                                                                     ],
                                                                                   ),
                                                                                 ),

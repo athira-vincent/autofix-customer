@@ -130,7 +130,7 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DirectPaymentScreen(isMechanicApp: true,isPaymentFailed: true,)));
+                      builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
             },
               child: directPaymentButton(size)),
         ],

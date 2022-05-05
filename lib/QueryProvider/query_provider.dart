@@ -387,32 +387,40 @@ class QueryProvider {
   }
 
   postMechanicsBookingIDRequest(
-      token,
-      date,
-      time,
-      latitude,
-      longitude,
-      serviceId) async {
-    String _query = """ 
-     mutation {
-      mechanics_Booking(
-        date: "$date"
-        time: "$time"
-        latitude: ${double.parse(latitude.toString())}
-        longitude: ${double.parse(longitude.toString())}
-        serviceId: $serviceId
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
+    String _query = """  
+    mutation {
+  mechanicBooking(
+    bookedDate: "$date"
+    bookedTime: "$time"
+    latitude: ${double.parse(latitude.toString())}
+    longitude: ${double.parse(longitude.toString())}
+    serviceId: $serviceId
+    mechanicId: $mechanicId
+    reqType: $reqType
+    totalPrice: $totalPrice
+    paymentType: $paymentType
+    travelTime:  $travelTime
       ) {
         id
-        date
-        time
-        latitude
-        longitude
-        paymentMethod
-        userId
-        status
-        isAccepted
-        vehicleId
-        serviceId
+    bookedDate
+    bookedTime
+    latitude
+    longitude
+    customerId
+    mechanicId
+    status
+    isAccepted
+    isCompleted
+    vehicleId
+    totalPrice
+    tax
+    commission
+    serviceCharge
+    totalTime
       }
     }
     """;
@@ -515,8 +523,6 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
-
-
 
 
   fcmTokenUpdate(String fcmToken,String Authtoken) async {

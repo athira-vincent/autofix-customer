@@ -100,19 +100,15 @@ class Repository {
 
   //Mechanic Booking Id Request
   Future<dynamic> postMechanicsBookingIDRequest(
-      token,
-      date,
-      time,
-      latitude,
-      longitude,
-      serviceId) =>
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) =>
       _homeCustomerApiProvider.postMechanicsBookingIDRequest(
-          token,
-          date,
-          time,
-          latitude,
-          longitude,
-          serviceId);
+          token, date, time,
+          latitude, longitude,
+          serviceId, mechanicId, reqType,
+          totalPrice, paymentType, travelTime);
 
   //Mechanics List Emergency Request
   Future<dynamic> postFindMechanicsListEmergencyRequest(

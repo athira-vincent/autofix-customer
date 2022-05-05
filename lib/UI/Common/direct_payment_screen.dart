@@ -9,7 +9,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class DirectPaymentScreen extends StatefulWidget {
 
   bool isMechanicApp;
-  bool isPaymentFailed;
+  bool isPaymentFailed;   // ------ change the variable as isDirectPayment for screen 106
+                            // isMechanicApp - true && isPaymentFailed - true  ==> screen 080,
+                            // isMechanicApp - true && isPaymentFailed - false  ==> screen 106,
+                            // isMechanicApp - false && isPaymentFailed - false  ==> screen 080 a,
+                            // isMechanicApp - false && isPaymentFailed - true  ==> screen 080 a,
+
   DirectPaymentScreen({
     required this.isMechanicApp,
     required this.isPaymentFailed
@@ -23,6 +28,7 @@ class DirectPaymentScreen extends StatefulWidget {
 
 class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
+  bool isDirectPayment = true;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,12 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
                       children: [
                         titleWidget(size),
                         InfoTextWidget(size),
-                        widget.isMechanicApp == true ? MechanicTitleImageWidget(size) : customerTitleImageWidget(size),
+                        widget.isMechanicApp
+                            ?
+                        isDirectPayment
+                            ? MechanicDirectPaymentTitleImageWidget(size)
+                            : MechanicOtherPaymentTitleImageWidget(size)
+                            : customerTitleImageWidget(size),
                         warningTextWidget(size),
                         InkWell(
                           onTap: (){
@@ -72,7 +83,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
           MaterialPageRoute(
               builder: (context) => PaymentFailedScreen()));
     }
-    else if(!widget.isMechanicApp){
+    else if(!widget.isMechanicApp && !widget.isPaymentFailed){
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -87,7 +98,12 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text("Direct payment ",
+      child: Text(
+        widget.isMechanicApp && !isDirectPayment
+            ?
+        "payment received "
+            :
+        "Direct payment ",
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -120,9 +136,14 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Text(
-            widget.isMechanicApp == true ?
-            "Your customer chooses direct payment method! \nReceive the payment and click the \n“payment received” button"
-            :
+            widget.isMechanicApp
+                ?
+                isDirectPayment
+                    ?
+                "Your customer chooses direct payment method! \nReceive the payment and click the \n“payment received” button"
+                    :
+                "Hi..George you received a payment of \nrupees ₦ 1500 from customer Afamefuna "
+                :
             "You choosed the direct payment method! \nSo this transaction process completed only after, \nwhen mechanic confirm as  he received ",
             style: warningTextStyle01,
           )
@@ -143,7 +164,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     );
   }
 
-  Widget MechanicTitleImageWidget(Size size){
+  Widget MechanicDirectPaymentTitleImageWidget(Size size){
     return Container(
       //decoration: Styles.boxDecorationStyle,
       margin: EdgeInsets.only(
@@ -155,6 +176,19 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     );
   }
 
+  Widget MechanicOtherPaymentTitleImageWidget(Size size){
+    return Container(
+      color: Colors.purpleAccent,
+      height: size.height * 30 / 100,
+      //decoration: Styles.boxDecorationStyle,
+      margin: EdgeInsets.only(
+          left: size.width * 5 / 100,
+          right: size.width * 5 / 100,
+          top: size.height * 2 / 100
+      ),
+      //child: Image.asset("assets/image/img_mech_direct_pay_bg.png"),
+    );
+  }
 
   Widget warningTextWidget(Size size){
     return Container(
@@ -179,9 +213,12 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Text(
-            widget.isMechanicApp == true ?
+            widget.isMechanicApp ?
+                isDirectPayment ?
             "If you clicked the payment received button \nThis service cycle will completed from your side "
-            :
+                :
+                    "You received the payment. So this service \ncycle ending here. Go home and \ncomplete the pending services."
+                :
             "Continue with direct payment. It will send a \nnotification to your mechanic and then \nyou can give the payment.",
             style: warningTextStyle01,
           )
@@ -211,8 +248,8 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
           bottom: size.height * 1 / 100,
         ),
         child: Text(
-         widget.isMechanicApp == true ?
-          "Payment received "
+         widget.isMechanicApp ? isDirectPayment ?
+          "Payment received " : "Go home"
           :
           "Continue",
           style: TextStyle(

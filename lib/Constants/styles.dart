@@ -720,6 +720,13 @@ class Styles {
     //wordSpacing: .7
   );
 
+  static const workProgressTitleText = TextStyle(
+    fontSize: 16,
+    fontFamily: "Samsung_SharpSans_Medium",
+    fontWeight: FontWeight.w400,
+    color: CustColors.light_navy,
+  );
+
   static BoxDecoration boxDecorationStyle = BoxDecoration(
       borderRadius: BorderRadius.all(
         Radius.circular(8),

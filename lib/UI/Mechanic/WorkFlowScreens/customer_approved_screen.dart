@@ -20,6 +20,13 @@ class CustomerApprovedScreen extends StatefulWidget {
 class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
 
   bool isStartedWork = false;
+  bool _isLoading = false;
+
+  double per = .10;
+
+  double _setValue(double value) {
+    return value * per + value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +54,26 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
 
                   customerApprovedScreenWarningText(size),
 
-                  customerApprovedScreenTimer(size),
+                  InkWell(
+                    onTap: (){
+
+                      setState(() {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                contentPadding: EdgeInsets.all(0.0),
+                                content: StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter monthYear) {
+                                      return  setupAlertDialogAddExtraTime(size);
+                                    }
+                                ),
+                              );
+                            });
+                      });
+
+                    },
+                      child: customerApprovedScreenTimer(size)),
 
                   InkWell(
                     onTap: (){
@@ -258,7 +284,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
                       width: 0.3
                   )
               ),
-              /*margin: EdgeInsets.only(
+                            /*margin: EdgeInsets.only(
                                 left: size.width * 4 / 100,
                                 right: size.width * 4 / 100,
                                 top: size.height * 2.8 / 100
@@ -307,6 +333,183 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
             color: Colors.white,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget setupAlertDialogAddExtraTime(Size size ) {
+    return Container(
+      height: 280.0, // Change as per your requirement
+      child: Column(
+        children: [
+          Container(
+              width: double.infinity,
+              height: 50,
+              color: CustColors.light_navy,
+              alignment: Alignment.center,
+              child: Text("Add Extra time",
+                style: Styles.textButtonLabelSubTitle,)
+          ),
+
+          Container(
+            padding: EdgeInsets.only(
+                top: size.height * 2.5 / 100,
+                bottom: size.height * 2.5 / 100,
+                left: size.width * 4 / 100,
+                right: size.width * 4 / 100
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                      top: size.height * 1.5 / 100,
+                      bottom: size.height * 1.5 / 100,
+                      left: size.width * 2 / 100,
+                      right: size.width * 2 / 100
+                  ),
+                  decoration: Styles.serviceIconBoxDecorationStyle,
+                  child: SvgPicture.asset(
+                    "assets/image/MechanicType/mechanic_work_clock.svg",
+                    height: size.height * 4 / 100,
+                    //width: size.width * 5 / 100,
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * 8 / 100,
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Extend time",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontFamily: "Samsung_SharpSans_Medium",
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: .6,
+                            height: 1.7
+                        ),
+                      ),
+                      Text("25:00 ",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontFamily: "SharpSans_Bold",
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: .6,
+                            height: 1.7
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          InfoTextWidget(size),
+
+          Container(
+            margin: EdgeInsets.only(
+              //left: size.width * 4 / 100,
+              //right: size.width * 4 / 100,
+                top: size.height * 1.5 / 100
+            ),
+            child: _isLoading
+                ? Center(
+                  child: Container(
+                    height: _setValue(28),
+                    width: _setValue(28),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          CustColors.peaGreen),
+                    ),
+                  ),
+            )
+                : MaterialButton(
+              onPressed: () {
+
+                Navigator.pop(context);
+                /*setState(() {
+
+                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
+                      if (_formKey.currentState!.validate()) {
+                      } else {
+                      }
+                    });*/
+                print(">>>>>>>>>> time   ");
+
+                /*Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  FindMechanicListScreen(
+                          bookingId: '01',
+                          serviceIds: serviceIds,
+                          serviceType: 'emergency',
+                          authToken: authToken,)));*/
+
+              },
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                    left: size.width * 2.5 / 100,
+                    right: size.width * 2.5 / 100,
+                    top: size.height * 1 / 100,
+                    bottom: size.height * 1 / 100
+                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(6),
+                    ),
+                    color: CustColors.light_navy
+                ),
+                child: Text(
+                  'Add time ',
+                  textAlign: TextAlign.center,
+                  style: Styles.textButtonLabelSubTitle,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget InfoTextWidget(Size size){
+    return Container(
+      decoration: Styles.boxDecorationStyle,
+      margin: EdgeInsets.only(
+          left: size.width * 4 / 100,
+          right: size.width * 4 / 100,
+          top: size.height * 1 / 100,
+          bottom: size.height * .7 / 100
+      ),
+      padding: EdgeInsets.only(
+        top: size.height * 1.5 / 100,
+        bottom: size.height * 1.5 / 100,
+        right: size.width * 2.3 / 100,
+      ),
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(
+              left: size.width * 2 / 100,
+              right: size.width * 2.5 / 100,
+            ),
+            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+              height: size.height * 2.5 / 100,width: size.width * 2.5 / 100,),
+          ),
+          Expanded(
+            child: Text(
+              "Adding extra time may cause bad reviews from customer",
+              textAlign: TextAlign.justify,
+              style: warningTextStyle01,
+            ),
+          )
+        ],
       ),
     );
   }

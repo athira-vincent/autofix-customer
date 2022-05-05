@@ -222,6 +222,11 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 ),
               ),
 
+              Container(
+                color: Colors.tealAccent,
+                child: Text("Online"),
+              ),
+
               InkWell(
                 onTap: (){
                   print("on tap notification icon");

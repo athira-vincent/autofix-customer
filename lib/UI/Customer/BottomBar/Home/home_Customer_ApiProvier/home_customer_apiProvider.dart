@@ -14,19 +14,15 @@ class HomeCustomerApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
 
   Future<MechanicsBookingMdl> postMechanicsBookingIDRequest(
-      token,
-      date,
-      time,
-      latitude,
-      longitude,
-      serviceId) async {
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicsBookingIDRequest(
-        token,
-        date,
-        time,
-        latitude,
-        longitude,
-        serviceId);
+        token, date, time,
+        latitude, longitude,
+        serviceId, mechanicId, reqType,
+        totalPrice, paymentType, travelTime);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
