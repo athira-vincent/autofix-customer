@@ -972,6 +972,49 @@ class QueryProvider {
     );
   }
 
+  postMechanicOnlineOfflineRequest(
+      token) async {
+    String _query = """
+    mutation {
+      online_Offline(online: 1) {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        status
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postMechanicLocationUpdateRequest(
+      token,lat,lng) async {
+    String _query = """
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postCustIndividualEditProfileRequest(
     String token, firstName,  lastName,  state, status, imageUrl) async {
     String _query = """  

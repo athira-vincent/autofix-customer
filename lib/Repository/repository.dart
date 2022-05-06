@@ -1,5 +1,5 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
-import 'package:auto_fix/ApiProvider/mechanic_ApiProvider.dart';
+import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
@@ -235,7 +235,17 @@ class Repository {
       _customerFetchProfileApiProvider.postCustFetchProfileRequest(
           token);
 
+  // Fetch Mechanic Online Offline Request
+  Future<dynamic>  postMechanicOnlineOfflineRequest(
+      token)  =>
+      _mechanicApiProvider.postMechanicOnlineOfflineRequest(
+          token);
 
+  // Fetch Mechanic Mechanic Location Update Request
+  Future<dynamic>  postMechanicLocationUpdateRequest(
+      token,lat,lng)  =>
+      _mechanicApiProvider.postMechanicLocationUpdateRequest(
+          token,lat,lng);
 
   // Fetch Profile Mechanic Request
   Future<dynamic>  postMechanicFetchProfileRequest(token)  =>

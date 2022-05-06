@@ -46,7 +46,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   }
 
-
   void registerNotification() async {
     // 3. On iOS, this helps to take the user permissions
     NotificationSettings settings = await _messaging.requestPermission(
@@ -203,16 +202,40 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
-            child: Column(
+            child: Stack(
               children: [
-                mechanicLocation(context),
-                upcomingServices(size),
-                brandSpecialization(size),
-                dashBoardItemsWidget(size),
-                emergencyServiceReminder(size)
+                Column(
+                  children: [
+                    mechanicLocation(context),
+                    upcomingServices(size),
+                    brandSpecialization(size),
+                    dashBoardItemsWidget(size),
+                    emergencyServiceReminder(size),
+                  ],
+                ),
+
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  //left: 0,
+                 // width: size.width,
+                  child: FloatingActionButton(
+                      elevation: 0.0,
+                      child: new Icon(Icons.check),
+                      backgroundColor: new Color(0xFFE57373),
+                      onPressed: (){}
+                  ),
+                )
               ],
+
             ),
           ),
+          /*floatingActionButton: new FloatingActionButton(
+              elevation: 0.0,
+              child: new Icon(Icons.check),
+              backgroundColor: new Color(0xFFE57373),
+              onPressed: (){}
+              ),*/
         ),
       ),
     );

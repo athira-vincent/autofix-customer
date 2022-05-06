@@ -2,7 +2,9 @@
 import 'dart:async';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,21 +47,19 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  CustomerMainLandingScreen()));
 
-      /*if (userType == TextStrings.user_customer) {
-        if (_isDefaultVehicleAvailable == null ||
-            _isDefaultVehicleAvailable == 1) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => AddVehicleScreen()));
-        } else {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        }
-      }*/
+      if (userType == TextStrings.user_customer) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  CustomerMainLandingScreen()));
+      }
+      else{
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechanicHomeScreen()));
+      }
     } else {
       if (isWalked == null || isWalked == false) {
         print('WalkThroughPages');

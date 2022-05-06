@@ -1,13 +1,18 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/my_services_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MechanicHomeScreen extends StatefulWidget {
@@ -27,6 +32,11 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   double per = .10;
   double perfont = .10;
+  late bool isOnline;
+  String authToken = "";
+
+  HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   double _setValue(double value) {
     return value * per + value;
@@ -34,6 +44,48 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   double _setValueFont(double value) {
     return value * perfont + value;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isOnline = true;
+    getSharedPrefData();
+    _listenApiResponse();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId ' + authToken.toString());
+
+    });
+  }
+
+  _listenApiResponse() {
+    _mechanicHomeBloc.postMechanicOnlineOffline.listen((value) {
+      if(value.status == "error"){
+        setState(() {
+          //_isLoading = false;
+          //isOnline =
+          //socialLoginIsLoading = false;
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        });
+      }else{
+        setState(() {
+          /*_isLoading = false;
+          socialLoginIsLoading = false;
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
+         // isOnline = value.
+
+        });
+      }
+
+    });
+
   }
 
   @override
@@ -197,45 +249,73 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                     )),
               ),
 
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      top: 25 + MediaQuery.of(context).padding.top, left: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Welcome",
-                        style: Styles.homeWelcomeTextStyle,
-                      ),
-                      Text(
-                        //"welcome $_userName",
-                        " Athira",
-                        style: Styles.homeNameTextStyle,
-                      ),
-                      Text(
-                        " !",
-                        style: Styles.homeWelcomeSymbolTextStyle,
-                      ),
-                    ],
-                  ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: 25 + MediaQuery.of(context).padding.top, left: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Welcome",
+                      style: Styles.homeWelcomeTextStyle,
+                    ),
+                    Text(
+                      //"welcome $_userName",
+                      " Athira",
+                      style: Styles.homeNameTextStyle,
+                    ),
+                    Text(
+                      " !",
+                      style: Styles.homeWelcomeSymbolTextStyle,
+                    ),
+                  ],
                 ),
               ),
 
-              Container(
-                color: Colors.tealAccent,
-                child: Text("Online"),
+              Spacer(),
+
+              InkWell(
+                onTap: (){
+                  _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken",);
+                   // !isOnline
+                },
+                child: Container(
+                  margin: EdgeInsets.only(
+                    top: 25 + MediaQuery.of(context).padding.top,
+                    right: 10 + MediaQuery.of(context).padding.right
+                  ),
+                  padding: EdgeInsets.only(
+                      left: 7, right: 7,
+                      top: 4, bottom: 4
+                  ),
+                  decoration: BoxDecoration(
+                      color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                      borderRadius: BorderRadius.circular(4),
+                      boxShadow: [new BoxShadow(
+                        color: CustColors.roseText1,
+                        blurRadius: 10.0,
+                      ),]
+                  ),
+                  //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                  child: Text(
+                      isOnline ? "Online" : "Offline",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontFamily: "Samsung_SharpSans_Medium",
+                        fontWeight: FontWeight.w400
+                      ),
+                  ),
+                ),
               ),
 
               InkWell(
                 onTap: (){
                   print("on tap notification icon");
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)));
-
                 },
                 child: Container(
                   margin: EdgeInsets.only(
@@ -244,7 +324,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   ),
                   child: Stack(
                     children: [
-                          SvgPicture.asset(
+                      SvgPicture.asset(
                             'assets/image/notification_icon.svg',
                             width: 22,
                             height: 22,
