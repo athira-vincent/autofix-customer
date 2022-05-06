@@ -582,6 +582,7 @@ class _LoginScreenState extends State<LoginScreen> {
       accessToken: googleSignInAuthentication?.accessToken,
       idToken: googleSignInAuthentication?.idToken,
     );
+
     final UserCredential authResult = await auth.signInWithCredential(credential);
     final User? user = authResult.user;
     //final user = authResult.user;
@@ -589,15 +590,14 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       socialLoginIsLoading = false;
     });
+
     if (user != null) {
       print("result sucess user ${user.uid}");
       setState(() {
         socialLoginIsLoading = true;
         _signinBloc.socialLogin(user.email.toString(), "");
-
       });
     } else {
-
       setState(() {
         socialLoginIsLoading = false;
       });
