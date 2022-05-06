@@ -18,10 +18,10 @@ class HomeMechanicBloc {
   Stream<MechanicOnlineOfflineMdl> get postMechanicOnlineOfflineResponse => postMechanicOnlineOffline.stream;
 
   postMechanicOnlineOfflineRequest(
-      token,) async {
+      token, String status, String mechanicId) async {
 
     MechanicOnlineOfflineMdl _mechanicOnlineOfflineMdlMdl = await repository.postMechanicOnlineOfflineRequest(
-      token,);
+      token, status, mechanicId);
     postMechanicOnlineOffline.sink.add(_mechanicOnlineOfflineMdlMdl);
   }
 

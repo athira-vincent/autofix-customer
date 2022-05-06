@@ -10,9 +10,9 @@ class MechanicApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
 
   Future<MechanicOnlineOfflineMdl> postMechanicOnlineOfflineRequest(
-      token)async {
+      token, String status, String mechanicId)async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicOnlineOfflineRequest(
-      token,);
+      token,status, mechanicId);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

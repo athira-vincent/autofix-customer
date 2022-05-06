@@ -973,25 +973,13 @@ class QueryProvider {
   }
 
   postMechanicOnlineOfflineRequest(
-      token) async {
+      token, String status, String mechanicId) async {
     String _query = """
     mutation {
-      online_Offline(online: 1) {
-        id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-        status
-      }
+    mechanicWorkStatusUpdate(status: $status, mechanicId: $mechanicId) {
+      message
     }
+  }
     """;
     log(_query);
     return await GqlClient.I.query01(

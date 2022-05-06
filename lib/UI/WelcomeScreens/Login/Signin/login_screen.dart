@@ -500,7 +500,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
-                value.data!.signIn!.user!.firstName.toString());
+                value.data!.signIn!.user!.firstName.toString(),
+                value.data!.signIn!.user!.id.toString()
+            );
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -509,7 +511,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
-                value.data!.signIn!.user!.firstName.toString());
+                value.data!.signIn!.user!.firstName.toString(),
+                value.data!.signIn!.user!.id.toString()
+            );
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -536,7 +540,8 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
-                value.data!.socialLogin!.user!.firstName.toString());
+                value.data!.socialLogin!.user!.firstName.toString(),
+                value.data!.socialLogin!.user!.id.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -545,7 +550,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_mechanic,
-                value.data!.socialLogin!.user!.firstName.toString());
+                value.data!.socialLogin!.user!.firstName.toString(),
+                value.data!.socialLogin!.user!.id.toString()
+            );
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

@@ -237,9 +237,9 @@ class Repository {
 
   // Fetch Mechanic Online Offline Request
   Future<dynamic>  postMechanicOnlineOfflineRequest(
-      token)  =>
+      token, String status, String mechanicId)  =>
       _mechanicApiProvider.postMechanicOnlineOfflineRequest(
-          token);
+          token, status, mechanicId);
 
   // Fetch Mechanic Mechanic Location Update Request
   Future<dynamic>  postMechanicLocationUpdateRequest(

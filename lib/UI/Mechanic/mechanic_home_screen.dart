@@ -33,7 +33,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   double per = .10;
   double perfont = .10;
   late bool isOnline;
-  String authToken = "";
+  String authToken = "", userId = "";
   String _userName = "";
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
@@ -61,9 +61,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId ' + authToken.toString());
+      print('userId ' + userId.toString());
       _userName =  shdPre.getString(SharedPrefKeys.userName).toString();
-
     });
   }
 
@@ -72,22 +73,18 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
-          //isOnline =
-          //socialLoginIsLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
         setState(() {
+          isOnline = !isOnline;
+          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           socialLoginIsLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
-         // isOnline = value.
-
         });
       }
-
     });
-
   }
 
   @override
@@ -278,8 +275,13 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
               InkWell(
                 onTap: (){
-                  _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken",);
-                   // !isOnline
+                  setState(() {
+                    if(isOnline){
+                      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","0", userId, );
+                    }else{
+                      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId, );
+                    }
+                  });// !isOnline
                 },
                 child: Container(
                   margin: EdgeInsets.only(
