@@ -34,6 +34,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   double perfont = .10;
   late bool isOnline;
   String authToken = "";
+  String _userName = "";
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -61,6 +62,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId ' + authToken.toString());
+      _userName =  shdPre.getString(SharedPrefKeys.userName).toString();
 
     });
   }
@@ -260,8 +262,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       style: Styles.homeWelcomeTextStyle,
                     ),
                     Text(
-                      //"welcome $_userName",
-                      " Athira",
+                      " $_userName",
+                      //" Athira",
                       style: Styles.homeNameTextStyle,
                     ),
                     Text(

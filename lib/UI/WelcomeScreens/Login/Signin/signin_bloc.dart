@@ -36,13 +36,22 @@ class SigninBloc {
     postPhoneLogin.sink.add(_phoneResp);
   }
 
-  void userDefault(String token) async {
+  void userDefault(String token,String userType, String userName,) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
     shdPre.setBool(SharedPrefKeys.isUserLoggedIn, true);
+    shdPre.setString(SharedPrefKeys.userType, userType);
+    shdPre.setString(SharedPrefKeys.userName, userName);
     GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }
+  void userDefaultData(String token,) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.token, token);
+    GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
+    print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
+  }
+
 
   dispose() {
     postSignIn.close();

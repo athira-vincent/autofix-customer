@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/phone_login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_models/signin_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/UserType/user_selection_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
@@ -65,7 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
   UserCredential? userCredential;
-  User? user;
   bool socialLoginIsLoading = false;
   String facebookButtonClick = "0";
 
@@ -474,10 +474,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _signinBloc.dispose();
   }
 
-  _setUserType(String userType) async {
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
-    shdPre.setString(SharedPrefKeys.userType, userType);
-  }
 
   Future<void> setFcmToken(String Authtoken) async {
     /*FirebaseMessaging.instance.getToken().then((value) {
@@ -501,15 +497,20 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
 
-          _signinBloc.userDefault(value.data!.signIn!.token.toString());
           if(value.data!.signIn!.user!.userTypeId == "1"){
-            _setUserType(TextStrings.user_customer);
+            _signinBloc.userDefault(
+                value.data!.signIn!.token.toString(),
+                TextStrings.user_customer,
+                value.data!.signIn!.user!.firstName.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerMainLandingScreen()));
           }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
-            _setUserType(TextStrings.user_mechanic);
+            _signinBloc.userDefault(
+                value.data!.signIn!.token.toString(),
+                TextStrings.user_mechanic,
+                value.data!.signIn!.user!.firstName.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -531,23 +532,30 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
-          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());
 
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  CustomerMainLandingScreen()));
+          if(value.data!.socialLogin!.user!.userTypeId == "1"){
+            _signinBloc.userDefault(
+                value.data!.socialLogin!.token.toString(),
+                TextStrings.user_customer,
+                value.data!.socialLogin!.user!.firstName.toString());
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CustomerMainLandingScreen()));
+          }else if(value.data!.socialLogin!.user!.userTypeId == "2"){
+            _signinBloc.userDefault(
+                value.data!.socialLogin!.token.toString(),
+                TextStrings.user_mechanic,
+                value.data!.socialLogin!.user!.firstName.toString());
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicHomeScreen()));
+          }
         });
       }
     });
   }
-
-  void setIsSignedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(SharedPrefKeys.isUserLoggedIn, true);
-  }
-
-
 
   Future<bool?> isDefaultVehicleAvailable() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -569,7 +577,8 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: googleSignInAuthentication?.idToken,
     );
     final UserCredential authResult = await auth.signInWithCredential(credential);
-    final User? user = authResult.user;
+    //final User? user = authResult.user;
+    final user = authResult.user;
     print("result success  $user");
     setState(() {
       socialLoginIsLoading = false;

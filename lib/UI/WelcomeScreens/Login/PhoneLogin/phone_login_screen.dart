@@ -75,7 +75,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefault(value.data!.signInPhoneNo!.jwtToken.toString());
+          _signinBloc.userDefaultData(value.data!.signInPhoneNo!.jwtToken.toString());
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -87,7 +87,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       otpNumber: "${value.data?.signInPhoneNo?.otp}",
                       userTypeId: "${value.data?.signInPhoneNo?.userTypeId}",
                       fromPage: "2",
-                    )),
+                    ),
+            ),
           );
         });
       }

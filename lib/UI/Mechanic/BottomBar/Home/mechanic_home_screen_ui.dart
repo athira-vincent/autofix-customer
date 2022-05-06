@@ -322,11 +322,15 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("02-12-2021",style: TextStyle(color: Colors.white,
-                                              fontSize: 15),),
+                                          Text("02-12-2021",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),),
 
-                                          Text("09:30 AM",style: TextStyle(color: Colors.white,
-                                              fontSize: 15),)
+                                          Text("09:30 AM",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15),)
                                         ],
                                       ),
                                     ),
@@ -340,10 +344,12 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("Service from Eric John. ",style: TextStyle(color: Colors.white,
+                                          Text("Service from Eric John. ",
+                                            style: TextStyle(color: Colors.white,
                                               fontSize: 15),),
 
-                                          Text(" [ HONDA CITY ]",style: TextStyle(color: Colors.white,
+                                          Text(" [ HONDA CITY ]",
+                                            style: TextStyle(color: Colors.white,
                                               fontSize: 15),)
                                         ],
                                       ),
