@@ -235,8 +235,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+
                 margin: EdgeInsets.only(
                     left: 21, top: 20 + MediaQuery.of(context).padding.top),
+
                 child: GestureDetector(
                     onTap: () {
                       scaffoldKey.currentState?.openDrawer();
