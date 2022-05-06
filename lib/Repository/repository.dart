@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_pr
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_api_provider.dart';
@@ -44,7 +45,7 @@ class Repository {
   final _completeProfileMechanicApiProvider = MechanicCompleteProfileApiProvider();
   final _serviceListApiProvider = ServiceListApiProvider();
   final _addServiceListApiProvider = AddServicesApiProvider();
-
+  final _addMechanicMyWalletApiProvider = MechanicMyWalletApiProvider();
 
   final _categoryListApiProvider = CategoryListApiProvider();
 
@@ -72,8 +73,6 @@ class Repository {
       _signupApiProvider.signUp( type, firstName, lastName, emailId, phoneNo, password, state,
         fcmToken, userTypeId, userType, profilepic, orgName, orgType,
         ministryName, hod, latitude, longitude, yearExp, shopName,) ;
-
-
 
   //AddCar Of Customer
   Future<dynamic> postAddCarRequest(
@@ -141,7 +140,6 @@ class Repository {
           count,
           categoryId) ;
 
-
   // Make Brand List
   Future<dynamic> postMakeBrandRequest(
       token,) =>
@@ -154,7 +152,11 @@ class Repository {
       _addCarApiProvider.postModelDetailRequest(
         token,type);
 
-
+  // Mechanic My Wallet
+    Future<dynamic> postMechanicFetchMyWalletRequest(
+        token,type) =>
+        _addMechanicMyWalletApiProvider.postMechanicMyWalletRequest(
+            token,type);
 
   // Mechanic Individual Complete Profile
   Future<dynamic> getCompleteProfileMechIndividual(
@@ -228,7 +230,6 @@ class Repository {
       _genrateAuthorizationApiProvider.getGenerateAuthorizationRequest(
           userId, type);
 
-
   // Fetch Profile Customer Request
   Future<dynamic>  postCustFetchProfileRequest(
       token)  =>
@@ -247,6 +248,12 @@ class Repository {
       _mechanicApiProvider.postMechanicLocationUpdateRequest(
           token,lat,lng);
 
+  // Fetch Mechanic Mechanic Brand Specialization Request
+  Future<dynamic>  postMechanicBrandSpecializationRequest(
+      token, brandName)  =>
+      _mechanicApiProvider.postMechanicBrandSpecializationRequest(
+          token, brandName);
+
   // Fetch Profile Mechanic Request
   Future<dynamic>  postMechanicFetchProfileRequest(token)  =>
       _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token);
@@ -260,8 +267,6 @@ class Repository {
       status, year_of_experience, org_Name, org_Type,)  =>
       _mechanicProfileApiProvider.postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
         status, year_of_experience, org_Name, org_Type,);
-
-
 
   // Update Customer - individual Profile Request
   Future<dynamic>  postCustIndividualEditProfileRequest(
@@ -282,11 +287,11 @@ class Repository {
       _customerEditProfileApiProvider.postCustGovernmentEditProfileRequest(
           token, firstName,  lastName,  state, status, imageUrl, ministryName);
 
-
   //  Vehicle List Request
   Future<dynamic>  postCustVehicleListRequest(
       token)  =>
       _homeCustomerApiProvider.postCustVehicleListRequest(
           token);
+
 
 }

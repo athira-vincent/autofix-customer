@@ -248,8 +248,6 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-
-
   postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
@@ -326,7 +324,6 @@ class QueryProvider {
         status
       }
     }
-
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -549,6 +546,19 @@ class QueryProvider {
     log(_query);
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
+  }
+
+  postMechanicMyWalletRequest(String token, ) async {
+    String _query = """
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
   }
 
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
@@ -992,6 +1002,19 @@ class QueryProvider {
 
   postMechanicLocationUpdateRequest(
       token,lat,lng) async {
+    String _query = """
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postMechanicBrandSpecializationRequest(
+      token,brandName) async {
     String _query = """
     """;
     log(_query);

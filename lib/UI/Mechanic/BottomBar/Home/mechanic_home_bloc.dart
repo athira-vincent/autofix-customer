@@ -1,5 +1,6 @@
 
 import 'package:auto_fix/Repository/repository.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_location_update_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_online_offline_mdl.dart';
 
@@ -38,6 +39,20 @@ class HomeMechanicBloc {
      token, lat,lng);
     postMechanicLocationUpdate.sink.add(_mechanicLocationUpdateMdl);
   }
+
+  /// =============== Mechanic brand Specialization ================== ///
+
+  final postMechanicBrandSpecialization = PublishSubject<MechanicBrandSpecializationMdl>();
+  Stream<MechanicBrandSpecializationMdl> get postMechanicBrandSpecializationResponse => postMechanicBrandSpecialization.stream;
+
+  postMechanicBrandSpecializationRequest(
+      token, brandName) async {
+
+    MechanicBrandSpecializationMdl _mechanicLocationUpdateMdl = await repository.postMechanicBrandSpecializationRequest(
+        token, brandName);
+    postMechanicBrandSpecialization.sink.add(_mechanicLocationUpdateMdl);
+  }
+
 
 
   /// =============== Date Conversion ================== ///

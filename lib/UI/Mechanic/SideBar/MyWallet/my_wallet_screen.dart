@@ -1,8 +1,12 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_bloc.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicMyWalletScreen extends StatefulWidget {
 
@@ -15,6 +19,48 @@ class MechanicMyWalletScreen extends StatefulWidget {
 }
 
 class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
+
+  String authToken = "" ;
+  MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+    _listenApiResponse();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId ' + authToken.toString());
+     //print('userId ' + userId.toString());
+      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, "");
+    });
+  }
+
+  _listenApiResponse() {
+    _mechanicWalletBloc.postMechanicMyWallet.listen((value) {
+      if(value.status == "error"){
+        setState(() {
+          //_isLoading = false;
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        });
+      }else{
+        setState(() {
+          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
+          /*_isLoading = false;
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
+        });
+      }
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -345,4 +391,5 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     );
 
   }
+
 }

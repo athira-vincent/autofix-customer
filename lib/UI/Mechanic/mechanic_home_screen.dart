@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
@@ -77,7 +78,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         });
       }else{
         setState(() {
-          isOnline = !isOnline;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           socialLoginIsLoading = false;
@@ -85,6 +85,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         });
       }
     });
+
   }
 
   @override

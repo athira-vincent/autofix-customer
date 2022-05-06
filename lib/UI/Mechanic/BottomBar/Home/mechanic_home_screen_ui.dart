@@ -1,6 +1,9 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,6 +30,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
   String Address = 'search';
+  List<BrandDetail>? brandDetails;
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -34,6 +38,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
     'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
   ];
+
+  HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void initState() {
     // TODO: implement initState
@@ -129,13 +136,29 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      //_homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
+
+      _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["bmw","maruthi"]);
 
     });
   }
 
   _listenApiResponse() {
-
+    _mechanicHomeBloc.postMechanicBrandSpecialization.listen((value) {
+      if(value.status == "error"){
+        setState(() {
+          //_isLoading = false;
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        });
+      }else{
+        setState(() {
+          //brandDetails.add(value.data.brandDetails);
+          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
+          /*_isLoading = false;
+          socialLoginIsLoading = false;
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
+        });
+      }
+    });
   }
 
   Future<void> _getCurrentCustomerLocation() async {

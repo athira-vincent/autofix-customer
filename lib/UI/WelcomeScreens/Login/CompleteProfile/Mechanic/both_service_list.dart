@@ -185,7 +185,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               ),
               child: Column(
                 children: [
-
                   InkWell(
                     onTap: () {
                       setState(() {

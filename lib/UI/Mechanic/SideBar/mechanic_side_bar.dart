@@ -8,7 +8,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
-import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
