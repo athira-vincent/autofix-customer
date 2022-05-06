@@ -393,36 +393,36 @@ class QueryProvider {
       totalPrice, paymentType, travelTime) async {
     String _query = """  
     mutation {
-  mechanicBooking(
-    bookedDate: "$date"
-    bookedTime: "$time"
-    latitude: ${double.parse(latitude.toString())}
-    longitude: ${double.parse(longitude.toString())}
-    serviceId: $serviceId
-    mechanicId: $mechanicId
-    reqType: $reqType
-    totalPrice: $totalPrice
-    paymentType: $paymentType
-    travelTime:  $travelTime
-      ) {
-        id
-    bookedDate
-    bookedTime
-    latitude
-    longitude
-    customerId
-    mechanicId
-    status
-    isAccepted
-    isCompleted
-    vehicleId
-    totalPrice
-    tax
-    commission
-    serviceCharge
-    totalTime
-      }
-    }
+      mechanicBooking(
+        bookedDate: "$date"
+        bookedTime: "$time"
+        latitude: ${double.parse(latitude.toString())}
+        longitude: ${double.parse(longitude.toString())}
+        serviceId: $serviceId
+        mechanicId: $mechanicId
+        reqType: $reqType
+        totalPrice: $totalPrice
+        paymentType: $paymentType
+        travelTime:  $travelTime
+          ) {
+            id
+        bookedDate
+        bookedTime
+        latitude
+        longitude
+        customerId
+        mechanicId
+        status
+        isAccepted
+        isCompleted
+        vehicleId
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+          }
+        }
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
