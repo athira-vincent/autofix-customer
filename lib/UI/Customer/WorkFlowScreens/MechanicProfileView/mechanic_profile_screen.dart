@@ -9,8 +9,11 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropO
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,6 +50,19 @@ class MechanicProfileViewScreen extends StatefulWidget {
 
 class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
+
+  String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
+
+  late final  FirebaseMessaging _firebaseMessaging ;
+
+
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var initializationSettingsAndroid;
+
+
+
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
 
@@ -72,6 +88,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
     getSharedPrefData();
     _listenServiceListResponse();
+    getPushNotification();
+
+
 
 
   }
@@ -95,6 +114,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   _listenServiceListResponse() {
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("success postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -610,11 +646,35 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   Widget acceptAndSendRequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-        _showMechanicAcceptanceDialog(context);
+
        /* Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>  MechanicTrackingScreen()));*/
+
+        print(">>>>>>>>>> Latitude  ${widget.latitude}");
+        print(">>>>>>>>>> Longitude  ${widget.longitude}");
+        print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+        print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+        print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
+
+        callOnFcmApiSendPushNotifications(1);
+
+        _homeCustomerBloc.postMechanicsBookingIDRequest(
+           authToken,
+          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+          '${widget.latitude}',
+          '${widget.longitude}',
+          ' ${widget.serviceIds}',
+          '${widget.mechanicListData?.id}',
+          '2',
+          '${widget.mechanicListData?.totalAmount}',
+          '1',
+          '${_homeCustomerBloc.timeConvert(DateTime.now())}',);
+
+        _showMechanicAcceptanceDialog(context);
+
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -762,4 +822,146 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
    
   }
+
+
+  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have $length new order',
+        'title': 'New Orders',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+        'screen': 'screenA',
+        'message': 'ACTION'
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to': 'fr4ESWvYQba1XMOEfv7i-h:APA91bFcE37i1l-eZY0Mc8CAGm64eTMezY0p3POWUd--G15ZlMKDw7p-JIX0L5fOpTQSnYyXOtkFeAV4-09aGE9JJn1KMtGOLpkOsfGlAflAv2XDa8bqTslOXAikwEOzDlCHd5CoJK9f',
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        print('notification sending success');
+      } else {
+        print('notification sending failed');
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }
+
+  void registerNotification() async {
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      // TODO: handle the received notifications
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+
+
+
+
+  Future<void> getPushNotification() async {
+    initializationSettingsAndroid =
+    new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    /*flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);*/
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // print foreground message here.
+      print('Handling a foreground message ${message.messageId}');
+      print('Notification : ${message.notification?.title}');
+      print('Notification Message: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+       showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
+
+    });
+
+
+  }
+
+
+
+  void showNotification(String title, String body) async {
+    await _demoNotification(title, body);
+  }
+
+  Future<void> _demoNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'channel_ID', 'channel name',
+
+        playSound: true,
+        showProgress: true,
+        ticker: 'Kindersteps');
+
+    var iOSChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iOSChannelSpecifics);
+    await flutterLocalNotificationsPlugin
+        .show(0, title, body, platformChannelSpecifics, payload: 'test');
+  }
+
+  Future onSelectNotification(String payload) async {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return new AlertDialog(
+          title: Text("PayLoad"),
+          content: Text("Payload : $payload"),
+        );
+      },
+    );
+  }
+
+
+
 }

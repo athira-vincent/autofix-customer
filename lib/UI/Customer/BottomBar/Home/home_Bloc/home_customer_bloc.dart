@@ -4,7 +4,6 @@ import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicB
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
@@ -73,7 +72,7 @@ class HomeCustomerBloc {
 
 
 
-  /// =============== Mechanics List Emergency ================== ///
+  /// =============== Mechanics Profile Details ================== ///
 
 
   final postMechanicProfileDetails = PublishSubject<MechanicDetailsMdl>();

@@ -515,7 +515,7 @@ class QueryProvider {
                   salesCount
                 }
               }
-            mechanicReview
+            mechanicReview  
           }
           totalPages
           currentPage
