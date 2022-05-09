@@ -399,7 +399,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         AppLocalizations.of(context)!.text_name :
                                                         AppLocalizations.of(context)!.text_organization_name).nameChecking,
                                                     controller: _nameController,
-                                                    cursorColor: CustColors.whiteBlueish,
+                                                    cursorColor: CustColors.materialBlue,
                                                     decoration: InputDecoration(
                                                       isDense: true,
                                                       hintText:  widget.userCategory == TextStrings.user_category_individual ?
@@ -457,7 +457,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       keyboardType: TextInputType.text,
                                                       //validator: InputValidator(ch: AppLocalizations.of(context)!.text_hint_organization_type).emptyChecking,
                                                       controller: _orgTypeController,
-                                                      cursorColor: CustColors.whiteBlueish,
+                                                      cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_organization_type,
@@ -522,7 +522,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       //keyboardType: TextInputType.phone,
                                                       validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
                                                       controller: _stateController,
-                                                      cursorColor: CustColors.whiteBlueish,
+                                                      cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_state,
@@ -579,7 +579,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       //keyboardType: TextInputType.phone,
                                                       //validator: InputValidator(ch: " ministry/govt agency").emptyChecking,
                                                       controller: _ministryGovtController,
-                                                      cursorColor: CustColors.whiteBlueish,
+                                                      cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_ministry_govt,
@@ -635,7 +635,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     ],
                                                     validator: InputValidator(ch :AppLocalizations.of(context)!.text_contact_person,).nameChecking,
                                                     controller: _contactPersonController,
-                                                    cursorColor: CustColors.whiteBlueish,
+                                                    cursorColor: CustColors.materialBlue,
                                                     decoration: InputDecoration(
                                                       isDense: true,
                                                       hintText: AppLocalizations.of(context)!.text_hint_contact_person,
@@ -686,7 +686,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     ],
                                                     validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
                                                     controller: _phoneController,
-                                                    cursorColor: CustColors.whiteBlueish,
+                                                    cursorColor: CustColors.materialBlue,
                                                     decoration: InputDecoration(
                                                       isDense: true,
                                                       hintText: AppLocalizations.of(context)!.text_hint_phone,
@@ -735,7 +735,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     keyboardType: TextInputType.emailAddress,
                                                     validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
                                                     controller: _emailController,
-                                                    cursorColor: CustColors.whiteBlueish,
+                                                    cursorColor: CustColors.materialBlue,
                                                     decoration: InputDecoration(
                                                       isDense: true,
                                                       hintText: AppLocalizations.of(context)!.text_hint_email,
@@ -798,7 +798,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       //keyboardType: TextInputType.phone,
                                                       validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
                                                       controller: _stateController,
-                                                      cursorColor: CustColors.whiteBlueish,
+                                                      cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_state,
@@ -852,7 +852,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     ],
                                                     //validator: InputValidator(ch: AppLocalizations.of(context)!.text_experience_year).phoneNumChecking,
                                                     controller: _yearOfExperienceController,
-                                                    cursorColor: CustColors.whiteBlueish,
+                                                    cursorColor: CustColors.materialBlue,
                                                     decoration: InputDecoration(
                                                       isDense: true,
                                                       hintText: AppLocalizations.of(context)!.text_hint_experience_year,
@@ -908,7 +908,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       keyboardType: TextInputType.text,
                                                       //validator: InputValidator(ch: AppLocalizations.of(context)!.text_photo).emptyChecking,
                                                       controller: _photoController,
-                                                      cursorColor: CustColors.whiteBlueish,
+                                                      cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_upload_photo,
