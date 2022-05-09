@@ -281,6 +281,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,
                   style: Styles.textLabelTitle_10,
+
                 ),
               ],
             ),
