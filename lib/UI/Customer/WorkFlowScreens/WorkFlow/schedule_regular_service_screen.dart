@@ -82,7 +82,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             serviceTypeTextSelection(size),
                             InkWell(
                               onTap: (){
-                                Navigator.push(
+                                /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>  MechanicListScreen(
@@ -90,8 +90,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                                           serviceIds: widget.serviceIds,
                                           serviceType: widget.serviceType,
                                           authToken: widget.authToken,
-                                          serviceModel : selectedServiceModel
-                                        )));
+                                          serviceModel : selectedServiceModel,
+
+                                        )));*/
                               },
                                 child: findMechanicButtonWidget(size))
                           ],

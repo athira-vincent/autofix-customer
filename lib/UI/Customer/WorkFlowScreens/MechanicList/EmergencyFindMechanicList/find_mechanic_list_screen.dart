@@ -385,8 +385,12 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                   builder: (context) =>  MechanicProfileViewScreen(
                                                                                     mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
                                                                                     authToken: '$authToken',
-                                                                                    mechaniclistForService: snapshot.data?.data?.mechanicList?.data![index].mechanicService?[0],
-                                                                                    isEmergency: true, serviceModel: "",
+                                                                                    mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
+                                                                                    isEmergency: true,
+                                                                                    serviceModel: "",
+                                                                                    serviceIds: widget.serviceIds,
+                                                                                    longitude: widget.longitude,
+                                                                                    latitude: widget.latitude,
                                                                                   )));
                                                                     },
                                                                     child: Padding(
@@ -427,7 +431,8 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                     children: [
                                                                                       Padding(
                                                                                         padding: const EdgeInsets.all(2),
-                                                                                        child: Text('${snapshot.data?.data?.mechanicList?.data?[index].firstName}',
+                                                                                        child: Text(
+                                                                                          '${snapshot.data?.data?.mechanicList?.data?[index].firstName}',
                                                                                           style: Styles.mechanicNameStyle,
                                                                                           maxLines: 1,
                                                                                           textAlign: TextAlign.start,
@@ -442,7 +447,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                             Padding(
                                                                                               padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                                                                               child: RatingBar.builder(
-                                                                                                initialRating: 3.5,
+                                                                                                initialRating: 0,
                                                                                                 minRating: 1,
                                                                                                 direction: Axis.horizontal,
                                                                                                 allowHalfRating: true,
@@ -460,7 +465,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                             ),
                                                                                             Padding(
                                                                                               padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                              child: Text('1280 Reviews',
+                                                                                              child: Text('${snapshot.data?.data?.mechanicList?.data?[index].reviewCount} Reviews',
                                                                                                 style: Styles.smallTitleStyle1,),
                                                                                             ),
                                                                                           ],
@@ -482,17 +487,17 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                         children: [
                                                                                           Padding(
                                                                                             padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                            child: Text('120 km',
+                                                                                            child: Text('${snapshot.data?.data?.mechanicList?.data?[index].distance}',
                                                                                               style: Styles.smallTitleStyle1,),
                                                                                           ),
                                                                                           Padding(
                                                                                             padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                                                                                            child: Text('12 min',
+                                                                                            child: Text('${snapshot.data?.data?.mechanicList?.data?[index].duration}',
                                                                                               style: Styles.smallTitleStyle1,),
                                                                                           ),
                                                                                           Padding(
                                                                                             padding: const EdgeInsets.fromLTRB(0,3,0,3),
-                                                                                            child: Text('1245',
+                                                                                            child: Text('₦ ${snapshot.data?.data?.mechanicList?.data?[index].totalAmount}',
                                                                                               style: Styles.totalAmountStyle,),
                                                                                           ),
                                                                                         ],

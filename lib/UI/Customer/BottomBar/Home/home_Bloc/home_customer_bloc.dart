@@ -1,5 +1,6 @@
 
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
@@ -68,6 +69,31 @@ class HomeCustomerBloc {
         serviceType);
     postFindMechanicsListEmergency.sink.add(_mechaniclist);
   }
+
+
+
+  /// =============== Mechanics List Emergency ================== ///
+
+
+  final postMechanicProfileDetails = PublishSubject<MechanicDetailsMdl>();
+  Stream<MechanicDetailsMdl> get MechanicProfileDetailsResponse => postMechanicProfileDetails.stream;
+
+  fetchMechanicProfileDetails(
+      token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,) async {
+
+    MechanicDetailsMdl _mechanicDetailsMdl = await repository.fetchMechanicProfileDetails(
+      token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,);
+    postMechanicProfileDetails.sink.add(_mechanicDetailsMdl);
+  }
+
 
 
   /// =============== Mechanics Booking ID ================== ///

@@ -132,6 +132,23 @@ class Repository {
           serviceId,
           serviceType);
 
+  /// =============== Mechanics Profile Details ================== ///
+
+  Future<dynamic> fetchMechanicProfileDetails(
+      token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,) =>
+      _customerApiProvider.fetchMechanicProfileDetails(
+        token,
+        mechanicId,
+        serviceId,
+        latitude,
+        longitude,);
+
+
+
   // Search Service Request
   Future<dynamic>  postSearchServiceRequest(
       token,

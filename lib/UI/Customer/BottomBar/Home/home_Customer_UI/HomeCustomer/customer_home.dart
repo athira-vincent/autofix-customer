@@ -459,7 +459,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   builder: (BuildContext context, StateSetter monthYear) {
                                                     return  setupAlertDialogMonthAndYear(
                                                       snapshot.data?.data?.categoryList?[0].service?[index],
-                                                      //snapshot.data?.data?.categoryList![index],
                                                        snapshot.data?.data?.categoryList![0],
                                                       size,
                                                     );
@@ -861,15 +860,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             ),
             child: _isLoading
                 ? Center(
-              child: Container(
-                height: _setValue(28),
-                width: _setValue(28),
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      CustColors.peaGreen),
-                ),
-              ),
-            )
+                    child: Container(
+                      height: _setValue(28),
+                      width: _setValue(28),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
+                      ),
+                    ),
+                  )
                 : MaterialButton(
                   onPressed: () {
 

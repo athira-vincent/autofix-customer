@@ -427,6 +427,7 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
+  /// =============== Mechanics List Emergency ================== ///
 
   postFindMechanicsListEmergencyRequest(
       token,
@@ -569,6 +570,104 @@ class QueryProvider {
     token,
     enableDebug: true,
     isTokenThere: false,
+    );
+  }
+
+  /// =============== Mechanics Profile Details ================== ///
+
+  fetchMechanicProfileDetails(
+      token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,) async {
+    String _query = """
+            {
+              mechanicDetails(
+                 mechanicId: ${int.parse(mechanicId)}
+                 serviceId: "${serviceId.toString()}"
+                latitude: "9.2575"
+                longitude: "76.4508"
+              ) {
+                id
+                userCode
+                firstName
+                lastName
+                emailId
+                phoneNo
+                userTypeId
+                status
+                jwtToken
+                fcmToken
+                otpCode
+                isProfile
+                otpVerified
+                mechanic {
+                  id
+                  displayName
+                  userName
+                  password
+                  firstName
+                  lastName
+                  emailId
+                  phoneNo
+                  address
+                  startTime
+                  endTime
+                  city
+                  licenseNo
+                  state
+                  licenseDate
+                  latitude
+                  longitude
+                  serviceId
+                  profilePic
+                  licenseProof
+                  status
+                }
+                mechanicStatus {
+                  distance
+                }
+                mechanicService {
+                  id
+                  fee
+                   service {
+                      id
+                      serviceName
+                      description
+                      icon
+                      minPrice
+                      maxPrice
+                      categoryId
+                      status
+                    }
+                  status
+                  userId
+                }
+                totalAmount
+                distance
+                duration
+                reviewCount
+                mechanicReviewsData {
+                  id
+                  transType
+                  rating
+                  feedback
+                  bookingId
+                  orderId
+                  status
+                }
+                mechanicReview
+              }
+            }
+    
+         """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
     );
   }
 
@@ -874,59 +973,7 @@ class QueryProvider {
   }
 
 
-  getMechanicDetails(String id,String serviceId) async {
-    String _query = """
-         query{
-      mechanicDetails(mechanicId:$id,serviceId: "$serviceId"){
-        mechanicData{id,
-          mechanicCode,
-          mechanicName,
-          emailId,
-          phoneNo,
-          address,
-          latitude,
-          longitude,
-          walletId,
-          verified,
-          enable,
-          isEmailverified,
-          jobType,
-          startTime,
-          endTime,
-          status,
-          }
-        serviceData{id,
-        status,
-          fee,
-        serviceId,
-        demoMechanicId,
-        service{id,
-    serviceName,
-    icon,
-    type,
-    fee,
-    minAmount,
-    maxAmount,
-    status}}
-        vehicleData{id,
-          status,
-        make{
-          id,
-        makeName,
-        description,
-        status,
-        }}
-        totalAmount
-      }
-}
-     """;
-    log(_query);
-    return await GqlClient.I.query(
-      _query,
-      enableDebug: true,
-      isTokenThere: false,
-    );
-  }
+
 
   forgotPassword(String email) async {
     String _query = """

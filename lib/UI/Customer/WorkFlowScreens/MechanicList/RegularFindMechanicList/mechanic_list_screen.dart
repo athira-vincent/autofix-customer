@@ -17,10 +17,18 @@ class MechanicListScreen extends StatefulWidget {
   final String serviceIds;
   final String serviceType;
   final String serviceModel;
+  final String latitude;
+  final String longitude;
 
-  MechanicListScreen({required this.bookingId,
-    required this.authToken,required this.serviceIds,
-    required this.serviceType,required this.serviceModel});
+  MechanicListScreen({
+    required this.bookingId,
+    required this.authToken,
+    required this.serviceIds,
+    required this.serviceType,
+    required this.serviceModel,
+    required this.latitude,
+    required this.longitude
+  });
 
 
   @override
@@ -248,10 +256,12 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                           builder: (context) =>  MechanicProfileViewScreen(
                                             authToken: '$authToken',
                                             isEmergency: false,
-                                            mechaniclistForService: snapshot.data?.data?.mechanicList?.data![index].mechanicService?[0],
+                                            mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
                                             mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
                                             serviceModel: widget.serviceModel,
-
+                                            serviceIds: widget.serviceIds,
+                                            longitude: widget.longitude,
+                                            latitude: widget.latitude,
                                           )));
 
                                 },

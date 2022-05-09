@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
@@ -13,30 +14,6 @@ class CustomerApiProvider {
 
   final QueryProvider _queryProvider = QueryProvider();
 
-  Future<MechanicsBookingMdl> postMechanicsBookingIDRequest(
-      token, date, time,
-      latitude, longitude,
-      serviceId, mechanicId, reqType,
-      totalPrice, paymentType, travelTime) async {
-    Map<String, dynamic> _resp = await _queryProvider.postMechanicsBookingIDRequest(
-        token, date, time,
-        latitude, longitude,
-        serviceId, mechanicId, reqType,
-        totalPrice, paymentType, travelTime);
-    // ignore: unnecessary_null_comparison
-    if (_resp != null) {
-      if (_resp['status'] == "error") {
-        final errorMsg = MechanicsBookingMdl(status: "error", message: _resp['message'], data: null);
-        return errorMsg;
-      } else {
-        var data = {"data": _resp};
-        return MechanicsBookingMdl.fromJson(data);
-      }
-    } else {
-      final errorMsg = MechanicsBookingMdl(status: "error", message: "No Internet connection", data: null);
-      return errorMsg;
-    }
-  }
 
   /// =============== Mechanics List Emergency ================== ///
 
@@ -71,6 +48,63 @@ class CustomerApiProvider {
       return errorMsg;
     }
   }
+
+  /// =============== Mechanics Profile Details ================== ///
+
+  Future<MechanicDetailsMdl>    fetchMechanicProfileDetails(
+      token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,)async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchMechanicProfileDetails(
+      token,
+      mechanicId,
+      serviceId,
+      latitude,
+      longitude,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicDetailsMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicDetailsMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicDetailsMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+
+  Future<MechanicsBookingMdl> postMechanicsBookingIDRequest(
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
+    Map<String, dynamic> _resp = await _queryProvider.postMechanicsBookingIDRequest(
+        token, date, time,
+        latitude, longitude,
+        serviceId, mechanicId, reqType,
+        totalPrice, paymentType, travelTime);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicsBookingMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicsBookingMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicsBookingMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 
 
   Future<ServiceSearchListAllMdl>  postSearchServiceRequest(

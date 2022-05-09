@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
@@ -20,15 +21,23 @@ class MechanicProfileViewScreen extends StatefulWidget {
   final String mechanicId;
   final String authToken;
   final bool isEmergency;
-  MechanicService? mechaniclistForService;
+  Datum? mechanicListData;
   final String serviceModel;
+  final String latitude;
+  final String longitude;
+  final String serviceIds;
+
 
 
   MechanicProfileViewScreen({
     required this.mechanicId,
     required this.authToken,
-    required this.mechaniclistForService,
-    required this.isEmergency,required this.serviceModel});
+    required this.mechanicListData,
+    required this.isEmergency,
+    required this.serviceModel,
+    required this.latitude,
+    required this.longitude,
+    required this.serviceIds});
 
   @override
   State<StatefulWidget> createState() {
@@ -37,6 +46,8 @@ class MechanicProfileViewScreen extends StatefulWidget {
 }
 
 class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
+
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
 
   double per = .10;
@@ -71,12 +82,35 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      totalFees = totalFees + double.parse('${widget.mechaniclistForService?.fee.toString()}');
+      totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService?[0].fee.toString()}');
+      _homeCustomerBloc.fetchMechanicProfileDetails(
+          authToken,
+          '${widget.mechanicListData?.id}',
+          widget.serviceIds,
+          widget.latitude,
+         widget.longitude,);
 
     });
   }
 
   _listenServiceListResponse() {
+    _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("success postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
 
   }
 
@@ -115,7 +149,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             Text(
-              '${widget.mechaniclistForService?.id}',
+              '${widget.mechanicListData?.firstName}',
               textAlign: TextAlign.center,
               style: Styles.appBarTextBlack,
             ),
@@ -153,7 +187,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            '9 Year',
+                            '1 Year',
                             textAlign: TextAlign.center,
                             style: Styles.badgeTextStyle,
                           ),
@@ -195,7 +229,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Text('1200 Km',
+                        child: Text('${widget.mechanicListData?.distance}',
                           style: Styles.appBarTextBlack17,),
                       ),
                       Padding(
@@ -244,7 +278,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,110,10,0),
                         child: RatingBar.builder(
-                          initialRating: 3.5,
+                          initialRating: 0,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -287,7 +321,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   width: 50,
                   child: Column(
                     children: [
-                      Text('3 Minutes',
+                      Text('${widget.mechanicListData?.duration}',
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -302,11 +336,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Row(
               children: [
                 SizedBox(
-                  width: 50,
+                  width: 70,
                   child: Column(
                     children: [
-                      Text('Location',
-                        maxLines: 2,
+                      Text('${widget.mechanicListData?.mechanic?.address}',
+                        maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
                         style: Styles.textLabelTitle_10,
@@ -502,7 +536,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     children: [
                       Row(
                         children: [
-                          Text('${widget.mechaniclistForService?.id}',
+                          Text('${widget.mechanicListData?.firstName}',
                             maxLines: 2,
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.visible,
@@ -513,7 +547,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       Spacer(),
                       Row(
                         children: [
-                          Text('${widget.mechaniclistForService?.fee}',
+                          Text('${widget.mechanicListData?.mechanicService?[0].fee}',
                             maxLines: 2,
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.visible,
