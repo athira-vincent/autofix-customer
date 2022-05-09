@@ -29,7 +29,6 @@ class FindMechanicListScreen extends StatefulWidget {
 
   FindMechanicListScreen({required this.bookingId,required this.authToken,required this.serviceIds,required this.serviceType});
 
-
   @override
   State<StatefulWidget> createState() {
     return _FindMechanicListScreenState();
