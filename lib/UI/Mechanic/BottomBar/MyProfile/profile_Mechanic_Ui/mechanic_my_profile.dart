@@ -3,10 +3,12 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -340,17 +342,27 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(200,75,40,0),
-                        child:Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.logout,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Logout',
-                                style: Styles.appBarTextBlack17,),
-                            ],
+                        child:InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context)
+                                {
+                                  return deactivateDialog();
+                                });
+                          },
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  size: 15,
+                                  color: CustColors.blue,
+                                ),
+                                Text('Logout',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -1393,6 +1405,64 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 });
           });
         });
+  }
+
+  Widget deactivateDialog() {
+    return CupertinoAlertDialog(
+      title: Text("Logout account?",
+          style: TextStyle(
+            fontFamily: 'Formular',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: CustColors.materialBlue,
+          )),
+      content: Text("Are you sure you want to logout?"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+
+
+            },
+            child: Text("Cancel")),
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () async {
+
+              setState(() {
+                setDeactivate();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginScreen()),
+                    ModalRoute.withName("/LoginScreen"));
+
+              });
+            },
+            child: Text("Logout")),
+      ],
+    );
+  }
+
+  void setDeactivate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(SharedPrefKeys.token, "");
+    prefs.setString(SharedPrefKeys.userID, "");
+    prefs.setString(SharedPrefKeys.userName, "");
+    prefs.setBool(SharedPrefKeys.isUserLoggedIn, false);
+    prefs.setString(SharedPrefKeys.userType, "");
+
+
+
   }
 
 

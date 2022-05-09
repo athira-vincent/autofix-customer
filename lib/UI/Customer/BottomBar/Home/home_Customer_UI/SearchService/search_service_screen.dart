@@ -4,7 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,7 +39,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
-  List<String> serviceIds =[];
+  String serviceIds = "";
   bool _isLoading = false;
   double per = .10;
 
@@ -410,8 +410,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                     print(">>>>>>>>>> Longitude  $CurrentLongitude");
                                     print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                                     print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                    serviceIds.clear();
-                                    serviceIds.add('${snapshot.data?.data?.serviceListAll?[index].id}');
+                                    serviceIds = '${snapshot.data?.data?.serviceListAll?[index].id}';
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
                                     _homeCustomerBloc.postMechanicsBookingIDRequest(
@@ -559,39 +558,39 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                 : MaterialButton(
                   onPressed: () {
 
-                    Navigator.pop(context);
-                    /*setState(() {
-                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
-                      if (_formKey.currentState!.validate()) {
-                      } else {
-                      }
-                    });*/
-                  print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                  print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                  print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                  print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                  serviceIds.clear();
-                  serviceIds.add('${service.category!.id}');
-                  print(">>>>>>>>>> ServiceId  $serviceIds");
-                    _homeCustomerBloc.postMechanicsBookingIDRequest(
-                        authToken,
-                        '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                        '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                        CurrentLatitude,
-                        CurrentLongitude,serviceIds,
-                        null, null, null, null, null
-                        );
+                        Navigator.pop(context);
+                        /*setState(() {
+                          _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
+                          if (_formKey.currentState!.validate()) {
+                          } else {
+                          }
+                        });*/
+                      print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                      print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                      print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                      print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                      serviceIds = '${service.category!.id}';
+                      print(">>>>>>>>>> ServiceId  $serviceIds");
+                        _homeCustomerBloc.postMechanicsBookingIDRequest(
+                            authToken,
+                            '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+                            '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+                            CurrentLatitude,
+                            CurrentLongitude,serviceIds,
+                            null, null, null, null, null
+                            );
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  FindMechanicListScreen(
-                              bookingId: '01',
-                              serviceIds: serviceIds,
-                              serviceType: 'emergency',
-                              authToken: authToken,)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  FindMechanicListScreen(
+                                  serviceIds: serviceIds,
+                                  serviceType: 'emergency',
+                                  latitude: CurrentLatitude,
+                                  longitude: CurrentLongitude,
+                                  authToken: authToken,)));
 
-              },
+                  },
                    child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.only(

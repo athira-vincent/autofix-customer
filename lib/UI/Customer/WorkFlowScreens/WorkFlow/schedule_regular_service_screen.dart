@@ -1,7 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/RegularFindMechanicList/mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicList/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
 
   final String bookingId;
   final String authToken;
-  final List<String> serviceIds;
+  final String serviceIds;
   final String serviceType;
 
   ScheduleRegularServiceScreen({required this.bookingId,
@@ -82,7 +82,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             serviceTypeTextSelection(size),
                             InkWell(
                               onTap: (){
-                                Navigator.push(
+                                /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>  MechanicListScreen(
@@ -90,8 +90,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                                           serviceIds: widget.serviceIds,
                                           serviceType: widget.serviceType,
                                           authToken: widget.authToken,
-                                          serviceModel : selectedServiceModel
-                                        )));
+                                          serviceModel : selectedServiceModel,
+
+                                        )));*/
                               },
                                 child: findMechanicButtonWidget(size))
                           ],

@@ -486,7 +486,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   _getSignInRes() async {
-    _signinBloc.postSignIn.listen((value) async {
+    _signinBloc.signInResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -496,7 +496,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
 
-          if(value.data!.signIn!.user!.userTypeId == "1"){
+          if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
