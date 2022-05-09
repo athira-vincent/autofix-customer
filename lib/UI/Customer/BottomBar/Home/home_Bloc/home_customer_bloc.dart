@@ -1,5 +1,6 @@
 
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
@@ -99,8 +100,8 @@ class HomeCustomerBloc {
   /// =============== Mechanics Booking ID ================== ///
 
 
-  final postMechanicsBookingIDList = BehaviorSubject<MechanicsBookingMdl>();
-  Stream<MechanicsBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
+  final postMechanicsBookingIDList = BehaviorSubject<MechanicBookingMdl>();
+  Stream<MechanicBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
 
   postMechanicsBookingIDRequest(
       token, date, time,
@@ -108,7 +109,7 @@ class HomeCustomerBloc {
       serviceId, mechanicId, reqType,
       totalPrice, paymentType, travelTime) async {
 
-    MechanicsBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
+    MechanicBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
         token, date, time,
         latitude, longitude,
         serviceId, mechanicId, reqType,

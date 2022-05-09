@@ -384,48 +384,6 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
-  postMechanicsBookingIDRequest(
-      token, date, time,
-      latitude, longitude,
-      serviceId, mechanicId, reqType,
-      totalPrice, paymentType, travelTime) async {
-    String _query = """  
-    mutation {
-      mechanicBooking(
-        bookedDate: "$date"
-        bookedTime: "$time"
-        latitude: ${double.parse(latitude.toString())}
-        longitude: ${double.parse(longitude.toString())}
-        serviceId: $serviceId
-        mechanicId: $mechanicId
-        reqType: $reqType
-        totalPrice: $totalPrice
-        paymentType: $paymentType
-        travelTime:  $travelTime
-          ) {
-            id
-        bookedDate
-        bookedTime
-        latitude
-        longitude
-        customerId
-        mechanicId
-        status
-        isAccepted
-        isCompleted
-        vehicleId
-        totalPrice
-        tax
-        commission
-        serviceCharge
-        totalTime
-          }
-        }
-    """;
-    log(_query);
-    return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
-  }
 
   /// =============== Mechanics List Emergency ================== ///
 
@@ -581,94 +539,137 @@ class QueryProvider {
       serviceId,
       latitude,
       longitude,) async {
-    String _query = """
-            {
-              mechanicDetails(
-                 mechanicId: ${int.parse(mechanicId)}
-                 serviceId: "${serviceId.toString()}"
-                latitude: "9.2575"
-                longitude: "76.4508"
-              ) {
-                id
-                userCode
-                firstName
-                lastName
-                emailId
-                phoneNo
-                userTypeId
-                status
-                jwtToken
-                fcmToken
-                otpCode
-                isProfile
-                otpVerified
-                mechanic {
-                  id
-                  displayName
-                  userName
-                  password
-                  firstName
-                  lastName
-                  emailId
-                  phoneNo
-                  address
-                  startTime
-                  endTime
-                  city
-                  licenseNo
-                  state
-                  licenseDate
-                  latitude
-                  longitude
-                  serviceId
-                  profilePic
-                  licenseProof
-                  status
-                }
-                mechanicStatus {
-                  distance
-                }
-                mechanicService {
-                  id
-                  fee
-                   service {
+        String _query = """
+                {
+                  mechanicDetails(
+                     mechanicId: ${int.parse(mechanicId)}
+                     serviceId: "${serviceId.toString()}"
+                    latitude: "9.2575"
+                    longitude: "76.4508"
+                  ) {
+                    id
+                    userCode
+                    firstName
+                    lastName
+                    emailId
+                    phoneNo
+                    userTypeId
+                    status
+                    jwtToken
+                    fcmToken
+                    otpCode
+                    isProfile
+                    otpVerified
+                    mechanic {
                       id
-                      serviceName
-                      description
-                      icon
-                      minPrice
-                      maxPrice
-                      categoryId
+                      displayName
+                      userName
+                      password
+                      firstName
+                      lastName
+                      emailId
+                      phoneNo
+                      address
+                      startTime
+                      endTime
+                      city
+                      licenseNo
+                      state
+                      licenseDate
+                      latitude
+                      longitude
+                      serviceId
+                      profilePic
+                      licenseProof
                       status
                     }
-                  status
-                  userId
+                    mechanicStatus {
+                      distance
+                    }
+                    mechanicService {
+                      id
+                      fee
+                       service {
+                          id
+                          serviceName
+                          description
+                          icon
+                          minPrice
+                          maxPrice
+                          categoryId
+                          status
+                        }
+                      status
+                      userId
+                    }
+                    totalAmount
+                    distance
+                    duration
+                    reviewCount
+                    mechanicReviewsData {
+                      id
+                      transType
+                      rating
+                      feedback
+                      bookingId
+                      orderId
+                      status
+                    }
+                    mechanicReview
+                  }
                 }
-                totalAmount
-                distance
-                duration
-                reviewCount
-                mechanicReviewsData {
-                  id
-                  transType
-                  rating
-                  feedback
-                  bookingId
-                  orderId
-                  status
-                }
-                mechanicReview
-              }
-            }
-    
-         """;
+        
+             """;
+        log(_query);
+        return await GqlClient.I.query01(
+          _query,
+          token,
+          enableDebug: true,
+          isTokenThere: true,
+        );
+  }
+
+
+  /// =============== Mechanics Booking Id  ================== ///
+
+  postMechanicsBookingIDRequest(
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
+    String _query = """  
+    mutation {
+      mechanicBooking(
+        bookedDate: "$date"
+        bookedTime: "$time"
+        latitude: 9.2575
+        longitude: 76.4508
+        serviceId: ${int.parse(serviceId.toString())}
+        mechanicId:${int.parse(mechanicId.toString())}
+        reqType: ${int.parse(reqType.toString())}
+        totalPrice: ${int.parse(totalPrice.toString())}
+        paymentType: ${int.parse(paymentType.toString())}
+        travelTime:  "$travelTime"
+        ) {
+            id
+            bookedDate
+            latitude
+            longitude
+            customerId
+            mechanicId
+            status
+            vehicleId
+            totalPrice
+            tax
+            commission
+            serviceCharge
+            totalTime
+          }
+        }
+    """;
     log(_query);
-    return await GqlClient.I.query01(
-      _query,
-      token,
-      enableDebug: true,
-      isTokenThere: true,
-    );
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
 
