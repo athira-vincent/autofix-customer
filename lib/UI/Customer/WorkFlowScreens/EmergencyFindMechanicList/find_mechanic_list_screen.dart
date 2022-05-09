@@ -75,7 +75,6 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
   Set<Polyline> lines = {};
 
 
-
   void _onAddMarkerButtonPressed() {
     setState(() {
       _markers.add(Marker(
