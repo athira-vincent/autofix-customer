@@ -1,8 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -14,7 +14,7 @@ class MechanicListScreen extends StatefulWidget {
 
   final String bookingId;
   final String authToken;
-  final List<String> serviceIds;
+  final String serviceIds;
   final String serviceType;
   final String serviceModel;
 
@@ -34,36 +34,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
-  List<MechaniclistForService>? mechanicListForServices = [
-    MechaniclistForService(id: "1",
-      userCode: "012",firstName: "athira",
-      lastName: "a",phoneNo: "123454676",emailId: "athira@gmail.com",
-      state: "kerala",accountType: 1,userType: 1,isProfileCompleted: 1,profilePic: "",status: 1,
-      mechanicService: [new MechanicService(id: "1",status: 1, fee: "2000", serviceId: 1, userId: 1)],
-      mechanicVehicle: [new MechanicVehicle(status: 1, id: "1", makeId: 1)]
-    ),
-    MechaniclistForService(id: "12",
-        userCode: "014",firstName: "Ammu",
-        lastName: "a",phoneNo: "123454676",emailId: "ammu@gmail.com",
-        state: "kerala",accountType: 1,userType: 1,isProfileCompleted: 1,profilePic: "",status: 1,
-        mechanicService: [new MechanicService(id: "2",status: 1, fee: "2010", serviceId: 2, userId: 12)],
-        mechanicVehicle: [new MechanicVehicle(status: 1, id: "3", makeId: 2)]
-    ),
-    MechaniclistForService(id: "12",
-        userCode: "014",firstName: "BBB",
-        lastName: "a",phoneNo: "123454676",emailId: "ammu@gmail.com",
-        state: "kerala",accountType: 1,userType: 1,isProfileCompleted: 1,profilePic: "",status: 1,
-        mechanicService: [new MechanicService(id: "2",status: 1, fee: "2010", serviceId: 2, userId: 12)],
-        mechanicVehicle: [new MechanicVehicle(status: 1, id: "3", makeId: 2)]
-    ),
-    MechaniclistForService(id: "12",
-        userCode: "014",firstName: "CCCCCC",
-        lastName: "a",phoneNo: "123454676",emailId: "ammu@gmail.com",
-        state: "kerala",accountType: 1,userType: 1,isProfileCompleted: 1,profilePic: "",status: 1,
-        mechanicService: [new MechanicService(id: "2",status: 1, fee: "2010", serviceId: 2, userId: 12)],
-        mechanicVehicle: [new MechanicVehicle(status: 1, id: "3", makeId: 2)]
-    ),
-  ];
+
 
   String waitingMechanic="1";
 
@@ -101,7 +72,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
 
         setState(() {
 
-          if(value.data?.mechaniclistForServices?.length==0)
+          if(value.data?.mechanicList?.data?.length==0)
           {
             waitingMechanic = "0";
           }
@@ -252,7 +223,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
           Container(
             child: StreamBuilder(
                 stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
-                builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
+                builder: (context, AsyncSnapshot<MechanicListMdl> snapshot) {
                   print("${snapshot.hasData}");
                   print("${snapshot.connectionState}");
                   switch (snapshot.connectionState) {
@@ -260,14 +231,14 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                     default:
                       return
                         //snapshot.data?.data?.mechaniclistForServices?.length != 0 && snapshot.data?.data?.mechaniclistForServices?.length != null
-                        mechanicListForServices!.length != 0 && mechanicListForServices!.length != null
+                        snapshot.data?.data?.mechanicList?.data?.length != 0 && snapshot.data?.data?.mechanicList?.data?.length != null
                             ? ListView.builder(
                               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               //itemCount:snapshot.data?.data?.mechaniclistForServices?.length,
-                              itemCount:mechanicListForServices?.length,
+                              itemCount:snapshot.data?.data?.mechanicList?.data?.length,
                               itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: (){
@@ -275,12 +246,11 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>  MechanicProfileViewScreen(
-                                            //mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
-                                            //mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
                                             authToken: '$authToken',
                                             isEmergency: false,
-                                            mechaniclistForService: mechanicListForServices![0],
-                                            mechanicId: "1",serviceModel: widget.serviceModel,
+                                            mechaniclistForService: snapshot.data?.data?.mechanicList?.data![index].mechanicService?[0],
+                                            mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
+                                            serviceModel: widget.serviceModel,
 
                                           )));
 
@@ -323,7 +293,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                 children: [
                                                   Padding(
                                                     padding: const EdgeInsets.all(2),
-                                                    child: Text('${mechanicListForServices![index].firstName}',
+                                                    child: Text('${snapshot.data?.data?.mechanicList?.data![index].firstName}',
                                                       style: Styles.mechanicNameStyle,
                                                       maxLines: 1,
                                                       textAlign: TextAlign.start,

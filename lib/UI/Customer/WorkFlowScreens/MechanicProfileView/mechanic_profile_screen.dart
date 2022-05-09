@@ -1,7 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
@@ -20,11 +20,13 @@ class MechanicProfileViewScreen extends StatefulWidget {
   final String mechanicId;
   final String authToken;
   final bool isEmergency;
-  final MechaniclistForService mechaniclistForService;
+  MechanicService? mechaniclistForService;
   final String serviceModel;
 
 
-  MechanicProfileViewScreen({required this.mechanicId,required this.authToken,
+  MechanicProfileViewScreen({
+    required this.mechanicId,
+    required this.authToken,
     required this.mechaniclistForService,
     required this.isEmergency,required this.serviceModel});
 
@@ -69,10 +71,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      for(int i=0;i<widget.mechaniclistForService.mechanicService!.length;i++)
-      {
-          totalFees = totalFees + double.parse(widget.mechaniclistForService.mechanicService![i].fee);
-      }
+      totalFees = totalFees + double.parse('${widget.mechaniclistForService?.fee.toString()}');
+
     });
   }
 
@@ -115,7 +115,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             Text(
-              '${widget.mechaniclistForService.firstName}',
+              '${widget.mechaniclistForService?.id}',
               textAlign: TextAlign.center,
               style: Styles.appBarTextBlack,
             ),
@@ -494,51 +494,36 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               ),
             ),
             Container(
-              child: ListView.builder(
-                itemCount:widget.mechaniclistForService.mechanicService?.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context,index,) {
-
-
-
-                  return GestureDetector(
-                    onTap:(){
-
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                      child: Container(
-                        alignment: Alignment.center,
-                        child:Row(
-                          children: [
-                            Row(
-                              children: [
-                                Text('${widget.mechaniclistForService.mechanicService![index].id}',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelTitle_10,
-                                ),
-                              ],
-                            ),
-                            Spacer(),
-                            Row(
-                              children: [
-                                Text('${widget.mechaniclistForService.mechanicService![index].fee}',
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.visible,
-                                  style: Styles.textLabelTitle_10,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+              child:  Padding(
+                padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                child: Container(
+                  alignment: Alignment.center,
+                  child:Row(
+                    children: [
+                      Row(
+                        children: [
+                          Text('${widget.mechaniclistForService?.id}',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_10,
+                          ),
+                        ],
                       ),
-                    ),
-                  );
-                },
+                      Spacer(),
+                      Row(
+                        children: [
+                          Text('${widget.mechaniclistForService?.fee}',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.visible,
+                            style: Styles.textLabelTitle_10,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
             Padding(

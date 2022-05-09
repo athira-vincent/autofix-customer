@@ -4,8 +4,8 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,13 +21,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class FindMechanicListScreen extends StatefulWidget {
 
-  final String bookingId;
+  final String latitude;
+  final String longitude;
   final String authToken;
-  final  List<String> serviceIds;
+  final String serviceIds;
   final String serviceType;
 
 
-  FindMechanicListScreen({required this.bookingId,required this.authToken,required this.serviceIds,required this.serviceType});
+  FindMechanicListScreen({required this.authToken,required this.serviceIds,required this.serviceType,required this.latitude,required this.longitude});
 
   @override
   State<StatefulWidget> createState() {
@@ -38,33 +39,17 @@ class FindMechanicListScreen extends StatefulWidget {
 class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
 
   String authToken="";
-
   String waitingMechanic="-1";
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
 
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
-
   final Set<Marker> _markers = {};
-
   LatLng _lastMapPosition = _center;
-
-  MapType _currentMapType = MapType.terrain;
-
   Completer<GoogleMapController> _controller = Completer();
-
   static const LatLng _center = const LatLng(12.988827, 77.472091);
-
   String? _mapStyle;
 
   void _onMapCreated(GoogleMapController controller) {
@@ -151,17 +136,10 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-/*
-    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
-      _mapStyle = string;
-    });*/
 
     getSharedPrefData();
     _listenServiceListResponse();
 
-  /*  rootBundle.loadString('assets/map_style/map_style.json').then((string) {
-      _mapStyle = string;
-    });*/
     /// add origin marker origin marker
     _addMarker(
       LatLng(_originLatitude, _originLongitude),
@@ -185,7 +163,14 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _homeCustomerBloc.postFindMechanicsListEmergencyRequest("$authToken", widget.bookingId,widget.serviceIds,"emergency");
+      _homeCustomerBloc.postFindMechanicsListEmergencyRequest(
+          "$authToken",
+          "0",
+          "200",
+          widget.latitude,
+          widget.longitude,
+          widget.serviceIds,
+          "emergency");
 
     });
   }
@@ -203,7 +188,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
 
         setState(() {
 
-          if(value.data?.mechaniclistForServices?.length==0)
+          if(value.data?.mechanicList?.data?.length==0)
             {
               waitingMechanic = "0";
             }
@@ -376,7 +361,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                         Container(
                                           child: StreamBuilder(
                                               stream:  _homeCustomerBloc.findMechanicsListEmergencyResponse,
-                                              builder: (context, AsyncSnapshot<MechaniclistForServicesMdl> snapshot) {
+                                              builder: (context, AsyncSnapshot<MechanicListMdl> snapshot) {
                                                 print("${snapshot.hasData}");
                                                 print("${snapshot.connectionState}");
                                                 switch (snapshot.connectionState) {
@@ -384,24 +369,25 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                     return progressBarLightRose();
                                                   default:
                                                     return
-                                                      snapshot.data?.data?.mechaniclistForServices?.length != 0 && snapshot.data?.data?.mechaniclistForServices?.length != null
+                                                      snapshot.data?.data?.mechanicList?.data?.length != 0 && snapshot.data?.data?.mechanicList?.data?.length != null
                                                        ? ListView.builder(
                                                             padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                                             scrollDirection: Axis.vertical,
                                                             shrinkWrap: true,
                                                             physics: NeverScrollableScrollPhysics(),
-                                                            itemCount:snapshot.data?.data?.mechaniclistForServices?.length,
+                                                            itemCount:snapshot.data?.data?.mechanicList?.data?.length,
                                                             itemBuilder: (context, index) {
                                                                   return InkWell(
                                                                     onTap: (){
                                                                       Navigator.push(
                                                                           context,
                                                                           MaterialPageRoute(
-                                                                              builder: (context) =>  MechanicProfileViewScreen(mechanicId: '${snapshot.data?.data?.mechaniclistForServices![index].id}',
-                                                                                authToken: '$authToken',
-                                                                                mechaniclistForService: snapshot.data!.data!.mechaniclistForServices![index],
-                                                                                isEmergency: true, serviceModel: "",
-                                                                              )));
+                                                                                  builder: (context) =>  MechanicProfileViewScreen(
+                                                                                    mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
+                                                                                    authToken: '$authToken',
+                                                                                    mechaniclistForService: snapshot.data?.data?.mechanicList?.data![index].mechanicService?[0],
+                                                                                    isEmergency: true, serviceModel: "",
+                                                                                  )));
                                                                     },
                                                                     child: Padding(
                                                                       padding: const EdgeInsets.fromLTRB(10,5,10,0),
@@ -441,7 +427,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                     children: [
                                                                                       Padding(
                                                                                         padding: const EdgeInsets.all(2),
-                                                                                        child: Text('${snapshot.data?.data?.mechaniclistForServices![index].firstName}',
+                                                                                        child: Text('${snapshot.data?.data?.mechanicList?.data?[index].firstName}',
                                                                                           style: Styles.mechanicNameStyle,
                                                                                           maxLines: 1,
                                                                                           textAlign: TextAlign.start,

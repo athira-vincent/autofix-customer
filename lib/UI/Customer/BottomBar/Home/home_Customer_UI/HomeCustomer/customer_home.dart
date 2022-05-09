@@ -3,8 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/RegularFindMechanicList/mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -69,7 +68,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
-  List<String> serviceIds =[];
+  String serviceIds = "";
 
   double per = .10;
 
@@ -209,36 +208,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
-
-        });
-      }
-    });
-    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
-        });
-
-      } else {
-
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print(" postServiceList >>>>>>>  ${value.status}");
-          print(" authToken >>>>>>>  $authToken");
-          print(" serviceIds >>>>>>>  $serviceIds");
-          print(" serviceType >>>>>>>  emergency");
-          print(" serviceType >>>>>>>  mechanicBooking  >>>>>>>>>>  ${value}");
-          print("{value.data?.mechanicBooking?['id'] >>>>> ${value.data?.mechanicBooking?.id}");
-
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  FindMechanicListScreen(
-                  bookingId: '${value.data?.mechanicBooking?.id}',
-                  serviceIds: serviceIds,
-                  serviceType: 'emergency',
-                  authToken: authToken,)));
 
         });
       }
@@ -624,8 +593,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     print(">>>>>>>>>> Longitude  $CurrentLongitude");
                                     print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                                     print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                    serviceIds.clear();
-                                    serviceIds.add('${snapshot.data?.data?.categoryList![index].id}');
+
+                                    serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
                                     Navigator.push(
@@ -905,38 +874,23 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                   onPressed: () {
 
                     Navigator.pop(context);
-                    /*setState(() {
-                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
-                      if (_formKey.currentState!.validate()) {
-                      } else {
-                      }
-                    });*/
-                                      print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                                      print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                                      print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                      print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                      serviceIds.clear();
-                                      serviceIds.add('${categoryList!.id}');
-                                      print(">>>>>>>>>> ServiceId  $serviceIds");
+                    print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                    print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                    print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                    print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                    serviceIds = '${categoryList!.id}';
+                    print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                          _homeCustomerBloc.postMechanicsBookingIDRequest(
-                                          authToken,
-                                          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                                          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                                          CurrentLatitude,
-                                          CurrentLongitude,
-                                          serviceIds,
-                                          //"2", "1", "1000", "1", null
-                                          null, null, null, null, null
-                           );
 
-                    /*Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(
                             builder: (context) =>  FindMechanicListScreen(
-                              bookingId: '01',
                               serviceIds: serviceIds,
                               serviceType: 'emergency',
-                              authToken: authToken,)));*/
+                              latitude: CurrentLatitude,
+                              longitude: CurrentLongitude,
+                              authToken: authToken,)));
                   },
                   child: Container(
                     width: double.infinity,

@@ -2,21 +2,7 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
-import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
-import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/PaymentScreens/payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicProfileView/mechanic_profile_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
-import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
-import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

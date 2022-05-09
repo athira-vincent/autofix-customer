@@ -1,4 +1,5 @@
 
+import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechaniclist_for_services_Mdl.dart';
@@ -41,6 +42,35 @@ class HomeCustomerBloc {
   }
 
 
+
+
+  /// =============== Mechanics List Emergency ================== ///
+
+
+  final postFindMechanicsListEmergency = PublishSubject<MechanicListMdl>();
+  Stream<MechanicListMdl> get findMechanicsListEmergencyResponse => postFindMechanicsListEmergency.stream;
+
+  postFindMechanicsListEmergencyRequest(
+      token,
+      page,
+      size,
+      latitude,
+      longitude,
+      serviceId,
+      serviceType) async {
+
+    MechanicListMdl _mechaniclist = await repository.postFindMechanicsListEmergencyRequest(
+        token,
+        page,
+        size,
+        latitude,
+        longitude,
+        serviceId,
+        serviceType);
+    postFindMechanicsListEmergency.sink.add(_mechaniclist);
+  }
+
+
   /// =============== Mechanics Booking ID ================== ///
 
 
@@ -61,26 +91,6 @@ class HomeCustomerBloc {
     postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
   }
 
-
-  /// =============== Find Mechanics List Emergency ================== ///
-
-
-  final postFindMechanicsListEmergency = PublishSubject<MechaniclistForServicesMdl>();
-  Stream<MechaniclistForServicesMdl> get findMechanicsListEmergencyResponse => postFindMechanicsListEmergency.stream;
-
-  postFindMechanicsListEmergencyRequest(
-      token,
-      bookMechanicId,
-      serviceId,
-      serviceType) async {
-
-    MechaniclistForServicesMdl _mechaniclistForServicesMdl = await repository.postFindMechanicsListEmergencyRequest(
-        token,
-        bookMechanicId,
-        serviceId,
-        serviceType);
-    postFindMechanicsListEmergency.sink.add(_mechaniclistForServicesMdl);
-  }
 
   /// =============== Search Service Request  ================== ///
 

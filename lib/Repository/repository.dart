@@ -15,8 +15,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScr
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
-
-import '../UI/Customer/BottomBar/Home/home_Customer_ApiProvier/home_customer_apiProvider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
 
@@ -28,7 +26,6 @@ class Repository {
   final _mechanicApiProvider = MechanicApiProvider();
 
   final _signupApiProvider = SignupApiProvider();
-  final _homeCustomerApiProvider = HomeCustomerApiProvider();
   final _customerFetchProfileApiProvider = CustomerProfileApiProvider();
   final _mechanicProfileApiProvider = MechanicProfileApiProvider();
 
@@ -63,7 +60,7 @@ class Repository {
 
   //  Category List Home Request
   Future<dynamic> getCategoryListHomeRequest(String token,categoryId) =>
-      _homeCustomerApiProvider.getCategoryListHomeRequest(token,categoryId);
+      _customerApiProvider.getCategoryListHomeRequest(token,categoryId);
 
 
   // SignUp
@@ -110,21 +107,28 @@ class Repository {
       latitude, longitude,
       serviceId, mechanicId, reqType,
       totalPrice, paymentType, travelTime) =>
-      _homeCustomerApiProvider.postMechanicsBookingIDRequest(
+      _customerApiProvider.postMechanicsBookingIDRequest(
           token, date, time,
           latitude, longitude,
           serviceId, mechanicId, reqType,
           totalPrice, paymentType, travelTime);
 
-  //Mechanics List Emergency Request
+  /// =============== Mechanics List Emergency ================== ///
+
   Future<dynamic> postFindMechanicsListEmergencyRequest(
       token,
-      bookMechanicId,
+      page,
+      size,
+      latitude,
+      longitude,
       serviceId,
       serviceType) =>
-      _homeCustomerApiProvider.postFindMechanicsListEmergencyRequest(
+      _customerApiProvider.postFindMechanicsListEmergencyRequest(
           token,
-          bookMechanicId,
+          page,
+          size,
+          latitude,
+          longitude,
           serviceId,
           serviceType);
 
@@ -134,7 +138,7 @@ class Repository {
       search,
       count,
       categoryId)  =>
-      _homeCustomerApiProvider. postSearchServiceRequest(
+      _customerApiProvider. postSearchServiceRequest(
           token,
           search,
           count,
@@ -290,7 +294,7 @@ class Repository {
   //  Vehicle List Request
   Future<dynamic>  postCustVehicleListRequest(
       token)  =>
-      _homeCustomerApiProvider.postCustVehicleListRequest(
+      _customerApiProvider.postCustVehicleListRequest(
           token);
 
 
