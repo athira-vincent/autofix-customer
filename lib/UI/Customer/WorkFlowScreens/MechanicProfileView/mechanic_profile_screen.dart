@@ -379,7 +379,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:1,
+                itemCount:widget.mechanicListData?.mechanicReviewsData?.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -437,14 +437,14 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text('Good service and  nice work…',
+                                            child: Text('${widget.mechanicListData?.mechanicReviewsData?[index].feedback}',
                                               style: Styles.textLabelTitle12,
                                               maxLines: 1,
                                               textAlign: TextAlign.start,
                                               overflow: TextOverflow.visible,),
                                           ),
 
-                                          Row(
+                                          /*Row(
                                             children: [
                                               Spacer(),
                                               Padding(
@@ -456,7 +456,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                                   overflow: TextOverflow.visible,),
                                               ),
                                             ],
-                                          ),
+                                          ),*/
                                         ],
                                       ),
                                     ),
@@ -527,36 +527,50 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               ),
             ),
             Container(
-              child:  Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                child: Container(
-                  alignment: Alignment.center,
-                  child:Row(
-                    children: [
-                      Row(
-                        children: [
-                          Text('${widget.mechanicListData?.firstName}',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.visible,
-                            style: Styles.textLabelTitle_10,
+              child: ListView.builder(
+                itemCount:widget.mechanicListData?.mechanicService?.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context,index,) {
+                  return GestureDetector(
+                    onTap:(){
+
+                    },
+                    child: Container(
+                      child:  Padding(
+                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child:Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('${widget.mechanicListData?.mechanicService?[index].service?.serviceName}',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  Text('${widget.mechanicListData?.mechanicService?[index].fee}',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                      Spacer(),
-                      Row(
-                        children: [
-                          Text('${widget.mechanicListData?.mechanicService?[0].fee}',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.visible,
-                            style: Styles.textLabelTitle_10,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
             Padding(
@@ -576,7 +590,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   Spacer(),
                   Row(
                     children: [
-                      Text('$totalFees',
+                      Text('${widget.mechanicListData?.totalAmount}',
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -597,10 +611,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     return InkWell(
       onTap: (){
         _showMechanicAcceptanceDialog(context);
-        Navigator.pushReplacement(
+       /* Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  MechanicTrackingScreen()));
+                builder: (context) =>  MechanicTrackingScreen()));*/
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
