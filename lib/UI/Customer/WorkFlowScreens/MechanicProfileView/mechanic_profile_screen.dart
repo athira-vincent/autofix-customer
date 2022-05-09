@@ -114,7 +114,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   }
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
