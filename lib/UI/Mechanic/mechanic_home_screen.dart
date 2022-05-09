@@ -78,6 +78,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         });
       }else{
         setState(() {
+          isOnline = !isOnline;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           socialLoginIsLoading = false;

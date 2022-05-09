@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +26,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
 
   late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
-  String authToken="";
+  String authToken="", mechanicId = "";
   String location ='Null, Press Button';
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
   String Address = 'search';
   List<BrandDetail>? brandDetails;
+  bool _isLoadingPage = false;
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -135,15 +137,36 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId'+authToken.toString());
+      print('userId ' + mechanicId.toString());
 
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "1", mechanicId);
       _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["bmw","maruthi"]);
+
 
     });
   }
 
   _listenApiResponse() {
     _mechanicHomeBloc.postMechanicBrandSpecialization.listen((value) {
+      if(value.status == "error"){
+        setState(() {
+          //_isLoading = false;
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+        });
+      }else{
+        setState(() {
+          //brandDetails.add(value.data.brandDetails);
+          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
+          /*_isLoading = false;
+          socialLoginIsLoading = false;
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
+        });
+      }
+    });
+
+    _mechanicHomeBloc.postMechanicUpComingService.listen((value) {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
@@ -281,7 +304,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,
                   style: Styles.textLabelTitle_10,
-
                 ),
               ],
             ),
@@ -310,92 +332,128 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           Container(
             height: 185,
             margin: EdgeInsets.all(0),
-            child: ListView.builder(
-              itemCount: imageList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, i, ){
-                //for onTap to redirect to another screen
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    left: 5,),
-                  child: InkWell(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 180,
-                          width: 250,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.white,)
-                          ),
-                          //ClipRRect for image border radius
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Stack(
-                              children: [
-                                Image.asset("assets/image/img_mech_home_service_bg.png"),
-                                Column(
+            child: Stack(
+              children: [
+                StreamBuilder(
+                    stream:  _mechanicHomeBloc.postMechanicUpComingServiceResponse,
+                    builder: (context, AsyncSnapshot<MechanicUpcomingServiceMdl> snapshot) {
+                      print("${snapshot.hasData}");
+                      print("${snapshot.connectionState}");
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height,
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustColors.peaGreen),
+                              ),
+                            ),
+                          );
+                        default:
+                          return
+                            snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
+                                ? Padding(
+                              padding: const EdgeInsets.only(
+                                left: 5,),
+                              child: InkWell(
+                                child: Column(
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.only(
-                                        left: size.width * 2 / 100,
-                                        right: size.width * 2 / 100,
-                                        top: size.height * 4 / 100,
-                                        //bottom: size.height * 2 / 100,
+                                      height: 180,
+                                      width: 250,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          border: Border.all(color: Colors.white,)
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("02-12-2021",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),),
+                                      //ClipRRect for image border radius
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Stack(
+                                          children: [
+                                            Image.asset("assets/image/img_mech_home_service_bg.png"),
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: size.width * 2 / 100,
+                                                    right: size.width * 2 / 100,
+                                                    top: size.height * 4 / 100,
+                                                    //bottom: size.height * 2 / 100,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text("02-12-2021",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15),),
 
-                                          Text("09:30 AM",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),)
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                        left: size.width * 2 / 100,
-                                        right: size.width * 2 / 100,
-                                        top: size.height * 4 / 100,
-                                        //bottom: size.height * 2.5 / 100,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Service from Eric John. ",
-                                            style: TextStyle(color: Colors.white,
-                                              fontSize: 15),),
+                                                      Text("09:30 AM",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 15),)
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: size.width * 2 / 100,
+                                                    right: size.width * 2 / 100,
+                                                    top: size.height * 4 / 100,
+                                                    //bottom: size.height * 2.5 / 100,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text("Service from Eric John. ",
+                                                        style: TextStyle(color: Colors.white,
+                                                            fontSize: 15),),
 
-                                          Text(" [ HONDA CITY ]",
-                                            style: TextStyle(color: Colors.white,
-                                              fontSize: 15),)
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            /*child: Image.network(
+                                                      Text(" [ HONDA CITY ]",
+                                                        style: TextStyle(color: Colors.white,
+                                                            fontSize: 15),)
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        /*child: Image.network(
                               imageList[i],
                               fit: BoxFit.cover,
                             ),*/
-                          ),
-                        ),
-                      ],
-                    ),
-                    onTap: (){
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onTap: (){
 
-                    },
+                                },
+                              ),
+                            )
+                                : Container();
+                      }
+                    }
+                ),
+                Visibility(
+                  visible: _isLoadingPage,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
+                      ),
+                    ),
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ],

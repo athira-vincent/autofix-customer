@@ -4,6 +4,7 @@ import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_location_update_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_online_offline_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 
 
 class MechanicApiProvider {
@@ -67,6 +68,24 @@ class MechanicApiProvider {
     }
   }
 
+  Future<MechanicUpcomingServiceMdl> postMechanicUpcomingServiceRequest(
+      token, type, mechanicId )async {
+    Map<String, dynamic> _resp = await _queryProvider.postMechanicUpcomingServiceRequest(
+        token, type, mechanicId);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicUpcomingServiceMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicUpcomingServiceMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicUpcomingServiceMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 
 
 }

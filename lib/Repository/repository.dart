@@ -254,6 +254,12 @@ class Repository {
       _mechanicApiProvider.postMechanicBrandSpecializationRequest(
           token, brandName);
 
+  // Fetch Mechanic Upcoming Service Request
+  Future<dynamic>  postMechanicUpComingServiceRequest(
+      token, type, mechanicId)  =>
+      _mechanicApiProvider.postMechanicUpcomingServiceRequest(
+          token, type, mechanicId);
+
   // Fetch Profile Mechanic Request
   Future<dynamic>  postMechanicFetchProfileRequest(token)  =>
       _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token);

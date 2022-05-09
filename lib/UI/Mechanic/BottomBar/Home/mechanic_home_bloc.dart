@@ -3,6 +3,7 @@ import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_location_update_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_online_offline_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
@@ -51,6 +52,19 @@ class HomeMechanicBloc {
     MechanicBrandSpecializationMdl _mechanicLocationUpdateMdl = await repository.postMechanicBrandSpecializationRequest(
         token, brandName);
     postMechanicBrandSpecialization.sink.add(_mechanicLocationUpdateMdl);
+  }
+
+  /// =============== Mechanic Upcoming Service ================== ///
+
+  final postMechanicUpComingService = PublishSubject<MechanicUpcomingServiceMdl>();
+  Stream<MechanicUpcomingServiceMdl> get postMechanicUpComingServiceResponse => postMechanicUpComingService.stream;
+
+  postMechanicUpComingServiceRequest(
+      token, type, mechanicId) async {
+
+    MechanicUpcomingServiceMdl _mechanicUpComingServiceMdl = await repository.postMechanicUpComingServiceRequest(
+        token, type, mechanicId);
+    postMechanicUpComingService.sink.add(_mechanicUpComingServiceMdl);
   }
 
 
