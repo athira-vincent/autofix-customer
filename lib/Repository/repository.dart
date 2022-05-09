@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_pr
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CategoryList/category_list_api_provider.dart';
@@ -43,6 +44,7 @@ class Repository {
   final _serviceListApiProvider = ServiceListApiProvider();
   final _addServiceListApiProvider = AddServicesApiProvider();
   final _addMechanicMyWalletApiProvider = MechanicMyWalletApiProvider();
+  final _addMechanicMyJobReviewApiProvider = MechanicMyJobReviewApiProvider();
 
   final _categoryListApiProvider = CategoryListApiProvider();
 
@@ -179,6 +181,12 @@ class Repository {
         _addMechanicMyWalletApiProvider.postMechanicMyWalletRequest(
             token,type);
 
+  // Mechanic My Job Review
+  Future<dynamic> postMechanicFetchMyJobReviewRequest(
+      token,type) =>
+      _addMechanicMyJobReviewApiProvider.postMechanicMyJobReviewRequest(
+          token,type);
+
   // Mechanic Individual Complete Profile
   Future<dynamic> getCompleteProfileMechIndividual(
       String token,
@@ -280,6 +288,12 @@ class Repository {
       token, type, mechanicId)  =>
       _mechanicApiProvider.postMechanicUpcomingServiceRequest(
           token, type, mechanicId);
+
+  // Fetch Mechanic Active Service Request
+  Future<dynamic>  postMechanicActiveServiceRequest(
+      token, mechanicId)  =>
+      _mechanicApiProvider.postMechanicActiveServiceRequest(
+          token, mechanicId);
 
   // Fetch Profile Mechanic Request
   Future<dynamic>  postMechanicFetchProfileRequest(token)  =>

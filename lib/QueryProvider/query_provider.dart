@@ -746,6 +746,27 @@ class QueryProvider {
 
   postMechanicMyWalletRequest(String token, ) async {
     String _query = """
+    mutation {
+      myWallet(
+    #   dayStart: "2022-05-03"
+    #   dayEnd: "2022-05-03"
+       monthStart: "2022-05-03"
+       monthEnd: "2022-05-31"
+    #   weekStart: "string"
+    #   weekEnd: "string"
+        mechanicId: 8
+      ) {
+        jobCount
+        sum
+        bookingData {
+          id
+          bookingCode
+          mechanic{
+            id
+          }
+        }
+      }
+    }
      """;
     log(_query);
     print("Token >>>>>>> $token");
@@ -756,6 +777,99 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
+  postMechanicMyJobReviewRequest(String token, mechanicId) async {
+    String _query = """
+    {
+  mechanicReviewList(mechanicId: $mechanicId) {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    status
+    jwtToken
+    fcmToken
+    otpCode
+    isProfile
+    otpVerified
+    mechanic {
+      id
+      displayName
+      userName
+      password
+      firstName
+      lastName
+      emailId
+      phoneNo
+      address
+      startTime
+      endTime
+      city
+      licenseNo
+      state
+      licenseDate
+      latitude
+      longitude
+      serviceId
+      profilePic
+      licenseProof
+      status
+      rate
+      reviewCount
+    }
+    mechanicStatus {
+      distance
+    }
+    mechanicService {
+      id
+      fee
+      service{
+        id
+      }
+      status
+      userId
+    }
+    totalAmount
+    distance
+    duration
+    reviewCount
+    mechanicReviewsData {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+      order{
+        id
+      }
+      bookings{
+        id
+      }
+      productData{
+        id
+      }
+    }
+    mechanicReview
+    bookingsCount
+  }
+}
+     """;
+    log(_query);
+    print("Token >>>>>>> $token");
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
 
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
   serviceList(String token, searchText, count, categoryId ) async {
@@ -1174,7 +1288,7 @@ class QueryProvider {
       token, type, mechanicId) async {
     String _query = """
       {
-    UpcomingCompletedServices(type: 2, mechanicId: $mechanicId) {
+    UpcomingCompletedServices(type: 1, mechanicId: $mechanicId) {
       id
       bookingCode
       reqType
@@ -1243,6 +1357,51 @@ class QueryProvider {
       }
     }
   }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postMechanicActiveServiceRequest(
+      token,  mechanicId) async {
+    String _query = """
+      mutation {
+      currentlyWorkingService(mechanicId: $mechanicId) {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        isRated
+        status
+        customerId
+        mechanicId
+        vehicleId
+        bookService {
+          id
+          status
+          service{
+            id
+          }
+        }
+      }
+    }
     """;
     log(_query);
     return await GqlClient.I.query01(

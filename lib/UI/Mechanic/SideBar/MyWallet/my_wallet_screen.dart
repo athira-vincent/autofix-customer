@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_mdl.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   String authToken = "" ;
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late MechanicMyWalletMdl mechanicMyWalletMdl;
 
   @override
   void initState() {
@@ -52,6 +54,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
         });
       }else{
         setState(() {
+          mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
@@ -66,6 +69,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     Size size = MediaQuery.of(context).size;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -255,9 +259,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                   ],
                 ),
               ),
-
-
-
             ],
           ),
         ),

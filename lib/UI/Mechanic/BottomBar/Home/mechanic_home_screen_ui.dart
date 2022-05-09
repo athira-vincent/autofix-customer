@@ -141,9 +141,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userFamilyId'+authToken.toString());
       print('userId ' + mechanicId.toString());
 
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "1", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "1", "8");
       _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["bmw","maruthi"]);
-
+      _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
 
     });
   }
@@ -165,7 +165,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         });
       }
     });
-
+/*
     _mechanicHomeBloc.postMechanicUpComingService.listen((value) {
       if(value.status == "error"){
         setState(() {
@@ -176,12 +176,12 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         setState(() {
           //brandDetails.add(value.data.brandDetails);
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
-          /*_isLoading = false;
+          *//*_isLoading = false;
           socialLoginIsLoading = false;
-          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
+          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*//*
         });
       }
-    });
+    });*/
   }
 
   Future<void> _getCurrentCustomerLocation() async {
@@ -259,8 +259,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                     emergencyServiceReminder(size),
                   ],
                 ),
-
-                Positioned(
+                /*Positioned(
                   right: 0,
                   bottom: 0,
                   //left: 0,
@@ -271,9 +270,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       backgroundColor: new Color(0xFFE57373),
                       onPressed: (){}
                   ),
-                )
+                )*/
               ],
-
             ),
           ),
           /*floatingActionButton: new FloatingActionButton(
@@ -355,86 +353,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                         default:
                           return
                             snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
-                                ? Padding(
-                              padding: const EdgeInsets.only(
-                                left: 5,),
-                              child: InkWell(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 180,
-                                      width: 250,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          border: Border.all(color: Colors.white,)
-                                      ),
-                                      //ClipRRect for image border radius
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Stack(
-                                          children: [
-                                            Image.asset("assets/image/img_mech_home_service_bg.png"),
-                                            Column(
-                                              children: [
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                    left: size.width * 2 / 100,
-                                                    right: size.width * 2 / 100,
-                                                    top: size.height * 4 / 100,
-                                                    //bottom: size.height * 2 / 100,
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text("02-12-2021",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15),),
-
-                                                      Text("09:30 AM",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 15),)
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.only(
-                                                    left: size.width * 2 / 100,
-                                                    right: size.width * 2 / 100,
-                                                    top: size.height * 4 / 100,
-                                                    //bottom: size.height * 2.5 / 100,
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text("Service from Eric John. ",
-                                                        style: TextStyle(color: Colors.white,
-                                                            fontSize: 15),),
-
-                                                      Text(" [ HONDA CITY ]",
-                                                        style: TextStyle(color: Colors.white,
-                                                            fontSize: 15),)
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        /*child: Image.network(
-                              imageList[i],
-                              fit: BoxFit.cover,
-                            ),*/
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onTap: (){
-
-                                },
-                              ),
-                            )
+                                ? upcomingServicesList(size,snapshot)
                                 : Container();
                       }
                     }
@@ -457,6 +376,119 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget upcomingServicesList(Size size, AsyncSnapshot<MechanicUpcomingServiceMdl> snapshot){
+    return  Container(
+      child: ListView.builder(
+        itemCount: snapshot.data?.data?.upcomingCompletedServices?.length,
+        scrollDirection: Axis.horizontal,
+          itemBuilder: (context, i, ){
+              return Padding(
+                padding: const EdgeInsets.only(
+                  left: 5,),
+                child: InkWell(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 180,
+                        width: 250,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.white,)
+                        ),
+                        //ClipRRect for image border radius
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Stack(
+                            children: [
+                              Image.asset("assets/image/img_mech_home_service_bg.png"),
+                              Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      left: size.width * 2 / 100,
+                                      right: size.width * 2 / 100,
+                                      top: size.height * 4 / 100,
+                                      //bottom: size.height * 2 / 100,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!.day.toString() +
+                                          "-" +
+                                          snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!.month.toString() +
+                                          "-" +
+                                          snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!.year.toString(),
+                                         // "02-12-2021",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 15),),
+                                        Text(
+                                          snapshot.data!.data!.upcomingCompletedServices![i].serviceTime.toString(),
+                                          //"09:30 AM",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 15),)
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      left: size.width * 2 / 100,
+                                      right: size.width * 2 / 100,
+                                      top: size.height * 4 / 100,
+                                      //bottom: size.height * 2.5 / 100,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Service from " +
+                                          snapshot.data!.data!.upcomingCompletedServices![i].customer!.firstName.toString(),
+                                          //"Service from Eric John. ",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 12
+                                          ),),
+
+                                        Text(
+                                          " [ " +
+                                          snapshot.data!.data!.upcomingCompletedServices![i].vehicle!.brand.toString()
+                                          + " ] ",
+                                          //" [ HONDA CITY ]",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 12
+                                          ),)
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: (){
+
+                  },
+                ),
+              );
+          }
       ),
     );
   }
