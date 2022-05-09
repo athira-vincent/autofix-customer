@@ -86,11 +86,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getPushNotification();
     getSharedPrefData();
     _listenServiceListResponse();
-    getPushNotification();
-
-
 
 
   }
@@ -905,8 +903,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
   Future<void> getPushNotification() async {
-    initializationSettingsAndroid =
-    new AndroidInitializationSettings('@mipmap/ic_launcher');
+    initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -923,6 +920,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         print('Message also contained a notification: ${message.notification}');
       }
        showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
+
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // print foreground message here.
+      print('Handling a foreground message ${message.messageId}');
+      print('Notification : ${message.notification?.title}');
+      print('Notification Message: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+      else
+        {
+          print('Message not contained a notification:');
+
+        }
+      showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
 
     });
 
