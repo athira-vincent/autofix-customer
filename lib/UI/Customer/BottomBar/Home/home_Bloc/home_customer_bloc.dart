@@ -186,6 +186,16 @@ class HomeCustomerBloc {
     return formatted;
   }
 
+  /// =============== Time Conversion ================== ///
+
+  timeConvertWithoutAmPm(DateTime Format) {
+    final DateFormat formatter = DateFormat('hh:mm');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+
 
 
   dispose() {

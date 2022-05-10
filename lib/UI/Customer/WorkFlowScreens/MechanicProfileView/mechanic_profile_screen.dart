@@ -18,6 +18,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
@@ -54,8 +55,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
-  late final  FirebaseMessaging _firebaseMessaging ;
-
 
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -70,7 +69,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   double totalFees = 0.0;
   String authToken="";
 
@@ -88,8 +86,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
     getPushNotification();
     getSharedPrefData();
-    _listenServiceListResponse();
-
+    _listen();
 
   }
 
@@ -110,7 +107,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
   }
 
-  _listenServiceListResponse() {
+  _listen() {
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
@@ -372,7 +369,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   width: 70,
                   child: Column(
                     children: [
-                      Text('${widget.mechanicListData?.mechanic?.address}',
+                      Text('${widget.mechanicListData?.mechanic?[0].address}',
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -658,7 +655,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
         callOnFcmApiSendPushNotifications(1);
 
-        _homeCustomerBloc.postMechanicsBookingIDRequest(
+       /* _homeCustomerBloc.postMechanicsBookingIDRequest(
            authToken,
           '${_homeCustomerBloc.dateConvert(DateTime.now())}',
           '${_homeCustomerBloc.timeConvert(DateTime.now())}',
@@ -669,7 +666,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           '2',
           '${widget.mechanicListData?.totalAmount}',
           '1',
-          '${_homeCustomerBloc.timeConvert(DateTime.now())}',);
+          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);*/
+
+       /* launchMapsUrl(
+            '10.5276',
+            '76.2144',
+            '10.0718',
+            '76.5488');*/
 
         _showMechanicAcceptanceDialog(context);
 
@@ -836,7 +839,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     final data = {
       'notification': {
         'body': 'You have $length new order',
-        'title': 'New Orders',
+        'title': 'Maria',
         'sound': 'alarmw.wav',
       },
       'priority': 'high',
@@ -845,6 +848,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         'id': '1',
         'status': 'done',
         'screen': 'screenA',
+        "bookingId" : '60',
+        "serviceName" : 'time Belt',
+        "serviceId" : '1',
+        "carPlateNumber" : 'KLmlodr876',
+        "customerName" : 'Minnukutty',
+        "customerAddress" : 'Elenjikkal House Empyreal Garden',
+        "requestFromApp" : "0",
         'message': 'ACTION'
       },
       'apns': {
@@ -853,7 +863,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to': 'fr4ESWvYQba1XMOEfv7i-h:APA91bFcE37i1l-eZY0Mc8CAGm64eTMezY0p3POWUd--G15ZlMKDw7p-JIX0L5fOpTQSnYyXOtkFeAV4-09aGE9JJn1KMtGOLpkOsfGlAflAv2XDa8bqTslOXAikwEOzDlCHd5CoJK9f',
+      'to': 'dKbQbAuESk6nRYj0gUH9-Q:APA91bE3y95YjEI9WWxdobOgKz2xsEPUOc7BFXG2SAcqDT9YmfjOk-OPlZjdwnXoPN0d64zXp5UO0TcOQ847jPfB2nyxMFqnO0_OObh1-oV_HsI5O6es2vTKclpa_vtztlwt2amflEt_',
     };
 
     final headers = {
@@ -903,6 +913,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
   Future<void> getPushNotification() async {
+
     initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
@@ -912,7 +923,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // print foreground message here.
-      print('Handling a foreground message ${message.messageId}');
+      print(' onMessage Handling a foreground message ${message.messageId}');
       print('Notification : ${message.notification?.title}');
       print('Notification Message: ${message.data}');
 
@@ -924,7 +935,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       // print foreground message here.
-      print('Handling a foreground message ${message.messageId}');
+      print('onMessageOpenedApp Handling a foreground message ${message.messageId}');
       print('Notification : ${message.notification?.title}');
       print('Notification Message: ${message.data}');
 
@@ -944,15 +955,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-
-  void showNotification(String title, String body) async {
-    await _demoNotification(title, body);
-  }
-
-  Future<void> _demoNotification(String title, String body) async {
+  Future<void> showNotification(String title, String body) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'channel_ID', 'channel name',
-
         playSound: true,
         showProgress: true,
         ticker: 'Kindersteps');
@@ -964,18 +969,24 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         .show(0, title, body, platformChannelSpecifics, payload: 'test');
   }
 
-  Future onSelectNotification(String payload) async {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return new AlertDialog(
-          title: Text("PayLoad"),
-          content: Text("Payload : $payload"),
-        );
-      },
-    );
-  }
 
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
 
 
 }

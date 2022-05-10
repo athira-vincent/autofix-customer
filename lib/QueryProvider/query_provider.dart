@@ -396,131 +396,139 @@ class QueryProvider {
       serviceId,
       serviceType) async {
     String _query = """ 
-      {
-        mechanicList(
-          page: ${int.parse(page.toString())}
-          size:  ${int.parse(size.toString())}
-          serviceId: "$serviceId"
-          latitude: "9.2575"
-          longitude: "76.4508"
-        ) {
-          totalItems
-          data {
-            id
-            userCode
-            firstName
-            lastName
-            emailId
-            phoneNo
-            userTypeId
-            status
-            jwtToken
-            fcmToken
-            otpCode
-            isProfile
-            otpVerified
-            mechanic {
+          {
+            mechanicList(
+                    page: ${int.parse(page.toString())}
+                    size:  ${int.parse(size.toString())}
+                    serviceId: "$serviceId"
+                    latitude: "9.2575"
+                    longitude: "76.4508"
+            ) {
+              totalItems
+              data {
                 id
-                displayName
-                userName
-                password
+                userCode
                 firstName
                 lastName
                 emailId
                 phoneNo
-                address
-                startTime
-                endTime
-                city
-                licenseNo
-                state
-                licenseDate
-                latitude
-                longitude
-                serviceId
-                profilePic
-                licenseProof
+                userTypeId
                 status
+                jwtToken
+                fcmToken
+                otpCode
+                isProfile
+                otpVerified
+                 mechanic {
+                      id
+                      usersId
+                      yearExp
+                      profilePic
+                      mechType
+                      workType
+                      noMech
+                      state
+                      rcNumber
+                      brands
+                      address
+                      certificate1
+                      certificate2
+                      status
+                      rate
+                      reviewCount
+                    }
+                mechanicStatus {
+                    distance
+                    latitude
+                    longitude
+                    workStatus
+                  }
+                  mechanicService {
+                      id
+                      fee
+                      service {
+                        id
+                        serviceName
+                        description
+                        icon
+                        minPrice
+                        maxPrice
+                        categoryId
+                        status
+                      }
+                      status
+                      userId
+                    }
+                totalAmount
+                distance
+                duration
+                reviewCount
+                  mechanicReviewsData {
+                  id
+                  transType
+                  rating
+                  feedback
+                  bookingId
+                  orderId
+                  status
+                  order {
+                    id
+                    oderCode
+                    qty
+                    totalPrice
+                    commision
+                    tax
+                    paymentType
+                    status
+                    vendorId
+                    customerId
+                  }
+                  bookings {
+                    id
+                    bookingCode
+                    reqType
+                    bookStatus
+                    totalPrice
+                    tax
+                    commission
+                    serviceCharge
+                    totalTime
+                    serviceTime
+                    latitude
+                    longitude
+                    extend
+                    totalExt
+                    extendTime
+                    bookedDate
+                    isRated
+                    status
+                    customerId
+                    mechanicId
+                    vehicleId
+                  }
+                  productData {
+                    id
+                    productCode
+                    productName
+                    price
+                    shippingCharge
+                    productImage
+                    description
+                    status
+                    vehicleModelId
+                    vendorId
+                    reviewCount
+                    avgRate
+                    salesCount
+                  }
+                }
+                mechanicReview
+                bookingsCount
               }
-             mechanicStatus {
-                  distance
-                }
-            mechanicService {
-                id
-                fee
-                service {
-                  id
-                  serviceName
-                  description
-                  icon
-                  minPrice
-                  maxPrice
-                  categoryId
-                  status
-                }
-                status
-                userId
-              }
-            totalAmount
-            distance
-            duration
-            reviewCount
-             mechanicReviewsData {
-                id
-                transType
-                rating
-                feedback
-                bookingId
-                orderId
-                status
-                order {
-                  id
-                  oderCode
-                  qty
-                  totalPrice
-                  commision
-                  tax
-                  paymentType
-                  status
-                  vendorId
-                  customerId
-                }
-                bookings {
-                  id
-                  latitude
-                  longitude
-                  customerId
-                  mechanicId
-                  status
-                  vehicleId
-                  totalPrice
-                  tax
-                  commission
-                  serviceCharge
-                  totalTime
-                }
-                productData {
-                  id
-                  productCode
-                  productName
-                  price
-                  shippingCharge
-                  productImage
-                  description
-                  status
-                  vehicleModelId
-                  vendorId
-                  reviewCount
-                  avgRate
-                  salesCount
-                }
-              }
-            mechanicReview  
+              totalPages
+              currentPage
+            }
           }
-          totalPages
-          currentPage
-        }
-      }
     """;
     log(_query);
    return await GqlClient.I.query01(
@@ -561,28 +569,13 @@ class QueryProvider {
                     isProfile
                     otpVerified
                     mechanic {
-                      id
-                      displayName
-                      userName
-                      password
-                      firstName
-                      lastName
-                      emailId
-                      phoneNo
-                      address
-                      startTime
-                      endTime
-                      city
-                      licenseNo
-                      state
-                      licenseDate
-                      latitude
-                      longitude
-                      serviceId
-                      profilePic
-                      licenseProof
-                      status
-                    }
+                        id
+                        address
+                        profilePic
+                        yearExp
+                         noMech
+                        status
+                      }
                     mechanicStatus {
                       distance
                     }
