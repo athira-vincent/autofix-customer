@@ -9,12 +9,16 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropO
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
@@ -47,14 +51,19 @@ class MechanicProfileViewScreen extends StatefulWidget {
 
 class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
-  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
+  String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var initializationSettingsAndroid;
+
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   double totalFees = 0.0;
   String authToken="";
 
@@ -70,9 +79,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getPushNotification();
     getSharedPrefData();
-    _listenServiceListResponse();
-
+    _listen();
 
   }
 
@@ -93,18 +102,28 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
   }
 
-  _listenServiceListResponse() {
+  _listen() {
     _homeCustomerBloc.MechanicProfileDetailsResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
-
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("success postServiceList >>>>>>>  ${value.status}");
+        });
+      }
+    });
+    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+      } else {
+        setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
@@ -113,7 +132,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +357,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   width: 70,
                   child: Column(
                     children: [
-                      Text('${widget.mechanicListData?.mechanic?.address}',
+                      Text('${widget.mechanicListData?.mechanic?[0].address}',
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -380,7 +398,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:1,
+                itemCount:widget.mechanicListData?.mechanicReviewsData?.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -438,14 +456,14 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text('Good service and  nice work…',
+                                            child: Text('${widget.mechanicListData?.mechanicReviewsData?[index].feedback}',
                                               style: Styles.textLabelTitle12,
                                               maxLines: 1,
                                               textAlign: TextAlign.start,
                                               overflow: TextOverflow.visible,),
                                           ),
 
-                                          Row(
+                                          /*Row(
                                             children: [
                                               Spacer(),
                                               Padding(
@@ -457,7 +475,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                                   overflow: TextOverflow.visible,),
                                               ),
                                             ],
-                                          ),
+                                          ),*/
                                         ],
                                       ),
                                     ),
@@ -528,36 +546,50 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
               ),
             ),
             Container(
-              child:  Padding(
-                padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                child: Container(
-                  alignment: Alignment.center,
-                  child:Row(
-                    children: [
-                      Row(
-                        children: [
-                          Text('${widget.mechanicListData?.firstName}',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.visible,
-                            style: Styles.textLabelTitle_10,
+              child: ListView.builder(
+                itemCount:widget.mechanicListData?.mechanicService?.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context,index,) {
+                  return GestureDetector(
+                    onTap:(){
+
+                    },
+                    child: Container(
+                      child:  Padding(
+                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child:Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('${widget.mechanicListData?.mechanicService?[index].service?.serviceName}',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Row(
+                                children: [
+                                  Text('${widget.mechanicListData?.mechanicService?[index].fee}',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.visible,
+                                    style: Styles.textLabelTitle_10,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                      Spacer(),
-                      Row(
-                        children: [
-                          Text('${widget.mechanicListData?.mechanicService?[0].fee}',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.visible,
-                            style: Styles.textLabelTitle_10,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
             Padding(
@@ -577,7 +609,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   Spacer(),
                   Row(
                     children: [
-                      Text('$totalFees',
+                      Text('${widget.mechanicListData?.totalAmount}',
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -597,11 +629,41 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   Widget acceptAndSendRequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-        _showMechanicAcceptanceDialog(context);
-        Navigator.pushReplacement(
+
+       /* Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>  MechanicTrackingScreen()));
+                builder: (context) =>  MechanicTrackingScreen()));*/
+
+        print(">>>>>>>>>> Latitude  ${widget.latitude}");
+        print(">>>>>>>>>> Longitude  ${widget.longitude}");
+        print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+        print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+        print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
+
+        callOnFcmApiSendPushNotifications(1);
+
+       /* _homeCustomerBloc.postMechanicsBookingIDRequest(
+           authToken,
+          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+          '${widget.latitude}',
+          '${widget.longitude}',
+          ' ${widget.serviceIds}',
+          '${widget.mechanicListData?.id}',
+          '2',
+          '${widget.mechanicListData?.totalAmount}',
+          '1',
+          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);*/
+
+       /* launchMapsUrl(
+            '10.5276',
+            '76.2144',
+            '10.0718',
+            '76.5488');*/
+
+        _showMechanicAcceptanceDialog(context);
+
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -749,4 +811,170 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
    
   }
+
+
+  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have $length new order',
+        'title': 'Maria',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+        'screen': 'screenA',
+        "bookingId" : '60',
+        "serviceName" : 'time Belt',
+        "serviceId" : '1',
+        "carPlateNumber" : 'KLmlodr876',
+        "customerName" : 'Minnukutty',
+        "customerAddress" : 'Elenjikkal House Empyreal Garden',
+        "requestFromApp" : "0",
+        'message': 'ACTION'
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to': 'dKbQbAuESk6nRYj0gUH9-Q:APA91bE3y95YjEI9WWxdobOgKz2xsEPUOc7BFXG2SAcqDT9YmfjOk-OPlZjdwnXoPN0d64zXp5UO0TcOQ847jPfB2nyxMFqnO0_OObh1-oV_HsI5O6es2vTKclpa_vtztlwt2amflEt_',
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        print('notification sending success');
+      } else {
+        print('notification sending failed');
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }
+
+  void registerNotification() async {
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      // TODO: handle the received notifications
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+
+
+
+
+  Future<void> getPushNotification() async {
+
+    initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    /*flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);*/
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // print foreground message here.
+      print(' onMessage Handling a foreground message ${message.messageId}');
+      print('Notification : ${message.notification?.title}');
+      print('Notification Message: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+       showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
+
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // print foreground message here.
+      print('onMessageOpenedApp Handling a foreground message ${message.messageId}');
+      print('Notification : ${message.notification?.title}');
+      print('Notification Message: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+      else
+        {
+          print('Message not contained a notification:');
+
+        }
+      showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
+
+    });
+
+
+  }
+
+
+  Future<void> showNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'channel_ID', 'channel name',
+        playSound: true,
+        showProgress: true,
+        ticker: 'Kindersteps');
+
+    var iOSChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iOSChannelSpecifics);
+    await flutterLocalNotificationsPlugin
+        .show(0, title, body, platformChannelSpecifics, payload: 'test');
+  }
+
+
+  static void launchMapsUrl(
+      sourceLatitude,
+      sourceLongitude,
+      destinationLatitude,
+      destinationLongitude) async {
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
+
+    final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }  }
+
+
 }
