@@ -64,9 +64,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
     _controller.forward();
 
-    Timer(const Duration(seconds: 8), () {
-      changeScreen();
-    });
+   /* Timer(const Duration(seconds: 8), () {
+     // changeScreen();
+    });*/
 
   }
 
@@ -93,7 +93,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           MaterialPageRoute(
               builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
     }
-
   }
 
   @override

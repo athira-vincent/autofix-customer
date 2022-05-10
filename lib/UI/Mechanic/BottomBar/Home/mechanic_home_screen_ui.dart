@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dar
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,7 +26,10 @@ class MechanicHomeUIScreen extends StatefulWidget {
 class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
 
-  late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
+  //String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
+  //late FirebaseMessaging messaging;
+
   String authToken="", mechanicId = "";
   String location ='Null, Press Button';
   String CurrentLatitude ="10.506402";
@@ -33,6 +37,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String Address = 'search';
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
+
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -47,13 +52,15 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getSharedPrefData();
-    callOnFcmApiSendPushNotifications(1);
+    //callOnFcmApiSendPushNotifications(1);
 
     _getCurrentCustomerLocation();
     _listenApiResponse();
 
   }
+
 
   void registerNotification() async {
     // 3. On iOS, this helps to take the user permissions
@@ -72,15 +79,14 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     }
   }
 
-
-  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+  /*Future<void> callOnFcmApiSendPushNotifications(int length) async {
 
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
       print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
     });
 
-    /* final postUrl = 'https://fcm.googleapis.com/fcm/send';
+     final postUrl = 'https://fcm.googleapis.com/fcm/send';
     // print('userToken>>>${appData.fcmToken}'); //alp dec 28
 
     final data = {
@@ -103,7 +109,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to': 'eCBxvR1ZSNWWUqyqlQPtgO:APA91bFDwk8N-bxpVLVrhylF_gG4ota7JnHJKQErONodQbE9ppf8t0LWd7sYNt6RgRTysPTlW2GI2yIbRg76tjJ1MSgmhaeLIHr0dJuFbDEt42lNLGjGwz6glPHpuq6DjfmRoehcWk9L',
+      'to': 'ddN7dOfSSp6smPVEcm1-V6:APA91bEnvhxehhX_Dj2tQgLPXqL8s8YFs1xdYjIR1Fp8mqQYeCQKWupQUzLIIS7YWNC1bnZlN0Em1oHztKYPNx_dD5O8M0FQpAW9MzVkS6Xkkn7yea5zYv-EzhefvblGJvYa4YicEkOM',
     };
 
     final headers = {
@@ -128,9 +134,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       }
     } catch (e) {
       print('exception $e');
-    }*/
-  }
-
+    }
+  }*/
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -142,6 +147,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userId ' + mechanicId.toString());
 
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "1", "8");
+
       _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["bmw","maruthi"]);
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
 
@@ -229,13 +235,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-
   Future<void> GetAddressFromLatLong(Position position)async {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
   }
+
 
   @override
   Widget build(BuildContext context) {

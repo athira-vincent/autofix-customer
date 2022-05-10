@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/my_services_screen.dar
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +27,8 @@ class MechanicHomeScreen extends StatefulWidget {
 }
 
 class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
+
+  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
   int _index = 0;
   int _counter = 0;
@@ -51,6 +54,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _messaging.getToken().then((value){
+      print("FCM Token>>>>>>>>>>" + value!);
+    });
+    _listenNotification();
     isOnline = true;
     getSharedPrefData();
     _listenApiResponse();
@@ -85,6 +92,71 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         });
       }
     });
+  }
+
+  _listenNotification(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      setState(() {
+        _counter += 1;
+      });
+      print("event.notification!.data " + event.data.toString());
+      //var data = message['data'] ?? message;
+      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      print("bookingId >>>>> " + bookingId );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
+          )).then((value){
+      });
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
+      print("message recieved");
+      setState(() {
+        _counter += 1;
+      });
+      print("event.notification!.data " + event.data.toString());
+      //var data = message['data'] ?? message;
+      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      print("bookingId >>>>> " + bookingId );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
+          )).then((value){
+      });
+    });
+
+    /*FirebaseMessaging.onBackgroundMessage((message) {
+
+    });*/
+
+    /*FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      setState(() {
+        _counter += _counter;
+      });
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
+          )).then((value){
+      });
+
+      print('onMessageOpenedApp - Message clicked!');
+      print("event.notification!.body " + message.notification!.body.toString());
+      print("event.notification!.title " + message.notification!.title.toString());
+
+      print("event.notification!.data " + message.data.toString());
+      //var data = message['data'] ?? message;
+      String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      print("bookingId >>>>> " + bookingId );
+
+    });*/
 
   }
 
@@ -315,50 +387,41 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 ),
               ),
 
-              InkWell(
-                onTap: (){
-                  print("on tap notification icon");
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)));
-                },
-                child: Container(
-                  margin: EdgeInsets.only(
-                       top: 25 + MediaQuery.of(context).padding.top,
-                       right: size.width * 4.2/100
-                  ),
-                  child: Stack(
-                    children: [
-                      SvgPicture.asset(
-                            'assets/image/notification_icon.svg',
-                            width: 22,
-                            height: 22,
+              Container(
+                margin: EdgeInsets.only(
+                     top: 25 + MediaQuery.of(context).padding.top,
+                     right: size.width * 4.2/100
+                ),
+                child: Stack(
+                  children: [
+                    SvgPicture.asset(
+                          'assets/image/notification_icon.svg',
+                          width: 22,
+                          height: 22,
+                        ),
+                    Positioned(
+                      right: 0,
+                      child: _counter > 0 ? Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: new BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 12,
+                          minHeight: 12,
+                        ),
+                        child: new Text(
+                         '$_counter',
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
                           ),
-                      Positioned(
-                        right: 0,
-                        child: _counter > 0 ? Container(
-                          padding: EdgeInsets.all(1),
-                          decoration: new BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          constraints: BoxConstraints(
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: new Text(
-                           '$_counter',
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ) : Container(),
-                      ),
-                    ],
-                  ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ) : Container(),
+                    ),
+                  ],
                 ),
               ),
             ],
