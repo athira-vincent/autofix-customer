@@ -118,7 +118,6 @@ class HomeCustomerBloc {
   }
 
 
-
   /// =============== Update Mechanic Booking Id  ================== ///
 
 
