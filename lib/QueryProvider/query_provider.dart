@@ -665,6 +665,24 @@ class QueryProvider {
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
 
+  /// =============== Update Mechanic Booking Id  ================== ///
+
+  postUpdateMechanicsBookingIDRequest(
+      token, bookingId, mechanicId,) async {
+    String _query = """  
+        mutation {
+          updateMechanicBooking(bookingId: ${int.parse(bookingId.toString())}, mechanicId: ${int.parse(mechanicId.toString())}) {
+            status
+            code
+            message
+          }
+        }
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
 
   postSearchServiceRequest(
       token,

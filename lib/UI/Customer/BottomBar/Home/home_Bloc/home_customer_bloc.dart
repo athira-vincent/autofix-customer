@@ -2,6 +2,7 @@
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
+import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
@@ -114,6 +115,22 @@ class HomeCustomerBloc {
         serviceId, mechanicId, reqType,
         totalPrice, paymentType, travelTime);
     postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
+  }
+
+
+
+  /// =============== Update Mechanic Booking Id  ================== ///
+
+
+  final postUpdateMechanicsBookingIDList = BehaviorSubject<UpdateMechanicBookingMdl>();
+  Stream<UpdateMechanicBookingMdl> get mechanicsUpdateBookingIDResponse => postUpdateMechanicsBookingIDList.stream;
+
+  postUpdateMechanicsBookingIDRequest(
+      token, bookingId, mechanicId,)async {
+
+    UpdateMechanicBookingMdl _mechanicsBookingMdl = await repository.postUpdateMechanicsBookingIDRequest(
+      token, bookingId, mechanicId,);
+    postUpdateMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
   }
 
 

@@ -55,15 +55,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
-
-
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid;
 
-
-
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
 
   double per = .10;
   double perfont = .10;
@@ -114,14 +109,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
-
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
-
         });
       }
     });
@@ -131,11 +122,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
-
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
