@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home: MechanicTrackingScreen(),
+                home: SplashScreen(),
               );
             },
           );
