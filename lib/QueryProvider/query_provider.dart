@@ -1300,75 +1300,75 @@ class QueryProvider {
       token, type, mechanicId) async {
     String _query = """
       {
-    UpcomingCompletedServices(type: 1, mechanicId: $mechanicId) {
-      id
-      bookingCode
-      reqType
-      bookStatus
-      totalPrice
-      tax
-      commission
-      serviceCharge
-      totalTime
-      serviceTime
-      latitude
-      longitude
-      extend
-      totalExt
-      extendTime
-      bookedDate
-      isRated
-      status
-      customerId
-      mechanicId
-      vehicleId
-      mechanic {
+      UpcomingCompletedServices(type: $type, mechanicId: $mechanicId) {
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        status
-        userTypeId
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-      }
-      customer {
-        id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        status
-        userTypeId
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-      }
-      vehicle {
-        id
-        brand
-        model
-        engine
-        year
-        plateNo
-        lastMaintenance
-        milege
-        vehiclePic
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
         latitude
         longitude
-        defaultVehicle
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        isRated
         status
+        customerId
+        mechanicId
+        vehicleId
+        mechanic {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+        }
+        customer {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+        }
+        vehicle {
+          id
+          brand
+          model
+          engine
+          year
+          plateNo
+          lastMaintenance
+          milege
+          vehiclePic
+          latitude
+          longitude
+          defaultVehicle
+          status
+        }
       }
     }
-  }
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -1503,47 +1503,42 @@ class QueryProvider {
   postMechanicFetchProfileRequest(
       token) async {
     String _query = """ 
-      query
-      {
-        mechanic_Details(jwtToken: "$token") {
-          id
-          userCode
-          firstName
-          lastName
-          emailId
-          phoneNo
-          userTypeId
-          accountType
-          jwtToken
-          status
-          mechanic {
-            id
-            orgName
-            orgType
-            yearExp
-            mechType
-            userId
-            profilePic
-            state
-            status
-          }
-          mechanicService {
-            id
-            fee
-            status
-            service{
-              serviceName
-              description
-              minPrice
-              maxPrice
-              categoryId
-              id
-              icon
-            }
-            userId
-          }
-        }
+     {
+  mechanic_Details(jwtToken: "$token") {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    accountType
+    jwtToken
+    status
+    mechanic {
+      id
+      orgName
+      orgType
+      yearExp
+      mechType
+      userId
+      profilePic
+      state
+      status
+      brands
+    }
+    mechanicService {
+      id
+      fee
+      service{
+        id
+        serviceName
       }
+      status
+      userId
+    }
+  }
+}
     """;
     log(_query);
     return await GqlClient.I.query01(

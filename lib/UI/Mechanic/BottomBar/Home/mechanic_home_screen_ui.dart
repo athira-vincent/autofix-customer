@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,7 +28,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
 
   String serverToken = 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P';
-  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
+  late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
   //late FirebaseMessaging messaging;
 
   String authToken="", mechanicId = "";
@@ -37,6 +38,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String Address = 'search';
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
+  MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
 
 
   final List<String> imageList = [
@@ -154,14 +156,33 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userFamilyId'+authToken.toString());
       print('userId ' + mechanicId.toString());
 
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "1", "8");
-      _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["bmw","maruthi"]);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
 
     });
   }
 
   _listenApiResponse() {
+    _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoadingPage = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          _isLoadingPage = false;
+          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails?.mechanic![0].brands);
+        });
+      }
+    });
     _mechanicHomeBloc.postMechanicBrandSpecialization.listen((value) {
       if(value.status == "error"){
         setState(() {

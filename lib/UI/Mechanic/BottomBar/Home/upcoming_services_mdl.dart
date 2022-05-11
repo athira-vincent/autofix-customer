@@ -41,11 +41,11 @@ class Data {
   List<UpcomingCompletedService>? upcomingCompletedServices;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    upcomingCompletedServices: json["UpcomingCompletedServices"] == null ? null : List<UpcomingCompletedService>.from(json["UpcomingCompletedServices"].map((x) => x == null ? null : UpcomingCompletedService.fromJson(x))),
+    upcomingCompletedServices: json["UpcomingCompletedServices"] == null ? null : List<UpcomingCompletedService>.from(json["UpcomingCompletedServices"].map((x) => UpcomingCompletedService.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "UpcomingCompletedServices": upcomingCompletedServices == null ? null : List<dynamic>.from(upcomingCompletedServices!.map((x) => x == null ? null : x.toJson())),
+    "UpcomingCompletedServices": upcomingCompletedServices == null ? null : List<dynamic>.from(upcomingCompletedServices!.map((x) => x.toJson())),
   };
 }
 
@@ -85,8 +85,8 @@ class UpcomingCompletedService {
   double tax;
   double commission;
   int serviceCharge;
-  dynamic totalTime;
-  dynamic serviceTime;
+  String totalTime;
+  String serviceTime;
   double latitude;
   double longitude;
   double extend;
@@ -111,8 +111,8 @@ class UpcomingCompletedService {
     tax: json["tax"] == null ? null : json["tax"].toDouble(),
     commission: json["commission"] == null ? null : json["commission"].toDouble(),
     serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
-    totalTime: json["totalTime"],
-    serviceTime: json["serviceTime"],
+    totalTime: json["totalTime"] == null ? null : json["totalTime"],
+    serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     extend: json["extend"] == null ? null : json["extend"].toDouble(),
@@ -138,8 +138,8 @@ class UpcomingCompletedService {
     "tax": tax == null ? null : tax,
     "commission": commission == null ? null : commission,
     "serviceCharge": serviceCharge == null ? null : serviceCharge,
-    "totalTime": totalTime,
-    "serviceTime": serviceTime,
+    "totalTime": totalTime == null ? null : totalTime,
+    "serviceTime": serviceTime == null ? null : serviceTime,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
     "extend": extend == null ? null : extend,

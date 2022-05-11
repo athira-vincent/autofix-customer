@@ -147,7 +147,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         print('notification sending success');
         SliderVal = true;
         if(isAccepted == 0){
+
           Navigator.pop(context);
+
         }else if(isAccepted == 1){
           Navigator.pushReplacement(
               context,

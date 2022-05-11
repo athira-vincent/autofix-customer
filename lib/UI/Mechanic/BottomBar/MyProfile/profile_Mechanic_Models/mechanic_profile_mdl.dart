@@ -11,9 +11,9 @@ String mechanicProfileMdlToJson(MechanicProfileMdl data) => json.encode(data.toJ
 
 class MechanicProfileMdl {
   MechanicProfileMdl({
+    required this.data,
     required this.message,
     required this.status,
-    required this.data,
   });
 
   String message;
@@ -27,9 +27,9 @@ class MechanicProfileMdl {
   );
 
   Map<String, dynamic> toJson() => {
+    "data": data == null ? null : data!.toJson(),
     "message": message == null ? null : message,
     "status": status == null ? null : status,
-    "data": data == null ? null : data!.toJson(),
   };
 }
 
@@ -120,40 +120,44 @@ class Mechanic {
     required this.profilePic,
     required this.state,
     required this.status,
+    required this.brands,
   });
 
   String id;
-  String orgName;
-  String orgType;
+  dynamic orgName;
+  dynamic orgType;
   String yearExp;
   String mechType;
   int userId;
   String profilePic;
   String state;
   int status;
+  String brands;
 
   factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
     id: json["id"] == null ? null : json["id"],
-    orgName: json["orgName"] == null ? null : json["orgName"],
-    orgType: json["orgType"] == null ? null : json["orgType"],
+    orgName: json["orgName"],
+    orgType: json["orgType"],
     yearExp: json["yearExp"] == null ? null : json["yearExp"],
     mechType: json["mechType"] == null ? null : json["mechType"],
     userId: json["userId"] == null ? null : json["userId"],
     profilePic: json["profilePic"] == null ? null : json["profilePic"],
     state: json["state"] == null ? null : json["state"],
     status: json["status"] == null ? null : json["status"],
+    brands: json["brands"] == null ? null : json["brands"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
-    "orgName": orgName == null ? null : orgName,
-    "orgType": orgType == null ? null : orgType,
+    "orgName": orgName,
+    "orgType": orgType,
     "yearExp": yearExp == null ? null : yearExp,
     "mechType": mechType == null ? null : mechType,
     "userId": userId == null ? null : userId,
     "profilePic": profilePic == null ? null : profilePic,
     "state": state == null ? null : state,
     "status": status == null ? null : status,
+    "brands": brands == null ? null : brands,
   };
 }
 
@@ -161,18 +165,21 @@ class MechanicService {
   MechanicService({
     required this.id,
     required this.fee,
+    required this.service,
     required this.status,
     required this.userId,
   });
 
   String id;
   String fee;
+  Service? service;
   int status;
   int userId;
 
   factory MechanicService.fromJson(Map<String, dynamic> json) => MechanicService(
     id: json["id"] == null ? null : json["id"],
     fee: json["fee"] == null ? null : json["fee"],
+    service: json["service"] == null ? null : Service.fromJson(json["service"]),
     status: json["status"] == null ? null : json["status"],
     userId: json["userId"] == null ? null : json["userId"],
   );
@@ -180,7 +187,28 @@ class MechanicService {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "fee": fee == null ? null : fee,
+    "service": service == null ? null : service!.toJson(),
     "status": status == null ? null : status,
     "userId": userId == null ? null : userId,
+  };
+}
+
+class Service {
+  Service({
+    required this.id,
+    required this.serviceName,
+  });
+
+  String id;
+  String serviceName;
+
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
+    id: json["id"] == null ? null : json["id"],
+    serviceName: json["serviceName"] == null ? null : json["serviceName"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "serviceName": serviceName == null ? null : serviceName,
   };
 }

@@ -177,8 +177,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
               alignment: Alignment.bottomCenter,
               children: [
 
-
-
                 Expanded(
                   child: GoogleMap(
                     onMapCreated: _onMapCreated,
