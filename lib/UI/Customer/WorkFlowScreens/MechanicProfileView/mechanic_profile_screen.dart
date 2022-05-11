@@ -155,6 +155,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
+      final provider = Provider.of<LocaleProvider>(context);
+
+      provider.setPayload(notificationPayloadMdl);
 
 
 

@@ -72,6 +72,7 @@ class _MyAppState extends State<MyApp> {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'Banqmart',
+
                 theme: ThemeData(
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
