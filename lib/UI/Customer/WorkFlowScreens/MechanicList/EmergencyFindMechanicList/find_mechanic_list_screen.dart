@@ -221,12 +221,17 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
               children: [
 
                 GoogleMap(
-                  onMapCreated: _onMapCreated,
+                  onMapCreated: (GoogleMapController controller){
+                    print("$_mapStyle  >>>>>>>>>>>>>>>>>>>_mapStyle");
+
+                    controller.setMapStyle(_mapStyle);
+                    _controller.complete(controller);
+                  },
                   initialCameraPosition: CameraPosition(
                     target: _center,
                     zoom: 11.0,
                   ),
-                  //mapType: _currentMapType,
+                  // mapType: _currentMapType,
                   markers: _markers,
                   onCameraMove: _onCameraMove,
                   polylines: Set<Polyline>.of(polylines.values),
