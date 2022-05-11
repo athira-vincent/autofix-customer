@@ -11,22 +11,6 @@ String notificationPayloadMdlToJson(NotificationPayloadMdl data) => json.encode(
 
 class NotificationPayloadMdl {
   NotificationPayloadMdl({
-    required this.data,
-  });
-
-  Data? data;
-
-  factory NotificationPayloadMdl.fromJson(Map<String, dynamic> json) => NotificationPayloadMdl(
-    data: json["data"] == null ? null : Data.fromJson(json["data"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "data": data == null ? null : data!.toJson(),
-  };
-}
-
-class Data {
-  Data({
     required this.clickAction,
     required this.id,
     required this.status,
@@ -43,12 +27,12 @@ class Data {
   });
 
   String clickAction;
-  int id;
+  String id;
   String status;
   String screen;
   String bookingId;
   String serviceName;
-  int serviceId;
+  String serviceId;
   String carPlateNumber;
   String customerName;
   String customerAddress;
@@ -56,7 +40,7 @@ class Data {
   String paymentStatus;
   String message;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory NotificationPayloadMdl.fromJson(Map<String, dynamic> json) => NotificationPayloadMdl(
     clickAction: json["click_action"] == null ? null : json["click_action"],
     id: json["id"] == null ? null : json["id"],
     status: json["status"] == null ? null : json["status"],
