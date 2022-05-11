@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -26,6 +28,9 @@ class MechanicTrackingScreen extends StatefulWidget {
 class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
 
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<LatLng> polylineCoordinates = [];
 
@@ -92,6 +97,17 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       CurrentLongitude = position.longitude.toString();
 
       endLocation = LatLng(position.latitude, position.longitude);
+
+
+      _firestore
+          .collection('riders')
+          .doc('minnu')
+          .update({'locationName': 'hgfgddhgfg', 'location': endLocation.toString()});
+
+
+
+
+
     });
     print(location);
   }
