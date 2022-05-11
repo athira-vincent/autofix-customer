@@ -124,6 +124,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       setState(() {
         _counter += 1;
       });
+
       print("event.notification!.data " + event.data.toString());
       //var data = message['data'] ?? message;
       String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
