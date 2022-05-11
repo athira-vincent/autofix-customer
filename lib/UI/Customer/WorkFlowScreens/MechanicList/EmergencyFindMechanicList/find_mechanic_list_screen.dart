@@ -141,6 +141,9 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
     getSharedPrefData();
     _listenServiceListResponse();
 
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
+      _mapStyle = string;
+    });
     /// add origin marker origin marker
     _addMarker(
       LatLng(_originLatitude, _originLongitude),
