@@ -87,7 +87,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
 
 
-
     _listenNotification();
     getSharedPrefData();
     _listen();
