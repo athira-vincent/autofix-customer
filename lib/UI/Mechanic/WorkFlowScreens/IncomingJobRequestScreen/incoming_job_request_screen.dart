@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
@@ -16,9 +17,12 @@ import 'package:slider_button/slider_button.dart';
 
 class IncomingJobRequestScreen extends StatefulWidget {
   final String serviceModel;
+  final NotificationPayloadMdl notificationPayloadMdl;
 
    IncomingJobRequestScreen(
-       {required this.serviceModel});
+       {required this.serviceModel,
+        required this.notificationPayloadMdl
+       });
 
   @override
   State<StatefulWidget> createState() {
@@ -64,11 +68,15 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
     _controller.forward();
 
+    print("Incoming job offer widget.notificationPayloadMdl  >>> " + widget.notificationPayloadMdl.data!.serviceName);
+
    /* Timer(const Duration(seconds: 8), () {
      // changeScreen();
     });*/
-
   }
+
+
+
 
   void changeScreen(){
     if (widget.serviceModel == "0"){

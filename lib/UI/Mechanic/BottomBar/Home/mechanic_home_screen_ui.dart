@@ -26,7 +26,7 @@ class MechanicHomeUIScreen extends StatefulWidget {
 class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
 
-  //String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+  String serverToken = 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P';
   late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
   //late FirebaseMessaging messaging;
 
@@ -79,7 +79,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     }
   }
 
-  /*Future<void> callOnFcmApiSendPushNotifications(int length) async {
+  Future<void> callOnFcmApiSendPushNotifications(int length) async {
 
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
@@ -97,11 +97,19 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       },
       'priority': 'high',
       'data': {
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'id': '1',
-        'status': 'done',
-        'screen': 'screenA',
-        'message': 'ACTION'
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": 1,
+        "status": "done",
+        "screen": "screenA",
+        "bookingId" : "60",
+        "serviceName" :" time Belt",
+        "serviceId" : 1,
+        "carPlateNumber" : "KLmlodr876",
+        "customerName" : "Minnukutty",
+        "customerAddress" : "Elenjikkal House Empyreal Garden",
+        "requestFromApp" : "0",
+        "paymentStatus" : "0",
+        "message": "ACTION"
       },
       'apns': {
         'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
@@ -109,7 +117,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to': 'ddN7dOfSSp6smPVEcm1-V6:APA91bEnvhxehhX_Dj2tQgLPXqL8s8YFs1xdYjIR1Fp8mqQYeCQKWupQUzLIIS7YWNC1bnZlN0Em1oHztKYPNx_dD5O8M0FQpAW9MzVkS6Xkkn7yea5zYv-EzhefvblGJvYa4YicEkOM',
+      'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
     };
 
     final headers = {
@@ -135,7 +143,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     } catch (e) {
       print('exception $e');
     }
-  }*/
+  }
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -147,7 +155,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userId ' + mechanicId.toString());
 
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "1", "8");
-
       _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["bmw","maruthi"]);
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
 
@@ -324,13 +331,18 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-            child: Text('Upcoming Services',
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.visible,
-              style: Styles.sparepartsForYourModelsStyle,
+          InkWell(
+            onTap: (){
+              callOnFcmApiSendPushNotifications(5);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+              child: Text('Upcoming Services',
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.visible,
+                style: Styles.sparepartsForYourModelsStyle,
+              ),
             ),
           ),
           Container(

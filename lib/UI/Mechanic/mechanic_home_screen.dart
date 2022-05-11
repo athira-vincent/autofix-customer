@@ -39,10 +39,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   late bool isOnline;
   String authToken = "", userId = "";
   String _userName = "";
+  late Map<String, dynamic> notificationPayloadMdl;
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late NotificationPayloadMdl _notificationPayloadMdl;
 
   double _setValue(double value) {
     return value * per + value;
@@ -98,6 +98,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   _listenNotification(){
 
+
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       setState(() {
@@ -105,6 +106,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("event.notification!.data " + event.data.toString());
+
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+
+      print("_notificationPayloadMdl >>>>>" + notificationPayloadMdl.data!.bookingId.toString());
       //var data = message['data'] ?? message;
       String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
@@ -113,19 +118,21 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
+              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",notificationPayloadMdl: notificationPayloadMdl,)
           )).then((value){
       });
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
-      print("message recieved");
-      //_notificationPayloadMdl = event.data;
+      print("message received");
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+      print("_notificationPayloadMdl >>>>>" + notificationPayloadMdl.toString());
       setState(() {
         _counter += 1;
       });
 
       print("event.notification!.data " + event.data.toString());
+
       //var data = message['data'] ?? message;
       String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
@@ -133,36 +140,20 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
+              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0", notificationPayloadMdl: notificationPayloadMdl,)
           )).then((value){
       });
     });
 
-    /*FirebaseMessaging.onBackgroundMessage((message) {
-
-    });*/
-
-    /*FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    FirebaseMessaging.onBackgroundMessage((message) async {
+      print("message onBackgroundMessage");
       setState(() {
-        _counter += _counter;
+        _counter += 1;
+        //_notificationPayloadMdl = event.data;
       });
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
-          )).then((value){
-      });
+      print("message.notification!.data " + message.data.toString());
 
-      print('onMessageOpenedApp - Message clicked!');
-      print("event.notification!.body " + message.notification!.body.toString());
-      print("event.notification!.title " + message.notification!.title.toString());
-
-      print("event.notification!.data " + message.data.toString());
-      //var data = message['data'] ?? message;
-      String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      print("bookingId >>>>> " + bookingId );
-    });*/
+    });
 
   }
 
