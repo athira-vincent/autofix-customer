@@ -45,4 +45,7 @@ class TextStrings {
 
   static const app_language_code_yoruba = "yo";
 
+  static const hpSuccess     = "Success";
+
+
 }

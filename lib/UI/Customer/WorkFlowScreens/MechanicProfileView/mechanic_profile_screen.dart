@@ -2,6 +2,8 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Provider/locale_provider.dart';
+import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
@@ -17,8 +19,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert' as json;
 
 
 class MechanicProfileViewScreen extends StatefulWidget {
@@ -60,6 +64,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   var initializationSettingsAndroid;
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
 
   double per = .10;
   double perfont = .10;
@@ -140,11 +145,22 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
   _listenNotification(){
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved from onMessage");
-      print("event.notification!.data " + event.data.toString());
-      //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
+
+      print("onMessage recieved from onMessage");
+      print("onMessage event.notification!.data " + event.data.toString());
+
+
+      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+
+      print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
+
+
+
+
+
+
+      /* String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       print("bookingId >>>>> " + bookingId );
       Navigator.push(
@@ -152,13 +168,21 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           MaterialPageRoute(
               builder: (context) =>   MechanicTrackingScreen()
           )).then((value){
-      });
+      });*/
+
+
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
-      print("message recieved");
+      print("onMessageOpenedApp recieved");
       print("event.notification!.data " + event.data.toString());
-      //var data = message['data'] ?? message;
+
+
+
+
+
+
+     /* //var data = message['data'] ?? message;
       String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       print("bookingId >>>>> " + bookingId );
@@ -167,7 +191,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           MaterialPageRoute(
               builder: (context) =>  MechanicTrackingScreen()
           )).then((value){
-      });
+      });*/
+
+
     });
 
     /*FirebaseMessaging.onBackgroundMessage((message) {
@@ -708,8 +734,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
         print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
 
+        callOnFcmApiSendPushNotifications(1);
 
-        _homeCustomerBloc.postMechanicsBookingIDRequest(
+        /*_homeCustomerBloc.postMechanicsBookingIDRequest(
            authToken,
           '${_homeCustomerBloc.dateConvert(DateTime.now())}',
           '${_homeCustomerBloc.timeConvert(DateTime.now())}',
@@ -720,7 +747,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           '2',
           '${widget.mechanicListData?.totalAmount}',
           '1',
-          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);
+          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);*/
 
        /* launchMapsUrl(
             '10.5276',
@@ -919,7 +946,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         }
       },
       'to':'dlmPibElQV6AvuAshQbcZX:APA91bHtlcldalttox-Gb6G3s99YJX-MCv3d0QtQVd4uGgznm5VZVmZEqbPWzOBe_akZodjwNdb7Fz7tP2p7KUOVhSdfTlMHZGUhNlgN-25DT-iqGAORYUq3Vs60iJXSTp2jLzz3SHph'
-      //'to': 'dKbQbAuESk6nRYj0gUH9-Q:APA91bE3y95YjEI9WWxdobOgKz2xsEPUOc7BFXG2SAcqDT9YmfjOk-OPlZjdwnXoPN0d64zXp5UO0TcOQ847jPfB2nyxMFqnO0_OObh1-oV_HsI5O6es2vTKclpa_vtztlwt2amflEt_',
+      //'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
     };
 
     final headers = {

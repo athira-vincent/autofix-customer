@@ -78,6 +78,11 @@ dependencies:
   slider_button: ^2.0.0
   flutter_local_notifications: ^9.5.2
   url_launcher: ^6.1.0
+  cloud_firestore: ^3.1.14
+  sizer: ^2.0.15
+  provider: ^6.0.2
+
+
 
 
 
