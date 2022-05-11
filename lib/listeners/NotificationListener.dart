@@ -13,17 +13,13 @@ import 'package:provider/provider.dart';
     print("onMessage recieved from onMessage");
     print("onMessage event.notification!.data " + event.data.toString());
 
-
     NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-
     print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
-
     final provider = Provider.of<LocaleProvider>(context,listen: false);
-
     provider.setPayload(notificationPayloadMdl);
 
+
    });
-   return 0;
   }
 
 
