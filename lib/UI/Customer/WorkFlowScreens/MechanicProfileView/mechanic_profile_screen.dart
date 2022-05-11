@@ -912,8 +912,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // print foreground message here.
       print(' onMessage Handling a foreground message ${message.messageId}');
-      print('Notification : ${message.notification?.title}');
-      print('Notification Message: ${message.data}');
+      print('NotificationPayload : ${message.notification?.title}');
+      print('NotificationPayload Message: ${message.data}');
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
@@ -924,8 +924,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       // print foreground message here.
       print('onMessageOpenedApp Handling a foreground message ${message.messageId}');
-      print('Notification : ${message.notification?.title}');
-      print('Notification Message: ${message.data}');
+      print('NotificationPayload : ${message.notification?.title}');
+      print('NotificationPayload Message: ${message.data}');
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
