@@ -87,8 +87,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
 
 
-
-    _listenNotification();
+  //  _listenNotification();
     getSharedPrefData();
     _listen();
 
@@ -144,7 +143,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   }
 
-  _listenNotification(){
+  _listenNotification(BuildContext context){
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
 
       print("onMessage recieved from onMessage");
@@ -155,7 +154,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
-      final provider = Provider.of<LocaleProvider>(context);
+      final provider = Provider.of<LocaleProvider>(context,listen: false);
 
       provider.setPayload(notificationPayloadMdl);
 
@@ -231,6 +230,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
