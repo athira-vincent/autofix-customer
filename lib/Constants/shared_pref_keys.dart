@@ -25,4 +25,11 @@ class SharedPrefKeys {
   static const mechanicCode = "mechanicCode";
   static const mechanicID = "mechanicID";
 
+  ///========= Customer Tracking Variables ==============///
+
+
+  static const serviceIdEmergency = "serviceIdEmergency";
+  static const mechanicIdEmergency = "mechanicIdEmergency";
+  static const bookingIdEmergency = "bookingIdEmergency";
+
 }

@@ -36,13 +36,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     return value * perfont + value;
   }
   final Set<Marker> _markers = {};
-
   LatLng _lastMapPosition = _center;
-
   Completer<GoogleMapController> _controller = Completer();
-
   static const LatLng _center = const LatLng(12.988827, 77.472091);
-
   String? _mapStyle;
 
   Set<Polyline> lines = {};
@@ -141,9 +137,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
 
     _getPolyline();
-    Timer(const Duration(seconds: 5), () {
+    /*Timer(const Duration(seconds: 5), () {
       changeScreen();
-    });
+    });*/
   }
 
   void changeScreen(){
@@ -152,6 +148,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         MaterialPageRoute(
             builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
   }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

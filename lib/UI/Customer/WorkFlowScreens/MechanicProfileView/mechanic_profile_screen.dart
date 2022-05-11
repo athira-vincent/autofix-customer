@@ -20,6 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class MechanicProfileViewScreen extends StatefulWidget {
 
   final String mechanicId;
@@ -79,7 +80,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPushNotification();
+
+
+
+    _listenNotification();
     getSharedPrefData();
     _listen();
 
@@ -124,6 +128,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       } else {
         setState(() {
+          callOnFcmApiSendPushNotifications(1);
+
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
@@ -132,6 +138,67 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
 
   }
+
+  _listenNotification(){
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved from onMessage");
+      print("event.notification!.data " + event.data.toString());
+      //var data = message['data'] ?? message;
+      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      print("bookingId >>>>> " + bookingId );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>   MechanicTrackingScreen()
+          )).then((value){
+      });
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
+      print("message recieved");
+      print("event.notification!.data " + event.data.toString());
+      //var data = message['data'] ?? message;
+      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      print("bookingId >>>>> " + bookingId );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  MechanicTrackingScreen()
+          )).then((value){
+      });
+    });
+
+    /*FirebaseMessaging.onBackgroundMessage((message) {
+
+    });*/
+
+    /*FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      setState(() {
+        _counter += _counter;
+      });
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
+          )).then((value){
+      });
+
+      print('onMessageOpenedApp - Message clicked!');
+      print("event.notification!.body " + message.notification!.body.toString());
+      print("event.notification!.title " + message.notification!.title.toString());
+
+      print("event.notification!.data " + message.data.toString());
+      //var data = message['data'] ?? message;
+      String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      print("bookingId >>>>> " + bookingId );
+
+    });*/
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +272,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            '1 Year',
+                            '${widget.mechanicListData?.mechanic?[0].yearExp} Year',
                             textAlign: TextAlign.center,
                             style: Styles.badgeTextStyle,
                           ),
@@ -641,9 +708,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
         print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
 
-        callOnFcmApiSendPushNotifications(1);
 
-       /* _homeCustomerBloc.postMechanicsBookingIDRequest(
+        _homeCustomerBloc.postMechanicsBookingIDRequest(
            authToken,
           '${_homeCustomerBloc.dateConvert(DateTime.now())}',
           '${_homeCustomerBloc.timeConvert(DateTime.now())}',
@@ -654,7 +720,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           '2',
           '${widget.mechanicListData?.totalAmount}',
           '1',
-          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);*/
+          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);
 
        /* launchMapsUrl(
             '10.5276',
@@ -826,7 +892,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     final data = {
       'notification': {
-        'body': 'You have $length new order',
+        'body': 'You have $length new booking',
         'title': 'Maria',
         'sound': 'alarmw.wav',
       },
@@ -843,6 +909,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerName" : 'Minnukutty',
         "customerAddress" : 'Elenjikkal House Empyreal Garden',
         "requestFromApp" : "0",
+        'paymentStatus' : '0',
         'message': 'ACTION'
       },
       'apns': {
@@ -851,7 +918,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to': 'dKbQbAuESk6nRYj0gUH9-Q:APA91bE3y95YjEI9WWxdobOgKz2xsEPUOc7BFXG2SAcqDT9YmfjOk-OPlZjdwnXoPN0d64zXp5UO0TcOQ847jPfB2nyxMFqnO0_OObh1-oV_HsI5O6es2vTKclpa_vtztlwt2amflEt_',
+      'to':'dlmPibElQV6AvuAshQbcZX:APA91bHtlcldalttox-Gb6G3s99YJX-MCv3d0QtQVd4uGgznm5VZVmZEqbPWzOBe_akZodjwNdb7Fz7tP2p7KUOVhSdfTlMHZGUhNlgN-25DT-iqGAORYUq3Vs60iJXSTp2jLzz3SHph'
+      //'to': 'dKbQbAuESk6nRYj0gUH9-Q:APA91bE3y95YjEI9WWxdobOgKz2xsEPUOc7BFXG2SAcqDT9YmfjOk-OPlZjdwnXoPN0d64zXp5UO0TcOQ847jPfB2nyxMFqnO0_OObh1-oV_HsI5O6es2vTKclpa_vtztlwt2amflEt_',
     };
 
     final headers = {
@@ -918,7 +986,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
       }
-       showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
+      // showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
 
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -935,7 +1003,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           print('Message not contained a notification:');
 
         }
-      showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
+      //showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
 
     });
 
