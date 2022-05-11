@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/my_services_screen.dart';
+import 'package:auto_fix/UI/Mechanic/Notification/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -28,7 +29,7 @@ class MechanicHomeScreen extends StatefulWidget {
 
 class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
-  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
+  late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   int _index = 0;
   int _counter = 0;
@@ -41,6 +42,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late NotificationPayloadMdl _notificationPayloadMdl;
 
   double _setValue(double value) {
     return value * per + value;
@@ -95,16 +97,19 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   }
 
   _listenNotification(){
+
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       setState(() {
         _counter += 1;
+        //_notificationPayloadMdl = event.data;
       });
       print("event.notification!.data " + event.data.toString());
       //var data = message['data'] ?? message;
       String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       print("bookingId >>>>> " + bookingId );
+
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -115,6 +120,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
       print("message recieved");
+      //_notificationPayloadMdl = event.data;
       setState(() {
         _counter += 1;
       });
@@ -155,7 +161,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       print("bookingId >>>>> " + bookingId );
-
     });*/
 
   }
