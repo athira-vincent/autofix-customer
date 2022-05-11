@@ -111,7 +111,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
 
-      print("_notificationPayloadMdl >>>>>" + notificationPayloadMdl.data!.bookingId.toString());
       //var data = message['data'] ?? message;
       String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
       //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
