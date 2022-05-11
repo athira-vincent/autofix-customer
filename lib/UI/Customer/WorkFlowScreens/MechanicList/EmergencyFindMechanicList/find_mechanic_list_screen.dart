@@ -17,6 +17,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 
 class FindMechanicListScreen extends StatefulWidget {
@@ -140,6 +141,9 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
     getSharedPrefData();
     _listenServiceListResponse();
 
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
+      _mapStyle = string;
+    });
     /// add origin marker origin marker
     _addMarker(
       LatLng(_originLatitude, _originLongitude),
@@ -220,12 +224,17 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
               children: [
 
                 GoogleMap(
-                  onMapCreated: _onMapCreated,
+                  onMapCreated: (GoogleMapController controller){
+                    print("$_mapStyle  >>>>>>>>>>>>>>>>>>>_mapStyle");
+
+                    controller.setMapStyle(_mapStyle);
+                    _controller.complete(controller);
+                  },
                   initialCameraPosition: CameraPosition(
                     target: _center,
                     zoom: 11.0,
                   ),
-                  //mapType: _currentMapType,
+                  // mapType: _currentMapType,
                   markers: _markers,
                   onCameraMove: _onCameraMove,
                   polylines: Set<Polyline>.of(polylines.values),
