@@ -11,6 +11,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropO
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/listeners/NotificationListener.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,6 +58,7 @@ class MechanicProfileViewScreen extends StatefulWidget {
 class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
+
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
@@ -64,6 +66,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   var initializationSettingsAndroid;
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
+  final NotificationListenerCall _notificationListener = NotificationListenerCall();
+
 
 
   double per = .10;
@@ -85,6 +90,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
 
 
   //  _listenNotification();
@@ -230,7 +236,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _listenNotification(context);
+    //_listenNotification(context);
+    _notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
