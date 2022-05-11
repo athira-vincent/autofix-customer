@@ -102,7 +102,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
+      print("message recieved onMessage");
       setState(() {
         _counter += 1;
         //_notificationPayloadMdl = event.data;
@@ -112,8 +112,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
 
       //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+      String bookingId = event.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
 
       Navigator.push(
@@ -125,9 +124,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
-      print("message received");
+      print("message received onMessageOpenedApp");
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-      print("_notificationPayloadMdl >>>>>" + notificationPayloadMdl.toString());
+      print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
       setState(() {
         _counter += 1;
       });
@@ -153,7 +152,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-
     });
 
   }
