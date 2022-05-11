@@ -413,13 +413,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                     serviceIds = '${snapshot.data?.data?.serviceListAll?[index].id}';
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                                    _homeCustomerBloc.postMechanicsBookingIDRequest(
-                                        authToken,
-                                        '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                                        '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                                        CurrentLatitude,
-                                        CurrentLongitude,
-                                        serviceIds, null, null, null, null, null);
+
                                   });
 
                                 },
@@ -571,14 +565,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                       print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
                       serviceIds = '${service.category!.id}';
                       print(">>>>>>>>>> ServiceId  $serviceIds");
-                        _homeCustomerBloc.postMechanicsBookingIDRequest(
-                            authToken,
-                            '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-                            '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-                            CurrentLatitude,
-                            CurrentLongitude,serviceIds,
-                            null, null, null, null, null
-                            );
+
 
                         Navigator.push(
                             context,

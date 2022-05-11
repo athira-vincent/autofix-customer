@@ -1,9 +1,10 @@
 
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
+import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/mechanics_Booking_Mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/FetchProfile/customerDetailsMdl.dart';
@@ -72,7 +73,7 @@ class HomeCustomerBloc {
 
 
 
-  /// =============== Mechanics List Emergency ================== ///
+  /// =============== Mechanics Profile Details ================== ///
 
 
   final postMechanicProfileDetails = PublishSubject<MechanicDetailsMdl>();
@@ -99,8 +100,8 @@ class HomeCustomerBloc {
   /// =============== Mechanics Booking ID ================== ///
 
 
-  final postMechanicsBookingIDList = BehaviorSubject<MechanicsBookingMdl>();
-  Stream<MechanicsBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
+  final postMechanicsBookingIDList = BehaviorSubject<MechanicBookingMdl>();
+  Stream<MechanicBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
 
   postMechanicsBookingIDRequest(
       token, date, time,
@@ -108,12 +109,28 @@ class HomeCustomerBloc {
       serviceId, mechanicId, reqType,
       totalPrice, paymentType, travelTime) async {
 
-    MechanicsBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
+    MechanicBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
         token, date, time,
         latitude, longitude,
         serviceId, mechanicId, reqType,
         totalPrice, paymentType, travelTime);
     postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
+  }
+
+
+
+  /// =============== Update Mechanic Booking Id  ================== ///
+
+
+  final postUpdateMechanicsBookingIDList = BehaviorSubject<UpdateMechanicBookingMdl>();
+  Stream<UpdateMechanicBookingMdl> get mechanicsUpdateBookingIDResponse => postUpdateMechanicsBookingIDList.stream;
+
+  postUpdateMechanicsBookingIDRequest(
+      token, bookingId, mechanicId,)async {
+
+    UpdateMechanicBookingMdl _mechanicsBookingMdl = await repository.postUpdateMechanicsBookingIDRequest(
+      token, bookingId, mechanicId,);
+    postUpdateMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
   }
 
 
@@ -180,6 +197,16 @@ class HomeCustomerBloc {
 
   timeConvert(DateTime Format) {
     final DateFormat formatter = DateFormat('hh:mm a');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+
+  /// =============== Time Conversion ================== ///
+
+  timeConvertWithoutAmPm(DateTime Format) {
+    final DateFormat formatter = DateFormat('hh:mm');
     final String formatted = formatter.format(Format);
     print(formatted);
 
