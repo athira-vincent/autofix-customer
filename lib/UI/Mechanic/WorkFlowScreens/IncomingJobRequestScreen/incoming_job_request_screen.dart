@@ -68,7 +68,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
     _controller.forward();
 
-    print("Incoming job offer widget.notificationPayloadMdl  >>> " + widget.notificationPayloadMdl.data!.serviceName);
+    print("Incoming job offer widget.notificationPayloadMdl  >>> " + widget.notificationPayloadMdl.serviceName);
 
    /* Timer(const Duration(seconds: 8), () {
      // changeScreen();
