@@ -5,9 +5,10 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,8 +21,9 @@ class IncomingJobRequestScreen extends StatefulWidget {
   final NotificationPayloadMdl notificationPayloadMdl;
 
    IncomingJobRequestScreen(
-       {required this.serviceModel,
-        required this.notificationPayloadMdl
+       {
+         required this.serviceModel,
+         required this.notificationPayloadMdl
        });
 
   @override
@@ -31,12 +33,16 @@ class IncomingJobRequestScreen extends StatefulWidget {
 }
 
 class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> with TickerProviderStateMixin{
+
+  String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
   bool _isLoading = false;
+  //late bool _isJobOfferAccepted;
 
   double per = .10;
   double perfont = .10;
@@ -49,7 +55,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   }
   bool language_en_ar=true;
 
-  bool SliderVal=false;
+  bool SliderVal = false;
 
   int _counter = 0;
   late AnimationController _controller;
@@ -68,16 +74,96 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
     _controller.forward();
 
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        print("levelClock >>>>>> " + levelClock.toString() );
+        // = false;
+        callOnFcmApiSendPushNotifications(1, 0);
+        //--------- call notification
+      }
+    });
 
-   /* Timer(const Duration(seconds: 8), () {
-     // changeScreen();
-    });*/
   }
 
+  Future<void> callOnFcmApiSendPushNotifications(int length,int isAccepted) async {
 
+    print(" callOnFcmApiSendPushNotifications > isAccepted " + isAccepted.toString());
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
 
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
 
-  void changeScreen(){
+    final data = {
+      'notification': {
+        'body': 'You have $length new booking',
+        'title': 'Emergency Service Request Response',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+        'id': '1',
+        'status': 'done',
+        'screen': 'screenA',
+        "bookingId" : '60',
+        "serviceName" : 'time Belt',
+        "serviceId" : '1',
+        "carPlateNumber" : 'KLmlodr876',
+        "customerName" : 'Minnukutty',
+        "customerAddress" : 'Elenjikkal House Empyreal Garden',
+        "requestFromApp" : '$isAccepted',
+        'paymentStatus' : '0',
+        'message': 'ACTION'
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to':'dlmPibElQV6AvuAshQbcZX:APA91bHtlcldalttox-Gb6G3s99YJX-MCv3d0QtQVd4uGgznm5VZVmZEqbPWzOBe_akZodjwNdb7Fz7tP2p7KUOVhSdfTlMHZGUhNlgN-25DT-iqGAORYUq3Vs60iJXSTp2jLzz3SHph'
+      //'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        print('notification sending success');
+        SliderVal = true;
+        if(isAccepted == 0){
+          Navigator.pop(context);
+        }else if(isAccepted == 1){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
+        }
+
+      } else {
+        print('notification sending failed');
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }
+
+  /*void changeScreen(){
     if (widget.serviceModel == "0"){
       Navigator.pushReplacement(
           context,
@@ -100,11 +186,12 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           MaterialPageRoute(
               builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
     }
-  }
+  }*/
 
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
     _emailFocusNode.removeListener(onFocusChange);
     _forgotPasswordBloc.dispose();
   }
@@ -214,7 +301,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             children: [
                                               SizedBox(height: 10,),
                                               Container(
-                                                child: Text('Timing  belt replacement',
+                                                child: Text(widget.notificationPayloadMdl.serviceName,
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -232,7 +319,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                               ),
                                               SizedBox(height: 10,),
                                               Container(
-                                                child: Text('YAB477AB',
+                                                child: Text(widget.notificationPayloadMdl.carPlateNumber,      //'YAB477AB',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -273,16 +360,19 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                       borderRadius: BorderRadius.circular(50) // use instead of BorderRadius.all(Radius.circular(20))
                                   ),
                                   child:
-                                  SliderVal==false
+                                  SliderVal == false
                                   ? SliderButton(
                                     buttonColor: CustColors.blue,
                                     backgroundColor: Colors.white,
                                     highlightedColor: CustColors.light_navy02,
                                     baseColor:  CustColors.light_navy,
                                       action: () {
-                                        print('success');
+                                        print(' SliderButton success');
                                         setState(() {
-                                          SliderVal=true;
+                                          SliderVal = true;
+                                          _controller.stop(canceled: true);
+                                          callOnFcmApiSendPushNotifications(1, 1);
+                                          //--------- call notification
                                         });
                                       },
                                       label: Text(
@@ -339,6 +429,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                     begin: levelClock, // THIS IS A USER ENTERED NUMBER
                                     end: 0,
                                   ).animate(_controller),
+
                                 ),
                               ],
                             ),
@@ -374,6 +465,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       ],
     );
   }
+
+
 
 }
 
