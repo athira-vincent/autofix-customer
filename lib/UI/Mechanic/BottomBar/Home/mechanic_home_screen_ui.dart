@@ -366,6 +366,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
               ),
             ),
           ),
+
           Container(
             height: 185,
             margin: EdgeInsets.all(0),
