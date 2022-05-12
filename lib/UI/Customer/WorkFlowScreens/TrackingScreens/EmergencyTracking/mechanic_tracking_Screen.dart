@@ -84,8 +84,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     });
 
 
-
-
   }
 
   Future<void> _getCurrentCustomerLocation() async {
