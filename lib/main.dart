@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -66,7 +67,7 @@ class _MyAppState extends State<MyApp> {
     ));
 
 
-    return  ChangeNotifierProvider(
+    return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
         builder: (context, child) {
           final provider = Provider.of<LocaleProvider>(context,listen: false);
@@ -84,7 +85,9 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home: MechanicTrackingScreen(),
+                //home: MechanicTrackingScreen(),
+                //home: SplashScreen(),
+                home: FindYourCustomerScreen(serviceModel: "0"),
               );
             },
           );
