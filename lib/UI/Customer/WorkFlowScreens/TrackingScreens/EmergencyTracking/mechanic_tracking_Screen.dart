@@ -13,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui;
 import 'package:location/location.dart' as loc;
+
 class MechanicTrackingScreen extends StatefulWidget {
 
   final String latitude;
@@ -62,34 +63,13 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     mapStyling();
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
+
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
-    _getCurrentLocation();
-    //LocationService();
-    Timer.periodic(Duration(seconds: 20), (Timer t) {
-      print('Timer ++++++');
-      _getCurrentLocation();
-    });
-
+    _googleMap = _googleMapIntegrate();
 
   }
 
-  LocationService() {
-    var location = loc.Location();
-    // Request permission to use location
-    location.requestPermission().then((permissionStatus) {
-      if (permissionStatus == loc.PermissionStatus.granted) {
-        // If granted listen to the onLocationChanged stream and emit over our controller
-        location.onLocationChanged.listen((locationData) {
-          print("onLocationChanged 001 ");
-          if (locationData != null) {
-
-            _getCurrentLocation();
-          }
-        });
-      }
-    });
-  }
 
   mapStyling() {
     print('latlong from another screen ${widget.latitude} ${widget.longitude}');
@@ -132,8 +112,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       setState(() {
         print("markers ${markers.length}");
         setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
-
-
       });
 
     });
@@ -154,10 +132,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
   }
 
-  _getCurrentLocation()  {
-    print('Timer ++++++   00');
-    _getGeoLocationPosition();
-  }
 
   Widget _googleMapIntegrate() {
     return GoogleMap( //Map widget from google_maps_flutter package
@@ -203,121 +177,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   }
 
-  _getGeoLocationPosition() async {
-    print('_getGeoLocationPosition ++++++   01');
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    print('serviceEnabled ++++++   03');
-    if (!serviceEnabled) {
-      print('serviceEnabled ++++++   04');
-
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      print('Timer ++++++   05');
-
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        print('Timer ++++++   06');
-
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-
-    Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
-      var value1 = event;
-
-      print('getPositionStream ++++++   02');
-
-      setState(() {
-        _firestore
-            .collection("ResolMech")
-            .doc('${widget.bookingId}')
-            .set({
-          'latitude': value1.latitude.toString(),
-          'longitude': value1.longitude.toString()
-        })
-            .then((value) => print("Location Added"))
-            .catchError((error) =>
-            print("Failed to add Location: $error"));
-      });
-      print("value1 $value1");
-      LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
-      print("latLng 001 ${latLng.latitude}");
-      mechanicMarker (latLng);
-
-    });
-    //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-  }
-
-  getDirections() async {
-
-
-    List<LatLng> polylineCoordinates = [];
-
-    polylinePoints = PolylinePoints();
-    if (markers.isNotEmpty) markers.clear();
-    if (polylines.isNotEmpty)
-      polylines.clear();
-    if (polylineCoordinates.isNotEmpty)
-      polylineCoordinates.clear();
-
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleAPiKey,
-      PointLatLng(startLocation.latitude, startLocation.longitude),
-      PointLatLng(endLocation.latitude, endLocation.longitude),
-      travelMode: TravelMode.driving,
-    );
-    print('PolylineResult 01 + ${result.points}' );
-    print('PolylineResult 00 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
-
-
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    } else {
-      print('PolylineResult + ${result.errorMessage}' );
-    }
-    addPolyLine(polylineCoordinates);
-    markers.add(Marker( //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
-      infoWindow: InfoWindow( //popup info
-        title: 'Starting Point ',
-        snippet: 'Start Marker',
-      ),
-      icon: customerIcon!, //Icon for Marker
-    ));
-
-    markers.add(Marker( //add distination location marker
-      markerId: MarkerId(endLocation.toString()),
-      position: endLocation, //position of marker
-      infoWindow: InfoWindow( //popup info
-        title: 'Destination Point ',
-        snippet: 'Destination Marker',
-      ),
-      icon: mechanicIcon, //Icon for Marker
-    ));
-  }
 
   addPolyLine(List<LatLng> polylineCoordinates) {
     PolylineId id = PolylineId("poly");
@@ -329,7 +189,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
     polylines[id] = polyline;
     setState(() {});
-    _googleMap=_googleMapIntegrate();
+    _googleMap = _googleMapIntegrate();
   }
 
   @override
@@ -342,7 +202,35 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                _googleMap!=null?_googleMap!:CircularProgressIndicator(),
+
+                StreamBuilder(
+                  stream:   _firestore.collection("ResolMech").snapshots(),
+                  builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+                    print('StreamBuilder ++++ ${snapshot.data?.docs[0]} ');
+                   // mechanicMarker(LatLng(snapshot.data?.latitude, snapshot.data?.l));
+
+
+                    return GoogleMap( //Map widget from google_maps_flutter package
+
+                      zoomGesturesEnabled: true, //enable Zoom in, out on map
+                      initialCameraPosition: _kGooglePlex!,
+                      markers: markers, //markers to show on map
+                      polylines: Set<Polyline>.of(polylines.values), //polylines
+                      mapType: MapType.normal, //map type
+                      onMapCreated: (controller) { //method called when map is created
+                        setState(() {
+                          controller.setMapStyle(_mapStyle);
+                          mapController = controller;
+                        });
+                      },
+                    );
+                  },
+                ),
+
+                //_googleMap!=null?_googleMap!:CircularProgressIndicator(),
+
+
                 // GoogleMap( //Map widget from google_maps_flutter package
                 //   zoomGesturesEnabled: true, //enable Zoom in, out on map
                 //   initialCameraPosition: _kGooglePlex!,
