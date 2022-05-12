@@ -50,7 +50,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   late BitmapDescriptor mechanicIcon;
   CameraPosition? _kGooglePlex = CameraPosition(
     target: LatLng(37.778259000,
-        -122.391386000,),
+      -122.391386000,),
     zoom: 25,
   );
 
@@ -68,18 +68,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     _getCurrentLocation();
     //LocationService();
     Timer.periodic(Duration(seconds: 20), (Timer t) {
-    print('Timer ++++++');
+      print('Timer ++++++');
       _getCurrentLocation();
     });
 
 
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    print("fkfjhjkfhfkj");
   }
 
   LocationService() {
@@ -89,7 +82,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       if (permissionStatus == loc.PermissionStatus.granted) {
         // If granted listen to the onLocationChanged stream and emit over our controller
         location.onLocationChanged.listen((locationData) {
-          print("dfhdjhkgdk 001 ");
+          print("onLocationChanged 001 ");
           if (locationData != null) {
 
             _getCurrentLocation();
@@ -100,11 +93,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   }
 
   mapStyling() {
-    print('${widget.latitude}');
+    print('latlong from another screen ${widget.latitude} ${widget.longitude}');
 
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
-        _mapStyle = string;
-      });
+      _mapStyle = string;
+    });
   }
 
   customerMarker(LatLng latLng) {
@@ -126,7 +119,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   mechanicMarker(LatLng latLng) {
     print('Current latitude ${latLng.latitude}  Current longitude ${latLng.longitude}');
     getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
-      print("djghjhgdkk 001");
+      print("getBytesFromAsset 001");
       mechanicIcon =BitmapDescriptor.fromBytes(onValue);
       markers.add(Marker( //add start location marker
         markerId: MarkerId('mechanicMarkerId'),
@@ -138,7 +131,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         icon: mechanicIcon, //Icon for Marker
       ));
       setState(() {
-        print("djhdgdjjdj ${markers.length}");
+        print("markers ${markers.length}");
         setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
 
 
@@ -162,30 +155,24 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
   }
 
-   _getCurrentLocation()  {
-
+  _getCurrentLocation()  {
     print('Timer ++++++   00');
-
     _getGeoLocationPosition();
-    //print("ddvdv ${value1!.latitude}");
-
-
-
   }
 
   Widget _googleMapIntegrate() {
     return GoogleMap( //Map widget from google_maps_flutter package
-        zoomGesturesEnabled: true, //enable Zoom in, out on map
-        initialCameraPosition: _kGooglePlex!,
-        markers: markers, //markers to show on map
-        polylines: Set<Polyline>.of(polylines.values), //polylines
-        mapType: MapType.normal, //map type
-        onMapCreated: (controller) { //method called when map is created
+      zoomGesturesEnabled: true, //enable Zoom in, out on map
+      initialCameraPosition: _kGooglePlex!,
+      markers: markers, //markers to show on map
+      polylines: Set<Polyline>.of(polylines.values), //polylines
+      mapType: MapType.normal, //map type
+      onMapCreated: (controller) { //method called when map is created
         setState(() {
-        controller.setMapStyle(_mapStyle);
-        mapController = controller;
-  });
-  },
+          controller.setMapStyle(_mapStyle);
+          mapController = controller;
+        });
+      },
     );
   }
 
@@ -197,37 +184,37 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       polylines.clear();
     if (polylineCoordinates.isNotEmpty)
       polylineCoordinates.clear();
-    print("gddghgdh ${polylines.length}");
+    print("polylineCoordinates ${polylines.length}");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleAPiKey,
       PointLatLng(startlatLng.latitude, startlatLng.longitude),
       PointLatLng(endlatLng.latitude, endlatLng.longitude),
       travelMode: TravelMode.driving,
     );
-   // log('getDirections + ${result?.points}' );
+    // log('getDirections + ${result?.points}' );
 
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     } else {
-      print('getDirections + ${result.errorMessage}' );
+      print('PolylineResult + ${result.errorMessage}' );
     }
     addPolyLine(polylineCoordinates);
 
   }
 
   _getGeoLocationPosition() async {
-    print('Timer ++++++   01');
+    print('_getGeoLocationPosition ++++++   01');
     Position? value1;
     bool serviceEnabled;
     LocationPermission permission;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    print('Timer ++++++   03');
+    print('serviceEnabled ++++++   03');
     if (!serviceEnabled) {
-      print('Timer ++++++   04');
+      print('serviceEnabled ++++++   04');
 
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -258,12 +245,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     // continue accessing the position of the device.
 
     Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
-     var value1 = event;
+      var value1 = event;
 
-      print('Timer ++++++   02');
+      print('getPositionStream ++++++   02');
 
-
-      //location ='Lat: ${value.latitude} , Long: ${value.longitude}';
       setState(() {
         _firestore
             .collection("ResolMech")
@@ -276,10 +261,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             .catchError((error) =>
             print("Failed to add Location: $error"));
       });
-     print("ddjdgdjdjk $value1");
-     LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
-     print("ddvdv 001 ${latLng.latitude}");
-     mechanicMarker (latLng);
+      print("value1 $value1");
+      LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
+      print("latLng 001 ${latLng.latitude}");
+      mechanicMarker (latLng);
 
     });
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
@@ -303,8 +288,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       PointLatLng(endLocation.latitude, endLocation.longitude),
       travelMode: TravelMode.driving,
     );
-    print('getDirections 01 + ${result.points}' );
-    print('getDirections 00 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
+    print('PolylineResult 01 + ${result.points}' );
+    print('PolylineResult 00 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
 
 
     if (result.points.isNotEmpty) {
@@ -312,7 +297,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     } else {
-      print('getDirections + ${result.errorMessage}' );
+      print('PolylineResult + ${result.errorMessage}' );
     }
     addPolyLine(polylineCoordinates);
     markers.add(Marker( //add start location marker
@@ -539,10 +524,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                          boxShadow: [new BoxShadow(
-                            color: CustColors.roseText1,
-                            blurRadius: 10.0,
-                          ),],
+                        boxShadow: [new BoxShadow(
+                          color: CustColors.roseText1,
+                          blurRadius: 10.0,
+                        ),],
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
@@ -594,6 +579,14 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         ),
       ),
     );
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("dispose");
   }
 
   void changeScreen(){

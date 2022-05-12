@@ -78,13 +78,6 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    print("fkfjhjkfhfkj");
-  }
-
   LocationService() {
     var location = loc.Location();
     // Request permission to use location
@@ -92,7 +85,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
       if (permissionStatus == loc.PermissionStatus.granted) {
         // If granted listen to the onLocationChanged stream and emit over our controller
         location.onLocationChanged.listen((locationData) {
-          print("dfhdjhkgdk 001 ");
+          print("onLocationChanged 001 ");
           if (locationData != null) {
 
             _getCurrentLocation();
@@ -103,7 +96,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
   }
 
   mapStyling() {
-    print('${widget.latitude}');
+    print('latlong from another screen ${widget.latitude} ${widget.longitude}');
 
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
@@ -129,7 +122,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
   mechanicMarker(LatLng latLng) {
     print('Current latitude ${latLng.latitude}  Current longitude ${latLng.longitude}');
     getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
-      print("djghjhgdkk 001");
+      print("getBytesFromAsset 001");
       mechanicIcon =BitmapDescriptor.fromBytes(onValue);
       markers.add(Marker( //add start location marker
         markerId: MarkerId('mechanicMarkerId'),
@@ -141,7 +134,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
         icon: mechanicIcon, //Icon for Marker
       ));
       setState(() {
-        print("djhdgdjjdj ${markers.length}");
+        print("markers ${markers.length}");
         setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
 
 
@@ -166,14 +159,8 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
   }
 
   _getCurrentLocation()  {
-
     print('Timer ++++++   00');
-
     _getGeoLocationPosition();
-    //print("ddvdv ${value1!.latitude}");
-
-
-
   }
 
   Widget _googleMapIntegrate() {
@@ -200,7 +187,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
       polylines.clear();
     if (polylineCoordinates.isNotEmpty)
       polylineCoordinates.clear();
-    print("gddghgdh ${polylines.length}");
+    print("polylineCoordinates ${polylines.length}");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleAPiKey,
       PointLatLng(startlatLng.latitude, startlatLng.longitude),
@@ -214,23 +201,23 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     } else {
-      print('getDirections + ${result.errorMessage}' );
+      print('PolylineResult + ${result.errorMessage}' );
     }
     addPolyLine(polylineCoordinates);
 
   }
 
   _getGeoLocationPosition() async {
-    print('Timer ++++++   01');
+    print('_getGeoLocationPosition ++++++   01');
     Position? value1;
     bool serviceEnabled;
     LocationPermission permission;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    print('Timer ++++++   03');
+    print('serviceEnabled ++++++   03');
     if (!serviceEnabled) {
-      print('Timer ++++++   04');
+      print('serviceEnabled ++++++   04');
 
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -263,10 +250,8 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
       var value1 = event;
 
-      print('Timer ++++++   02');
+      print('getPositionStream ++++++   02');
 
-
-      //location ='Lat: ${value.latitude} , Long: ${value.longitude}';
       setState(() {
         _firestore
             .collection("ResolMech")
@@ -279,9 +264,9 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
             .catchError((error) =>
             print("Failed to add Location: $error"));
       });
-      print("ddjdgdjdjk $value1");
+      print("value1 $value1");
       LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
-      print("ddvdv 001 ${latLng.latitude}");
+      print("latLng 001 ${latLng.latitude}");
       mechanicMarker (latLng);
 
     });
@@ -306,8 +291,8 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
       PointLatLng(endLocation.latitude, endLocation.longitude),
       travelMode: TravelMode.driving,
     );
-    print('getDirections 01 + ${result.points}' );
-    print('getDirections 00 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
+    print('PolylineResult 01 + ${result.points}' );
+    print('PolylineResult 00 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
 
 
     if (result.points.isNotEmpty) {
@@ -315,7 +300,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     } else {
-      print('getDirections + ${result.errorMessage}' );
+      print('PolylineResult + ${result.errorMessage}' );
     }
     addPolyLine(polylineCoordinates);
     markers.add(Marker( //add start location marker
@@ -597,6 +582,14 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
         ),
       ),
     );
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("dispose");
   }
 
   void changeScreen(){
