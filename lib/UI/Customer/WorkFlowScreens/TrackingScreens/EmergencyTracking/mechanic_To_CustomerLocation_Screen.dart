@@ -17,26 +17,28 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui;
 import 'package:location/location.dart' as loc;
-class CustomerTracking1Screen extends StatefulWidget {
+
+
+class MechanicToCustomerLocationScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
   final String bookingId;
 
 
-  CustomerTracking1Screen({
+  MechanicToCustomerLocationScreen({
     required this.latitude,
     required this.longitude,
     required this.bookingId,});
 
   @override
   State<StatefulWidget> createState() {
-    return _CustomerTracking1ScreenState();
+    return _MechanicToCustomerLocationScreenState();
   }
 
 }
 
-class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
+class _MechanicToCustomerLocationScreenState extends State<MechanicToCustomerLocationScreen> {
 
   String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
   String? _mapStyle;
@@ -104,7 +106,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
   }
 
   customerMarker(LatLng latLng) {
-    getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
+    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
       customerIcon =BitmapDescriptor.fromBytes(onValue);
       markers.add(Marker( //add start location marker
         markerId: MarkerId('customerMarkerId'),
@@ -121,7 +123,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   mechanicMarker(LatLng latLng) {
     print('Current latitude ${latLng.latitude}  Current longitude ${latLng.longitude}');
-    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
+    getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
       print("getBytesFromAsset 001");
       mechanicIcon =BitmapDescriptor.fromBytes(onValue);
       markers.add(Marker( //add start location marker
