@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fdottedline/fdottedline.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -38,53 +35,24 @@ class MechanicTrackingScreen extends StatefulWidget {
 
 class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
+  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
   String? _mapStyle;
-
   Set<Marker> markers = Set(); //markers for google map
   BitmapDescriptor? customerIcon;
-
-  String? CurrentLatitude;
-  String? CurrentLongitude ;
-
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   Widget? _googleMap;
   List<LatLng> polylineCoordinates = [];
-
-
-  GoogleMapController? mapController; //contrller for Google map
+  GoogleMapController? mapController;
   PolylinePoints polylinePoints = PolylinePoints();
-
-  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
-
-  Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
-
+  Map<PolylineId, Polyline> polylines = {};
   LatLng startLocation = LatLng(37.778259000, -122.391386000);
   LatLng endLocation = LatLng(37.778259000, -122.390942000);
-
-  double per = .10;
-  double perfont = .10;
-  double height = 0;
-  String selectedState = "";
-
-
-  //String location ='Null, Press Button';
-
-
   late BitmapDescriptor mechanicIcon;
-
   CameraPosition? _kGooglePlex = CameraPosition(
     target: LatLng(37.778259000,
         -122.391386000,),
     zoom: 25,
   );
-
-
-
-
-
 
 
   @override
@@ -106,12 +74,14 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
 
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     print("fkfjhjkfhfkj");
   }
+
   LocationService() {
     var location = loc.Location();
     // Request permission to use location
@@ -178,6 +148,13 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   }
 
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
   getGoogleMapCameraPosition(LatLng latLng) {
     _kGooglePlex = CameraPosition(
       target:latLng,
@@ -196,8 +173,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   }
 
-  Widget _googleMapIntegrate()
-  {
+  Widget _googleMapIntegrate() {
     return GoogleMap( //Map widget from google_maps_flutter package
         zoomGesturesEnabled: true, //enable Zoom in, out on map
         initialCameraPosition: _kGooglePlex!,
@@ -212,7 +188,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   },
     );
   }
-
 
   setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
     List<LatLng> polylineCoordinates = [];
@@ -240,39 +215,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     }
     addPolyLine(polylineCoordinates);
 
-  }
-
-
-  Future<void> _getCurrentCustomerLocation() async {
-    Position position = await _getGeoLocationPosition();
-    //location ='Lat: ${position.latitude} , Long: ${position.longitude}';
-    setState(() {
-
-      CurrentLatitude = position.latitude.toString();
-      CurrentLongitude = position.longitude.toString();
-
-      endLocation = LatLng(position.latitude, position.longitude);
-
-      _kGooglePlex = CameraPosition(
-        target: LatLng(endLocation.latitude,
-            endLocation.longitude),
-        zoom: 25,
-      );
-
-      _firestore
-          .collection("ResolMech")
-          .doc('0002')
-          .set({
-            'locationName': 'minnu',
-            'location': endLocation.toString()
-          })
-          .then((value) => print("User Added"))
-
-          .catchError((error) =>
-          print("Failed to add user: $error"));
-
-    });
-    //print(location);
   }
 
   _getGeoLocationPosition() async {
@@ -343,7 +285,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
-
   getDirections() async {
 
 
@@ -407,18 +348,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     setState(() {});
     _googleMap=_googleMapIntegrate();
   }
-
-
-
-
-
-  void changeScreen(){
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -667,67 +596,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
   }
 
-
-
-
-  _showProductTourDialog(BuildContext context) async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-                backgroundColor: Colors.white,
-                insetPadding: EdgeInsets.only(left: 20, right: 20),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                contentPadding: const EdgeInsets.all(20),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from George Dola!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                              height: 150,
-                              child: SvgPicture.asset(
-                                'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-          });
-        });
-
-
+  void changeScreen(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
   }
-
-
-  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-  }
-
-
 
 }

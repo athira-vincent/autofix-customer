@@ -38,52 +38,24 @@ class CustomerTracking1Screen extends StatefulWidget {
 
 class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
+  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
   String? _mapStyle;
-
   Set<Marker> markers = Set(); //markers for google map
   BitmapDescriptor? customerIcon;
-
-  String? CurrentLatitude;
-  String? CurrentLongitude ;
-
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   Widget? _googleMap;
   List<LatLng> polylineCoordinates = [];
-
-
-  GoogleMapController? mapController; //contrller for Google map
+  GoogleMapController? mapController;
   PolylinePoints polylinePoints = PolylinePoints();
-
-  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
-
-  Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
-
+  Map<PolylineId, Polyline> polylines = {};
   LatLng startLocation = LatLng(37.778259000, -122.391386000);
   LatLng endLocation = LatLng(37.778259000, -122.390942000);
-
-  double per = .10;
-  double perfont = .10;
-  double height = 0;
-  String selectedState = "";
-
-
-
-
   late BitmapDescriptor mechanicIcon;
-
   CameraPosition? _kGooglePlex = CameraPosition(
     target: LatLng(37.778259000,
-        -122.391386000,),
+      -122.391386000,),
     zoom: 25,
   );
-
-
-
-
-
 
 
   @override
@@ -99,18 +71,20 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     _getCurrentLocation();
     //LocationService();
     Timer.periodic(Duration(seconds: 20), (Timer t) {
-    print('Timer ++++++');
+      print('Timer ++++++');
       _getCurrentLocation();
     });
 
 
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     print("fkfjhjkfhfkj");
   }
+
   LocationService() {
     var location = loc.Location();
     // Request permission to use location
@@ -132,8 +106,8 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     print('${widget.latitude}');
 
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
-        _mapStyle = string;
-      });
+      _mapStyle = string;
+    });
   }
 
   customerMarker(LatLng latLng) {
@@ -177,6 +151,13 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   }
 
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
   getGoogleMapCameraPosition(LatLng latLng) {
     _kGooglePlex = CameraPosition(
       target:latLng,
@@ -184,7 +165,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     );
   }
 
-   _getCurrentLocation()  {
+  _getCurrentLocation()  {
 
     print('Timer ++++++   00');
 
@@ -195,23 +176,21 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   }
 
-  Widget _googleMapIntegrate()
-  {
+  Widget _googleMapIntegrate() {
     return GoogleMap( //Map widget from google_maps_flutter package
-        zoomGesturesEnabled: true, //enable Zoom in, out on map
-        initialCameraPosition: _kGooglePlex!,
-        markers: markers, //markers to show on map
-        polylines: Set<Polyline>.of(polylines.values), //polylines
-        mapType: MapType.normal, //map type
-        onMapCreated: (controller) { //method called when map is created
+      zoomGesturesEnabled: true, //enable Zoom in, out on map
+      initialCameraPosition: _kGooglePlex!,
+      markers: markers, //markers to show on map
+      polylines: Set<Polyline>.of(polylines.values), //polylines
+      mapType: MapType.normal, //map type
+      onMapCreated: (controller) { //method called when map is created
         setState(() {
-        controller.setMapStyle(_mapStyle);
-        mapController = controller;
-  });
-  },
+          controller.setMapStyle(_mapStyle);
+          mapController = controller;
+        });
+      },
     );
   }
-
 
   setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
     List<LatLng> polylineCoordinates = [];
@@ -228,7 +207,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
       PointLatLng(endlatLng.latitude, endlatLng.longitude),
       travelMode: TravelMode.driving,
     );
-   // log('getDirections + ${result?.points}' );
+    // log('getDirections + ${result?.points}' );
 
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
@@ -239,39 +218,6 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     }
     addPolyLine(polylineCoordinates);
 
-  }
-
-
-  Future<void> _getCurrentCustomerLocation() async {
-    Position position = await _getGeoLocationPosition();
-    //location ='Lat: ${position.latitude} , Long: ${position.longitude}';
-    setState(() {
-
-      CurrentLatitude = position.latitude.toString();
-      CurrentLongitude = position.longitude.toString();
-
-      endLocation = LatLng(position.latitude, position.longitude);
-
-      _kGooglePlex = CameraPosition(
-        target: LatLng(endLocation.latitude,
-            endLocation.longitude),
-        zoom: 25,
-      );
-
-      _firestore
-          .collection("ResolMech")
-          .doc('0002')
-          .set({
-            'locationName': 'minnu',
-            'location': endLocation.toString()
-          })
-          .then((value) => print("User Added"))
-
-          .catchError((error) =>
-          print("Failed to add user: $error"));
-
-    });
-    //print(location);
   }
 
   _getGeoLocationPosition() async {
@@ -315,7 +261,7 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     // continue accessing the position of the device.
 
     Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
-     var value1 = event;
+      var value1 = event;
 
       print('Timer ++++++   02');
 
@@ -333,15 +279,14 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
             .catchError((error) =>
             print("Failed to add Location: $error"));
       });
-     print("ddjdgdjdjk $value1");
-     LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
-     print("ddvdv 001 ${latLng.latitude}");
-     mechanicMarker (latLng);
+      print("ddjdgdjdjk $value1");
+      LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
+      print("ddvdv 001 ${latLng.latitude}");
+      mechanicMarker (latLng);
 
     });
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
-
 
   getDirections() async {
 
@@ -406,18 +351,6 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     setState(() {});
     _googleMap=_googleMapIntegrate();
   }
-
-
-
-
-
-  void changeScreen(){
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -609,10 +542,10 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                          boxShadow: [new BoxShadow(
-                            color: CustColors.roseText1,
-                            blurRadius: 10.0,
-                          ),],
+                        boxShadow: [new BoxShadow(
+                          color: CustColors.roseText1,
+                          blurRadius: 10.0,
+                        ),],
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
@@ -666,67 +599,11 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
     );
   }
 
-
-
-
-  _showProductTourDialog(BuildContext context) async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-                backgroundColor: Colors.white,
-                insetPadding: EdgeInsets.only(left: 20, right: 20),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                contentPadding: const EdgeInsets.all(20),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from George Dola!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                              height: 150,
-                              child: SvgPicture.asset(
-                                'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-          });
-        });
-
-
+  void changeScreen(){
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
   }
-
-
-  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-  }
-
-
 
 }
