@@ -209,7 +209,6 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   _getGeoLocationPosition() async {
     print('_getGeoLocationPosition ++++++   01');
-    Position? value1;
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -339,7 +338,6 @@ class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(

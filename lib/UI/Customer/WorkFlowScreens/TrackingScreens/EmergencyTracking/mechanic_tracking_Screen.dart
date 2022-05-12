@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -206,7 +205,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   _getGeoLocationPosition() async {
     print('_getGeoLocationPosition ++++++   01');
-    Position? value1;
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -336,7 +334,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
