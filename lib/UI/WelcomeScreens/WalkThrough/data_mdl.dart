@@ -22,25 +22,25 @@ List<SliderModel> getSlides(BuildContext? context) {
   List<SliderModel> slides = <SliderModel>[];
   SliderModel sliderModel = new SliderModel(
     iconPath: "assets/image/ic_walk_through1.png",
-    smallTitle: AppLocalizations.of(context!)!.text_walk_through1_small_title,
-    largeTitle: AppLocalizations.of(context)!.text_walk_through1_large_title,
-    description: AppLocalizations.of(context)!.text_walk_through1_description,
+    smallTitle: 'WELCOME TO',
+    largeTitle: 'RESOLMECH',
+    description: 'WE CONNECT YOU WITH SERVICE PROVIDERS',
   );
   slides.add(sliderModel);
 
   sliderModel = new SliderModel(
       iconPath: "assets/image/ic_walk_through2.png",
-      smallTitle: AppLocalizations.of(context)!.text_walk_through2_small_title,
-      largeTitle: AppLocalizations.of(context)!.text_walk_through2_large_title,
-      description: AppLocalizations.of(context)!.text_walk_through2_description,
+      smallTitle: 'CAR IS IN TROUBLE',
+      largeTitle: 'NEED HELP ?',
+      description: 'A MECHANIC IN YOUR PALM! ',
   );
   slides.add(sliderModel);
 
   sliderModel = new SliderModel(
       iconPath: "assets/image/ic_walk_through3.png",
-      smallTitle: AppLocalizations.of(context)!.text_walk_through3_small_title,
-      largeTitle: AppLocalizations.of(context)!.text_walk_through3_large_title,
-      description: AppLocalizations.of(context)!.text_walk_through3_description,
+      smallTitle: 'ARE YOU A ',
+      largeTitle: 'MECHANIC ? ',
+      description: 'LOTS OF CUSTOMERS WAITING FOR YOU ',
   );
   slides.add(sliderModel);
 

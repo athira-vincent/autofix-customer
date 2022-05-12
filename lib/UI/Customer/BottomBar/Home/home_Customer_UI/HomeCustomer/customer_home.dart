@@ -37,6 +37,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String? filter;
   String authToken="";
 
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
+
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -98,7 +102,27 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
+
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+
+      print('authToken>>>>>>>>>' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>>' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>>' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>>' + bookingIdEmergency.toString());
+
+      if(serviceIdEmergency.toString() != 'null'  && serviceIdEmergency.toString() != "" )
+        {
+          print('serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
+
+        }
+      else
+        {
+          print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
+
+        }
+
       _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
 
@@ -796,20 +820,34 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     ),
                   )
                 : MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    SharedPreferences shdPre = await SharedPreferences.getInstance();
 
-                    Navigator.pop(context);
+
                     print(">>>>>>>>>> Latitude  $CurrentLatitude");
                     print(">>>>>>>>>> Longitude  $CurrentLongitude");
                     print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                     print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                    serviceIds = '${categoryList!.id}';
+                    serviceIds = '${service.id}';
                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
+                    if(serviceIdEmergency.toString() == '$serviceIds' )
+                    {
+                      print('serviceIdEmergency>>>>>>>>==11111' + serviceIdEmergency.toString());
+
+                    }
+                    else
+                    {
+                      shdPre.setString(SharedPrefKeys.serviceIdEmergency, "");
+                      shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "");
+                      shdPre.setString(SharedPrefKeys.bookingIdEmergency, "");
+
+                      print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
+
+                    }
 
 
-
-
+                    Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(

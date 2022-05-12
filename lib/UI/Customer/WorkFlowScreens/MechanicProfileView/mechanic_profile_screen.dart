@@ -11,6 +11,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropO
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/listeners/NotificationListener.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,6 +58,7 @@ class MechanicProfileViewScreen extends StatefulWidget {
 class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
+
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
@@ -65,13 +67,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
+  final NotificationListenerCall _notificationListener = NotificationListenerCall();
+
+
 
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
   double totalFees = 0.0;
+
+  String? FcmToken="";
   String authToken="";
+  String bookingId="";
+
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
 
   double _setValue(double value) {
     return value * per + value;
@@ -87,6 +99,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
 
 
+
   //  _listenNotification();
     getSharedPrefData();
     _listen();
@@ -98,7 +111,16 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingId =  shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
       totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService?[0].fee.toString()}');
       _homeCustomerBloc.fetchMechanicProfileDetails(
           authToken,
@@ -124,14 +146,42 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       }
     });
-    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) {
+    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
       } else {
+
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+
         setState(() {
+
+          shdPre.setString(SharedPrefKeys.serviceIdEmergency, "${widget.serviceIds}");
+          shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "${widget.mechanicId}");
+          shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.mechanicBooking?.id}");
+
+          callOnFcmApiSendPushNotifications(1);
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("success postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+    _homeCustomerBloc.mechanicsUpdateBookingIDResponse.listen((value) async {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+      } else {
+
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+
+        setState(() {
+
           callOnFcmApiSendPushNotifications(1);
 
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -158,72 +208,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       provider.setPayload(notificationPayloadMdl);
 
-
-
-
-
-      /* String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      print("bookingId >>>>> " + bookingId );
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>   MechanicTrackingScreen()
           )).then((value){
-      });*/
+      });
 
 
     });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
-      print("onMessageOpenedApp recieved");
-      print("event.notification!.data " + event.data.toString());
-
-
-
-
-
-
-     /* //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      print("bookingId >>>>> " + bookingId );
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  MechanicTrackingScreen()
-          )).then((value){
-      });*/
-
-
-    });
-
-    /*FirebaseMessaging.onBackgroundMessage((message) {
-
-    });*/
-
-    /*FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      setState(() {
-        _counter += _counter;
-      });
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",)
-          )).then((value){
-      });
-
-      print('onMessageOpenedApp - Message clicked!');
-      print("event.notification!.body " + message.notification!.body.toString());
-      print("event.notification!.title " + message.notification!.title.toString());
-
-      print("event.notification!.data " + message.data.toString());
-      //var data = message['data'] ?? message;
-      String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      print("bookingId >>>>> " + bookingId );
-
-    });*/
 
   }
 
@@ -231,6 +224,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   @override
   Widget build(BuildContext context) {
     _listenNotification(context);
+    //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
@@ -724,39 +718,39 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   Widget acceptAndSendRequestButton(Size size, BuildContext context) {
     return InkWell(
-      onTap: (){
-
-       /* Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  MechanicTrackingScreen()));*/
-
+      onTap: () async {
         print(">>>>>>>>>> Latitude  ${widget.latitude}");
         print(">>>>>>>>>> Longitude  ${widget.longitude}");
         print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
         print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
         print(">>>>>>>>>> ServiceId  ${widget.serviceIds}");
 
-        callOnFcmApiSendPushNotifications(1);
+        if(serviceIdEmergency.toString().trim() == '${widget.serviceIds}' )
+        {
+          print('serviceIdEmergency>>>>>>>>000000  ' + serviceIdEmergency.toString());
+          _homeCustomerBloc.postUpdateMechanicsBookingIDRequest(
+              authToken,
+              '$bookingIdEmergency',
+              '$mechanicIdEmergency');
+        }
+        else
+        {
+          print('serviceIdEmergency>>>>>>>>11111 ' + serviceIdEmergency.toString());
 
-        /*_homeCustomerBloc.postMechanicsBookingIDRequest(
-           authToken,
-          '${_homeCustomerBloc.dateConvert(DateTime.now())}',
-          '${_homeCustomerBloc.timeConvert(DateTime.now())}',
-          '${widget.latitude}',
-          '${widget.longitude}',
-          ' ${widget.serviceIds}',
-          '${widget.mechanicListData?.id}',
-          '2',
-          '${widget.mechanicListData?.totalAmount}',
-          '1',
-          '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);*/
+          _homeCustomerBloc.postMechanicsBookingIDRequest(
+            authToken,
+            '${_homeCustomerBloc.dateConvert(DateTime.now())}',
+            '${_homeCustomerBloc.timeConvert(DateTime.now())}',
+            '${widget.latitude}',
+            '${widget.longitude}',
+            ' ${widget.serviceIds}',
+            '${widget.mechanicListData?.id}',
+            '2',
+            '${widget.mechanicListData?.totalAmount}',
+            '1',
+            '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);
 
-       /* launchMapsUrl(
-            '10.5276',
-            '76.2144',
-            '10.0718',
-            '76.5488');*/
+        }
 
         _showMechanicAcceptanceDialog(context);
 
@@ -913,6 +907,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
+      setState(() {
+        FcmToken = value;
+      });
       print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
     });
 
@@ -931,13 +928,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
         'id': '1',
         'status': 'done',
-        'screen': 'screenA',
-        "bookingId" : '60',
-        "serviceName" : 'time Belt',
-        "serviceId" : '1',
+        'screen': 'IncomingJobOfferScreen',
+        "bookingId" : '$bookingId',
+        "serviceName" : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}',
+        "serviceId" : '${widget.serviceIds}',
+        "serviceList" : '[{ "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}"}]',
+        "carName" : 'ToyotoCorollA [bLACK]',
         "carPlateNumber" : 'KLmlodr876',
         "customerName" : 'Minnukutty',
         "customerAddress" : 'Elenjikkal House Empyreal Garden',
+        "customerLatitude" : '${widget.latitude}',
+        "customerLongitude" : '${widget.latitude}',
+        "customerFcmToken" : '$FcmToken',
+        "mechanicName" : 'Minnukutty',
+        "mechanicAddress" : 'Elenjikkal House Empyreal Garden',
+        "mechanicLatitude" : '${widget.latitude}',
+        "mechanicLongitude" : '${widget.latitude}',
+        "mechanicFcmToken" : '$FcmToken',
         "requestFromApp" : "0",
         'paymentStatus' : '0',
         'message': 'ACTION'
@@ -948,7 +955,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'dlmPibElQV6AvuAshQbcZX:APA91bHtlcldalttox-Gb6G3s99YJX-MCv3d0QtQVd4uGgznm5VZVmZEqbPWzOBe_akZodjwNdb7Fz7tP2p7KUOVhSdfTlMHZGUhNlgN-25DT-iqGAORYUq3Vs60iJXSTp2jLzz3SHph'
+      'to':'$FcmToken'
       //'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
     };
 
@@ -977,22 +984,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     }
   }
 
-  void registerNotification() async {
-    // 3. On iOS, this helps to take the user permissions
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-      // TODO: handle the received notifications
-    } else {
-      print('User declined or has not accepted permission');
-    }
-  }
 
 
 
@@ -1041,38 +1032,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-  Future<void> showNotification(String title, String body) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'channel_ID', 'channel name',
-        playSound: true,
-        showProgress: true,
-        ticker: 'Kindersteps');
-
-    var iOSChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: iOSChannelSpecifics);
-    await flutterLocalNotificationsPlugin
-        .show(0, title, body, platformChannelSpecifics, payload: 'test');
-  }
 
 
-  static void launchMapsUrl(
-      sourceLatitude,
-      sourceLongitude,
-      destinationLatitude,
-      destinationLongitude) async {
-    String mapOptions = [
-      'saddr=$sourceLatitude,$sourceLongitude',
-      'daddr=$destinationLatitude,$destinationLongitude',
-      'dir_action=navigate'
-    ].join('&');
-
-    final url = 'https://www.google.com/maps?$mapOptions';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }  }
 
 
 }
