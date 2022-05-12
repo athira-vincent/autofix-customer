@@ -304,6 +304,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                               Row(
                                 children: [
+
                                   Column(
                                     children: [
                                       Container(
