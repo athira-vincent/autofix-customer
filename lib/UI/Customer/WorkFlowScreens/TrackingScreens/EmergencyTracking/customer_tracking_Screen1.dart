@@ -17,26 +17,26 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui;
 import 'package:location/location.dart' as loc;
-class MechanicTrackingScreen extends StatefulWidget {
+class CustomerTracking1Screen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
   final String bookingId;
 
 
-  MechanicTrackingScreen({
+  CustomerTracking1Screen({
     required this.latitude,
     required this.longitude,
     required this.bookingId,});
 
   @override
   State<StatefulWidget> createState() {
-    return _MechanicTrackingScreenState();
+    return _CustomerTracking1ScreenState();
   }
 
 }
 
-class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
+class _CustomerTracking1ScreenState extends State<CustomerTracking1Screen> {
 
   String? _mapStyle;
 
@@ -70,7 +70,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String selectedState = "";
 
 
-  //String location ='Null, Press Button';
 
 
   late BitmapDescriptor mechanicIcon;
