@@ -105,9 +105,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
           .update({'locationName': 'hgfgddhgfg', 'location': endLocation.toString()});
 
 
-
-
-
     });
     print(location);
   }
