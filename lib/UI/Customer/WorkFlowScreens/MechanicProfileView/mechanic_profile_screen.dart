@@ -211,7 +211,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>   MechanicTrackingScreen()
+              builder: (context) =>   MechanicTrackingScreen(latitude: "",longitude: "",bookingId: "",)
           )).then((value){
       });
 

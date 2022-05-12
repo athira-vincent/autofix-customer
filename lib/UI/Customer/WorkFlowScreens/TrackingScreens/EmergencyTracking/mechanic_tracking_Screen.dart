@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -13,25 +15,42 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
-
+import 'dart:ui' as ui;
+import 'package:location/location.dart' as loc;
 class MechanicTrackingScreen extends StatefulWidget {
 
-  MechanicTrackingScreen();
+  final String latitude;
+  final String longitude;
+  final String bookingId;
+
+
+  MechanicTrackingScreen({
+    required this.latitude,
+    required this.longitude,
+    required this.bookingId,});
 
   @override
   State<StatefulWidget> createState() {
     return _MechanicTrackingScreenState();
   }
+
 }
 
 class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
+  String? _mapStyle;
+
+  Set<Marker> markers = Set(); //markers for google map
+  BitmapDescriptor? customerIcon;
+
+  String? CurrentLatitude;
+  String? CurrentLongitude ;
 
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  Widget? _googleMap;
   List<LatLng> polylineCoordinates = [];
 
 
@@ -40,7 +59,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
 
-  Set<Marker> markers = Set(); //markers for google map
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
 
   LatLng startLocation = LatLng(37.778259000, -122.391386000);
@@ -51,11 +69,19 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   double height = 0;
   String selectedState = "";
 
-  String CurrentLatitude ="37.778259000";
-  String CurrentLongitude ="-122.391386000";
-  String location ='Null, Press Button';
 
-  String? _mapStyle;
+  //String location ='Null, Press Button';
+
+
+  late BitmapDescriptor mechanicIcon;
+
+  CameraPosition? _kGooglePlex = CameraPosition(
+    target: LatLng(37.778259000,
+        -122.391386000,),
+    zoom: 25,
+  );
+
+
 
 
 
@@ -66,29 +92,165 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     // TODO: implement initState
     super.initState();
 
-    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
-      _mapStyle = string;
-    });
 
-
-
-    Timer.periodic(Duration(seconds: 15), (Timer t) {
-          _getCurrentCustomerLocation();
-          getDirections();
-
-          print('getDirections 00000 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
-
-
-          print('>>>>>>>>>>>>>>>> Timer');
-
+    mapStyling();
+    customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
+    getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
+        double.parse(widget.longitude.toString())));
+    _getCurrentLocation();
+    //LocationService();
+    Timer.periodic(Duration(seconds: 20), (Timer t) {
+    print('Timer ++++++');
+      _getCurrentLocation();
     });
 
 
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("fkfjhjkfhfkj");
+  }
+  LocationService() {
+    var location = loc.Location();
+    // Request permission to use location
+    location.requestPermission().then((permissionStatus) {
+      if (permissionStatus == loc.PermissionStatus.granted) {
+        // If granted listen to the onLocationChanged stream and emit over our controller
+        location.onLocationChanged.listen((locationData) {
+          print("dfhdjhkgdk 001 ");
+          if (locationData != null) {
+
+            _getCurrentLocation();
+          }
+        });
+      }
+    });
+  }
+
+  mapStyling() {
+    print('${widget.latitude}');
+
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
+        _mapStyle = string;
+      });
+  }
+
+  customerMarker(LatLng latLng) {
+    getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
+      customerIcon =BitmapDescriptor.fromBytes(onValue);
+      markers.add(Marker( //add start location marker
+        markerId: MarkerId('customerMarkerId'),
+        position: latLng, //position of marker
+        infoWindow: InfoWindow( //popup info
+          title: 'customer location',
+          snippet: 'customer location',
+        ),
+        icon: customerIcon!, //Icon for Marker
+      ));
+    });
+
+  }
+
+  mechanicMarker(LatLng latLng) {
+    print('Current latitude ${latLng.latitude}  Current longitude ${latLng.longitude}');
+    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
+      print("djghjhgdkk 001");
+      mechanicIcon =BitmapDescriptor.fromBytes(onValue);
+      markers.add(Marker( //add start location marker
+        markerId: MarkerId('mechanicMarkerId'),
+        position: latLng, //position of marker
+        infoWindow: InfoWindow( //popup info
+          title: 'mechanic location',
+          snippet: 'mechanic location',
+        ),
+        icon: mechanicIcon, //Icon for Marker
+      ));
+      setState(() {
+        print("djhdgdjjdj ${markers.length}");
+        setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
+
+
+      });
+
+    });
+
+  }
+
+  getGoogleMapCameraPosition(LatLng latLng) {
+    _kGooglePlex = CameraPosition(
+      target:latLng,
+      zoom: 12,
+    );
+  }
+
+   _getCurrentLocation()  {
+
+    print('Timer ++++++   00');
+
+    _getGeoLocationPosition();
+    //print("ddvdv ${value1!.latitude}");
+
+
+
+  }
+
+  Widget _googleMapIntegrate()
+  {
+    return GoogleMap( //Map widget from google_maps_flutter package
+        zoomGesturesEnabled: true, //enable Zoom in, out on map
+        initialCameraPosition: _kGooglePlex!,
+        markers: markers, //markers to show on map
+        polylines: Set<Polyline>.of(polylines.values), //polylines
+        mapType: MapType.normal, //map type
+        onMapCreated: (controller) { //method called when map is created
+        setState(() {
+        controller.setMapStyle(_mapStyle);
+        mapController = controller;
+  });
+  },
+    );
+  }
+
+
+  setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
+    List<LatLng> polylineCoordinates = [];
+    polylinePoints = PolylinePoints();
+
+    if (polylines.isNotEmpty)
+      polylines.clear();
+    if (polylineCoordinates.isNotEmpty)
+      polylineCoordinates.clear();
+    print("gddghgdh ${polylines.length}");
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleAPiKey,
+      PointLatLng(startlatLng.latitude, startlatLng.longitude),
+      PointLatLng(endlatLng.latitude, endlatLng.longitude),
+      travelMode: TravelMode.driving,
+    );
+   // log('getDirections + ${result?.points}' );
+
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print('getDirections + ${result.errorMessage}' );
+    }
+    addPolyLine(polylineCoordinates);
+
+  }
+
+
+
+
+
+
 
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
-    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    //location ='Lat: ${position.latitude} , Long: ${position.longitude}';
     setState(() {
 
       CurrentLatitude = position.latitude.toString();
@@ -96,24 +258,40 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
       endLocation = LatLng(position.latitude, position.longitude);
 
+      _kGooglePlex = CameraPosition(
+        target: LatLng(endLocation.latitude,
+            endLocation.longitude),
+        zoom: 25,
+      );
 
       _firestore
-          .collection('riders')
-          .doc('minnu')
-          .update({'locationName': 'hgfgddhgfg', 'location': endLocation.toString()});
+          .collection("ResolMech")
+          .doc('0002')
+          .set({
+            'locationName': 'minnu',
+            'location': endLocation.toString()
+          })
+          .then((value) => print("User Added"))
 
+          .catchError((error) =>
+          print("Failed to add user: $error"));
 
     });
-    print(location);
+    //print(location);
   }
 
-  Future<Position> _getGeoLocationPosition() async {
+  _getGeoLocationPosition() async {
+    print('Timer ++++++   01');
+    Position? value1;
     bool serviceEnabled;
     LocationPermission permission;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    print('Timer ++++++   03');
     if (!serviceEnabled) {
+      print('Timer ++++++   04');
+
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
@@ -123,8 +301,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
+      print('Timer ++++++   05');
+
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        print('Timer ++++++   06');
 
         return Future.error('Location permissions are denied');
       }
@@ -138,7 +319,33 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
+     var value1 = event;
+
+      print('Timer ++++++   02');
+
+
+      //location ='Lat: ${value.latitude} , Long: ${value.longitude}';
+      setState(() {
+        _firestore
+            .collection("ResolMech")
+            .doc('${widget.bookingId}')
+            .set({
+          'latitude': value1.latitude.toString(),
+          'longitude': value1.longitude.toString()
+        })
+            .then((value) => print("Location Added"))
+            .catchError((error) =>
+            print("Failed to add Location: $error"));
+      });
+     print("ddjdgdjdjk $value1");
+     LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
+     print("ddvdv 001 ${latLng.latitude}");
+     mechanicMarker (latLng);
+
+    });
+    //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
 
@@ -179,7 +386,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         title: 'Starting Point ',
         snippet: 'Start Marker',
       ),
-      icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+      icon: customerIcon!, //Icon for Marker
     ));
 
     markers.add(Marker( //add distination location marker
@@ -189,7 +396,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         title: 'Destination Point ',
         snippet: 'Destination Marker',
       ),
-      icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+      icon: mechanicIcon, //Icon for Marker
     ));
   }
 
@@ -199,10 +406,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       polylineId: id,
       color: Colors.deepPurpleAccent,
       points: polylineCoordinates,
-      width: 8,
+      width: 4,
     );
     polylines[id] = polyline;
     setState(() {});
+    _googleMap=_googleMapIntegrate();
   }
 
 
@@ -228,27 +436,24 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
+                _googleMap!=null?_googleMap!:CircularProgressIndicator(),
+                // GoogleMap( //Map widget from google_maps_flutter package
+                //   zoomGesturesEnabled: true, //enable Zoom in, out on map
+                //   initialCameraPosition: _kGooglePlex!,
+                //   markers: markers, //markers to show on map
+                //   polylines: Set<Polyline>.of(polylines.values), //polylines
+                //   mapType: MapType.normal, //map type
+                //   onMapCreated: (controller) { //method called when map is created
+                //     setState(() {
+                //       controller.setMapStyle(_mapStyle);
+                //
+                //       mapController = controller;
+                //     });
+                //   },
+                // ),
 
-                GoogleMap( //Map widget from google_maps_flutter package
-                  zoomGesturesEnabled: true, //enable Zoom in, out on map
-                  initialCameraPosition: CameraPosition( //innital position in map
-                    target: startLocation, //initial position
-                    zoom: 9, //initial zoom level
-                  ),
-                  markers: markers, //markers to show on map
-                  polylines: Set<Polyline>.of(polylines.values), //polylines
-                  mapType: MapType.normal, //map type
-                  onMapCreated: (controller) { //method called when map is created
-                    setState(() {
-                      controller.setMapStyle(_mapStyle);
-
-                      mapController = controller;
-                    });
-                  },
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                /*Padding(
+                  padding: const EdgeInsets.fromLTRB(20,20,20,100),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -401,7 +606,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       ],
                     ),
                   ),
-                ),
+                ),*/
 
                 Align(
                   alignment: Alignment.topCenter,
@@ -469,6 +674,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
 
 
+
   _showProductTourDialog(BuildContext context) async {
     await showDialog(
         context: context,
@@ -518,6 +724,15 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
 
   }
+
+
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
 
 
 }
