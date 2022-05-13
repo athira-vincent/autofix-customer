@@ -1502,6 +1502,24 @@ class QueryProvider {
     );
   }
 
+  postMechanicOrderStatusUpdate(
+      token, bookStatus, bookingId) async {
+    String _query = """
+     mutation {
+      mechanic_status_update(state: 1, bookId: 1) {
+        message
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postCustIndividualEditProfileRequest(
     String token, firstName,  lastName,  state, status, imageUrl) async {
     String _query = """  
