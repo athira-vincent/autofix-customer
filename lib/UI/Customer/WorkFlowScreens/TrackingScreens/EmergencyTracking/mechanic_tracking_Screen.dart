@@ -59,7 +59,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   String? _placeDistance;
   double _speed = 0.0;
   var _firestoreData ;
-
+  double distanceInMeters = 0.0;
   var updatingLat = 0.0;
 
 
@@ -222,6 +222,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     setState(() {
       _placeDistance = totalDistance.toStringAsFixed(2);
       print('DISTANCE ===== : $_placeDistance km');
+
+
+
+
     });
   }
 
@@ -252,6 +256,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       Timer(const Duration(seconds: 15), () {
                         if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                         {
+                           distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
+                          print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
                           updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
                           mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
                         }                      });
