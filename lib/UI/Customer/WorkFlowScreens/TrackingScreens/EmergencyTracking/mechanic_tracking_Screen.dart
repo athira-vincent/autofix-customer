@@ -378,7 +378,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                     padding: const EdgeInsets.all(5),
                                     child: InkWell(
                                       onTap: (){
-                                        setToCloudFirestoreDB();
+                                        updateToCloudFirestoreDB();
                                       },
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
