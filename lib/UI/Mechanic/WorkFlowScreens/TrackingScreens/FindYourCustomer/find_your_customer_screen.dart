@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +38,19 @@ class FindYourCustomerScreen extends StatefulWidget {
 
 class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
-
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
+
+  LatLng startLocation = LatLng(10.0159, 76.3419);
+  LatLng endLocation = LatLng(10.0443, 76.3282);
+
+  GoogleMapController? mapController; //contrller for Google map
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -49,42 +58,18 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
   MapType _currentMapType = MapType.terrain;
   GoogleMapController? _controller ;
-  static const LatLng _center = const LatLng(10.0265, 76.3086);
+  static const LatLng _center = const LatLng(10.0159, 76.3419);
   String? _mapStyle;
-  Map<MarkerId, Marker> markers = {};
+  //Map<MarkerId, Marker> markers = {};
   final Set<Polyline>_polyline={};
   LatLng _lastMapPosition = _center;
   List<LatLng> latlng = [];
+
   LatLng _new = LatLng(10.506402, 76.244164);
   LatLng _news = LatLng(10.0265, 76.3086);
-
-
-
-
-  void _onMapCreated(GoogleMapController controller) {
-
-    setState(() {
-      _controller = controller;
-      _controller!.setMapStyle(_mapStyle).whenComplete(() {
-        print(">>>>>>>>>>>>>>>>>+++++++++++++++++  =true");
-      });
-      //_controller.complete(controller);
-      final marker = Marker(
-        markerId: MarkerId('place_name'),
-        position: LatLng(10.506402, 76.244164),
-        icon:  BitmapDescriptor.defaultMarker,
-      );
-      markers[MarkerId('place_name')] = marker;
-    });
-    latlng.add(_new);
-    latlng.add(_news);
-    _polyline.add(Polyline(
-      polylineId: PolylineId(_lastMapPosition.toString()),
-      visible: true,
-      points: latlng,
-      color: CustColors.cherry,
-    ));
-  }
+  Set<Marker> markers = Set(); //markers for google map
+  Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
+  PolylinePoints polylinePoints = PolylinePoints();
 
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
@@ -96,30 +81,39 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getCurrentCustomerLocation();
-
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
-    /*DefaultAssetBundle.of(context).loadString('assets/map_style/map_style.json').then((string) {
-      this._mapStyle = string;
-    }).catchError((error) {
-      log(error.toString());
-    });*/
+    Timer.periodic(Duration(seconds: 15), (Timer t) {
+      _getCurrentCustomerLocation();
+      getDirections();
+
+      print('getDirections 00000 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
+
+
+      print('>>>>>>>>>>>>>>>> Timer');
+
+    });
 
   }
-
-
 
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
     setState(() {
+
       CurrentLatitude = position.latitude.toString();
       CurrentLongitude = position.longitude.toString();
+
+      endLocation = LatLng(position.latitude, position.longitude);
+
+      _firestore
+          .collection('riders')
+          .doc('minnu')
+          .update({'locationName': 'hgfgddhgfg', 'location': endLocation.toString()});
+
     });
     print(location);
-    GetAddressFromLatLong(position);
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -156,6 +150,70 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
+  getDirections() async {
+
+
+    List<LatLng> polylineCoordinates = [];
+
+    polylinePoints = PolylinePoints();
+    if (markers.isNotEmpty) markers.clear();
+    if (polylines.isNotEmpty)
+      polylines.clear();
+    if (polylineCoordinates.isNotEmpty)
+      polylineCoordinates.clear();
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleAPiKey,
+      PointLatLng(startLocation.latitude, startLocation.longitude),
+      PointLatLng(endLocation.latitude, endLocation.longitude),
+      travelMode: TravelMode.driving,
+    );
+    print('getDirections 01 + ${result.points}' );
+    print('getDirections 00 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
+
+
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print('getDirections + ${result.errorMessage}' );
+    }
+    addPolyLine(polylineCoordinates);
+    markers.add(Marker( //add start location marker
+      markerId: MarkerId(startLocation.toString()),
+      position: startLocation, //position of marker
+      infoWindow: InfoWindow( //popup info
+        title: 'Starting Point ',
+        snippet: 'Start Marker',
+      ),
+      icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+    ));
+
+    markers.add(Marker( //add distination location marker
+      markerId: MarkerId(endLocation.toString()),
+      position: endLocation, //position of marker
+      infoWindow: InfoWindow( //popup info
+        title: 'Destination Point ',
+        snippet: 'Destination Marker',
+      ),
+      icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+    ));
+  }
+
+  addPolyLine(List<LatLng> polylineCoordinates) {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.deepPurpleAccent,
+      points: polylineCoordinates,
+      width: 8,
+    );
+    polylines[id] = polyline;
+    setState(() {
+
+    });
+  }
 
   Future<void> GetAddressFromLatLong(Position position)async {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
@@ -169,6 +227,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
@@ -178,15 +237,22 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
               children: [
 
                 Expanded(
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 8.0,
+                  child: GoogleMap( //Map widget from google_maps_flutter package
+                    zoomGesturesEnabled: true, //enable Zoom in, out on map
+                    initialCameraPosition: CameraPosition( //innital position in map
+                      target: startLocation, //initial position
+                      zoom: 15, //initial zoom level
                     ),
-                    mapType: _currentMapType,
-                    markers: markers.values.toSet(),
-                    polylines:_polyline,
+                    markers: markers, //markers to show on map
+                    polylines: Set<Polyline>.of(polylines.values), //polylines
+                    mapType: MapType.normal, //map type
+                    onMapCreated: (controller) { //method called when map is created
+                      setState(() {
+                        controller.setMapStyle(_mapStyle);
+
+                        mapController = controller;
+                      });
+                    },
                   ),
                 ),
 
@@ -237,6 +303,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                               Row(
                                 children: [
+
                                   Column(
                                     children: [
                                       Container(

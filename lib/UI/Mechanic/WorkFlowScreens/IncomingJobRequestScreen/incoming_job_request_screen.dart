@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_request_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slider_button/slider_button.dart';
 
 class IncomingJobRequestScreen extends StatefulWidget {
@@ -40,10 +43,11 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
+  final MechanicIncomingJobRequestBloc _incomingJobRequestBloc = MechanicIncomingJobRequestBloc();
   bool _isLoading = false;
   //late bool _isJobOfferAccepted;
 
+  late int isAccepted;
   double per = .10;
   double perfont = .10;
   double _setValue(double value) {
@@ -60,12 +64,13 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   int _counter = 0;
   late AnimationController _controller;
   int levelClock = 30;
-
+  String authToken = "", userId = "";
 
   @override
   void initState() {
     super.initState();
-    _getForgotPwd();
+    getSharedPrefData();
+    _getApiResponse();
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
@@ -77,15 +82,27 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         print("levelClock >>>>>> " + levelClock.toString() );
-        // = false;
-        callOnFcmApiSendPushNotifications(1, 0);
+        isAccepted = 0;
+        callOnFcmApiSendPushNotifications(1,);
+        //_incomingJobRequestBloc.postMechanicFetchIncomingRequestRequest(authToken, bookingId, bookStatus);
         //--------- call notification
       }
     });
 
   }
 
-  Future<void> callOnFcmApiSendPushNotifications(int length,int isAccepted) async {
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
+      print('userFamilyId ' + authToken.toString());
+      print('userId ' + userId.toString());
+    });
+  }
+
+  Future<void> callOnFcmApiSendPushNotifications(int length,) async {
 
     print(" callOnFcmApiSendPushNotifications > isAccepted " + isAccepted.toString());
     FirebaseMessaging.instance.getToken().then((value) {
@@ -151,6 +168,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           Navigator.pop(context);
 
         }else if(isAccepted == 1){
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -195,11 +213,12 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     super.dispose();
     _controller.dispose();
     _emailFocusNode.removeListener(onFocusChange);
-    _forgotPasswordBloc.dispose();
+    _incomingJobRequestBloc.dispose();
+
   }
 
-  _getForgotPwd() {
-    _forgotPasswordBloc.postForgotPassword.listen((value) {
+  _getApiResponse() {
+    _incomingJobRequestBloc.postMechanicIncomingJobRequest.listen((value) {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -210,20 +229,15 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
+          Navigator.pop(context);
         });
       } else {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-
-          Navigator.pushReplacement(context,
+          callOnFcmApiSendPushNotifications(1);
+          /*Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()));
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).unfocus();*/
         });
       }
     });
@@ -373,7 +387,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                         setState(() {
                                           SliderVal = true;
                                           _controller.stop(canceled: true);
-                                          callOnFcmApiSendPushNotifications(1, 1);
+                                          isAccepted = 1;
+                                          //callOnFcmApiSendPushNotifications(1, 1);
+                                          _incomingJobRequestBloc.postMechanicFetchIncomingRequestRequest(authToken, "1234", isAccepted);
                                           //--------- call notification
                                         });
                                       },

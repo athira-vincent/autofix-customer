@@ -33,6 +33,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
+
   int _index = 0;
   int _counter = 0;
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -102,7 +103,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved onMessage");
+
+      //Future<void>.delayed(const Duration(seconds: 2));//faking task delay
+
       setState(() {
         _counter += 1;
         //_notificationPayloadMdl = event.data;
@@ -124,6 +127,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
+
       print("message received onMessageOpenedApp");
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
       print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
@@ -146,7 +150,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
 
     FirebaseMessaging.onBackgroundMessage((message) async {
-      print("message onBackgroundMessage");
+      print("onBackgroundMessage " + message.data.toString());
+
       setState(() {
         _counter += 1;
         //_notificationPayloadMdl = event.data;

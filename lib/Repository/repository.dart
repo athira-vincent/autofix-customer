@@ -305,6 +305,12 @@ class Repository {
       _mechanicApiProvider.postMechanicActiveServiceRequest(
           token, mechanicId);
 
+  // Fetch Mechanic Online Offline Request
+  Future<dynamic>  postMechanicIncomingRequestUpdate(
+      token,  bookingId, bookStatus)  =>
+      _mechanicApiProvider.postMechanicIncomingJobUpdateRequest(
+          token,  bookingId, bookStatus);
+
   // Fetch Profile Mechanic Request
   Future<dynamic>  postMechanicFetchProfileRequest(token)  =>
       _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token);

@@ -1382,8 +1382,8 @@ class QueryProvider {
   postMechanicActiveServiceRequest(
       token,  mechanicId) async {
     String _query = """
-      mutation {
-      currentlyWorkingService(mechanicId: $mechanicId) {
+     mutation {
+  currentlyWorkingService(mechanicId: 8) {
         id
         bookingCode
         reqType
@@ -1405,15 +1405,93 @@ class QueryProvider {
         customerId
         mechanicId
         vehicleId
+        mechanic {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          mechanic{
+            id
+          }
+          customer{
+            id
+          }
+        }
+        customer {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+          mechanic{
+            id
+          }
+          customer{
+            id
+          }
+        }
+        vehicle {
+          id
+          brand
+          model
+          engine
+          year
+          plateNo
+          lastMaintenance
+          milege
+          vehiclePic
+          latitude
+          longitude
+          defaultVehicle
+          status
+        }
         bookService {
           id
           status
           service{
             id
+            serviceName
           }
         }
       }
     }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postMechanicIncomingJobUpdateRequest(
+      token,  bookingId, bookStatus) async {
+    String _query = """
+     mutation {
+    acceptRejectRequest(bookingId: $bookingId, bookStatus: $bookStatus) {
+      status
+      code
+      message
+    }
+  }
     """;
     log(_query);
     return await GqlClient.I.query01(
