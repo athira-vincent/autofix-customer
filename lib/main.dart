@@ -82,22 +82,13 @@ class _MyAppState extends State<MyApp> {
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: 'Banqmart',
 
-
-
-
                 theme: ThemeData(
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home:  MechanicTrackingScreen(
-                  latitude: "10.0159",
-                  longitude: "76.3419",
-                  bookingId: "2022",)
-                /*MechanicTrackingScreen(latitude:
-                "38.92747367732227",
-                longitude:
-                "-77.02016168273985",
-                bookingId: "2022",)
+                home: SplashScreen()
+
+                // MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
 
               );
             },

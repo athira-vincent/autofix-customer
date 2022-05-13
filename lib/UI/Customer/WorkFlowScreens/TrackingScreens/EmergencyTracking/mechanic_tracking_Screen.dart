@@ -5,9 +5,11 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -179,7 +181,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
 
       });
-      distanceCalculation(polylineCoordinates);
     } else {
       print('PolylineResult + ${result.errorMessage}' );
     }
@@ -208,27 +209,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   }
 
 
-  distanceCalculation(List<LatLng> polylineCoordinates)
-  {
-    for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += _coordinateDistance(
-        polylineCoordinates[i].latitude,
-        polylineCoordinates[i].longitude,
-        polylineCoordinates[i + 1].latitude,
-        polylineCoordinates[i + 1].longitude,
-      );
-    }
-
-    setState(() {
-      _placeDistance = totalDistance.toStringAsFixed(2);
-      print('DISTANCE ===== : $_placeDistance km');
-
-
-
-
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -245,9 +225,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   stream: _firestoreData,
                   builder: (_, snapshot) {
 
-
-
-
                     if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
@@ -256,18 +233,14 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       Timer(const Duration(seconds: 15), () {
                         if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                         {
-                           distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
-                          print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
+                          setState(() {
+                            distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${snapshot.data?.data()!['latitude']}'), double.parse('${snapshot.data?.data()!['longitude']}'));
+                            print('DISTANCE distanceInMeters===== : ${distanceInMeters/1000} ');
+                          });
                           updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
                           mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
                         }                      });
-                     /* if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
-                        {
-                          updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
-                          mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
-                        }
-*/
-                      // <-- Your value
+
                       return GoogleMap( //Map widget from google_maps_flutter package
 
                         zoomGesturesEnabled: true, //enable Zoom in, out on map
@@ -288,53 +261,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   },
                 ),
 
-                // StreamBuilder(
-                //   stream:   _firestore.collection("ResolMech").where(
-                //       FieldPath.documentId,
-                //       isEqualTo: "2022"
-                //   ).snapshots(),
-                //   builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
-                //
-                //     print('StreamBuilder ++++ ${snapshot.data?.docs[0].id} ');
-                //    // mechanicMarker(LatLng(snapshot.data?.latitude, snapshot.data?.l));
-                //
-                //
-                //     return GoogleMap( //Map widget from google_maps_flutter package
-                //
-                //       zoomGesturesEnabled: true, //enable Zoom in, out on map
-                //       initialCameraPosition: _kGooglePlex!,
-                //       markers: markers, //markers to show on map
-                //       polylines: Set<Polyline>.of(polylines.values), //polylines
-                //       mapType: MapType.normal, //map type
-                //       onMapCreated: (controller) { //method called when map is created
-                //         setState(() {
-                //           controller.setMapStyle(_mapStyle);
-                //           mapController = controller;
-                //         });
-                //       },
-                //     );
-                //   },
-                // ),
-
-                //_googleMap!=null?_googleMap!:CircularProgressIndicator(),
-
-
-                // GoogleMap( //Map widget from google_maps_flutter package
-                //   zoomGesturesEnabled: true, //enable Zoom in, out on map
-                //   initialCameraPosition: _kGooglePlex!,
-                //   markers: markers, //markers to show on map
-                //   polylines: Set<Polyline>.of(polylines.values), //polylines
-                //   mapType: MapType.normal, //map type
-                //   onMapCreated: (controller) { //method called when map is created
-                //     setState(() {
-                //       controller.setMapStyle(_mapStyle);
-                //
-                //       mapController = controller;
-                //     });
-                //   },
-                // ),
-
-                /*Padding(
+                Padding(
                   padding: const EdgeInsets.fromLTRB(20,20,20,100),
                   child: Container(
                     decoration: BoxDecoration(
@@ -410,11 +337,11 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "3 mintues",
+                                          "${distanceInMeters/1000} km",
                                           style: Styles.waitingTextBlack17,
                                         ),
                                         Text(
-                                          "Arrival time.",
+                                          "Away",
                                           style: Styles.awayTextBlack,
                                         ),
                                       ],
@@ -488,7 +415,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       ],
                     ),
                   ),
-                ),*/
+                ),
 
                 Align(
                   alignment: Alignment.topCenter,
@@ -554,20 +481,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
   }
 
-  double _coordinateDistance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
-  }
-
-  void _onSpeedChange(double newSpeed) {
-    setState(() {
-      _speed = newSpeed;
-    });
-  }
 
 
   @override
