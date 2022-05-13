@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
@@ -18,6 +20,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
@@ -42,13 +45,14 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   double perfont = .10;
   double height = 0;
   String selectedState = "";
+  bool _isLoadingPage = true;
 
   LatLng startLocation = LatLng(10.0159, 76.3419);
   LatLng endLocation = LatLng(10.0443, 76.3282);
 
   GoogleMapController? mapController; //contrller for Google map
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
 
   double _setValue(double value) {
@@ -75,12 +79,14 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   String CurrentLongitude ="76.244164";
   String location ='Null, Press Button';
   String Address = 'search';
+  String authToken="";
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
@@ -93,7 +99,60 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       print('>>>>>>>>>>>>>>>> Timer');
 
     });
+    _listenServiceListResponse();
+  }
 
+  _listenServiceListResponse() {
+
+    _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isLoadingPage = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      } else {
+        setState(() {
+          _isLoadingPage = false;
+
+          if(widget.serviceModel == "0"){
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicStartServiceScreen(serviceModel: widget.serviceModel,)));
+          }
+          else if(widget.serviceModel == "1"){
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
+          }
+          else if(widget.serviceModel == "2" || widget.serviceModel == "3"){
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
+          }
+
+
+        });
+      }
+    });
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      print('userFamilyId'+authToken.toString());
+
+    });
   }
 
   Future<void> _getCurrentCustomerLocation() async {
@@ -381,24 +440,11 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                if(widget.serviceModel == "0"){
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => MechanicStartServiceScreen(serviceModel: widget.serviceModel,)));
-                                                }
-                                                else if(widget.serviceModel == "1"){
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
-                                                }
-                                                else if(widget.serviceModel == "2" || widget.serviceModel == "3"){
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
-                                                }
+
+                                                _isLoadingPage = false;
+
+                                                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                                                    authToken, "10", "3");
 
                                               },
                                               child: Container(

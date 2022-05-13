@@ -97,12 +97,11 @@ class _MyAppState extends State<MyApp> {
                 "38.92747367732227",
                 longitude:
                 "-77.02016168273985",
-                bookingId: "2022",)*/
+                bookingId: "2022",)
 
               );
             },
           );
         });
-
   }
 }
