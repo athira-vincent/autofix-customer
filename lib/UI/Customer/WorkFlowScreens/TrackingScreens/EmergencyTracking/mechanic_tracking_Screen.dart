@@ -60,10 +60,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     // TODO: implement initState
     super.initState();
 
-
     mapStyling();
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
-
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
     _googleMap = _googleMapIntegrate();
@@ -73,7 +71,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   mapStyling() {
     print('latlong from another screen ${widget.latitude} ${widget.longitude}');
-
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
@@ -113,7 +110,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         print("markers ${markers.length}");
         setPolyline(LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())), latLng,);
       });
-
     });
 
   }
@@ -152,7 +148,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
     List<LatLng> polylineCoordinates = [];
     polylinePoints = PolylinePoints();
-
     if (polylines.isNotEmpty)
       polylines.clear();
     if (polylineCoordinates.isNotEmpty)
@@ -203,30 +198,66 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
               alignment: Alignment.bottomCenter,
               children: [
 
-                StreamBuilder(
-                  stream:   _firestore.collection("ResolMech").snapshots(),
-                  builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+                StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: _firestore.collection("ResolMech").doc('2022').snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
-                    print('StreamBuilder ++++ ${snapshot.data?.docs[0]} ');
-                   // mechanicMarker(LatLng(snapshot.data?.latitude, snapshot.data?.l));
+                    if (snapshot.hasData) {
 
+                      print('StreamBuilder ++++ ${snapshot.data?.data()!['latitude']} ');
+                      mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
 
-                    return GoogleMap( //Map widget from google_maps_flutter package
+                      var output = snapshot.data!.data();
+                      var value = output!['some_field']; // <-- Your value
+                      return GoogleMap( //Map widget from google_maps_flutter package
 
-                      zoomGesturesEnabled: true, //enable Zoom in, out on map
-                      initialCameraPosition: _kGooglePlex!,
-                      markers: markers, //markers to show on map
-                      polylines: Set<Polyline>.of(polylines.values), //polylines
-                      mapType: MapType.normal, //map type
-                      onMapCreated: (controller) { //method called when map is created
-                        setState(() {
-                          controller.setMapStyle(_mapStyle);
-                          mapController = controller;
-                        });
-                      },
-                    );
+                        zoomGesturesEnabled: true, //enable Zoom in, out on map
+                        initialCameraPosition: _kGooglePlex!,
+                        liteModeEnabled: true,
+                        markers: markers, //markers to show on map
+                        polylines: Set<Polyline>.of(polylines.values), //polylines
+                        mapType: MapType.normal, //map type
+                        onMapCreated: (controller) { //method called when map is created
+                          setState(() {
+                            controller.setMapStyle(_mapStyle);
+                            mapController = controller;
+                          });
+                        },
+                      );
+                    }
+
+                    return Center(child: CircularProgressIndicator());
                   },
                 ),
+
+                // StreamBuilder(
+                //   stream:   _firestore.collection("ResolMech").where(
+                //       FieldPath.documentId,
+                //       isEqualTo: "2022"
+                //   ).snapshots(),
+                //   builder: (_, AsyncSnapshot<QuerySnapshot> snapshot) {
+                //
+                //     print('StreamBuilder ++++ ${snapshot.data?.docs[0].id} ');
+                //    // mechanicMarker(LatLng(snapshot.data?.latitude, snapshot.data?.l));
+                //
+                //
+                //     return GoogleMap( //Map widget from google_maps_flutter package
+                //
+                //       zoomGesturesEnabled: true, //enable Zoom in, out on map
+                //       initialCameraPosition: _kGooglePlex!,
+                //       markers: markers, //markers to show on map
+                //       polylines: Set<Polyline>.of(polylines.values), //polylines
+                //       mapType: MapType.normal, //map type
+                //       onMapCreated: (controller) { //method called when map is created
+                //         setState(() {
+                //           controller.setMapStyle(_mapStyle);
+                //           mapController = controller;
+                //         });
+                //       },
+                //     );
+                //   },
+                // ),
 
                 //_googleMap!=null?_googleMap!:CircularProgressIndicator(),
 
