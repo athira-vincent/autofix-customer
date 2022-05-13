@@ -85,11 +85,12 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home:  MechanicTrackingScreen(latitude:
+                home: SplashScreen(),
+                /*home:  MechanicTrackingScreen(latitude:
                 "10.0159",
                   longitude:
                     "76.3419",
-                  bookingId: "2022",)
+                  bookingId: "2022",)*/
                 /*MechanicTrackingScreen(latitude:
                 "38.92747367732227",
                 longitude:

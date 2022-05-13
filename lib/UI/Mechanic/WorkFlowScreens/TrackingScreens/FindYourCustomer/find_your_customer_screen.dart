@@ -90,7 +90,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
       print('getDirections 00000 + ${endLocation.latitude}     ++ ${startLocation.latitude}' );
 
-
       print('>>>>>>>>>>>>>>>> Timer');
 
     });
@@ -151,7 +150,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   }
 
   getDirections() async {
-
 
     List<LatLng> polylineCoordinates = [];
 

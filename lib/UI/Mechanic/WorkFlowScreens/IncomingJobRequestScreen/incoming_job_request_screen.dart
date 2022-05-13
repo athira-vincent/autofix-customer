@@ -389,7 +389,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                           _controller.stop(canceled: true);
                                           isAccepted = 1;
                                           //callOnFcmApiSendPushNotifications(1, 1);
-                                          _incomingJobRequestBloc.postMechanicFetchIncomingRequestRequest(authToken, "1234", isAccepted);
+                                          _incomingJobRequestBloc.postMechanicFetchIncomingUpdateRequest(authToken, "1234", isAccepted);
                                           //--------- call notification
                                         });
                                       },

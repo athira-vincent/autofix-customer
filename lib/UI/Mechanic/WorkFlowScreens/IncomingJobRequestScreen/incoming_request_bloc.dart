@@ -9,7 +9,7 @@ class MechanicIncomingJobRequestBloc {
   final postMechanicIncomingJobRequest = PublishSubject<MechanicIncomingJobMdl>();
   Stream<MechanicIncomingJobMdl> get MechanicMyJobReviewResponse => postMechanicIncomingJobRequest.stream;
 
-  postMechanicFetchIncomingRequestRequest(
+  postMechanicFetchIncomingUpdateRequest(
       String token,  bookingId, bookStatus
       ) async {
     MechanicIncomingJobMdl _mechanicIncomingRequestMdl = await repository.postMechanicIncomingRequestUpdate(token,  bookingId, bookStatus);

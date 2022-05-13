@@ -63,7 +63,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
     _getCurrentCustomerLocation();
     _listenApiResponse();
-
+    _hasActiveService = false;
     Timer.periodic(Duration(seconds: 120), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
     });
@@ -184,8 +184,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          //_mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails?.mechanic![0].brands);
-          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["Maruthi","Corolla"]);
+          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails?.mechanic![0].brands);
+          //_mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken", "Maruthi, Corolla");
         });
       }
     });
@@ -294,7 +294,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                     upcomingServices(size),
                     brandSpecialization(size),
                     dashBoardItemsWidget(size),
-                    emergencyServiceReminder(size),
+                    _hasActiveService ? emergencyServiceReminder(size) : Container(),
                   ],
                 ),
                 /*Positioned(
@@ -616,7 +616,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         return Padding(
           padding: const EdgeInsets.all(5),
           child: InkWell(
-            child: brandSpecializationListItem(size,i),
+            child: brandSpecializationListItem(size, i, snapshot.data!.data?.brandDetails![i].icon),
             onTap: (){
 
             },
@@ -626,7 +626,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     );
   }
 
-  Widget brandSpecializationListItem(Size size,int i) {
+  Widget brandSpecializationListItem(Size size,int i,  iconImage) {
     return Column(
       children: [
         Container(
@@ -649,7 +649,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Image.network(
-              imageList[i],
+              iconImage!,
               fit: BoxFit.cover,
             ),
           ),
