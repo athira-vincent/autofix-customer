@@ -57,6 +57,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   );
   double totalDistance = 0.0;
   String? _placeDistance;
+  double _speed = 0.0;
+  var _firestoreData ;
+
+  var updatingLat = 0.0;
+
+
 
 
 
@@ -64,6 +70,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _firestoreData = _firestore.collection("ResolMech").doc('2022').snapshots();
 
     mapStyling();
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
@@ -151,6 +158,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   }
 
   setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
+    print('MechanicTrackingScreen setPolyline');
     List<LatLng> polylineCoordinates = [];
     polylinePoints = PolylinePoints();
     if (polylines.isNotEmpty)
@@ -169,13 +177,16 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+
       });
+      distanceCalculation(polylineCoordinates);
     } else {
       print('PolylineResult + ${result.errorMessage}' );
     }
+
     addPolyLine(polylineCoordinates);
 
-    distanceCalculation(polylineCoordinates);
+
 
 
 
@@ -227,22 +238,34 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
               children: [
 
                 StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  stream: _firestore.collection("ResolMech").doc('2022').snapshots(),
+                  stream: _firestoreData,
                   builder: (_, snapshot) {
+
+
+
+
                     if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
 
                       print('StreamBuilder ++++ ${snapshot.data?.data()!['latitude']} ');
-                      mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
-
-                      var output = snapshot.data!.data();
-                      var value = output!['some_field']; // <-- Your value
+                      Timer(const Duration(seconds: 15), () {
+                        if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
+                        {
+                          updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
+                          mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
+                        }                      });
+                     /* if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
+                        {
+                          updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
+                          mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
+                        }
+*/
+                      // <-- Your value
                       return GoogleMap( //Map widget from google_maps_flutter package
 
                         zoomGesturesEnabled: true, //enable Zoom in, out on map
                         initialCameraPosition: _kGooglePlex!,
-                        liteModeEnabled: true,
                         markers: markers, //markers to show on map
                         polylines: Set<Polyline>.of(polylines.values), //polylines
                         mapType: MapType.normal, //map type
@@ -532,6 +555,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         c((lat2 - lat1) * p) / 2 +
         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a));
+  }
+
+  void _onSpeedChange(double newSpeed) {
+    setState(() {
+      _speed = newSpeed;
+    });
   }
 
 
