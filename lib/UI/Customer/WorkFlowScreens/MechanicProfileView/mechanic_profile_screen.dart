@@ -743,7 +743,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             '${_homeCustomerBloc.timeConvert(DateTime.now())}',
             '${widget.latitude}',
             '${widget.longitude}',
-            ' ${widget.serviceIds}',
+            '${widget.serviceIds}',
             '${widget.mechanicListData?.id}',
             '2',
             '${widget.mechanicListData?.totalAmount}',
@@ -923,6 +923,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         'title': 'Maria',
         'sound': 'alarmw.wav',
       },
+
       'priority': 'high',
       'data': {
         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -967,7 +968,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     BaseOptions options = new BaseOptions(
       connectTimeout: 5000,
-      receiveTimeout: 3000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
       headers: headers,
     );
 

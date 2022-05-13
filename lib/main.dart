@@ -86,8 +86,8 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
                 //home: MechanicTrackingScreen(),
-                //home: SplashScreen(),
-                home: FindYourCustomerScreen(serviceModel: "0"),
+                home: SplashScreen(),
+                //home: FindYourCustomerScreen(serviceModel: "0"),
               );
             },
           );

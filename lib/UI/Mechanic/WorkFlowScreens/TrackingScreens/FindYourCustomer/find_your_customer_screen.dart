@@ -38,7 +38,6 @@ class FindYourCustomerScreen extends StatefulWidget {
 
 class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
-
   double per = .10;
   double perfont = .10;
   double height = 0;
@@ -108,12 +107,10 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
       endLocation = LatLng(position.latitude, position.longitude);
 
-
       _firestore
           .collection('riders')
           .doc('minnu')
           .update({'locationName': 'hgfgddhgfg', 'location': endLocation.toString()});
-
 
     });
     print(location);
@@ -213,7 +210,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       width: 8,
     );
     polylines[id] = polyline;
-    setState(() {});
+    setState(() {
+
+    });
   }
 
   Future<void> GetAddressFromLatLong(Position position)async {

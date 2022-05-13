@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_active_service_mdl.
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_location_update_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_online_offline_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_request_mdl.dart';
 
 
 class MechanicApiProvider {
@@ -103,6 +104,25 @@ class MechanicApiProvider {
       }
     } else {
       final errorMsg = MechanicActiveServiceUpdateMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  Future<MechanicIncomingJobMdl> postMechanicIncomingJobUpdateRequest(
+      token,  bookingId, bookStatus )async {
+    Map<String, dynamic> _resp = await _queryProvider.postMechanicIncomingJobUpdateRequest(
+        token,  bookingId, bookStatus);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicIncomingJobMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicIncomingJobMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicIncomingJobMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

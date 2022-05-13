@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -39,6 +41,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
+  late bool _hasActiveService;
 
 
   final List<String> imageList = [
@@ -61,8 +64,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     _getCurrentCustomerLocation();
     _listenApiResponse();
 
+    Timer.periodic(Duration(seconds: 120), (Timer t) {
+      _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
+    });
   }
-
 
   void registerNotification() async {
     // 3. On iOS, this helps to take the user permissions
@@ -90,6 +95,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
      final postUrl = 'https://fcm.googleapis.com/fcm/send';
     // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    // "time_to_live":"600",
 
     final data = {
       'notification': {
@@ -158,8 +165,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
-      _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
-
     });
   }
 
@@ -179,7 +184,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails?.mechanic![0].brands);
+          //_mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails?.mechanic![0].brands);
+          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",["Maruthi","Corolla"]);
         });
       }
     });
@@ -199,23 +205,21 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         });
       }
     });
-/*
-    _mechanicHomeBloc.postMechanicUpComingService.listen((value) {
+    _mechanicHomeBloc.postMechanicActiveService.listen((value) {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          setState(() {
+            _hasActiveService = false;
+          });
         });
       }else{
-        setState(() {
-          //brandDetails.add(value.data.brandDetails);
-          //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
-          *//*_isLoading = false;
-          socialLoginIsLoading = false;
-          _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*//*
-        });
+          setState(() {
+            _hasActiveService = true;
+          });
       }
-    });*/
+    });
   }
 
   Future<void> _getCurrentCustomerLocation() async {
@@ -553,25 +557,72 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           Container(
             height: size.height * 15 / 100,
             margin: EdgeInsets.all(0),
-            child: ListView.builder(
-              itemCount: imageList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, i, ){
-                //for onTap to redirect to another screen
-                return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: InkWell(
-                    child: brandSpecializationListItem(size,i),
-                    onTap: (){
-
-                    },
+            child: Stack(
+              children: [
+                StreamBuilder(
+                    stream:  _mechanicHomeBloc.postMechanicBrandSpecializationResponse,
+                    builder: (context, AsyncSnapshot<MechanicBrandSpecializationMdl> snapshot) {
+                      print("${snapshot.hasData}");
+                      print("${snapshot.connectionState}");
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height,
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustColors.peaGreen),
+                              ),
+                            ),
+                          );
+                        default:
+                          return
+                            snapshot.data?.data?.brandDetails?.length != 0 && snapshot.data?.data?.brandDetails?.length != null
+                                ? brandSpecializationList(size,snapshot)
+                                : Container();
+                      }
+                    }
+                ),
+                Visibility(
+                  visible: _isLoadingPage,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
+                      ),
+                    ),
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget brandSpecializationList(Size size, AsyncSnapshot<MechanicBrandSpecializationMdl> snapshot,){
+    return ListView.builder(
+      itemCount: snapshot.data!.data?.brandDetails!.length,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, i, ){
+        //for onTap to redirect to another screen
+        return Padding(
+          padding: const EdgeInsets.all(5),
+          child: InkWell(
+            child: brandSpecializationListItem(size,i),
+            onTap: (){
+
+            },
+          ),
+        );
+      },
     );
   }
 
