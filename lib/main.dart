@@ -81,14 +81,14 @@ class _MyAppState extends State<MyApp> {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: 'Banqmart',
-
                 theme: ThemeData(
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home: SplashScreen()
 
-                // MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
+                 // home: SplashScreen()
+
+                  home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
 
               );
             },

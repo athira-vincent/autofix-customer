@@ -63,6 +63,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   var _firestoreData ;
   double distanceInMeters = 0.0;
   var updatingLat = 0.0;
+  String mechanicWorkProgress = "0";
 
 
 
@@ -72,13 +73,54 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _firestoreData = _firestore.collection("ResolMech").doc('2022').snapshots();
 
+    _firestoreData = _firestore.collection("ResolMech").doc('2022').snapshots();
     mapStyling();
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
     _googleMap = _googleMapIntegrate();
+
+    listenToCloudFirestoreDB();
+
+  }
+
+  void listenToCloudFirestoreDB() {
+
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("2022");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+
+        print('StreamBuilder ++++1 ${querySnapshot.get('latitude')}');
+        print('StreamBuilder ++++2 ${querySnapshot.get('latitude')}');
+
+
+        mechanicWorkProgress = querySnapshot.get("mechanicWorkProgress");
+        print('StreamBuilder ++++ $mechanicWorkProgress');
+        if(mechanicWorkProgress =="1")
+          {
+            print('mechanicWorkProgress ++++1 ${querySnapshot.get('latitude')}');
+            print('mechanicWorkProgress ++++2 ${querySnapshot.get('latitude')}');
+          }
+
+      });
+    });
+
+  }
+
+
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${widget.bookingId}')
+        .update({
+            'mechanicWorkProgress': "1",
+            'customerDiagonsisApproval': "1"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
 
   }
 
@@ -225,6 +267,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   stream: _firestoreData,
                   builder: (_, snapshot) {
 
+
                     if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
@@ -239,7 +282,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                           });
                           updatingLat =  double.parse('${snapshot.data?.data()!['latitude']}');
                           mechanicMarker(LatLng(double.parse('${snapshot.data?.data()!['latitude']}'),double.parse('${snapshot.data?.data()!['longitude']}')));
-                        }                      });
+                        }
+                      });
 
                       return GoogleMap( //Map widget from google_maps_flutter package
 
@@ -262,7 +306,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20,20,20,100),
+                  padding: const EdgeInsets.fromLTRB(20,20,20,50),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -332,19 +376,24 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${distanceInMeters/1000} km",
-                                          style: Styles.waitingTextBlack17,
-                                        ),
-                                        Text(
-                                          "Away",
-                                          style: Styles.awayTextBlack,
-                                        ),
-                                      ],
+                                    child: InkWell(
+                                      onTap: (){
+                                        setToCloudFirestoreDB();
+                                      },
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${distanceInMeters/1000} km",
+                                            style: Styles.waitingTextBlack17,
+                                          ),
+                                          Text(
+                                            "Away",
+                                            style: Styles.awayTextBlack,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
 
@@ -496,5 +545,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         MaterialPageRoute(
             builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
   }
+
 
 }
