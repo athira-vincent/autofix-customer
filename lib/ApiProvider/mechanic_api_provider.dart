@@ -7,7 +7,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_location_update_mdl
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_online_offline_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_request_mdl.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdate/order_status_update_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_mdl.dart';
 
 
 class MechanicApiProvider {
