@@ -166,6 +166,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Widget startedWorkScreenTitleImage(Size size){
     return Center(
       child: Container(
+        height: 150,
         margin: EdgeInsets.only(
            left: size.width * 6 /100,
            right: size.width * 6 / 100,
