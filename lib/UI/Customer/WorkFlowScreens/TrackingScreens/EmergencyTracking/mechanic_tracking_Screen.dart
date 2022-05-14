@@ -63,7 +63,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   var _firestoreData ;
   double distanceInMeters = 0.0;
   var updatingLat = 0.0;
-  String mechanicWorkProgress = "0";
+  String mechanicArrivalState = "0";
+   Timer? timerObjVar;
+   Timer? timerObj;
+
 
 
 
@@ -81,7 +84,12 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         double.parse(widget.longitude.toString())));
     _googleMap = _googleMapIntegrate();
 
-    listenToCloudFirestoreDB();
+    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      timerObjVar = t;
+      print('Timer listenToCloudFirestoreDB ++++++');
+      listenToCloudFirestoreDB();
+    });
+
 
   }
 
@@ -95,12 +103,19 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         print('StreamBuilder ++++2 ${querySnapshot.get('latitude')}');
 
 
-        mechanicWorkProgress = querySnapshot.get("mechanicWorkProgress");
-        print('StreamBuilder ++++ $mechanicWorkProgress');
-        if(mechanicWorkProgress =="1")
+        mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
+        print('StreamBuilder ++++ $mechanicArrivalState');
+        if(mechanicArrivalState =="1")
           {
             print('mechanicWorkProgress ++++1 ${querySnapshot.get('latitude')}');
             print('mechanicWorkProgress ++++2 ${querySnapshot.get('latitude')}');
+
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)
+                )).then((value){
+            });
           }
 
       });
@@ -115,8 +130,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         .collection("ResolMech")
         .doc('${widget.bookingId}')
         .update({
-            'mechanicWorkProgress': "1",
-            'customerDiagonsisApproval': "1"
+            'mechanicArrivalState': "1",
+            'mechanicDiagonsisState': "0",
+            'customerDiagonsisApproval': "0"
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -536,15 +552,21 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    cancelTimer();
     print("dispose");
   }
 
-  void changeScreen(){
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
-  }
+  cancelTimer() {
 
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
+  }
 
 }

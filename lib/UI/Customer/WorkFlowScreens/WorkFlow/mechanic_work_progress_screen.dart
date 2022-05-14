@@ -34,9 +34,9 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     // TODO: implement initState
     super.initState();
     workStatus = widget.workStatus.toString();
-    Timer(const Duration(seconds: 10), () {
+    /*Timer(const Duration(seconds: 10), () {
       changeScreen();
-    });
+    });*/
   }
 
   void changeScreen(){
@@ -324,13 +324,15 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
-          Text(
-            "Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: "Samsung_SharpSans_Regular",
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
+          Expanded(
+            child: Text(
+              "Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: "Samsung_SharpSans_Regular",
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
             ),
           )
         ],

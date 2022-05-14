@@ -260,7 +260,7 @@ class _MechanicToCustomerLocationScreenState extends State<MechanicToCustomerLoc
     Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
 
 
-      speedOfMechanic= event.speed;
+      speedOfMechanic = event.speed;
       print('speedOfMechanic ++++++   000==== $speedOfMechanic');
 
       var value1 = event;
@@ -280,7 +280,7 @@ class _MechanicToCustomerLocationScreenState extends State<MechanicToCustomerLoc
             print("Failed to add Location: $error"));
       });
       print("value1 $value1");
-      LatLng latLng=LatLng(double.parse(value1!.latitude.toString()), double.parse(value1.longitude.toString()));
+      LatLng latLng=LatLng(double.parse(value1.latitude.toString()), double.parse(value1.longitude.toString()));
       print("latLng 001 ${latLng.latitude}");
       mechanicMarker (latLng);
 
