@@ -147,6 +147,7 @@ flutter:
     - assets/image/CustomerType/myvehicleDelete.svg
     - assets/image/mechanicTracking/mechanicMapIcon1.webp
     - assets/image/mechanicTracking/carMapIcon.png
+    - assets/image/img_started_work_bg.png
     - assets/image/mechanicTracking/mechanicMapIcon.png
 
   fonts:

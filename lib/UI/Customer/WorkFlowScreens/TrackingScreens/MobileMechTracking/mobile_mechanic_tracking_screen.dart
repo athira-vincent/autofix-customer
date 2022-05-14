@@ -96,7 +96,7 @@ class _MobileMechTrackingScreenState extends State<MobileMechTrackingScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => MechanicWorkProgressScreen(
-              workStatus: "5",)));
+              workStatus: "5",bookingId: "2022",)));
   }
 
   Future<void> _getCurrentCustomerLocation() async {

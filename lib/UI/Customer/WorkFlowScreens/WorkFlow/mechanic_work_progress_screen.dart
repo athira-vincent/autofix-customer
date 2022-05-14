@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,8 +12,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 class MechanicWorkProgressScreen extends StatefulWidget {
 
   final String workStatus;
+  final String bookingId;
 
-  MechanicWorkProgressScreen({required this.workStatus,});
+  MechanicWorkProgressScreen({required this.workStatus,required this.bookingId});
 
   @override
   State<StatefulWidget> createState() {
@@ -23,21 +25,47 @@ class MechanicWorkProgressScreen extends StatefulWidget {
 class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> {
 
 
-  String workStatus = "";     // 1 - arrived - screen 075,
-                              // 2 - started working - screen 078,
-                              // 3 - completed - screen 079,
-                              // 4 - ready to pickup vehicle - screen 094
-                              // 5 - mechanic reached your location - screen 102
+  String workStatus = "";
+  Timer? timerObjVar;
+  Timer? timerObj;
+  String mechanicDiagonsisState = "0";
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     workStatus = widget.workStatus.toString();
-    /*Timer(const Duration(seconds: 10), () {
-      changeScreen();
-    });*/
+    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      timerObjVar = t;
+      print('Timer listenToCloudFirestoreDB ++++++');
+      listenToCloudFirestoreDB();
+    });
   }
+
+  void listenToCloudFirestoreDB() {
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${widget.bookingId}");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+        mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
+        print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
+        if(widget.workStatus =="1")
+        {
+          if(mechanicDiagonsisState =="1")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
+                )).then((value){
+            });
+          }
+        }
+
+      });
+    });
+  }
+
 
   void changeScreen(){
     if(workStatus == "1"){
@@ -49,7 +77,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",)));
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: "2022",)));
     }else if(workStatus == "3"){
       Navigator.pushReplacement(
           context,
@@ -166,7 +194,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               size.height * 14 / 100,
               Text(
                 workStatus == "1" ?
-                  "Hi.. John Eric congratulations! Your mechanic reached near you. \nHe fix your vehicle faults."
+                  "Hi.. John Eric congratulations! Your mechanic reached near you. He fix your vehicle faults."
                     :
                     workStatus == "2" ?
                       "Hi.. John Eric congratulations! Your mechanic started repair your vehicle. \nWait for the count down stop."
@@ -303,39 +331,46 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           border: Border.all(
               color: CustColors.greyish,
               width: 0.3
-          )
+          ),
+        color: CustColors.pale_grey,
       ),
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
           top: size.height * 4.8 / 100
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-                top: size.width * 3 / 100,
-                bottom: size.width * 3 / 100
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        top: size.width * 3 / 100,
+                        bottom: size.width * 3 / 100
+                    ),
+                    child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+                      height: size.height * 3 / 100,width: size.width * 3 / 100,),
+                  ),
+                ),
+              ],
             ),
-            margin: EdgeInsets.only(
-                left: size.width * 5 / 100,
-                right: size.width * 2 / 100
-            ),
-            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
-              height: size.height * 3 / 100,width: size.width * 3 / 100,),
-          ),
-          Expanded(
-            child: Text(
-              "Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: "Samsung_SharpSans_Regular",
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
+            Expanded(
+              child: Text(
+                "Wait for some time. Mechanic started diagnostic test. He will finalise the service you needed",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontFamily: "Samsung_SharpSans_Regular",
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -469,6 +504,28 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
        ],
      ),
     );
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    cancelTimer();
+    print("dispose");
+  }
+
+  cancelTimer() {
+
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
   }
 
 }

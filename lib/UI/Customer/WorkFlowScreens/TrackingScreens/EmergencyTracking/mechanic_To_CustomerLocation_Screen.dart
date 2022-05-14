@@ -637,7 +637,7 @@ class _MechanicToCustomerLocationScreenState extends State<MechanicToCustomerLoc
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)));
+            builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",bookingId: "2022",)));
   }
 
 

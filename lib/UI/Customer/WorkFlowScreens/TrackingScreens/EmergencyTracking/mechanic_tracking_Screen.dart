@@ -76,51 +76,36 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    _firestoreData = _firestore.collection("ResolMech").doc('2022').snapshots();
+    _firestoreData = _firestore.collection("ResolMech").doc('${widget.bookingId}').snapshots();
     mapStyling();
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
     _googleMap = _googleMapIntegrate();
-
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
       listenToCloudFirestoreDB();
     });
-
-
   }
 
   void listenToCloudFirestoreDB() {
-
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("2022");
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${widget.bookingId}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
-
-        print('StreamBuilder ++++1 ${querySnapshot.get('latitude')}');
-        print('StreamBuilder ++++2 ${querySnapshot.get('latitude')}');
-
-
         mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
-        print('StreamBuilder ++++ $mechanicArrivalState');
+        print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
           {
-            print('mechanicWorkProgress ++++1 ${querySnapshot.get('latitude')}');
-            print('mechanicWorkProgress ++++2 ${querySnapshot.get('latitude')}');
-
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",)
+                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",bookingId: "2022",)
                 )).then((value){
             });
           }
-
       });
     });
-
   }
 
 
@@ -133,7 +118,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             'mechanicArrivalState': "1",
             'mechanicDiagonsisState': "0",
             'customerDiagonsisApproval': "0"
-    })
+        })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
