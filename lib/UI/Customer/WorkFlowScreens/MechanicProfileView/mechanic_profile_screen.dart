@@ -106,6 +106,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   }
 
+
+
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
