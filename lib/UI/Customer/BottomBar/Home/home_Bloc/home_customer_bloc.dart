@@ -1,4 +1,5 @@
 
+import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
@@ -127,9 +128,27 @@ class HomeCustomerBloc {
   postUpdateMechanicsBookingIDRequest(
       token, bookingId, mechanicId,)async {
 
+    print('token   $token   token');
+
     UpdateMechanicBookingMdl _mechanicsBookingMdl = await repository.postUpdateMechanicsBookingIDRequest(
       token, bookingId, mechanicId,);
     postUpdateMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
+  }
+
+  /// ===============  Booking Details  ================== ///
+
+
+  final postBookingDetailsList = BehaviorSubject<BookingDetailsMdl>();
+  Stream<BookingDetailsMdl> get bookingDetailsResponse => postBookingDetailsList.stream;
+
+  postBookingDetailsRequest(
+      token, bookingId,)async {
+
+    print('token   $token   token');
+
+    BookingDetailsMdl _bookingDetailsMdl = await repository.postBookingDetailsRequest(
+      token, bookingId,);
+    postBookingDetailsList.sink.add(_bookingDetailsMdl);
   }
 
 

@@ -123,6 +123,13 @@ class Repository {
       _customerApiProvider.postUpdateMechanicsBookingIDRequest(
         token, bookingId, mechanicId,);
 
+  /// ===============  Booking Details  ================== ///
+
+  Future<dynamic> postBookingDetailsRequest(
+      token, bookingId,)=>
+      _customerApiProvider.postBookingDetailsRequest(
+        token, bookingId,);
+
   /// =============== Mechanics List Emergency ================== ///
 
   Future<dynamic> postFindMechanicsListEmergencyRequest(

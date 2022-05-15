@@ -79,7 +79,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   String? FcmToken="";
   String authToken="";
-  String bookingId="";
+  String userName="";
+
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
@@ -97,12 +98,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
-
-  //  _listenNotification();
     getSharedPrefData();
     _listen();
+
+    _listenNotification(context);
+
 
   }
 
@@ -111,10 +111,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      bookingId =  shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
@@ -162,7 +163,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "${widget.mechanicId}");
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.mechanicBooking?.id}");
 
-          callOnFcmApiSendPushNotifications(1);
+          bookingIdEmergency = "${value.data?.mechanicBooking?.id}";
+          _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.mechanicBooking?.id}",);
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
@@ -171,6 +173,27 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       }
     });
     _homeCustomerBloc.mechanicsUpdateBookingIDResponse.listen((value) async {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+      } else {
+
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+
+        setState(() {
+
+          _homeCustomerBloc.postBookingDetailsRequest(authToken, "$bookingIdEmergency",);
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("success postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+
+    _homeCustomerBloc.bookingDetailsResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -204,17 +227,30 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
-      final provider = Provider.of<LocaleProvider>(context,listen: false);
+      //final provider = Provider.of<LocaleProvider>(context,listen: false);
 
-      provider.setPayload(notificationPayloadMdl);
+      //provider.setPayload(notificationPayloadMdl);
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>   MechanicTrackingScreen(latitude: "",longitude: "",bookingId: "",)
-          )).then((value){
-      });
+      //Navigator.pop(context);
 
+      if(notificationPayloadMdl.requestFromApp == "0")
+        {
+
+          Navigator.of(context).pop();
+        }
+      else
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
+              )).then((value){
+          });
+        }
+
+
+
+      
 
     });
 
@@ -853,6 +889,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
   _showMechanicAcceptanceDialog(BuildContext context) async {
+    Future.delayed(const Duration(milliseconds: 500), () {
+
+
+      setState(() {
+      });
+
+    });
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -926,29 +969,34 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       'priority': 'high',
       'data': {
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'id': '1',
-        'status': 'done',
-        'screen': 'IncomingJobOfferScreen',
-        "bookingId" : '$bookingId',
-        "serviceName" : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}',
-        "serviceId" : '${widget.serviceIds}',
-        "serviceList" : '[{ "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}"}]',
-        "carName" : 'ToyotoCorollA [bLACK]',
-        "carPlateNumber" : 'KLmlodr876',
-        "customerName" : 'Minnukutty',
-        "customerAddress" : 'Elenjikkal House Empyreal Garden',
-        "customerLatitude" : '${widget.latitude}',
-        "customerLongitude" : '${widget.latitude}',
-        "customerFcmToken" : '$FcmToken',
-        "mechanicName" : 'Minnukutty',
-        "mechanicAddress" : 'Elenjikkal House Empyreal Garden',
-        "mechanicLatitude" : '${widget.latitude}',
-        "mechanicLongitude" : '${widget.latitude}',
-        "mechanicFcmToken" : '$FcmToken',
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "screen": "IncomingJobOfferScreen",
+        "bookingId" : "$bookingIdEmergency",
+        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+        "serviceId" : "${widget.serviceIds}",
+        "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}'}]",
+        "carName" : "ToyotoCorollA [bLACK]",
+        "carPlateNumber" : "KLmlodr876",
+        "customerName" : "$userName",
+        "customerAddress" : "",
+        "customerLatitude" : "${widget.latitude}",
+        "customerLongitude" : "${widget.latitude}",
+        "customerFcmToken" : "$FcmToken",
+        "mechanicName" : "${widget.mechanicListData?.firstName}",
+        "mechanicAddress" : "",
+        "mechanicLatitude" : "${widget.latitude}",
+        "mechanicLongitude" : "${widget.latitude}",
+        "mechanicFcmToken" : "$FcmToken",
+        "mechanicArrivalState": "0",
+        "mechanicDiagonsisState": "0",
+        "customerDiagonsisApproval": "0",
         "requestFromApp" : "0",
-        'paymentStatus' : '0',
-        'message': 'ACTION'
+        "paymentStatus" : "0",
+        "customerFromPage" : "0",
+        "mechanicFromPage" : "0",
+        "message": "ACTION"
       },
       'apns': {
         'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
@@ -976,9 +1024,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       final response = await Dio(options).post(postUrl, data: data);
 
       if (response.statusCode == 200) {
-        print('notification sending success');
+        setState(() {
+          print('notification sending success');
+
+        });
       } else {
-        print('notification sending failed');
+        setState(() {
+          print('notification sending failed');
+
+        });
       }
     } catch (e) {
       print('exception $e');

@@ -684,6 +684,88 @@ class QueryProvider {
   }
 
 
+  /// ===============  Booking Details  ================== ///
+
+  postBookingDetailsRequest(
+      token, bookingId,) async {
+    String _query = """        
+      {
+        bookingDetails(bookingId: ${int.parse(bookingId.toString())}) {
+          id
+          bookedDate
+          bookedTime
+          latitude
+          longitude
+          paymentMethod
+          demoMechanicId
+          customerId
+          status
+          isAccepted
+          vehicleId
+          serviceId
+          bookService {
+            id
+            mechanicId
+            customerId
+            status
+            serviceId
+            bookMechanicId
+          }
+          vehicle {
+            id
+            brand
+            model
+            engine
+            year
+            plateNo
+            lastMaintenance
+            milege
+            vehiclePic
+            latitude
+            longitude
+            defaultVehicle
+            status
+          }
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            accountType
+            status
+            jwtToken
+            fcmToke
+            otpCode
+          }
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            accountType
+            status
+            jwtToken
+            fcmToke
+            otpCode
+          }
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
   postSearchServiceRequest(
       token,
       search,
