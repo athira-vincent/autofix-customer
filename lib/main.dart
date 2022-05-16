@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_To_CustomerLocation_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -89,15 +90,17 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home:  MechanicTrackingScreen(
+                //home: SplashScreen(),
+                home: MechanicStartServiceScreen(serviceModel: "1"),
+                /*home:  MechanicToCustomerLocationScreen(
                   latitude: "10.0159",
                   longitude: "76.3419",
-                  bookingId: "2022",)
+                  bookingId: "2022",)*/
                 /*MechanicTrackingScreen(latitude:
                 "38.92747367732227",
                 longitude:
                 "-77.02016168273985",
-                bookingId: "2022",)
+                bookingId: "2022",)*/
 
               );
             },

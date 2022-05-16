@@ -1,9 +1,15 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
+import 'package:auto_fix/Widgets/Countdown.dart';
+import 'package:auto_fix/Widgets/count_down_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
 
@@ -17,21 +23,61 @@ class MechanicStartServiceScreen extends StatefulWidget {
   }
 }
 
-class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
+class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> with TickerProviderStateMixin{
 
   bool isExpanded = false;
 
   List<String> selectedServiceList = [];
-
+  final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   String additionalServiceNames = "";
+  String additionalServiceIds = "";
+  String totalServiceTime = "";
   String selectedServiceName = "";
+
+  String authToken="";
+  late AnimationController _controller;
+  int levelClock = 30;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
+    _listenServiceListResponse();
     additionalServiceNames = "Flat tyre";
     selectedServiceName = "Lost /Locked keys";
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(
+            seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+    );
+    _controller.forward();
+
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    });
+  }
+
+  _listenServiceListResponse() {
+    _addMoreServiceBloc.postMechanicAddMoreServiceRequest.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+
+        });
+
+      } else {
+
+        setState(() {
+
+        });
+      }
+    });
   }
 
   @override
@@ -104,7 +150,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                 width: size.width * 4 / 100,
                                 height: size.height * 4 / 100,),
                                 Spacer(),
-                                Text("25:00 ",
+                                CountDownWidget(
+                                  animation: StepTween(
+                                    begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                                    end: 0,
+                                  ).animate(_controller),
+
+                                ),
+                                /*Text("25:00 ",
                                   style: TextStyle(
                                     fontSize: 36,
                                     fontFamily: "SharpSans_Bold",
@@ -112,11 +165,10 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                     color: Colors.black,
                                     letterSpacing: .7
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
-
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
@@ -336,32 +388,37 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   }
 
   Widget mechanicStartServiceButton(Size size){
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 4 / 100,
-            top: size.height * 5.2 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+    return InkWell(
+      onTap: (){
+        _addMoreServiceBloc.postAddMoreServiceRequest(authToken, "1", additionalServiceIds);
+      },
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 4 / 100,
+              top: size.height * 5.2 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5.8 / 100,
+            right: size.width * 5.8 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+            "Start work",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 5.8 / 100,
-          right: size.width * 5.8 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-          "Start work",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
@@ -371,7 +428,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
-    List<String> serviceList = [];
+    List<Service>? serviceList = [];
     serviceList.clear();
     additionalServiceNames = "";
 
@@ -383,15 +440,21 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         ));
 
     setState(() {
-      for(int i = 0; i<serviceList.length ; i++){
+      additionalServiceIds = "[";
+      for(int i = 0; i<serviceList!.length ; i++){
 
-        if(serviceList.length-1 == i){
-          additionalServiceNames = additionalServiceNames + serviceList[i].toString();
+        //totalServiceTime = totalServiceTime + serviceList[i].
+
+        if(serviceList.length - 1 == i){
+          additionalServiceNames = additionalServiceNames + serviceList[i].serviceName.toString();
+          additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString();
         }
         else{
-          additionalServiceNames = additionalServiceNames + serviceList[i].toString() + " \n";
+          additionalServiceNames = additionalServiceNames + serviceList[i].serviceName.toString() + " \n";
+          additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString() + ", ";
         }
       }
+      additionalServiceIds = "]";
       //selectedState = result;
       if(serviceList!='[]')
       {

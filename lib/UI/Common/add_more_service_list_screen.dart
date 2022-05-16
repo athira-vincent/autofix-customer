@@ -1,8 +1,12 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../Widgets/screen_size.dart';
 
@@ -21,7 +25,10 @@ class AddMoreServicesListScreen extends StatefulWidget {
 
 class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
-  List<String> serviceList = [
+  String authToken="";
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
+  /*List<String> serviceList = [
     "A",
     "Spareparts delivery01",
     "c","Spareparts delivery","d",
@@ -29,15 +36,48 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     "h","Spareparts delivery02","j",
     "Fuel problem","K",
     "l","relay of urgent mechanism"
-  ];
+  ];*/
 
   List<bool>? _serviceIsChecked;
-  List<String>? selectedServiceList = [];
+  List<Service>? selectedServiceList = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _serviceIsChecked = List<bool>.filled(serviceList.length, false);
+    getSharedPrefData();
+    _listenServiceListResponse();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
+      //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
+
+    });
+  }
+
+  _listenServiceListResponse() {
+    _homeCustomerBloc.emergencyServiceListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          _serviceIsChecked = List<bool>.filled(value.data!.categoryList![0].service!.length, false);
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
   }
 
   @override
@@ -197,7 +237,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   }
 
   Widget servicesListArea(Size size){
-    return Flexible(
+    return Expanded(
       child: Container(
         margin: EdgeInsets.only(
          // left: size.width * 6 / 100,
@@ -206,68 +246,89 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
           //bottom: size.height * 1.9 / 100,
         ),
         color: CustColors.pale_grey,
-        child: Container(
-          margin: EdgeInsets.only(
-            left: size.width * 5.9 / 100,
-            right: size.width * 5.9 / 100,
-            top: size.height * 3.7 / 100,
-            // bottom: size.height * ,
-          ),
-          child: serviceList.length != 0
-              ? ListView.separated(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: serviceList.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                  onTap: () {
-                    final serviceName = serviceList[index];
-                    /*print("widget.isAddService >>>>>>> " + widget.isAddService.toString());
-                    if(widget.isAddService != true){
-                      Navigator.pop(context,serviceName);
-                    }*/
-                    //final brandId = regularServiceList[index].id;
-                    /* setState(() {
-                                         _brandController.text =
-                                             brandName.toString();
-                                         selectedBrandId =
-                                             int.parse(brandId!);
-                                         _modelController.clear();
-                                         selectedModelId = 0;
-                                         _engineController.clear();
-                                         selectedEngineId = 0;
-                                         _allModelBloc
-                                             .postAllModelDataRequest(
-                                             selectedBrandId!,
-                                             token);
-                                       });*/
-                    print(">>>>>");
-                    //print(brandId);
-                  },
-                  child: serviceListItems(size,index) );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return Container(
-                  margin: EdgeInsets.only(
-                    //top: ScreenSize().setValue(1),
-                    left: size.width * 3 / 100,
-                    right: size.width * 1 / 100,
-                    //bottom: ScreenSize().setValue(1),
-                  ),
-                  child: Divider(
-                    height: 0,
-                  ));
-            },
-          )
-              : Center(
-            child: Text("No Results found."),
-          ),
+        child: StreamBuilder(
+            stream:  _homeCustomerBloc.emergencyServiceListResponse,
+            builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
+              print("${snapshot.hasData}");
+              print("${snapshot.connectionState}");
+              print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
+
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator());
+                default:
+                  return
+                    snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
+                        ? mainServiceList(size, snapshot)
+                        : Container();
+              }
+            }
         ),
       ),
     );
   }
 
-  Widget serviceListItems(Size size,int index){
+  Widget mainServiceList(Size size, AsyncSnapshot<CategoryListHomeMdl> snapshot,){
+    return Container(
+      margin: EdgeInsets.only(
+        left: size.width * 5.9 / 100,
+        right: size.width * 5.9 / 100,
+        top: size.height * 3.7 / 100,
+        // bottom: size.height * ,
+      ),
+      child:  snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
+          ? ListView.separated(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: snapshot.data!.data!.categoryList![0].service!.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  //final serviceName = serviceList[index];
+                  /*print("widget.isAddService >>>>>>> " + widget.isAddService.toString());
+                      if(widget.isAddService != true){
+                        Navigator.pop(context,serviceName);
+                      }*/
+                  //final brandId = regularServiceList[index].id;
+                  /* setState(() {
+                                           _brandController.text =
+                                               brandName.toString();
+                                           selectedBrandId =
+                                               int.parse(brandId!);
+                                           _modelController.clear();
+                                           selectedModelId = 0;
+                                           _engineController.clear();
+                                           selectedEngineId = 0;
+                                           _allModelBloc
+                                               .postAllModelDataRequest(
+                                               selectedBrandId!,
+                                               token);
+                                         });*/
+                  print(">>>>>");
+                  //print(brandId);
+                },
+                child: serviceListItems(size, index, snapshot.data!.data!.categoryList![0].service![index]) );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Container(
+              margin: EdgeInsets.only(
+                //top: ScreenSize().setValue(1),
+                left: size.width * 3 / 100,
+                right: size.width * 1 / 100,
+                //bottom: ScreenSize().setValue(1),
+              ),
+              child: Divider(
+                height: 0,
+              ));
+        },
+      )
+          : Center(
+        child: Text("No Results found."),
+      ),
+    );
+  }
+
+  Widget serviceListItems(Size size, int index, Service service,  ){
     return Container(
       child: Row(
         children: [
@@ -283,9 +344,9 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                   this._serviceIsChecked![index] = val!;
                   //isChecked ? false : true;
                   val ?
-                  selectedServiceList!.add(serviceList[index])
+                  selectedServiceList!.add(service)
                       :
-                  selectedServiceList!.remove(serviceList[index]);
+                  selectedServiceList!.remove(service);
                   print("sgsjhgj 001 $val");
                   print(">>>>>>>>> Selected Make List data " + selectedServiceList!.length.toString());
                 });
@@ -295,7 +356,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
           ),
 
           Text(
-            '${serviceList[index].toString()}',
+            '${service.serviceName}',
             style: TextStyle(
               fontSize: 12,
               fontFamily: "Samsung_SharpSans_Medium",
