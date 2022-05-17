@@ -120,18 +120,18 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
         children: [
           InkWell(
             onTap: (){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CustomerMainLandingScreen()));
+
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+
             },
               child: reviewLaterButton(size)),
           InkWell(
             onTap: (){
-              Navigator.pushReplacement(
+              /*Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RateMechanicScreen()));
+                      builder: (context) => RateMechanicScreen()));*/
             },
               child: reviewNowButton(size)),
         ],
