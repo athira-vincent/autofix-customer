@@ -51,18 +51,21 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
 
 
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      timerObjVar = t;
-      print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB();
-    });
+
+    if(!widget.isMechanicApp){
+      timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+        timerObjVar = t;
+        print('Timer listenToCloudFirestoreDB ++++++');
+        listenToCloudFirestoreDB();
+      });
+    }
+
+
   }
 
 
@@ -106,7 +109,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         .collection("ResolMech")
         .doc('${bookingIdEmergency}')
         .update({
-      'isPaymentAccepted': "1"
+        'isPaymentAccepted': "1"
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -141,12 +144,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
                             : MechanicOtherPaymentTitleImageWidget(size)
                             : customerTitleImageWidget(size),
                         warningTextWidget(size),
-                        InkWell(
-                          onTap: (){
-
-                            changeScreen();
-                          },
-                            child: paymentReceivedButton(size))
+                        paymentReceivedButton(size)
                       ]
                   ),
                ),
@@ -158,6 +156,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
   void changeScreen(){
     if(widget.isMechanicApp){
+      updateToCloudFirestoreDB();
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -320,34 +319,39 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   Widget paymentReceivedButton(Size size){
     return Align(
       alignment: Alignment.centerRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 6.2 / 100,
-            top: size.height * 7.5 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+      child: InkWell(
+        onTap: (){
+          changeScreen();
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 6.2 / 100,
+              top: size.height * 7.5 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5.8 / 100,
+            right: size.width * 5.8 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+           widget.isMechanicApp
+               ? isDirectPayment
+               ? "Payment received "
+               : "Go home"
+            : "Continue",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 5.8 / 100,
-          right: size.width * 5.8 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-         widget.isMechanicApp
-             ? isDirectPayment
-             ? "Payment received "
-             : "Go home"
-          : "Continue",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
