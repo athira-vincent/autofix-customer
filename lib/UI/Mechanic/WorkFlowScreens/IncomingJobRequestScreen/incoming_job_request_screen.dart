@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCus
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
@@ -39,11 +40,13 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
 
+  String customerToken = "", bookingIdEmergency = "", serviceName = "";
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final MechanicIncomingJobRequestBloc _incomingJobRequestBloc = MechanicIncomingJobRequestBloc();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = false;
   //late bool _isJobOfferAccepted;
 
@@ -60,6 +63,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   bool language_en_ar=true;
 
   bool SliderVal = false;
+  String? FcmToken ="";
 
   int _counter = 0;
   late AnimationController _controller;
@@ -69,6 +73,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   @override
   void initState() {
     super.initState();
+    customerToken = widget.notificationPayloadMdl.customerFcmToken;
+    bookingIdEmergency = widget.notificationPayloadMdl.bookingId;
+    serviceName = widget.notificationPayloadMdl.serviceName;
     getSharedPrefData();
     _getApiResponse();
     _controller = AnimationController(
@@ -83,9 +90,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       if (status == AnimationStatus.completed) {
         print("levelClock >>>>>> " + levelClock.toString() );
         isAccepted = 0;
-        callOnFcmApiSendPushNotifications(1,);
+        Navigator.pop(context);
+        //callOnFcmApiSendPushNotifications(1,);
         //_incomingJobRequestBloc.postMechanicFetchIncomingRequestRequest(authToken, bookingId, bookStatus);
-        //--------- call notification
       }
     });
 
@@ -99,15 +106,18 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId ' + authToken.toString());
       print('userId ' + userId.toString());
+
     });
   }
 
   Future<void> callOnFcmApiSendPushNotifications(int length,) async {
 
     print(" callOnFcmApiSendPushNotifications > isAccepted " + isAccepted.toString());
+    print("customerToken >> " + customerToken);
+
     FirebaseMessaging.instance.getToken().then((value) {
-      String? token = value;
-      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+      FcmToken = value;
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + FcmToken.toString());
     });
 
     final postUrl = 'https://fcm.googleapis.com/fcm/send';
@@ -121,19 +131,34 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       },
       'priority': 'high',
       'data': {
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'id': '1',
-        'status': 'done',
-        'screen': 'screenA',
-        "bookingId" : '60',
-        "serviceName" : 'time Belt',
-        "serviceId" : '1',
-        "carPlateNumber" : 'KLmlodr876',
-        "customerName" : 'Minnukutty',
-        "customerAddress" : 'Elenjikkal House Empyreal Garden',
-        "requestFromApp" : '$isAccepted',
-        'paymentStatus' : '0',
-        'message': 'ACTION'
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "screen": "MechanicTrackingScreen",
+        "bookingId" : "${widget.notificationPayloadMdl.bookingId}",
+        "serviceName" : "${widget.notificationPayloadMdl.serviceName}",
+        "serviceId" : "${widget.notificationPayloadMdl.serviceId}",
+        "serviceList" : "${widget.notificationPayloadMdl.serviceList}",
+        "carName" : "${widget.notificationPayloadMdl.carName}",
+        "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
+        "customerName" : "${widget.notificationPayloadMdl.customerName}",
+        "customerAddress" : "",
+        "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
+        "customerLongitude" : "${widget.notificationPayloadMdl.customerLongitude}",
+        "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
+        "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
+        "mechanicAddress" : "",
+        "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
+        "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
+        "mechanicFcmToken" : "$FcmToken",
+        "mechanicArrivalState": "0",
+        "mechanicDiagonsisState": "0",
+        "customerDiagonsisApproval": "0",
+        "requestFromApp" : "$isAccepted",
+        "paymentStatus" : "0",
+        "customerFromPage" : "0",
+        "mechanicFromPage" : "0",
+        "message": "ACTION"
       },
       'apns': {
         'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
@@ -141,7 +166,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'dlmPibElQV6AvuAshQbcZX:APA91bHtlcldalttox-Gb6G3s99YJX-MCv3d0QtQVd4uGgznm5VZVmZEqbPWzOBe_akZodjwNdb7Fz7tP2p7KUOVhSdfTlMHZGUhNlgN-25DT-iqGAORYUq3Vs60iJXSTp2jLzz3SHph'
+
+      'to':'$customerToken'
       //'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
     };
 
@@ -169,15 +195,20 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
         }else if(isAccepted == 1){
 
+          SharedPreferences shdPre = await SharedPreferences.getInstance();
+          shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
+
+          updateToCloudFirestoreDB();
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => FindYourCustomerScreen(
-                    latitude: "10.0159",
-                    longitude: "76.3419",
-                    bookingId: "2022",
+                    latitude: widget.notificationPayloadMdl.customerLatitude/*"10.0159"*/,
+                    longitude: widget.notificationPayloadMdl.customerLongitude/*"76.3419"*/,
+                    bookingId: widget.notificationPayloadMdl.bookingId/*"2022"*/,
                     serviceModel: widget.serviceModel,
-                    notificationPayloadMdl: widget.notificationPayloadMdl,
+                    //notificationPayloadMdl: widget.notificationPayloadMdl,
                   )));
         }
 
@@ -187,6 +218,44 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     } catch (e) {
       print('exception $e');
     }
+  }
+
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${widget.notificationPayloadMdl.bookingId}')
+        .set({
+      "bookingId" : "${widget.notificationPayloadMdl.bookingId}",
+      "serviceName" : "${widget.notificationPayloadMdl.serviceName}",
+      "serviceId" : "${widget.notificationPayloadMdl.serviceId}",
+      "serviceList" : "${widget.notificationPayloadMdl.serviceList}",
+      "carName" : "${widget.notificationPayloadMdl.carName}",
+      "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
+      "customerName" : "${widget.notificationPayloadMdl.customerName}",
+      "customerAddress" : "",
+      "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
+      "customerLongitude" : "${widget.notificationPayloadMdl.customerLongitude}",
+      "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
+      "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
+      "mechanicAddress" : "",
+      "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
+      "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
+      "mechanicFcmToken" : "$FcmToken",
+      "requestFromApp" : "$isAccepted",
+      "paymentStatus" : "0",
+      "customerFromPage" : "0",
+      "mechanicFromPage" : "0",
+      "latitude": "${widget.notificationPayloadMdl.mechanicLatitude}",
+      'longitude': "${widget.notificationPayloadMdl.mechanicLongitude}",
+      "mechanicArrivalState": "0",
+      "mechanicDiagonsisState": "0",
+      "customerDiagonsisApproval": "0",
+      })
+        .then((value) => print("ToCloudFirestoreDB - row - created"))
+        .catchError((error) =>
+        print("Failed to add row: $error"));
+
   }
 
   /*void changeScreen(){
@@ -240,11 +309,13 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       } else {
         setState(() {
           _isLoading = false;
+          print('getSharedPrefData');
           callOnFcmApiSendPushNotifications(1);
           /*Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const LoginScreen()));
           FocusScope.of(context).unfocus();*/
         });
+
       }
     });
   }

@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'package:auto_fix/Widgets/count_down_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,16 +18,31 @@ class CustomerApprovedScreen extends StatefulWidget {
   }
 }
 
-class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
+class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with TickerProviderStateMixin{
 
   bool isStartedWork = false;
   bool _isLoading = false;
 
+  late AnimationController _controller;
+  int levelClock = 30;
   double per = .10;
 
   double _setValue(double value) {
     return value * per + value;
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(
+            seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+    );
+    _controller.forward();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +277,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
                     width: size.width * 4 / 100,
                     height: size.height * 4 / 100,),
                   Spacer(),
-                  Text("25:00 ",
+                  /*Text("25:00 ",
                     style: TextStyle(
                         fontSize: 36,
                         fontFamily: "SharpSans_Bold",
@@ -269,6 +285,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> {
                         color: Colors.black,
                         letterSpacing: .7
                     ),
+                  ),*/
+                  CountDownWidget(
+                    animation: StepTween(
+                      begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                      end: 0,
+                    ).animate(_controller),
+
                   ),
                 ],
               ),
