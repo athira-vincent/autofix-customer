@@ -94,6 +94,13 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
         isPaymentAccepted = querySnapshot.get("isPaymentAccepted");
         print('isPaymentAccepted ++++ $isPaymentAccepted');
+        if(isPaymentAccepted == "1")
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DirectPaymentSuccessScreen()));
+        }
 
       });
     });
