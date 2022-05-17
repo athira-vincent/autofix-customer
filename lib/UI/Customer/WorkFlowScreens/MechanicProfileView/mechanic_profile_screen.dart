@@ -399,6 +399,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       if(notificationPayloadMdl.requestFromApp == "0")
         {
+          print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
 
           setState(() {
             Navigator.of(context, rootNavigator: true).pop();
@@ -407,14 +408,17 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         }
       else
         {
-          Navigator.of(context, rootNavigator: true).pop();
+          print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
+          setState(() {
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "${bookingIdEmergency}",)
+                )).then((value){
+            });          });
 
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "${bookingIdEmergency}",)
-              )).then((value){
-          });
+
         }
 
 
@@ -428,7 +432,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _listenNotification(context);
+   // _listenNotification(context);
     //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
