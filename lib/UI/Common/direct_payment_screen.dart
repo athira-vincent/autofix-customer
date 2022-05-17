@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/payment_failed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DirectPaymentScreen extends StatefulWidget {
 
@@ -29,6 +34,86 @@ class DirectPaymentScreen extends StatefulWidget {
 class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
   bool isDirectPayment = true;
+
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String isPaymentAccepted = "0";
+  Timer? timerObjVar;
+  Timer? timerObj;
+
+  String authToken="";
+  String userName="";
+
+
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
+
+
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      timerObjVar = t;
+      print('Timer listenToCloudFirestoreDB ++++++');
+      listenToCloudFirestoreDB();
+    });
+  }
+
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
+
+    });
+  }
+
+
+  void listenToCloudFirestoreDB() {
+    print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+
+        isPaymentAccepted = querySnapshot.get("isPaymentAccepted");
+        print('isPaymentAccepted ++++ $isPaymentAccepted');
+
+      });
+    });
+  }
+
+
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+      'isPaymentAccepted': "1"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +143,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
                         warningTextWidget(size),
                         InkWell(
                           onTap: (){
+
                             changeScreen();
                           },
                             child: paymentReceivedButton(size))
@@ -84,10 +170,14 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
               builder: (context) => PaymentFailedScreen()));
     }
     else if(!widget.isMechanicApp && !widget.isPaymentFailed){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DirectPaymentSuccessScreen()));
+
+      if(isPaymentAccepted == "1")
+      {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DirectPaymentSuccessScreen()));
+      }
     }
   }
 
@@ -248,10 +338,11 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
           bottom: size.height * 1 / 100,
         ),
         child: Text(
-         widget.isMechanicApp ? isDirectPayment ?
-          "Payment received " : "Go home"
-          :
-          "Continue",
+         widget.isMechanicApp
+             ? isDirectPayment
+             ? "Payment received "
+             : "Go home"
+          : "Continue",
           style: TextStyle(
             fontSize: 14.3,
             fontWeight: FontWeight.w600,
