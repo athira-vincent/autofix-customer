@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentScreen extends StatefulWidget {
 
@@ -18,6 +22,63 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
 
   int _selectedOptionValue = -1;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  String mechanicArrivalState = "0";
+  Timer? timerObjVar;
+  Timer? timerObj;
+
+  String authToken="";
+  String userName="";
+
+
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
+
+    });
+  }
+
+
+
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+          'paymentStatus': "1",
+        })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +114,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     child: Column(
                       children: [
                         paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
-                        paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
-                        paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
-                        paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
+                       //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
+                       //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
+                       // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
 
                         InkWell(
                             child: paymentContinueButton(size),
                           onTap: (){
                               print("On Press Continue");
+
+                              updateToCloudFirestoreDB();
                               changeScreen(_selectedOptionValue);
                           },
                         )
@@ -213,7 +276,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: true,)));
+                builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
       }
 
   }

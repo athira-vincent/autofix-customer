@@ -36,6 +36,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Timer? timerObjVar;
   Timer? timerObj;
   String mechanicDiagonsisState = "0";
+  String isWorkCompleted = "0";
+  String isPaymentRequested = "0";
+
+
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var _firestoreData ;
@@ -86,8 +90,23 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
-        mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
+        if(widget.workStatus =="1") {
+          mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
+          print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
+
+        }
+        else if(widget.workStatus =="2") {
+          isWorkCompleted = querySnapshot.get("isWorkCompleted");
+          print('isWorkCompleted ++++ $isWorkCompleted');
+
+        }
+        else if(widget.workStatus =="3") {
+          isPaymentRequested = querySnapshot.get("isPaymentRequested");
+          print('isPaymentRequested ++++ $isPaymentRequested');
+
+        }
         print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
+
         if(widget.workStatus =="1")
         {
           if(mechanicDiagonsisState =="1")
@@ -98,6 +117,29 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                     builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
                 )).then((value){
             });
+          }
+        }
+        else if(widget.workStatus =="2")
+        {
+          if(isWorkCompleted =="1")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: "2022",))
+            ).then((value){
+            });
+          }
+        }
+        else if(widget.workStatus =="3")
+        {
+          if(isPaymentRequested =="1")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWaitingPaymentScreen()));
+
           }
         }
 
@@ -551,7 +593,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    cancelTimer();
+   // cancelTimer();
     print("dispose");
   }
 
