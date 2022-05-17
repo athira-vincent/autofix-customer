@@ -227,7 +227,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   Future<void> callOnFcmApiSendPushNotifications(int length) async {
     String? token;
-    FirebaseMessaging.instance.getToken().then((value) {
+    await FirebaseMessaging.instance.getToken().then((value) {
      token = value;
       setState(() {
         FcmToken = value;
@@ -254,14 +254,14 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "screen": "IncomingJobOfferScreen",
         "bookingId" : "$bookingIdEmergency",
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceId" : "${widget.serviceIds}",
-        "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}'}]",
+        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+        "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}','serviceId' : '${widget.serviceIds}'}]",
         "carName" : "$carNameBrand [$carNameModel]",
         "carPlateNumber" : "$carPlateNumber",
         "customerName" : "$userName",
         "customerAddress" : "",
         "customerLatitude" : "${widget.latitude}",
-        "customerLongitude" : "${widget.latitude}",
+        "customerLongitude" : "${widget.longitude}",
         "customerFcmToken" : "$token",
         "mechanicName" : "${widget.mechanicListData?.firstName}",
         "mechanicAddress" : "",
@@ -287,6 +287,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       'to': 'dutyBlAJSMGUhZbfJlHKzU:APA91bGoO0sqUYJncF621fjbdYtBo5FsbAHi2EUCMxl2ovc7pxXpgorpuFUnr93VCbmasxvqGRtBzObBdB4ms8HKmTBl1TgUNlMNn8FzzM8EPtaN5lF9cSiWIh04f7fwOhJZQtPJbaFu',
     };
 
+    print('FcmToken data >>> ${data}');
     print('FcmToken >>> ${FcmToken}');
     print('FcmToken token >>> ${token}');
 
@@ -350,7 +351,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
+                  builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "${bookingIdEmergency}",)
               )).then((value){
           });
         }
@@ -996,7 +997,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
   _showMechanicAcceptanceDialog(BuildContext context) async {
-    Future.delayed(const Duration(seconds: 15), () {
+    Future.delayed(const Duration(seconds: 30), () {
 
 
       setState(() {
@@ -1023,28 +1024,33 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from George Dola!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                            height: 150,
-                              child: SvgPicture.asset(
-                                  'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
+                      InkWell(
+                        onTap:(){
+                          Navigator.of(context).pop();
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              "Wait few minutes !",
+                              style: Styles.waitingTextBlack17,
+                            ),
+                            Text(
+                              "Wait for the response from George Dola!",
+                              style: Styles.awayTextBlack,
+                            ),
+                            Container(
+                              height: 150,
+                                child: SvgPicture.asset(
+                                    'assets/image/mechanicProfileView/waitForMechanic.svg',
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                )
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

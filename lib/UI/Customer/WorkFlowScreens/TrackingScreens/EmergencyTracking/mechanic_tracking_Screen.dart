@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui;
 import 'package:location/location.dart' as loc;
 import 'dart:math' show cos, sqrt, asin;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MechanicTrackingScreen extends StatefulWidget {
@@ -67,7 +70,13 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
    Timer? timerObjVar;
    Timer? timerObj;
 
+  String authToken="";
+  String userName="";
 
+
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
 
 
 
@@ -76,7 +85,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _firestoreData = _firestore.collection("ResolMech").doc('${widget.bookingId}').snapshots();
+    getSharedPrefData();
     mapStyling();
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
@@ -89,10 +98,34 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     });
   }
 
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
+
+    });
+  }
+
+
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${widget.bookingId}");
+    print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
+
         mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
         print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
@@ -113,7 +146,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     _firestore
         .collection("ResolMech")
-        .doc('${widget.bookingId}')
+        .doc('${bookingIdEmergency}')
         .update({
             'mechanicArrivalState': "1",
             'mechanicDiagonsisState': "0",
@@ -134,7 +167,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   }
 
   customerMarker(LatLng latLng) {
-    getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
+    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
       customerIcon =BitmapDescriptor.fromBytes(onValue);
       markers.add(Marker( //add start location marker
         markerId: MarkerId('customerMarkerId'),
@@ -151,7 +184,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   mechanicMarker(LatLng latLng) {
     print('Current latitude ${latLng.latitude}  Current longitude ${latLng.longitude}');
-    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
+    getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
       print("getBytesFromAsset 001");
       mechanicIcon =BitmapDescriptor.fromBytes(onValue);
       markers.add(Marker( //add start location marker
@@ -379,7 +412,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                     padding: const EdgeInsets.all(5),
                                     child: InkWell(
                                       onTap: (){
-                                        updateToCloudFirestoreDB();
+                                      //  updateToCloudFirestoreDB();
                                       },
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.start,

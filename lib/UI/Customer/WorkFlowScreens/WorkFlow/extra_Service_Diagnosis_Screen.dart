@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -35,7 +38,19 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   String selectedState = "";
 
   double totalFees = 0.0;
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Timer? timerObjVar;
+  Timer? timerObj;
+  String mechanicDiagonsisState = "0";
+
   String authToken="";
+  String userName="";
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
+
 
   double _setValue(double value) {
     return value * per + value;
@@ -53,19 +68,74 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
     getSharedPrefData();
     _listenServiceListResponse();
 
-
+    /*timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      timerObjVar = t;
+      print('Timer listenToCloudFirestoreDB ++++++');
+      listenToCloudFirestoreDB();
+    });*/
 
   }
+
+
+
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
 
     });
   }
+
+
+  void listenToCloudFirestoreDB() {
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+        mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
+        print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
+
+          if(mechanicDiagonsisState =="1")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
+                )).then((value){
+            });
+          }
+
+
+      });
+    });
+  }
+
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+      'customerDiagonsisApproval': "1"
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+
+  }
+
+
 
   _listenServiceListResponse() {
 
@@ -430,7 +500,11 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   Widget RequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
+
         if(widget.isEmergency){
+
+          updateToCloudFirestoreDB();
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -526,5 +600,27 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         });
 
 
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    cancelTimer();
+    print("dispose");
+  }
+
+  cancelTimer() {
+
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
   }
 }
