@@ -434,7 +434,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: "2022",)));
         }else{
           Navigator.pushReplacement(
               context,

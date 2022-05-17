@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
@@ -125,6 +126,28 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = UpdateMechanicBookingMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  /// ===============  Booking Details  ================== ///
+
+  Future<BookingDetailsMdl>   postBookingDetailsRequest(
+      token, bookingId,) async {
+    Map<String, dynamic> _resp = await _queryProvider. postBookingDetailsRequest(
+      token, bookingId,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = BookingDetailsMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return BookingDetailsMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = BookingDetailsMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

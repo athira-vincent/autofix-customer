@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_To_CustomerLocation_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
@@ -82,25 +83,16 @@ class _MyAppState extends State<MyApp> {
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: 'Banqmart',
-
-
-
-
                 theme: ThemeData(
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                //home: SplashScreen(),
-                home: MechanicStartServiceScreen(serviceModel: "1"),
-                /*home:  MechanicToCustomerLocationScreen(
-                  latitude: "10.0159",
-                  longitude: "76.3419",
-                  bookingId: "2022",)*/
-                /*MechanicTrackingScreen(latitude:
-                "38.92747367732227",
-                longitude:
-                "-77.02016168273985",
-                bookingId: "2022",)*/
+
+                 home: SplashScreen()
+
+                // home:  MechanicWorkProgressScreen(workStatus: "1",)
+
+                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
 
               );
             },

@@ -79,7 +79,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   String? FcmToken="";
   String authToken="";
-  String bookingId="";
+  String userName="";
+
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
@@ -97,24 +98,26 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
-
-  //  _listenNotification();
     getSharedPrefData();
     _listen();
 
+    _listenNotification(context);
+
+
   }
+
+
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      bookingId =  shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
@@ -162,7 +165,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "${widget.mechanicId}");
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.mechanicBooking?.id}");
 
-          callOnFcmApiSendPushNotifications(1);
+          bookingIdEmergency = "${value.data?.mechanicBooking?.id}";
+          _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.mechanicBooking?.id}",);
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
@@ -182,7 +186,29 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
         setState(() {
 
+          _homeCustomerBloc.postBookingDetailsRequest(authToken, "$bookingIdEmergency",);
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("success postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+
+    _homeCustomerBloc.bookingDetailsResponse.listen((value) async {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+      } else {
+
+        SharedPreferences shdPre = await SharedPreferences.getInstance();
+
+        setState(() {
+
           callOnFcmApiSendPushNotifications(1);
+          _showMechanicAcceptanceDialog(context);
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
@@ -192,6 +218,104 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     });
 
   }
+
+  Future<void> callOnFcmApiSendPushNotifications(int length) async {
+    String? token;
+    FirebaseMessaging.instance.getToken().then((value) {
+     token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have $length new booking',
+        'title': 'Maria',
+        'sound': 'alarmw.wav',
+      },
+
+      'priority': 'high',
+      'data': {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "screen": "IncomingJobOfferScreen",
+        "bookingId" : "$bookingIdEmergency",
+        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+        "serviceId" : "${widget.serviceIds}",
+        "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}'}]",
+        "carName" : "ToyotoCorollA [bLACK]",
+        "carPlateNumber" : "KLmlodr876",
+        "customerName" : "$userName",
+        "customerAddress" : "",
+        "customerLatitude" : "${widget.latitude}",
+        "customerLongitude" : "${widget.latitude}",
+        "customerFcmToken" : "$FcmToken",
+        "mechanicName" : "${widget.mechanicListData?.firstName}",
+        "mechanicAddress" : "",
+        "mechanicLatitude" : "${widget.latitude}",
+        "mechanicLongitude" : "${widget.latitude}",
+        "mechanicFcmToken" : "$FcmToken",
+        "mechanicArrivalState": "0",
+        "mechanicDiagonsisState": "0",
+        "customerDiagonsisApproval": "0",
+        "requestFromApp" : "0",
+        "paymentStatus" : "0",
+        "customerFromPage" : "0",
+        "mechanicFromPage" : "0",
+        "message": "ACTION"
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to':'$token'
+      //'to': 'eZ2JuuWIQXaxEydLjw0d20:APA91bFj0JtF2PBKf1CatpnybStKnhXYgdyo5Nz1g_9vlH735kvXCwiaAytHCnfsNUTN-lbIcY1ASkwWwGVMVubk46XKHePjA5pR6rGhwjoZXThFEUNPrBuLgTvYX3yhTFf4bxciSFyv',
+    };
+
+    print('FcmToken >>> ${FcmToken}');
+    print('FcmToken token >>> ${token}');
+
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          print('notification sending success');
+
+        });
+      } else {
+        setState(() {
+          print('notification sending failed');
+
+        });
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }
+
 
   _listenNotification(BuildContext context){
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
@@ -204,17 +328,30 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
       print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
-      final provider = Provider.of<LocaleProvider>(context,listen: false);
+      //final provider = Provider.of<LocaleProvider>(context,listen: false);
 
-      provider.setPayload(notificationPayloadMdl);
+      //provider.setPayload(notificationPayloadMdl);
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>   MechanicTrackingScreen(latitude: "",longitude: "",bookingId: "",)
-          )).then((value){
-      });
+      //Navigator.pop(context);
 
+      if(notificationPayloadMdl.requestFromApp == "0")
+        {
+
+          Navigator.of(context).pop();
+        }
+      else
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
+              )).then((value){
+          });
+        }
+
+
+
+      
 
     });
 
@@ -752,7 +889,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
         }
 
-        _showMechanicAcceptanceDialog(context);
+
 
       },
       child: Padding(
@@ -853,6 +990,16 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
   _showMechanicAcceptanceDialog(BuildContext context) async {
+    Future.delayed(const Duration(seconds: 15), () {
+
+
+      setState(() {
+
+        print('_showMechanicAcceptanceDialog');
+        Navigator.of(context).pop();
+      });
+
+    });
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -862,7 +1009,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                 insetPadding: EdgeInsets.only(left: 20, right: 20),
 
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                    borderRadius: BorderRadius.all(Radius. circular(10))),
                 contentPadding: const EdgeInsets.all(20),
                 content: Container(
                   child: Column(
@@ -903,134 +1050,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-  Future<void> callOnFcmApiSendPushNotifications(int length) async {
-
-    FirebaseMessaging.instance.getToken().then((value) {
-      String? token = value;
-      setState(() {
-        FcmToken = value;
-      });
-      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
-    });
 
 
-    final postUrl = 'https://fcm.googleapis.com/fcm/send';
-    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
-
-    final data = {
-      'notification': {
-        'body': 'You have $length new booking',
-        'title': 'Maria',
-        'sound': 'alarmw.wav',
-      },
-
-      'priority': 'high',
-      'data': {
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-        'id': '1',
-        'status': 'done',
-        'screen': 'IncomingJobOfferScreen',
-        "bookingId" : '$bookingId',
-        "serviceName" : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}',
-        "serviceId" : '${widget.serviceIds}',
-        "serviceList" : '[{ "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}"}]',
-        "carName" : 'ToyotoCorollA [bLACK]',
-        "carPlateNumber" : 'KLmlodr876',
-        "customerName" : 'Minnukutty',
-        "customerAddress" : 'Elenjikkal House Empyreal Garden',
-        "customerLatitude" : '${widget.latitude}',
-        "customerLongitude" : '${widget.latitude}',
-        "customerFcmToken" : '$FcmToken',
-        "mechanicName" : 'Minnukutty',
-        "mechanicAddress" : 'Elenjikkal House Empyreal Garden',
-        "mechanicLatitude" : '${widget.latitude}',
-        "mechanicLongitude" : '${widget.latitude}',
-        "mechanicFcmToken" : '$FcmToken',
-        "requestFromApp" : "0",
-        'paymentStatus' : '0',
-        'message': 'ACTION'
-      },
-      'apns': {
-        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
-        'payload': {
-          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
-        }
-      },
-      'to':'$FcmToken'
-      //'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
-    };
-
-    final headers = {
-      'content-type': 'application/json',
-      'Authorization':
-      'key=$serverToken'
-    };
-
-    BaseOptions options = new BaseOptions(
-      connectTimeout: 5000,
-      receiveTimeout: 30 * 1000,    // 30 seconds
-      headers: headers,
-    );
-
-    try {
-      final response = await Dio(options).post(postUrl, data: data);
-
-      if (response.statusCode == 200) {
-        print('notification sending success');
-      } else {
-        print('notification sending failed');
-      }
-    } catch (e) {
-      print('exception $e');
-    }
-  }
-
-
-
-
-
-
-  Future<void> getPushNotification() async {
-
-    initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOS = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    /*flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);*/
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // print foreground message here.
-      print(' onMessage Handling a foreground message ${message.messageId}');
-      print('NotificationPayload : ${message.notification?.title}');
-      print('NotificationPayload Message: ${message.data}');
-
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-      // showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
-
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // print foreground message here.
-      print('onMessageOpenedApp Handling a foreground message ${message.messageId}');
-      print('NotificationPayload : ${message.notification?.title}');
-      print('NotificationPayload Message: ${message.data}');
-
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-      else
-        {
-          print('Message not contained a notification:');
-
-        }
-      //showNotification(' ${message.notification?.title}',' ${message.notification?.title}');
-
-    });
-
-
-  }
 
 
 
