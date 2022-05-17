@@ -28,8 +28,6 @@ class MechanicHomeUIScreen extends StatefulWidget {
 
 class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
-
-  String serverToken = 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P';
   late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
   //late FirebaseMessaging messaging;
 
@@ -83,74 +81,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       // TODO: handle the received notifications
     } else {
       print('User declined or has not accepted permission');
-    }
-  }
-
-  Future<void> callOnFcmApiSendPushNotifications(int length) async {
-
-    FirebaseMessaging.instance.getToken().then((value) {
-      String? token = value;
-      print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
-    });
-
-     final postUrl = 'https://fcm.googleapis.com/fcm/send';
-    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
-
-    // "time_to_live":"600",
-
-    final data = {
-      'notification': {
-        'body': 'You have $length new order',
-        'title': 'New Orders',
-        'sound': 'alarmw.wav',
-      },
-      'priority': 'high',
-      'data': {
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-        "id": 1,
-        "status": "done",
-        "screen": "screenA",
-        "bookingId" : "60",
-        "serviceName" :" time Belt",
-        "serviceId" : 1,
-        "carPlateNumber" : "KLmlodr876",
-        "customerName" : "Minnukutty",
-        "customerAddress" : "Elenjikkal House Empyreal Garden",
-        "requestFromApp" : "0",
-        "paymentStatus" : "0",
-        "message": "ACTION"
-      },
-      'apns': {
-        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
-        'payload': {
-          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
-        }
-      },
-      'to': 'fZ5X6-BfTSGbeIbe-SO_pZ:APA91bGTsUoghS-1YXbecO3wsSmlui-vo0gp7ykssyD6J4vAMwpprU2aZC_h4jX0ym9pp42tRDt6uGWie8SxKAyDn8dq23JrOwxDgl3XJu40a4_JwxID9lMKsxw_Dmg4Zgafgm5XVu5P',
-    };
-
-    final headers = {
-      'content-type': 'application/json',
-      'Authorization':
-      'key=$serverToken'
-    };
-
-    BaseOptions options = new BaseOptions(
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      headers: headers,
-    );
-
-    try {
-      final response = await Dio(options).post(postUrl, data: data);
-
-      if (response.statusCode == 200) {
-        print('notification sending success');
-      } else {
-        print('notification sending failed');
-      }
-    } catch (e) {
-      print('exception $e');
     }
   }
 
@@ -356,18 +286,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: (){
-              callOnFcmApiSendPushNotifications(5);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-              child: Text('Upcoming Services',
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.visible,
-                style: Styles.sparepartsForYourModelsStyle,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+            child: Text('Upcoming Services',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: Styles.sparepartsForYourModelsStyle,
             ),
           ),
 

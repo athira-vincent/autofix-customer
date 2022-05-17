@@ -4,25 +4,24 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../../Constants/cust_colors.dart';
@@ -37,14 +36,14 @@ class FindYourCustomerScreen extends StatefulWidget {
   final String latitude;
   final String longitude;
   final String bookingId;
-  final NotificationPayloadMdl notificationPayloadMdl;
+ // final NotificationPayloadMdl notificationPayloadMdl;
 
   FindYourCustomerScreen({
     required this.latitude,
     required this.longitude,
     required this.bookingId,
     required this.serviceModel,
-    required this.notificationPayloadMdl
+    //required this.notificationPayloadMdl
   });
 
   @override
@@ -84,8 +83,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
   double speedOfMechanic = 0.0;
 
-
-
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
 
   double _setValue(double value) {
@@ -104,7 +101,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   String CurrentLongitude ="76.244164";
   String location ='Null, Press Button';
   String Address = 'search';
-  String authToken="";
+  String authToken="", bookingId = "";
+  bool isArrived = false;
 
   @override
   void initState() {
@@ -125,7 +123,11 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
     getSharedPrefData();
     _listenServiceListResponse();
-
+    Timer(const Duration(seconds: 5), () {
+      setState(() {
+        isArrived = true;
+      });
+    });
   }
 
   mapStyling() {
@@ -219,7 +221,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId'+authToken.toString());
+      print('userFamilyId'+bookingId.toString());
     });
   }
 
@@ -274,8 +278,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       setState(() {
         _firestore
             .collection("ResolMech")
-            .doc('${widget.bookingId}')
-            .set({
+            .doc('${bookingId}')
+            .update({
           'latitude': value1.latitude.toString(),
           'longitude': value1.longitude.toString()
         })
@@ -457,8 +461,26 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
   }
 
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+      'mechanicArrivalState': "1",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LocaleProvider>(context,listen: false);
+    //provider.setPayload(notificationPayloadMdl);
+    print("provider >>>>>>>>>>> " + provider.toString());
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -620,9 +642,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                               onPressed: () {
 
                                                 _isLoadingPage = false;
-
+                                                updateToCloudFirestoreDB();
                                                 _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                                    authToken, "10", "3");
+                                                    authToken, bookingId, "3");
 
                                               },
                                               child: Container(
@@ -639,7 +661,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              color: CustColors.greyText,
+                                              color: isArrived ? CustColors.light_navy :  CustColors.greyText,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(
                                                       _setValue(10))),

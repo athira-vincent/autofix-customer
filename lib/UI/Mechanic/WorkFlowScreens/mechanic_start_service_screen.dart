@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
@@ -5,6 +7,7 @@ import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.da
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,20 +26,24 @@ class MechanicStartServiceScreen extends StatefulWidget {
   }
 }
 
-class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> with TickerProviderStateMixin{
+class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
 
   bool isExpanded = false;
 
   List<String> selectedServiceList = [];
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String additionalServiceNames = "";
   String additionalServiceIds = "";
   String totalServiceTime = "";
   String selectedServiceName = "";
 
-  String authToken="";
-  late AnimationController _controller;
-  int levelClock = 30;
+  String authToken="", bookingId = "";
+  bool isCustomerApproved = false;
+
+  String customerDiagonsisApproval = "0";
+  Timer? timerObjVar;
+  Timer? timerObj;
 
   @override
   void initState() {
@@ -46,13 +53,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     _listenServiceListResponse();
     additionalServiceNames = "Flat tyre";
     selectedServiceName = "Lost /Locked keys";
-    _controller = AnimationController(
-        vsync: this,
-        duration: Duration(
-            seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-    );
-    _controller.forward();
 
+    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      timerObjVar = t;
+      print('Timer listenToCloudFirestoreDB ++++++');
+      listenToCloudFirestoreDB();
+    });
   }
 
   Future<void> getSharedPrefData() async {
@@ -60,8 +66,41 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });
+  }
+
+  void listenToCloudFirestoreDB() {
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingId}");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+        customerDiagonsisApproval = querySnapshot.get("customerDiagonsisApproval");
+        print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
+        if(customerDiagonsisApproval =="1")
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>   CustomerApprovedScreen(serviceModel: widget.serviceModel,)
+              )).then((value){
+          });
+        }
+      });
+    });
+  }
+
+  void updateToCloudFirestoreDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+      'mechanicDiagonsisState': "1",
+      //===================== code for send the list of additional services =========
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+
   }
 
   _listenServiceListResponse() {
@@ -72,7 +111,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         });
 
       } else {
-
         setState(() {
 
         });
@@ -150,14 +188,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                 width: size.width * 4 / 100,
                                 height: size.height * 4 / 100,),
                                 Spacer(),
-                                CountDownWidget(
-                                  animation: StepTween(
-                                    begin: levelClock, // THIS IS A USER ENTERED NUMBER
-                                    end: 0,
-                                  ).animate(_controller),
-
-                                ),
-                                /*Text("25:00 ",
+                                Text("25:00 ",
                                   style: TextStyle(
                                     fontSize: 36,
                                     fontFamily: "SharpSans_Bold",
@@ -165,7 +196,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                     color: Colors.black,
                                     letterSpacing: .7
                                   ),
-                                ),*/
+                                ),
                               ],
                             ),
                           ),
@@ -197,14 +228,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                     ),
                   ),
 
-                  InkWell(
-                    onTap: (){
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CustomerApprovedScreen(serviceModel: widget.serviceModel,)));
-                    },
-                      child: mechanicStartServiceButton(size)),
+                  mechanicStartServiceButton(size),
                 ],
               ),
             ),
@@ -214,6 +238,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     );
 
   }
+
   Widget mechanicStartServiceTitle(Size size){
     return Container(
       margin: EdgeInsets.only(
@@ -288,12 +313,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   ),
                 ),
                 Spacer(),
-                Container(
+                /*Container(
                     height: size.height * 3.5 /100,
                     width: size.width * 3.5 / 100,
                     child: Image.asset("assets/image/ic_edit_pen.png",
                     )
-                ),
+                ),*/
               ],
             ),
             onTap: (){
@@ -390,7 +415,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-        _addMoreServiceBloc.postAddMoreServiceRequest(authToken, "1", additionalServiceIds);
+        isCustomerApproved = true;
+        updateToCloudFirestoreDB();
+        _addMoreServiceBloc.postAddMoreServiceRequest(authToken, bookingId, additionalServiceIds);
       },
       child: Align(
         alignment: Alignment.centerRight,
@@ -412,7 +439,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-            "Start work",
+            isCustomerApproved ? "Waiting For Customer Approval" : "Update Services" ,
+            //"Start work",
             style: TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,
@@ -491,5 +519,26 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       }
 
   }*/
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    cancelTimer();
+    print("dispose");
+  }
+
+  cancelTimer() {
+
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
+  }
 
 }

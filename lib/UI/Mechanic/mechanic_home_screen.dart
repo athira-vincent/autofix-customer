@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
@@ -14,6 +15,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -62,7 +64,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     _messaging.getToken().then((value){
       print("FCM Token>>>>>>>>>>" + value!);
     });
-    _listenNotification();
+
     isOnline = true;
     getSharedPrefData();
     _listenApiResponse();
@@ -99,8 +101,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
   }
 
-  _listenNotification(){
-
+  _listenNotification(BuildContext context){
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
 
@@ -118,6 +119,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       String bookingId = event.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
 
+      final provider = Provider.of<LocaleProvider>(context,listen: false);
+      provider.setPayload(notificationPayloadMdl);
+
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -131,6 +135,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       print("message received onMessageOpenedApp");
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
       print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
+
+      final provider = Provider.of<LocaleProvider>(context,listen: false);
+      provider.setPayload(notificationPayloadMdl);
       setState(() {
         _counter += 1;
       });
@@ -163,6 +170,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _listenNotification(context);
     Size size = MediaQuery.of(context).size;
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
