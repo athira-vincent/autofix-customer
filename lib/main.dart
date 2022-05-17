@@ -88,13 +88,14 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                 home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
+                // home: SplashScreen(),
+                 // home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
                  //home: SplashScreen(),
 
                 // home:  MechanicWorkProgressScreen(workStatus: "1",)
 
-                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
+                  home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
 
               );
             },

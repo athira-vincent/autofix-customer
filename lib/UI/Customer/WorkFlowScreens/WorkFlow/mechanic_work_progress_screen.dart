@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
@@ -8,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicWorkProgressScreen extends StatefulWidget {
 
@@ -25,16 +27,33 @@ class MechanicWorkProgressScreen extends StatefulWidget {
 class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> {
 
 
-  String workStatus = "";
+  String workStatus = "";     // 1 - arrived - screen 075,
+  // 2 - started working - screen 078,
+  // 3 - completed - screen 079,
+  // 4 - ready to pickup vehicle - screen 094
+  // 5 - mechanic reached your location - screen 102
+
   Timer? timerObjVar;
   Timer? timerObj;
   String mechanicDiagonsisState = "0";
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var _firestoreData ;
+
+  String authToken="";
+  String userName="";
+
+
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
     workStatus = widget.workStatus.toString();
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
@@ -43,8 +62,28 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     });
   }
 
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
+
+    });
+  }
+
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${widget.bookingId}");
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
