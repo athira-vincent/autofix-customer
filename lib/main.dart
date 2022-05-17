@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTr
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
@@ -89,13 +90,14 @@ class _MyAppState extends State<MyApp> {
                 ),
 
                 // home: SplashScreen(),
-                 // home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
+                //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
+                home: CustomerApprovedScreen(serviceModel: "0",),
                  //home: SplashScreen(),
 
                 // home:  MechanicWorkProgressScreen(workStatus: "1",)
 
-                  home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
+                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "2022",)
 
               );
             },

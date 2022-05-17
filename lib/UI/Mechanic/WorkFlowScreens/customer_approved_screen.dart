@@ -1,10 +1,13 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerApprovedScreen extends StatefulWidget {
 
@@ -23,9 +26,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   bool isStartedWork = false;
   bool _isLoading = false;
 
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late AnimationController _controller;
-  int levelClock = 30;
+  int levelClock = 10;
   double per = .10;
+  String authToken = "", bookingId = "", extendedTime = "0";
 
   double _setValue(double value) {
     return value * per + value;
@@ -35,12 +40,40 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
             seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
     );
-    _controller.forward();
+
+  }
+
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+    });
+  }
+
+
+  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String extendedTime ) {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+        'isWorkStarted': "$isWorkStarted",
+        'isWorkCompleted': "$isWorkCompleted",
+        "extendedTime": "$extendedTime",
+      //===================== code for send the list of additional services =========
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+
   }
 
 
@@ -70,50 +103,15 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
                   customerApprovedScreenWarningText(size),
 
-                  InkWell(
-                    onTap: (){
+                  customerApprovedScreenTimer(size),
 
-                      setState(() {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                contentPadding: EdgeInsets.all(0.0),
-                                content: StatefulBuilder(
-                                    builder: (BuildContext context, StateSetter monthYear) {
-                                      return  setupAlertDialogAddExtraTime(size);
-                                    }
-                                ),
-                              );
-                            });
-                      });
-
-                    },
-                      child: customerApprovedScreenTimer(size)),
-
-                  InkWell(
-                    onTap: (){
-
-                      if(widget.serviceModel == "1"){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CustomerMainLandingScreen()));
-                      }
-                      else if(isStartedWork){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MechanicWorkCompletedScreen()));
-                      }
-                      else{
-                        setState(() {
-                          isStartedWork = !isStartedWork;
-                        });
-                      }
-
-                    },
-                      child: mechanicStartServiceButton(size)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      isStartedWork ? mechanicAddMoreTimeButton(size) : Container(),
+                      mechanicStartServiceButton(size),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -329,31 +327,123 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Widget mechanicStartServiceButton(Size size){
     return Align(
       alignment: Alignment.centerRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 6.2 / 100,
-            top: size.height * 3.7 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+      child: InkWell(
+        onTap: (){
+
+          setState(() {
+            if(isStartedWork == false){
+              print("updateToCloudFirestoreDB");
+              isStartedWork = !isStartedWork;
+              updateToCloudFirestoreDB("1", "0", extendedTime);
+              _controller.forward();
+            }else{
+              updateToCloudFirestoreDB("1","1", extendedTime);
+              print("Else is working");
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MechanicWorkCompletedScreen()));
+
+            }
+          });
+
+          /*if(widget.serviceModel == "1"){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerMainLandingScreen()));
+                      }
+                      else if(isStartedWork){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MechanicWorkCompletedScreen()));
+                      }
+                      else{
+                        setState(() {
+                          isStartedWork = !isStartedWork;
+                        });
+                      }*/
+
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 6.2 / 100,
+              top: size.height * 3.7 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5.8 / 100,
+            right: size.width * 5.8 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+            widget.serviceModel == "1" ? "Back to home" :
+            isStartedWork ? "Work Finished" : "Start repair",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy
+          ),
         ),
-        padding: EdgeInsets.only(
-          left: size.width * 5.8 / 100,
-          right: size.width * 5.8 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-          widget.serviceModel == "1" ? "Back to home" :
-          isStartedWork ? "Work Finished" : "Start repair",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
+      ),
+    );
+  }
+
+  Widget mechanicAddMoreTimeButton(Size size){
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: InkWell(
+        onTap: (){
+          setState(() {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    contentPadding: EdgeInsets.all(0.0),
+                    content: StatefulBuilder(
+                        builder: (BuildContext context, StateSetter monthYear) {
+                          return  setupAlertDialogAddExtraTime(size);
+                        }
+                    ),
+                  );
+                });
+          });
+
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+              left: size.width * 6.2 / 100,
+              top: size.height * 3.7 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5.8 / 100,
+            right: size.width * 5.8 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+            "Add Time",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -454,6 +544,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 : MaterialButton(
               onPressed: () {
 
+
+                setState(() {
+                  extendedTime = "10";
+                  levelClock = levelClock + 10;
+                  print("level clock >>>> " + levelClock.toString());
+                });
+
                 Navigator.pop(context);
                 /*setState(() {
 
@@ -463,6 +560,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                       }
                     });*/
                 print(">>>>>>>>>> time   ");
+
+                updateToCloudFirestoreDB("1","0", extendedTime);
 
                 /*Navigator.push(
                     context,

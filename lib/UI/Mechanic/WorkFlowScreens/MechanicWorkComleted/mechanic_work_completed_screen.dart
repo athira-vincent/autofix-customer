@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -25,14 +28,14 @@ class MechanicWorkCompletedScreen extends StatefulWidget {
 
 class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScreen> {
 
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
 
   double totalFees = 0.0;
-  String authToken="";
+  String authToken="", bookingId = "", paymentStatus = "", text = "request payment";
 
   double _setValue(double value) {
     return value * per + value;
@@ -41,6 +44,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   double _setValueFont(double value) {
     return value * perfont + value;
   }
+  Timer? timerObjVar;
+  Timer? timerObj;
 
   @override
   void initState() {
@@ -50,18 +55,56 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     getSharedPrefData();
     _listenServiceListResponse();
 
-
+    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      timerObjVar = t;
+      print('Timer listenToCloudFirestoreDB ++++++');
+      listenToCloudFirestoreDB();
+    });
 
   }
+
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
-
+      print('userFamilyId ' + authToken.toString());
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });
+  }
+
+  void listenToCloudFirestoreDB() {
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingId}");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+        paymentStatus = querySnapshot.get("paymentStatus");
+        print('paymentStatus ++++ $paymentStatus');
+        if(paymentStatus =="1")
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
+              )).then((value){
+
+          });
+        }
+      });
+    });
+  }
+
+  void updateToCloudFirestoreDB( ) {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+      'isPaymentRequested': "1",
+      //===================== code for send the list of additional services =========
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
   }
 
   _listenServiceListResponse() {
@@ -73,6 +116,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -286,7 +330,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                   itemBuilder: (context,index,) {
 
 
-
                     return GestureDetector(
                       onTap:(){
 
@@ -366,10 +409,14 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   Widget RequestButton(Size size, BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.pushReplacement(
+        updateToCloudFirestoreDB();
+        setState(() {
+          text = "waiting response";
+        });
+        /*Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => DirectPaymentScreen(isMechanicApp: true,isPaymentFailed: true,)));
+                builder: (context) => DirectPaymentScreen(isMechanicApp: true,isPaymentFailed: true,)));*/
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
@@ -392,7 +439,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                 borderRadius: BorderRadius.circular(7),
               ),
               child:  Text(
-                "Request Payment",
+                text,
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Corbel_Bold',
@@ -453,6 +500,25 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
           });
         });
 
+  }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    cancelTimer();
+    print("dispose");
+  }
+
+  cancelTimer() {
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
   }
 }

@@ -81,7 +81,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>   CustomerApprovedScreen(serviceModel: widget.serviceModel,)
+                  builder: (context) =>  CustomerApprovedScreen(serviceModel: widget.serviceModel,)
               )).then((value){
           });
         }
@@ -529,7 +529,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   }
 
   cancelTimer() {
-
     if (timerObjVar != null) {
       timerObjVar?.cancel();
       timerObjVar = null;
