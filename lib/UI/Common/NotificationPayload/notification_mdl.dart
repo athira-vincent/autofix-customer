@@ -18,11 +18,26 @@ class NotificationPayloadMdl {
     required this.bookingId,
     required this.serviceName,
     required this.serviceId,
+    required this.serviceList,
+    required this.carName,
     required this.carPlateNumber,
     required this.customerName,
     required this.customerAddress,
+    required this.customerLatitude,
+    required this.customerLongitude,
+    required this.customerFcmToken,
+    required this.mechanicName,
+    required this.mechanicAddress,
+    required this.mechanicLatitude,
+    required this.mechanicLongitude,
+    required this.mechanicFcmToken,
+    required this.mechanicArrivalState,
+    required this.mechanicDiagonsisState,
+    required this.customerDiagonsisApproval,
     required this.requestFromApp,
     required this.paymentStatus,
+    required this.customerFromPage,
+    required this.mechanicFromPage,
     required this.message,
   });
 
@@ -33,11 +48,26 @@ class NotificationPayloadMdl {
   String bookingId;
   String serviceName;
   String serviceId;
+  String serviceList;
+  String carName;
   String carPlateNumber;
   String customerName;
   String customerAddress;
+  String customerLatitude;
+  String customerLongitude;
+  String customerFcmToken;
+  String mechanicName;
+  String mechanicAddress;
+  String mechanicLatitude;
+  String mechanicLongitude;
+  String mechanicFcmToken;
+  String mechanicArrivalState;
+  String mechanicDiagonsisState;
+  String customerDiagonsisApproval;
   String requestFromApp;
   String paymentStatus;
+  String customerFromPage;
+  String mechanicFromPage;
   String message;
 
   factory NotificationPayloadMdl.fromJson(Map<String, dynamic> json) => NotificationPayloadMdl(
@@ -48,11 +78,26 @@ class NotificationPayloadMdl {
     bookingId: json["bookingId"] == null ? null : json["bookingId"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
     serviceId: json["serviceId"] == null ? null : json["serviceId"],
+    serviceList: json["serviceList"] == null ? null : json["serviceList"],
+    carName: json["carName"] == null ? null : json["carName"],
     carPlateNumber: json["carPlateNumber"] == null ? null : json["carPlateNumber"],
     customerName: json["customerName"] == null ? null : json["customerName"],
     customerAddress: json["customerAddress"] == null ? null : json["customerAddress"],
+    customerLatitude: json["customerLatitude"] == null ? null : json["customerLatitude"],
+    customerLongitude: json["customerLongitude"] == null ? null : json["customerLongitude"],
+    customerFcmToken: json["customerFcmToken"] == null ? null : json["customerFcmToken"],
+    mechanicName: json["mechanicName"] == null ? null : json["mechanicName"],
+    mechanicAddress: json["mechanicAddress"] == null ? null : json["mechanicAddress"],
+    mechanicLatitude: json["mechanicLatitude"] == null ? null : json["mechanicLatitude"],
+    mechanicLongitude: json["mechanicLongitude"] == null ? null : json["mechanicLongitude"],
+    mechanicFcmToken: json["mechanicFcmToken"] == null ? null : json["mechanicFcmToken"],
+    mechanicArrivalState: json["mechanicArrivalState"] == null ? null : json["mechanicArrivalState"],
+    mechanicDiagonsisState: json["mechanicDiagonsisState"] == null ? null : json["mechanicDiagonsisState"],
+    customerDiagonsisApproval: json["customerDiagonsisApproval"] == null ? null : json["customerDiagonsisApproval"],
     requestFromApp: json["requestFromApp"] == null ? null : json["requestFromApp"],
     paymentStatus: json["paymentStatus"] == null ? null : json["paymentStatus"],
+    customerFromPage: json["customerFromPage"] == null ? null : json["customerFromPage"],
+    mechanicFromPage: json["mechanicFromPage"] == null ? null : json["mechanicFromPage"],
     message: json["message"] == null ? null : json["message"],
   );
 
@@ -64,11 +109,26 @@ class NotificationPayloadMdl {
     "bookingId": bookingId == null ? null : bookingId,
     "serviceName": serviceName == null ? null : serviceName,
     "serviceId": serviceId == null ? null : serviceId,
+    "serviceList": serviceList == null ? null : serviceList,
+    "carName": carName == null ? null : carName,
     "carPlateNumber": carPlateNumber == null ? null : carPlateNumber,
     "customerName": customerName == null ? null : customerName,
     "customerAddress": customerAddress == null ? null : customerAddress,
+    "customerLatitude": customerLatitude == null ? null : customerLatitude,
+    "customerLongitude": customerLongitude == null ? null : customerLongitude,
+    "customerFcmToken": customerFcmToken == null ? null : customerFcmToken,
+    "mechanicName": mechanicName == null ? null : mechanicName,
+    "mechanicAddress": mechanicAddress == null ? null : mechanicAddress,
+    "mechanicLatitude": mechanicLatitude == null ? null : mechanicLatitude,
+    "mechanicLongitude": mechanicLongitude == null ? null : mechanicLongitude,
+    "mechanicFcmToken": mechanicFcmToken == null ? null : mechanicFcmToken,
+    "mechanicArrivalState": mechanicArrivalState == null ? null : mechanicArrivalState,
+    "mechanicDiagonsisState": mechanicDiagonsisState == null ? null : mechanicDiagonsisState,
+    "customerDiagonsisApproval": customerDiagonsisApproval == null ? null : customerDiagonsisApproval,
     "requestFromApp": requestFromApp == null ? null : requestFromApp,
     "paymentStatus": paymentStatus == null ? null : paymentStatus,
+    "customerFromPage": customerFromPage == null ? null : customerFromPage,
+    "mechanicFromPage": mechanicFromPage == null ? null : mechanicFromPage,
     "message": message == null ? null : message,
   };
 }
