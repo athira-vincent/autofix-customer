@@ -86,6 +86,12 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
 
+  String carNameBrand="";
+  String carNameModel="";
+
+  String carPlateNumber="";
+
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -250,18 +256,18 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
         "serviceId" : "${widget.serviceIds}",
         "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}","serviceId" : "${widget.serviceIds}'}]",
-        "carName" : "ToyotoCorollA [bLACK]",
-        "carPlateNumber" : "KLmlodr876",
+        "carName" : "$carNameBrand [$carNameModel]",
+        "carPlateNumber" : "$carPlateNumber",
         "customerName" : "$userName",
         "customerAddress" : "",
         "customerLatitude" : "${widget.latitude}",
         "customerLongitude" : "${widget.latitude}",
-        "customerFcmToken" : "$FcmToken",
+        "customerFcmToken" : "$token",
         "mechanicName" : "${widget.mechanicListData?.firstName}",
         "mechanicAddress" : "",
         "mechanicLatitude" : "${widget.latitude}",
         "mechanicLongitude" : "${widget.latitude}",
-        "mechanicFcmToken" : "$FcmToken",
+        "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
         "mechanicArrivalState": "0",
         "mechanicDiagonsisState": "0",
         "customerDiagonsisApproval": "0",
@@ -277,8 +283,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'$token'
-      //'to': 'eZ2JuuWIQXaxEydLjw0d20:APA91bFj0JtF2PBKf1CatpnybStKnhXYgdyo5Nz1g_9vlH735kvXCwiaAytHCnfsNUTN-lbIcY1ASkwWwGVMVubk46XKHePjA5pR6rGhwjoZXThFEUNPrBuLgTvYX3yhTFf4bxciSFyv',
+      //'to':'$token'
+      'to': 'dutyBlAJSMGUhZbfJlHKzU:APA91bGoO0sqUYJncF621fjbdYtBo5FsbAHi2EUCMxl2ovc7pxXpgorpuFUnr93VCbmasxvqGRtBzObBdB4ms8HKmTBl1TgUNlMNn8FzzM8EPtaN5lF9cSiWIh04f7fwOhJZQtPJbaFu',
     };
 
     print('FcmToken >>> ${FcmToken}');
