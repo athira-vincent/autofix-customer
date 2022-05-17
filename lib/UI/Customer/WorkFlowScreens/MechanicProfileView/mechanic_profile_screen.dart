@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_sc
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/listeners/NotificationListener.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,6 +70,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   final NotificationListenerCall _notificationListener = NotificationListenerCall();
 
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
   double per = .10;
@@ -90,6 +92,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String carNameModel="";
 
   String carPlateNumber="";
+
+  late StateSetter mechanicAcceptance;
 
 
   double _setValue(double value) {
@@ -273,8 +277,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerDiagonsisApproval": "0",
         "requestFromApp" : "0",
         "paymentStatus" : "0",
+        "isPaymentRequested" : "0",
+        "isPaymentAccepted" : "0",
+        "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
+        "isWorkStarted" : "0",
+        "isWorkCompleted" : "0",
         "message": "ACTION"
       },
       'apns': {
@@ -283,8 +292,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      //'to':'$token'
-      'to': 'dutyBlAJSMGUhZbfJlHKzU:APA91bGoO0sqUYJncF621fjbdYtBo5FsbAHi2EUCMxl2ovc7pxXpgorpuFUnr93VCbmasxvqGRtBzObBdB4ms8HKmTBl1TgUNlMNn8FzzM8EPtaN5lF9cSiWIh04f7fwOhJZQtPJbaFu',
+      'to':'$token'
+      //'to': 'dutyBlAJSMGUhZbfJlHKzU:APA91bGoO0sqUYJncF621fjbdYtBo5FsbAHi2EUCMxl2ovc7pxXpgorpuFUnr93VCbmasxvqGRtBzObBdB4ms8HKmTBl1TgUNlMNn8FzzM8EPtaN5lF9cSiWIh04f7fwOhJZQtPJbaFu',
     };
 
     print('FcmToken data >>> ${data}');
@@ -324,6 +333,53 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
+  void updateToCloudFirestoreDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('2022')
+        .set({
+      "click_action": "FLUTTER_NOTIFICATION_CLICK",
+      "id": "1",
+      "status": "done",
+      "screen": "IncomingJobOfferScreen",
+      "bookingId" : "$bookingIdEmergency",
+      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+      "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}','serviceId' : '${widget.serviceIds}'}]",
+      "carName" : "$carNameBrand [$carNameModel]",
+      "carPlateNumber" : "$carPlateNumber",
+      "customerName" : "$userName",
+      "customerAddress" : "",
+      "customerLatitude" : "${widget.latitude}",
+      "customerLongitude" : "${widget.longitude}",
+      "customerFcmToken" : "",
+      "mechanicName" : "${widget.mechanicListData?.firstName}",
+      "mechanicAddress" : "",
+      "mechanicLatitude" : "${widget.latitude}",
+      "mechanicLongitude" : "${widget.latitude}",
+      "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
+      "mechanicArrivalState": "0",
+      "mechanicDiagonsisState": "0",
+      "customerDiagonsisApproval": "0",
+      "requestFromApp" : "0",
+      "paymentStatus" : "0",
+      "isPaymentRequested" : "0",
+      "isPaymentAccepted" : "0",
+      "extendedTime" : "0",
+      "customerFromPage" : "0",
+      "mechanicFromPage" : "0",
+      "isWorkStarted" : "0",
+      "isWorkCompleted" : "0",
+      "message": "ACTION"
+    })
+        .then((value) => print("ToCloudFirestoreDB - row - created"))
+        .catchError((error) =>
+        print("Failed to add row: $error"));
+
+  }
+
+
   _listenNotification(BuildContext context){
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
 
@@ -344,10 +400,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       if(notificationPayloadMdl.requestFromApp == "0")
         {
 
-          Navigator.of(context).pop();
+          setState(() {
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.of(context).pop();
+          });
         }
       else
         {
+          Navigator.of(context, rootNavigator: true).pop();
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -358,7 +419,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
 
-      
+
 
     });
 
@@ -997,20 +1058,23 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
   _showMechanicAcceptanceDialog(BuildContext context) async {
-    Future.delayed(const Duration(seconds: 30), () {
+    Future.delayed(const Duration(seconds: 35), () {
 
 
       setState(() {
-
         print('_showMechanicAcceptanceDialog');
+
+        Navigator.of(context, rootNavigator: true).pop();
         Navigator.of(context).pop();
+
       });
 
     });
     await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter mechanicAcceptance1) {
+            mechanicAcceptance = mechanicAcceptance1;
             return AlertDialog(
                 backgroundColor: Colors.white,
                 insetPadding: EdgeInsets.only(left: 20, right: 20),
@@ -1024,33 +1088,28 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      InkWell(
-                        onTap:(){
-                          Navigator.of(context).pop();
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              "Wait few minutes !",
-                              style: Styles.waitingTextBlack17,
-                            ),
-                            Text(
-                              "Wait for the response from George Dola!",
-                              style: Styles.awayTextBlack,
-                            ),
-                            Container(
-                              height: 150,
-                                child: SvgPicture.asset(
-                                    'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                  height: 200,
-                                  fit: BoxFit.cover,
-                                )
-                            ),
-                          ],
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            "Wait few minutes !",
+                            style: Styles.waitingTextBlack17,
+                          ),
+                          Text(
+                            "Wait for the response from George Dola!",
+                            style: Styles.awayTextBlack,
+                          ),
+                          Container(
+                            height: 150,
+                              child: SvgPicture.asset(
+                                  'assets/image/mechanicProfileView/waitForMechanic.svg',
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -1058,7 +1117,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           });
         });
 
-   
+
   }
 
 

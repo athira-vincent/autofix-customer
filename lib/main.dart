@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isIOS) {
     await Firebase.initializeApp();
@@ -40,6 +41,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   runApp(MyApp());
+
 }
 
 class MyApp extends StatefulWidget {
