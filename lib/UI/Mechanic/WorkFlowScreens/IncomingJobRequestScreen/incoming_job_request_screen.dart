@@ -172,7 +172,13 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => FindYourCustomerScreen(serviceModel: widget.serviceModel,)));
+                  builder: (context) => FindYourCustomerScreen(
+                    latitude: "10.0159",
+                    longitude: "76.3419",
+                    bookingId: "2022",
+                    serviceModel: widget.serviceModel,
+                    notificationPayloadMdl: widget.notificationPayloadMdl,
+                  )));
         }
 
       } else {
