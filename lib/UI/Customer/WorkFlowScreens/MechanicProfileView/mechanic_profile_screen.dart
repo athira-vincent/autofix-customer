@@ -296,6 +296,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
+        "updatedServiceCost" : "0",
+        "updatedServiceList" : FieldValue.arrayUnion([]),
+        "updatedServiceTime" : "0",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "message": "ACTION"
