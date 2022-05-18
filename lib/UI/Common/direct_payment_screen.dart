@@ -312,13 +312,11 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
           ),
           Expanded(
             child: Text(
-              widget.isMechanicApp ?
-                  isDirectPayment ?
-              "If you clicked the payment received button This service cycle will completed from your side "
-                  :
-                      "You received the payment. So this service cycle ending here. Go home and complete the pending services."
-                  :
-              "Continue with direct payment. It will send a notification to your mechanic and then you can give the payment.",
+              widget.isMechanicApp
+                  ? isDirectPayment
+                  ? "If you clicked the payment received button This service cycle will completed from your side "
+                  : "You received the payment. So this service cycle ending here. Go home and complete the pending services."
+                  : "Continue with direct payment. It will send a notification to your mechanic and then you can give the payment.",
               style: warningTextStyle01,
             ),
           )
