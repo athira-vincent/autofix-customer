@@ -38,7 +38,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String isWorkCompleted = "0";
   String isPaymentRequested = "0";
 
-
+  String totalEstimatedTime = "0";
+  String mechanicName = "";
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -79,12 +80,21 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
       print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
+      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+
+
+        totalEstimatedTime = event.get('updatedServiceTime');
+        mechanicName = event.get('mechanicName');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+
+      });
+
 
     });
   }
 
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("87");
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         if(widget.workStatus =="1") {
@@ -196,14 +206,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                       startedWorkScreenBottomCurve(size),
 
                       workStatus == "2"
-                          ?
-                      startedWorkScreenTimer(size)
-                          :
-                      workStatus == "3"
-                          ?
-                      startedWorkScreenSuccess(size)
-                          :
-                      startedWorkScreenWarningText(size) ,
+                          ? startedWorkScreenTimer(size)
+                          : workStatus == "3"
+                          ? startedWorkScreenSuccess(size)
+                          : startedWorkScreenWarningText(size) ,
                     ],
                 ),
               ),
@@ -270,16 +276,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               "1",
               size.height * 14 / 100,
               Text(
-                workStatus == "1" ?
-                  "Hi.. John Eric congratulations! Your mechanic reached near you. He fix your vehicle faults."
-                    :
-                    workStatus == "2" ?
-                      "Hi.. John Eric congratulations! Your mechanic started repair your vehicle. \nWait for the count down stop."
-                    :
-                        workStatus == "3" ?
-                          "Hi.. John Eric congratulations!  Your mechanic completed his Work wait for the payment process"
-                    :
-                      "Hi.. John Eric congratulations!  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
+                workStatus == "1"
+                    ? "Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
+                    : workStatus == "2"
+                    ? "Hi.. $userName congratulations! Your mechanic started repair your vehicle. Wait for the count down stop."
+                    : workStatus == "3"
+                    ? "Hi.. $userName congratulations!  Your mechanic completed his Work wait for the payment process"
+                    : "Hi.. $userName congratulations!  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
 
                 style: TextStyle(
                   fontSize: 13,
@@ -373,7 +376,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "George Dola",
+                "$mechanicName",
                   style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -518,7 +521,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                   height: size.height * 4 / 100,),
                 SizedBox(width: 20,),
                 Expanded(
-                  child: Text("25:00 ",
+                  child: Text("$totalEstimatedTime",
                     style: TextStyle(
                         fontSize: 36,
                         fontFamily: "SharpSans_Bold",

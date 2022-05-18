@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/payment_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicWaitingPaymentScreen extends StatefulWidget {
 
@@ -17,11 +22,54 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
 
   bool isExpanded = false;
 
+  Timer? timerObjVar;
+  Timer? timerObj;
+
+  String totalEstimatedTime = "0";
+  String mechanicName = "";
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  String authToken="";
+  String userName="";
+
+
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
+
   }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+        totalEstimatedTime = event.get('updatedServiceTime');
+        mechanicName = event.get('mechanicName');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+      });
+    });
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -246,28 +294,25 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
   }
 
   Widget mechanicWaitingTitle(Size size){
-    return Container(
-      margin: EdgeInsets.only(
-        left: size.width * 3 /100,
-        right: size.width * 5 /100,
-        bottom: size.height * 1 /100,
-        top: size.height * 1 / 100,
-      ),
-      child: Row(
-        children: [
-          Text("Afamefuna ",style: TextStyle(
-            fontSize: 20,
-            fontFamily: "Samsung_SharpSans_Medium",
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-          ),),
-          Text("is waiting for payment..",style: TextStyle(
-            fontSize: 20,
-            fontFamily: "Samsung_SharpSans_Medium",
-            fontWeight: FontWeight.w400,
-            color: CustColors.light_navy
-          ),)
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: Container(
+        child: Row(
+          children: [
+            Text("$mechanicName ",style: TextStyle(
+              fontSize: 19,
+              fontFamily: "Samsung_SharpSans_Medium",
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),),
+            Text("is waiting for payment..",style: TextStyle(
+              fontSize: 18,
+              fontFamily: "Samsung_SharpSans_Medium",
+              fontWeight: FontWeight.w400,
+              color: CustColors.light_navy
+            ),)
+          ],
+        ),
       ),
     );
   }
@@ -277,7 +322,8 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("₦ ",style: TextStyle(
+          Text("₦ ",
+            style: TextStyle(
               fontSize: 30,
               fontFamily: "SharpSans_Bold",
               fontWeight: FontWeight.bold,

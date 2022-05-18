@@ -231,17 +231,19 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
             child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
-          Text(
-            widget.isMechanicApp
-                ?
-                isDirectPayment
-                    ?
-                "Your customer chooses direct payment method! \nReceive the payment and click the \n“payment received” button"
-                    :
-                "Hi..George you received a payment of \nrupees ₦ 1500 from customer Afamefuna "
-                :
-            "You choosed the direct payment method! \nSo this transaction process completed only after, \nwhen mechanic confirm as  he received ",
-            style: warningTextStyle01,
+          Expanded(
+            child: Text(
+              widget.isMechanicApp
+                  ?
+                  isDirectPayment
+                      ?
+                  "Your customer chooses direct payment method! Receive the payment and click the “payment received” button"
+                      :
+                  "Hi..George you received a payment of rupees ₦ 1500 from customer Afamefuna "
+                  :
+              "You choosed the direct payment method! So this transaction process completed only after, when mechanic confirm as  he received ",
+              style: warningTextStyle01,
+            ),
           )
         ],
       ),
@@ -308,15 +310,17 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
             child: SvgPicture.asset("assets/image/ic_warning_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
-          Text(
-            widget.isMechanicApp ?
-                isDirectPayment ?
-            "If you clicked the payment received button \nThis service cycle will completed from your side "
-                :
-                    "You received the payment. So this service \ncycle ending here. Go home and \ncomplete the pending services."
-                :
-            "Continue with direct payment. It will send a \nnotification to your mechanic and then \nyou can give the payment.",
-            style: warningTextStyle01,
+          Expanded(
+            child: Text(
+              widget.isMechanicApp ?
+                  isDirectPayment ?
+              "If you clicked the payment received button This service cycle will completed from your side "
+                  :
+                      "You received the payment. So this service cycle ending here. Go home and complete the pending services."
+                  :
+              "Continue with direct payment. It will send a notification to your mechanic and then you can give the payment.",
+              style: warningTextStyle01,
+            ),
           )
         ],
       ),

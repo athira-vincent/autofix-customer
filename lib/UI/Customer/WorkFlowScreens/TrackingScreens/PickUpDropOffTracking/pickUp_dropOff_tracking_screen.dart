@@ -394,8 +394,7 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => MechanicWorkProgressScreen(
-                                              workStatus: "4",)));
+                                            builder: (context) => MechanicWorkProgressScreen(workStatus: "4",)));
                                   },
                                     child: backToHomeButton(size)),
                               ]

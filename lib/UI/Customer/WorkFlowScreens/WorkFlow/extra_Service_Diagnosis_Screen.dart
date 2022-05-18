@@ -98,7 +98,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
 
-      _firestore.collection("ResolMech").doc('87').snapshots().listen((event) {
+      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
 
 
         totalEstimatedTime = event.get('updatedServiceTime');
