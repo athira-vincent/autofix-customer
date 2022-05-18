@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
@@ -29,6 +30,7 @@ class MechanicHomeUIScreen extends StatefulWidget {
 class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
+  FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
   //late FirebaseMessaging messaging;
 
   String authToken="", mechanicId = "";
@@ -57,14 +59,19 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     super.initState();
 
     getSharedPrefData();
-    //callOnFcmApiSendPushNotifications(1);
-
-    _getCurrentCustomerLocation();
     _listenApiResponse();
     _hasActiveService = false;
     Timer.periodic(Duration(seconds: 120), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
+      _getCurrentMechanicLocation();
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant MechanicHomeUIScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    setFcmToken(authToken);
   }
 
   void registerNotification() async {
@@ -92,14 +99,22 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId'+authToken.toString());
       print('userId ' + mechanicId.toString());
-
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
+      setFcmToken(authToken);
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
+    });
+  }
+
+  Future<void> setFcmToken(String Authtoken) async {
+    _messaging.getToken().then((value) {
+      String? token = value;
+      print("FCM Token >>>>>>>>>>  " + token.toString());
+      _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
     });
   }
 
   _listenApiResponse() {
-    _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
+    _mechanicProfileBloc.postMechanicProfile.listen((value) {
       if (value.status == "error") {
         setState(() {
           _isLoadingPage = false;
@@ -114,8 +129,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails?.mechanic![0].brands);
-          //_mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken", "Maruthi, Corolla");
+          print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString());
+          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString());
         });
       }
     });
@@ -152,7 +167,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     });
   }
 
-  Future<void> _getCurrentCustomerLocation() async {
+  Future<void> _getCurrentMechanicLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
     setState(() {
@@ -161,6 +176,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     });
     print(location);
     GetAddressFromLatLong(position);
+    _mechanicHomeBloc.postMechanicLocationUpdateRequest(authToken,mechanicId, CurrentLatitude, CurrentLongitude);
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -265,7 +281,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             width: 50,
             child: Column(
               children: [
-                Text('Elenjikkal house Empyreal Garden',
+                Text(
+                  Address,
+                  //'Elenjikkal house Empyreal Garden',
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,

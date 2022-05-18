@@ -35,9 +35,9 @@ class MechanicApiProvider {
   }
 
   Future<MechanicLocationUpdateMdl> postMechanicLocationUpdateRequest(
-      token, lat, lng )async {
+      token, mechanicId, lat, lng )async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicLocationUpdateRequest(
-      token, lat, lng);
+      token, mechanicId, lat, lng);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

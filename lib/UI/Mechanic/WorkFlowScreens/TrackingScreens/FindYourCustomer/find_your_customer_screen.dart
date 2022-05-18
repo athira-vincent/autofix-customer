@@ -123,7 +123,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
     getSharedPrefData();
     _listenServiceListResponse();
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 10), () {
       setState(() {
         isArrived = true;
       });
@@ -209,8 +209,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                 MaterialPageRoute(
                     builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
           }
-
-
         });
       }
     });

@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
+import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
@@ -35,13 +36,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
-
   int _index = 0;
   int _counter = 0;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   double per = .10;
   double perfont = .10;
-  late bool isOnline;
+  late bool isOnline = false;
   String authToken = "", userId = "";
   String _userName = "";
   late Map<String, dynamic> notificationPayloadMdl;
@@ -61,11 +61,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _messaging.getToken().then((value){
-      print("FCM Token>>>>>>>>>>" + value!);
-    });
 
-    isOnline = true;
     getSharedPrefData();
     _listenApiResponse();
   }
@@ -74,6 +70,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
+      isOnline = shdPre.getBool(SharedPrefKeys.mechanicIsOnline)!;
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId ' + authToken.toString());
@@ -81,6 +78,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       _userName =  shdPre.getString(SharedPrefKeys.userName).toString();
     });
   }
+
 
   _listenApiResponse() {
     _mechanicHomeBloc.postMechanicOnlineOffline.listen((value) {
@@ -90,8 +88,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
-        setState(() {
+        setState(() async {
           isOnline = !isOnline;
+          SharedPreferences shdPre = await SharedPreferences.getInstance();
+          shdPre.setBool(SharedPrefKeys.mechanicIsOnline,isOnline);
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           socialLoginIsLoading = false;

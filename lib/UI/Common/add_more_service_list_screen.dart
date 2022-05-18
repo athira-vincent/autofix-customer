@@ -1,8 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,8 +26,8 @@ class AddMoreServicesListScreen extends StatefulWidget {
 class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
   String authToken="";
-  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
+  //final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+  MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
   /*List<String> serviceList = [
     "A",
     "Spareparts delivery01",
@@ -39,7 +39,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   ];*/
 
   List<bool>? _serviceIsChecked;
-  List<Service>? selectedServiceList = [];
+  List<MechanicService>? selectedServiceList = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -54,24 +54,24 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
 
-      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+
+     // _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
       //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
 
     });
   }
 
   _listenServiceListResponse() {
-    _homeCustomerBloc.emergencyServiceListResponse.listen((value) {
+    _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
-          _serviceIsChecked = List<bool>.filled(value.data!.categoryList![0].service!.length, false);
+          _serviceIsChecked = List<bool>.filled(value.data!.mechanicDetails!.mechanicService!.length, false);
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
 
@@ -101,7 +101,6 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Add additional faults",
@@ -247,18 +246,18 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         ),
         color: CustColors.pale_grey,
         child: StreamBuilder(
-            stream:  _homeCustomerBloc.emergencyServiceListResponse,
-            builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
+            stream:  _mechanicProfileBloc.MechanicProfileResponse,
+            builder: (context, AsyncSnapshot<MechanicProfileMdl> snapshot) {
               print("${snapshot.hasData}");
               print("${snapshot.connectionState}");
-              print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
+              print("+++++++++++++++${snapshot.data?.data?.mechanicDetails?.mechanicService?.length}++++++++++++++++");
 
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return Center(child: CircularProgressIndicator());
                 default:
                   return
-                    snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
+                    snapshot.data?.data?.mechanicDetails?.mechanicService?.length != 0 && snapshot.data?.data?.mechanicDetails?.mechanicService?.length != null
                         ? mainServiceList(size, snapshot)
                         : Container();
               }
@@ -268,7 +267,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     );
   }
 
-  Widget mainServiceList(Size size, AsyncSnapshot<CategoryListHomeMdl> snapshot,){
+  Widget mainServiceList(Size size, AsyncSnapshot<MechanicProfileMdl> snapshot,){
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 5.9 / 100,
@@ -276,11 +275,11 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         top: size.height * 3.7 / 100,
         // bottom: size.height * ,
       ),
-      child:  snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
+      child:  snapshot.data?.data?.mechanicDetails?.mechanicService?.length != 0 && snapshot.data?.data?.mechanicDetails?.mechanicService?.length != null
           ? ListView.separated(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: snapshot.data!.data!.categoryList![0].service!.length,
+            itemCount: snapshot.data!.data!.mechanicDetails!.mechanicService!.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
@@ -307,7 +306,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                   print(">>>>>");
                   //print(brandId);
                 },
-                child: serviceListItems(size, index, snapshot.data!.data!.categoryList![0].service![index]) );
+                child: serviceListItems(size, index, snapshot.data!.data!.mechanicDetails!.mechanicService![index]) );
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(
@@ -323,12 +322,12 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         },
       )
           : Center(
-        child: Text("No Results found."),
+             child: Text("No Results found."),
       ),
     );
   }
 
-  Widget serviceListItems(Size size, int index, Service service,  ){
+  Widget serviceListItems(Size size, int index, MechanicService service,  ){
     return Container(
       child: Row(
         children: [
@@ -356,7 +355,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
           ),
 
           Text(
-            '${service.serviceName}',
+            '${service.service!.serviceName}',
             style: TextStyle(
               fontSize: 12,
               fontFamily: "Samsung_SharpSans_Medium",
@@ -367,7 +366,6 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
           /*SizedBox(
             width: size.width / 100 * 18,
           ),*/
-
         ],
       ),
     ) ;
