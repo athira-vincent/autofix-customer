@@ -14,9 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MechanicWorkProgressScreen extends StatefulWidget {
 
   final String workStatus;
-  final String bookingId;
 
-  MechanicWorkProgressScreen({required this.workStatus,required this.bookingId});
+  MechanicWorkProgressScreen({required this.workStatus});
 
   @override
   State<StatefulWidget> createState() {
@@ -105,8 +104,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           print('isPaymentRequested ++++ $isPaymentRequested');
 
         }
-        print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
-
         if(widget.workStatus =="1")
         {
           if(mechanicDiagonsisState =="1")
@@ -126,7 +123,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: "2022",))
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "3",))
             ).then((value){
             });
           }
@@ -158,7 +155,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",bookingId: "2022",)));
+              builder: (context) => MechanicWorkProgressScreen(workStatus: "3",)));
     }else if(workStatus == "3"){
       Navigator.pushReplacement(
           context,
