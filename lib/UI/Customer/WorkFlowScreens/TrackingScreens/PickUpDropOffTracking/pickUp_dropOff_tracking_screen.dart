@@ -395,7 +395,7 @@ class _PickUpDropOffTrackingScreenState extends State<PickUpDropOffTrackingScree
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => MechanicWorkProgressScreen(
-                                              workStatus: "4",bookingId: "2022",)));
+                                              workStatus: "4",)));
                                   },
                                     child: backToHomeButton(size)),
                               ]

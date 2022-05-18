@@ -29,7 +29,7 @@ class MechanicListMdl {
   Map<String, dynamic> toJson() => {
     "message": message == null ? null : message,
     "status": status == null ? null : status,
-    "data": data == null ? null : data!.toJson(),
+    "data": data == null ? null : data?.toJson(),
   };
 }
 
@@ -45,7 +45,7 @@ class Data {
   );
 
   Map<String, dynamic> toJson() => {
-    "mechanicList": mechanicList == null ? null : mechanicList!.toJson(),
+    "mechanicList": mechanicList == null ? null : mechanicList?.toJson(),
   };
 }
 
@@ -119,7 +119,7 @@ class Datum {
   int otpVerified;
   List<Mechanic>? mechanic;
   List<MechanicStatus>? mechanicStatus;
-  List<MechanicService>? mechanicService;
+   List<MechanicService> mechanicService;
   String totalAmount;
   String distance;
   String duration;
@@ -144,7 +144,7 @@ class Datum {
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
     mechanic: json["mechanic"] == null ? null : List<Mechanic>.from(json["mechanic"].map((x) => Mechanic.fromJson(x))),
     mechanicStatus: json["mechanicStatus"] == null ? null : List<MechanicStatus>.from(json["mechanicStatus"].map((x) => MechanicStatus.fromJson(x))),
-    mechanicService: json["mechanicService"] == null ? null : List<MechanicService>.from(json["mechanicService"].map((x) => MechanicService.fromJson(x))),
+    mechanicService: json["mechanicService"] == null ? [] : List<MechanicService>.from(json["mechanicService"].map((x) => MechanicService.fromJson(x))),
     totalAmount: json["totalAmount"] == null ? null : json["totalAmount"],
     distance: json["distance"] == null ? null : json["distance"],
     duration: json["duration"] == null ? null : json["duration"],
@@ -170,7 +170,7 @@ class Datum {
     "otpVerified": otpVerified == null ? null : otpVerified,
     "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
     "mechanicStatus": mechanicStatus == null ? null : List<dynamic>.from(mechanicStatus!.map((x) => x.toJson())),
-    "mechanicService": mechanicService == null ? null : List<dynamic>.from(mechanicService!.map((x) => x.toJson())),
+    "mechanicService": mechanicService == null ? null : List<dynamic>.from(mechanicService.map((x) => x.toJson())),
     "totalAmount": totalAmount == null ? null : totalAmount,
     "distance": distance == null ? null : distance,
     "duration": duration == null ? null : duration,
@@ -335,7 +335,7 @@ class MechanicService {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "fee": fee == null ? null : fee,
-    "service": service == null ? null : service!.toJson(),
+    "service": service == null ? null : service?.toJson(),
     "status": status == null ? null : status,
     "userId": userId == null ? null : userId,
   };

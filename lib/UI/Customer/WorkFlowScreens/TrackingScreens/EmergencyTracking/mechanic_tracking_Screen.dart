@@ -25,13 +25,11 @@ class MechanicTrackingScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
-  final String bookingId;
 
 
   MechanicTrackingScreen({
     required this.latitude,
-    required this.longitude,
-    required this.bookingId,});
+    required this.longitude,});
 
   @override
   State<StatefulWidget> createState() {
@@ -133,7 +131,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1",bookingId: "2022",)
+                    builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
                 )).then((value){
             });
           }

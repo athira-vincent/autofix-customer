@@ -19,9 +19,7 @@ class ExtraServiceDiagonsisScreen extends StatefulWidget {
 
   final bool isEmergency;
 
-  ExtraServiceDiagonsisScreen(
-      {required this.isEmergency,}
-      );
+  ExtraServiceDiagonsisScreen({required this.isEmergency,});
 
   @override
   State<StatefulWidget> createState() {
@@ -40,6 +38,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   double totalFees = 0.0;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var _firestoreData ;
 
   Timer? timerObjVar;
   Timer? timerObj;
@@ -89,6 +88,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      _firestoreData = _firestore.collection("ResolMech").doc('87').snapshots();
+
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
@@ -402,91 +403,111 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
             children: [
 
               Container(
-                child: ListView.builder(
-                  itemCount:3,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index,) {
+                child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: _firestoreData,
+                  builder: (_, snapshot) {
+
+
+                    if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
+                    if (snapshot.hasData) {
+
+                      List allData = snapshot.data?.data()!['updatedServiceList'].toList();
+
+                      print('StreamBuilder ++++ ${allData.length} ');
+                      print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+
+
+                      return  ListView.builder(
+                        itemCount:allData.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context,index,) {
 
 
 
-                    return GestureDetector(
-                      onTap:(){
+                          return GestureDetector(
+                            onTap:(){
 
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(2,10,2,10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child:Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Timing belt replacement',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_12,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 5,),
-                              Expanded(
-                                flex: 1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(2,10,2,10),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child:Row(
                                   children: [
+                                    Row(
+                                      children: [
+                                        Text('${allData[index]['serviceName']}',
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.visible,
+                                          style: Styles.textLabelTitle_12,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 5,),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
 
-                                    Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: SvgPicture.asset(
-                                          'assets/image/CustomerType/extraServiceMoneyBag.svg',
-                                          fit: BoxFit.contain,
-                                        )
+                                          Container(
+                                              height: 20,
+                                              width: 20,
+                                              child: SvgPicture.asset(
+                                                'assets/image/CustomerType/extraServiceMoneyBag.svg',
+                                                fit: BoxFit.contain,
+                                              )
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "\$ ${allData[index]['serviceCost']}",
+                                            style: Styles.textLabelTitle_12,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "\$ 256",
-                                      style: Styles.textLabelTitle_12,
+                                    SizedBox(width: 5,),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+
+                                          Container(
+                                              height: 20,
+                                              width: 20,
+                                              child: SvgPicture.asset(
+                                                'assets/image/MechanicType/mechanic_work_clock.svg',
+                                                fit: BoxFit.contain,
+                                              )
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "${allData[index]['serviceTime']} Min",
+                                            style: Styles.textLabelTitle_12,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 5,),
-                              Expanded(
-                                flex: 1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
+                            ),
+                          );
+                        },
+                      );
+                    }
 
-                                    Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: SvgPicture.asset(
-                                          'assets/image/MechanicType/mechanic_work_clock.svg',
-                                          fit: BoxFit.contain,
-                                        )
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "45 Min",
-                                      style: Styles.textLabelTitle_12,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
@@ -508,7 +529,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "2",bookingId: "2022",)));
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
         }else{
           Navigator.pushReplacement(
               context,

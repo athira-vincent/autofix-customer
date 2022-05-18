@@ -26,6 +26,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as json;
 
+import '../../../Common/NotificationPayload/mechanicServicesListMdl.dart';
+
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
@@ -72,6 +74,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  List yourItemList = [];
+
+
 
   double per = .10;
   double perfont = .10;
@@ -111,9 +116,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     getSharedPrefData();
     _listen();
 
+    for(int i=0 ; i< int.parse('${widget.mechanicListData!.mechanicService.length}'); i++)
+    yourItemList.add({
+      "serviceCost":  '${widget.mechanicListData?.mechanicService[i].service?.minPrice}',
+      "serviceId": '${widget.mechanicListData?.mechanicService[i].service?.id}',
+      "serviceName": '${widget.mechanicListData?.mechanicService[i].service?.serviceName}',
+      "serviceTime":  '00:30',
+    });
+
     _listenNotification(context);
-
-
   }
 
 
@@ -216,6 +227,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         SharedPreferences shdPre = await SharedPreferences.getInstance();
 
         setState(() {
+
+          carNameBrand = '${value.data?.bookingDetails?.vehicle?.brand}';
+          carNameModel = '${value.data?.bookingDetails?.vehicle?.model}';
 
           callOnFcmApiSendPushNotifications(1);
           _showMechanicAcceptanceDialog(context);
@@ -337,41 +351,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     _firestore
         .collection("ResolMech")
-        .doc('2022')
-        .set({
-      "click_action": "FLUTTER_NOTIFICATION_CLICK",
-      "id": "1",
-      "status": "done",
-      "screen": "IncomingJobOfferScreen",
-      "bookingId" : "$bookingIdEmergency",
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-      "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}','serviceId' : '${widget.serviceIds}'}]",
-      "carName" : "$carNameBrand [$carNameModel]",
-      "carPlateNumber" : "$carPlateNumber",
-      "customerName" : "$userName",
-      "customerAddress" : "",
-      "customerLatitude" : "${widget.latitude}",
-      "customerLongitude" : "${widget.longitude}",
-      "customerFcmToken" : "",
-      "mechanicName" : "${widget.mechanicListData?.firstName}",
-      "mechanicAddress" : "",
-      "mechanicLatitude" : "${widget.latitude}",
-      "mechanicLongitude" : "${widget.latitude}",
-      "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
-      "mechanicArrivalState": "0",
-      "mechanicDiagonsisState": "0",
-      "customerDiagonsisApproval": "0",
-      "requestFromApp" : "0",
-      "paymentStatus" : "0",
-      "isPaymentRequested" : "0",
-      "isPaymentAccepted" : "0",
-      "extendedTime" : "0",
-      "customerFromPage" : "0",
-      "mechanicFromPage" : "0",
-      "isWorkStarted" : "0",
-      "isWorkCompleted" : "0",
-      "message": "ACTION"
+        .doc('$bookingIdEmergency')
+        .update({
+      "serviceModel" : FieldValue.arrayUnion(yourItemList),
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
@@ -400,7 +382,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       if(notificationPayloadMdl.requestFromApp == "0")
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
-
           setState(() {
             Navigator.of(context, rootNavigator: true).pop();
             Navigator.of(context).pop();
@@ -410,21 +391,16 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
           setState(() {
+            updateToCloudFirestoreDB();
             Navigator.of(context, rootNavigator: true).pop();
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419", bookingId: "${bookingIdEmergency}",)
+                    builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
                 )).then((value){
-            });          });
-
-
+            });
+          });
         }
-
-
-
-
-
     });
 
   }
