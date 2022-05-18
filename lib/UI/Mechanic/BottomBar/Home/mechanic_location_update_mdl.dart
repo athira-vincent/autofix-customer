@@ -1,13 +1,13 @@
 // To parse this JSON data, do
 //
-//     final vehicleCreateMdl = vehicleCreateMdlFromJson(jsonString);
+//     final mechanicLocationUpdateMdl = mechanicLocationUpdateMdlFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-MechanicLocationUpdateMdl vehicleCreateMdlFromJson(String str) => MechanicLocationUpdateMdl.fromJson(json.decode(str));
+MechanicLocationUpdateMdl mechanicLocationUpdateMdlFromJson(String str) => MechanicLocationUpdateMdl.fromJson(json.decode(str));
 
-String vehicleCreateMdlToJson(MechanicLocationUpdateMdl data) => json.encode(data.toJson());
+String mechanicLocationUpdateMdlToJson(MechanicLocationUpdateMdl data) => json.encode(data.toJson());
 
 class MechanicLocationUpdateMdl {
   MechanicLocationUpdateMdl({
@@ -34,15 +34,33 @@ class MechanicLocationUpdateMdl {
 }
 
 class Data {
-  Data();
+  Data({
+    required this.mechanicLocationUpdate,
+  });
 
+  MechanicLocationUpdate? mechanicLocationUpdate;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-
+    mechanicLocationUpdate: json["mechanic_location_update"] == null ? null : MechanicLocationUpdate.fromJson(json["mechanic_location_update"]),
   );
 
   Map<String, dynamic> toJson() => {
-
+    "mechanic_location_update": mechanicLocationUpdate == null ? null : mechanicLocationUpdate!.toJson(),
   };
 }
 
+class MechanicLocationUpdate {
+  MechanicLocationUpdate({
+    required this.message,
+  });
+
+  String message;
+
+  factory MechanicLocationUpdate.fromJson(Map<String, dynamic> json) => MechanicLocationUpdate(
+    message: json["message"] == null ? null : json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "message": message == null ? null : message,
+  };
+}

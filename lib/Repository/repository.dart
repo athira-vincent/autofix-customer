@@ -290,9 +290,9 @@ class Repository {
 
   // Fetch Mechanic Mechanic Location Update Request
   Future<dynamic>  postMechanicLocationUpdateRequest(
-      token,lat,lng)  =>
+      token, mechanicId, lat,lng)  =>
       _mechanicApiProvider.postMechanicLocationUpdateRequest(
-          token,lat,lng);
+          token, mechanicId, lat,lng);
 
   // Fetch Mechanic Mechanic Brand Specialization Request
   Future<dynamic>  postMechanicBrandSpecializationRequest(

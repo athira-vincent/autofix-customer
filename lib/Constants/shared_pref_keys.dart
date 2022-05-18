@@ -24,6 +24,7 @@ class SharedPrefKeys {
   static const isMechanicLoggedIn = "isMechanicLoggedIn";
   static const mechanicCode = "mechanicCode";
   static const mechanicID = "mechanicID";
+  static const mechanicIsOnline = "mechanicIsOnline";
 
   ///========= Customer Tracking Variables ==============///
 

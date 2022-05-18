@@ -1353,8 +1353,17 @@ class QueryProvider {
   }
 
   postMechanicLocationUpdateRequest(
-      token,lat,lng) async {
+      token, mechanicId, lat, lng) async {
     String _query = """
+    mutation {
+    mechanic_location_update(
+      latitude: $lat
+      longitude: $lng
+      mechanicId: $mechanicId
+    ) {
+      message
+    }
+  }
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -1366,8 +1375,16 @@ class QueryProvider {
   }
 
   postMechanicBrandSpecializationRequest(
-      token,brandName) async {
+      token, brandName) async {
     String _query = """
+      {
+    brandDetails(brandName: "$brandName") {
+      id
+      brandName
+      icon
+      status
+    }
+  }
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -1465,7 +1482,7 @@ class QueryProvider {
       token,  mechanicId) async {
     String _query = """
      mutation {
-  currentlyWorkingService(mechanicId: 8) {
+  currentlyWorkingService(mechanicId: $mechanicId) {
         id
         bookingCode
         reqType
@@ -1699,42 +1716,44 @@ class QueryProvider {
   postMechanicFetchProfileRequest(
       token) async {
     String _query = """ 
-     {
-  mechanic_Details(jwtToken: "$token") {
-    id
-    userCode
-    firstName
-    lastName
-    emailId
-    phoneNo
-    userTypeId
-    accountType
-    jwtToken
-    status
-    mechanic {
+    {
+    mechanic_Details(jwtToken: "$token") {
       id
-      orgName
-      orgType
-      yearExp
-      mechType
-      userId
-      profilePic
-      state
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      userTypeId
+      accountType
+      jwtToken
       status
-      brands
-    }
-    mechanicService {
-      id
-      fee
-      service{
+      mechanic {
         id
-        serviceName
+        orgName
+        orgType
+        yearExp
+        mechType
+        userId
+        profilePic
+        state
+        status
+        brands
       }
-      status
-      userId
+      mechanicService {
+        id
+        fee
+        time
+        service{
+          id
+          serviceName
+        }
+        status
+        userId
+        serviceId
+      }
     }
   }
-}
     """;
     log(_query);
     return await GqlClient.I.query01(

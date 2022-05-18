@@ -95,6 +95,8 @@ class _MyAppState extends State<MyApp> {
                  // home: SplashScreen(),
 
                 //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
+                // home: MechanicStartServiceScreen(serviceModel: "0"),
+                //home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
                 //home: CustomerApprovedScreen(serviceModel: "0",),
 

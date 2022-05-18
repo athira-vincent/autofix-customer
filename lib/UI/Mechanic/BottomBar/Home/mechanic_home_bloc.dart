@@ -34,11 +34,11 @@ class HomeMechanicBloc {
   Stream<MechanicLocationUpdateMdl> get postMechanicLocationUpdateResponse => postMechanicLocationUpdate.stream;
 
   postMechanicLocationUpdateRequest(
-      token,
+      token, String mechanicId,
       lat,lng,) async {
 
     MechanicLocationUpdateMdl _mechanicLocationUpdateMdl = await repository.postMechanicLocationUpdateRequest(
-     token, lat,lng);
+     token, mechanicId, lat,lng);
     postMechanicLocationUpdate.sink.add(_mechanicLocationUpdateMdl);
   }
 

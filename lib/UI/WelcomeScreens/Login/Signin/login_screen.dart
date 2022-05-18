@@ -12,6 +12,7 @@ import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-
 
   bool language_en_ar=true;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -475,15 +475,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   Future<void> setFcmToken(String Authtoken) async {
-    /*FirebaseMessaging.instance.getToken().then((value) {
+    FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
       print("Instance ID: +++++++++ +++++ +++++ minnu " + token.toString());
 
       _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
-    });*/
-
+    });
   }
-
 
   _getSignInRes() async {
     _signinBloc.signInResponse.listen((value) async {
@@ -503,6 +501,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString()
             );
+            setFcmToken(value.data!.signIn!.token.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -514,12 +513,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString()
             );
+            setFcmToken(value.data!.signIn!.token.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => MechanicHomeScreen()));
           }
-
         });
       }
     });
@@ -535,13 +534,13 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
-
           if(value.data!.socialLogin!.user!.userTypeId == "1"){
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
                 value.data!.socialLogin!.user!.firstName.toString(),
                 value.data!.socialLogin!.user!.id.toString());
+            setFcmToken(value.data!.socialLogin!.token.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -553,6 +552,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 value.data!.socialLogin!.user!.firstName.toString(),
                 value.data!.socialLogin!.user!.id.toString()
             );
+            setFcmToken(value.data!.socialLogin!.token.toString());
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

@@ -7,11 +7,11 @@ import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.da
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
@@ -33,7 +33,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   List<String> selectedServiceList = [];
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String additionalServiceNames = "";
+  String additionalServiceNames = "",
+      serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
+  List serviceItemList = [];
   String additionalServiceIds = "";
   String totalServiceTime = "";
   String selectedServiceName = "";
@@ -57,7 +59,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB();
+      //listenToCloudFirestoreDB();
     });
   }
 
@@ -95,11 +97,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         .doc('${bookingId}')
         .update({
       'mechanicDiagonsisState': "1",
+      'updatedServiceList' : FieldValue.arrayUnion(serviceItemList),
+      'updatedServiceCost': "$serviceTotalCostForFirebase",
+      'updatedServiceTime': "$serviceTotalTimeForFirebase",
       //===================== code for send the list of additional services =========
     })
-        .then((value) => print("Location Added"))
+        .then((value) => print("updatedServiceList Added"))
         .catchError((error) =>
-        print("Failed to add Location: $error"));
+        print("Failed to add updatedServiceList: $error"));
 
   }
 
@@ -456,9 +461,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
-    List<Service>? serviceList = [];
+    List<MechanicService>? serviceList = [];
     serviceList.clear();
     additionalServiceNames = "";
+    serviceTotalCostForFirebase = "";
+    serviceTotalTimeForFirebase = "";
 
     //_chooseVechicleSpecializedController.text="";
     serviceList = await Navigator.push(
@@ -468,22 +475,39 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         ));
 
     setState(() {
+
       additionalServiceIds = "[";
+
       for(int i = 0; i<serviceList!.length ; i++){
 
         //totalServiceTime = totalServiceTime + serviceList[i].
-
         if(serviceList.length - 1 == i){
-          additionalServiceNames = additionalServiceNames + serviceList[i].serviceName.toString();
+          additionalServiceNames = additionalServiceNames + serviceList[i].service.toString();
           additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString();
         }
         else{
-          additionalServiceNames = additionalServiceNames + serviceList[i].serviceName.toString() + " \n";
+          additionalServiceNames = additionalServiceNames + serviceList[i].service!.serviceName.toString() + " \n";
           additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString() + ", ";
         }
+
+        serviceItemList.add({
+          'serviceId' : '${serviceList[i].id.toString()}',
+          'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
+          'serviceCost' : '${serviceList[i].fee.toString()}',
+          'serviceTime' : '10:00'
+        });
+
       }
-      additionalServiceIds = "]";
+      additionalServiceIds = additionalServiceIds + "]";
+      serviceTotalCostForFirebase = "1000";
+      serviceTotalTimeForFirebase = "25.30";
       //selectedState = result;
+
+      print("additionalServiceIds >>>>>" + additionalServiceIds);
+      print("additionalServiceForFirebase >>>>>" + serviceItemList.toString());
+      print("serviceTotalCostForFirebase >>>>>" + serviceTotalCostForFirebase);
+      print("serviceTotalTimeForFirebase >>>>>" + serviceTotalTimeForFirebase);
+
       if(serviceList!='[]')
       {
         /*_chooseVechicleSpecializedController.text = selectedVehicles;
