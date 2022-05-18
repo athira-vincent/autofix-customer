@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_To_CustomerLocation_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
@@ -94,13 +95,13 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                 // home: SplashScreen(),
+                  home: SplashScreen(),
 
                 //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
                 // home: MechanicStartServiceScreen(serviceModel: "0"),
 
-                 home: DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)
+                 // home: DirectPaymentSuccessScreen()
 
                  // home:   MechanicWaitingPaymentScreen()
 

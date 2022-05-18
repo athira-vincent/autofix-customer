@@ -71,27 +71,30 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
-          top: size.height * 8.2 / 100
+          top: size.height * 5 / 100
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-                top: size.width * 5 / 100,
-                bottom: size.width * 5 / 100
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          children: [
+            Container(
+
+              margin: EdgeInsets.only(
+                left: size.width * 5 / 100,
+                right: size.width * 2 / 100,
+              ),
+              child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
+                height: size.height * 3 / 100,width: size.width * 3 / 100,),
             ),
-            margin: EdgeInsets.only(
-              left: size.width * 5 / 100,
-              right: size.width * 2 / 100,
-            ),
-            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
-              height: size.height * 3 / 100,width: size.width * 3 / 100,),
-          ),
-          Text(
-            "Congratulations! Your mechanic confirmed as \nhe received the payment. This service cycle \ncompleted from mechanic side ",
-            style: warningTextStyle01,
-          )
-        ],
+            Expanded(
+              child: Text(
+                "Congratulations! Your mechanic confirmed as he received the payment. This service cycle completed from mechanic side ",
+                style: warningTextStyle01,
+                textAlign: TextAlign.start,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -128,6 +131,10 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
               child: reviewLaterButton(size)),
           InkWell(
             onTap: (){
+
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+
               /*Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
