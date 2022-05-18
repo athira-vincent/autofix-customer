@@ -41,7 +41,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  var _firestoreData ;
 
   String authToken="";
   String userName="";
@@ -75,7 +74,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
@@ -86,7 +84,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   }
 
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("87");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         if(widget.workStatus =="1") {
@@ -500,27 +498,27 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Widget startedWorkScreenTimer(Size size){
     return Container(
       margin: EdgeInsets.only(
-          left: size.width * 27.5 / 100,
-          right: size.width * 27.5 / 100,
+          left: size.width * 25 / 100,
+          right: size.width * 25 / 100,
           top: size.height * 3.3 / 100
       ),
-      child: Flexible(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: size.width * 4.5 / 100,
-                right: size.width * 4.5 / 100,
-                top: size.height * 1 / 100,
-                bottom: size.height * 1 / 100,
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset('assets/image/ic_alarm.svg',
-                    width: size.width * 4 / 100,
-                    height: size.height * 4 / 100,),
-                  Spacer(),
-                  Text("25:00 ",
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+              left: size.width * 4 / 100,
+              right: size.width * 4 / 100,
+              top: size.height * 1 / 100,
+              bottom: size.height * 1 / 100,
+            ),
+            child: Row(
+              children: [
+                SvgPicture.asset('assets/image/ic_alarm.svg',
+                  width: size.width * 4 / 100,
+                  height: size.height * 4 / 100,),
+                SizedBox(width: 20,),
+                Expanded(
+                  child: Text("25:00 ",
                     style: TextStyle(
                         fontSize: 36,
                         fontFamily: "SharpSans_Bold",
@@ -529,30 +527,30 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                         letterSpacing: .7
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(13),
-                  ),
-                  border: Border.all(
-                      color: CustColors.light_navy02,
-                      width: 0.3
-                  )
-              ),
-              padding: EdgeInsets.only(
-                left: size.width * 4 / 100,
-                right: size.width * 4 / 100,
-                top: size.height * 1 / 100,
-                bottom: size.height * 1 / 100,
-              ),
-              child: Text("Total estimated time "),
-            )
-          ],
-        ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(13),
+                ),
+                border: Border.all(
+                    color: CustColors.light_navy02,
+                    width: 0.3
+                )
+            ),
+            padding: EdgeInsets.only(
+              left: size.width * 4 / 100,
+              right: size.width * 4 / 100,
+              top: size.height * 1 / 100,
+              bottom: size.height * 1 / 100,
+            ),
+            child: Text("Total estimated time "),
+          )
+        ],
       ),
     );
   }
