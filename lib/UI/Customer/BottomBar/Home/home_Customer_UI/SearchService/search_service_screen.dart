@@ -573,6 +573,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                 builder: (context) =>  FindMechanicListScreen(
                                   serviceIds: serviceIds,
                                   serviceType: 'emergency',
+                                  customerAddress: "",
                                   latitude: CurrentLatitude,
                                   longitude: CurrentLongitude,
                                   authToken: authToken,)));

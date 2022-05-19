@@ -854,6 +854,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             builder: (context) =>  FindMechanicListScreen(
                               serviceIds: serviceIds,
                               serviceType: 'emergency',
+                              customerAddress: Address,
                               latitude: CurrentLatitude,
                               longitude: CurrentLongitude,
                               authToken: authToken,)));

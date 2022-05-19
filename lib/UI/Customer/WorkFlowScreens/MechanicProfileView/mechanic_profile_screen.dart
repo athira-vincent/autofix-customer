@@ -39,12 +39,15 @@ class MechanicProfileViewScreen extends StatefulWidget {
   final String latitude;
   final String longitude;
   final String serviceIds;
+  final String customerAddress;
+
 
 
 
   MechanicProfileViewScreen({
     required this.mechanicId,
     required this.authToken,
+    required this.customerAddress,
     required this.mechanicListData,
     required this.isEmergency,
     required this.serviceModel,
@@ -122,6 +125,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       "serviceId": '${widget.mechanicListData?.mechanicService[i].service?.id}',
       "serviceName": '${widget.mechanicListData?.mechanicService[i].service?.serviceName}',
       "serviceTime":  '00:30',
+      "isDefault":  '1',
     });
 
     _listenNotification(context);
@@ -230,6 +234,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
           carNameBrand = '${value.data?.bookingDetails?.vehicle?.brand}';
           carNameModel = '${value.data?.bookingDetails?.vehicle?.model}';
+          carPlateNumber = '${value.data?.bookingDetails?.vehicle?.plateNo}';
+
 
           callOnFcmApiSendPushNotifications(1);
           _showMechanicAcceptanceDialog(context);
@@ -277,14 +283,16 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "carName" : "$carNameBrand [$carNameModel]",
         "carPlateNumber" : "$carPlateNumber",
         "customerName" : "$userName",
-        "customerAddress" : "",
+        "customerAddress" : "${widget.customerAddress}",
         "customerLatitude" : "${widget.latitude}",
         "customerLongitude" : "${widget.longitude}",
         "customerFcmToken" : "$token",
         "mechanicName" : "${widget.mechanicListData?.firstName}",
         "mechanicAddress" : "",
         "mechanicLatitude" : "${widget.latitude}",
-        "mechanicLongitude" : "${widget.latitude}",
+        "mechanicLongitude" : "${widget.longitude}",
+        "latitude" : "${widget.latitude}",
+        "longitude" : "${widget.longitude}",
         "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
         "mechanicArrivalState": "0",
         "mechanicDiagonsisState": "0",
@@ -297,7 +305,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
         "updatedServiceCost" : "0",
-        "updatedServiceList" : FieldValue.arrayUnion([]),
+        "updatedServiceList" : "",
         "updatedServiceTime" : "0",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
@@ -309,8 +317,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'$token'
-      //'to': 'dutyBlAJSMGUhZbfJlHKzU:APA91bGoO0sqUYJncF621fjbdYtBo5FsbAHi2EUCMxl2ovc7pxXpgorpuFUnr93VCbmasxvqGRtBzObBdB4ms8HKmTBl1TgUNlMNn8FzzM8EPtaN5lF9cSiWIh04f7fwOhJZQtPJbaFu',
+      //'to':'$token'
+      'to': 'ctxMbS6zQISb6eTlYY9nJO:APA91bGPR9m_XzScrWyxUGPZSirRwBGus4SurpMUw6s9sQYoK1E9lEaUJEzWpBsyVaJX_nPhjPG_bb3yKdHmzgUnk0iSGRFlf9v0zZ72iJqBozA2kURv6ypaKiHWzKshdVWvjL025x9G',
     };
 
     print('FcmToken data >>> ${data}');
@@ -356,7 +364,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         .collection("ResolMech")
         .doc('$bookingIdEmergency')
         .update({
-      "serviceModel" : FieldValue.arrayUnion(yourItemList),
+          "serviceModel" : FieldValue.arrayUnion(yourItemList),
+          "updatedServiceList": FieldValue.arrayUnion(yourItemList),
+         "customerFromPage": "MechanicTrackingScreen",
+
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
@@ -399,7 +410,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>   MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
+                    builder: (context) =>   MechanicTrackingScreen(latitude: "${widget.latitude}", longitude:  "${widget.longitude}",)
                 )).then((value){
             });
           });
@@ -1081,7 +1092,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                             style: Styles.waitingTextBlack17,
                           ),
                           Text(
-                            "Wait for the response from George Dola!",
+                            "Wait for the response from ${widget.mechanicListData?.firstName}!",
                             style: Styles.awayTextBlack,
                           ),
                           Container(

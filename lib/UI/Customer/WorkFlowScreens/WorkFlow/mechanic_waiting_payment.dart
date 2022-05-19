@@ -20,15 +20,18 @@ class MechanicWaitingPaymentScreen extends StatefulWidget {
 
 class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScreen> {
 
-  bool isExpanded = false;
+  bool isExpanded = true;
 
   Timer? timerObjVar;
   Timer? timerObj;
+
+  String totalEstimatedCost = "0";
 
   String totalEstimatedTime = "0";
   String mechanicName = "";
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var _firestoreData ;
 
   String authToken="";
   String userName="";
@@ -55,12 +58,12 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+      _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
+
       _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
         totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedCost = event.get('updatedServiceCost');
+
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
       });
@@ -186,15 +189,14 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                                 ],
                               ),
 
-// ------------------ this Column widget will be replaced by list ---- item builder will return serviceDetailListItem()
 
-                              isExpanded ? Column(
-                                children: [
-                                  serviceDetailListItem(size,"Timing belt replacement","₦ 200"),
-                                  serviceDetailListItem(size,"Breakpad replacement","₦ 700"),
-                                  serviceDetailListItem(size,"Oil port leaking","₦ 500"),
-                                ],
-                              ) : Container(),
+                                 isExpanded
+                                  ? Column(
+                                          children: [
+                                            serviceDetailListItem(size),
+                                          ],
+                                    )
+                                 : Container(),
 
 
                               Container(
@@ -212,7 +214,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                                         color: Colors.black
                                     ),),
                                    Spacer(),
-                                    Text("₦ 1600",style: TextStyle(
+                                    Text("₦ $totalEstimatedCost",style: TextStyle(
                                         fontSize: 14,
                                         fontFamily: "Samsung_SharpSans_Medium",
                                         fontWeight: FontWeight.w400,
@@ -329,7 +331,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
               fontWeight: FontWeight.bold,
               color: CustColors.light_navy
           ),),
-          Text("1600",
+          Text("$totalEstimatedCost",
             style: TextStyle(
                 fontFamily: "SharpSans_Bold",
                 fontSize: 30,
@@ -342,35 +344,73 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
     );
   }
 
-  Widget serviceDetailListItem(Size size,String serviceName, String serviceCost){
+  Widget serviceDetailListItem(Size size){
     return Container(
-      margin: EdgeInsets.only(
-          top: size.height * 1.2 / 100,
-          bottom: size.height * 1.2 / 100
-      ),
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(serviceName,style: TextStyle(
-              fontSize: 12,
-              fontFamily: "Samsung_SharpSans_Regular",
-              fontWeight: FontWeight.w400,
-              color: Colors.black
-          ),),
-          Spacer(),
-          Container(
-            margin: EdgeInsets.only(
-              right: size.width * 2.8 / 100,
-            ),
-            child: Text(serviceCost,style: TextStyle(
-                fontSize: 12,
-                fontFamily: "Samsung_SharpSans_Regular",
-                fontWeight: FontWeight.w400,
-                color: Colors.black
-            ),
-            ),
-          ),
-        ],
+      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: _firestoreData,
+        builder: (_, snapshot) {
+
+
+          if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
+          if (snapshot.hasData) {
+
+            List allData = snapshot.data?.data()!['updatedServiceList'].toList();
+
+            print('StreamBuilder ++++ ${allData.length} ');
+            print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+
+
+            return  ListView.builder(
+              itemCount:allData.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context,index,) {
+
+
+
+                return GestureDetector(
+                  onTap:(){
+
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(2,5,2,5),
+                    child:  Container(
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${allData[index]['serviceName']}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: "Samsung_SharpSans_Regular",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black
+                          ),),
+                          Spacer(),
+                          Container(
+                            margin: EdgeInsets.only(
+                              right: size.width * 2.8 / 100,
+                            ),
+                            child: Text('${allData[index]['serviceCost']}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: "Samsung_SharpSans_Regular",
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black
+                            ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ),
+                );
+              },
+            );
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

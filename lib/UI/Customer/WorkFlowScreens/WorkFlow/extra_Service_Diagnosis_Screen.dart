@@ -120,36 +120,16 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
 
 
-  void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
-    reference.snapshots().listen((querySnapshot) {
-      setState(() {
-        mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
-        print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
-
-          if(mechanicDiagonsisState =="1")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
-                )).then((value){
-            });
-          }
-
-
-      });
-    });
-  }
-
   void updateToCloudFirestoreDB() {
 
     _firestore
         .collection("ResolMech")
         .doc('${bookingIdEmergency}')
         .update({
-            'customerDiagonsisApproval': "1"
-          })
+            'customerDiagonsisApproval': "1",
+            'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "2",)'
+
+    })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
