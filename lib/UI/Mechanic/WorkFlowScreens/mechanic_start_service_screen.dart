@@ -31,7 +31,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  String selectedServiceName = "", selectedServiceTime = "";
+  String selectedServiceName = "";
   String additionalServiceNames = "", serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
   List serviceItemList = [];
 
@@ -59,8 +59,15 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
-      //listenToCloudFirestoreDB();
+      listenToCloudFirestoreDB();
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant MechanicStartServiceScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    getSharedPrefData();
   }
 
   Future<void> getSharedPrefData() async {
@@ -73,10 +80,15 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
         List allData = event.get('serviceModel').toList();
         selectedServiceName = allData[0]['serviceName'];
-        selectedServiceTime = allData[0]['serviceTime'];
+        serviceTotalTimeForFirebase = allData[0]['serviceTime'];
+        serviceTotalCostForFirebase = allData[0]['serviceCost'];
 
         print('allData StreamBuilder ++++ ${allData.length} ');
         print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+
+        setState(() {
+
+        });
 
         //customerAddress = event.get('customerAddress');
         //plateNumber =  event.get('carPlateNumber');
@@ -132,6 +144,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .doc('${bookingId}')
           .update({
         "mechanicDiagonsisState": "1",
+        'updatedServiceCost': "$serviceTotalCostForFirebase",
+        'updatedServiceTime': "$serviceTotalTimeForFirebase",
         "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
         "mechanicFromPage" : "CustomerApprovedScreen",
         //===================== code for send the list of additional services =========
@@ -140,7 +154,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .catchError((error) =>
           print("Failed to add updatedServiceList: $error"));
     }
-
 
   }
 
@@ -227,7 +240,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                               height: size.height * 4 / 100,),
                               Spacer(),
                               Text(
-                                selectedServiceTime,
+                                serviceTotalTimeForFirebase,
                                 //"25:00 ",
                                 style: TextStyle(
                                   fontSize: 36,
@@ -482,10 +495,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     List<MechanicService>? serviceList = [];
     serviceList.clear();
     additionalServiceNames = "";
-    serviceTotalCostForFirebase = "";
-    serviceTotalTimeForFirebase = "";
 
     //_chooseVechicleSpecializedController.text="";
+
+    totalTime = double.parse(serviceTotalTimeForFirebase.replaceAll(":", "."));
+    totalCost = int.parse(serviceTotalCostForFirebase);
     serviceList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -518,9 +532,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       serviceTotalCostForFirebase = totalCost.toString();
       serviceTotalTimeForFirebase = totalTime.toString().replaceAll(".", ":");
 
-      double time = totalTime + double.parse(selectedServiceTime.replaceAll(":", ".")) ;
-
-      selectedServiceTime = time.toString();
       //selectedState = result;
 
       print("additionalServiceForFirebase >>>>>" + serviceItemList.toString());

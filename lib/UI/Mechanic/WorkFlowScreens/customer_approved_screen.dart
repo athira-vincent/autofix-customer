@@ -38,6 +38,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     return value * per + value;
   }
 
+  late StateSetter extraTimeStateSetter;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -65,6 +67,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         //totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
         customerName = event.get('customerName');
+        setState(() {
+
+        });
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
 
       });
@@ -430,7 +435,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   return AlertDialog(
                     contentPadding: EdgeInsets.all(0.0),
                     content: StatefulBuilder(
-                        builder: (BuildContext context, StateSetter monthYear) {
+                        builder: (BuildContext context, StateSetter extraTimeStateSetter1) {
+                          extraTimeStateSetter = extraTimeStateSetter1;
                           return  setupAlertDialogAddExtraTime(size);
                         }
                     ),
@@ -547,7 +553,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                               children: [
                                 InkWell(
                                     onTap: (){
-                                      setState(() {
+                                      extraTimeStateSetter(() {
                                         extendedTimeVal = extendedTimeVal + 1;
                                       });
                                   },
@@ -555,19 +561,19 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                                     child: Icon(
                                       Icons.keyboard_arrow_up,
                                     ),
-                                    color: Colors.purple,
+                                    //color: Colors.purple,
                                     //child: Text("aaaaaaaa"),
                                   ),
                                 ),
                                 InkWell(
                                   onTap: (){
-                                    setState(() {
+                                    extraTimeStateSetter(() {
                                       extendedTimeVal = extendedTimeVal - 1;
                                     });
 
                                   },
                                   child: Container(
-                                    color: Colors.tealAccent,
+                                    //color: Colors.tealAccent,
                                     child:  Icon(
                                         Icons.keyboard_arrow_down,
                                       ),
