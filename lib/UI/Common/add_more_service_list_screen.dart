@@ -105,7 +105,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
                   addServicesSearchArea(size),
 
-                  servicesListArea(size),
+                  servicesListArea(size,context),
 
                   widget.isAddService
                       ? InkWell(
@@ -225,7 +225,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     );
   }
 
-  Widget servicesListArea(Size size){
+  Widget servicesListArea(Size size, BuildContext context){
     return Expanded(
       child: Container(
         margin: EdgeInsets.only(
@@ -248,7 +248,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                 default:
                   return
                     snapshot.data?.data?.mechanicDetails?.mechanicService?.length != 0 && snapshot.data?.data?.mechanicDetails?.mechanicService?.length != null
-                        ? mainServiceList(size, snapshot)
+                        ? mainServiceList(size, snapshot,context)
                         : Container();
               }
             }
@@ -257,7 +257,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     );
   }
 
-  Widget mainServiceList(Size size, AsyncSnapshot<MechanicProfileMdl> snapshot,){
+  Widget mainServiceList(Size size, AsyncSnapshot<MechanicProfileMdl> snapshot, BuildContext context1,){
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 5.9 / 100,
@@ -266,36 +266,16 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         // bottom: size.height * ,
       ),
       child:  snapshot.data?.data?.mechanicDetails?.mechanicService?.length != 0 && snapshot.data?.data?.mechanicDetails?.mechanicService?.length != null
-          ? ListView.separated(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: snapshot.data!.data!.mechanicDetails!.mechanicService!.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  print(">>>>> ");
-                  if(widget.isAddService == false){
-                    print(">>>>> widget.isAddService == false ");
-                    print(">>>>> snapshot.data!.data!.mechanicDetails!.mechanicService![index] ${snapshot.data!.data!.mechanicDetails!.mechanicService![index].serviceId}" );
-                    Navigator.pop(context,[]);
-                  }
-
+          ? ListView.builder(
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount:snapshot.data!.data!.mechanicDetails!.mechanicService!.length,
+                itemBuilder: (context, index) {
+                  return serviceListItems(size, index, snapshot.data!.data!.mechanicDetails!.mechanicService![index]);
                 },
-                child: serviceListItems(size, index, snapshot.data!.data!.mechanicDetails!.mechanicService![index]) );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return Container(
-              margin: EdgeInsets.only(
-                //top: ScreenSize().setValue(1),
-                left: size.width * 3 / 100,
-                right: size.width * 1 / 100,
-                //bottom: ScreenSize().setValue(1),
-              ),
-              child: Divider(
-                height: 0,
-              ));
-        },
-      )
+              )
           : Center(
              child: Text("No Results found."),
       ),
@@ -303,51 +283,85 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   }
 
   Widget serviceListItems(Size size, int index, MechanicService service,  ){
-    return Container(
-      child: Row(
-        children: [
+    return Column(
+      children: [
+        Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
 
-          widget.isAddService ? Transform.scale(
-            scale: .6,
-            child: widget.isAddService
-                ? Checkbox(
-              activeColor: CustColors.light_navy,
-              value: _serviceIsChecked![index],
-              onChanged: (bool? val){
-                setState(() {
-                  this._serviceIsChecked![index] = val!;
-                  //isChecked ? false : true;
-                  val ?
-                  selectedServiceList!.add(service)
-                      :
-                  selectedServiceList!.remove(service);
-                  print("sgsjhgj 001 $val");
-                  print(">>>>>>>>> Selected Make List data " + selectedServiceList!.length.toString());
-                });
-              },
-            )
-                : Container(),
-          ) : Container(),
+              widget.isAddService
+                  ? Transform.scale(
+                    scale: .6,
+                    child: widget.isAddService
+                        ? Checkbox(
+                          activeColor: CustColors.light_navy,
+                          value: _serviceIsChecked![index],
+                          onChanged: (bool? val){
+                            setState(() {
+                              this._serviceIsChecked![index] = val!;
+                              //isChecked ? false : true;
+                              val
+                                  ? selectedServiceList!.add(service)
+                                  : selectedServiceList!.remove(service);
+                              print("sgsjhgj 001 $val");
+                              print(">>>>>>>>> Selected Make List data " + selectedServiceList!.length.toString());
+                            });
+                          },
+                        )
+                        : Container(),
+                  )
+                  : Container(),
 
-          Container(
-            padding: EdgeInsets.only(
-              top: 2,bottom: 2.5
-            ),
-            child: Text(
-              '${service.service!.serviceName}',
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: "Samsung_SharpSans_Medium",
-                fontWeight: FontWeight.w400,
-                color: CustColors.almost_black
+              Expanded(
+                flex: 3,
+                child: InkWell(
+                  onTap: (){
+                    print(">>>>> ");
+                    if(widget.isAddService == false){
+                      print(">>>>> widget.isAddService == false ");
+                      selectedServiceList!.add(service);
+                       Navigator.pop(context,selectedServiceList);
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      top: 2,bottom: 2.5
+                    ),
+                    child: Text(
+                      '${service.service!.serviceName}',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: "Samsung_SharpSans_Medium",
+                        fontWeight: FontWeight.w400,
+                        color: CustColors.almost_black
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
+              /*SizedBox(
+                width: size.width / 100 * 18,
+              ),*/
+
+
+            ],
           ),
-          /*SizedBox(
-            width: size.width / 100 * 18,
-          ),*/
-        ],
-      ),
+        ),
+        Container(
+            margin: EdgeInsets.only(
+              top:5,
+              bottom: 5,
+              left: size.width * 3 / 100,
+              right: size.width * 1 / 100,
+              //bottom: ScreenSize().setValue(1),
+            ),
+            child: Divider(
+              height: 1,
+            ))
+      ],
     ) ;
   }
 
