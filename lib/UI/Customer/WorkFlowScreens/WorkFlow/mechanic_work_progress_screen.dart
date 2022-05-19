@@ -123,6 +123,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
 
+        setState(() {
+
+        });
+
       });
 
 

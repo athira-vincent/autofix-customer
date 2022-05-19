@@ -325,9 +325,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+     // 'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
       //'to':'$token'
-      //'to': 'ctxMbS6zQISb6eTlYY9nJO:APA91bGPR9m_XzScrWyxUGPZSirRwBGus4SurpMUw6s9sQYoK1E9lEaUJEzWpBsyVaJX_nPhjPG_bb3yKdHmzgUnk0iSGRFlf9v0zZ72iJqBozA2kURv6ypaKiHWzKshdVWvjL025x9G',
+      'to': 'cnhYxFRNR1-gLe7-WYmnKF:APA91bESKseD_m9569cK2Xva_-sp25qRsCBecfqPNrrYb93GyGJh-UPZ034M3CTfd-QjPgcvly2TOnVOBtybf9A9-S1WZYkix2M8OlopYNub3ViPu0JlL9SdC5hdcEKW6vbWWNsyh9TS',
     };
 
     print('FcmToken data >>> ${data}');
