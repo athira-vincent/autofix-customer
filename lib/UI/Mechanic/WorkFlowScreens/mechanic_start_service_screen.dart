@@ -80,7 +80,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
         //customerAddress = event.get('customerAddress');
         //plateNumber =  event.get('carPlateNumber');
-
         // mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + selectedServiceName);
 
