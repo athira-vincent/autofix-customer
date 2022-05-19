@@ -1,13 +1,13 @@
 // To parse this JSON data, do
 //
-//     final mechanicIncomingJobMdl = mechanicIncomingJobMdlFromJson(jsonString);
+//     final mechanicOrderStatusUpdateMdl = mechanicOrderStatusUpdateMdlFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-MechanicOrderStatusUpdateMdl mechanicIncomingJobMdlFromJson(String str) => MechanicOrderStatusUpdateMdl.fromJson(json.decode(str));
+MechanicOrderStatusUpdateMdl mechanicOrderStatusUpdateMdlFromJson(String str) => MechanicOrderStatusUpdateMdl.fromJson(json.decode(str));
 
-String mechanicIncomingJobMdlToJson(MechanicOrderStatusUpdateMdl data) => json.encode(data.toJson());
+String mechanicOrderStatusUpdateMdlToJson(MechanicOrderStatusUpdateMdl data) => json.encode(data.toJson());
 
 class MechanicOrderStatusUpdateMdl {
   MechanicOrderStatusUpdateMdl({
@@ -34,14 +34,33 @@ class MechanicOrderStatusUpdateMdl {
 }
 
 class Data {
-  Data();
+  Data({
+    required this.mechanicStatusUpdate,
+  });
 
-
+  MechanicStatusUpdate? mechanicStatusUpdate;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
+    mechanicStatusUpdate: json["mechanic_status_update"] == null ? null : MechanicStatusUpdate.fromJson(json["mechanic_status_update"]),
   );
 
   Map<String, dynamic> toJson() => {
+    "mechanic_status_update": mechanicStatusUpdate == null ? null : mechanicStatusUpdate!.toJson(),
   };
 }
 
+class MechanicStatusUpdate {
+  MechanicStatusUpdate({
+    required this.message,
+  });
+
+  String message;
+
+  factory MechanicStatusUpdate.fromJson(Map<String, dynamic> json) => MechanicStatusUpdate(
+    message: json["message"] == null ? null : json["message"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "message": message == null ? null : message,
+  };
+}

@@ -1606,7 +1606,7 @@ class QueryProvider {
       token, bookStatus, bookingId) async {
     String _query = """
      mutation {
-      mechanic_status_update(state: 1, bookId: 1) {
+      mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
         message
       }
     }

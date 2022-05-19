@@ -38,6 +38,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
   String Address = 'search';
+  String displayAddress = 'search';
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
@@ -57,7 +58,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
     _listenApiResponse();
     _hasActiveService = false;
@@ -97,8 +97,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
-      print('userFamilyId'+authToken.toString());
-      print('userId ' + mechanicId.toString());
+      print('userFamilyId MechanicHomeUIScreen '+authToken.toString());
+      print('userId  MechanicHomeUIScreen ' + mechanicId.toString());
       setFcmToken(authToken);
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
@@ -129,8 +129,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString());
-          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString());
+          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString();
+          brandName = brandName.replaceAll(" ", "");
+          print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + brandName);
+          _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",brandName);
         });
       }
     });
@@ -218,8 +220,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    displayAddress = '${place.thoroughfare},${place.subLocality},${place.locality},';//${place.name},
+    print(" displayAddress >>>>>> " + displayAddress);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -282,7 +285,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             child: Column(
               children: [
                 Text(
-                  Address,
+                  displayAddress,
                   //'Elenjikkal house Empyreal Garden',
                   maxLines: 2,
                   textAlign: TextAlign.start,

@@ -5,8 +5,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
-import 'package:auto_fix/Widgets/Countdown.dart';
-import 'package:auto_fix/Widgets/count_down_widget.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,9 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
 
-  final String serviceModel;
 
-  MechanicStartServiceScreen({required this.serviceModel});
+  MechanicStartServiceScreen();
 
   @override
   State<StatefulWidget> createState() {
@@ -33,12 +30,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   List<String> selectedServiceList = [];
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String additionalServiceNames = "",
+  String additionalServiceNames = "", selectedServiceName = "",
       serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
   List serviceItemList = [];
   String additionalServiceIds = "";
   String totalServiceTime = "";
-  String selectedServiceName = "";
+  var _firestoreData ;
 
   String authToken="", bookingId = "";
   bool isCustomerApproved = false;
@@ -64,11 +61,13 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData >>> ');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+
     });
   }
 
@@ -77,13 +76,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         customerDiagonsisApproval = querySnapshot.get("customerDiagonsisApproval");
+
         print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
         if(customerDiagonsisApproval =="1")
         {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  CustomerApprovedScreen(serviceModel: widget.serviceModel,)
+                  builder: (context) =>  CustomerApprovedScreen(serviceModel: "",)
               )).then((value){
           });
         }
@@ -146,13 +146,17 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                 children: [
                   mechanicStartServiceTitle(size),
                   mechanicStartServiceImage(size),
-                  mechanicEditSelectedService(size,selectedServiceName),
-                  mechanicAdditionalFaultService(size, additionalServiceNames ),
                   InkWell(
                     onTap: (){
-                      print(" on Tap - Add More");
+                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnChange");
+                      _awaitReturnValueFromSecondScreenOnChange(context);
+                    },
+                      child: mechanicEditSelectedService(size, "Lost /Locked keys")),
+                  mechanicAdditionalFaultService(size, " " ),
+                  InkWell(
+                    onTap: (){
+                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
                       _awaitReturnValueFromSecondScreenOnAdd(context);
-
                     },
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -241,7 +245,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         ),
       ),
     );
-
   }
 
   Widget mechanicStartServiceTitle(Size size){
@@ -306,30 +309,24 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   color: Colors.black,
                 ),
               )),
-          InkWell(
-            child: Row(
-              children: [
-                Text(selectedService,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: "Samsung_SharpSans_Regular",
-                    fontWeight: FontWeight.w400,
-                    color: CustColors.warm_grey03,
-                  ),
+          Row(
+            children: [
+              Text(selectedService,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: "Samsung_SharpSans_Regular",
+                  fontWeight: FontWeight.w400,
+                  color: CustColors.warm_grey03,
                 ),
-                Spacer(),
-                /*Container(
-                    height: size.height * 3.5 /100,
-                    width: size.width * 3.5 / 100,
-                    child: Image.asset("assets/image/ic_edit_pen.png",
-                    )
-                ),*/
-              ],
-            ),
-            onTap: (){
-              print("onTap mechanicEditSelectedServices ");
-              //_awaitReturnValueFromSecondScreenOnEdit(context);
-            },
+              ),
+              Spacer(),
+              Container(
+                  height: size.height * 3.5 /100,
+                  width: size.width * 3.5 / 100,
+                  child: Image.asset("assets/image/ic_edit_pen.png",
+                  )
+              ),
+            ],
           ),
           Divider(
             color: CustColors.greyish,
@@ -482,7 +479,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
         //totalServiceTime = totalServiceTime + serviceList[i].
         if(serviceList.length - 1 == i){
-          additionalServiceNames = additionalServiceNames + serviceList[i].service.toString();
+          additionalServiceNames = additionalServiceNames + serviceList[i].service!.serviceName.toString();
           additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString();
         }
         else{
@@ -491,6 +488,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         }
 
         serviceItemList.add({
+          'isDefault' : '0',
           'serviceId' : '${serviceList[i].id.toString()}',
           'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
           'serviceCost' : '${serviceList[i].fee.toString()}',
@@ -522,27 +520,32 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     });
   }
 
-  /*void _awaitReturnValueFromSecondScreenOnEdit(BuildContext context) async {
+  void _awaitReturnValueFromSecondScreenOnChange(BuildContext context) async {
 
-    // start the SecondScreen and wait for it to finish with a result
-    //List<String> serviceList = [];
-    //serviceList.clear();
-    //selectedServiceName = "";
 
-    //_chooseVechicleSpecializedController.text="";
-    var result = await Navigator.push(
+    List<MechanicService> result = [];
+    result.clear();
+    result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: false),
+          builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true),
         ));
 
       if(result.isNotEmpty){
         setState(() {
-          selectedServiceName = result;
+          serviceItemList.add({
+            'isDefault' : '1',
+            'serviceId' : '${result[0].id.toString()}',
+            'serviceName' : '${result[0].service!.serviceName.toString()}',
+            'serviceCost' : '${result[0].fee.toString()}',
+            'serviceTime' : '${result[0].time.toString()}'
+          });
+          selectedServiceName = '${result[0].service!.serviceName.toString()}';
         });
+
       }
 
-  }*/
+  }
 
   @override
   void dispose() {

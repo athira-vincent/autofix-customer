@@ -32,18 +32,12 @@ import 'dart:ui' as ui;
 
 class FindYourCustomerScreen extends StatefulWidget {
 
-  final String serviceModel;
   final String latitude;
   final String longitude;
-  final String bookingId;
- // final NotificationPayloadMdl notificationPayloadMdl;
 
   FindYourCustomerScreen({
-    required this.latitude,
-    required this.longitude,
-    required this.bookingId,
-    required this.serviceModel,
-    //required this.notificationPayloadMdl
+    required this.latitude,required this.longitude,
+
   });
 
   @override
@@ -97,12 +91,13 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   LatLng _lastMapPosition = _center;
   List<LatLng> latlng = [];
 
-  String CurrentLatitude ="10.506402";
-  String CurrentLongitude ="76.244164";
+  //String CurrentLatitude ="10.506402";
+  //String CurrentLongitude ="76.244164";
   String location ='Null, Press Button';
   String Address = 'search';
   String authToken="", bookingId = "";
   bool isArrived = false;
+  String carName = "";
 
   @override
   void initState() {
@@ -123,7 +118,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
     getSharedPrefData();
     _listenServiceListResponse();
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 15), () {
       setState(() {
         isArrived = true;
       });
@@ -191,24 +186,29 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         setState(() {
           _isLoadingPage = false;
 
-          if(widget.serviceModel == "0"){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MechanicStartServiceScreen()));
+
+          /*if(widget.serviceModel == "0"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicStartServiceScreen(serviceModel: widget.serviceModel,)));
+                    builder: (context) => MechanicStartServiceScreen(serviceModel: "",)));
           }
           else if(widget.serviceModel == "1"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
+                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: "",)));
           }
           else if(widget.serviceModel == "2" || widget.serviceModel == "3"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
-          }
+                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: "",)));
+          }*/
         });
       }
     });
@@ -465,14 +465,23 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         .collection("ResolMech")
         .doc('${bookingId}')
         .update({
-      'mechanicArrivalState': "1",
+        'mechanicArrivalState': "1",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
-
   }
+  void listenToCloudFirestoreDB() {
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingId}");
+    reference.snapshots().listen((querySnapshot) {
+      setState(() {
+        carName = querySnapshot.get("carName");
 
+        print('carName  ++++ $carName');
+
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -543,7 +552,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Toyota Corolla Silver",
+                                          carName,
+                                          //"Toyota Corolla Silver",
                                           style: Styles.appBarTextBlack17,
                                         ),
                                         Text(

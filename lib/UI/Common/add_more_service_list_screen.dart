@@ -28,15 +28,6 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   String authToken="";
   //final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
-  /*List<String> serviceList = [
-    "A",
-    "Spareparts delivery01",
-    "c","Spareparts delivery","d",
-    "e","Spareparts delivery05","g",
-    "h","Spareparts delivery02","j",
-    "Fuel problem","K",
-    "l","relay of urgent mechanism"
-  ];*/
 
   List<bool>? _serviceIsChecked;
   List<MechanicService>? selectedServiceList = [];
@@ -99,7 +90,6 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                 bottom: size.height * 2 / 100,
               ),
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -283,28 +273,13 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  //final serviceName = serviceList[index];
-                  /*print("widget.isAddService >>>>>>> " + widget.isAddService.toString());
-                      if(widget.isAddService != true){
-                        Navigator.pop(context,serviceName);
-                      }*/
-                  //final brandId = regularServiceList[index].id;
-                  /* setState(() {
-                                           _brandController.text =
-                                               brandName.toString();
-                                           selectedBrandId =
-                                               int.parse(brandId!);
-                                           _modelController.clear();
-                                           selectedModelId = 0;
-                                           _engineController.clear();
-                                           selectedEngineId = 0;
-                                           _allModelBloc
-                                               .postAllModelDataRequest(
-                                               selectedBrandId!,
-                                               token);
-                                         });*/
-                  print(">>>>>");
-                  //print(brandId);
+                  print(">>>>> ");
+                  if(widget.isAddService == false){
+                    print(">>>>> widget.isAddService == false ");
+                    print(">>>>> snapshot.data!.data!.mechanicDetails!.mechanicService![index] ${snapshot.data!.data!.mechanicDetails!.mechanicService![index].serviceId}" );
+                    Navigator.pop(context,[]);
+                  }
+
                 },
                 child: serviceListItems(size, index, snapshot.data!.data!.mechanicDetails!.mechanicService![index]) );
         },
@@ -332,7 +307,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
       child: Row(
         children: [
 
-          Transform.scale(
+          widget.isAddService ? Transform.scale(
             scale: .6,
             child: widget.isAddService
                 ? Checkbox(
@@ -352,15 +327,20 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
               },
             )
                 : Container(),
-          ),
+          ) : Container(),
 
-          Text(
-            '${service.service!.serviceName}',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: "Samsung_SharpSans_Medium",
-              fontWeight: FontWeight.w400,
-              color: CustColors.almost_black
+          Container(
+            padding: EdgeInsets.only(
+              top: 2,bottom: 2.5
+            ),
+            child: Text(
+              '${service.service!.serviceName}',
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: "Samsung_SharpSans_Medium",
+                fontWeight: FontWeight.w400,
+                color: CustColors.almost_black
+              ),
             ),
           ),
           /*SizedBox(
