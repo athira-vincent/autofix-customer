@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                  home: MechanicStartServiceScreen(),
+                  home: CustomerApprovedScreen(),
 
                 //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 

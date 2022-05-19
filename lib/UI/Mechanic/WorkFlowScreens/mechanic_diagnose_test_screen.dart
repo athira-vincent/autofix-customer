@@ -89,7 +89,7 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomerApprovedScreen(serviceModel: widget.serviceModel,)));
+                              builder: (context) => CustomerApprovedScreen()));
                     },
                       child: mechanicStartServiceButton(size)),
                 ],

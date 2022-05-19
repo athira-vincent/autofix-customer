@@ -11,9 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerApprovedScreen extends StatefulWidget {
 
-  final String serviceModel;
 
-  CustomerApprovedScreen({required this.serviceModel});
+  CustomerApprovedScreen();
 
   @override
   State<StatefulWidget> createState() {
@@ -29,9 +28,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late AnimationController _controller;
   int levelClock = 10;
+  //int minutesLevelClock = 10;
   double per = .10;
-  String authToken = "", bookingId = "", extendedTime = "0";
+  String authToken = "", bookingId = "", extendedTime = "0", customerName= "", mechanicName = "";
 
+  int extendedTimeVal = 30;
+  String extendedTimeText = "";
   double _setValue(double value) {
     return value * per + value;
   }
@@ -44,6 +46,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
+            //minutes: minutesLevelClock,
             seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
     );
 
@@ -56,6 +59,16 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+
+      _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+
+        //totalEstimatedTime = event.get('updatedServiceTime');
+        mechanicName = event.get('mechanicName');
+        customerName = event.get('customerName');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+
+      });
+
     });
   }
 
@@ -73,7 +86,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
-
   }
 
 
@@ -152,7 +164,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               Text("Hi...", style: TextStyle(
 
               ),),
-              Text("George Dola", style: TextStyle(
+              Text(
+                mechanicName,
+               // "George Dola",
+                style: TextStyle(
                 color: CustColors.light_navy
               ),)
             ],
@@ -162,8 +177,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               Text("Customer ", style: TextStyle(
 
               ),),
-              Text("John Eric ", style: TextStyle(
-                  color: CustColors.light_navy
+              Text(
+                customerName,
+                //"John Eric ",
+                style: TextStyle(
+                color: CustColors.light_navy
               ),),
               Text("approved the services you added.",style: TextStyle(
 
@@ -384,7 +402,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-            widget.serviceModel == "1" ? "Back to home" :
+            //widget.serviceModel == "1" ? "Back to home" :
             isStartedWork ? "Work Finished" : "Start repair",
             style: TextStyle(
               fontSize: 14.3,
@@ -505,16 +523,42 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                             height: 1.7
                         ),
                       ),
-                      Text("25:00 ",
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black,
-                            fontFamily: "SharpSans_Bold",
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: .6,
-                            height: 1.7
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            extendedTimeVal.toString() + " : 00",
+                            //"25:00 ",
+                            style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.black,
+                                fontFamily: "SharpSans_Bold",
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: .6,
+                                height: 1.7
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: 8
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  //child: ,
+                                  color: Colors.purple,
+                                  //child: Text("aaaaaaaa"),
+                                ),
+                                Container(
+                                  color: Colors.tealAccent,
+                                  child: Text("cccc"),
+                                )
+                              ],
+                            ),
+                          )
+
+                        ],
                       )
+
                     ],
                   ),
                 )

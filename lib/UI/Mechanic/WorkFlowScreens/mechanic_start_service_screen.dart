@@ -83,7 +83,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  CustomerApprovedScreen(serviceModel: "",)
+                  builder: (context) =>  CustomerApprovedScreen()
               )).then((value){
           });
         }
