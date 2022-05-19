@@ -95,17 +95,10 @@ class _MyAppState extends State<MyApp> {
                 ),
 
                  // home: SplashScreen(),
-                home: IncomingJobRequestScreen(notificationPayloadMdl: new NotificationPayloadMdl(
-                  bookingId: "2022", clickAction: "0",customerAddress: "abcd abcd",customerDiagonsisApproval: "0",
-                  customerFcmToken: "fasda", customerFromPage: "asasa", customerLatitude: "1111",
-                  id: "001",status: "0",serviceId: "5",customerLongitude: "1111", customerName: "athiraa",
-                  mechanicAddress: "aaaa", mechanicArrivalState: "0",mechanicDiagonsisState: "0",mechanicFcmToken: "aaaaaa",
-                  message: "abc",carName: "aba", carPlateNumber: "1223",mechanicFromPage: "aaaa", mechanicLatitude: "1111",
-                  mechanicLongitude: "1111", mechanicName: "abcc", paymentStatus: "0", requestFromApp: "customer", screen: "scren",
-                  serviceList: "1222",serviceName: "servicenmae"
-                )),
-                //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
+
+                  home: FindYourCustomerScreen(latitude: "10.0159",longitude: "76.3419",),
                  //home: MechanicStartServiceScreen(serviceModel: "0"),
+
                 //home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
                 //home: CustomerApprovedScreen(serviceModel: "0",),

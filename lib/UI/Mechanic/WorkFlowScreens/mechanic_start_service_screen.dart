@@ -14,9 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
 
-  final String serviceModel;
 
-  MechanicStartServiceScreen({required this.serviceModel});
+  MechanicStartServiceScreen();
 
   @override
   State<StatefulWidget> createState() {
@@ -75,13 +74,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         customerDiagonsisApproval = querySnapshot.get("customerDiagonsisApproval");
+
         print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
         if(customerDiagonsisApproval =="1")
         {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) =>  CustomerApprovedScreen(serviceModel: widget.serviceModel,)
+                  builder: (context) =>  CustomerApprovedScreen(serviceModel: "",)
               )).then((value){
           });
         }
@@ -489,6 +489,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         }
 
         serviceItemList.add({
+          'isDefault' : '0',
           'serviceId' : '${serviceList[i].id.toString()}',
           'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
           'serviceCost' : '${serviceList[i].fee.toString()}',
