@@ -25,7 +25,7 @@ class MechanicStartServiceScreen extends StatefulWidget {
 
 class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
 
-  bool isExpanded = false;
+  bool isExpanded = true;
 
   List<String> selectedServiceList = [];
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
@@ -151,8 +151,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                       print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnChange");
                       _awaitReturnValueFromSecondScreenOnChange(context);
                     },
-                      child: mechanicEditSelectedService(size, "Lost /Locked keys")),
-                  mechanicAdditionalFaultService(size, " " ),
+                      child: mechanicEditSelectedService(size, "$selectedServiceName")),
+                  mechanicAdditionalFaultService(size, "" ),
                   InkWell(
                     onTap: (){
                       print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
@@ -181,59 +181,43 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                       right: size.width * 27.5 / 100,
                       top: size.height * 6 / 100
                     ),
-                    child: Flexible(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: size.width * 3.5 / 100,
-                              right: size.width * 3.5 / 100,
-                              top: size.height * 1 / 100,
-                              bottom: size.height * 1 / 100,
-                            ),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/image/ic_alarm.svg',
-                                width: size.width * 4 / 100,
-                                height: size.height * 4 / 100,),
-                                Spacer(),
-                                Text("25:00 ",
-                                  style: TextStyle(
-                                    fontSize: 36,
-                                    fontFamily: "SharpSans_Bold",
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    letterSpacing: .7
-                                  ),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Row(
+                            children: [
+                              SvgPicture.asset('assets/image/ic_alarm.svg',
+                              width: size.width * 4 / 100,
+                              height: size.height * 4 / 100,),
+                              Spacer(),
+                              Text("25:00 ",
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  fontFamily: "SharpSans_Bold",
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  letterSpacing: .7
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(13),
-                                ),
-                                border: Border.all(
-                                    color: CustColors.light_navy02,
-                                    width: 0.3
-                                )
-                            ),
-                            /*margin: EdgeInsets.only(
-                                left: size.width * 4 / 100,
-                                right: size.width * 4 / 100,
-                                top: size.height * 2.8 / 100
-                            ),*/
-                            padding: EdgeInsets.only(
-                              left: size.width * 4 / 100,
-                              right: size.width * 4 / 100,
-                              top: size.height * 1 / 100,
-                              bottom: size.height * 1 / 100,
-                            ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(13),
+                              ),
+                              border: Border.all(
+                                  color: CustColors.light_navy02,
+                                  width: 0.3
+                              )
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text("Total estimated time "),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
 
@@ -396,7 +380,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           ),
           isExpanded ? Align(
             alignment: Alignment.centerLeft,
-            child: Text(selectedService,
+            child: Text(additionalServiceNames,
               style: TextStyle(
                 fontSize: 12,
                 fontFamily: "Samsung_SharpSans_Regular",
@@ -531,7 +515,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true),
         ));
 
-      if(result.isNotEmpty){
+    print(">>>>> widget.isAddService == false ");
+    print(">>>>> widget.isAddService == false === $result");
+
+
+    if(result.isNotEmpty){
         setState(() {
           serviceItemList.add({
             'isDefault' : '1',
