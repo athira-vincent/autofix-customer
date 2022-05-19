@@ -118,7 +118,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
       _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
 
-
         totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
