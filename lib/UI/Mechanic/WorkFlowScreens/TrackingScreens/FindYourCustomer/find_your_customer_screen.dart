@@ -123,7 +123,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
     getSharedPrefData();
     _listenServiceListResponse();
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 15), () {
       setState(() {
         isArrived = true;
       });

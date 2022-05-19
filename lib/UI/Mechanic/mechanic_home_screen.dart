@@ -20,8 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-
-
 class MechanicHomeScreen extends StatefulWidget {
 
   MechanicHomeScreen();
@@ -41,9 +39,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   double per = .10;
   double perfont = .10;
-  late bool isOnline = false;
-  String authToken = "", userId = "";
-  String _userName = "";
+  String isOnline = "";
+  String authToken = "", userId = "", userName = "";
   late Map<String, dynamic> notificationPayloadMdl;
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
@@ -61,42 +58,51 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
     _listenApiResponse();
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData -------> ');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
-      isOnline = shdPre.getBool(SharedPrefKeys.mechanicIsOnline)!;
+      isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      print('userFamilyId ' + authToken.toString());
-      print('userId ' + userId.toString());
-      _userName =  shdPre.getString(SharedPrefKeys.userName).toString();
+      userName =  shdPre.getString(SharedPrefKeys.userName).toString();
     });
+    print('userFamilyId  MechanicHomeScreen ' + authToken.toString());
+    print('userId  MechanicHomeScreen ' + userId.toString());
+    print('userName  MechanicHomeScreen ' + userName.toString());
+    print('isOnline  MechanicHomeScreen ' + isOnline.toString());
   }
 
 
   _listenApiResponse() {
-    _mechanicHomeBloc.postMechanicOnlineOffline.listen((value) {
+    _mechanicHomeBloc.postMechanicOnlineOffline.listen((value) async {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
-        setState(() async {
-          isOnline = !isOnline;
+          if(isOnline == "1"){
+            setState(() {
+              isOnline = "0";
+            });
+          }else{
+            setState(() {
+              isOnline = "1";
+            });
+          }
+         //isOnline = !isOnline;
           SharedPreferences shdPre = await SharedPreferences.getInstance();
-          shdPre.setBool(SharedPrefKeys.mechanicIsOnline,isOnline);
+          shdPre.setString(SharedPrefKeys.mechanicIsOnline,isOnline);
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           socialLoginIsLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
-        });
+
       }
     });
   }
@@ -125,7 +131,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0",notificationPayloadMdl: notificationPayloadMdl,)
+              builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
           )).then((value){
       });
     });
@@ -151,7 +157,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(serviceModel: "0", notificationPayloadMdl: notificationPayloadMdl,)
+              builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
           )).then((value){
       });
     });
@@ -343,7 +349,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       style: Styles.homeWelcomeTextStyle,
                     ),
                     Text(
-                      " $_userName",  //" Athira",
+                      " $userName",  //" Athira",
                       style: Styles.homeNameTextStyle,
                     ),
                     Text(
@@ -359,10 +365,10 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
               InkWell(
                 onTap: (){
                   setState(() {
-                    if(isOnline){
-                      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","0", userId, );
+                    if(isOnline == "1"){
+                      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
                     }else{
-                      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId, );
+                      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
                     }
                   });// !isOnline
                 },
@@ -376,7 +382,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                       top: 4, bottom: 4
                   ),
                   decoration: BoxDecoration(
-                      color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                      color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
                       borderRadius: BorderRadius.circular(4),
                       boxShadow: [new BoxShadow(
                         color: CustColors.roseText1,
@@ -385,7 +391,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   ),
                   //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
                   child: Text(
-                      isOnline ? "Online" : "Offline",
+                      isOnline == "1" ? "Online" : "Offline",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -401,7 +407,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                      top: 25 + MediaQuery.of(context).padding.top,
                      right: size.width * 4.2/100
                 ),
-                child: Stack(
+                /*child: Stack(
                   children: [
                     SvgPicture.asset(
                           'assets/image/notification_icon.svg',
@@ -432,7 +438,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
                     ),
                   ],
-                ),
+                ),*/
               ),
             ],
           ),

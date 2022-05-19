@@ -21,12 +21,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slider_button/slider_button.dart';
 
 class IncomingJobRequestScreen extends StatefulWidget {
-  final String serviceModel;
+
   final NotificationPayloadMdl notificationPayloadMdl;
 
    IncomingJobRequestScreen(
        {
-         required this.serviceModel,
          required this.notificationPayloadMdl
        });
 
@@ -215,7 +214,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                     latitude: widget.notificationPayloadMdl.customerLatitude/*"10.0159"*/,
                     longitude: widget.notificationPayloadMdl.customerLongitude/*"76.3419"*/,
                     bookingId: widget.notificationPayloadMdl.bookingId/*"2022"*/,
-                    serviceModel: widget.serviceModel,
+                    serviceModel: "",
                     //notificationPayloadMdl: widget.notificationPayloadMdl,
                   )));
         }

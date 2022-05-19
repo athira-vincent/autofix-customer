@@ -498,6 +498,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
+                //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString()
             );
