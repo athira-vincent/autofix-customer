@@ -214,6 +214,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    print('$Address Address=====');
 
   }
 
@@ -854,6 +855,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             builder: (context) =>  FindMechanicListScreen(
                               serviceIds: serviceIds,
                               serviceType: 'emergency',
+                              customerAddress: Address,
                               latitude: CurrentLatitude,
                               longitude: CurrentLongitude,
                               authToken: authToken,)));

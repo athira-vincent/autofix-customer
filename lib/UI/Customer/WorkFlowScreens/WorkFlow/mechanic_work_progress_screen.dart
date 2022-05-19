@@ -60,7 +60,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   int _counter = 0;
   late AnimationController _controller;
-  int levelClock = 10;
+  int levelClock = 1800;
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
 

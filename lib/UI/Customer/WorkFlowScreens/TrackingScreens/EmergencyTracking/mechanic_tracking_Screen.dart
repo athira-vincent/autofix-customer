@@ -128,6 +128,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
           {
+            updateToCloudFirestoreDB();
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -146,9 +147,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         .collection("ResolMech")
         .doc('${bookingIdEmergency}')
         .update({
-            'mechanicArrivalState': "1",
-            'mechanicDiagonsisState': "0",
-            'customerDiagonsisApproval': "0"
+            'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "1")'
         })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -525,9 +524,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
+                                    /*Container(
                                       child: Icon(Icons.arrow_back, color: Colors.black),
-                                    ),
+                                    ),*/
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(15,0,15,0),
                                       child: Column(

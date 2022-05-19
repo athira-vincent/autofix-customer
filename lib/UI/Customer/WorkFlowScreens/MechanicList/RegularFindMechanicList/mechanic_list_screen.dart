@@ -256,6 +256,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                           builder: (context) =>  MechanicProfileViewScreen(
                                             authToken: '$authToken',
                                             isEmergency: false,
+                                            customerAddress: "",
                                             mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
                                             mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
                                             serviceModel: widget.serviceModel,
