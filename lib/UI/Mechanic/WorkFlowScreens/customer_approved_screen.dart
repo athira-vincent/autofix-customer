@@ -485,7 +485,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           Container(
             padding: EdgeInsets.only(
                 top: size.height * 2.5 / 100,
-                bottom: size.height * 2.5 / 100,
+                bottom: size.height * 2 / 100,
                 left: size.width * 4 / 100,
                 right: size.width * 4 / 100
             ),
@@ -543,22 +543,39 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                             ),
                             child: Column(
                               children: [
-                                Container(
-                                  //child: ,
-                                  color: Colors.purple,
-                                  //child: Text("aaaaaaaa"),
+                                InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        extendedTimeVal = extendedTimeVal + 1;
+                                      });
+                                  },
+                                  child: Container(
+                                    child: Icon(
+                                      Icons.keyboard_arrow_up,
+                                    ),
+                                    color: Colors.purple,
+                                    //child: Text("aaaaaaaa"),
+                                  ),
                                 ),
-                                Container(
-                                  color: Colors.tealAccent,
-                                  child: Text("cccc"),
+                                InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      extendedTimeVal = extendedTimeVal - 1;
+                                    });
+
+                                  },
+                                  child: Container(
+                                    color: Colors.tealAccent,
+                                    child:  Icon(
+                                        Icons.keyboard_arrow_down,
+                                      ),
+                                  ),
                                 )
                               ],
                             ),
                           )
-
                         ],
                       )
-
                     ],
                   ),
                 )
