@@ -30,12 +30,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   List<String> selectedServiceList = [];
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String additionalServiceNames = "",
+  String additionalServiceNames = "", selectedServiceName = "",
       serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
   List serviceItemList = [];
   String additionalServiceIds = "";
   String totalServiceTime = "";
-  String selectedServiceName = "";
+  var _firestoreData ;
 
   String authToken="", bookingId = "";
   bool isCustomerApproved = false;
@@ -66,6 +66,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+
     });
   }
 
@@ -144,13 +146,17 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                 children: [
                   mechanicStartServiceTitle(size),
                   mechanicStartServiceImage(size),
-                  mechanicEditSelectedService(size,selectedServiceName),
-                  mechanicAdditionalFaultService(size, additionalServiceNames ),
                   InkWell(
                     onTap: (){
-                      print(" on Tap - Add More");
+                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnChange");
+                      _awaitReturnValueFromSecondScreenOnChange(context);
+                    },
+                      child: mechanicEditSelectedService(size, "Lost /Locked keys")),
+                  mechanicAdditionalFaultService(size, " " ),
+                  InkWell(
+                    onTap: (){
+                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
                       _awaitReturnValueFromSecondScreenOnAdd(context);
-
                     },
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -239,7 +245,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         ),
       ),
     );
-
   }
 
   Widget mechanicStartServiceTitle(Size size){
@@ -304,30 +309,24 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   color: Colors.black,
                 ),
               )),
-          InkWell(
-            child: Row(
-              children: [
-                Text(selectedService,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: "Samsung_SharpSans_Regular",
-                    fontWeight: FontWeight.w400,
-                    color: CustColors.warm_grey03,
-                  ),
+          Row(
+            children: [
+              Text(selectedService,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: "Samsung_SharpSans_Regular",
+                  fontWeight: FontWeight.w400,
+                  color: CustColors.warm_grey03,
                 ),
-                Spacer(),
-                /*Container(
-                    height: size.height * 3.5 /100,
-                    width: size.width * 3.5 / 100,
-                    child: Image.asset("assets/image/ic_edit_pen.png",
-                    )
-                ),*/
-              ],
-            ),
-            onTap: (){
-              print("onTap mechanicEditSelectedServices ");
-              //_awaitReturnValueFromSecondScreenOnEdit(context);
-            },
+              ),
+              Spacer(),
+              Container(
+                  height: size.height * 3.5 /100,
+                  width: size.width * 3.5 / 100,
+                  child: Image.asset("assets/image/ic_edit_pen.png",
+                  )
+              ),
+            ],
           ),
           Divider(
             color: CustColors.greyish,
@@ -480,7 +479,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
         //totalServiceTime = totalServiceTime + serviceList[i].
         if(serviceList.length - 1 == i){
-          additionalServiceNames = additionalServiceNames + serviceList[i].service.toString();
+          additionalServiceNames = additionalServiceNames + serviceList[i].service!.serviceName.toString();
           additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString();
         }
         else{
@@ -521,27 +520,32 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     });
   }
 
-  /*void _awaitReturnValueFromSecondScreenOnEdit(BuildContext context) async {
+  void _awaitReturnValueFromSecondScreenOnChange(BuildContext context) async {
 
-    // start the SecondScreen and wait for it to finish with a result
-    //List<String> serviceList = [];
-    //serviceList.clear();
-    //selectedServiceName = "";
 
-    //_chooseVechicleSpecializedController.text="";
-    var result = await Navigator.push(
+    List<MechanicService> result = [];
+    result.clear();
+    result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: false),
+          builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true),
         ));
 
       if(result.isNotEmpty){
         setState(() {
-          selectedServiceName = result;
+          serviceItemList.add({
+            'isDefault' : '1',
+            'serviceId' : '${result[0].id.toString()}',
+            'serviceName' : '${result[0].service!.serviceName.toString()}',
+            'serviceCost' : '${result[0].fee.toString()}',
+            'serviceTime' : '${result[0].time.toString()}'
+          });
+          selectedServiceName = '${result[0].service!.serviceName.toString()}';
         });
+
       }
 
-  }*/
+  }
 
   @override
   void dispose() {
