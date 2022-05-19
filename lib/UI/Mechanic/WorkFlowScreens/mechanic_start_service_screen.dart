@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
@@ -39,6 +40,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   String authToken="", bookingId = "";
   bool isCustomerApproved = false;
+  bool isWaiting = false;
+
 
   String customerDiagonsisApproval = "0";
   Timer? timerObjVar;
@@ -109,13 +112,18 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
         if(customerDiagonsisApproval =="1")
         {
+          isCustomerApproved = true;
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>  CustomerApprovedScreen()
               )).then((value){
           });
-        }
+        }/*else{
+          setState(() {
+            isWaiting = true;
+          });
+        }*/
       });
     });
   }
@@ -190,7 +198,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                 right: size.width * 2 / 100
               ),
 
-              child: Column(
+              child: isWaiting ? mechanicNotFountWidget(size) : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   mechanicStartServiceTitle(size),
@@ -274,7 +282,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
                   mechanicStartServiceButton(size),
                 ],
-              ),
+              ) ,
             ),
           ),
         ),
@@ -452,8 +460,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-        isCustomerApproved = true;
         updateToCloudFirestoreDB();
+        isWaiting = true;
       },
       child: Align(
         alignment: Alignment.centerRight,
@@ -475,7 +483,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-            isCustomerApproved ? "Waiting For Customer Approval" : "Update Services" ,
+            isCustomerApproved ? "Update Services" : "Waiting For Customer Approval"  ,
             //"Start work",
             style: TextStyle(
               fontSize: 14.3,
@@ -580,6 +588,99 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   }
 
+  Widget mechanicNotFountWidget(Size size) {
+    return Expanded(
+      child: Container(
+        //color: Colors.lightGreen,
+        margin: EdgeInsets.only(
+            left: size.width * 6 / 100,
+            right: size.width * 6 / 100,
+            top: size.height * 8 / 100,
+            bottom: size.height * 3.5 / 100
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              child: SvgPicture.asset(
+                'assets/image/img_oops_mechanic_bg.svg',
+                height: size.height * 27 / 100,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                margin: EdgeInsets.only(
+                    left: size.width * 1 / 100,
+                    right: size.width * 1 / 100,
+                    top: size.height * 7 / 100
+                ),
+                height: size.height * 18 / 100,
+                width: size.width,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                  color: CustColors.pale_grey,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Oops!! Customer not found!",
+                      style: Styles.oopsmechanicNotFoundStyle01,
+                    ),
+                    Text("Confirmation is Mandatory",
+                      style: Styles.smallTitleStyle3,
+                    ),
+                    Text("Wait for Customer Response...!",
+                      style: Styles.TryAfterSomeTimetyle01,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            tryAgainButtonWidget(size),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget tryAgainButtonWidget(Size size){
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        margin: EdgeInsets.only(
+          //right: size.width * 6.2 / 100,
+            top: size.height * 22 / 100
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(6),
+            ),
+            color: CustColors.light_navy
+        ),
+        padding: EdgeInsets.only(
+          left: size.width * 4 / 100,
+          right: size.width * 4 / 100,
+          top: size.height * 1 / 100,
+          bottom: size.height * 1 / 100,
+        ),
+        child: Text(
+          "Try again",
+          style: TextStyle(
+            fontSize: 14.3,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Samsung_SharpSans_Medium",
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
   @override
   void dispose() {
     // TODO: implement dispose

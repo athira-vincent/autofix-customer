@@ -29,6 +29,8 @@ class MechanicWorkCompletedScreen extends StatefulWidget {
 class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScreen> {
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var _firestoreData ;
+
   double per = .10;
   double perfont = .10;
   double height = 0;
@@ -36,6 +38,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
   double totalFees = 0.0;
   String authToken="", bookingId = "", paymentStatus = "", text = "request payment";
+  String totalEstimatedTime = "", totalEstimatedCost = "", mechanicName = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -71,6 +74,22 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+
+      _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+      _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+
+
+        mechanicName = event.get('mechanicName');
+        totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedCost = event.get('updatedServiceCost');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+
+        setState(() {
+
+        });
+
+      });
+
     });
   }
 
@@ -147,7 +166,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
           onPressed: () => Navigator.pop(context),
         ),
         Text(
-          'Congratulations!! minnu',
+          'Congratulations!! ${mechanicName}',
           textAlign: TextAlign.center,
           style: Styles.appBarTextBlack,
         ),
@@ -228,7 +247,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                 width: 10,
                               ),
                               Text(
-                                "20:02",
+                                "$totalEstimatedTime",
                                 style: Styles.textSuccessfulTitleStyle03,
                               ),
                             ],
@@ -278,7 +297,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                 width: 10,
                               ),
                               Text(
-                                "20:02",
+                                "$totalEstimatedCost",
                                 style: Styles.textSuccessfulTitleStyle03,
                               ),
                             ],
@@ -325,52 +344,42 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                 ),
               ),
               Container(
-                child: ListView.builder(
-                  itemCount:3,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index,) {
+                child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: _firestoreData,
+                  builder: (_, snapshot) {
 
 
-                    return GestureDetector(
-                      onTap:(){
+                    if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child:Row(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Timing belt replacement',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_12,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Row(
-                                children: [
-                                  Text('200',
-                                    maxLines: 2,
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.visible,
-                                    style: Styles.textLabelTitle_10,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                    if (snapshot.hasData) {
+
+                      List allData = snapshot.data?.data()!['serviceModel'].toList();
+                      allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
+
+                      print('StreamBuilder ++++ ${allData.length} ');
+                      print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+
+
+                      return  ListView.builder(
+                        itemCount:3,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context,index,) {
+                          return GestureDetector(
+                            onTap:(){
+
+                            },
+                            child: listItem(size, allData[index]),
+                          );
+                        },
+                      );
+                    }
+
+                    return Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(10,10,10,10),
                 child: Row(
@@ -406,6 +415,41 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     );
   }
 
+  Widget listItem(Size size, allData){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,10,10,10),
+      child: Container(
+        alignment: Alignment.center,
+        child:Row(
+          children: [
+            Row(
+              children: [
+                Text(
+                  '${allData['serviceName']}',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.textLabelTitle_12,
+                ),
+              ],
+            ),
+            Spacer(),
+            Row(
+              children: [
+                Text(
+                  '${allData['serviceCost']}',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.textLabelTitle_10,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
 
   Widget RequestButton(Size size, BuildContext context) {
