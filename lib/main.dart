@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                  home: CustomerApprovedScreen(),
+                  home: SplashScreen(),
 
                 //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
@@ -108,6 +108,7 @@ class _MyAppState extends State<MyApp> {
                   // home:   MechanicWorkProgressScreen(workStatus: "2",)
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
+
 
               );
             },
