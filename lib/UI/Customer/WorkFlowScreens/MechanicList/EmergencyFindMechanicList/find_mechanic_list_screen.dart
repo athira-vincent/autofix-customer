@@ -27,12 +27,13 @@ class FindMechanicListScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
+  final String customerAddress;
   final String authToken;
   final String serviceIds;
   final String serviceType;
 
 
-  FindMechanicListScreen({required this.authToken,required this.serviceIds,required this.serviceType,required this.latitude,required this.longitude});
+  FindMechanicListScreen({required this.authToken,required this.customerAddress,required this.serviceIds,required this.serviceType,required this.latitude,required this.longitude});
 
   @override
   State<StatefulWidget> createState() {
@@ -357,6 +358,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                   builder: (context) =>  MechanicProfileViewScreen(
                                                                                     mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
                                                                                     authToken: '$authToken',
+                                                                                    customerAddress: "${widget.customerAddress}",
                                                                                     mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
                                                                                     isEmergency: true,
                                                                                     serviceModel: "",
