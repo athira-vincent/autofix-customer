@@ -11,9 +11,9 @@ class MechanicProfileBloc {
   Stream<MechanicProfileMdl> get MechanicProfileResponse => postMechanicProfile.stream;
 
   postMechanicFetchProfileRequest(
-    String token,
+    String token, userId
   ) async {
-    MechanicProfileMdl _MechanicProfileMdl = await repository.postMechanicFetchProfileRequest(token);
+    MechanicProfileMdl _MechanicProfileMdl = await repository.postMechanicFetchProfileRequest(token, userId);
     postMechanicProfile.sink.add(_MechanicProfileMdl);
   }
 

@@ -95,9 +95,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   //String CurrentLongitude ="76.244164";
   String location ='Null, Press Button';
   String Address = 'search';
-  String authToken="", bookingId = "";
+  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
   bool isArrived = false;
-  String carName = "";
 
   @override
   void initState() {
@@ -222,6 +221,16 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId'+authToken.toString());
       print('userFamilyId'+bookingId.toString());
+      _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+
+        carName = event.get('carName');
+        customerAddress = event.get('customerAddress');
+        plateNumber =  event.get('carPlateNumber');
+
+       // mechanicName = event.get('mechanicName');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+
+      });
     });
   }
 
@@ -278,8 +287,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-          'latitude': value1.latitude.toString(),
-          'longitude': value1.longitude.toString()
+            'latitude': value1.latitude.toString(),
+            'longitude': value1.longitude.toString()
         })
             .then((value) => print("Location Added"))
             .catchError((error) =>
@@ -466,12 +475,14 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         .doc('${bookingId}')
         .update({
         'mechanicArrivalState': "1",
+        "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '1')",
+        "mechanicFromPage" : "MechanicStartServiceScreen",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-  void listenToCloudFirestoreDB() {
+  /*void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingId}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
@@ -481,13 +492,13 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
       });
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<LocaleProvider>(context,listen: false);
+    //final provider = Provider.of<LocaleProvider>(context,listen: false);
     //provider.setPayload(notificationPayloadMdl);
-    print("provider >>>>>>>>>>> " + provider.toString());
+    //print("provider >>>>>>>>>>> " + provider.toString());
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -557,7 +568,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                           style: Styles.appBarTextBlack17,
                                         ),
                                         Text(
-                                          "Service Id :Vien232",
+                                          //"Service Id :Vien232",
+                                          "Service Id : " + plateNumber,
                                           style: Styles.SelectLanguageWalkThroughStyle,
                                         ),
                                       ],
@@ -611,7 +623,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                                 style: Styles.waitingTextBlack17,
                                               ),
                                               Text(
-                                                "Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
+                                                customerAddress,
+                                                //"Elenjikkal house,Residency Empyreal Garden Anchery P.o Thrissur-680006",
                                                 style: Styles.awayTextBlack,
                                                 textAlign: TextAlign.start,
                                                 maxLines: 3,
@@ -771,9 +784,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
+                                    /*Container(
                                       child: Icon(Icons.arrow_back, color: Colors.black),
-                                    ),
+                                    ),*/
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(15,0,15,0),
                                       child: Column(

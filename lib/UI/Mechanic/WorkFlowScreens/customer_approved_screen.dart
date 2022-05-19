@@ -81,6 +81,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         'isWorkStarted': "$isWorkStarted",
         'isWorkCompleted': "$isWorkCompleted",
         "extendedTime": "$extendedTime",
+        "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+        "mechanicFromPage" : "MechanicWorkCompletedScreen",
       //===================== code for send the list of additional services =========
     })
         .then((value) => print("Location Added"))

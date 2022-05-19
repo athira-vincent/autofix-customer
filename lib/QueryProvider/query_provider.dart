@@ -1748,10 +1748,10 @@ class QueryProvider {
 
 
   postMechanicFetchProfileRequest(
-      token) async {
+      token, userId) async {
     String _query = """ 
     {
-    mechanic_Details(jwtToken: "$token") {
+     mechanic_Details(id: $userId) {
       id
       userCode
       firstName

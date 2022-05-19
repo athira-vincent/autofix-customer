@@ -25,7 +25,7 @@ class AddMoreServicesListScreen extends StatefulWidget {
 
 class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
-  String authToken="";
+  String authToken="", userId = "";
   //final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
 
@@ -44,8 +44,9 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
 
-      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
 
      // _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
       //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
