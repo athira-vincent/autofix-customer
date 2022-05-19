@@ -100,6 +100,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         .doc('${bookingId}')
         .update({
       'isPaymentRequested': "1",
+      "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '3',)",
+      "mechanicFromPage" : "DirectPaymentScreen",
       //===================== code for send the list of additional services =========
     })
         .then((value) => print("Location Added"))

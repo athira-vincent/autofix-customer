@@ -9,9 +9,9 @@ class MechanicProfileApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
 
   Future<MechanicProfileMdl> postMechanicFetchProfileRequest(
-      token)async {
+      token, userId)async {
     Map<String, dynamic> _resp = await _queryProvider. postMechanicFetchProfileRequest(
-      token,);
+      token, userId);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

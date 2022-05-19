@@ -332,8 +332,8 @@ class Repository {
 
 
   // Fetch Profile Mechanic Request
-  Future<dynamic>  postMechanicFetchProfileRequest(token)  =>
-      _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token);
+  Future<dynamic>  postMechanicFetchProfileRequest(token, userId)  =>
+      _mechanicProfileApiProvider.postMechanicFetchProfileRequest(token, userId);
 
   // Edit Profile Mechanic Individual Request
   Future<dynamic>  postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic, status, year_of_experience,)  =>

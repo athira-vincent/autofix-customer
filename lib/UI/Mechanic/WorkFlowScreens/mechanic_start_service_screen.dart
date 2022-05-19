@@ -30,11 +30,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   List<String> selectedServiceList = [];
   final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String additionalServiceNames = "", selectedServiceName = "",
-      serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
+
+  String selectedServiceName = "", selectedServiceTime = "";
+  String additionalServiceNames = "", serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
   List serviceItemList = [];
-  String additionalServiceIds = "";
-  String totalServiceTime = "";
+
   var _firestoreData ;
 
   String authToken="", bookingId = "";
@@ -44,14 +44,17 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Timer? timerObjVar;
   Timer? timerObj;
 
+  double totalTime = 0.0;
+  int totalCost = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
     _listenServiceListResponse();
-    additionalServiceNames = "Flat tyre";
-    selectedServiceName = "Lost /Locked keys";
+    //additionalServiceNames = "Flat tyre";
+    //selectedServiceName = "Lost /Locked keys";
 
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
@@ -66,7 +69,22 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+      _firestore.collection("ResolMech").doc('92').snapshots().listen((event) {
+
+        List allData = event.get('serviceModel').toList();
+        selectedServiceName = allData[0]['serviceName'];
+        selectedServiceTime = allData[0]['serviceTime'];
+
+        print('allData StreamBuilder ++++ ${allData.length} ');
+        print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+
+        //customerAddress = event.get('customerAddress');
+        //plateNumber =  event.get('carPlateNumber');
+
+        // mechanicName = event.get('mechanicName');
+        print('_firestoreData>>>>>>>>> ' + selectedServiceName);
+
+      });
 
     });
   }
@@ -92,19 +110,38 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   }
 
   void updateToCloudFirestoreDB() {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingId}')
-        .update({
-      'mechanicDiagonsisState': "1",
-      'updatedServiceList' : FieldValue.arrayUnion(serviceItemList),
-      'updatedServiceCost': "$serviceTotalCostForFirebase",
-      'updatedServiceTime': "$serviceTotalTimeForFirebase",
-      //===================== code for send the list of additional services =========
-    })
-        .then((value) => print("updatedServiceList Added"))
-        .catchError((error) =>
-        print("Failed to add updatedServiceList: $error"));
+
+    if(serviceItemList.isNotEmpty){
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingId}')
+          .update({
+        'mechanicDiagonsisState': "1",
+        'updatedServiceList' : FieldValue.arrayUnion(serviceItemList),
+        'updatedServiceCost': "$serviceTotalCostForFirebase",
+        'updatedServiceTime': "$serviceTotalTimeForFirebase",
+        "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
+        "mechanicFromPage" : "CustomerApprovedScreen",
+        //===================== code for send the list of additional services =========
+      })
+          .then((value) => print("updatedServiceList Added"))
+          .catchError((error) =>
+          print("Failed to add updatedServiceList: $error"));
+    }else{
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingId}')
+          .update({
+        "mechanicDiagonsisState": "1",
+        "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
+        "mechanicFromPage" : "CustomerApprovedScreen",
+        //===================== code for send the list of additional services =========
+      })
+          .then((value) => print("updatedServiceList Added"))
+          .catchError((error) =>
+          print("Failed to add updatedServiceList: $error"));
+    }
+
 
   }
 
@@ -147,10 +184,10 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   mechanicStartServiceTitle(size),
                   mechanicStartServiceImage(size),
                   InkWell(
-                    onTap: (){
+                   /* onTap: (){
                       print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnChange");
                       _awaitReturnValueFromSecondScreenOnChange(context);
-                    },
+                    },*/
                       child: mechanicEditSelectedService(size, "$selectedServiceName")),
                   mechanicAdditionalFaultService(size, "" ),
                   InkWell(
@@ -190,7 +227,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                               width: size.width * 4 / 100,
                               height: size.height * 4 / 100,),
                               Spacer(),
-                              Text("25:00 ",
+                              Text(
+                                selectedServiceTime,
+                                //"25:00 ",
                                 style: TextStyle(
                                   fontSize: 36,
                                   fontFamily: "SharpSans_Bold",
@@ -403,7 +442,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       onTap: (){
         isCustomerApproved = true;
         updateToCloudFirestoreDB();
-        _addMoreServiceBloc.postAddMoreServiceRequest(authToken, bookingId, additionalServiceIds);
       },
       child: Align(
         alignment: Alignment.centerRight,
@@ -452,23 +490,22 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     serviceList = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: true,isMechanicApp: true,),
+          builder: (context) => AddMoreServicesListScreen(isAddService: true, isMechanicApp: true,),
         ));
 
     setState(() {
 
-      additionalServiceIds = "[";
-
       for(int i = 0; i<serviceList!.length ; i++){
+
+        totalTime  = totalTime + double.parse(serviceList[i].time.replaceAll(":", "."));
+        totalCost = totalCost + int.parse(serviceList[i].fee);
 
         //totalServiceTime = totalServiceTime + serviceList[i].
         if(serviceList.length - 1 == i){
           additionalServiceNames = additionalServiceNames + serviceList[i].service!.serviceName.toString();
-          additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString();
         }
         else{
           additionalServiceNames = additionalServiceNames + serviceList[i].service!.serviceName.toString() + " \n";
-          additionalServiceIds =  additionalServiceIds + serviceList[i].id.toString() + ", ";
         }
 
         serviceItemList.add({
@@ -476,16 +513,17 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           'serviceId' : '${serviceList[i].id.toString()}',
           'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
           'serviceCost' : '${serviceList[i].fee.toString()}',
-          'serviceTime' : '10:00'
+          'serviceTime' : '${serviceList[i].time.toString()}'
         });
-
       }
-      additionalServiceIds = additionalServiceIds + "]";
-      serviceTotalCostForFirebase = "1000";
-      serviceTotalTimeForFirebase = "25.30";
+      serviceTotalCostForFirebase = totalCost.toString();
+      serviceTotalTimeForFirebase = totalTime.toString().replaceAll(".", ":");
+
+      double time = totalTime + double.parse(selectedServiceTime.replaceAll(":", ".")) ;
+
+      selectedServiceTime = time.toString();
       //selectedState = result;
 
-      print("additionalServiceIds >>>>>" + additionalServiceIds);
       print("additionalServiceForFirebase >>>>>" + serviceItemList.toString());
       print("serviceTotalCostForFirebase >>>>>" + serviceTotalCostForFirebase);
       print("serviceTotalTimeForFirebase >>>>>" + serviceTotalTimeForFirebase);
@@ -506,7 +544,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   void _awaitReturnValueFromSecondScreenOnChange(BuildContext context) async {
 
-
     List<MechanicService> result = [];
     result.clear();
     result = await Navigator.push(
@@ -517,7 +554,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
     print(">>>>> widget.isAddService == false ");
     print(">>>>> widget.isAddService == false === $result");
-
 
     if(result.isNotEmpty){
         setState(() {
@@ -530,7 +566,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           });
           selectedServiceName = '${result[0].service!.serviceName.toString()}';
         });
-
       }
 
   }

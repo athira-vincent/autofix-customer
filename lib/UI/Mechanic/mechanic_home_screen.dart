@@ -162,7 +162,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       });
     });
 
-    FirebaseMessaging.onBackgroundMessage((message) async {
+    /*FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       setState(() {
@@ -170,7 +170,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-    });
+    });*/
 
   }
 

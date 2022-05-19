@@ -34,7 +34,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   double perfont = .10;
   bool _isLoadingPage = true;
   bool _isLoading = false;
-  String _userName = "", _imageUrl = "", _userType = "";
+  String _userName = "", _imageUrl = "", _userType = "",  userId = "" ;
 
 
   double _setValue(double value) {
@@ -105,9 +105,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId'+authToken.toString());
       _isLoadingPage=true;
-      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
 
     });
   }
@@ -145,7 +146,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           _isLoading = false;
           _isLoadingPage = true;
           editProfileEnabled = false;
-          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
         });
       }
     });
@@ -161,7 +162,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           _isLoading = false;
           _isLoadingPage = true;
           editProfileEnabled = false;
-          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,userId);
         });
       }
     });

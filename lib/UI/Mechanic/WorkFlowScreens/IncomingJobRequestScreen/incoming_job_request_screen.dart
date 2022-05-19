@@ -160,10 +160,11 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
         "updatedServiceCost" : "0",
-        "updatedServiceList" : FieldValue.arrayUnion([]),
+        "updatedServiceList" : "",
         "updatedServiceTime" : "0",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
+        "serviceTime" : "00:30",
         "message": "ACTION"
       },
       'apns': {
@@ -251,18 +252,19 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "isPaymentRequested" : "0",
       "isPaymentAccepted" : "0",
       "extendedTime" : "0",
-      "customerFromPage" : "0",
-      "mechanicFromPage" : "0",
+      "customerFromPage" : "MechanicTrackingScreen",
+      "mechanicFromPage" : "FindYourCustomerScreen",
       "isWorkStarted" : "0",
       "isWorkCompleted" : "0",
       "latitude": "${widget.notificationPayloadMdl.mechanicLatitude}",
       'longitude': "${widget.notificationPayloadMdl.mechanicLongitude}",
       "updatedServiceCost" : "0",
-      "updatedServiceList" : FieldValue.arrayUnion([]),
+      "updatedServiceList" : "",
       "updatedServiceTime" : "0",
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
+      "serviceTime" : "00:30",
       })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>

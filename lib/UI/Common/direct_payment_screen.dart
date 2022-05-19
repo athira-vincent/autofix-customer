@@ -116,7 +116,9 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         .collection("ResolMech")
         .doc('${bookingIdEmergency}')
         .update({
-        'isPaymentAccepted': "1"
+        'isPaymentAccepted': "1",
+        "customerFromPage" : "MechanicWaitingPaymentScreen",
+        "mechanicFromPage" : "DirectPaymentSuccessScreen",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>

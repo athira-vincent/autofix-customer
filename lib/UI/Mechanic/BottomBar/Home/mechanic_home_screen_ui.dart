@@ -100,7 +100,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userFamilyId MechanicHomeUIScreen '+authToken.toString());
       print('userId  MechanicHomeUIScreen ' + mechanicId.toString());
       setFcmToken(authToken);
-      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken);
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
     });
   }
@@ -178,6 +178,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     });
     print(location);
     GetAddressFromLatLong(position);
+    print("_getCurrentMechanicLocation >>> CurrentLatitude " + CurrentLatitude + "CurrentLongitude >>" + CurrentLongitude);
     _mechanicHomeBloc.postMechanicLocationUpdateRequest(authToken,mechanicId, CurrentLatitude, CurrentLongitude);
   }
 
