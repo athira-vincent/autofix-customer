@@ -32,18 +32,12 @@ import 'dart:ui' as ui;
 
 class FindYourCustomerScreen extends StatefulWidget {
 
-  final String serviceModel;
   final String latitude;
   final String longitude;
-  final String bookingId;
- // final NotificationPayloadMdl notificationPayloadMdl;
 
   FindYourCustomerScreen({
-    required this.latitude,
-    required this.longitude,
-    required this.bookingId,
-    required this.serviceModel,
-    //required this.notificationPayloadMdl
+    required this.latitude,required this.longitude,
+
   });
 
   @override
@@ -191,24 +185,29 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         setState(() {
           _isLoadingPage = false;
 
-          if(widget.serviceModel == "0"){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MechanicStartServiceScreen(serviceModel: "",)));
+
+          /*if(widget.serviceModel == "0"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicStartServiceScreen(serviceModel: widget.serviceModel,)));
+                    builder: (context) => MechanicStartServiceScreen(serviceModel: "",)));
           }
           else if(widget.serviceModel == "1"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
+                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: "",)));
           }
           else if(widget.serviceModel == "2" || widget.serviceModel == "3"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: widget.serviceModel,)));
-          }
+                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: "",)));
+          }*/
         });
       }
     });

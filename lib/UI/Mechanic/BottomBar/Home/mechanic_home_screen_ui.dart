@@ -224,7 +224,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     print(" displayAddress >>>>>> " + displayAddress);
   }
 
-
   @override
   Widget build(BuildContext context) {
 

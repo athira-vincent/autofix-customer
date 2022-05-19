@@ -94,7 +94,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         //_incomingJobRequestBloc.postMechanicFetchIncomingRequestRequest(authToken, bookingId, bookStatus);
       }
     });
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -213,8 +212,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                   builder: (context) => FindYourCustomerScreen(
                     latitude: widget.notificationPayloadMdl.customerLatitude/*"10.0159"*/,
                     longitude: widget.notificationPayloadMdl.customerLongitude/*"76.3419"*/,
-                    bookingId: widget.notificationPayloadMdl.bookingId/*"2022"*/,
-                    serviceModel: "",
                     //notificationPayloadMdl: widget.notificationPayloadMdl,
                   )));
         }
@@ -304,7 +301,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     _controller.dispose();
     _emailFocusNode.removeListener(onFocusChange);
     _incomingJobRequestBloc.dispose();
-
   }
 
   _getApiResponse() {
@@ -346,6 +342,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
@@ -418,7 +415,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                               ),
                                               SizedBox(height: 5,),
                                               Container(
-                                                child: Text('Toyota Corolla   [Black]',
+                                                child: Text(
+                                                  widget.notificationPayloadMdl.carName,
+                                                 // 'Toyota Corolla   [Black]',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -437,11 +436,23 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                               SizedBox(height: 5,),
                                               Container(
                                                 width: 150,
-                                                child: Text('Elenjikkal House '
+                                                child: Text(
+                                                  widget.notificationPayloadMdl.customerName,
+                                                  maxLines: 4,
+                                                  textAlign: TextAlign.start,
+                                                  overflow: TextOverflow.visible,
+                                                  style: Styles.textLabelSubTitlegrey11,
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 150,
+                                                child: Text(
+                                                    widget.notificationPayloadMdl.customerAddress
+                                                  /*'Elenjikkal House '
                                                     'Empyreal Garden '
                                                     'Opposite of Ceevees International Auditorium Anchery'
                                                     'Anchery P.O'
-                                                    'Thrissur - 680006',
+                                                    'Thrissur - 680006'*/,
                                                   maxLines: 4,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -481,7 +492,10 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                           _controller.stop(canceled: true);
                                           isAccepted = 1;
                                           //callOnFcmApiSendPushNotifications(1, 1);
-                                          _incomingJobRequestBloc.postMechanicFetchIncomingUpdateRequest(authToken, "1234", isAccepted);
+                                          _incomingJobRequestBloc.postMechanicFetchIncomingUpdateRequest(
+                                              authToken,
+                                              widget.notificationPayloadMdl.bookingId,
+                                              isAccepted);
                                           //--------- call notification
                                         });
                                       },
