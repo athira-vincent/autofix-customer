@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
@@ -63,7 +64,7 @@ class MechanicProfileViewScreen extends StatefulWidget {
 
 class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
-
+  MechanicDetailsMdl? _mechanicDetailsMdl;
 
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
@@ -78,6 +79,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List yourItemList = [];
+
+  int? reviewLength = 0;
 
 
 
@@ -118,6 +121,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
     getSharedPrefData();
     _listen();
+
 
     for(int i=0 ; i< int.parse('${widget.mechanicListData!.mechanicService.length}'); i++)
     yourItemList.add({
@@ -169,6 +173,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       } else {
         setState(() {
+          _mechanicDetailsMdl = value;
+          reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}') >= 2 ? 2 : _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length;
+
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
         });
@@ -278,6 +285,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "screen": "IncomingJobOfferScreen",
         "bookingId" : "$bookingIdEmergency",
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+        "serviceTime" : "00:30",
         "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
         "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}','serviceId' : '${widget.serviceIds}'}]",
         "carName" : "$carNameBrand [$carNameModel]",
@@ -317,8 +325,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
+      'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
       //'to':'$token'
-      'to': 'ctxMbS6zQISb6eTlYY9nJO:APA91bGPR9m_XzScrWyxUGPZSirRwBGus4SurpMUw6s9sQYoK1E9lEaUJEzWpBsyVaJX_nPhjPG_bb3yKdHmzgUnk0iSGRFlf9v0zZ72iJqBozA2kURv6ypaKiHWzKshdVWvjL025x9G',
+      //'to': 'ctxMbS6zQISb6eTlYY9nJO:APA91bGPR9m_XzScrWyxUGPZSirRwBGus4SurpMUw6s9sQYoK1E9lEaUJEzWpBsyVaJX_nPhjPG_bb3yKdHmzgUnk0iSGRFlf9v0zZ72iJqBozA2kURv6ypaKiHWzKshdVWvjL025x9G',
     };
 
     print('FcmToken data >>> ${data}');
@@ -435,7 +444,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                 appBarCustomUi(size),
                 profileImageAndKmAndReviewCount(size),
                 timeAndLocationUi(size),
-                reviewsUi(size),
+
+                _mechanicDetailsMdl == null
+                    ? Container()
+                    : reviewsUi(size),
                 selectedServiceDetailsUi(size),
                 widget.isEmergency ? acceptAndSendRequestButton( size,context) : acceptAndContinueButton(size, context),
               ],
@@ -666,6 +678,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
   Widget reviewsUi(Size size) {
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,10,10,10),
       child: Container(
@@ -687,126 +700,117 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:int.parse('${widget.mechanicListData?.mechanicReviewsData?.length}') >= 3 ? 3 : widget.mechanicListData?.mechanicReviewsData?.length,
+                itemCount:reviewLength,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
-                  return GestureDetector(
-                    onTap:(){
+                  return Column(
+                    mainAxisAlignment:MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10,5,10,0),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: CustColors.whiteBlueish,
+                              borderRadius: BorderRadius.circular(11.0)
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                                  child: Container(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                        child:Container(
+                                            child:CircleAvatar(
+                                                radius: 50,
+                                                backgroundColor: Colors.white,
+                                                child: ClipOval(
+                                                  child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                )))
 
-                    },
-                    child:Column(
-                      mainAxisAlignment:MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10,5,10,0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: CustColors.whiteBlueish,
-                                borderRadius: BorderRadius.circular(11.0)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(10,10,10,10),
-                                    child: Container(
-                                      width: 80.0,
-                                      height: 80.0,
-                                      child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          child:Container(
-                                              child:CircleAvatar(
-                                                  radius: 50,
-                                                  backgroundColor: Colors.white,
-                                                  child: ClipOval(
-                                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                                  )))
-
-                                      ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(2),
-                                            child: Text('User',
-                                              style: Styles.textLabelTitle12,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,),
-                                          ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(2),
+                                          child: Text('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings?.customer?.firstName} ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings?.customer?.lastName}',
+                                            style: Styles.textLabelTitle12,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            overflow: TextOverflow.visible,),
+                                        ),
 
-                                          Padding(
-                                            padding: const EdgeInsets.all(2),
-                                            child: Text('${widget.mechanicListData?.mechanicReviewsData?[index].feedback}',
-                                              style: Styles.textLabelTitle12,
-                                              maxLines: 1,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,),
-                                          ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(2),
+                                          child: Text('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].feedback}',
+                                            style: Styles.textLabelTitle12,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            overflow: TextOverflow.visible,),
+                                        ),
 
-                                          /*Row(
-                                            children: [
-                                              Spacer(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top:8),
-                                                child: Text('Read More',
-                                                  style: Styles.textLabelTitle12,
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,),
-                                              ),
-                                            ],
-                                          ),*/
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 },
               ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            InkWell(
+              onTap: (){
+                setState(() {
+                  reviewLength = int.parse('${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                  print('reviewLength $reviewLength');
+                  print('reviewLength ${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?.length}');
+                });
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-                Container(
-                  height: 1,
-                  width: 110,
-                  color: CustColors.greyText,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Load more',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
-                    style: Styles.textLabelTitle_10,
+                  Container(
+                    height: 1,
+                    width: 110,
+                    color: CustColors.greyText,
                   ),
-                ),
-                Container(
-                  height: 1,
-                  width: 110,
-                  color: CustColors.greyText,
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Load more',
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.visible,
+                      style: Styles.textLabelTitle_10,
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    width: 110,
+                    color: CustColors.greyText,
+                  ),
 
 
-              ],
+                ],
+              ),
             )
           ],
         ),

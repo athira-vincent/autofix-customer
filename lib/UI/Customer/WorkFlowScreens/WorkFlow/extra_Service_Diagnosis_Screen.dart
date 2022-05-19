@@ -4,8 +4,10 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Repository/repository.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/firestoreProvider/fireStoreProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,7 +39,13 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   double height = 0;
   String selectedState = "";
 
+  List serviceIds = [];
+
+
   double totalFees = 0.0;
+
+  final HomeCustomerBloc _addMoreServiceBloc = HomeCustomerBloc();
+
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var _firestoreData ;
@@ -56,16 +64,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
   String totalEstimatedTime = "0";
   String totalEstimatedCost = "0";
-
-
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
@@ -96,23 +94,25 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // bookingIdEmergency = '87';
+
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
 
       _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+        List allData = event.get('updatedServiceList').toList();
+        print('allData StreamBuilder ++++ ${allData.length} ');
+        print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
 
+        for(int i = 0; i< allData.length ; i++)
+          serviceIds.add('${allData[i]['serviceId']}');
+
+        print('StreamBuilder serviceIds ++++ $serviceIds ');
 
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
 
       });
-
-
-
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
 
     });
@@ -418,6 +418,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                       print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');
 
 
+
+
                       return  ListView.builder(
                         itemCount:allData.length,
                         shrinkWrap: true,
@@ -524,12 +526,19 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
         if(widget.isEmergency){
 
+          print('RequestButton ++++ $serviceIds ');
+
           updateToCloudFirestoreDB();
+
 
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+
+          _addMoreServiceBloc. postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
+
+
         }else{
           Navigator.pushReplacement(
               context,

@@ -606,6 +606,20 @@ class QueryProvider {
                       rating
                       feedback
                       bookingId
+                    bookings{
+                      customer
+                      {
+                        fcmToken
+                        firstName
+                        phoneNo
+                        lastName
+                      
+                        customer
+                        {
+                          profilePic
+                        }
+                      }
+                    }
                       orderId
                       status
                     }
@@ -1621,10 +1635,29 @@ class QueryProvider {
   }
 
   postMechanicAddMoreServiceUpdate(
-      token, bookingId, serviceIds) async {
+      token, bookingId, serviceIds,) async {
     String _query = """
      mutation {
-      addAdditionalServices(bookingId: $bookingId, serviceId: $serviceIds) {
+      addAdditionalServices(bookingId: $bookingId, serviceId: $serviceIds ) {
+        message
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+
+  postCustomerAddMoreServiceUpdate(
+      token, bookingId, serviceIds, totalPrice, travelTime) async {
+    String _query = """
+     mutation {
+      addAdditionalServices(bookingId: $bookingId, serviceId: $serviceIds , totalPrice: $totalPrice, travelTime: $travelTime) {
         message
       }
     }

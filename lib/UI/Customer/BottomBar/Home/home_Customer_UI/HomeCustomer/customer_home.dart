@@ -214,6 +214,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    print('$Address Address=====');
 
   }
 

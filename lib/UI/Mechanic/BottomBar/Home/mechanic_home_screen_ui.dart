@@ -140,7 +140,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+         // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
         setState(() {

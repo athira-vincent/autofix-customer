@@ -3,6 +3,7 @@ import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDet
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/customer_start_service_mdl.dart';
 import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
@@ -198,6 +199,17 @@ class HomeCustomerBloc {
     CustVehicleListMdl _custVehicleListMdl = await repository.postCustVehicleListRequest(
       token,);
     postCustVehicleList.sink.add(_custVehicleListMdl);
+  }
+
+
+  final postCustomerAddMoreServiceRequest = PublishSubject<CustomerAddMoreServiceMdl>();
+  Stream<CustomerAddMoreServiceMdl> get postCustomerAddMoreServiceResponse => postCustomerAddMoreServiceRequest.stream;
+
+  postCustomerAddMoreServiceUpdate(
+      token, bookingId, serviceIds, totalPrice, travelTime) async {
+    CustomerAddMoreServiceMdl _mechanicAddMoreServiceMdl = await repository. postCustomerAddMoreServiceUpdate(
+        token, bookingId, serviceIds, totalPrice, travelTime);
+    postCustomerAddMoreServiceRequest.sink.add(_mechanicAddMoreServiceMdl);
   }
 
 
