@@ -11,31 +11,31 @@ String mechanicListMdlToJson(MechanicListMdl data) => json.encode(data.toJson())
 
 class MechanicListMdl {
   MechanicListMdl({
-    required this.message,
-    required this.status,
-    required this.data,
+   required this.status,
+   required this.message,
+   required this.data,
   });
 
-  String message;
   String status;
+  String message;
   Data? data;
 
   factory MechanicListMdl.fromJson(Map<String, dynamic> json) => MechanicListMdl(
-    message: json["message"] == null ? null : json["message"],
     status: json["status"] == null ? null : json["status"],
+    message: json["message"] == null ? null : json["message"],
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "message": message == null ? null : message,
     "status": status == null ? null : status,
+    "message": message == null ? null : message,
     "data": data == null ? null : data?.toJson(),
   };
 }
 
 class Data {
   Data({
-    required this.mechanicList,
+   required this.mechanicList,
   });
 
   MechanicList? mechanicList;
@@ -51,10 +51,10 @@ class Data {
 
 class MechanicList {
   MechanicList({
-    required this.totalItems,
-    required this.data,
-    required this.totalPages,
-    required this.currentPage,
+   required this.totalItems,
+   required this.data,
+   required this.totalPages,
+   required this.currentPage,
   });
 
   int totalItems;
@@ -79,29 +79,29 @@ class MechanicList {
 
 class Datum {
   Datum({
-    required this.id,
-    required this.userCode,
-    required this.firstName,
-    required this.lastName,
-    required this.emailId,
-    required this.phoneNo,
-    required this.userTypeId,
-    required this.status,
-    required this.jwtToken,
-    required this.fcmToken,
-    required this.otpCode,
-    required this.isProfile,
-    required this.otpVerified,
-    required this.mechanic,
-    required this.mechanicStatus,
-    required this.mechanicService,
-    required this.totalAmount,
-    required this.distance,
-    required this.duration,
-    required this.reviewCount,
-    required this.mechanicReviewsData,
-    required this.mechanicReview,
-    required this.bookingsCount,
+   required this.id,
+   required this.userCode,
+   required this.firstName,
+   required this.lastName,
+   required this.emailId,
+   required this.phoneNo,
+   required this.userTypeId,
+   required this.status,
+   required this.jwtToken,
+   required this.fcmToken,
+   required this.otpCode,
+   required this.isProfile,
+   required this.otpVerified,
+   required this.mechanic,
+   required this.mechanicStatus,
+   required this.mechanicService,
+   required this.totalAmount,
+   required this.distance,
+   required this.duration,
+   required this.reviewCount,
+   required this.mechanicReviewsData,
+   required this.mechanicReview,
+   required this.bookingsCount,
   });
 
   int id;
@@ -117,15 +117,15 @@ class Datum {
   String otpCode;
   int isProfile;
   int otpVerified;
-  List<Mechanic>? mechanic;
-  List<MechanicStatus>? mechanicStatus;
-   List<MechanicService> mechanicService;
+  List<Mechanic> mechanic= [];
+  List<MechanicStatus> mechanicStatus = [];
+  List<MechanicService> mechanicService = [];
   String totalAmount;
   String distance;
   String duration;
   int reviewCount;
-  List<MechanicReviewsDatum>? mechanicReviewsData;
-  int mechanicReview;
+  List<MechanicReviewsDatum> mechanicReviewsData = [];
+  double mechanicReview;
   dynamic bookingsCount;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -142,15 +142,15 @@ class Datum {
     otpCode: json["otpCode"] == null ? null : json["otpCode"],
     isProfile: json["isProfile"] == null ? null : json["isProfile"],
     otpVerified: json["otpVerified"] == null ? null : json["otpVerified"],
-    mechanic: json["mechanic"] == null ? null : List<Mechanic>.from(json["mechanic"].map((x) => Mechanic.fromJson(x))),
-    mechanicStatus: json["mechanicStatus"] == null ? null : List<MechanicStatus>.from(json["mechanicStatus"].map((x) => MechanicStatus.fromJson(x))),
+    mechanic: json["mechanic"] == null ? [] : List<Mechanic>.from(json["mechanic"].map((x) => Mechanic.fromJson(x))),
+    mechanicStatus: json["mechanicStatus"] == null ? [] : List<MechanicStatus>.from(json["mechanicStatus"].map((x) => MechanicStatus.fromJson(x))),
     mechanicService: json["mechanicService"] == null ? [] : List<MechanicService>.from(json["mechanicService"].map((x) => MechanicService.fromJson(x))),
     totalAmount: json["totalAmount"] == null ? null : json["totalAmount"],
     distance: json["distance"] == null ? null : json["distance"],
     duration: json["duration"] == null ? null : json["duration"],
     reviewCount: json["reviewCount"] == null ? null : json["reviewCount"],
-    mechanicReviewsData: json["mechanicReviewsData"] == null ? null : List<MechanicReviewsDatum>.from(json["mechanicReviewsData"].map((x) => MechanicReviewsDatum.fromJson(x))),
-    mechanicReview: json["mechanicReview"] == null ? null : json["mechanicReview"],
+    mechanicReviewsData: json["mechanicReviewsData"] == null ? [] : List<MechanicReviewsDatum>.from(json["mechanicReviewsData"].map((x) => MechanicReviewsDatum.fromJson(x))),
+    mechanicReview: json["mechanicReview"] == null ? null : json["mechanicReview"].toDouble(),
     bookingsCount: json["bookingsCount"],
   );
 
@@ -168,14 +168,14 @@ class Datum {
     "otpCode": otpCode == null ? null : otpCode,
     "isProfile": isProfile == null ? null : isProfile,
     "otpVerified": otpVerified == null ? null : otpVerified,
-    "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic!.map((x) => x.toJson())),
-    "mechanicStatus": mechanicStatus == null ? null : List<dynamic>.from(mechanicStatus!.map((x) => x.toJson())),
+    "mechanic": mechanic == null ? null : List<dynamic>.from(mechanic.map((x) => x.toJson())),
+    "mechanicStatus": mechanicStatus == null ? null : List<dynamic>.from(mechanicStatus.map((x) => x.toJson())),
     "mechanicService": mechanicService == null ? null : List<dynamic>.from(mechanicService.map((x) => x.toJson())),
     "totalAmount": totalAmount == null ? null : totalAmount,
     "distance": distance == null ? null : distance,
     "duration": duration == null ? null : duration,
     "reviewCount": reviewCount == null ? null : reviewCount,
-    "mechanicReviewsData": mechanicReviewsData == null ? null : List<dynamic>.from(mechanicReviewsData!.map((x) => x.toJson())),
+    "mechanicReviewsData": mechanicReviewsData == null ? null : List<dynamic>.from(mechanicReviewsData.map((x) => x.toJson())),
     "mechanicReview": mechanicReview == null ? null : mechanicReview,
     "bookingsCount": bookingsCount,
   };
@@ -183,39 +183,39 @@ class Datum {
 
 class Mechanic {
   Mechanic({
-    required this.id,
-    required this.usersId,
-    required this.yearExp,
-    required this.profilePic,
-    required this.mechType,
-    required this.workType,
-    required this.noMech,
-    required this.state,
-    required this.rcNumber,
-    required this.brands,
-    required this.address,
-    required this.certificate1,
-    required this.certificate2,
-    required this.status,
-    required this.rate,
-    required this.reviewCount,
+   required this.id,
+   required this.usersId,
+   required this.yearExp,
+   required this.profilePic,
+   required this.mechType,
+   required this.workType,
+   required this.noMech,
+   required this.state,
+   required this.rcNumber,
+   required this.brands,
+   required this.address,
+   required this.certificate1,
+   required this.certificate2,
+   required this.status,
+   required this.rate,
+   required this.reviewCount,
   });
 
   String id;
   dynamic usersId;
   int yearExp;
   String profilePic;
-  dynamic mechType;
+  String mechType;
   String workType;
   dynamic noMech;
   String state;
-  dynamic rcNumber;
+  String rcNumber;
   String brands;
   String address;
   dynamic certificate1;
   dynamic certificate2;
   int status;
-  int rate;
+  double rate;
   int reviewCount;
 
   factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
@@ -223,17 +223,17 @@ class Mechanic {
     usersId: json["usersId"],
     yearExp: json["yearExp"] == null ? null : json["yearExp"],
     profilePic: json["profilePic"] == null ? null : json["profilePic"],
-    mechType: json["mechType"],
+    mechType: json["mechType"] == null ? null : json["mechType"],
     workType: json["workType"] == null ? null : json["workType"],
     noMech: json["noMech"],
     state: json["state"] == null ? null : json["state"],
-    rcNumber: json["rcNumber"],
+    rcNumber: json["rcNumber"] == null ? null : json["rcNumber"],
     brands: json["brands"] == null ? null : json["brands"],
     address: json["address"] == null ? null : json["address"],
     certificate1: json["certificate1"],
     certificate2: json["certificate2"],
     status: json["status"] == null ? null : json["status"],
-    rate: json["rate"] == null ? null : json["rate"],
+    rate: json["rate"] == null ? null : json["rate"].toDouble(),
     reviewCount: json["reviewCount"] == null ? null : json["reviewCount"],
   );
 
@@ -242,11 +242,11 @@ class Mechanic {
     "usersId": usersId,
     "yearExp": yearExp == null ? null : yearExp,
     "profilePic": profilePic == null ? null : profilePic,
-    "mechType": mechType,
+    "mechType": mechType == null ? null : mechType,
     "workType": workType == null ? null : workType,
     "noMech": noMech,
     "state": state == null ? null : state,
-    "rcNumber": rcNumber,
+    "rcNumber": rcNumber == null ? null : rcNumber,
     "brands": brands == null ? null : brands,
     "address": address == null ? null : address,
     "certificate1": certificate1,
@@ -259,16 +259,16 @@ class Mechanic {
 
 class MechanicReviewsDatum {
   MechanicReviewsDatum({
-    required this.id,
-    required this.transType,
-    required this.rating,
-    required this.feedback,
-    required this.bookingId,
-    required this.orderId,
-    required this.status,
-    required this.order,
-    required this.bookings,
-    required this.productData,
+   required this.id,
+   required this.transType,
+   required this.rating,
+   required this.feedback,
+   required this.bookingId,
+   required this.orderId,
+   required this.status,
+   required this.order,
+   required this.bookings,
+   required this.productData,
   });
 
   String id;
@@ -276,7 +276,7 @@ class MechanicReviewsDatum {
   double rating;
   String feedback;
   int bookingId;
-  dynamic orderId;
+  int orderId;
   int status;
   dynamic order;
   dynamic bookings;
@@ -288,7 +288,7 @@ class MechanicReviewsDatum {
     rating: json["rating"] == null ? null : json["rating"].toDouble(),
     feedback: json["feedback"] == null ? null : json["feedback"],
     bookingId: json["bookingId"] == null ? null : json["bookingId"],
-    orderId: json["orderId"],
+    orderId: json["orderId"] == null ? null : json["orderId"],
     status: json["status"] == null ? null : json["status"],
     order: json["order"],
     bookings: json["bookings"],
@@ -301,7 +301,7 @@ class MechanicReviewsDatum {
     "rating": rating == null ? null : rating,
     "feedback": feedback == null ? null : feedback,
     "bookingId": bookingId == null ? null : bookingId,
-    "orderId": orderId,
+    "orderId": orderId == null ? null : orderId,
     "status": status == null ? null : status,
     "order": order,
     "bookings": bookings,
@@ -311,11 +311,11 @@ class MechanicReviewsDatum {
 
 class MechanicService {
   MechanicService({
-    required this.id,
-    required this.fee,
-    required this.service,
-    required this.status,
-    required this.userId,
+   required this.id,
+   required this.fee,
+   required this.service,
+   required this.status,
+   required this.userId,
   });
 
   String id;
@@ -343,14 +343,14 @@ class MechanicService {
 
 class Service {
   Service({
-    required this.id,
-    required this.serviceName,
-    required this.description,
-    required this.icon,
-    required this.minPrice,
-    required this.maxPrice,
-    required this.categoryId,
-    required this.status,
+   required this.id,
+   required this.serviceName,
+   required this.description,
+   required this.icon,
+   required this.minPrice,
+   required this.maxPrice,
+   required this.categoryId,
+   required this.status,
   });
 
   String id;
@@ -387,10 +387,10 @@ class Service {
 
 class MechanicStatus {
   MechanicStatus({
-    required this.distance,
-    required this.latitude,
-    required this.longitude,
-    required this.workStatus,
+   required this.distance,
+   required this.latitude,
+   required this.longitude,
+   required this.workStatus,
   });
 
   dynamic distance;

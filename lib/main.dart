@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_prog
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -95,7 +96,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                  home: SplashScreen(),
+                  home: MechanicStartServiceScreen(),
 
                 //  home: FindYourCustomerScreen(serviceModel: "0",latitude: "10.0159",longitude: "76.3419",bookingId: "2022", ),
 
@@ -103,7 +104,7 @@ class _MyAppState extends State<MyApp> {
 
                  // home: DirectPaymentSuccessScreen()
 
-                 // home:   MechanicWaitingPaymentScreen()
+                  // home:   MechanicWorkProgressScreen(workStatus: "2",)
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
 
