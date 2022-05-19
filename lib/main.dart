@@ -97,10 +97,10 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-
                 home: SplashScreen(),
 
                   //home: FindYourCustomerScreen(latitude: "10.0159",longitude: "76.3419", ),
+
 
                  //home: MechanicStartServiceScreen(),
 
