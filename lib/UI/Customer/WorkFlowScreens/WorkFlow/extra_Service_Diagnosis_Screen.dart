@@ -112,6 +112,10 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         totalEstimatedCost = event.get('updatedServiceCost');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
 
+        setState(() {
+
+        });
+
       });
 
 
