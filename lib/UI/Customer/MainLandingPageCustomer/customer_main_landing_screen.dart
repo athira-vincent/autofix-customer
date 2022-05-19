@@ -1,3 +1,4 @@
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
@@ -6,6 +7,7 @@ import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class CustomerMainLandingScreen extends StatefulWidget {
@@ -26,6 +28,10 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   double per = .10;
   double perfont = .10;
 
+  String authToken="";
+  String userName="";
+
+
 
   double _setValue(double value) {
     return value * per + value;
@@ -34,6 +40,28 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   double _setValueFont(double value) {
     return value * perfont + value;
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+
+      print('authToken>>>>>>>>>' + authToken.toString());
+
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -208,20 +236,27 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                             "Welcome",
                             style: Styles.homeWelcomeTextStyle,
                           ),
-                          Text(
-                            " Athira",
-                            style: Styles.homeNameTextStyle,
+                          Expanded(
+                            child: RichText(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text:   " $userName",
+                                style: Styles.homeNameTextStyle,
+                                children: <TextSpan>[
+                                  TextSpan(text: " !",
+                                    style: Styles.homeWelcomeSymbolTextStyle,),
+                                ],
+                              ),
+                            ),
                           ),
-                          Text(
-                            " !",
-                            style: Styles.homeWelcomeSymbolTextStyle,
-                          ),
+                         
                         ],
                       ),
                     ),
                   ),
 
-                  Container(
+                  /*Container(
                     margin: EdgeInsets.only(
                          top: 25 + MediaQuery.of(context).padding.top,
                       right: size.width * 4.2/100
@@ -260,7 +295,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
               backgroundColor: Colors.white,

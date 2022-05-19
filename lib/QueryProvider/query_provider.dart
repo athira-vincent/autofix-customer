@@ -385,7 +385,7 @@ class QueryProvider {
   }
 
 
-  /// =============== Mechanics List Emergency ================== ///
+  /// =============== Mechanics List Emergency ================== latitude: "9.2575"  longitude: "76.4508"///
 
   postFindMechanicsListEmergencyRequest(
       token,
@@ -401,8 +401,9 @@ class QueryProvider {
                     page: ${int.parse(page.toString())}
                     size:  ${int.parse(size.toString())}
                     serviceId: "$serviceId"
-                    latitude: "9.2575"
-                    longitude: "76.4508"
+                     latitude: "$latitude"
+                    longitude: "$longitude"
+                    
             ) {
               totalItems
               data {

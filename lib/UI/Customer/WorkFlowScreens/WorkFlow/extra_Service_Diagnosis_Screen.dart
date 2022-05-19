@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/firestoreProvider/fireStoreProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var _firestoreData ;
 
+
+
   Timer? timerObjVar;
   Timer? timerObj;
   String mechanicDiagonsisState = "0";
@@ -49,6 +53,10 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
+
+  String totalEstimatedTime = "0";
+  String totalEstimatedCost = "0";
+
 
 
   double _setValue(double value) {
@@ -88,7 +96,18 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _firestoreData = _firestore.collection("ResolMech").doc('87').snapshots();
+      _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
+
+      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+
+
+        totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedCost = event.get('updatedServiceCost');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+
+      });
+
+
 
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
@@ -98,6 +117,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
     });
   }
+
 
 
   void listenToCloudFirestoreDB() {
@@ -128,8 +148,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         .collection("ResolMech")
         .doc('${bookingIdEmergency}')
         .update({
-      'customerDiagonsisApproval': "1"
-    })
+            'customerDiagonsisApproval': "1"
+          })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
@@ -319,7 +339,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                           ),
                           Text(
                             widget.isEmergency ?
-                            "20:02 Min"
+                            "${totalEstimatedTime} Min"
                             :
                             "12 Jan 2022",
                             style: Styles.textSuccessfulTitleStyle03,
@@ -369,7 +389,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                             width: 10,
                           ),
                           Text(
-                            "\$ 20:02",
+                            "\$ ${totalEstimatedCost}",
                             style: Styles.textSuccessfulTitleStyle03,
                           ),
                         ],

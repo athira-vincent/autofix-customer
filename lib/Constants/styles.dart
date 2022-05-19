@@ -297,6 +297,14 @@ class Styles {
     fontSize: 16,
   );
 
+  static const textCountdownMechanicTimer= TextStyle(
+      fontSize: 36,
+      fontFamily: "SharpSans_Bold",
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+      letterSpacing: .7
+  );
+
 
 
   static const textLabelTitle12= TextStyle(

@@ -5,6 +5,9 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
+import 'package:auto_fix/Widgets/Countdown.dart';
+import 'package:auto_fix/Widgets/count_down_widget.dart';
+import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +26,7 @@ class MechanicWorkProgressScreen extends StatefulWidget {
   }
 }
 
-class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> {
+class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen> with TickerProviderStateMixin{
 
 
   String workStatus = "";     // 1 - arrived - screen 075,
@@ -38,10 +41,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String isWorkCompleted = "0";
   String isPaymentRequested = "0";
 
+  String totalEstimatedTime = "00.00";
+  String mechanicName = "";
+  String bookingIdEmergency="";
 
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  var _firestoreData ;
 
   String authToken="";
   String userName="";
@@ -49,7 +54,22 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-  String bookingIdEmergency="";
+  String extendedTimeFromFirestore="0";
+
+  String extendedTimeFirstTymCall="0";
+
+  int _counter = 0;
+  late AnimationController _controller;
+  int levelClock = 10;
+  Timer? timerForCouterTime;
+  Timer? timerCouterTime;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
 
 
   @override
@@ -61,8 +81,28 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
+
       listenToCloudFirestoreDB();
     });
+
+
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(
+            seconds:
+            levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+    );
+
+    _controller.forward();
+
+
+    timerCouterTime = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      timerForCouterTime = t;
+      _incrementCounter();
+      print('Timer levelClock  $levelClock  ++++++  $_counter');
+
+    });
+
   }
 
   Future<void> getSharedPrefData() async {
@@ -75,20 +115,54 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+
+      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+
+
+        totalEstimatedTime = event.get('updatedServiceTime');
+        mechanicName = event.get('mechanicName');
+        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+
+      });
 
 
     });
   }
 
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
+        extendedTimeFromFirestore = querySnapshot.get("extendedTime");
+        print('extendedTimeFromFirestore ++++ $extendedTimeFromFirestore');
+
+        int mins = Duration(minutes: int.parse('30')).inSeconds;
+        print('extendedTimeFromFirestore  in mins ++++ $mins');
+
+        print('extendedTimeFromFirestore  split ++++ ${extendedTimeFromFirestore.split(".").first}');
+
+        if(querySnapshot.get("extendedTime").toString() != "0")
+        {
+
+          print('extendedTime ++++ $extendedTimeFirstTymCall');
+
+          if(extendedTimeFirstTymCall == "0")
+          {
+            extendedTimeFirstTymCall = "1";
+            levelClock = levelClock + int.parse('${extendedTimeFromFirestore.split(".").first}') + 1;
+            _controller = AnimationController(
+                vsync: this,
+                duration: Duration(
+                    seconds:
+                    levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+            );
+            _controller.forward();
+          }
+
+        }
+
+
+
         if(widget.workStatus =="1") {
           mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
           print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
@@ -104,6 +178,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           print('isPaymentRequested ++++ $isPaymentRequested');
 
         }
+
+
         if(widget.workStatus =="1")
         {
           if(mechanicDiagonsisState =="1")
@@ -198,14 +274,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                       startedWorkScreenBottomCurve(size),
 
                       workStatus == "2"
-                          ?
-                      startedWorkScreenTimer(size)
-                          :
-                      workStatus == "3"
-                          ?
-                      startedWorkScreenSuccess(size)
-                          :
-                      startedWorkScreenWarningText(size) ,
+                          ? startedWorkScreenTimer(size)
+                          : workStatus == "3"
+                          ? startedWorkScreenSuccess(size)
+                          : startedWorkScreenWarningText(size) ,
                     ],
                 ),
               ),
@@ -272,16 +344,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               "1",
               size.height * 14 / 100,
               Text(
-                workStatus == "1" ?
-                  "Hi.. John Eric congratulations! Your mechanic reached near you. He fix your vehicle faults."
-                    :
-                    workStatus == "2" ?
-                      "Hi.. John Eric congratulations! Your mechanic started repair your vehicle. \nWait for the count down stop."
-                    :
-                        workStatus == "3" ?
-                          "Hi.. John Eric congratulations!  Your mechanic completed his Work wait for the payment process"
-                    :
-                      "Hi.. John Eric congratulations!  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
+                workStatus == "1"
+                    ? "Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
+                    : workStatus == "2"
+                    ? "Hi.. $userName congratulations! Your mechanic started repair your vehicle. Wait for the count down stop."
+                    : workStatus == "3"
+                    ? "Hi.. $userName congratulations!  Your mechanic completed his Work wait for the payment process"
+                    : "Hi.. $userName congratulations!  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
 
                 style: TextStyle(
                   fontSize: 13,
@@ -352,18 +421,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               ),
               ClipRRect(
                 child: Container(
-                  margin: EdgeInsets.only(
-                      right: 2
-                  ),
-                  color: Colors.white,
-                  child: Image.network(
-                    'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg',
-                    fit: BoxFit.cover,
-                    width: 70,
-                    height: 70,
-                  ),
-                ),
-                borderRadius: BorderRadius.circular(40),
+                    child:CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.white,
+                        child: ClipOval(
+                          child:SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                        ))),
+                borderRadius: BorderRadius.circular(44),
               ),
             ],
           ),
@@ -375,7 +439,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "George Dola",
+                "$mechanicName",
                   style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -454,73 +518,27 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     );
   }
 
-  /*Widget startedWorkScreenWarningText(Size size){
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8),
-          ),
-          border: Border.all(
-              color: CustColors.greyish,
-              width: 0.3
-          )
-      ),
-      margin: EdgeInsets.only(
-          left: size.width * 6 / 100,
-          right: size.width * 6 / 100,
-          top: size.height * 4.8 / 100
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-                top: size.width * 3 / 100,
-                bottom: size.width * 3 / 100
-            ),
-            margin: EdgeInsets.only(
-                left: size.width * 5 / 100,
-                right: size.width * 2 / 100
-            ),
-            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
-              height: size.height * 3 / 100,width: size.width * 3 / 100,),
-          ),
-          Text("Wait for some time. Mechanic started diagnostic test. \nHe will finalise the service you needed",
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: "Samsung_SharpSans_Regular",
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          )
-        ],
-      ),
-    );
-  }*/
 
   Widget startedWorkScreenTimer(Size size){
     return Container(
-      margin: EdgeInsets.only(
-          left: size.width * 27.5 / 100,
-          right: size.width * 27.5 / 100,
-          top: size.height * 3.3 / 100
-      ),
-      child: Flexible(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: size.width * 4.5 / 100,
-                right: size.width * 4.5 / 100,
-                top: size.height * 1 / 100,
-                bottom: size.height * 1 / 100,
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset('assets/image/ic_alarm.svg',
-                    width: size.width * 4 / 100,
-                    height: size.height * 4 / 100,),
-                  Spacer(),
-                  Text("25:00 ",
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              children: [
+                SvgPicture.asset('assets/image/ic_alarm.svg',
+                  width: size.width * 4 / 100,
+                  height: size.height * 4 / 100,),
+                SizedBox(width: 20,),
+                /*Expanded(
+                  child: Text("$totalEstimatedTime",
                     style: TextStyle(
                         fontSize: 36,
                         fontFamily: "SharpSans_Bold",
@@ -529,30 +547,36 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                         letterSpacing: .7
                     ),
                   ),
-                ],
-              ),
+                ),*/
+                CountdownMechanicTimer(
+                  animation: StepTween(
+                    begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                    end: 0,
+                  ).animate(_controller),
+                ),
+              ],
             ),
+          ),
 
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(13),
-                  ),
-                  border: Border.all(
-                      color: CustColors.light_navy02,
-                      width: 0.3
-                  )
-              ),
-              padding: EdgeInsets.only(
-                left: size.width * 4 / 100,
-                right: size.width * 4 / 100,
-                top: size.height * 1 / 100,
-                bottom: size.height * 1 / 100,
-              ),
-              child: Text("Total estimated time "),
-            )
-          ],
-        ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(13),
+                ),
+                border: Border.all(
+                    color: CustColors.light_navy02,
+                    width: 0.3
+                )
+            ),
+            padding: EdgeInsets.only(
+              left: size.width * 4 / 100,
+              right: size.width * 4 / 100,
+              top: size.height * 1 / 100,
+              bottom: size.height * 1 / 100,
+            ),
+            child: Text("Total estimated time "),
+          )
+        ],
       ),
     );
   }
@@ -589,6 +613,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   @override
   void dispose() {
     // TODO: implement dispose
+    _controller.dispose();
+
     super.dispose();
    // cancelTimer();
     print("dispose");

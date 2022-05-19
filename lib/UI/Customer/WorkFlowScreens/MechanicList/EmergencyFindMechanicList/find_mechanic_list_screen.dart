@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
@@ -18,7 +19,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
+import 'dart:ui' as ui;
+import 'package:location/location.dart' as loc;
+import 'dart:math' show cos, sqrt, asin;
 
 class FindMechanicListScreen extends StatefulWidget {
 
@@ -47,91 +50,22 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
   double height = 0;
   String selectedState = "";
 
-  final Set<Marker> _markers = {};
-  LatLng _lastMapPosition = _center;
+
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(12.988827, 77.472091);
+
+
+  GoogleMapController? mapController;
+
+  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
   String? _mapStyle;
+  Set<Marker> markers = Set();
+  BitmapDescriptor? customerIcon;
+  CameraPosition? _kGooglePlex = CameraPosition(
+    target: LatLng(37.778259000,
+      -122.391386000,),
+    zoom: 25,
+  );
 
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-    controller.setMapStyle(_mapStyle);
-  }
-
-
-  Set<Polyline> lines = {};
-
-
-  void _onAddMarkerButtonPressed() {
-    setState(() {
-      _markers.add(Marker(
-        // This marker id can be anything that uniquely identifies each marker.
-        markerId: MarkerId(_lastMapPosition.toString()),
-        position: _lastMapPosition,
-        infoWindow: InfoWindow(
-          title: 'Really cool place',
-          snippet: '5 Star Rating',
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-    });
-  }
-
-  void _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
-  }
-
-  // Starting point latitude
-  double _originLatitude = 6.5212402;
-// Starting point longitude
-  double _originLongitude = 3.3679965;
-// Destination latitude
-  double _destLatitude = 6.849660;
-// Destination Longitude
-  double _destLongitude = 3.648190;
-// Markers to show points on the map
-  Map<MarkerId, Marker> markers = {};
-
-  PolylinePoints polylinePoints = PolylinePoints();
-  Map<PolylineId, Polyline> polylines = {};
-
-  // This method will add markers to the map based on the LatLng position
-  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
-    MarkerId markerId = MarkerId(id);
-    Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: position);
-    markers[markerId] = marker;
-  }
-
-  _addPolyLine(List<LatLng> polylineCoordinates) {
-    PolylineId id = PolylineId("poly");
-    Polyline polyline = Polyline(
-      polylineId: id,
-      points: polylineCoordinates,
-      width: 8,
-    );
-    polylines[id] = polyline;
-    setState(() {});
-  }
-
-  void _getPolyline() async {
-    List<LatLng> polylineCoordinates = [];
-
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "YOUR API KEY HERE",
-      PointLatLng(_originLatitude, _originLongitude),
-      PointLatLng(_destLatitude, _destLongitude),
-      travelMode: TravelMode.driving,
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    } else {
-      print(result.errorMessage);
-    }
-    _addPolyLine(polylineCoordinates);
-  }
 
 
   @override
@@ -142,25 +76,51 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
     getSharedPrefData();
     _listenServiceListResponse();
 
+    mapStyling();
+    customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
+    getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
+        double.parse(widget.longitude.toString())));
+  }
+
+
+  mapStyling() {
+    print('latlong from another screen ${widget.latitude} ${widget.longitude}');
     rootBundle.loadString('assets/map_style/map_style.json').then((string) {
       _mapStyle = string;
     });
-    /// add origin marker origin marker
-    _addMarker(
-      LatLng(_originLatitude, _originLongitude),
-      "origin",
-      BitmapDescriptor.defaultMarker,
-    );
-
-    // Add destination marker
-    _addMarker(
-      LatLng(_destLatitude, _destLongitude),
-      "destination",
-      BitmapDescriptor.defaultMarkerWithHue(90),
-    );
-
-    _getPolyline();
   }
+
+  customerMarker(LatLng latLng) {
+    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
+      customerIcon =BitmapDescriptor.fromBytes(onValue);
+      markers.add(Marker( //add start location marker
+        markerId: MarkerId('customerMarkerId'),
+        position: latLng, //position of marker
+        infoWindow: InfoWindow( //popup info
+          title: 'customer location',
+          snippet: 'customer location',
+        ),
+        icon: customerIcon!, //Icon for Marker
+      ));
+    });
+
+  }
+
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
+  getGoogleMapCameraPosition(LatLng latLng) {
+    _kGooglePlex = CameraPosition(
+      target:latLng,
+      zoom: 12,
+    );
+  }
+
+
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -224,21 +184,23 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
               alignment: Alignment.bottomCenter,
               children: [
 
-                GoogleMap(
-                  onMapCreated: (GoogleMapController controller){
-                    print("$_mapStyle  >>>>>>>>>>>>>>>>>>>_mapStyle");
-
-                    controller.setMapStyle(_mapStyle);
-                    _controller.complete(controller);
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 11.0,
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    height:  MediaQuery.of(context).size.height * .50,
+                    child: GoogleMap( //Map widget from google_maps_flutter package
+                      zoomGesturesEnabled: true, //enable Zoom in, out on map
+                      initialCameraPosition: _kGooglePlex!,
+                      markers: markers,
+                      mapType: MapType.normal, //map type
+                      onMapCreated: (controller) { //method called when map is created
+                        setState(() {
+                          controller.setMapStyle(_mapStyle);
+                          mapController = controller;
+                        });
+                      },
+                    ),
                   ),
-                  // mapType: _currentMapType,
-                  markers: _markers,
-                  onCameraMove: _onCameraMove,
-                  polylines: Set<Polyline>.of(polylines.values),
                 ),
 
                 CurvedBottomSheetContainer(
