@@ -299,20 +299,32 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Container(
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("$mechanicName ",style: TextStyle(
-              fontSize: 19,
-              fontFamily: "Samsung_SharpSans_Medium",
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
+            Text("Job completed!",
+              style: TextStyle(
+                fontSize: 17,
+                fontFamily: "Samsung_SharpSans_Medium",
+                fontWeight: FontWeight.w500,
+                color: CustColors.light_navy
             ),),
-            Text("is waiting for payment..",style: TextStyle(
-              fontSize: 18,
-              fontFamily: "Samsung_SharpSans_Medium",
-              fontWeight: FontWeight.w400,
-              color: CustColors.light_navy
-            ),)
+            Row(
+              children: [
+                Text("$mechanicName ",style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: "Samsung_SharpSans_Medium",
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),),
+                Text("is waiting for payment..",style: TextStyle(
+                  fontSize: 17,
+                  fontFamily: "Samsung_SharpSans_Medium",
+                  fontWeight: FontWeight.w500,
+                  color: CustColors.light_navy
+                ),)
+              ],
+            ),
           ],
         ),
       ),

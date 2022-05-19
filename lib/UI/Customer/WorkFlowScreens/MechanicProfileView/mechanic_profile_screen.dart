@@ -558,7 +558,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                   radius: 50,
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                    child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
 
                       ),
@@ -687,7 +687,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             ),
             Container(
               child: ListView.builder(
-                itemCount:widget.mechanicListData?.mechanicReviewsData?.length,
+                itemCount:int.parse('${widget.mechanicListData?.mechanicReviewsData?.length}') >= 3 ? 3 : widget.mechanicListData?.mechanicReviewsData?.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index,) {
@@ -736,7 +736,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(2),
-                                            child: Text('Christopher',
+                                            child: Text('User',
                                               style: Styles.textLabelTitle12,
                                               maxLines: 1,
                                               textAlign: TextAlign.start,

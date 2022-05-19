@@ -553,8 +553,8 @@ class QueryProvider {
                   mechanicDetails(
                      mechanicId: ${int.parse(mechanicId)}
                      serviceId: "${serviceId.toString()}"
-                    latitude: "9.2575"
-                    longitude: "76.4508"
+                    latitude: "$latitude"
+                    longitude: "$longitude"
                   ) {
                     id
                     userCode
