@@ -43,6 +43,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
 
   double totalFees = 0.0;
+  bool isWorkStartedState = false;
+
 
   final HomeCustomerBloc _addMoreServiceBloc = HomeCustomerBloc();
 
@@ -50,6 +52,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var _firestoreData ;
 
+  String isWorkStarted = "0";
 
 
   Timer? timerObjVar;
@@ -73,13 +76,34 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
     getSharedPrefData();
     _listenServiceListResponse();
 
-    /*timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
       listenToCloudFirestoreDB();
-    });*/
+    });
 
   }
+
+  void listenToCloudFirestoreDB() {
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
+        reference.snapshots().listen((querySnapshot) {
+          setState(() {
+            isWorkStarted = querySnapshot.get("isWorkStarted");
+            print('isWorkStarted ++++ $isWorkStarted');
+            if(isWorkStarted == "1")
+            {
+            //  Navigator.of(context, rootNavigator: true).pop();
+
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+
+            }
+        });
+      });
+  }
+
 
 
 
@@ -94,11 +118,16 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // bookingIdEmergency = '87';
+
+      // bookingIdEmergency = '95';
+
+      print('allData bookingIdEmergency ++++ ${bookingIdEmergency} ');
+
 
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
 
       _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+        isWorkStarted = event.get("isWorkStarted");
         List allData = event.get('updatedServiceList').toList();
         print('allData StreamBuilder ++++ ${allData.length} ');
         print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
@@ -534,11 +563,9 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
           updateToCloudFirestoreDB();
 
+          _showMechanicAcceptanceDialog( context);
 
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+
 
           _addMoreServiceBloc. postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
 

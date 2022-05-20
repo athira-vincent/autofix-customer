@@ -105,6 +105,14 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   }
 
+  @override
+  void didUpdateWidget(covariant MechanicWorkProgressScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    getSharedPrefData();
+    super.didUpdateWidget(oldWidget);
+  }
+
+
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -115,8 +123,15 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // bookingIdEmergency = '87';
 
       _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+
+        extendedTimeFromFirestore = event.get("extendedTime");
+        isPaymentRequested = event.get("isPaymentRequested");
+        isWorkCompleted = event.get("isWorkCompleted");
+        mechanicDiagonsisState = event.get("mechanicDiagonsisState");
+
 
 
         totalEstimatedTime = event.get('updatedServiceTime');
@@ -132,6 +147,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
     });
   }
+
 
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
@@ -620,7 +636,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     _controller.dispose();
 
     super.dispose();
-   // cancelTimer();
+    cancelTimer1();
     print("dispose");
   }
 
@@ -634,6 +650,19 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     if (timerObj != null) {
       timerObj?.cancel();
       timerObj = null;
+    }
+  }
+
+  cancelTimer1() {
+
+    if (timerForCouterTime != null) {
+      timerForCouterTime?.cancel();
+      timerForCouterTime = null;
+    }
+
+    if (timerCouterTime != null) {
+      timerCouterTime?.cancel();
+      timerCouterTime = null;
     }
   }
 
