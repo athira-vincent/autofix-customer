@@ -121,13 +121,14 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
       // bookingIdEmergency = '95';
 
-      print('allData bookingIdEmergency ++++ ${bookingIdEmergency} ');
-
-
+      print('ExtraServiceDiagonsisScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
-
-      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+    });
+    await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+      setState(() {
         isWorkStarted = event.get("isWorkStarted");
+        totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedCost = event.get('updatedServiceCost');
         List allData = event.get('updatedServiceList').toList();
         print('allData StreamBuilder ++++ ${allData.length} ');
         print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
@@ -136,18 +137,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
           serviceIds.add('${allData[i]['serviceId']}');
 
         print('StreamBuilder serviceIds ++++ $serviceIds ');
-
-        totalEstimatedTime = event.get('updatedServiceTime');
-        totalEstimatedCost = event.get('updatedServiceCost');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
-
-        setState(() {
-
-        });
-
       });
-
-
     });
   }
 

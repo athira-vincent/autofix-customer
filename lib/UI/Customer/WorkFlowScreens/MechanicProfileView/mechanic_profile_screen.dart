@@ -123,14 +123,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _listen();
 
 
-    for(int i=0 ; i< int.parse('${widget.mechanicListData!.mechanicService.length}'); i++)
-    yourItemList.add({
-      "serviceCost":  '${widget.mechanicListData?.mechanicService[i].service?.minPrice}',
-      "serviceId": '${widget.mechanicListData?.mechanicService[i].service?.id}',
-      "serviceName": '${widget.mechanicListData?.mechanicService[i].service?.serviceName}',
-      "serviceTime":  '00:30',
-      "isDefault":  '1',
-    });
 
     _listenNotification(context);
   }
@@ -285,7 +277,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "screen": "IncomingJobOfferScreen",
         "bookingId" : "$bookingIdEmergency",
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "00:30",
+        "serviceTime" : "30",
+        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
         "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}','serviceId' : '${widget.serviceIds}'}]",
         "carName" : "$carNameBrand [$carNameModel]",
@@ -312,9 +305,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
-        "updatedServiceCost" : "0",
+        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "updatedServiceList" : "",
-        "updatedServiceTime" : "0",
+        "updatedServiceTime" : "30",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "message": "ACTION"
@@ -325,9 +318,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-     'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+     // 'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
       //'to':'$token'
-      // 'to': 'cnhYxFRNR1-gLe7-WYmnKF:APA91bESKseD_m9569cK2Xva_-sp25qRsCBecfqPNrrYb93GyGJh-UPZ034M3CTfd-QjPgcvly2TOnVOBtybf9A9-S1WZYkix2M8OlopYNub3ViPu0JlL9SdC5hdcEKW6vbWWNsyh9TS',
+      'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
     };
 
     print('FcmToken data >>> ${data}');
@@ -368,6 +361,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
   void updateToCloudFirestoreDB() {
+    yourItemList.add({
+      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+      "serviceTime" : "30",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
+      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+      "isDefault":  '1',
+    });
 
     _firestore
         .collection("ResolMech")

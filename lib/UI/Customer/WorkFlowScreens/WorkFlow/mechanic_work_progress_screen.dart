@@ -123,27 +123,21 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // bookingIdEmergency = '87';
+      // bookingIdEmergency = '95';
+      print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
 
-      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+    });
 
+    await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+      setState(() {
         extendedTimeFromFirestore = event.get("extendedTime");
         isPaymentRequested = event.get("isPaymentRequested");
         isWorkCompleted = event.get("isWorkCompleted");
         mechanicDiagonsisState = event.get("mechanicDiagonsisState");
-
-
-
         totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
-
-        setState(() {
-
-        });
-
       });
-
 
     });
   }

@@ -59,14 +59,16 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
-
-      _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+    });
+    await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+      setState(() {
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
 
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
       });
+
     });
   }
 
