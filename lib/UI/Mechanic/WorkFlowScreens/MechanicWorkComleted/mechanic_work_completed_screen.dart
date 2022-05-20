@@ -275,7 +275,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Time taken",
+                          "Estimated Cost",
+                          //"Time taken",
                           style: Styles.textLabelTitleEmergencyServiceName,
                         ),
                         Padding(

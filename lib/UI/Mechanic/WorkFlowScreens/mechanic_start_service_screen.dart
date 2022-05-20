@@ -485,7 +485,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-       // updateToCloudFirestoreDB();
+        updateToCloudFirestoreDB();
         //isWaiting = true;
 
         setState(() {
