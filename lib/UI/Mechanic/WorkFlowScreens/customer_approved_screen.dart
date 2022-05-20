@@ -27,12 +27,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late AnimationController _controller;
-  int levelClock = 10;
   //int minutesLevelClock = 10;
   double per = .10;
-  String authToken = "", bookingId = "", extendedTime = "0", customerName= "", mechanicName = "";
+  String authToken = "", bookingId = "", extendedTime = "0",
+      customerName= "", mechanicName = "", updatedServiceTime = "00.00";
 
-  int extendedTimeVal = 30;
+  int levelClock = 0;
+  int extendedTimeVal = 00;
   String extendedTimeText = "";
   double _setValue(double value) {
     return value * per + value;
@@ -67,6 +68,22 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         //totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
         customerName = event.get('customerName');
+        updatedServiceTime = event.get('updatedServiceTime');
+
+        levelClock = int.parse('${updatedServiceTime.split(":").first}') + 1;
+
+        int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+
+        levelClock = sec;
+        _controller = AnimationController(
+            vsync: this,
+            duration: Duration(
+              //minutes: minutesLevelClock,
+                seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+        );
+
+
+
         setState(() {
 
         });
@@ -76,7 +93,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
     });
   }
-
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String extendedTime ) {
     _firestore
@@ -94,7 +110,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -429,6 +444,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       child: InkWell(
         onTap: (){
           setState(() {
+
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -554,7 +570,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                                 InkWell(
                                     onTap: (){
                                       extraTimeStateSetter(() {
-                                        extendedTimeVal = extendedTimeVal + 1;
+                                        if(extendedTimeVal < 30){
+                                          extendedTimeVal = extendedTimeVal + 1;
+                                        }
                                       });
                                   },
                                   child: Container(
@@ -568,9 +586,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                                 InkWell(
                                   onTap: (){
                                     extraTimeStateSetter(() {
-                                      extendedTimeVal = extendedTimeVal - 1;
+                                      if(extendedTimeVal > 00){
+                                        extendedTimeVal = extendedTimeVal - 1;
+                                      }
                                     });
-
                                   },
                                   child: Container(
                                     //color: Colors.tealAccent,
@@ -611,57 +630,69 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   ),
             )
                 : MaterialButton(
-              onPressed: () {
+                  onPressed: () {
+
+                    extraTimeStateSetter(() {
+                      extendedTime = extendedTimeVal.toString() + " : 00";
+
+                      levelClock = levelClock + int.parse('${extendedTime.split(":").first}') + 1;
+
+                      int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+
+                      levelClock = sec;
+                      _controller = AnimationController(
+                          vsync: this,
+                          duration: Duration(
+                            //minutes: minutesLevelClock,
+                              seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+
+                    );
+                      //levelClock = extendedTimeVal ;
+                      print("level clock >>>> " + levelClock.toString());
 
 
-                setState(() {
-                  extendedTime = "10";
-                  levelClock = levelClock + 10;
-                  print("level clock >>>> " + levelClock.toString());
-                });
+                    Navigator.pop(context);
+                    /*setState(() {
+                          _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
+                          if (_formKey.currentState!.validate()) {
+                          } else {
+                          }
+                        });*/
+                    print(">>>>>>>>>> time   ");
 
-                Navigator.pop(context);
-                /*setState(() {
+                    updateToCloudFirestoreDB("1","0", extendedTime);
 
-                      _lastMaintenanceController.text = '$selectedMonthText  $selectedYearText';
-                      if (_formKey.currentState!.validate()) {
-                      } else {
-                      }
-                    });*/
-                print(">>>>>>>>>> time   ");
+                    /*Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  FindMechanicListScreen(
+                              bookingId: '01',
+                              serviceIds: serviceIds,
+                              serviceType: 'emergency',
+                              authToken: authToken,)));*/
 
-                updateToCloudFirestoreDB("1","0", extendedTime);
-
-                /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>  FindMechanicListScreen(
-                          bookingId: '01',
-                          serviceIds: serviceIds,
-                          serviceType: 'emergency',
-                          authToken: authToken,)));*/
-
-              },
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                    left: size.width * 2.5 / 100,
-                    right: size.width * 2.5 / 100,
-                    top: size.height * 1 / 100,
-                    bottom: size.height * 1 / 100
-                ),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(6),
+                    });
+                    },
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                        left: size.width * 2.5 / 100,
+                        right: size.width * 2.5 / 100,
+                        top: size.height * 1 / 100,
+                        bottom: size.height * 1 / 100
                     ),
-                    color: CustColors.light_navy
-                ),
-                child: Text(
-                  'Add time ',
-                  textAlign: TextAlign.center,
-                  style: Styles.textButtonLabelSubTitle,
-                ),
-              ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(6),
+                        ),
+                        color: CustColors.light_navy
+                    ),
+                    child: Text(
+                      'Add time ',
+                      textAlign: TextAlign.center,
+                      style: Styles.textButtonLabelSubTitle,
+                    ),
+                  ),
             ),
           ),
         ],

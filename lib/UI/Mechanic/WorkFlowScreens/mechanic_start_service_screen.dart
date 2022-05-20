@@ -29,7 +29,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   bool isExpanded = true;
 
   List<String> selectedServiceList = [];
-  final MechanicAddMoreServiceBloc _addMoreServiceBloc = MechanicAddMoreServiceBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String selectedServiceName = "";
@@ -55,7 +54,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-    _listenServiceListResponse();
     //additionalServiceNames = "Flat tyre";
     //selectedServiceName = "Lost /Locked keys";
 
@@ -163,21 +161,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           print("Failed to add updatedServiceList: $error"));
     }
 
-  }
-
-  _listenServiceListResponse() {
-    _addMoreServiceBloc.postMechanicAddMoreServiceRequest.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-
-        });
-
-      } else {
-        setState(() {
-
-        });
-      }
-    });
   }
 
   @override
@@ -508,6 +491,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
     totalTime = double.parse(serviceTotalTimeForFirebase.replaceAll(":", "."));
     totalCost = int.parse(serviceTotalCostForFirebase);
+
     serviceList = await Navigator.push(
         context,
         MaterialPageRoute(
