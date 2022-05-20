@@ -276,11 +276,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget mechanicLocation(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          right: 8.0, left: 8.0, top: 2,bottom: 2),
+          right: 8.0, left: 8.0, top: 0,bottom: 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+          Icon(Icons.location_pin, color: CustColors.light_navy,size: 35,),
           SizedBox(
             width: 50,
             child: Column(

@@ -75,8 +75,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
-      _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
-      _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+      _firestoreData = _firestore.collection("ResolMech").doc('99').snapshots();
+      _firestore.collection("ResolMech").doc('99').snapshots().listen((event) {
 
 
         mechanicName = event.get('mechanicName');
@@ -361,10 +361,11 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
 
                       return  ListView.builder(
-                        itemCount:3,
+                        itemCount: allData.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context,index,) {
+                          print('StreamBuilder serviceCost ++++ ${allData[index]['serviceCost']} ');
                           return GestureDetector(
                             onTap:(){
 
@@ -415,7 +416,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     );
   }
 
-  Widget listItem(Size size, allData){
+  Widget listItem(Size size, data){
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,10,10,10),
       child: Container(
@@ -425,7 +426,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
             Row(
               children: [
                 Text(
-                  '${allData['serviceName']}',
+                  '${data['serviceName'].toString()}',
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,
@@ -437,7 +438,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
             Row(
               children: [
                 Text(
-                  '${allData['serviceCost']}',
+                  '${data['serviceCost'].toString()}',
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.visible,
