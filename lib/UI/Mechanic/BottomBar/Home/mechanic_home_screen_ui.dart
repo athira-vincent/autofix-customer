@@ -345,7 +345,21 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           return
                             snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
                                 ? upcomingServicesList(size,snapshot)
-                                : Container();
+                                : Container(
+                                  margin: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(25),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                    ),
+                                    color: CustColors.white_04
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/image/img_empty_service_list.svg",
+                                    //fit: BoxFit.contain,
+                                  ),
+                            );
                       }
                     }
                 ),
