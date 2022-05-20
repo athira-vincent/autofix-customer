@@ -75,8 +75,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
-      _firestoreData = _firestore.collection("ResolMech").doc('99').snapshots();
-      _firestore.collection("ResolMech").doc('99').snapshots().listen((event) {
+      _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+      _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
 
 
         mechanicName = event.get('mechanicName');
@@ -353,7 +353,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
                     if (snapshot.hasData) {
 
-                      List allData = snapshot.data?.data()!['serviceModel'].toList();
+                      List allData = snapshot.data?.data()!['updatedServiceList'].toList();
                       allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
 
                       print('StreamBuilder ++++ ${allData.length} ');
@@ -365,12 +365,38 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context,index,) {
-                          print('StreamBuilder serviceCost ++++ ${allData[index]['serviceCost']} ');
-                          return GestureDetector(
-                            onTap:(){
-
-                            },
-                            child: listItem(size, allData[index]),
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                            child: Container(
+                              alignment: Alignment.center,
+                              child:Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${allData[0]['serviceName']}',
+                                        maxLines: 2,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.visible,
+                                        style: Styles.textLabelTitle_12,
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${allData[0]['serviceCost']}',
+                                        maxLines: 2,
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.visible,
+                                        style: Styles.textLabelTitle_10,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       );
@@ -398,7 +424,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                     Spacer(),
                     Row(
                       children: [
-                        Text('$totalFees',
+                        Text('$totalEstimatedCost',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
