@@ -150,8 +150,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         extendedTimeFromFirestore = querySnapshot.get("extendedTime");
         print('extendedTimeFromFirestore ++++ $extendedTimeFromFirestore');
 
-        int mins = Duration(minutes: int.parse('30')).inSeconds;
-        print('extendedTimeFromFirestore  in mins ++++ $mins');
+        int sec = Duration(minutes: int.parse('30')).inSeconds;
+        print('extendedTimeFromFirestore  in mins ++++ $sec');
 
         print('extendedTimeFromFirestore  split ++++ ${extendedTimeFromFirestore.split(".").first}');
 

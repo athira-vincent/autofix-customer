@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
+import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MechanicStartServiceScreen extends StatefulWidget {
   }
 }
 
-class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> {
+class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> with TickerProviderStateMixin{
 
   bool isExpanded = true;
 
@@ -38,7 +39,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   var _firestoreData ;
 
   String authToken="", bookingId = "";
-  bool isCustomerApproved = false;
+  String isCustomerApproved = "0";
   bool isWaiting = false;
 
 
@@ -48,6 +49,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   double totalTime = 0.0;
   int totalCost = 0;
+
+  int _counter = 0;
+  late AnimationController _controller;
+  int levelClock = 0;
+  Timer? timerForCouterTime;
+  Timer? timerCouterTime;
 
   @override
   void initState() {
@@ -62,6 +69,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       print('Timer listenToCloudFirestoreDB ++++++');
       listenToCloudFirestoreDB();
     });
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(
+            seconds:
+            levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+    );
   }
 
   @override
@@ -77,6 +90,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
+
     });
     await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
 
@@ -86,8 +101,15 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         serviceTotalTimeForFirebase = allData[0]['serviceTime'];
         serviceTotalCostForFirebase = allData[0]['serviceCost'];
 
-        print('allData StreamBuilder ++++ ${allData.length} ');
-        print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+
+        int sec = Duration(minutes: int.parse('${allData[0]['serviceTime'].split(".").first}')).inSeconds;
+        levelClock =  sec + 1;
+        _controller = AnimationController(
+            vsync: this,
+            duration: Duration(
+                seconds:
+                levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+        );
 
       });
 
@@ -112,7 +134,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
         if(customerDiagonsisApproval =="1")
         {
-          isCustomerApproved = true;
+          isCustomerApproved = "1";
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -135,14 +157,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .collection("ResolMech")
           .doc('${bookingId}')
           .update({
-        'mechanicDiagonsisState': "1",
-        'updatedServiceList' : FieldValue.arrayUnion(serviceItemList),
-        'updatedServiceCost': "$serviceTotalCostForFirebase",
-        'updatedServiceTime': "$serviceTotalTimeForFirebase",
-        "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
-        "mechanicFromPage" : "CustomerApprovedScreen",
-        //===================== code for send the list of additional services =========
-      })
+              'mechanicDiagonsisState': "1",
+              'updatedServiceList' : FieldValue.arrayUnion(serviceItemList),
+              'updatedServiceCost': "$serviceTotalCostForFirebase",
+              'updatedServiceTime': "$serviceTotalTimeForFirebase",
+              "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
+              "mechanicFromPage" : "CustomerApprovedScreen",
+              //===================== code for send the list of additional services =========
+            })
           .then((value) => print("updatedServiceList Added"))
           .catchError((error) =>
           print("Failed to add updatedServiceList: $error"));
@@ -151,13 +173,13 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .collection("ResolMech")
           .doc('${bookingId}')
           .update({
-        "mechanicDiagonsisState": "1",
-        'updatedServiceCost': "$serviceTotalCostForFirebase",
-        'updatedServiceTime': "$serviceTotalTimeForFirebase",
-        "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
-        "mechanicFromPage" : "CustomerApprovedScreen",
-        //===================== code for send the list of additional services =========
-      })
+              "mechanicDiagonsisState": "1",
+              'updatedServiceCost': "$serviceTotalCostForFirebase",
+              'updatedServiceTime': "$serviceTotalTimeForFirebase",
+              "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
+              "mechanicFromPage" : "CustomerApprovedScreen",
+              //===================== code for send the list of additional services =========
+            })
           .then((value) => print("updatedServiceList Added"))
           .catchError((error) =>
           print("Failed to add updatedServiceList: $error"));
@@ -172,102 +194,120 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            color: Colors.white,
-            child: Container(
-              margin: EdgeInsets.only(
-                left: size.width * 2 / 100,
-                top: size.height * 2 / 100,
-                right: size.width * 2 / 100
-              ),
-
-              child: isWaiting ? mechanicNotFountWidget(size) : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  mechanicStartServiceTitle(size),
-                  mechanicStartServiceImage(size),
-                  InkWell(
-                   /* onTap: (){
-                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnChange");
-                      _awaitReturnValueFromSecondScreenOnChange(context);
-                    },*/
-                      child: mechanicEditSelectedService(size, "$selectedServiceName")),
-                  mechanicAdditionalFaultService(size, "" ),
-                  InkWell(
-                    onTap: (){
-                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
-                      _awaitReturnValueFromSecondScreenOnAdd(context);
-                    },
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            right: size.width * 8 / 100,
-                            top: size.height * 1.2 / 100
-                          ),
-                            child: Text("Add more",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: "SharpSans_Bold",
-                                fontWeight: FontWeight.w700,
-                                color: CustColors.light_navy,
-                              ),
-                            ))),
-                  ),
-
-                  Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  width: size.width,
+                  height: size.height,
+                  color: Colors.white,
+                  child: Container(
                     margin: EdgeInsets.only(
-                      left: size.width * 27.5 / 100,
-                      right: size.width * 27.5 / 100,
-                      top: size.height * 6 / 100
+                      left: size.width * 2 / 100,
+                      top: size.height * 2 / 100,
+                      right: size.width * 2 / 100
                     ),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/image/ic_alarm.svg',
-                              width: size.width * 4 / 100,
-                              height: size.height * 4 / 100,),
-                              Spacer(),
-                              Text(
-                                serviceTotalTimeForFirebase,
-                                //"25:00 ",
-                                style: TextStyle(
-                                  fontSize: 36,
-                                  fontFamily: "SharpSans_Bold",
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  letterSpacing: .7
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(13),
-                              ),
-                              border: Border.all(
-                                  color: CustColors.light_navy02,
-                                  width: 0.3
-                              )
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Total estimated time "),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
 
-                  mechanicStartServiceButton(size),
-                ],
-              ) ,
+                    child: isWaiting
+                        ? mechanicNotFountWidget(size)
+                        : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                mechanicStartServiceTitle(size),
+                                mechanicStartServiceImage(size),
+                                InkWell(
+                                 /* onTap: (){
+                                    print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnChange");
+                                    _awaitReturnValueFromSecondScreenOnChange(context);
+                                  },*/
+                                    child: mechanicEditSelectedService(size, "$selectedServiceName")),
+                                mechanicAdditionalFaultService(size, "" ),
+                                InkWell(
+                                  onTap: (){
+                                    print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
+                                    //_awaitReturnValueFromSecondScreenOnAdd(context);
+                                  },
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                          right: size.width * 8 / 100,
+                                          top: size.height * 1.2 / 100
+                                        ),
+                                          child: Text("Add more",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "SharpSans_Bold",
+                                              fontWeight: FontWeight.w700,
+                                              color: CustColors.light_navy,
+                                            ),
+                                          ))),
+                                ),
+
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: size.width * 27.5 / 100,
+                                    right: size.width * 27.5 / 100,
+                                    top: size.height * 6 / 100
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+
+                                          children: [
+                                            SvgPicture.asset('assets/image/ic_alarm.svg',
+                                              width: size.width * 4 / 100,
+                                              height: size.height * 4 / 100,),
+                                            SizedBox(width: 20,),
+                                            /*Expanded(
+                                child: Text("$totalEstimatedTime",
+                                  style: TextStyle(
+                                      fontSize: 36,
+                                      fontFamily: "SharpSans_Bold",
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      letterSpacing: .7
+                                  ),
+                                ),
+                              ),*/
+                                            CountdownMechanicTimer(
+                                              animation: StepTween(
+                                                begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                                                end: 0,
+                                              ).animate(_controller),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(13),
+                                            ),
+                                            border: Border.all(
+                                                color: CustColors.light_navy02,
+                                                width: 0.3
+                                            )
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text("Total estimated time "),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+
+                                mechanicStartServiceButton(size),
+                              ],
+                            ) ,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -445,8 +485,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Widget mechanicStartServiceButton(Size size){
     return InkWell(
       onTap: (){
-        updateToCloudFirestoreDB();
-        isWaiting = true;
+       // updateToCloudFirestoreDB();
+        //isWaiting = true;
+
+        setState(() {
+          isCustomerApproved = "1";
+        });
       },
       child: Align(
         alignment: Alignment.centerRight,
@@ -468,7 +512,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-            isCustomerApproved ? "Update Services" : "Waiting For Customer Approval"  ,
+            isCustomerApproved == "0" ? "Update Services" : "Waiting For Customer Approval"  ,
             //"Start work",
             style: TextStyle(
               fontSize: 14.3,
@@ -504,7 +548,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
       for(int i = 0; i<serviceList!.length ; i++){
 
-        totalTime  = totalTime + double.parse(serviceList[i].time.replaceAll(":", "."));
+        //totalTime  = totalTime + double.parse(serviceList[i].time.replaceAll(":", "."));
+        totalTime  = totalTime + double.parse(serviceList[i].time.toString().split(':').first) ;
         totalCost = totalCost + int.parse(serviceList[i].fee);
 
         //totalServiceTime = totalServiceTime + serviceList[i].
@@ -523,8 +568,29 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           'serviceTime' : '${serviceList[i].time.toString()}'
         });
       }
+      print("MechanicStartServiceScreen serviceTotalTimeForFirebase1 >>>>>" + serviceTotalTimeForFirebase);
+
       serviceTotalCostForFirebase = totalCost.toString();
-      serviceTotalTimeForFirebase = totalTime.toString().replaceAll(".", ":");
+      serviceTotalTimeForFirebase =   totalTime.toString().split(':').first;
+
+
+      ///     Add extra time to level clock     ///
+      print('MechanicStartServiceScreen  in totalTime ++++ $totalTime');
+      print("MechanicStartServiceScreen serviceTotalTimeForFirebase2 >>>>>" + serviceTotalTimeForFirebase);
+
+      int sec = Duration(minutes: int.parse('${serviceTotalTimeForFirebase.toString().split(".").first}')).inSeconds;
+      print('MechanicStartServiceScreen  in sec1 ++++ $sec');
+      levelClock = levelClock + sec + 1;
+      print('MechanicStartServiceScreen levelClock1 ++++ ${levelClock} ');
+      _controller = AnimationController(
+          vsync: this,
+          duration: Duration(
+              seconds:
+              levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+      );
+
+      /// ////////////////////////////////////// ///
+
 
       //selectedState = result;
 
@@ -655,13 +721,21 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           top: size.height * 1 / 100,
           bottom: size.height * 1 / 100,
         ),
-        child: Text(
-          "Try again",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
+        child: InkWell(
+          onTap: (){
+            //Navigator.of(context, rootNavigator: true).pop();
+            setState(() {
+              isWaiting = false;
+            });
+          },
+          child: Text(
+            "Try again",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
+            ),
           ),
         ),
       ),
