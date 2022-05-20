@@ -133,6 +133,15 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
+
+      yourItemList.add({
+        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+        "serviceTime" : "30",
+        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
+        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+        "isDefault":  '1',
+      });
+
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
 
@@ -318,9 +327,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-     // 'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+     'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
       //'to':'$token'
-      'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
+      // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
     };
 
     print('FcmToken data >>> ${data}');
