@@ -391,7 +391,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       print("onMessage recieved from onMessage");
       print("onMessage event.notification!.data " + event.data.toString());
 
-
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
       print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
