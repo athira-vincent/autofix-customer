@@ -54,10 +54,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+      print('PaymentScreen authToken>>>>>>>>> ' + authToken.toString());
+      print('PaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
 
     });
