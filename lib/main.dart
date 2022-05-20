@@ -98,9 +98,9 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                // home: LoginScreen(),
+                home: SplashScreen(),
 
-                home: MechanicWorkCompletedScreen(),
+                // home: MechanicWorkCompletedScreen(),
                  // home: MechanicStartServiceScreen(),
 
                  // home: CustomerApprovedScreen(),
