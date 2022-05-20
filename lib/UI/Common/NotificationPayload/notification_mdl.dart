@@ -36,6 +36,8 @@ class NotificationPayloadMdl {
     required this.customerDiagonsisApproval,
     required this.requestFromApp,
     required this.paymentStatus,
+    required this.serviceTime,
+    required this.serviceCost,
     required this.customerFromPage,
     required this.mechanicFromPage,
     required this.message,
@@ -52,6 +54,8 @@ class NotificationPayloadMdl {
   String carName;
   String carPlateNumber;
   String customerName;
+  String serviceTime;
+  String serviceCost;
   String customerAddress;
   String customerLatitude;
   String customerLongitude;
@@ -96,6 +100,8 @@ class NotificationPayloadMdl {
     customerDiagonsisApproval: json["customerDiagonsisApproval"] == null ? null : json["customerDiagonsisApproval"],
     requestFromApp: json["requestFromApp"] == null ? null : json["requestFromApp"],
     paymentStatus: json["paymentStatus"] == null ? null : json["paymentStatus"],
+    serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
+    serviceCost: json["serviceCost"] == null ? null : json["serviceCost"],
     customerFromPage: json["customerFromPage"] == null ? null : json["customerFromPage"],
     mechanicFromPage: json["mechanicFromPage"] == null ? null : json["mechanicFromPage"],
     message: json["message"] == null ? null : json["message"],
@@ -118,6 +124,8 @@ class NotificationPayloadMdl {
     "customerLongitude": customerLongitude == null ? null : customerLongitude,
     "customerFcmToken": customerFcmToken == null ? null : customerFcmToken,
     "mechanicName": mechanicName == null ? null : mechanicName,
+    "serviceTime": serviceTime == null ? null : serviceTime,
+    "serviceCost": serviceCost == null ? null : serviceCost,
     "mechanicAddress": mechanicAddress == null ? null : mechanicAddress,
     "mechanicLatitude": mechanicLatitude == null ? null : mechanicLatitude,
     "mechanicLongitude": mechanicLongitude == null ? null : mechanicLongitude,
