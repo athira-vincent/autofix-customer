@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                // home: SplashScreen(),
+                home: SplashScreen(),
 
                   //home: FindYourCustomerScreen(latitude: "10.0159",longitude: "76.3419", ),
 
@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> {
 
                  // home: DirectPaymentSuccessScreen()
 
-                  home:   ExtraServiceDiagonsisScreen(isEmergency: true,)
+                  // home:   ExtraServiceDiagonsisScreen(isEmergency: true,)
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
 
