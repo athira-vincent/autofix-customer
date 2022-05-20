@@ -77,8 +77,10 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
+    });
+    await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
 
+      setState(() {
         List allData = event.get('serviceModel').toList();
         selectedServiceName = allData[0]['serviceName'];
         serviceTotalTimeForFirebase = allData[0]['serviceTime'];
@@ -87,16 +89,16 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print('allData StreamBuilder ++++ ${allData.length} ');
         print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
 
-        setState(() {
+      });
 
-        });
-
-        //customerAddress = event.get('customerAddress');
-        //plateNumber =  event.get('carPlateNumber');
-        // mechanicName = event.get('mechanicName');
-        print('_firestoreData>>>>>>>>> ' + selectedServiceName);
+      setState(() {
 
       });
+
+      //customerAddress = event.get('customerAddress');
+      //plateNumber =  event.get('carPlateNumber');
+      // mechanicName = event.get('mechanicName');
+      print('_firestoreData>>>>>>>>> ' + selectedServiceName);
 
     });
   }

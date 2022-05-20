@@ -68,6 +68,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   late AnimationController _controller;
   int levelClock = 30;
   String authToken = "", userId = "";
+  List yourItemList = [];
 
   @override
   void initState() {
@@ -109,6 +110,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   }
 
   Future<void> callOnFcmApiSendPushNotifications(int length,) async {
+
+
 
     print(" callOnFcmApiSendPushNotifications > isAccepted " + isAccepted.toString());
     print("customerToken >> " + customerToken);
@@ -159,12 +162,14 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
-        "updatedServiceCost" : "0",
-        "updatedServiceList" : "",
-        "updatedServiceTime" : "0",
+        "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
+        "updatedServiceList" : FieldValue.arrayUnion(yourItemList),
+        "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
+        "serviceModel" : FieldValue.arrayUnion(yourItemList),
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
-        "serviceTime" : "00:30",
+        "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
+        "serviceCost" : "${widget.notificationPayloadMdl.serviceCost}",
         "message": "ACTION"
       },
       'apns': {
@@ -227,6 +232,16 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
   void updateToCloudFirestoreDB() {
 
+    yourItemList.add({
+      "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
+      "serviceId": '${widget.notificationPayloadMdl.serviceId}',
+      "serviceName": '${widget.notificationPayloadMdl.serviceName}',
+      "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
+      "isDefault":  '1',
+    });
+
+    print("yourItemList >>>>" + yourItemList.toString());
+
     _firestore
         .collection("ResolMech")
         .doc('${widget.notificationPayloadMdl.bookingId}')
@@ -258,13 +273,15 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "isWorkCompleted" : "0",
       "latitude": "${widget.notificationPayloadMdl.mechanicLatitude}",
       'longitude': "${widget.notificationPayloadMdl.mechanicLongitude}",
-      "updatedServiceCost" : "0",
-      "updatedServiceList" : "",
-      "updatedServiceTime" : "0",
+      "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
+      "serviceCost" :"${widget.notificationPayloadMdl.serviceCost}",
+      "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
+      "updatedServiceList" : FieldValue.arrayUnion(yourItemList),
+      "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
+      "serviceModel" : FieldValue.arrayUnion(yourItemList),
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
-      "serviceTime" : "00:30",
       })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
