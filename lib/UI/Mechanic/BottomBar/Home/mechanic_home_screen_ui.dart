@@ -276,11 +276,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget mechanicLocation(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          right: 8.0, left: 8.0, top: 2,bottom: 2),
+          right: 8.0, left: 8.0, top: 0,bottom: 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
+          Icon(Icons.location_pin, color: CustColors.light_navy,size: 35,),
           SizedBox(
             width: 50,
             child: Column(
@@ -345,7 +345,21 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           return
                             snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
                                 ? upcomingServicesList(size,snapshot)
-                                : Container();
+                                : Container(
+                                  margin: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(25),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                    ),
+                                    color: CustColors.white_04
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/image/img_empty_service_list.svg",
+                                    //fit: BoxFit.contain,
+                                  ),
+                            );
                       }
                     }
                 ),

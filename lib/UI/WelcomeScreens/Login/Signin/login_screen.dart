@@ -500,7 +500,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextStrings.user_customer,
                 //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
                 value.data!.signIn!.user!.firstName.toString(),
-                value.data!.signIn!.user!.id.toString()
+                value.data!.signIn!.user!.id.toString(),"0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
             Navigator.pushReplacement(
@@ -512,7 +512,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
                 value.data!.signIn!.user!.firstName.toString(),
-                value.data!.signIn!.user!.id.toString()
+                value.data!.signIn!.user!.id.toString(),"0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
             Navigator.pushReplacement(
@@ -540,7 +540,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
                 value.data!.socialLogin!.user!.firstName.toString(),
-                value.data!.socialLogin!.user!.id.toString());
+                value.data!.socialLogin!.user!.id.toString(),"0");
             setFcmToken(value.data!.socialLogin!.token.toString());
             Navigator.pushReplacement(
                 context,
@@ -551,7 +551,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_mechanic,
                 value.data!.socialLogin!.user!.firstName.toString(),
-                value.data!.socialLogin!.user!.id.toString()
+                value.data!.socialLogin!.user!.id.toString(),
+                "0"
             );
             setFcmToken(value.data!.socialLogin!.token.toString());
             Navigator.pushReplacement(

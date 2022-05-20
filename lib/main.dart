@@ -10,6 +10,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diag
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
@@ -99,7 +100,8 @@ class _MyAppState extends State<MyApp> {
 
                 // home: LoginScreen(),
 
-                  home: CustomerApprovedScreen(),
+                home: MechanicWorkCompletedScreen(),
+                 // home: MechanicStartServiceScreen(),
 
                  // home: CustomerApprovedScreen(),
 
