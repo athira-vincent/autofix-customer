@@ -393,7 +393,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-
       print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
       //final provider = Provider.of<LocaleProvider>(context,listen: false);
