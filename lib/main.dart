@@ -125,7 +125,6 @@ class _MyAppState extends State<MyApp> {
                 home: SplashScreen(),
 
                 // home: MechanicWorkCompletedScreen(),
-
                  // home: MechanicStartServiceScreen(),
 
                  // home: CustomerApprovedScreen(),
