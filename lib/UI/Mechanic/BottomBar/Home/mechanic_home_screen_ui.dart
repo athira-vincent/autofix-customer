@@ -10,7 +10,6 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -288,7 +287,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
               children: [
                 InkWell(
                   onTap: (){
-                    FirebaseCrashlytics.instance.crash();
                   },
 
                   child: Text(
