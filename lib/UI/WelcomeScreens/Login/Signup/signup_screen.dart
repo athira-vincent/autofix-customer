@@ -202,11 +202,16 @@ class _SignupScreenState extends State<SignupScreen> {
           _signupBloc.userDefault(
               value.data!.signUp!.token.toString(),
               TextStrings.user_mechanic,
-              "${value.data!.signUp!.mechanic?.firstName.toString()}",
+              "",
           );
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
           if(value.data?.signUp?.customer == null)
             {
+              _signupBloc.userDefault(
+                value.data!.signUp!.token.toString(),
+                TextStrings.user_mechanic,
+                "${value.data!.signUp!.mechanic?.firstName.toString()}",
+              );
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -221,6 +226,11 @@ class _SignupScreenState extends State<SignupScreen> {
             }
           else
             {
+              _signupBloc.userDefault(
+                value.data!.signUp!.token.toString(),
+                TextStrings.user_mechanic,
+                "${value.data!.signUp!.customer?.firstName.toString()}",
+              );
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
