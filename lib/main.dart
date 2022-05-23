@@ -16,6 +16,7 @@ import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCus
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
+import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';

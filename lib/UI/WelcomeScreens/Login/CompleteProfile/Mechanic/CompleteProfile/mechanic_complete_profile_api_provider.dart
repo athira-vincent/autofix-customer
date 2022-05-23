@@ -45,6 +45,8 @@ class MechanicCompleteProfileApiProvider {
       String rcNumber,
       String existenceYear,
       String photoUrl) async {
+    print('getCompleteProfileMechCorporateRequest>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
+
     Map<String, dynamic> _resp = await _queryProvider.completeProfileMechanicCorporate(token,
     serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear, photoUrl);
     // ignore: unnecessary_null_comparison

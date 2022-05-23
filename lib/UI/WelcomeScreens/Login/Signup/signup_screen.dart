@@ -199,7 +199,11 @@ class _SignupScreenState extends State<SignupScreen> {
           print("success postSignUpMechanic >>>>>>>  ${value.status}");
           print("success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
           _isLoading = false;
-          _signupBloc.userDefault(value.data!.signUp!.token.toString());
+          _signupBloc.userDefault(
+              value.data!.signUp!.token.toString(),
+              TextStrings.user_mechanic,
+              "${value.data!.signUp!.mechanic?.firstName.toString()}",
+          );
           SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
           if(value.data?.signUp?.customer == null)
             {

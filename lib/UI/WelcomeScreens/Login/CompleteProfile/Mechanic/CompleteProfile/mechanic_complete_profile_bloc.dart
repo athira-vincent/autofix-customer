@@ -15,6 +15,8 @@ class MechanicCompleteProfileBloc {
   postCompleteProfileCorporateRequest(String token, String serviceType, String vehicleSpecialization,
       String address, String mechanicNumber, String rcNumber, String existenceYear, String photoUrl) async {
 
+    print('postCompleteProfileCorporateRequest>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
+
     CorporateMechCompleteProfileMdl _completeProfileMdl = await repository.getCompleteProfileMechCorporate(
         token, serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear,photoUrl);
     postCompleteProfileCorporate.sink.add(_completeProfileMdl);
