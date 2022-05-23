@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_To_CustomerLocation_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
@@ -124,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                home: SplashScreen(),
+                // home: SplashScreen(),
 
                 // home: MechanicWorkCompletedScreen(),
                  // home: MechanicStartServiceScreen(),
@@ -135,7 +134,7 @@ class _MyAppState extends State<MyApp> {
 
                    // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
 
-                  // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
+                  home:   MechanicWorkProgressScreen(workStatus: "2",)
 
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)

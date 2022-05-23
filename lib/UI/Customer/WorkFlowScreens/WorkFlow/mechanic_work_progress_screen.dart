@@ -61,6 +61,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   int _counter = 0;
   late AnimationController _controller;
   int levelClock = 1800;
+  int levelClock1 = 0;
+
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
 
@@ -92,7 +94,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             seconds:
             levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
     );
-
     _controller.forward();
 
 
@@ -147,33 +148,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
-        extendedTimeFromFirestore = querySnapshot.get("extendedTime");
-        print('extendedTimeFromFirestore ++++ $extendedTimeFromFirestore');
 
-        int sec = Duration(minutes: int.parse('30')).inSeconds;
-        print('extendedTimeFromFirestore  in mins ++++ $sec');
-
-        print('extendedTimeFromFirestore  split ++++ ${extendedTimeFromFirestore.split(".").first}');
-
-        if(querySnapshot.get("extendedTime").toString() != "0")
-        {
-
-          print('extendedTime ++++ $extendedTimeFirstTymCall');
-
-          if(extendedTimeFirstTymCall == "0")
-          {
-            extendedTimeFirstTymCall = "1";
-            levelClock = levelClock + int.parse('${extendedTimeFromFirestore.split(".").first}') + 1;
-            _controller = AnimationController(
-                vsync: this,
-                duration: Duration(
-                    seconds:
-                    levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-            );
-            _controller.forward();
-          }
-
-        }
 
 
 
@@ -186,10 +161,34 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           isWorkCompleted = querySnapshot.get("isWorkCompleted");
           print('isWorkCompleted ++++ $isWorkCompleted');
 
+          extendedTimeFromFirestore = querySnapshot.get("extendedTime");
+          int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore')).inSeconds;
+          if(querySnapshot.get("extendedTime").toString() != "0")
+          {
+            if(extendedTimeFirstTymCall == "0")
+            {
+              extendedTimeFirstTymCall = "1";
+              print('levelClock  levelClock1 ++++ ${levelClock}');
+              levelClock1 = levelClock + sec + 1;
+              print('levelClock  levelClock2 ++++ ${levelClock1}');
+              _controller = AnimationController(
+                  vsync: this,
+                  duration: Duration(
+                      seconds:
+                      levelClock1) // gameData.levelClock is a user entered number elsewhere in the applciation
+              );
+              print('${_controller.status}');
+              _controller.forward();
+            }
+
+          }
+
         }
         else if(widget.workStatus =="3") {
           isPaymentRequested = querySnapshot.get("isPaymentRequested");
           print('isPaymentRequested ++++ $isPaymentRequested');
+
+
 
         }
 
