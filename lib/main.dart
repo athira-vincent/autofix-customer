@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
@@ -98,8 +99,8 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                home: SplashScreen(),
-                //home: MechanicStartServiceScreen(),
+               // home: SplashScreen(),
+                home: MechanicStartServiceScreen(),
 
                 // home: MechanicWorkCompletedScreen(),
 
