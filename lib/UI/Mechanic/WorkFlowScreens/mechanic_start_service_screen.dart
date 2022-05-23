@@ -106,7 +106,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
       });
       print('_firestoreData>>>>>>>>> ' + selectedServiceName);
-
     });
   }
 
