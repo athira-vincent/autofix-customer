@@ -88,7 +88,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   bool editProfileEnabled = false;
 
-  String authToken="";
+  String authToken="", userName = "";
 
   @override
   void initState() {
@@ -105,6 +105,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId'+authToken.toString());
       _isLoadingPage=true;
@@ -188,6 +189,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -235,14 +237,20 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
       children: [
         Row(
           children: [
-            IconButton(
+            /*IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () => Navigator.pop(context),
-            ),
-            Text(
-              'Mahesh',
-              textAlign: TextAlign.center,
-              style: Styles.appBarTextBlack,
+            ),*/
+            Container(
+              padding: const EdgeInsets.fromLTRB(20,5,20,5),
+              /*margin: EdgeInsets.only(
+                left: 20
+              ),*/
+              child: Text(
+                '$userName',
+                textAlign: TextAlign.center,
+                style: Styles.appBarTextBlack,
+              ),
             ),
             Spacer(),
 

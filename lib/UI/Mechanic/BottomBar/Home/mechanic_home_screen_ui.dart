@@ -9,8 +9,8 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,7 +34,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
   //late FirebaseMessaging messaging;
 
-  String authToken="", mechanicId = "";
+  String authToken="", mechanicId = "", bookingId = "", vehicleName = "", customerName = "";
   String location ='Null, Press Button';
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
@@ -55,6 +55,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   void initState() {
     // TODO: implement initState
@@ -163,13 +164,28 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           });
         });
       }else{
-          setState(() {
-            _hasActiveService = true;
+          setState(() async {
+            setReminderData();
           });
       }
     });
   }
 
+  Future<void> setReminderData() async {
+
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+    });
+    await  _firestore.collection("ResolMech").doc('100').snapshots().listen((event) {
+      print('_firestore');
+      setState(() {
+        vehicleName = event.get('carName');
+        customerName = event.get('customerName');
+        _hasActiveService = true;
+      });
+    });
+  }
   Future<void> _getCurrentMechanicLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
@@ -236,39 +252,24 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    mechanicLocation(context),
-                    upcomingServices(size),
-                    brandSpecialization(size),
-                    dashBoardItemsWidget(size),
-                    _hasActiveService ? emergencyServiceReminder(size) : Container(),
-                  ],
-                ),
-                /*Positioned(
-                  right: 0,
-                  bottom: 0,
-                  //left: 0,
-                 // width: size.width,
-                  child: FloatingActionButton(
-                      elevation: 0.0,
-                      child: new Icon(Icons.check),
-                      backgroundColor: new Color(0xFFE57373),
-                      onPressed: (){}
+          body: Stack(
+            children:[
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      mechanicLocation(context),
+                      upcomingServices(size),
+                      brandSpecialization(size),
+                      dashBoardItemsWidget(size),
+                      _hasActiveService ? SizedBox(
+                        height: size.height * 0.092,
+                      ) : Container(),
+                    ],
                   ),
-                )*/
-              ],
-            ),
+                ),
+                _hasActiveService ? emergencyServiceReminder(size) : Container(),
+            ],
           ),
-          /*floatingActionButton: new FloatingActionButton(
-              elevation: 0.0,
-              child: new Icon(Icons.check),
-              backgroundColor: new Color(0xFFE57373),
-              onPressed: (){}
-              ),*/
         ),
       ),
     );
@@ -287,9 +288,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             child: Column(
               children: [
                 InkWell(
-                  onTap: (){
+                  /*onTap: (){
                     FirebaseCrashlytics.instance.crash();
-                  },
+                  },*/
 
                   child: Text(
                     displayAddress,
@@ -696,34 +697,37 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   }
 
   Widget emergencyServiceReminder(Size size){
-    return Container(
-      height: size.height * 10 / 100,
-      width: size.width,
-      color: Colors.white,
-      margin: EdgeInsets.only(
-       // left: size.width * 5 / 100,
-        bottom: size.height * .5 / 100
-      ),
-      padding: EdgeInsets.only(
-        left: size.width * 5 / 100,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("You have one Emergency service ",
-                style: TextStyle(color: CustColors.light_navy),),
-              Text("Service from Eric John.   [ HONDA CITY ]", )
-            ],
-          ),
-          SvgPicture.asset(
-              "assets/image/img_mech_home_car_bg.svg",
-            height: size.height * 10 / 100,
-          )
-        ],
+    return Positioned(
+      bottom: size.height * 1.70 / 100,
+      child: Container(
+        height: size.height * 10 / 100,
+        width: size.width,
+        color: Colors.white,
+        margin: EdgeInsets.only(
+         // left: size.width * 5 / 100,
+          //bottom: size.height * .5 / 100
+        ),
+        padding: EdgeInsets.only(
+          left: size.width * 5 / 100,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("You have one Emergency service ",
+                  style: TextStyle(color: CustColors.light_navy),),
+                Text("Service from $customerName.   $vehicleName", )
+              ],
+            ),
+            SvgPicture.asset(
+                "assets/image/img_mech_home_car_bg.svg",
+              height: size.height * 10 / 100,
+            )
+          ],
+        ),
       ),
     );
   }

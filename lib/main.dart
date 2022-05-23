@@ -7,7 +7,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,10 +26,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isIOS) {
     await Firebase.initializeApp();
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    //await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   } else {
     await Firebase.initializeApp();
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    //await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
   //await Firebase.initializeApp();
   await initHiveForFlutter();
@@ -76,10 +75,10 @@ class _MyAppState extends State<MyApp> {
     ));
 
     //initialise firebase and crashlytics
-    Future<void> _initializeFirebase() async {
+   /* Future<void> _initializeFirebase() async {
       await Firebase.initializeApp();
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-    }
+    }*/
 
     return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
