@@ -45,6 +45,9 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   double totalFees = 0.0;
   bool isWorkStartedState = false;
 
+  String mechanicName = "";
+
+
 
   final HomeCustomerBloc _addMoreServiceBloc = HomeCustomerBloc();
 
@@ -92,7 +95,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
             print('isWorkStarted ++++ $isWorkStarted');
             if(isWorkStarted == "1")
             {
-            //  Navigator.of(context, rootNavigator: true).pop();
+              //Navigator.of(context, rootNavigator: true).pop();
 
               Navigator.pushReplacement(
                   context,
@@ -129,6 +132,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         isWorkStarted = event.get("isWorkStarted");
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
+        mechanicName = event.get('mechanicName');
+
         List allData = event.get('updatedServiceList').toList();
         print('allData StreamBuilder ++++ ${allData.length} ');
         print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
@@ -632,7 +637,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                             style: Styles.waitingTextBlack17,
                           ),
                           Text(
-                            "Wait for the response from George Dola!",
+                            "Wait for the response from $mechanicName!",
                             style: Styles.awayTextBlack,
                           ),
                           Container(

@@ -628,9 +628,11 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   void dispose() {
     // TODO: implement dispose
     _controller.dispose();
-
-    super.dispose();
     cancelTimer1();
+    if(widget.workStatus =="3") {
+      cancelTimer();
+    }
+    super.dispose();
     print("dispose");
   }
 
