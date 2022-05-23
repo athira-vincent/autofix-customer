@@ -110,7 +110,6 @@ class _MyAppState extends State<MyApp> {
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
 
-
               );
             },
           );
