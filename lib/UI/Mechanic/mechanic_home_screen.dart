@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
-import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
@@ -58,6 +59,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   double _setValueFont(double value) {
     return value * perfont + value;
   }
+
 
   @override
   void initState() {
@@ -149,7 +151,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           /*_isLoading = false;
           socialLoginIsLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
-
       }
     });
   }
@@ -505,6 +506,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           ),
         ],
       ),
+      //floatingActionButton: ,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [

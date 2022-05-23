@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -25,6 +26,8 @@ class MechanicSideBarScreen extends StatefulWidget {
 class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
   String? _userName;
   String? _userEmail;
+  String isOnline = "";
+
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     /* shdPre.setString(SharedPrefKeys.token, "");
@@ -52,6 +55,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _userName = _shdPre.getString(SharedPrefKeys.userName).toString();
     _userEmail = _shdPre.getString(SharedPrefKeys.userEmail).toString();
+    isOnline = _shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
     setState(() {});
   }
 
@@ -256,7 +260,13 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             ),
           ),
           onTap: () {
-            _logout();
+            //Navigator.pop(context);
+            showDialog(
+                context: context,
+                builder: (BuildContext context)
+                {
+                  return deactivateDialog();
+                });
           },
         ),
 
@@ -433,7 +443,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                             width: 15,
                             height: 15,
                             decoration: BoxDecoration(
-                              color: CustColors.green,
+                              color:  isOnline == "1" ? CustColors.green : CustColors.warm_grey,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(
                                   25,
@@ -448,8 +458,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                   Container(
                     margin: EdgeInsets.only(top: size.height * 1 / 100),
                     child: Text(
-                      //_userName.toString(),
-                      "Afamefuna",
+                      _userName.toString(),
+                      //"Afamefuna",
                       softWrap: true,
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -478,6 +488,59 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
         ],
       ),
     );
+  }
+
+  Widget deactivateDialog() {
+    return CupertinoAlertDialog(
+      title: Text("Logout account?",
+          style: TextStyle(
+            fontFamily: 'Formular',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: CustColors.materialBlue,
+          )),
+      content: Text("Are you sure you want to logout?"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel")),
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () async {
+              setState(() {
+                setDeactivate();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginScreen()),
+                    ModalRoute.withName("/LoginScreen"));
+
+              });
+            },
+            child: Text("Logout")),
+      ],
+    );
+  }
+
+  void setDeactivate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(SharedPrefKeys.token, "");
+    prefs.setString(SharedPrefKeys.userID, "");
+    prefs.setString(SharedPrefKeys.userName, "");
+    prefs.setBool(SharedPrefKeys.isUserLoggedIn, false);
+    prefs.setString(SharedPrefKeys.userType, "");
+
   }
 
 }
