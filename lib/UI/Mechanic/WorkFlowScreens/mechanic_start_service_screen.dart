@@ -138,7 +138,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
     print("allData >>>>>" + allData.toString());
     int time =   Duration(seconds: int.parse(serviceTotalTimeForFirebase)).inMinutes;
-    print("time >>>>>" + time.toString());
+    print("time >>>>>>" + time.toString());
 
     if(allData.isNotEmpty){
       _firestore
