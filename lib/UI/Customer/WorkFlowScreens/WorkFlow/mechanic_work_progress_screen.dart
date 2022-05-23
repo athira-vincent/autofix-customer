@@ -58,19 +58,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   String extendedTimeFirstTymCall="0";
 
-  int _counter = 0;
   late AnimationController _controller;
-  int levelClock = 1800;
+  int levelClock = 0;
   int levelClock1 = 0;
 
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
 
 
@@ -94,15 +88,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             seconds:
             levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
     );
-    _controller.forward();
-
-
-    timerCouterTime = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      timerForCouterTime = t;
-      _incrementCounter();
-      print('Timer levelClock  $levelClock  ++++++  $_counter');
-
-    });
 
   }
 
@@ -124,7 +109,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // bookingIdEmergency = '95';
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
 
     });
@@ -138,6 +122,15 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+        int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
+        levelClock = sec;
+        _controller = AnimationController(
+            vsync: this,
+            duration: Duration(
+                seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+        );
+        _controller.forward();
+
       });
 
     });
@@ -163,19 +156,21 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
           extendedTimeFromFirestore = querySnapshot.get("extendedTime");
           int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore')).inSeconds;
-          if(querySnapshot.get("extendedTime").toString() != "0")
+          if(extendedTimeFromFirestore.toString() != "0")
           {
             if(extendedTimeFirstTymCall == "0")
             {
               extendedTimeFirstTymCall = "1";
               print('levelClock  levelClock1 ++++ ${levelClock}');
-              levelClock1 = levelClock + sec + 1;
+              levelClock1 = levelClock + sec ;
               print('levelClock  levelClock2 ++++ ${levelClock1}');
+
+
+              _controller.stop();
               _controller = AnimationController(
                   vsync: this,
                   duration: Duration(
-                      seconds:
-                      levelClock1) // gameData.levelClock is a user entered number elsewhere in the applciation
+                      seconds: levelClock1) // gameData.levelClock is a user entered number elsewhere in the applciation
               );
               print('${_controller.status}');
               _controller.forward();
@@ -187,9 +182,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         else if(widget.workStatus =="3") {
           isPaymentRequested = querySnapshot.get("isPaymentRequested");
           print('isPaymentRequested ++++ $isPaymentRequested');
-
-
-
         }
 
 
@@ -267,6 +259,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   @override
   Widget build(BuildContext context) {
+
 
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
