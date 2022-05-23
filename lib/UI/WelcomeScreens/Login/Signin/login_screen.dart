@@ -320,6 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                               child: MaterialButton(
                                                 onPressed: () {
+
                                                   if (_formKey.currentState!.validate()) {
 
                                                     setState(() {

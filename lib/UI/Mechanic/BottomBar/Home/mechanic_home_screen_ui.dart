@@ -288,9 +288,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             child: Column(
               children: [
                 InkWell(
-                  /*onTap: (){
-                    FirebaseCrashlytics.instance.crash();
-                  },*/
+                  onTap: (){
+                  },
 
                   child: Text(
                     displayAddress,
