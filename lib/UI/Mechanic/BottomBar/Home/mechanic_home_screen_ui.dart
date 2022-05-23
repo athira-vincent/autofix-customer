@@ -10,6 +10,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -101,7 +102,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userId  MechanicHomeUIScreen ' + mechanicId.toString());
       setFcmToken(authToken);
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", "8");
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", mechanicId);
     });
   }
 
@@ -285,13 +286,19 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             width: 50,
             child: Column(
               children: [
-                Text(
-                  displayAddress,
-                  //'Elenjikkal house Empyreal Garden',
-                  maxLines: 2,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.visible,
-                  style: Styles.textLabelTitle_10,
+                InkWell(
+                  onTap: (){
+                    FirebaseCrashlytics.instance.crash();
+                  },
+
+                  child: Text(
+                    displayAddress,
+                    //'Elenjikkal house Empyreal Garden',
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.visible,
+                    style: Styles.textLabelTitle_10,
+                  ),
                 ),
               ],
             ),

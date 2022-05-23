@@ -93,8 +93,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             );
             listenToFirestoreTime = "1";
           }
-
-
       });
       setState(() {
 
@@ -361,7 +359,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
                 print("levelClock $levelClock");
 
-
                 updateToCloudFirestoreDB("1", "0", extendedTime);
               });
               _controller = AnimationController(
@@ -373,7 +370,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               print("updateToCloudFirestoreDB extendedTime ${_controller.status}");
               _controller.forward();
             }
-
             else
             {
               setState(() {
@@ -386,7 +382,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                         builder: (context) => MechanicWorkCompletedScreen()));
               });
             }
-
 
           /*if(widget.serviceModel == "1"){
                         Navigator.pushReplacement(
@@ -460,7 +455,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   );
                 });
           });
-
         },
         child: Container(
           margin: EdgeInsets.only(

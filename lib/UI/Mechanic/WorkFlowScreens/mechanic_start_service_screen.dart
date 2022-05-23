@@ -257,7 +257,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                         child: Row(
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           mainAxisAlignment: MainAxisAlignment.center,
-
                                           children: [
                                             SvgPicture.asset('assets/image/ic_alarm.svg',
                                               width: size.width * 4 / 100,
