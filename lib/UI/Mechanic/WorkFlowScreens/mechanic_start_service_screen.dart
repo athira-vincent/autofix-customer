@@ -516,7 +516,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     if(serviceList!.isNotEmpty){
 
       totalCost = int.parse(serviceTotalCostForFirebase);
-
       setState(() {
         for(int i = 0; i<serviceList!.length ; i++){
           allData.add({
@@ -553,7 +552,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
           );
           print(" serviceTotalCostForFirebase >>>>>>>>  " + serviceTotalCostForFirebase);
-
           print(" additionalServiceNames >>>>>>>>>> " + additionalServiceNames
               + " selectedServiceTime >>>>>>>> " + selectedServiceTime.toString()
               + " levelClock >>>>>>>>>>>> " + levelClock.toString()
