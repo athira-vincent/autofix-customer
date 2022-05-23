@@ -177,7 +177,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });
-    await  _firestore.collection("ResolMech").doc('100').snapshots().listen((event) {
+    await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
       print('_firestore');
       setState(() {
         vehicleName = event.get('carName');

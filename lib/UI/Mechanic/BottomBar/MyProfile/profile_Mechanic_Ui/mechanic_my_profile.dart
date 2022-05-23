@@ -1435,8 +1435,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
-
-
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1446,7 +1444,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () async {
-
               setState(() {
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
@@ -1454,7 +1451,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     MaterialPageRoute(
                         builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
-
               });
             },
             child: Text("Logout")),
