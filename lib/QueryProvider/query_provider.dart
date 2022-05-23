@@ -1112,6 +1112,8 @@ class QueryProvider {
       String existenceYear,
       String photoUrl
       ) async {
+    print('completeProfileMechanicCorporate>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
+
     String _query = """ 
     mutation {
   mechanic_work_selection_Corporate(

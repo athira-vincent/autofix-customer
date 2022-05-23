@@ -83,10 +83,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   Widget appBarCustomUi() {
     return Row(
       children: [
-        IconButton(
+        /*IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
-        ),
+        ),*/
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(

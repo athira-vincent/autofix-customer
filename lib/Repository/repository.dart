@@ -216,22 +216,10 @@ class Repository {
          token, workSelection, vehicleSpecialization,address, apprentice_cert, identification_cert,photoUrl );
 
   // Mechanic Corporate Complete Profile
-  Future<dynamic> getCompleteProfileMechCorporate(String token,
-      String serviceType,
-      String vehicleSpecialization,
-      String address,
-      String mechanicNumber,
-      String rcNumber,
-      String existenceYear,
-      String photoUrl) =>
-      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest(token,
-        serviceType,
-        mechanicNumber,
-        rcNumber,
-        vehicleSpecialization,
-        existenceYear,
-        address,
-        photoUrl
+  Future<dynamic> getCompleteProfileMechCorporate(
+      token, serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear,photoUrl) =>
+      _completeProfileMechanicApiProvider.getCompleteProfileMechCorporateRequest(
+          token, serviceType, vehicleSpecialization, address, mechanicNumber, rcNumber, existenceYear,photoUrl
       );
 
   // Get State

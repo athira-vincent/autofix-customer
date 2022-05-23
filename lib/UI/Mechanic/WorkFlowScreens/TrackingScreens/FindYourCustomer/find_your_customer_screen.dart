@@ -510,7 +510,21 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
               alignment: Alignment.bottomCenter,
               children: [
 
-                _googleMap != null ? _googleMap! : CircularProgressIndicator(),
+                //_googleMap != null ? _googleMap! : CircularProgressIndicator(),
+
+                GoogleMap( //Map widget from google_maps_flutter package
+                  zoomGesturesEnabled: true, //enable Zoom in, out on map
+                  initialCameraPosition: _kGooglePlex!,
+                  markers: markers, //markers to show on map
+                  polylines: Set<Polyline>.of(polylines.values), //polylines
+                  mapType: MapType.normal, //map type
+                  onMapCreated: (controller) { //method called when map is created
+                    setState(() {
+                      controller.setMapStyle(_mapStyle);
+                      mapController = controller;
+                    });
+                  },
+                ),
 
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20,10,20,30),

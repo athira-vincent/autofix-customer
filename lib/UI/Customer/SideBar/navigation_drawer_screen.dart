@@ -7,6 +7,8 @@ import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart'
 import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,6 +24,9 @@ class CustomerNavigationDrawerScreen extends StatefulWidget {
 class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen> {
   String? _userName;
   String? _userEmail;
+  String authToken="";
+  String userName="";
+
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
    /* shdPre.setString(SharedPrefKeys.token, "");
@@ -55,8 +60,25 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
   @override
   void initState() {
     super.initState();
+    getSharedPrefData();
     _getUser();
   }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+
+
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      print('authToken>>>>>>>>> ' + authToken.toString());
+
+
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -329,7 +351,12 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             ),
           ),
           onTap: () {
-            _logout();
+            showDialog(
+                context: context,
+                builder: (BuildContext context)
+                {
+                  return deactivateDialog();
+                });
           },
         ),
 
@@ -394,7 +421,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     return Container(
       width: double.infinity,
       //height: 174.3 + MediaQuery.of(context).padding.top,
-      height: size.height * 35 / 100,
+      height: size.height * 37 / 100,
       decoration: BoxDecoration(
         color: CustColors.light_navy,
         borderRadius: BorderRadius.only(
@@ -462,20 +489,20 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                           ),
                         ),
                       ),
-                      ClipRRect(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              right: 2
-                          ),
-                          color: Colors.white,
-                          child: Image.network(
-                            'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg',
-                            fit: BoxFit.cover,
-                            width: 88,
-                            height: 88,
-                          ),
+                      Container(
+                        width: 88.0,
+                        height: 88.0,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child:Container(
+                                child:CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.white,
+                                    child: ClipOval(
+                                        child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                    )))
+
                         ),
-                        borderRadius: BorderRadius.circular(44),
                       ),
 
                       Positioned(
@@ -503,7 +530,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                     margin: EdgeInsets.only(top: size.height * 1 / 100),
                     child: Text(
                       //_userName.toString(),
-                      "Afamefuna",
+                      "$userName",
                       softWrap: true,
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -521,5 +548,61 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
       ),
     );
   }
+
+  Widget deactivateDialog() {
+    return CupertinoAlertDialog(
+      title: Text("Logout account?",
+          style: TextStyle(
+            fontFamily: 'Formular',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: CustColors.materialBlue,
+          )),
+      content: Text("Are you sure you want to logout?"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel")),
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () async {
+              setState(() {
+                setDeactivate();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginScreen()),
+                    ModalRoute.withName("/LoginScreen"));
+              });
+            },
+            child: Text("Logout")),
+      ],
+    );
+  }
+
+  void setDeactivate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(SharedPrefKeys.token, "");
+    prefs.setString(SharedPrefKeys.userID, "");
+    prefs.setString(SharedPrefKeys.userName, "");
+    prefs.setBool(SharedPrefKeys.isUserLoggedIn, false);
+    prefs.setString(SharedPrefKeys.userType, "");
+
+
+
+  }
+
+
 
 }
