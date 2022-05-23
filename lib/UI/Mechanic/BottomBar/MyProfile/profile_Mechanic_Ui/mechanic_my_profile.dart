@@ -198,7 +198,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
               children: [
                 Column(
                         children: [
-                          appBarCustomUi(),
+                         // appBarCustomUi(),
                           profileImageAndKmAndReviewCount(),
                           NameTextUi(),
                           EmailTextUi(),

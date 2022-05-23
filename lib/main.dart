@@ -3,7 +3,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_To_CustomerLocation_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
+import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
@@ -16,21 +28,40 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 
-
-
 void main() async {
+  await initHiveForFlutter();
+  await runZonedGuarded(() async {
+   WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
+        appId: '1:54966987696:android:96f910e016709a2ca84475',
+        messagingSenderId: '54966987696',
+        authDomain: 'autofix-336509.firebaseapp.com',
+        projectId: 'autofix-336509',
+      ),
+    );
+    //FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    runApp(MyApp());
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
+}
+
+
+/*void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isIOS) {
     await Firebase.initializeApp();
-    //await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
   } else {
     await Firebase.initializeApp();
-    //await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
   //await Firebase.initializeApp();
   await initHiveForFlutter();
@@ -39,14 +70,9 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  /*runZonedGuarded(() {
-    runApp(MyApp());
-  }, (error, stackTrace) {
-    // Pass all uncaught errors from the framework to Crashlytics.
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
-  });*/
   runApp(MyApp());
-}
+
+}*/
 
 class MyApp extends StatefulWidget {
 
@@ -68,6 +94,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -75,11 +102,6 @@ class _MyAppState extends State<MyApp> {
       statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
 
-    //initialise firebase and crashlytics
-   /* Future<void> _initializeFirebase() async {
-      await Firebase.initializeApp();
-      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-    }*/
 
     return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
@@ -93,27 +115,24 @@ class _MyAppState extends State<MyApp> {
                 locale: _locale,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
-                title: 'Banqmart',
+                title: 'ResolMech',
                 theme: ThemeData(
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
 
-               // home: SplashScreen(),
-                home: MechanicStartServiceScreen(),
+                home: SplashScreen(),
 
                 // home: MechanicWorkCompletedScreen(),
-
                  // home: MechanicStartServiceScreen(),
 
                  // home: CustomerApprovedScreen(),
 
                  // home: DirectPaymentSuccessScreen()
 
-                 // home:   MechanicWorkProgressScreen(workStatus: "2",)
+                  // home:   MechanicWorkProgressScreen(workStatus: "2",)
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
-
 
               );
             },
