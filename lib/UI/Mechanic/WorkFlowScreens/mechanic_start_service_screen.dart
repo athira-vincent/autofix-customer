@@ -48,9 +48,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
 
-
   bool isWaiting = false;
-
 
   @override
   void initState() {
@@ -87,8 +85,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
 
     });
-   // await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
-     await _firestore.collection("ResolMech").doc('100').snapshots().listen((event) {
+    await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
+    //await _firestore.collection("ResolMech").doc('100').snapshots().listen((event) {
       setState(() {
         allData = event.get('serviceModel').toList();
         selectedServiceName = allData[0]['serviceName'];
@@ -113,7 +111,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   }
 
   void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("100");
+    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc('${bookingId}');
     reference.snapshots().listen((querySnapshot) {
       setState(() {
         customerDiagonsisApproval = querySnapshot.get("customerDiagonsisApproval");
@@ -146,7 +144,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     if(allData.isNotEmpty){
       _firestore
           .collection("ResolMech")
-          .doc('100')
+          .doc('${bookingId}')
           .update({
               'mechanicDiagonsisState': "1",
               'updatedServiceList' : FieldValue.arrayUnion(allData),
