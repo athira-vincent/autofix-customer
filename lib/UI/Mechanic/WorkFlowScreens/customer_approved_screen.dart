@@ -37,7 +37,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   int extendedTimeVal = 00;
   String extendedTimeText = "";
 
-  String listenToFirestoreTime = "0";
+  String listenToFirestoreTime = "0", customerDiagonsisApproval = "";
 
 
   double _setValue(double value) {
@@ -60,13 +60,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   }
 
-
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingId = "100";
+      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
@@ -77,6 +77,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         mechanicName = event.get('mechanicName');
         customerName = event.get('customerName');
         updatedServiceTime = event.get('updatedServiceTime');
+        customerDiagonsisApproval = event.get('customerDiagonsisApproval');
         extendedTime = event.get('updatedServiceTime');
         print('_firestore11');
 
@@ -157,7 +158,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     );
   }
 
-
   Widget customerApprovedScreenTitle(Size size){
     return Container(
       margin: EdgeInsets.only(
@@ -165,7 +165,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         // bottom: size.height * 1 /100,
         top: size.height * 3.4 / 100,
       ),
-      child: Text("Customer approved ! ",style: TextStyle(
+      child: Text(
+        "Customer approval ! ",
+        style: TextStyle(
         fontSize: 16,
         fontFamily: "Samsung_SharpSans_Medium",
         fontWeight: FontWeight.w400,
@@ -207,7 +209,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 style: TextStyle(
                 color: CustColors.light_navy
               ),),
-              Text("approved the services you added.",style: TextStyle(
+              Text(
+                customerDiagonsisApproval == "-1" ?
+                " rejected the services you added." :
+                " approved the services you added.",style: TextStyle(
 
               ),)
             ],
@@ -256,9 +261,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Expanded(
-            child: Text("Customer agree with the diagnostic test report and estimated cost . So you can start repair ",
+            child: Text(
+              customerDiagonsisApproval == "-1" ?
+              "Customer disagree with the diagnostic test report and estimated cost. Go ahead with requested service."
+              :
+              "Customer agree with the diagnostic test report and estimated cost . So you can start repair ",
               style: warningTextStyle01,
-
             ),
           )
         ],

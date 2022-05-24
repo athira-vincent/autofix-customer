@@ -31,7 +31,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   bool isExpanded = false;
 
-  String authToken="", bookingId = "";
+  String authToken="", bookingId = "100";
   String isCustomerApproved = "0";
 
   String customerDiagonsisApproval = "0";
@@ -48,7 +48,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
 
-  bool isWaiting = false;
+  String isWaiting = "-2";
 
   @override
   void initState() {
@@ -81,7 +81,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
 
     });
@@ -118,14 +118,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         print('customerDiagonsisApproval ++++ $customerDiagonsisApproval');
         if(customerDiagonsisApproval =="1")
         {
-          isCustomerApproved = "1";
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  CustomerApprovedScreen()
-              )).then((value){
-          });
-        }/*else{
+          isWaiting = "1";
+        }
+        else if(customerDiagonsisApproval =="-1"){
+          isWaiting = "-1";
+        }
+          /*else{
           setState(() {
             isWaiting = true;
           });
@@ -174,103 +172,105 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   height: size.height,
                   color: Colors.white,
                   child: Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 2 / 100,
-                      top: size.height * 2 / 100,
-                      right: size.width * 2 / 100
-                    ),
+                    child: isWaiting == "0"? waitCustomerResponseWidget(size) :
+                           isWaiting == "1" ? customerResponseAcceptRejectWidget(size) :
+                           isWaiting == "-1" ? customerResponseAcceptRejectWidget(size) :
+                           Container(
+                             margin: EdgeInsets.only(
+                                 left: size.width * 2 / 100,
+                                 top: size.height * 2 / 100,
+                                 right: size.width * 2 / 100
+                             ),
+                             child: Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+                                 mechanicStartServiceTitle(size),
+                                 mechanicStartServiceImage(size),
+                                 mechanicEditSelectedService(size, "$selectedServiceName"),
+                                 mechanicAdditionalFaultService(size, "" ),
+                                 InkWell(
+                                   onTap: (){
+                                     print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
+                                     _awaitReturnValueFromSecondScreenOnAdd(context);
+                                   },
+                                   child: Align(
+                                       alignment: Alignment.centerRight,
+                                       child: Container(
+                                           margin: EdgeInsets.only(
+                                               right: size.width * 8 / 100,
+                                               top: size.height * 1.2 / 100
+                                           ),
+                                           child: Text("Add more",
+                                             style: TextStyle(
+                                               fontSize: 20,
+                                               fontFamily: "SharpSans_Bold",
+                                               fontWeight: FontWeight.w700,
+                                               color: CustColors.light_navy,
+                                             ),
+                                           ))),
+                                 ),
 
-                    child: isWaiting
-                        ? mechanicNotFountWidget(size)
-                        : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                mechanicStartServiceTitle(size),
-                                mechanicStartServiceImage(size),
-                                mechanicEditSelectedService(size, "$selectedServiceName"),
-                                mechanicAdditionalFaultService(size, "" ),
-                                InkWell(
-                                  onTap: (){
-                                    print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
-                                    _awaitReturnValueFromSecondScreenOnAdd(context);
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                          right: size.width * 8 / 100,
-                                          top: size.height * 1.2 / 100
-                                        ),
-                                          child: Text("Add more",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: "SharpSans_Bold",
-                                              fontWeight: FontWeight.w700,
-                                              color: CustColors.light_navy,
-                                            ),
-                                          ))),
-                                ),
-
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: size.width * 27.5 / 100,
-                                    right: size.width * 27.5 / 100,
-                                    top: size.height * 6 / 100
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.center,
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset('assets/image/ic_alarm.svg',
-                                              width: size.width * 4 / 100,
-                                              height: size.height * 4 / 100,),
-                                            SizedBox(width: 20,),
-                                            /*Expanded(
-                                child: Text("$totalEstimatedTime",
-                                  style: TextStyle(
-                                      fontSize: 36,
-                                      fontFamily: "SharpSans_Bold",
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      letterSpacing: .7
-                                  ),
-                                ),
-                              ),*/
-                                            CountdownMechanicTimer(
-                                              animation: StepTween(
-                                                begin: levelClock, // THIS IS A USER ENTERED NUMBER
-                                                end: 0,
-                                              ).animate(_controller),
-                                            ),
-                                          ],
-                                        ),
+                                 Container(
+                                   margin: EdgeInsets.only(
+                                       left: size.width * 27.5 / 100,
+                                       right: size.width * 27.5 / 100,
+                                       top: size.height * 6 / 100
+                                   ),
+                                   child: Column(
+                                     children: [
+                                       Container(
+                                         alignment: Alignment.center,
+                                         child: Row(
+                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                           mainAxisAlignment: MainAxisAlignment.center,
+                                           children: [
+                                             SvgPicture.asset('assets/image/ic_alarm.svg',
+                                               width: size.width * 4 / 100,
+                                               height: size.height * 4 / 100,),
+                                             SizedBox(width: 20,),
+                                             /*Expanded(
+                                    child: Text("$totalEstimatedTime",
+                                      style: TextStyle(
+                                          fontSize: 36,
+                                          fontFamily: "SharpSans_Bold",
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          letterSpacing: .7
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(13),
-                                            ),
-                                            border: Border.all(
-                                                color: CustColors.light_navy02,
-                                                width: 0.3
-                                            )
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text("Total estimated time "),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  ),*/
+                                             CountdownMechanicTimer(
+                                               animation: StepTween(
+                                                 begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                                                 end: 0,
+                                               ).animate(_controller),
+                                             ),
+                                           ],
+                                         ),
+                                       ),
+                                       Container(
+                                         decoration: BoxDecoration(
+                                             borderRadius: BorderRadius.all(
+                                               Radius.circular(13),
+                                             ),
+                                             border: Border.all(
+                                                 color: CustColors.light_navy02,
+                                                 width: 0.3
+                                             )
+                                         ),
+                                         child: Padding(
+                                           padding: const EdgeInsets.all(8.0),
+                                           child: Text("Total estimated time "),
+                                         ),
+                                       )
+                                     ],
+                                   ),
+                                 ),
 
-                                mechanicStartServiceButton(size),
-                              ],
-                            ) ,
+                                 mechanicStartServiceButton(size),
+                               ],
+                             ),
+                           ),
                   ),
                 ),
               ],
@@ -460,7 +460,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         updateToCloudFirestoreDB();
         //isWaiting = true;
         setState(() {
-          isCustomerApproved = "1";
+          isWaiting = "0";
         });
       },
       child: Align(
@@ -483,7 +483,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-            isCustomerApproved == "0" ? "Update Services" : "Waiting For Customer Approval"  ,
+            "Update Services",
+            //isCustomerApproved == "0" ? "Update Services" : "Waiting For Customer Approval"  ,
             //"Start work",
             style: TextStyle(
               fontSize: 14.3,
@@ -635,15 +636,27 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       }
   }
 
-  Widget mechanicNotFountWidget(Size size) {
+  Widget waitCustomerResponseWidget(Size size) {
     return Expanded(
       child: Container(
         //color: Colors.lightGreen,
         margin: EdgeInsets.only(
-            left: size.width * 6 / 100,
-            right: size.width * 6 / 100,
-            top: size.height * 8 / 100,
-            bottom: size.height * 3.5 / 100
+            left: size.width * 5 / 100,
+            right: size.width * 5 / 100,
+            top: size.height * 12 / 100,
+            bottom: size.height * 12 / 100
+        ),
+        padding: EdgeInsets.only(
+            left: size.width * 3.5 / 100,
+            right: size.width * 3.5 / 100,
+            top: size.height * 5 / 100,
+            bottom: size.height * 5 / 100
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          color: CustColors.cloudy_blue,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -676,13 +689,80 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Oops!! Customer not found!",
+                    Text("Oops!! Customer Response not found!",
                       style: Styles.oopsmechanicNotFoundStyle01,
                     ),
                     Text("Confirmation is Mandatory",
                       style: Styles.smallTitleStyle3,
                     ),
                     Text("Wait for Customer Response...!",
+                      style: Styles.TryAfterSomeTimetyle01,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            //tryAgainButtonWidget(size),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget customerResponseAcceptRejectWidget(Size size) {
+    return Expanded(
+      child: Container(
+        color: CustColors.pale_grey,
+         padding: EdgeInsets.only(
+            left: size.width * 6 / 100,
+            right: size.width * 6 / 100,
+            top: size.height * 10 / 100,
+            bottom: size.height * 4 / 100
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              child: SvgPicture.asset(
+                'assets/image/img_oops_mechanic_bg.svg',
+                height: size.height * 27 / 100,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                margin: EdgeInsets.only(
+                    left: size.width * 1 / 100,
+                    right: size.width * 1 / 100,
+                    top: size.height * 7 / 100
+                ),
+                height: size.height * 18 / 100,
+                width: size.width,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                  color: CustColors.pale_grey,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      isWaiting == "-1" ?
+                      "Oops!! Customer Rejected !" : "Congratulation!! Customer Accepted !",
+                      style: Styles.oopsmechanicNotFoundStyle01,
+                    ),
+                    Text(
+                      //isWaiting == "-1" ?
+                      "Customer's Confirmation",
+                      style: Styles.smallTitleStyle3,
+                    ),
+                    Text(
+                      "Press Continue to start Work",
+                      //"Wait for Customer Response...!",
                       style: Styles.TryAfterSomeTimetyle01,
                     ),
                   ],
@@ -701,7 +781,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       alignment: Alignment.bottomRight,
       child: Container(
         margin: EdgeInsets.only(
-          //right: size.width * 6.2 / 100,
+          right: size.width * 2.2 / 100,
             top: size.height * 22 / 100
         ),
         decoration: BoxDecoration(
@@ -711,20 +791,23 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             color: CustColors.light_navy
         ),
         padding: EdgeInsets.only(
-          left: size.width * 4 / 100,
-          right: size.width * 4 / 100,
+          left: size.width * 5 / 100,
+          right: size.width * 5 / 100,
           top: size.height * 1 / 100,
           bottom: size.height * 1 / 100,
         ),
         child: InkWell(
           onTap: (){
             //Navigator.of(context, rootNavigator: true).pop();
-            setState(() {
-              isWaiting = false;
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  CustomerApprovedScreen()
+                )).then((value){
             });
           },
           child: Text(
-            "Try again",
+            "Continue",
             style: TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,
