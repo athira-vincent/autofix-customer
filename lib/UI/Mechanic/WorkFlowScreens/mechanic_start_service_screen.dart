@@ -31,7 +31,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   bool isExpanded = false;
 
-  String authToken="", bookingId = "100";
+  String authToken="", bookingId = "";
   String isCustomerApproved = "0";
 
   String customerDiagonsisApproval = "0";

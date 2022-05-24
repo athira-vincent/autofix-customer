@@ -65,8 +65,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = "100";
-      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId = "100";
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
