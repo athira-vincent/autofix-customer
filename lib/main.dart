@@ -134,7 +134,7 @@ class _MyAppState extends State<MyApp> {
                    longitude: "76.2426616",
                  ),*/
 
-                 // home: MechanicStartServiceScreen()
+                 // home: MechanicWaitingPaymentScreen()
 
                    // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
 
