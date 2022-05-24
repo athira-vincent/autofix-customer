@@ -163,9 +163,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
         "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
-        "updatedServiceList" : "FieldValue.arrayUnion(yourItemList)",
+        "updatedServiceList" : "",
         "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
-        "serviceModel" : "FieldValue.arrayUnion(yourItemList)",
+        "serviceModel" : "",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
@@ -210,7 +210,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           SharedPreferences shdPre = await SharedPreferences.getInstance();
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
-          updateToCloudFirestoreDB();
+           updateToCloudFirestoreDB();
 
           Navigator.pushReplacement(
               context,
@@ -230,7 +230,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     }
   }
 
-  void updateToCloudFirestoreDB() {
+  void updateToCloudFirestoreDB() async{
 
     yourItemList.add({
       "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
@@ -276,9 +276,21 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
       "serviceCost" :"${widget.notificationPayloadMdl.serviceCost}",
       "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
-      "updatedServiceList" : "FieldValue.arrayUnion(yourItemList)",
+      "updatedServiceList" : FieldValue.arrayUnion([{
+        "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
+        "serviceId": '${widget.notificationPayloadMdl.serviceId}',
+        "serviceName": '${widget.notificationPayloadMdl.serviceName}',
+        "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
+        "isDefault":  '1',
+      }]),
       "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
-      "serviceModel" : "FieldValue.arrayUnion(yourItemList)",
+      "serviceModel" : FieldValue.arrayUnion([{
+        "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
+        "serviceId": '${widget.notificationPayloadMdl.serviceId}',
+        "serviceName": '${widget.notificationPayloadMdl.serviceName}',
+        "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
+        "isDefault":  '1',
+      }]),
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",

@@ -119,6 +119,13 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    yourItemList.add({
+      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+      "serviceTime" : "30",
+      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
+      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+      "isDefault":  '1',
+    });
     getSharedPrefData();
     _listen();
 
@@ -134,14 +141,14 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
 
-      yourItemList.add({
+     /* yourItemList.add({
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
         "serviceTime" : "30",
         "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
         "isDefault":  '1',
       });
-
+*/
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
 
@@ -289,7 +296,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "serviceTime" : "30",
         "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-        "serviceList" : "[{ 'serviceName' : '${widget.mechanicListData?.mechanicService?[0].service?.serviceName}','serviceId' : '${widget.serviceIds}'}]",
+        "serviceList" : "${yourItemList.toString()}",
         "carName" : "$carNameBrand [$carNameModel]",
         "carPlateNumber" : "$carPlateNumber",
         "customerName" : "$userName",
@@ -369,8 +376,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-  void updateToCloudFirestoreDB() {
-    yourItemList.add({
+  Future<void> updateToCloudFirestoreDB() async {
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
+     yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
       "serviceTime" : "30",
       "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
@@ -378,11 +386,17 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       "isDefault":  '1',
     });
 
-    _firestore
+     _firestore
         .collection("ResolMech")
         .doc('$bookingIdEmergency')
         .update({
-          "serviceModel" : FieldValue.arrayUnion(yourItemList),
+          "serviceModel" : FieldValue.arrayUnion([{
+            "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+            "serviceTime" : "30",
+            "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
+            "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
+            "isDefault":  '1',
+          }]),
           "updatedServiceList": FieldValue.arrayUnion(yourItemList),
          "customerFromPage": "MechanicTrackingScreen",
 
@@ -420,8 +434,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       else
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
+          await updateToCloudFirestoreDB();
           setState(() {
-            updateToCloudFirestoreDB();
+             updateToCloudFirestoreDB();
             Navigator.of(context, rootNavigator: true).pop();
             Navigator.pushReplacement(
                 context,

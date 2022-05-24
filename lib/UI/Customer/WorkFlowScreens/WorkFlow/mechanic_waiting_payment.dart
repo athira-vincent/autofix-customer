@@ -28,6 +28,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
   String totalEstimatedCost = "0";
 
   String totalEstimatedTime = "0";
+  String customerDiagonsisApproval = "1";
   String mechanicName = "";
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -64,6 +65,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
       setState(() {
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
+        customerDiagonsisApproval = event.get('customerDiagonsisApproval');
 
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
@@ -368,8 +370,16 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
           if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
           if (snapshot.hasData) {
+            List allData;
+            if(customerDiagonsisApproval=="-1")
+              {
+                allData = snapshot.data?.data()!['serviceModel'].toList();
+              }
+            else
+              {
+                 allData = snapshot.data?.data()!['updatedServiceList'].toList();
+              }
 
-            List allData = snapshot.data?.data()!['updatedServiceList'].toList();
 
             print('StreamBuilder ++++ ${allData.length} ');
             print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');

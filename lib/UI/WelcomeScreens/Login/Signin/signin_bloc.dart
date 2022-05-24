@@ -48,9 +48,12 @@ class SigninBloc {
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }
 
-  void userDefaultData(String token,) async {
+  void userDefaultData(String token,String userType, String userName, String userId, ) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
+    shdPre.setString(SharedPrefKeys.userType, userType);
+    shdPre.setString(SharedPrefKeys.userName, userName);
+    shdPre.setString(SharedPrefKeys.userID, userId);
     GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }

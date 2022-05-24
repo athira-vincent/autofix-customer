@@ -123,10 +123,9 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                //home: SplashScreen(),
+                home: SplashScreen(),
 
-                //home: MechanicStartServiceScreen(),
-                home: MechanicStartServiceScreen(),
+                // home: CustomerApprovedScreen(),
 
                 // home: MechanicWorkCompletedScreen(),
 
@@ -135,11 +134,11 @@ class _MyAppState extends State<MyApp> {
                    longitude: "76.2426616",
                  ),*/
 
-                 // home: MechanicStartServiceScreen()
+                  // home: MechanicWaitingPaymentScreen()
 
                    // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
 
-                  // home:   MechanicWorkProgressScreen(workStatus: "2",)
+                  // home:   MechanicWorkProgressScreen(workStatus: "1",)
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
 
