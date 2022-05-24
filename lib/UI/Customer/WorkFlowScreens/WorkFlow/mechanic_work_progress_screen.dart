@@ -142,9 +142,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     reference.snapshots().listen((querySnapshot) {
       setState(() {
 
-
-
-
         if(widget.workStatus =="1") {
           mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
           print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');

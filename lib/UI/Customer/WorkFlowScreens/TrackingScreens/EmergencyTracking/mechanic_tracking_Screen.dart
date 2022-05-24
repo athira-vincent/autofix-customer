@@ -303,7 +303,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
                     if (snapshot.hasData) {
 
-                      print('StreamBuilder ++++ ${snapshot.data?.data()!['latitude']} ');
                       Timer(const Duration(seconds: 15), () {
                         if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                         {

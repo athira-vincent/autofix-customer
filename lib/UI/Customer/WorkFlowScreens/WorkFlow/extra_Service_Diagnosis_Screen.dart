@@ -34,6 +34,8 @@ class ExtraServiceDiagonsisScreen extends StatefulWidget {
 class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScreen> {
 
 
+  BuildContext? contextAlert;
+
   double per = .10;
   double perfont = .10;
   double height = 0;
@@ -84,28 +86,30 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB();
+      listenToCloudFirestoreDB(context);
     });
 
   }
 
-  void listenToCloudFirestoreDB() {
+  void listenToCloudFirestoreDB(BuildContext context) {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
         reference.snapshots().listen((querySnapshot) {
           setState(() {
             isWorkStarted = querySnapshot.get("isWorkStarted");
             print('isWorkStarted ++++ $isWorkStarted');
-            if(isWorkStarted == "1")
-            {
-              //Navigator.of(context, rootNavigator: true).pop();
-
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
-
-            }
         });
+          if(isWorkStarted == "1")
+          {
+
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                MechanicWorkProgressScreen(workStatus: "2",)), (Route<dynamic> route) => false);
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));*/
+
+          }
       });
   }
 
@@ -660,8 +664,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   _showMechanicAcceptanceDialog(BuildContext context) async {
     await showDialog(
         context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
+        builder: (context) {
             return AlertDialog(
                 backgroundColor: Colors.white,
                 insetPadding: EdgeInsets.only(left: 20, right: 20),
@@ -700,7 +703,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                     ],
                   ),
                 ));
-          });
         });
 
 
