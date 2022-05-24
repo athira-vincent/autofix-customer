@@ -125,9 +125,9 @@ class _MyAppState extends State<MyApp> {
 
                 home: SplashScreen(),
 
-                // home: CustomerApprovedScreen(),
+                 //home: MechanicStartServiceScreen(),
 
-                // home: MechanicWorkCompletedScreen(),
+                //home: MechanicWorkCompletedScreen(),
 
                  /*home: FindYourCustomerScreen(
                    latitude: "10.5062492",

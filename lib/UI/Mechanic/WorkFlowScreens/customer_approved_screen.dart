@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -24,7 +26,7 @@ class CustomerApprovedScreen extends StatefulWidget {
 
 class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with TickerProviderStateMixin{
 
-  bool isStartedWork = false;
+  bool isStartedWork = false, isEnableAddMoreBtn = false;
   bool _isLoading = false;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -46,6 +48,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   late StateSetter extraTimeStateSetter;
+  Timer? timerObj;
+  Timer? timerObjVar;
+  late int timeCounter;
 
   @override
   void initState() {
@@ -66,8 +71,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = "100";
-      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId = "100";
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
@@ -79,21 +84,23 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         customerName = event.get('customerName');
         updatedServiceTime = event.get('updatedServiceTime');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
-        extendedTime = event.get('updatedServiceTime');
+        //extendedTime = event.get('updatedServiceTime');
+        extendedTime = updatedServiceTime;
         print('_firestore11');
 
         if(listenToFirestoreTime == "0")
           {
             levelClock = int.parse('${updatedServiceTime.split(":").first}') + 1;
+            //levelClock = Duration(minutes: int.parse('$levelClock')).inSeconds;
             int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
             levelClock = sec;
             _controller = AnimationController(
                 vsync: this,
                 duration: Duration(
                   //minutes: minutesLevelClock,
-                    seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+                    seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the application
             );
-            listenToFirestoreTime = "1";
+            listenToFirestoreTime = "1";    // ....????
           }
       });
       setState(() {
@@ -147,7 +154,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    isStartedWork ? mechanicAddMoreTimeButton(size) : Container(),
+                    isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
                     mechanicStartServiceButton(size),
                   ],
                 )
@@ -363,25 +370,21 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         onTap: (){
             if(isStartedWork == false){
               setState(() {
-                print("updateToCloudFirestoreDB isStartedWork$isStartedWork");
-                isStartedWork = !isStartedWork;
+                print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
+                //isStartedWork = !isStartedWork;
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
                 print("levelClock $levelClock");
-
                 updateToCloudFirestoreDB("1", "0", extendedTime);
               });
-              _controller = AnimationController(
+              /*_controller = AnimationController(
                   vsync: this,
                   duration: Duration(
                       seconds:
                       levelClock) // gameData.levelClock is a user entered number elsewhere in the application
-              );
-              print("updateToCloudFirestoreDB _controller.status  ${_controller.status}");
+              );*/
               _controller.forward();
-              //_controller.addListener(_updateListener);
-              /*_controller.addListener(() {
-                print("_controller.value >>>>> " + _controller.value.toString());
-              });*/
+              _updateTimerListener();
+              isStartedWork = true;
             }
             else
             {
@@ -447,23 +450,21 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     );
   }
 
-  void _updateListener() {
-    setState(() {
+  void _updateTimerListener() {
 
+    timeCounter = _controller.duration!.inMinutes;
 
-     int i = (_controller.value * 299792458).round();
-     Duration clockTimer = Duration(seconds: _controller.value.round());
-     print("clockTimer.value >>>>> " + i.toString());
+    timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
+      timerObjVar = t;
 
-     print('inMinutes ${clockTimer.inMinutes.toString()}');
-     print('clockTimer.inMinutes.remainder(60).toString() >>> ${clockTimer.inMinutes.remainder(60).toString()}');
-
-     print(">>>>>>> \n _controller.value >>>>> " + _controller.value.toString());
-
-     print("_controller.duration >>>>> " + _controller.duration!.inMinutes.toString());
-     print("clockTimer >>>>> " + clockTimer.inMinutes.toString());
-     print("levelClock >>>>> " + levelClock.toString());
-    // _controller.
+      print('Timer timerObj ++++++' + timerObjVar.toString());
+      timeCounter = timeCounter - 1;
+      print("timeCounter >>>>>> " + timeCounter.toString());
+      if( timeCounter < 6 ){
+        setState(() {
+          isEnableAddMoreBtn = true;
+        });
+      }
     });
   }
 
@@ -676,9 +677,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                                  seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
                          );
                          print("clock2 _controller ${_controller.status}");
-
-                         _controller.forward();
+                        //_controller.reset();
+                        isEnableAddMoreBtn = false;
+                        _controller.forward();
                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
+
                       });
 
                       Navigator.of(context).pop();

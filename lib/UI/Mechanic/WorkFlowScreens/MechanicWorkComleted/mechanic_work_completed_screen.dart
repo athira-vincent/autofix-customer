@@ -37,7 +37,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   String selectedState = "";
 
   double totalFees = 0.0;
-  String authToken="", bookingId = "", paymentStatus = "", text = "request payment";
+  String authToken="", bookingId = "", paymentStatus = "", text = "request payment", customerDiagonsisApproval = "";
   String totalEstimatedTime = "", totalEstimatedCost = "", mechanicName = "";
 
   double _setValue(double value) {
@@ -78,7 +78,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
       _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
 
-
+        customerDiagonsisApproval = event.get("customerDiagonsisApproval");
         mechanicName = event.get('mechanicName');
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
@@ -87,9 +87,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         setState(() {
 
         });
-
       });
-
     });
   }
 
@@ -353,9 +351,14 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                     if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
-
-                      List allData = snapshot.data?.data()!['updatedServiceList'].toList();
-                      allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
+                      List allData = [];
+                      if(customerDiagonsisApproval == "1"){
+                        allData = snapshot.data?.data()!['updatedServiceList'].toList();
+                        allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
+                      }else if(customerDiagonsisApproval == "-1"){
+                        allData = snapshot.data?.data()!['serviceModel'].toList();
+                        allData.add(snapshot.data?.data()!['serviceModel'].toList()) ;
+                      }
 
                       print('StreamBuilder ++++ ${allData.length} ');
                       print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');

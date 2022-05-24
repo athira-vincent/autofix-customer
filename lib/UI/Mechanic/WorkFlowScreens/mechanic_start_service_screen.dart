@@ -81,6 +81,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      //bookingId = "100";
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
 
@@ -94,12 +95,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
         selectedServiceTime = Duration(minutes: int.parse('${allData[0]['serviceTime'].split(".").first}')).inSeconds;
         levelClock =  selectedServiceTime + 1;
-        _controller = AnimationController(
-            vsync: this,
-            duration: Duration(
-                seconds:
-                levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-        );
       });
       setState(() {
 
@@ -543,15 +538,17 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           int time = Duration(seconds: selectedServiceTime).inMinutes;
 
           serviceTotalTimeForFirebase =  time.toString();
-
           print(" serviceTotalTimeForFirebase = selectedServiceTime.toString();  >>>>> " + serviceTotalTimeForFirebase);
+
           levelClock =  selectedServiceTime + 1;
-          _controller = AnimationController(
+         // _controller.reset();
+
+          /*_controller = AnimationController(
               vsync: this,
               duration: Duration(
                   seconds:
                   levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-          );
+          );*/
           print(" serviceTotalCostForFirebase >>>>>>>>  " + serviceTotalCostForFirebase);
           print(" additionalServiceNames >>>>>>>>>> " + additionalServiceNames
               + " selectedServiceTime >>>>>>>> " + selectedServiceTime.toString()
@@ -626,12 +623,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             print(" result[0].fee.toString() >>>>>>>>  " + serviceTotalCostForFirebase);
             selectedServiceTime = Duration(minutes: int.parse('${result[0].time.split(":").last}')).inSeconds;
             levelClock =  selectedServiceTime + 1;
-            _controller = AnimationController(
+            /*_controller = AnimationController(
                 vsync: this,
                 duration: Duration(
                     seconds:
                     levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-            );
+            );*/
             print(" selectedServiceName >>>>>>>>>> " + selectedServiceName
                 + " selectedServiceTime >>>>>>>> " + selectedServiceTime.toString()
                 + " levelClock >>>>>>>>>>>> " + levelClock.toString()
