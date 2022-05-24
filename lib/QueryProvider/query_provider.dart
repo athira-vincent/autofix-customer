@@ -121,15 +121,21 @@ class QueryProvider {
 
   phoneLogin(  phoneNumber) async {
     String _query = """
-    mutation {
-      signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
-        otp
-        phoneNo
-        id
-        userTypeId
-        jwtToken
-      }
-    }
+        mutation {
+          signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
+            otp
+            phoneNo
+            id
+            lastName
+            fcmToken
+            firstName
+            emailId
+            status
+            userTypeId
+            jwtToken
+          }
+        }
+
     """;
 
     return await GqlClient.I.mutation(_query,

@@ -75,7 +75,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefaultData(value.data!.signInPhoneNo!.jwtToken.toString());
+          _signinBloc.userDefaultData(value.data!.signInPhoneNo!.jwtToken.toString(),
+              value.data!.signInPhoneNo!.userTypeId.toString(),
+              value.data!.signInPhoneNo!.firstName.toString(),
+              value.data!.signInPhoneNo!.id.toString());
           Navigator.push(
             context,
             MaterialPageRoute(

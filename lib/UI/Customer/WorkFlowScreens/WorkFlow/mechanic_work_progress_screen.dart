@@ -59,7 +59,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String extendedTimeFirstTymCall="0";
 
   late AnimationController _controller;
-  int levelClock = 0;
+  int levelClock = 1800;
   int levelClock1 = 0;
 
   Timer? timerForCouterTime;
