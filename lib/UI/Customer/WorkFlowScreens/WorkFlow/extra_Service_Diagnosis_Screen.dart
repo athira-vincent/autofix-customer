@@ -67,9 +67,11 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
-
   String totalEstimatedTime = "0";
   String totalEstimatedCost = "0";
+  String oldTotalEstimatedTime = "0";
+  String oldTotalEstimatedCost = "0";
+
 
   @override
   void initState() {
@@ -132,6 +134,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         isWorkStarted = event.get("isWorkStarted");
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
+        oldTotalEstimatedTime = event.get('serviceModel')[0]['serviceTime'];
+        oldTotalEstimatedCost = event.get('serviceModel')[0]['serviceCost'];
         mechanicName = event.get('mechanicName');
 
         List allData = event.get('updatedServiceList').toList();
@@ -149,19 +153,44 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
 
 
-  void updateToCloudFirestoreDB() {
+  void updateToCloudFirestoreDB(String customerDiagonsisApproval) {
+    print('customerDiagonsisApproval00 $customerDiagonsisApproval');
+    print('customerDiagonsisApproval00 $customerDiagonsisApproval');
 
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
+
+    if(customerDiagonsisApproval == "-1")
+      {
+        print('customerDiagonsisApproval11 -1');
+        _firestore
+            .collection("ResolMech")
+            .doc('${bookingIdEmergency}')
+            .update({
+              'customerDiagonsisApproval': "-1",
+              'updatedServiceCost': "$oldTotalEstimatedCost",
+              'updatedServiceTime': "$oldTotalEstimatedTime",
+              'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "2",)'
+
+            })
+            .then((value) => print("Uploaded to firestore"))
+            .catchError((error) =>
+            print("Failed to upload: $error"));
+      }
+    else{
+      print('customerDiagonsisApproval22 -1');
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingIdEmergency}')
+          .update({
             'customerDiagonsisApproval': "1",
             'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "2",)'
 
-    })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
+          })
+          .then((value) => print("Uploaded to firestore"))
+          .catchError((error) =>
+          print("Failed to upload: $error"));
+    }
+
+
 
   }
 
@@ -550,41 +579,24 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   }
 
   Widget RequestButton(Size size, BuildContext context) {
-    return InkWell(
-      onTap: (){
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0,left: 20,right: 20),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: (){
+              if(widget.isEmergency){
+                print('RequestButton ++++ $serviceIds ');
+                updateToCloudFirestoreDB("-1");
+                _showMechanicAcceptanceDialog( context);
+                _addMoreServiceBloc.postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
+              }
 
-        if(widget.isEmergency){
-
-          print('RequestButton ++++ $serviceIds ');
-
-          updateToCloudFirestoreDB();
-
-          _showMechanicAcceptanceDialog( context);
-
-
-
-          _addMoreServiceBloc. postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
-
-
-        }else{
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PickedUpVehicleScreen()));
-        }
-
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
-          children: [
-            Spacer(),
-            Container(
+            },
+            child: Container(
               height: 45,
-              width:200,
+              width:150,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
-              //padding: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
                 color: CustColors.light_navy,
                 border: Border.all(
@@ -595,7 +607,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                 borderRadius: BorderRadius.circular(7),
               ),
               child:  Text(
-                "Agree & continue",
+                "Reject and continue",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Corbel_Bold',
@@ -604,8 +617,42 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                     fontWeight: FontWeight.w800),
               ),
             ),
-          ],
-        ),
+          ),
+          Spacer(),
+          InkWell(
+          onTap: (){
+              if(widget.isEmergency){
+                  print('RequestButton ++++ $serviceIds ');
+                  updateToCloudFirestoreDB("1");
+                  _showMechanicAcceptanceDialog( context);
+                  _addMoreServiceBloc. postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
+              }
+           },
+            child: Container(
+              height: 45,
+              width:150,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: CustColors.light_navy,
+                border: Border.all(
+                  color: CustColors.blue,
+                  style: BorderStyle.solid,
+                  width: 0.70,
+                ),
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child:  Text(
+                "Accept & continue",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Corbel_Bold',
+                    fontSize:
+                    ScreenSize().setValueFont(14.5),
+                    fontWeight: FontWeight.w800),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

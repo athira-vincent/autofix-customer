@@ -295,7 +295,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       mechanicMarker (latLng);
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
         print('DISTANCE getPositionStream distanceInMeters===== : ${distanceInMeters/1000}    ++++  $_placeDistance');
-        if(int.parse('${(distanceInMeters/1000).toString().split('.').first}') <= 5)
+        if(int.parse('${(distanceInMeters/1000).toString().split('.').first}') <= 1)
           {
             isArrived = true;
           }
