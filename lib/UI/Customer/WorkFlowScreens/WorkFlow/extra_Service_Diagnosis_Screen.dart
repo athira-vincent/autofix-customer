@@ -58,6 +58,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   var _firestoreData ;
 
   String isWorkStarted = "0";
+  String isWorkStartedButtonClick = "0";
+
 
 
   Timer? timerObjVar;
@@ -101,13 +103,18 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
           if(isWorkStarted == "1")
           {
 
-            Navigator.of(context, rootNavigator: true).pop();
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                MechanicWorkProgressScreen(workStatus: "2",)), (Route<dynamic> route) => false);
-            /*Navigator.push(
+            if(isWorkStartedButtonClick == "1")
+            {
+              //Navigator.of(context, rootNavigator: true).pop();
+             /* Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  MechanicWorkProgressScreen(workStatus: "2",)), (Route<dynamic> route) => false);*/
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));*/
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+            }
+
+
 
           }
       });
@@ -180,7 +187,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
             print("Failed to upload: $error"));
       }
     else{
-      print('customerDiagonsisApproval22 -1');
+      print('customerDiagonsisApproval22 1');
       _firestore
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
@@ -213,19 +220,85 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
-
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                appBarCustomUi(size),
-                infoText(),
-                bagroundBgText(size),
+                Column(
 
-                selectedRepairDetailsUi(size),
-                estimatedAndTimeTakenUi(size),
-                RequestButton( size,context)
+                  children: [
+                    appBarCustomUi(size),
+                    infoText(),
+                    bagroundBgText(size),
+
+                    selectedRepairDetailsUi(size),
+                    estimatedAndTimeTakenUi(size),
+                    RequestButton( size,context)
+                  ],
+                ),
+                isWorkStartedButtonClick == "1"
+                  ? mechanicResponseWidget(size)
+                  : Container(),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget mechanicResponseWidget(Size size) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Container(
+        height: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width,
+
+        alignment: Alignment.center,
+
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              offset: Offset(0, 0),
+              blurRadius: 5,
+              spreadRadius: 3,
+              color: Colors.black26,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    "Wait few minutes !",
+                    style: Styles.oopsmechanicNotFoundStyle01,
+                  ),
+                  Text(
+                    "Wait for the response from $mechanicName! to start the work",
+                    textAlign: TextAlign.center,
+                    style: Styles.oopsmechanicNotFoundStyle01,
+                  ),
+                  Container(
+                      height: 200,
+                      child: SvgPicture.asset(
+                        'assets/image/mechanicProfileView/waitForMechanic.svg',
+                        height: 200,
+                        fit: BoxFit.cover,
+                      )
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -589,12 +662,17 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         children: [
           InkWell(
             onTap: (){
-              if(widget.isEmergency){
-                print('RequestButton ++++ $serviceIds ');
-                updateToCloudFirestoreDB("-1");
-                _showMechanicAcceptanceDialog( context);
-                _addMoreServiceBloc.postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
-              }
+              setState(() {
+                if(widget.isEmergency){
+                  if(isWorkStartedButtonClick=="0")
+                    {
+                      isWorkStartedButtonClick = "1";
+                      print('RequestButton ++++ $serviceIds ');
+                      updateToCloudFirestoreDB("-1");
+                      _addMoreServiceBloc. postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
+                    }
+                }
+              });
 
             },
             child: Container(
@@ -602,9 +680,9 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
               width:150,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: CustColors.light_navy,
+                color: isWorkStartedButtonClick=="0" ? CustColors.light_navy : CustColors.greyText1,
                 border: Border.all(
-                  color: CustColors.blue,
+                  color: isWorkStartedButtonClick=="0" ? CustColors.blue : CustColors.greyText1,
                   style: BorderStyle.solid,
                   width: 0.70,
                 ),
@@ -614,7 +692,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                 "Reject and continue",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Colors.white,
+                    color:  isWorkStartedButtonClick=="0" ? Colors.white : CustColors.brownish_grey_02,
                     fontFamily: 'Corbel_Bold',
                     fontSize:
                     ScreenSize().setValueFont(14.5),
@@ -625,21 +703,28 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
           Spacer(),
           InkWell(
           onTap: (){
+
+
+            setState(() {
               if(widget.isEmergency){
+                if(isWorkStartedButtonClick=="0")
+                {
+                  isWorkStartedButtonClick = "1";
                   print('RequestButton ++++ $serviceIds ');
                   updateToCloudFirestoreDB("1");
-                  _showMechanicAcceptanceDialog( context);
                   _addMoreServiceBloc. postCustomerAddMoreServiceUpdate(authToken, bookingIdEmergency, serviceIds,totalEstimatedCost, totalEstimatedTime);
-              }
+                }}
+            });
+
            },
             child: Container(
               height: 45,
               width:150,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: CustColors.light_navy,
+                color: isWorkStartedButtonClick=="0" ? CustColors.light_navy : CustColors.greyText1,
                 border: Border.all(
-                  color: CustColors.blue,
+                  color: isWorkStartedButtonClick=="0" ? CustColors.blue : CustColors.greyText1,
                   style: BorderStyle.solid,
                   width: 0.70,
                 ),
@@ -648,7 +733,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
               child:  Text(
                 "Accept & continue",
                 style: TextStyle(
-                    color: Colors.white,
+                    color:  isWorkStartedButtonClick=="0" ? Colors.white : CustColors.brownish_grey_02,
                     fontFamily: 'Corbel_Bold',
                     fontSize:
                     ScreenSize().setValueFont(14.5),
@@ -659,53 +744,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         ],
       ),
     );
-  }
-
-  _showMechanicAcceptanceDialog(BuildContext context) async {
-    await showDialog(
-        context: context,
-        builder: (context) {
-            return AlertDialog(
-                backgroundColor: Colors.white,
-                insetPadding: EdgeInsets.only(left: 20, right: 20),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                contentPadding: const EdgeInsets.all(20),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from $mechanicName!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                              height: 150,
-                              child: SvgPicture.asset(
-                                'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-        });
-
-
   }
 
 

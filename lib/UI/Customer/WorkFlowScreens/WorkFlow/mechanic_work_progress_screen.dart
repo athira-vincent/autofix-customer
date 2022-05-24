@@ -140,7 +140,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
-      setState(() {
 
         if(widget.workStatus =="1") {
           mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
@@ -163,7 +162,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               print('levelClock  levelClock2 ++++ ${levelClock1}');
 
 
-              _controller.stop();
               _controller = AnimationController(
                   vsync: this,
                   duration: Duration(
@@ -181,44 +179,41 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           print('isPaymentRequested ++++ $isPaymentRequested');
         }
 
-
-        if(widget.workStatus =="1")
+      if(widget.workStatus =="1")
+      {
+        if(mechanicDiagonsisState =="1")
         {
-          if(mechanicDiagonsisState =="1")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
-                )).then((value){
-            });
-          }
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ExtraServiceDiagonsisScreen(isEmergency: true,)
+              )).then((value){
+          });
         }
-        else if(widget.workStatus =="2")
+      }
+      else if(widget.workStatus =="2")
+      {
+        if(isWorkCompleted =="1")
         {
-          if(isWorkCompleted =="1")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "3",))
-            ).then((value){
-            });
-          }
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MechanicWorkProgressScreen(workStatus: "3",))
+          ).then((value){
+          });
         }
-        else if(widget.workStatus =="3")
+      }
+      else if(widget.workStatus =="3")
+      {
+        if(isPaymentRequested =="1")
         {
-          if(isPaymentRequested =="1")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicWaitingPaymentScreen()));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MechanicWaitingPaymentScreen()));
 
-          }
         }
-
-      });
+      }
     });
   }
 
