@@ -620,6 +620,16 @@ class Styles {
       height: 1.7
   );
 
+  static const oopsmechanicNotFoundStyle02 = TextStyle(
+      fontFamily: 'Samsung_SharpSans_Medium',
+      fontWeight: FontWeight.w500,
+      fontSize: 18,
+      color: CustColors.light_navy,
+      letterSpacing: .5,
+      wordSpacing: .5,
+      height: 1.7
+  );
+
   static const appBarTextBlue = TextStyle(
       fontSize: 18,
       color: CustColors.light_navy,

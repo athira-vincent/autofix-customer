@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                home: SplashScreen(),
+                // home: SplashScreen(),
 
                 // home: CustomerApprovedScreen(),
 
@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
 
                   // home: MechanicWaitingPaymentScreen()
 
-                   // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
+                   home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
 
                   // home:   MechanicWorkProgressScreen(workStatus: "1",)
 
