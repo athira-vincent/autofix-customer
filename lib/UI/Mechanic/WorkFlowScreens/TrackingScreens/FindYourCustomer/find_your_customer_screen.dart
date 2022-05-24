@@ -53,6 +53,8 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   double height = 0;
   String selectedState = "";
   bool _isLoadingPage = true;
+  double distanceInMeters = 0.0;
+
 
   String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
   String? _mapStyle;
@@ -117,11 +119,11 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
     getSharedPrefData();
     _listenServiceListResponse();
-    Timer(const Duration(seconds: 15), () {
+    /*Timer(const Duration(seconds: 15), () {
       setState(() {
         isArrived = true;
       });
-    });
+    });*/
   }
 
   mapStyling() {
@@ -274,14 +276,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     // continue accessing the position of the device.
 
     Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
-
-      speedOfMechanic= event.speed;
-      print('speedOfMechanic ++++++   000==== $speedOfMechanic');
-
       var value1 = event;
-
-      print('getPositionStream ++++++   02');
-
       setState(() {
         _firestore
             .collection("ResolMech")
@@ -298,6 +293,12 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       LatLng latLng=LatLng(double.parse(value1.latitude.toString()), double.parse(value1.longitude.toString()));
       print("latLng 001 ${latLng.latitude}");
       mechanicMarker (latLng);
+        distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
+        print('DISTANCE getPositionStream distanceInMeters===== : ${distanceInMeters/1000}    ++++  $_placeDistance');
+        if(int.parse('${(distanceInMeters/1000).toString().split('.').first}') <= 5)
+          {
+            isArrived = true;
+          }
 
     });
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
@@ -635,16 +636,17 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                             child: Container(
                                               height: 40,
                                               width: 150,
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
+                                              child:  Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "3 mintues",
+                                                    "${(distanceInMeters/1000).toStringAsFixed(2)} km",
                                                     style: Styles.waitingTextBlack17,
+                                                    maxLines: 1,
                                                   ),
                                                   Text(
-                                                    "Arrival time.",
+                                                    "Away",
                                                     style: Styles.awayTextBlack,
                                                   ),
                                                 ],

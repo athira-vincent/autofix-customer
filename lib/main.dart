@@ -122,13 +122,16 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                home: SplashScreen(),
+                // home: SplashScreen(),
 
                 // home: MechanicWorkCompletedScreen(),
 
                  // home: MechanicStartServiceScreen(),
 
-                 // home: CustomerApprovedScreen(),
+                 home: FindYourCustomerScreen(
+                   latitude: "10.5062492",
+                   longitude: "76.2426616",
+                 ),
 
                  // home: DirectPaymentSuccessScreen()
 
