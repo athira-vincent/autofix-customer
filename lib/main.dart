@@ -136,9 +136,9 @@ class _MyAppState extends State<MyApp> {
 
                   // home: MechanicWaitingPaymentScreen()
 
-                   home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
+                   // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
 
-                  // home:   MechanicWorkProgressScreen(workStatus: "1",)
+                  home:   MechanicWorkProgressScreen(workStatus: "2",)
 
                 // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
 
