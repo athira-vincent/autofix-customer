@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landi
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
+import 'package:auto_fix/Widgets/mechanicWorkTimer02.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,8 +66,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      //bookingId = "100";
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingId = "100";
+      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
@@ -373,10 +374,14 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   vsync: this,
                   duration: Duration(
                       seconds:
-                      levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+                      levelClock) // gameData.levelClock is a user entered number elsewhere in the application
               );
-              print("updateToCloudFirestoreDB extendedTime ${_controller.status}");
+              print("updateToCloudFirestoreDB _controller.status  ${_controller.status}");
               _controller.forward();
+              //_controller.addListener(_updateListener);
+              /*_controller.addListener(() {
+                print("_controller.value >>>>> " + _controller.value.toString());
+              });*/
             }
             else
             {
@@ -440,6 +445,26 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         ),
       ),
     );
+  }
+
+  void _updateListener() {
+    setState(() {
+
+
+     int i = (_controller.value * 299792458).round();
+     Duration clockTimer = Duration(seconds: _controller.value.round());
+     print("clockTimer.value >>>>> " + i.toString());
+
+     print('inMinutes ${clockTimer.inMinutes.toString()}');
+     print('clockTimer.inMinutes.remainder(60).toString() >>> ${clockTimer.inMinutes.remainder(60).toString()}');
+
+     print(">>>>>>> \n _controller.value >>>>> " + _controller.value.toString());
+
+     print("_controller.duration >>>>> " + _controller.duration!.inMinutes.toString());
+     print("clockTimer >>>>> " + clockTimer.inMinutes.toString());
+     print("levelClock >>>>> " + levelClock.toString());
+    // _controller.
+    });
   }
 
   Widget mechanicAddMoreTimeButton(Size size){
