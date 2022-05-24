@@ -82,11 +82,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingId = "100";
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
 
     });
     await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
-    //await _firestore.collection("ResolMech").doc('100').snapshots().listen((event) {
       setState(() {
         allData = event.get('serviceModel').toList();
         selectedServiceName = allData[0]['serviceName'];
@@ -135,8 +135,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   void updateToCloudFirestoreDB() {
 
     print("allData >>>>>" + allData.toString());
-    int time =   Duration(seconds: int.parse(serviceTotalTimeForFirebase)).inMinutes;
-    print("time >>>>>>" + time.toString());
+    print("serviceTotalTimeForFirebase  >>>>>>>>>> " + serviceTotalTimeForFirebase);
+   // int time =  Duration(seconds: int.parse(serviceTotalTimeForFirebase)).inMinutes;
+    //print("time  >>> >>>>>>" + time.toString());
 
     if(allData.isNotEmpty){
       _firestore
@@ -146,7 +147,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
               'mechanicDiagonsisState': "1",
               'updatedServiceList' : FieldValue.arrayUnion(allData),
               'updatedServiceCost': "$serviceTotalCostForFirebase",
-              'updatedServiceTime': "$time",
+              'updatedServiceTime': "$serviceTotalTimeForFirebase",
               "customerFromPage" : "ExtraServiceDiagonsisScreen(isEmergency: true,)",
               "mechanicFromPage" : "CustomerApprovedScreen",
               //===================== code for send the list of additional services =========
@@ -537,11 +538,14 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             serviceTotalCostForFirebase =  totalCost.toString();
 
             selectedServiceTime = selectedServiceTime + Duration(minutes: int.parse('${serviceList[0].time.split(":").last}')).inSeconds;
-            serviceTotalTimeForFirebase = selectedServiceTime.toString();
-
           });
         }
         setState(() {
+          int time = Duration(seconds: selectedServiceTime).inMinutes;
+
+          serviceTotalTimeForFirebase =  time.toString();
+
+          print(" serviceTotalTimeForFirebase = selectedServiceTime.toString();  >>>>> " + serviceTotalTimeForFirebase);
           levelClock =  selectedServiceTime + 1;
           _controller = AnimationController(
               vsync: this,
@@ -556,6 +560,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           );
         });
       });
+
     }
     // setState(() {
     //   for(int i = 0; i<serviceList!.length ; i++){
@@ -617,6 +622,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           setState(() {
             selectedServiceName = '${result[0].service!.serviceName.toString()}';
             serviceTotalTimeForFirebase = int.parse('${result[0].time.split(":").last}').toString() ;
+            print( " serviceTotalTimeForFirebase >>>>>>> " + serviceTotalTimeForFirebase);
             serviceTotalCostForFirebase = result[0].fee.toString();
             print(" result[0].fee.toString() >>>>>>>>  " + serviceTotalCostForFirebase);
             selectedServiceTime = Duration(minutes: int.parse('${result[0].time.split(":").last}')).inSeconds;
