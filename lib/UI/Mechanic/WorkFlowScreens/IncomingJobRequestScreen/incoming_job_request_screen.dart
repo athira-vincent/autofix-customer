@@ -163,21 +163,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
         "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
-        "updatedServiceList" : FieldValue.arrayUnion([{
-          "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
-          "serviceId": '${widget.notificationPayloadMdl.serviceId}',
-          "serviceName": '${widget.notificationPayloadMdl.serviceName}',
-          "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
-          "isDefault":  '1',
-        }]),
+        "updatedServiceList" : "",
         "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
-        "serviceModel" : FieldValue.arrayUnion([{
-          "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
-          "serviceId": '${widget.notificationPayloadMdl.serviceId}',
-          "serviceName": '${widget.notificationPayloadMdl.serviceName}',
-          "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
-          "isDefault":  '1',
-        }]),
+        "serviceModel" : "",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
@@ -222,7 +210,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           SharedPreferences shdPre = await SharedPreferences.getInstance();
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
-          updateToCloudFirestoreDB();
+           updateToCloudFirestoreDB();
 
           Navigator.pushReplacement(
               context,
@@ -242,7 +230,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     }
   }
 
-  void updateToCloudFirestoreDB() {
+  void updateToCloudFirestoreDB() async{
 
     yourItemList.add({
       "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
