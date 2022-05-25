@@ -313,6 +313,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         key: _scaffoldKey,
         backgroundColor: CustColors.whiteBlueish,
@@ -538,6 +539,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       controller: _stateController,
                                                       cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
+                                                        suffixIconConstraints: BoxConstraints(
+                                                          minWidth: 25,
+                                                          minHeight: 25,
+                                                        ),
+                                                        suffixIcon: Container(
+                                                          width: 5,
+                                                          height: 10,
+                                                          alignment: Alignment.centerRight,
+                                                          child: IconButton(
+                                                            iconSize: 22,
+                                                            padding: EdgeInsets.zero,
+                                                            icon: Icon(
+                                                              Icons.keyboard_arrow_down_sharp,
+                                                              color: Colors.grey,
+                                                            ),
+                                                            onPressed: () {
+                                                            },
+                                                          ),
+                                                        ),
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_state,
                                                         border: UnderlineInputBorder(
@@ -814,6 +834,26 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       controller: _stateController,
                                                       cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
+                                                        suffixIconConstraints: BoxConstraints(
+                                                          minWidth: 25,
+                                                          minHeight: 25,
+                                                        ),
+                                                        suffixIcon: Container(
+                                                          width: 5,
+                                                          height: 10,
+                                                          alignment: Alignment.centerRight,
+                                                          child: IconButton(
+                                                            iconSize: 20,
+                                                            padding: EdgeInsets.zero,
+                                                            icon: Icon(
+                                                              // Based on passwordVisible state choose the icon
+                                                              Icons.keyboard_arrow_down_sharp,
+                                                              color: Colors.grey,
+                                                            ),
+                                                            onPressed: () {
+                                                            },
+                                                          ),
+                                                        ),
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_state,
                                                         border: UnderlineInputBorder(
