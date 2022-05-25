@@ -162,7 +162,6 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
               ),
 
               Positioned(
-                //top: ,
                 bottom: size.height * 0.06,
                 left: size.width * 0.12,
                 right: size.width * 0.12,
