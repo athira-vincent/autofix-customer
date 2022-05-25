@@ -294,8 +294,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       print("latLng 001 ${latLng.latitude}");
       mechanicMarker (latLng);
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
-        print('DISTANCE getPositionStream distanceInMeters===== : ${distanceInMeters/1000}    ++++  $_placeDistance');
-        if(int.parse('${(distanceInMeters/1000).toString().split('.').first}') <= 1)
+      print('DISTANCE getPositionStream distanceInMeter===== : ${distanceInMeters.toStringAsFixed(2)}');
+      print('DISTANCE getPositionStream distanceInKillometer===== : ${distanceInMeters/1000}');
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 500)
           {
             isArrived = true;
           }
@@ -366,11 +367,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         polylineCoordinates[i + 1].longitude,
       );
     }
-
-    setState(() {
-      _placeDistance = totalDistance.toStringAsFixed(2);
-      print('DISTANCE ===== : $_placeDistance km');
-    });
   }
 
   double _coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -641,7 +637,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "${(distanceInMeters/1000).toStringAsFixed(2)} km",
+                                                   int.parse('${(distanceInMeters).toString().split('.').first}') <= 500
+                                                     ? "${(distanceInMeters).toStringAsFixed(2)} m"
+                                                     : "${(distanceInMeters/1000).toStringAsFixed(2)} km",
                                                     style: Styles.waitingTextBlack17,
                                                     maxLines: 1,
                                                   ),
