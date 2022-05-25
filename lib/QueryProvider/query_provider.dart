@@ -453,6 +453,7 @@ class QueryProvider {
                   mechanicService {
                       id
                       fee
+                      time
                       service {
                         id
                         serviceName

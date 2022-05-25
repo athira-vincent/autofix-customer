@@ -121,7 +121,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
     yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "30",
+      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
       "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
       "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
       "isDefault":  '1',
@@ -140,15 +140,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
-
-     /* yourItemList.add({
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "30",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-        "isDefault":  '1',
-      });
-*/
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
 
@@ -293,7 +284,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "screen": "IncomingJobOfferScreen",
         "bookingId" : "$bookingIdEmergency",
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "30",
+        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
         "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
         "serviceList" : "${yourItemList.toString()}",
@@ -323,7 +314,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "mechanicFromPage" : "0",
         "updatedServiceCost" : "${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "updatedServiceList" : "",
-        "updatedServiceTime" : "30",
+        "updatedServiceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "message": "ACTION"
@@ -380,7 +371,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
      yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "30",
+      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
       "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
       "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
       "isDefault":  '1',
@@ -392,7 +383,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         .update({
           "serviceModel" : FieldValue.arrayUnion([{
             "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-            "serviceTime" : "30",
+            "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
             "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
             "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
             "isDefault":  '1',

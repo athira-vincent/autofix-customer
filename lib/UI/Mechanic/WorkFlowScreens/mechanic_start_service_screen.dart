@@ -29,7 +29,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool isExpanded = false;
+  bool isExpanded = true;
 
   String authToken="", bookingId = "";
   String isCustomerApproved = "0";
@@ -128,7 +128,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   void updateToCloudFirestoreDB() {
 
-    print("allData >>>>>" + allData.toString());
+    print("allData 11111 >>>>>" + allData.toString());
     print("serviceTotalTimeForFirebase  >>>>>>>>>> " + serviceTotalTimeForFirebase);
    // int time =  Duration(seconds: int.parse(serviceTotalTimeForFirebase)).inMinutes;
     //print("time  >>> >>>>>>" + time.toString());
@@ -171,11 +171,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                            isWaiting == "1" ? customerResponseAcceptRejectWidget(size) :
                            isWaiting == "-1" ? customerResponseAcceptRejectWidget(size) :
                            Container(
-                             margin: EdgeInsets.only(
-                                 left: size.width * 2 / 100,
-                                 top: size.height * 2 / 100,
-                                 right: size.width * 2 / 100
-                             ),
                              child: Column(
                                crossAxisAlignment: CrossAxisAlignment.start,
                                children: [
@@ -186,7 +181,10 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                  InkWell(
                                    onTap: (){
                                      print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
-                                     _awaitReturnValueFromSecondScreenOnAdd(context);
+                                    setState(() {
+                                      _awaitReturnValueFromSecondScreenOnAdd(context);
+
+                                    });
                                    },
                                    child: Align(
                                        alignment: Alignment.centerRight,
@@ -222,7 +220,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                              SvgPicture.asset('assets/image/ic_alarm.svg',
                                                width: size.width * 4 / 100,
                                                height: size.height * 4 / 100,),
-                                             SizedBox(width: 20,),
+                                             SizedBox(width: 10,),
                                              /*Expanded(
                                     child: Text("$totalEstimatedTime",
                                       style: TextStyle(
@@ -429,17 +427,19 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
               ),
             ],
           ),
-          isExpanded ? Align(
-            alignment: Alignment.centerLeft,
-            child: Text(additionalServiceNames,
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: "Samsung_SharpSans_Regular",
-                fontWeight: FontWeight.w400,
-                color: CustColors.warm_grey03,
-              ),
-            ),
-          ) : Container(),
+          isExpanded
+              ? Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(additionalServiceNames,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Samsung_SharpSans_Regular",
+                      fontWeight: FontWeight.w400,
+                      color: CustColors.warm_grey03,
+                    ),
+                  ),
+                )
+              : Container(),
           Divider(
             color: CustColors.greyish,
             height: 5,
@@ -453,7 +453,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     return InkWell(
       onTap: (){
         updateToCloudFirestoreDB();
-        //isWaiting = true;
         setState(() {
           isWaiting = "0";
         });
@@ -498,6 +497,116 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     List<MechanicService>? serviceList = [];
     serviceList.clear();
     additionalServiceNames = "";
+    serviceTotalCostForFirebase = "${allData[0]['serviceCost']}";
+    serviceTotalTimeForFirebase = "${allData[0]['serviceTime']}";
+    int totalCost = 0, totalTime = 0;
+
+    serviceList = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddMoreServicesListScreen(isAddService: true, isMechanicApp: true,),
+        ));
+
+    if(serviceList!.isNotEmpty){
+
+      totalCost = int.parse(serviceTotalCostForFirebase);
+      totalTime =  int.parse(serviceTotalTimeForFirebase);
+
+      setState(() {
+        additionalServiceNames = "";
+        allData.removeRange(1, allData.length);
+        for(int i = 0; i<serviceList!.length ; i++){
+          allData.add({
+            'isDefault' : '0',
+            'serviceId' : '${serviceList[i].service!.id.toString()}',
+            'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
+            'serviceCost' : '${serviceList[i].fee.toString()}',
+            'serviceTime' : '${serviceList[i].time.split(":").first.toString()}'
+          });
+        }
+        print(" allData >>>>>>>> _awaitReturnValueFromSecondScreenOnAdd  $allData" );
+
+        for(int i = 0; i<allData.length ; i++){
+
+          print('${allData[i]['isDefault']} >>>>>>>>>> isDefault');
+          if(allData[i]['isDefault'] == "0")
+            {
+              additionalServiceNames = additionalServiceNames + allData[i]['serviceName'].toString() + " \n";
+              totalCost = totalCost + int.parse('${allData[i]['serviceCost']}');
+              serviceTotalCostForFirebase =  totalCost.toString();
+              totalTime = totalTime + int.parse('${allData[i]['serviceTime']}');
+              serviceTotalTimeForFirebase =  totalTime.toString();
+
+              selectedServiceTime = Duration(minutes: int.parse('${serviceTotalTimeForFirebase.split(":").first}')).inSeconds;
+              print('selectedServiceTime >>>>>>>>>> $selectedServiceTime');
+              print('serviceTotalTimeForFirebase >>>>>>>>>> $serviceTotalTimeForFirebase'); //total Time of Additional srvices and default service added
+              print('serviceTotalCostForFirebase >>>>>>>>>> $serviceTotalCostForFirebase'); //total Amount of Additional srvices and default service added
+            }
+        }
+
+        print("serviceTotalTimeForFirebase  >>>>> " + serviceTotalTimeForFirebase);
+        levelClock =  selectedServiceTime;
+        _controller = AnimationController(
+            vsync: this,
+            duration: Duration(
+                seconds:
+                levelClock));
+      });
+    }
+  }
+
+  void _awaitReturnValueFromSecondScreenOnChange(BuildContext context) async {
+
+    List<MechanicService> result = [];
+    result.clear();
+    result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true),
+        ));
+
+    print(">>>>> widget.isAddService == false === ${result.first}");
+
+    if(result.isNotEmpty){
+        setState(() {
+          additionalServiceNames = "No additional faults added.";
+          allData.clear();
+          allData.add({
+            'isDefault' : '1',
+            'serviceId' : '${result[0].service!.id.toString()}',
+            'serviceName' : '${result[0].service!.serviceName.toString()}',
+            'serviceCost' : '${result[0].fee.toString()}',
+            'serviceTime' : '${result[0].time.split(":").first.toString()}'
+          });
+
+          print( " allData _awaitReturnValueFromSecondScreenOnChange>>>>>>> " + allData.toString());
+
+          setState(() {
+            selectedServiceName = '${result[0].service!.serviceName.toString()}';
+            serviceTotalTimeForFirebase = int.parse('${result[0].time.split(":").first}').toString() ;
+            serviceTotalCostForFirebase = result[0].fee.toString();
+            print(" serviceTotalTimeForFirebase2 >>>>>>> " + serviceTotalTimeForFirebase);
+            print(" serviceTotalCostForFirebase2 >>>>>>> " + serviceTotalCostForFirebase);
+            selectedServiceTime = Duration(minutes: int.parse('${serviceTotalTimeForFirebase.split(":").first}')).inSeconds;
+            levelClock =  selectedServiceTime;
+            _controller = AnimationController(
+                vsync: this,
+                duration: Duration(
+                    seconds:
+                    levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+            );
+
+          });
+        });
+      }
+  }
+
+
+  void _awaitReturnValueFromSecondScreenOnAdd1(BuildContext context) async {
+
+    List<MechanicService>? serviceList = [];
+    serviceList.clear();
+    additionalServiceNames = "";
     int totalCost = 0;
 
     serviceList = await Navigator.push(
@@ -505,6 +614,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         MaterialPageRoute(
           builder: (context) => AddMoreServicesListScreen(isAddService: true, isMechanicApp: true,),
         ));
+    print(" serviceList = serviceList.toString();  >>>>> $serviceList" );
 
     if(serviceList!.isNotEmpty){
 
@@ -516,8 +626,11 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             'serviceId' : '${serviceList[i].service!.id.toString()}',
             'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
             'serviceCost' : '${serviceList[i].fee.toString()}',
-            'serviceTime' : '${serviceList[i].time.split(":").last.toString()}'
+            'serviceTime' : '${serviceList[i].time.split(":").first.toString()}'
           });
+
+          print( " allData _awaitReturnValueFromSecondScreenOnAdd>>>>>>> " + allData.toString());
+
 
           if(serviceList.length - 1 == i){
             additionalServiceNames = additionalServiceNames + serviceList[i].service!.serviceName.toString();
@@ -531,7 +644,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             totalCost = totalCost + int.parse('${serviceList![i].fee}');
             serviceTotalCostForFirebase =  totalCost.toString();
 
-            selectedServiceTime = selectedServiceTime + Duration(minutes: int.parse('${serviceList[0].time.split(":").last}')).inSeconds;
+            selectedServiceTime = selectedServiceTime + Duration(minutes: int.parse('${serviceList[0].time.split(":").first}')).inSeconds;
           });
         }
         setState(() {
@@ -541,7 +654,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           print(" serviceTotalTimeForFirebase = selectedServiceTime.toString();  >>>>> " + serviceTotalTimeForFirebase);
 
           levelClock =  selectedServiceTime + 1;
-         // _controller.reset();
+          // _controller.reset();
 
           /*_controller = AnimationController(
               vsync: this,
@@ -592,7 +705,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     //
   }
 
-  void _awaitReturnValueFromSecondScreenOnChange(BuildContext context) async {
+  void _awaitReturnValueFromSecondScreenOnChange1(BuildContext context) async {
 
     List<MechanicService> result = [];
     result.clear();
@@ -602,40 +715,42 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true),
         ));
 
-    print(">>>>> widget.isAddService == false ");
-    print(">>>>> widget.isAddService == false === $result");
+    print(">>>>> widget.isAddService == false === ${result.first}");
 
     if(result.isNotEmpty){
+      setState(() {
+        allData.clear();
+        allData.add({
+          'isDefault' : '1',
+          'serviceId' : '${result[0].service!.id.toString()}',
+          'serviceName' : '${result[0].service!.serviceName.toString()}',
+          'serviceCost' : '${result[0].fee.toString()}',
+          'serviceTime' : '${result[0].time.split(":").first.toString()}'
+        });
+
+        print( " allData _awaitReturnValueFromSecondScreenOnChange>>>>>>> " + allData.toString());
+
         setState(() {
-          allData.removeAt(0);
-          allData.add({
-            'isDefault' : '1',
-            'serviceId' : '${result[0].service!.id.toString()}',
-            'serviceName' : '${result[0].service!.serviceName.toString()}',
-            'serviceCost' : '${result[0].fee.toString()}',
-            'serviceTime' : '${result[0].time.split(":").last.toString()}'
-          });
-          setState(() {
-            selectedServiceName = '${result[0].service!.serviceName.toString()}';
-            serviceTotalTimeForFirebase = int.parse('${result[0].time.split(":").last}').toString() ;
-            print( " serviceTotalTimeForFirebase >>>>>>> " + serviceTotalTimeForFirebase);
-            serviceTotalCostForFirebase = result[0].fee.toString();
-            print(" result[0].fee.toString() >>>>>>>>  " + serviceTotalCostForFirebase);
-            selectedServiceTime = Duration(minutes: int.parse('${result[0].time.split(":").last}')).inSeconds;
-            levelClock =  selectedServiceTime + 1;
-            /*_controller = AnimationController(
+          selectedServiceName = '${result[0].service!.serviceName.toString()}';
+          serviceTotalTimeForFirebase = int.parse('${result[0].time.split(":").first}').toString() ;
+          print( " serviceTotalTimeForFirebase >>>>>>> " + serviceTotalTimeForFirebase);
+          serviceTotalCostForFirebase = result[0].fee.toString();
+          print(" result[0].fee.toString() >>>>>>>>  " + serviceTotalCostForFirebase);
+          selectedServiceTime = Duration(minutes: int.parse('${result[0].time.split(":").first}')).inSeconds;
+          levelClock =  selectedServiceTime;
+          /*_controller = AnimationController(
                 vsync: this,
                 duration: Duration(
                     seconds:
                     levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
             );*/
-            print(" selectedServiceName >>>>>>>>>> " + selectedServiceName
-                + " selectedServiceTime >>>>>>>> " + selectedServiceTime.toString()
-                + " levelClock >>>>>>>>>>>> " + levelClock.toString()
-            );
-          });
+          print(" selectedServiceName >>>>>>>>>> " + selectedServiceName
+              + " selectedServiceTime >>>>>>>> " + selectedServiceTime.toString()
+              + " levelClock >>>>>>>>>>>> " + levelClock.toString()
+          );
         });
-      }
+      });
+    }
   }
 
   Widget waitCustomerResponseWidget(Size size) {
