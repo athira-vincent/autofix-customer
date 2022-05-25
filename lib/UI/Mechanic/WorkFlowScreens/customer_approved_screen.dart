@@ -42,7 +42,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   String listenToFirestoreTime = "0", customerDiagonsisApproval = "";
 
-
   double _setValue(double value) {
     return value * per + value;
   }
@@ -85,7 +84,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         updatedServiceTime = event.get('updatedServiceTime');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
         //extendedTime = event.get('updatedServiceTime');
-        extendedTime = updatedServiceTime;
+        //extendedTime = updatedServiceTime;
         print('_firestore11');
 
         if(listenToFirestoreTime == "0")
@@ -109,14 +108,14 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     });
   }
 
-  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String extendedTime ) {
+  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time ) {
     _firestore
         .collection("ResolMech")
         .doc('${bookingId}')
         .update({
         'isWorkStarted': "$isWorkStarted",
         'isWorkCompleted': "$isWorkCompleted",
-        "extendedTime": "$extendedTime",
+        "extendedTime": "$time",
         "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
         "mechanicFromPage" : "MechanicWorkCompletedScreen",
       //===================== code for send the list of additional services =========
@@ -374,7 +373,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 //isStartedWork = !isStartedWork;
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
                 print("levelClock $levelClock");
-                updateToCloudFirestoreDB("1", "0", extendedTime);
+                updateToCloudFirestoreDB("1", "0", "0");
               });
               /*_controller = AnimationController(
                   vsync: this,

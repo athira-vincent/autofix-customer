@@ -83,6 +83,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         mechanicName = event.get('mechanicName');
         totalEstimatedCost = event.get("updatedServiceCost");
         totalEstimatedTime = event.get('updatedServiceTime');
+        //totalExtendedTime = event.get('extendedTime');
         String extendedTime = event.get('extendedTime');
         int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
         totalExtendedTime = time.toString();
