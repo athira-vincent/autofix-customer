@@ -37,8 +37,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   String selectedState = "";
 
   double totalFees = 0.0;
-  String authToken="", bookingId = "", paymentStatus = "", text = "request payment";
-  String totalEstimatedTime = "", totalEstimatedCost = "", mechanicName = "";
+  String authToken="", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
+  String totalEstimatedTime = "", totalExtendedTime = "", mechanicName = "", totalEstimatedCost = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -74,22 +74,25 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId = "100";
 
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
       _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
 
-
+        customerDiagonsisApproval = event.get("customerDiagonsisApproval");
         mechanicName = event.get('mechanicName');
+        totalEstimatedCost = event.get("updatedServiceCost");
         totalEstimatedTime = event.get('updatedServiceTime');
-        totalEstimatedCost = event.get('updatedServiceCost');
+        String extendedTime = event.get('extendedTime');
+        int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
+        totalExtendedTime = time.toString();
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
 
+        print('_firestoreData>>>>>>>>> ' + totalEstimatedCost);
         setState(() {
 
         });
-
       });
-
     });
   }
 
@@ -143,7 +146,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
-
               children: [
                 appBarCustomUi(size),
                 jobCompletedText(size),
@@ -161,14 +163,21 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   Widget appBarCustomUi(Size size) {
     return Row(
       children: [
-        IconButton(
+        /*IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
-        ),
-        Text(
-          'Congratulations!! ${mechanicName}',
-          textAlign: TextAlign.center,
-          style: Styles.appBarTextBlack,
+        ),*/
+        Container(
+          margin: EdgeInsets.only(
+            left: size.width * 6 / 100,
+            top: size.height * 3 / 100,
+            bottom: size.height * 1 / 100
+          ),
+          child: Text(
+            'Congratulations!! ${mechanicName}',
+            textAlign: TextAlign.center,
+            style: Styles.appBarTextBlack,
+          ),
         ),
         Spacer(),
 
@@ -247,7 +256,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                 width: 10,
                               ),
                               Text(
-                                "$totalEstimatedTime",
+                                "$totalEstimatedTime" + " : 00",
                                 style: Styles.textSuccessfulTitleStyle03,
                               ),
                             ],
@@ -275,8 +284,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Estimated Cost",
-                          //"Time taken",
+                          //"Estimated Cost",
+                          "Time taken",
                           style: Styles.textLabelTitleEmergencyServiceName,
                         ),
                         Padding(
@@ -298,7 +307,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                 width: 10,
                               ),
                               Text(
-                                "$totalEstimatedCost",
+                                "$totalExtendedTime" + ": 00",
                                 style: Styles.textSuccessfulTitleStyle03,
                               ),
                             ],
@@ -309,7 +318,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -344,6 +352,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                   ),
                 ),
               ),
+
               Container(
                 child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   stream: _firestoreData,
@@ -353,12 +362,17 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                     if (snapshot.hasError) return Text('Error = ${snapshot.error}');
 
                     if (snapshot.hasData) {
-
-                      List allData = snapshot.data?.data()!['updatedServiceList'].toList();
-                      allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
+                      List allData = [];
+                      if(customerDiagonsisApproval == "1"){
+                        allData = snapshot.data?.data()!['updatedServiceList'].toList();
+                        //allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
+                      }else if(customerDiagonsisApproval == "-1"){
+                        allData = snapshot.data?.data()!['serviceModel'].toList();
+                        //allData.add(snapshot.data?.data()!['serviceModel'].toList()) ;
+                      }
 
                       print('StreamBuilder ++++ ${allData.length} ');
-                      print('StreamBuilder ++++ ${allData[0]['serviceCost']} ');
+                      print('StreamBuilder ++++ ${allData[0]['serviceCost'].toString()} ');
 
 
                       return  ListView.builder(
@@ -387,7 +401,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                   Row(
                                     children: [
                                       Text(
-                                        '${allData[0]['serviceCost']}',
+                                        '₦ ${allData[0]['serviceCost']}',
                                         maxLines: 2,
                                         textAlign: TextAlign.start,
                                         overflow: TextOverflow.visible,
@@ -414,7 +428,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                   children: [
                     Row(
                       children: [
-                        Text('Total price including tax',
+                        Text(
+                          'Total price including tax',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
@@ -425,7 +440,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                     Spacer(),
                     Row(
                       children: [
-                        Text('$totalEstimatedCost',
+                        Text(
+                          '₦ $totalEstimatedCost',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
