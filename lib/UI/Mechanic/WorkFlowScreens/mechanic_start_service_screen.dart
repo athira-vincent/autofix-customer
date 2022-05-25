@@ -130,10 +130,20 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
     print("allData 11111 >>>>>" + allData.toString());
     print("serviceTotalTimeForFirebase  >>>>>>>>>> " + serviceTotalTimeForFirebase);
-   // int time =  Duration(seconds: int.parse(serviceTotalTimeForFirebase)).inMinutes;
-    //print("time  >>> >>>>>>" + time.toString());
 
     if(allData.isNotEmpty){
+            _firestore
+                .collection("ResolMech")
+                .doc('${bookingId}')
+                .update({
+              'updatedServiceList' : "",
+              //===================== code for send the list of additional services =========
+            })
+            .then((value) => print("updatedServiceList ended Added"))
+            .catchError((error) =>
+            print("Failed to add updatedServiceList: $error"));
+
+
       _firestore
           .collection("ResolMech")
           .doc('${bookingId}')
