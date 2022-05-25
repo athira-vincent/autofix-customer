@@ -656,12 +656,10 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-
                                                 _isLoadingPage = false;
                                                 updateToCloudFirestoreDB();
                                                 _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                                                     authToken, bookingId, "3");
-
                                               },
                                               child: Container(
                                                 height: 30,

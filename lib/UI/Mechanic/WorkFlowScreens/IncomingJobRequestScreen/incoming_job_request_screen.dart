@@ -5,8 +5,8 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_request_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,13 +38,12 @@ class IncomingJobRequestScreen extends StatefulWidget {
 class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> with TickerProviderStateMixin{
 
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
-
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   String customerToken = "", bookingIdEmergency = "", serviceName = "";
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
-  final MechanicIncomingJobRequestBloc _incomingJobRequestBloc = MechanicIncomingJobRequestBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _isLoading = false;
   //late bool _isJobOfferAccepted;
@@ -110,8 +109,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   }
 
   Future<void> callOnFcmApiSendPushNotifications(int length,) async {
-
-
 
     print(" callOnFcmApiSendPushNotifications > isAccepted " + isAccepted.toString());
     print("customerToken >> " + customerToken);
@@ -331,11 +328,11 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     super.dispose();
     _controller.dispose();
     _emailFocusNode.removeListener(onFocusChange);
-    _incomingJobRequestBloc.dispose();
+    _mechanicOrderStatusUpdateBloc.dispose();
   }
 
   _getApiResponse() {
-    _incomingJobRequestBloc.postMechanicIncomingJobRequest.listen((value) {
+    _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
@@ -523,10 +520,8 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                           _controller.stop(canceled: true);
                                           isAccepted = 1;
                                           //callOnFcmApiSendPushNotifications(1, 1);
-                                          _incomingJobRequestBloc.postMechanicFetchIncomingUpdateRequest(
-                                              authToken,
-                                              widget.notificationPayloadMdl.bookingId,
-                                              isAccepted);
+                                          _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                                              authToken, widget.notificationPayloadMdl.bookingId, "2");
                                           //--------- call notification
                                         });
                                       },
