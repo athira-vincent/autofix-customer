@@ -89,7 +89,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
         if(listenToFirestoreTime == "0")
           {
-            levelClock = int.parse('${updatedServiceTime.split(":").first}') + 1;
+            levelClock = int.parse('${updatedServiceTime.split(":").first}') ;
             //levelClock = Duration(minutes: int.parse('$levelClock')).inSeconds;
             int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
             levelClock = sec;

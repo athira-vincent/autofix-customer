@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                 home: SplashScreen(),
+                home: SplashScreen(),
 
                  // home: MechanicStartServiceScreen(),
 
