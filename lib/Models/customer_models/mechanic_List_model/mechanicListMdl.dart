@@ -313,13 +313,15 @@ class MechanicService {
   MechanicService({
    required this.id,
    required this.fee,
-   required this.service,
+    required this.time,
+    required this.service,
    required this.status,
    required this.userId,
   });
 
   String id;
   String fee;
+  String time;
   Service? service;
   int status;
   int userId;
@@ -327,6 +329,7 @@ class MechanicService {
   factory MechanicService.fromJson(Map<String, dynamic> json) => MechanicService(
     id: json["id"] == null ? null : json["id"],
     fee: json["fee"] == null ? null : json["fee"],
+    time: json["time"] == null ? null : json["time"],
     service: json["service"] == null ? null : Service.fromJson(json["service"]),
     status: json["status"] == null ? null : json["status"],
     userId: json["userId"] == null ? null : json["userId"],
@@ -335,6 +338,7 @@ class MechanicService {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "fee": fee == null ? null : fee,
+    "fee": time == null ? null : time,
     "service": service == null ? null : service?.toJson(),
     "status": status == null ? null : status,
     "userId": userId == null ? null : userId,
