@@ -94,7 +94,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         serviceTotalCostForFirebase = allData[0]['serviceCost'];
 
         selectedServiceTime = Duration(minutes: int.parse('${allData[0]['serviceTime'].split(".").first}')).inSeconds;
-        levelClock =  selectedServiceTime + 1;
+        levelClock =  selectedServiceTime;
       });
       setState(() {
 
@@ -117,11 +117,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         else if(customerDiagonsisApproval =="-1"){
           isWaiting = "-1";
         }
-          /*else{
-          setState(() {
-            isWaiting = true;
-          });
-        }*/
       });
     });
   }
@@ -231,23 +226,23 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                width: size.width * 4 / 100,
                                                height: size.height * 4 / 100,),
                                              SizedBox(width: 10,),
-                                             /*Expanded(
-                                    child: Text("$totalEstimatedTime",
-                                      style: TextStyle(
-                                          fontSize: 36,
-                                          fontFamily: "SharpSans_Bold",
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                          letterSpacing: .7
-                                      ),
-                                    ),
-                                  ),*/
-                                             CountdownMechanicTimer(
+                                             Expanded(
+                                                child: Text("$serviceTotalTimeForFirebase:00",
+                                                  style: TextStyle(
+                                                      fontSize: 36,
+                                                      fontFamily: "SharpSans_Bold",
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black,
+                                                      letterSpacing: .7
+                                                  ),
+                                                ),
+                                              ),
+                                             /*CountdownMechanicTimer(
                                                animation: StepTween(
                                                  begin: levelClock, // THIS IS A USER ENTERED NUMBER
                                                  end: 0,
                                                ).animate(_controller),
-                                             ),
+                                             ),*/
                                            ],
                                          ),
                                        ),
@@ -554,13 +549,15 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             }
         }
 
-        print("serviceTotalTimeForFirebase  >>>>> " + serviceTotalTimeForFirebase);
+        print("serviceTotalTimeForFirebase2233  >>>>> " + serviceTotalTimeForFirebase);
+        selectedServiceTime = Duration(minutes: int.parse('${serviceTotalTimeForFirebase}')).inSeconds;
         levelClock =  selectedServiceTime;
         _controller = AnimationController(
             vsync: this,
             duration: Duration(
                 seconds:
-                levelClock));
+                selectedServiceTime));
+        _controller.reset();
       });
     }
   }
@@ -663,7 +660,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           serviceTotalTimeForFirebase =  time.toString();
           print(" serviceTotalTimeForFirebase = selectedServiceTime.toString();  >>>>> " + serviceTotalTimeForFirebase);
 
-          levelClock =  selectedServiceTime + 1;
+          levelClock =  selectedServiceTime;
           // _controller.reset();
 
           /*_controller = AnimationController(

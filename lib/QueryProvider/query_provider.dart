@@ -657,14 +657,14 @@ class QueryProvider {
       mechanicBooking(
         bookedDate: "$date"
         bookedTime: "$time"
-        latitude: ${int.parse(latitude.toString())}
-        longitude: ${int.parse(longitude.toString())}
+        latitude: ${double.parse(latitude.toString())}
+        longitude: ${double.parse(longitude.toString())}
         serviceId: ${int.parse(serviceId.toString())}
         mechanicId:${int.parse(mechanicId.toString())}
         reqType: ${int.parse(reqType.toString())}
         totalPrice: ${int.parse(totalPrice.toString())}
         paymentType: ${int.parse(paymentType.toString())}
-        travelTime:  "$travelTime"
+        travelTime:  ""
         ) {
             id
             bookedDate

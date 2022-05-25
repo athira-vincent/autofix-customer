@@ -31,7 +31,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late AnimationController _controller;
-  //int minutesLevelClock = 10;
   double per = .10;
   String authToken = "", bookingId = "", extendedTime = "0",
       customerName= "", mechanicName = "", updatedServiceTime = "00.00";
@@ -55,13 +54,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   void initState() {
     // TODO: implement initState
     super.initState();
-    getSharedPrefData();
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
-            //minutes: minutesLevelClock,
-            seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+            seconds: levelClock)
     );
+    getSharedPrefData();
+
 
   }
 
@@ -70,40 +69,33 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      //bookingId = "100";
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // bookingId = "444";
+      print('CustomerApprovedScreen bookingId >>>> $bookingId');
+
 
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
       print('_firestore');
 
       setState(() {
-        //totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
         customerName = event.get('customerName');
         updatedServiceTime = event.get('updatedServiceTime');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
-        //extendedTime = event.get('updatedServiceTime');
-        //extendedTime = updatedServiceTime;
-        print('_firestore11');
-
+        print('_firestore11 updatedServiceTime >>> $updatedServiceTime');
         if(listenToFirestoreTime == "0")
           {
             levelClock = int.parse('${updatedServiceTime.split(":").first}') ;
-            //levelClock = Duration(minutes: int.parse('$levelClock')).inSeconds;
             int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
             levelClock = sec;
             _controller = AnimationController(
                 vsync: this,
                 duration: Duration(
-                  //minutes: minutesLevelClock,
-                    seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the application
+                    seconds: levelClock)
             );
-            listenToFirestoreTime = "1";    // ....????
+            listenToFirestoreTime = "1";
           }
-      });
-      setState(() {
-
       });
     });
   }
@@ -127,6 +119,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   @override
   Widget build(BuildContext context) {
+    print(' Widget build _firestore11 levelClock >>> $levelClock');
 
     Size size = MediaQuery.of(context).size;
 
@@ -375,12 +368,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 print("levelClock $levelClock");
                 updateToCloudFirestoreDB("1", "0", "0");
               });
-              /*_controller = AnimationController(
-                  vsync: this,
-                  duration: Duration(
-                      seconds:
-                      levelClock) // gameData.levelClock is a user entered number elsewhere in the application
-              );*/
               _controller.forward();
               _updateTimerListener();
               isStartedWork = true;
