@@ -56,27 +56,6 @@ void main() async {
   });
 }
 
-
-/*void main() async {
-
-  WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isIOS) {
-    await Firebase.initializeApp();
-
-  } else {
-    await Firebase.initializeApp();
-  }
-  //await Firebase.initializeApp();
-  await initHiveForFlutter();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  runApp(MyApp());
-
-}*/
-
 class MyApp extends StatefulWidget {
 
 
