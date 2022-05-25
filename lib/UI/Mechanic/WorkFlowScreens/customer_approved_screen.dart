@@ -194,7 +194,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         children: [
           Row(
             children: [
-              Text("Hi...", style: TextStyle(
+              Text("Hi... ", style: TextStyle(
 
               ),),
               Text(

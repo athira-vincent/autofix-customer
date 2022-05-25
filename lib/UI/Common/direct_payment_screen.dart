@@ -49,6 +49,9 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
 
+  String paymentSendStatus="0";
+
+
 
 
   @override
@@ -99,10 +102,14 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         print('isPaymentAccepted ++++ $isPaymentAccepted');
         if(isPaymentAccepted == "1")
         {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DirectPaymentSuccessScreen()));
+          if(paymentSendStatus=="1")
+            {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DirectPaymentSuccessScreen()));
+            }
+
         }
 
       });
@@ -181,6 +188,9 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
       if(isPaymentAccepted == "1")
       {
+        setState(() {
+          paymentSendStatus = "1";
+        });
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

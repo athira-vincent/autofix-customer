@@ -516,7 +516,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                             width: 10,
                           ),
                           Text(
-                            "\$ ${totalEstimatedCost}",
+                            "${totalEstimatedCost}",
                             style: Styles.textSuccessfulTitleStyle03,
                           ),
                         ],
@@ -615,7 +615,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                                             width: 5,
                                           ),
                                           Text(
-                                            "\$ ${allData[index]['serviceCost']}",
+                                            "${allData[index]['serviceCost']}",
                                             style: Styles.textLabelTitle_12,
                                           ),
                                         ],
