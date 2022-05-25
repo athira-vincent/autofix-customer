@@ -159,7 +159,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             {
               extendedTimeFirstTymCall = "1";
               print('levelClock  levelClock1 ++++ ${levelClock}');
-              levelClock = levelClock + sec ;
+              levelClock = sec ;
               print('levelClock  sec ++++ ${sec}');
             }
 

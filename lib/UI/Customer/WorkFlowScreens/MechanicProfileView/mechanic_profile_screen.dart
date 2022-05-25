@@ -121,7 +121,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     super.initState();
     yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
+      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
       "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
       "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
       "isDefault":  '1',
@@ -284,7 +284,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "screen": "IncomingJobOfferScreen",
         "bookingId" : "$bookingIdEmergency",
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
+        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
         "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
         "serviceList" : "${yourItemList.toString()}",
@@ -314,7 +314,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "mechanicFromPage" : "0",
         "updatedServiceCost" : "${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
         "updatedServiceList" : "",
-        "updatedServiceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
+        "updatedServiceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
         "message": "ACTION"
@@ -371,7 +371,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
      yourItemList.add({
       "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
+      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
       "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
       "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
       "isDefault":  '1',
@@ -383,7 +383,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         .update({
           "serviceModel" : FieldValue.arrayUnion([{
             "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-            "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].fee.split(':').first}",
+            "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
             "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
             "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
             "isDefault":  '1',
