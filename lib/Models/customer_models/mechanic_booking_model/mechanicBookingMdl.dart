@@ -75,9 +75,9 @@ class MechanicBooking {
   int status;
   int vehicleId;
   int totalPrice;
-  int tax;
+  var tax;
   int commission;
-  int serviceCharge;
+  var serviceCharge;
   String totalTime;
 
   factory MechanicBooking.fromJson(Map<String, dynamic> json) => MechanicBooking(
