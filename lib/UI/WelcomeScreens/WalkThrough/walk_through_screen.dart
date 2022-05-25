@@ -45,7 +45,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
 
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
-
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
           child: Stack(
@@ -54,7 +54,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
               IndicatorWidget(isFirst: true,isSecond: false,isThird: false,isFourth: false,),
 
               Positioned(
-                top: size.height * 0.134,
+                top: size.height * 0.110,
                 left: size.width * 0.115,
                 right: size.width * 0.06,
                 child: Container(
@@ -62,84 +62,84 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                   //margin: EdgeInsets.only(left: size.width * 0.115,right: size.width * 0.115),
                   child: currentIndex == 0
                       ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          child: Text(
-                            AppLocalizations.of(context)!.text_select_language,
-                            style: Styles.SelectLanguageWalkThroughStyle,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          height: size.height * 0.038,
-                          width: size.width * 0.554,
-                          padding: EdgeInsets.only(left: 5,right: 2),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2.7),
-                              border: Border.all(width: 0.3, color: CustColors.warm_grey),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              value: selectedItem,
-                              isExpanded: true,
-                              icon: const Icon(Icons.keyboard_arrow_down),
-                              items: language_list.map((String language){
-                                return DropdownMenuItem(
-                                  value: language,
-                                  child: Text(language,
-                                    style: Styles.LanguageWalkThroughStyle,),
-                                );
-                              }).toList(),
-                              onChanged: (var newVal) async {
-                                SharedPreferences shdPre = await SharedPreferences.getInstance();
-                                if(newVal=="English")
-                                {
-                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'en');
-                                }
-                                else if(newVal=="Igbo")
-                                {
-                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
-                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'ig');
-                                }
-                                else if(newVal=="Hausa")
-                                {
-                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
-                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'ha');
-                                }
-                                else if(newVal=="Yoruba")
-                                {
-                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
-                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'yo');
-                                }
-                                else
-                                {
-                                  MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
-                                  shdPre.setString(SharedPrefKeys.userLanguageCode, 'en');
-                                }
-                                setState(() {
-                                  print(newVal);
-                                  selectedItem = newVal.toString();
-                                });
-                              },
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: Text(
+                                AppLocalizations.of(context)!.text_select_language,
+                                style: Styles.SelectLanguageWalkThroughStyle,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              height: size.height * 0.038,
+                              width: size.width * 0.554,
+                              padding: EdgeInsets.only(left: 5,right: 2),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2.7),
+                                  border: Border.all(width: 0.3, color: CustColors.warm_grey),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  value: selectedItem,
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.keyboard_arrow_down),
+                                  items: language_list.map((String language){
+                                    return DropdownMenuItem(
+                                      value: language,
+                                      child: Text(language,
+                                        style: Styles.LanguageWalkThroughStyle,),
+                                    );
+                                  }).toList(),
+                                  onChanged: (var newVal) async {
+                                    SharedPreferences shdPre = await SharedPreferences.getInstance();
+                                    if(newVal=="English")
+                                    {
+                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                      shdPre.setString(SharedPrefKeys.userLanguageCode, 'en');
+                                    }
+                                    else if(newVal=="Igbo")
+                                    {
+                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ig'));
+                                      shdPre.setString(SharedPrefKeys.userLanguageCode, 'ig');
+                                    }
+                                    else if(newVal=="Hausa")
+                                    {
+                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'ha'));
+                                      shdPre.setString(SharedPrefKeys.userLanguageCode, 'ha');
+                                    }
+                                    else if(newVal=="Yoruba")
+                                    {
+                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'yo'));
+                                      shdPre.setString(SharedPrefKeys.userLanguageCode, 'yo');
+                                    }
+                                    else
+                                    {
+                                      MyApp.of(context)?.setLocale(Locale.fromSubtags(languageCode: 'en'));
+                                      shdPre.setString(SharedPrefKeys.userLanguageCode, 'en');
+                                    }
+                                    setState(() {
+                                      print(newVal);
+                                      selectedItem = newVal.toString();
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                    )
                       : Container(),
                 ),
               ),
 
               Container(
                 margin: EdgeInsets.only(
-                    top: size.height * 0.160,
+                    top: size.height * 0.165,
                     left: size.width * 0.115,
                     right: size.width * 0.117),
                 child: PageView.builder(
@@ -156,14 +156,12 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                       smallTitle: slides[index].smallTitle,
                       largeTitle: slides[index].largeTitle,
                       description: slides[index].description,
-
                     );
                   },
                 ),
               ),
 
               Positioned(
-                //top: ,
                 bottom: size.height * 0.06,
                 left: size.width * 0.12,
                 right: size.width * 0.12,
@@ -171,41 +169,41 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                   width: size.width - 10,
                   child: currentIndex != slides.length - 1
                       ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          pageController.animateToPage(currentIndex + 1,
-                              duration: Duration(milliseconds: 400),
-                              curve: Curves.linear);
-                        },
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context)!.next,
-                            style: Styles.nextWalkThroughStyle,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              pageController.animateToPage(currentIndex + 1,
+                                  duration: Duration(milliseconds: 400),
+                                  curve: Curves.linear);
+                            },
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context)!.next,
+                                style: Styles.nextWalkThroughStyle,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          //pageController.animateToPage(currentIndex - 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
-                          setIswalked();
-                        },
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context)!.text_skip,
-                            style: Styles.skipWalkThroughStyle,
+                          InkWell(
+                            onTap: () {
+                              //pageController.animateToPage(currentIndex - 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
+                              setIswalked();
+                            },
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context)!.text_skip,
+                                style: Styles.skipWalkThroughStyle,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                        ],
                   )
                       : InkWell(
-                    child: GestureDetector(
-                      onTap: () {
-                        setIswalked();
-                      },
-                      child: Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            setIswalked();
+                          },
+                          child: Container(
                         width: 10,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
