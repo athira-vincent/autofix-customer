@@ -247,59 +247,71 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   }
 
   Widget mechanicResponseWidget(Size size) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Container(
-        height: MediaQuery.of(context).size.width,
-        width: MediaQuery.of(context).size.width,
-
-        alignment: Alignment.center,
-
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              offset: Offset(0, 0),
-              blurRadius: 5,
-              spreadRadius: 3,
-              color: Colors.black26,
-            ),
-          ],
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      alignment: Alignment.center,
+        decoration: new BoxDecoration(
+            color:Colors.black.withOpacity(0.5)
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(
+              height: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    offset: Offset(0, 0),
+                    blurRadius: 5,
+                    spreadRadius: 3,
+                    color: Colors.black26,
+                  ),
+                ],
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(
-                    "Wait few minutes !",
-                    style: Styles.oopsmechanicNotFoundStyle01,
-                  ),
-                  Text(
-                    "Wait for the response from $mechanicName! to start the work",
-                    textAlign: TextAlign.center,
-                    style: Styles.oopsmechanicNotFoundStyle01,
-                  ),
-                  Container(
-                      height: 200,
-                      child: SvgPicture.asset(
-                        'assets/image/mechanicProfileView/waitForMechanic.svg',
-                        height: 200,
-                        fit: BoxFit.cover,
-                      )
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          "Wait few minutes !",
+                          style: Styles.oopsmechanicNotFoundStyle02,
+                        ),
+                        Text(
+                          "Wait for the response from $mechanicName! to start the work",
+                          textAlign: TextAlign.center,
+                          style: Styles.smallTitleStyle3,
+                        ),
+                        Container(
+                            height: 200,
+                            child: SvgPicture.asset(
+                              'assets/image/mechanicProfileView/waitForMechanic.svg',
+                              height: 200,
+                              fit: BoxFit.cover,
+                            )
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

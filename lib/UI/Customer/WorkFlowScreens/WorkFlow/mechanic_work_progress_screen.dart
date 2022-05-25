@@ -41,7 +41,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String isWorkCompleted = "0";
   String isPaymentRequested = "0";
 
-  String totalEstimatedTime = "00.00";
+  String totalEstimatedTime = "00";
   String mechanicName = "";
   String bookingIdEmergency="";
 
@@ -59,8 +59,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String extendedTimeFirstTymCall="0";
 
   late AnimationController _controller;
-  int levelClock = 1800;
-  int levelClock1 = 0;
+  int levelClock = 0;
 
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
@@ -121,18 +120,20 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         mechanicDiagonsisState = event.get("mechanicDiagonsisState");
         totalEstimatedTime = event.get('updatedServiceTime');
         mechanicName = event.get('mechanicName');
-        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
         int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
         levelClock = sec;
         _controller = AnimationController(
             vsync: this,
             duration: Duration(
-                seconds: levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
+                seconds:
+                levelClock)
         );
         _controller.forward();
 
       });
+      setState(() {
 
+      });
     });
   }
 
@@ -158,17 +159,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             {
               extendedTimeFirstTymCall = "1";
               print('levelClock  levelClock1 ++++ ${levelClock}');
-              levelClock1 = levelClock + sec ;
-              print('levelClock  levelClock2 ++++ ${levelClock1}');
-
-
-              _controller = AnimationController(
-                  vsync: this,
-                  duration: Duration(
-                      seconds: levelClock1) // gameData.levelClock is a user entered number elsewhere in the applciation
-              );
-              print('${_controller.status}');
-              _controller.forward();
+              levelClock = levelClock + sec ;
+              print('levelClock  sec ++++ ${sec}');
             }
 
           }
@@ -546,6 +538,27 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                     ),
                   ),
                 ),*/
+                /*TweenAnimationBuilder<Duration>(
+                    duration: Duration(seconds: levelClock),
+                    tween: Tween(begin: Duration(seconds: levelClock), end: Duration.zero),
+                    onEnd: () {
+                      print('Timer ended');
+                    },
+                    builder: (BuildContext context, Duration value, Widget? child) {
+                      print('Timer loop $value');
+                      print('Timer loop $levelClock1');
+
+                      final minutes = value.inMinutes;
+                      final seconds = value.inSeconds % 60;
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Text('$minutes:$seconds',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 40)));
+                    }),*/
                 CountdownMechanicTimer(
                   animation: StepTween(
                     begin: levelClock, // THIS IS A USER ENTERED NUMBER
