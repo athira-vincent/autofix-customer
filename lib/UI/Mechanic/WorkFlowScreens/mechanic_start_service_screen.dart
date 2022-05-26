@@ -96,7 +96,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         serviceTotalCostForFirebase = allData[0]['serviceCost'];
 
         selectedServiceTime = Duration(minutes: int.parse('${allData[0]['serviceTime'].split(".").first}')).inSeconds;
-        levelClock =  selectedServiceTime + 1;
+        levelClock =  selectedServiceTime;
       });
       setState(() {
 
@@ -119,11 +119,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         else if(customerDiagonsisApproval =="-1"){
           isWaiting = "-1";
         }
-          /*else{
-          setState(() {
-            isWaiting = true;
-          });
-        }*/
       });
     });
   }
@@ -179,10 +174,13 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                   height: size.height,
                   color: Colors.white,
                   child: Container(
-                    child: isWaiting == "0"? waitCustomerResponseWidget(size) :
-                           isWaiting == "1" ? customerResponseAcceptRejectWidget(size) :
-                           isWaiting == "-1" ? customerResponseAcceptRejectWidget(size) :
-                           Container(
+                    child: isWaiting == "0"
+                              ? waitCustomerResponseWidget(size)
+                              : isWaiting == "1"
+                              ? customerResponseAcceptRejectWidget(size)
+                              : isWaiting == "-1"
+                              ? customerResponseAcceptRejectWidget(size)
+                          : Container(
                              child: Column(
                                crossAxisAlignment: CrossAxisAlignment.start,
                                children: [
@@ -233,23 +231,23 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                width: size.width * 4 / 100,
                                                height: size.height * 4 / 100,),
                                              SizedBox(width: 10,),
-                                             /*Expanded(
-                                    child: Text("$totalEstimatedTime",
-                                      style: TextStyle(
-                                          fontSize: 36,
-                                          fontFamily: "SharpSans_Bold",
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                          letterSpacing: .7
-                                      ),
-                                    ),
-                                  ),*/
-                                             CountdownMechanicTimer(
+                                             Expanded(
+                                                child: Text("$serviceTotalTimeForFirebase:00",
+                                                  style: TextStyle(
+                                                      fontSize: 36,
+                                                      fontFamily: "SharpSans_Bold",
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black,
+                                                      letterSpacing: .7
+                                                  ),
+                                                ),
+                                              ),
+                                             /*CountdownMechanicTimer(
                                                animation: StepTween(
                                                  begin: levelClock, // THIS IS A USER ENTERED NUMBER
                                                  end: 0,
                                                ).animate(_controller),
-                                             ),
+                                             ),*/
                                            ],
                                          ),
                                        ),
@@ -558,13 +556,15 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             }
         }
 
-        print("serviceTotalTimeForFirebase  >>>>> " + serviceTotalTimeForFirebase);
+        print("serviceTotalTimeForFirebase2233  >>>>> " + serviceTotalTimeForFirebase);
+        selectedServiceTime = Duration(minutes: int.parse('${serviceTotalTimeForFirebase}')).inSeconds;
         levelClock =  selectedServiceTime;
         _controller = AnimationController(
             vsync: this,
             duration: Duration(
                 seconds:
-                levelClock));
+                selectedServiceTime));
+        _controller.reset();
       });
     }
   }
@@ -667,7 +667,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           serviceTotalTimeForFirebase =  time.toString();
           print(" serviceTotalTimeForFirebase = selectedServiceTime.toString();  >>>>> " + serviceTotalTimeForFirebase);
 
-          levelClock =  selectedServiceTime + 1;
+          levelClock =  selectedServiceTime;
           // _controller.reset();
 
           /*_controller = AnimationController(
@@ -768,141 +768,137 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   }
 
   Widget waitCustomerResponseWidget(Size size) {
-    return Expanded(
-      child: Container(
-        //color: Colors.lightGreen,
-        margin: EdgeInsets.only(
-            left: size.width * 5 / 100,
-            right: size.width * 5 / 100,
-            top: size.height * 12 / 100,
-            bottom: size.height * 12 / 100
-        ),
-        padding: EdgeInsets.only(
-            left: size.width * 3.5 / 100,
-            right: size.width * 3.5 / 100,
-            top: size.height * 5 / 100,
-            bottom: size.height * 5 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(8),
+    return Container(
+      //color: Colors.lightGreen,
+      margin: EdgeInsets.only(
+          left: size.width * 5 / 100,
+          right: size.width * 5 / 100,
+          top: size.height * 12 / 100,
+          bottom: size.height * 12 / 100
+      ),
+      padding: EdgeInsets.only(
+          left: size.width * 3.5 / 100,
+          right: size.width * 3.5 / 100,
+          top: size.height * 5 / 100,
+          bottom: size.height * 5 / 100
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+        color: CustColors.cloudy_blue,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            child: SvgPicture.asset(
+              'assets/image/img_oops_mechanic_bg.svg',
+              height: size.height * 27 / 100,
+              fit: BoxFit.cover,
             ),
-          color: CustColors.cloudy_blue,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: SvgPicture.asset(
-                'assets/image/img_oops_mechanic_bg.svg',
-                height: size.height * 27 / 100,
-                fit: BoxFit.cover,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: size.width * 1 / 100,
+                  right: size.width * 1 / 100,
+                  top: size.height * 7 / 100
               ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                margin: EdgeInsets.only(
-                    left: size.width * 1 / 100,
-                    right: size.width * 1 / 100,
-                    top: size.height * 7 / 100
+              height: size.height * 18 / 100,
+              width: size.width,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
                 ),
-                height: size.height * 18 / 100,
-                width: size.width,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
+                color: CustColors.pale_grey,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Oops!! Customer Response not found!",
+                    style: Styles.oopsmechanicNotFoundStyle01,
                   ),
-                  color: CustColors.pale_grey,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Oops!! Customer Response not found!",
-                      style: Styles.oopsmechanicNotFoundStyle01,
-                    ),
-                    Text("Confirmation is Mandatory",
-                      style: Styles.smallTitleStyle3,
-                    ),
-                    Text("Wait for Customer Response...!",
-                      style: Styles.TryAfterSomeTimetyle01,
-                    ),
-                  ],
-                ),
+                  Text("Confirmation is Mandatory",
+                    style: Styles.smallTitleStyle3,
+                  ),
+                  Text("Wait for Customer Response...!",
+                    style: Styles.TryAfterSomeTimetyle01,
+                  ),
+                ],
               ),
             ),
-            //tryAgainButtonWidget(size),
-          ],
-        ),
+          ),
+          //tryAgainButtonWidget(size),
+        ],
       ),
     );
   }
 
   Widget customerResponseAcceptRejectWidget(Size size) {
-    return Expanded(
-      child: Container(
-        color: CustColors.pale_grey,
-         padding: EdgeInsets.only(
-            left: size.width * 6 / 100,
-            right: size.width * 6 / 100,
-            top: size.height * 10 / 100,
-            bottom: size.height * 4 / 100
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: SvgPicture.asset(
-                'assets/image/img_oops_mechanic_bg.svg',
-                height: size.height * 27 / 100,
-                fit: BoxFit.cover,
-              ),
+    return Container(
+      color: CustColors.pale_grey,
+       padding: EdgeInsets.only(
+          left: size.width * 6 / 100,
+          right: size.width * 6 / 100,
+          top: size.height * 10 / 100,
+          bottom: size.height * 4 / 100
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            child: SvgPicture.asset(
+              'assets/image/img_oops_mechanic_bg.svg',
+              height: size.height * 27 / 100,
+              fit: BoxFit.cover,
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                margin: EdgeInsets.only(
-                    left: size.width * 1 / 100,
-                    right: size.width * 1 / 100,
-                    top: size.height * 7 / 100
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: size.width * 1 / 100,
+                  right: size.width * 1 / 100,
+                  top: size.height * 7 / 100
+              ),
+              height: size.height * 18 / 100,
+              width: size.width,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
                 ),
-                height: size.height * 18 / 100,
-                width: size.width,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
+                color: CustColors.pale_grey,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    isWaiting == "-1" ?
+                    "Oops!! Customer Rejected !" : "Congratulation!! Customer Accepted !",
+                    style: Styles.oopsmechanicNotFoundStyle01,
                   ),
-                  color: CustColors.pale_grey,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      isWaiting == "-1" ?
-                      "Oops!! Customer Rejected !" : "Congratulation!! Customer Accepted !",
-                      style: Styles.oopsmechanicNotFoundStyle01,
-                    ),
-                    Text(
-                      //isWaiting == "-1" ?
-                      "Customer's Confirmation",
-                      style: Styles.smallTitleStyle3,
-                    ),
-                    Text(
-                      "Press Continue to start Work",
-                      //"Wait for Customer Response...!",
-                      style: Styles.TryAfterSomeTimetyle01,
-                    ),
-                  ],
-                ),
+                  Text(
+                    //isWaiting == "-1" ?
+                    "Customer's Confirmation",
+                    style: Styles.smallTitleStyle3,
+                  ),
+                  Text(
+                    "Press Continue to start Work",
+                    //"Wait for Customer Response...!",
+                    style: Styles.TryAfterSomeTimetyle01,
+                  ),
+                ],
               ),
             ),
-            tryAgainButtonWidget(size),
-          ],
-        ),
+          ),
+          tryAgainButtonWidget(size),
+        ],
       ),
     );
   }

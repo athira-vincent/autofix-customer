@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
+import 'package:auto_fix/UI/Customer/PaymentScreens/payment_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_waiting_payment.dart';
@@ -54,27 +55,6 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
-
-
-/*void main() async {
-
-  WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isIOS) {
-    await Firebase.initializeApp();
-
-  } else {
-    await Firebase.initializeApp();
-  }
-  //await Firebase.initializeApp();
-  await initHiveForFlutter();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  runApp(MyApp());
-
-}*/
 
 class MyApp extends StatefulWidget {
 
@@ -126,16 +106,16 @@ class _MyAppState extends State<MyApp> {
                 home: SplashScreen(),
                 //home: MechanicStartServiceScreen(),
 
-                 // home: MechanicStartServiceScreen(),
+                  // home: MechanicStartServiceScreen(),
 
-                //home: MechanicWorkCompletedScreen(),
+                 //home: MechanicWorkCompletedScreen(),
 
                  /*home: FindYourCustomerScreen(
                    latitude: "10.5062492",
                    longitude: "76.2426616",
                  ),*/
 
-                  // home: MechanicWaitingPaymentScreen()
+                  // home:   PaymentScreen()
 
                    // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
 

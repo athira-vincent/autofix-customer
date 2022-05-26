@@ -517,13 +517,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   InkWell(
                                                     onTap: () async {
                                                       print("on tap state ");
-                                                      //showDialCodeSelector();
-                                                      /*String userSelectedState = await Navigator.push(
-                                                      context,
-                                                        MaterialPageRoute(
-                                                        builder: (context) => SelectStateScreen(),
-                                                        ),
-                                                    );*/
                                                       _awaitReturnValueFromSecondScreen(context);
 
                                                     },
@@ -813,13 +806,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   InkWell(
                                                     onTap: () async {
                                                       print("on tap state ");
-                                                      //showDialCodeSelector();
-                                                      /*String userSelectedState = await Navigator.push(
-                                                      context,
-                                                        MaterialPageRoute(
-                                                        builder: (context) => SelectStateScreen(),
-                                                        ),
-                                                    );*/
                                                       _awaitReturnValueFromSecondScreen(context);
                                                     },
                                                     child: TextFormField(

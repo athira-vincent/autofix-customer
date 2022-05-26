@@ -657,14 +657,14 @@ class QueryProvider {
       mechanicBooking(
         bookedDate: "$date"
         bookedTime: "$time"
-        latitude: 9.2575
-        longitude: 76.4508
+        latitude: ${double.parse(latitude.toString())}
+        longitude: ${double.parse(longitude.toString())}
         serviceId: ${int.parse(serviceId.toString())}
         mechanicId:${int.parse(mechanicId.toString())}
         reqType: ${int.parse(reqType.toString())}
         totalPrice: ${int.parse(totalPrice.toString())}
         paymentType: ${int.parse(paymentType.toString())}
-        travelTime:  "$travelTime"
+        travelTime:  ""
         ) {
             id
             bookedDate
@@ -693,7 +693,9 @@ class QueryProvider {
       token, bookingId, mechanicId,) async {
     String _query = """  
         mutation {
-          updateMechanicBooking(bookingId: ${int.parse(bookingId.toString())}, mechanicId: ${int.parse(mechanicId.toString())}) {
+          updateMechanicBooking(
+          bookingId: ${int.parse(bookingId.toString())}, 
+          mechanicId: ${int.parse(mechanicId.toString())}) {
             status
             code
             message

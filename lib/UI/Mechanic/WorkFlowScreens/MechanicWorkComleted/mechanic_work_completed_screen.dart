@@ -501,7 +501,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       onTap: (){
         updateToCloudFirestoreDB();
         setState(() {
-          text = "waiting response";
+          text = "Waiting response";
         });
         /*Navigator.pushReplacement(
             context,
