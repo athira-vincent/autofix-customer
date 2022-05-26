@@ -391,7 +391,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                   Row(
                                     children: [
                                       Text(
-                                        '${allData[0]['serviceName']}',
+                                        '${allData[index]['serviceName']}',
                                         maxLines: 2,
                                         textAlign: TextAlign.start,
                                         overflow: TextOverflow.visible,
@@ -403,7 +403,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                   Row(
                                     children: [
                                       Text(
-                                        '₦ ${allData[0]['serviceCost']}',
+                                        '₦ ${allData[index]['serviceCost']}',
                                         maxLines: 2,
                                         textAlign: TextAlign.start,
                                         overflow: TextOverflow.visible,
