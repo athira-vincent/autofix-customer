@@ -452,7 +452,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   void _updateTimerListener() {
 
     timeCounter = _controller.duration!.inMinutes;
-
     timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar = t;
 
