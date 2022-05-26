@@ -81,7 +81,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           emergencyServiceList = value.data!.categoryList![0].service!;
 
           for(int i=0;i<emergencyServiceList.length;i++){
-            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minPrice, "20:00", false));
+            selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minPrice, "10:00", false));
           }
           _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
           print(_emergencyIsChecked!.length);
@@ -241,7 +241,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                     TextEditingController _rateController=TextEditingController();
                                     TextEditingController _timeController = TextEditingController();
                                     _rateController.text = emergencyServiceList[index].minPrice.toString();
-                                    _timeController.text = "20:00";
+                                    _timeController.text = "10:00";
                                     _rateController.addListener(() {
                                       var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
                                       selectedServiceMdlList.removeAt(index);
