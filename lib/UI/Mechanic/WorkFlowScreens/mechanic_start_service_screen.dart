@@ -41,7 +41,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   Timer? timerObj;
 
   List allData = [];
-  String selectedServiceName = "", additionalServiceNames = "" ;
+  String selectedServiceName = "", additionalServiceNames = "", customerName = "", mechanicName = "" ;
   String serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
 
   late AnimationController _controller;
@@ -90,6 +90,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     });
     await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
       setState(() {
+        customerName = event.get('customerName').toString();
+        mechanicName = event.get('mechanicName').toString();
         allData = event.get('serviceModel').toList();
         selectedServiceName = allData[0]['serviceName'];
         serviceTotalTimeForFirebase = allData[0]['serviceTime'];
@@ -280,6 +282,81 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget waitCustomerResponseWidget(Size size) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+         color: Colors.transparent.withOpacity(0.5)
+        //color : Colors.white.withOpacity(0.5),
+        //color: CustColors.light_navy,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(
+              height: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    offset: Offset(0, 0),
+                    blurRadius: 5,
+                    spreadRadius: 3,
+                    color: Colors.black26,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          "Wait few minutes !",
+                          style: Styles.oopsmechanicNotFoundStyle02,
+                        ),
+                        Text(
+                          "Wait for the response from $customerName! to start the work",
+                          textAlign: TextAlign.center,
+                          style: Styles.smallTitleStyle3,
+                        ),
+                        Container(
+                            height: 200,
+                            child: SvgPicture.asset(
+                              'assets/image/mechanicProfileView/waitForMechanic.svg',
+                              height: 200,
+                              fit: BoxFit.cover,
+                            )
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -615,7 +692,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       }
   }
 
-
   void _awaitReturnValueFromSecondScreenOnAdd1(BuildContext context) async {
 
     List<MechanicService>? serviceList = [];
@@ -767,7 +843,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     }
   }
 
-  Widget waitCustomerResponseWidget(Size size) {
+  /*Widget waitCustomerResponseWidget(Size size) {
     return Container(
       //color: Colors.lightGreen,
       margin: EdgeInsets.only(
@@ -836,68 +912,107 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         ],
       ),
     );
-  }
+  }*/
 
   Widget customerResponseAcceptRejectWidget(Size size) {
     return Container(
-      color: CustColors.pale_grey,
-       padding: EdgeInsets.only(
-          left: size.width * 6 / 100,
-          right: size.width * 6 / 100,
-          top: size.height * 10 / 100,
-          bottom: size.height * 4 / 100
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
+          color: Colors.transparent.withOpacity(0.5)
+        //color: CustColors.light_navy,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            child: SvgPicture.asset(
-              'assets/image/img_oops_mechanic_bg.svg',
-              height: size.height * 27 / 100,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Container(
-              margin: EdgeInsets.only(
-                  left: size.width * 1 / 100,
-                  right: size.width * 1 / 100,
-                  top: size.height * 7 / 100
-              ),
-              height: size.height * 18 / 100,
-              width: size.width,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                color: CustColors.pale_grey,
+              height: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    offset: Offset(0, 0),
+                    blurRadius: 5,
+                    spreadRadius: 3,
+                    color: Colors.black26,
+                  ),
+                ],
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    isWaiting == "-1" ?
-                    "Oops!! Customer Rejected !" : "Congratulation!! Customer Accepted !",
-                    style: Styles.oopsmechanicNotFoundStyle01,
-                  ),
-                  Text(
-                    //isWaiting == "-1" ?
-                    "Customer's Confirmation",
-                    style: Styles.smallTitleStyle3,
-                  ),
-                  Text(
-                    "Press Continue to start Work",
-                    //"Wait for Customer Response...!",
-                    style: Styles.TryAfterSomeTimetyle01,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          child: SvgPicture.asset(
+                            isWaiting == "-1" ? "assets/image/img_oops_customer_bg.svg" :
+                            'assets/image/img_oops_mechanic_bg.svg',
+                            height: size.height * 18 / 100,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: size.width * 1 / 100,
+                                right: size.width * 1 / 100,
+                                top: size.height * 5 / 100
+                            ),
+                            height: size.height * 18 / 100,
+                            width: size.width,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              color: CustColors.pale_grey,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  isWaiting == "-1" ?
+                                  "Oops! Customer rejected !" : "Congratulations !! $mechanicName",
+                                  style: Styles.oopsmechanicNotFoundStyle01,
+                                ),
+                                Text(
+                                  isWaiting == "-1" ?
+                                  "Customer's Confirmation is mandatory" : "Customer accepted",
+                                  style: Styles.smallTitleStyle3,
+                                ),
+                                Text(
+                                  "Press Continue to start Work",
+                                  //"Wait for Customer Response...!",
+                                  style: Styles.TryAfterSomeTimetyle01,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        tryAgainButtonWidget(size),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          tryAgainButtonWidget(size),
         ],
       ),
     );
@@ -909,7 +1024,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       child: Container(
         margin: EdgeInsets.only(
           right: size.width * 2.2 / 100,
-            top: size.height * 22 / 100
+            top: size.height * 5 / 100
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
