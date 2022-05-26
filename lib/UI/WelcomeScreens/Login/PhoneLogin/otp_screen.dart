@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScreen/create_password_screen.dart';
@@ -418,10 +419,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if( widget.fromPage == "2")
                                                           {
-                                                            Navigator.pushReplacement(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>  CustomerMainLandingScreen()));
+                                                            if(widget.userTypeId.toString() == "1")
+                                                              {
+                                                                Navigator.pushReplacement(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>  CustomerMainLandingScreen()));
+                                                              }
+                                                            else{
+                                                              Navigator.pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => MechanicHomeScreen()));
+                                                            }
+
                                                           }
                                                           else if( widget.userType == TextStrings.user_customer)
                                                           {

@@ -950,6 +950,26 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       controller: _photoController,
                                                       cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
+                                                        suffixIconConstraints: BoxConstraints(
+                                                          minWidth: 20,
+                                                          minHeight: 20,
+                                                        ),
+                                                        suffixIcon: Container(
+                                                          width: 5,
+                                                          height: 10,
+                                                          alignment: Alignment.centerRight,
+                                                          child: IconButton(
+                                                            iconSize: 15,
+                                                            padding: EdgeInsets.zero,
+                                                            icon: Icon(
+                                                              // Based on passwordVisible state choose the icon
+                                                              Icons.camera_alt,
+                                                              color: Colors.grey,
+                                                            ),
+                                                            onPressed: () {
+                                                            },
+                                                          ),
+                                                        ),
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_upload_photo,
                                                         border: UnderlineInputBorder(
