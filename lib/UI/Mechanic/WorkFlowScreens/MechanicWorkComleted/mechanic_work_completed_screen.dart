@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,6 +30,8 @@ class MechanicWorkCompletedScreen extends StatefulWidget {
 class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScreen> {
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   var _firestoreData ;
 
   double per = .10;
@@ -37,7 +40,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   String selectedState = "";
 
   double totalFees = 0.0;
-  String authToken="", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
+  String authToken="", userId = "", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
   String totalEstimatedTime = "", totalExtendedTime = "", mechanicName = "", totalEstimatedCost = "";
 
   double _setValue(double value) {
@@ -57,7 +60,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
     getSharedPrefData();
     _listenServiceListResponse();
-
     timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
@@ -66,11 +68,11 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
   }
 
-
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
@@ -326,7 +328,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     );
   }
 
-
   Widget selectedRepairDetailsUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,10,20,10),
@@ -503,6 +504,9 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         setState(() {
           text = "Waiting response";
         });
+        _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+            authToken, bookingId, "7");
+        _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "3", userId, );
         /*Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -596,8 +600,9 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    cancelTimer();
     print("dispose");
+    _mechanicOrderStatusUpdateBloc.dispose();
+    cancelTimer();
   }
 
   cancelTimer() {
