@@ -12,7 +12,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_prog
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
@@ -124,6 +124,7 @@ class _MyAppState extends State<MyApp> {
                 ),
 
                 home: SplashScreen(),
+                //home: MechanicStartServiceScreen(),
 
                  // home: MechanicStartServiceScreen(),
 

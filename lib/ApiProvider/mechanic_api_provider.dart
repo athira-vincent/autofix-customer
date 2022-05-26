@@ -167,4 +167,23 @@ class MechanicApiProvider {
     }
   }
 
+  Future<MechanicIncomingJobMdl> postMechanicAddTimeUpdateRequest(
+      token, extendTime, bookingId, )async {
+    Map<String, dynamic> _resp = await _queryProvider.postMechanicAddTimeUpdateRequest(
+      token, extendTime, bookingId,);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = MechanicIncomingJobMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return MechanicIncomingJobMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = MechanicIncomingJobMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 }

@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer02.dart';
@@ -30,6 +31,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   bool _isLoading = false;
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   late AnimationController _controller;
   //int minutesLevelClock = 10;
   double per = .10;
@@ -384,13 +386,16 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               _controller.forward();
               _updateTimerListener();
               isStartedWork = true;
+              _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                  authToken, bookingId, "5");
             }
             else
             {
               setState(() {
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
                 updateToCloudFirestoreDB("1","1", extendedTime);
-                print("Else is working");
+                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                    authToken, bookingId, "6");
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

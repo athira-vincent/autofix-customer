@@ -812,6 +812,12 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _mechanicOrderStatusUpdateBloc.dispose();
+  }
+
   _showProductTourDialog(BuildContext context) async {
     await showDialog(
         context: context,
@@ -861,6 +867,5 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
 
   }
-
 
 }

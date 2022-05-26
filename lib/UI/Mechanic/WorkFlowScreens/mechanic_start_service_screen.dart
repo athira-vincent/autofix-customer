@@ -4,7 +4,8 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
@@ -28,6 +29,7 @@ class MechanicStartServiceScreen extends StatefulWidget {
 class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen> with TickerProviderStateMixin{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
 
   bool isExpanded = true;
 
@@ -466,6 +468,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         setState(() {
           isWaiting = "0";
         });
+        _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+            authToken, bookingId, "4");
       },
       child: Align(
         alignment: Alignment.centerRight,
@@ -950,6 +954,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _mechanicOrderStatusUpdateBloc.dispose();
     cancelTimer();
     print("dispose");
   }

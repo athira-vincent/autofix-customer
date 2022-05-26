@@ -1661,6 +1661,23 @@ class QueryProvider {
     );
   }
 
+  postMechanicAddTimeUpdateRequest(
+      token, extendTime, bookingId,) async {
+    String _query = """
+     mutation {
+    timeUpdateBooking(extendTime: "$extendTime", bookingId: $bookingId) {
+      message
+    }
+  }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 
   postCustomerAddMoreServiceUpdate(
       token, bookingId, serviceIds, totalPrice, travelTime) async {

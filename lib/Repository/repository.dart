@@ -306,6 +306,12 @@ class Repository {
       _mechanicApiProvider.postMechanicIncomingJobUpdateRequest(
           token,  bookingId, bookStatus);
 
+  // Fetch Mechanic Add additional time Request
+  Future<dynamic>  postMechanicAddTimeUpdate(
+      token, extendTime, bookingId,)  =>
+      _mechanicApiProvider.postMechanicAddTimeUpdateRequest(
+        token, extendTime, bookingId,);
+
   // Fetch Mechanic Add More Service Request
   Future<dynamic>  postMechanicAddMoreServiceUpdate(
       token, bookingId, serviceIds)  =>
