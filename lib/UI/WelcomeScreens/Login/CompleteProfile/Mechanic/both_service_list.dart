@@ -82,7 +82,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                 emergencyServiceMdlList.add(
                     SelectedServicesMdl(i,x,allList[i].service![x].id.toString(),
                         allList[i].service![x].minPrice,
-                        allList[i].service![x].maxPrice, "20:00", false));
+                        allList[i].service![x].maxPrice, "10:00", false));
               }
             }
             else{
@@ -92,7 +92,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                 regularServiceMdlList.add(
                     SelectedServicesMdl(i,x,allList[i].service![x].id.toString(),
                         allList[i].service![x].minPrice,
-                        allList[i].service![x].maxPrice, "20:00", false));
+                        allList[i].service![x].maxPrice, "10:00", false));
               }
             }
           }
@@ -436,7 +436,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                             TextEditingController _rateController=TextEditingController();
                             TextEditingController _timeController = TextEditingController();
                             _rateController.text = emergencyServiceList[index].minPrice.toString();
-                            _timeController.text = "20:00";
+                            _timeController.text = "10:00";
                             _rateController.addListener(() {
                               var temp =   SelectedServicesMdl(0,index,emergencyServiceMdlList[index].serviceId,_rateController.text,
                                   emergencyServiceMdlList[index].maxAmount, emergencyServiceMdlList[index].time, emergencyServiceMdlList[index].isEnable);
@@ -614,7 +614,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
             TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
             _rateController.text = root.service![index].minPrice.toString();
-            _timeController.text = "20:00";
+            _timeController.text = "10:00";
             _rateController.addListener(() {
               int itemIndex = getItemIndex(parentIndex,index);
               var temp =   SelectedServicesMdl(parentIndex, index,

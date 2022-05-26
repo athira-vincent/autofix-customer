@@ -60,7 +60,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
           for(int i = 0; i < regularServiceList.length;i++){
             for(int x = 0; x < regularServiceList[i].service!.length; x++){
-              selectedServiceMdlList.add(SelectedServicesMdl(i,x,regularServiceList[i].service![x].id.toString(),regularServiceList[i].service![x].minPrice, regularServiceList[i].service![x].maxPrice, "20:00", false));
+              selectedServiceMdlList.add(SelectedServicesMdl(i,x,regularServiceList[i].service![x].id.toString(),regularServiceList[i].service![x].minPrice, regularServiceList[i].service![x].maxPrice, "10:00", false));
             }
 
           }
@@ -390,7 +390,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
             TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
             _rateController.text = root.service![index].minPrice.toString();
-            _timeController.text = "20:00";
+            _timeController.text = "10:00";
             _rateController.addListener(() {
               int itemIndex = getItemIndex(parentIndex,index);
               var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,_rateController.text, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, selectedServiceMdlList[itemIndex].isEnable);
@@ -598,7 +598,7 @@ class SelectedServicesMdl{
                                       //print(regularServiceList[index].isEditable.toString() + ">>>isEditable amt");
                                       //_rateController.text = regularServiceList![index].minAmount.toString();
                                       _rateController.text = regularServiceList[index].minPrice.toString();
-                                      _timeController.text = "20:00";
+                                      _timeController.text = "10:00";
                                       _rateController.addListener(() {
                                         var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
                                         selectedServiceMdlList.removeAt(index);

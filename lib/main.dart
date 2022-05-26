@@ -50,8 +50,8 @@ void main() async {
     //FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    runApp(MyApp());
-  }, (error, stackTrace) {
+        runApp(MyApp());
+      }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
