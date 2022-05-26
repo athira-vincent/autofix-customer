@@ -10,7 +10,7 @@ class MechanicAddServiceListBloc {
   Stream<AddServicesMdl> get mechanicAddServicesResponse => postAddServiceList.stream;
 
   postMechanicAddServicesRequest(String token,String serviceList,String timeList, String costList ) async {
-
+ print('timeList postMechanicAddServicesRequest MechanicAddServiceListBloc>>>>>>>>>>>>>>>>>>>> $timeList');
     AddServicesMdl _addServiceMdl = await repository.getAddMechanicServiceList(token,serviceList,timeList,costList);
     postAddServiceList.sink.add(_addServiceMdl);
   }

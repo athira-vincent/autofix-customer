@@ -27,6 +27,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
   String? _userName;
   String? _userEmail;
   String isOnline = "";
+  String authToken="";
+  String userName="";
 
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -62,7 +64,24 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
   @override
   void initState() {
     super.initState();
+    getSharedPrefData();
+
     _getUser();
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+
+
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+
+      print('authToken>>>>>>>>> ' + authToken.toString());
+
+
+    });
   }
 
   @override
@@ -331,7 +350,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
     return Container(
       width: double.infinity,
       //height: 174.3 + MediaQuery.of(context).padding.top,
-      height: size.height * 35 / 100,
+      height: size.height * 37 / 100,
       decoration: BoxDecoration(
         color: CustColors.light_navy,
         borderRadius: BorderRadius.only(
@@ -374,8 +393,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             child: Container(
               //color: Colors.redAccent,
               margin: EdgeInsets.only(
-                top: size.height * 5 / 100,
-                right: size.width * 10 / 100
+                  top: size.height * 5 / 100,
+                  right: size.width * 10 / 100
               ),
               //alignment: Alignment.bottomRight,
               child: Column(
@@ -386,7 +405,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(
-                          right: 2
+                            right: 2
                         ),
                         width: 93,
                         height: 93,
@@ -399,20 +418,20 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                           ),
                         ),
                       ),
-                      ClipRRect(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              right: 2
-                          ),
-                          color: Colors.white,
-                          child: Image.network(
-                            'http://www.londondentalsmiles.co.uk/wp-content/uploads/2017/06/person-dummy.jpg',
-                            fit: BoxFit.cover,
-                            width: 88,
-                            height: 88,
-                          ),
+                      Container(
+                        width: 88.0,
+                        height: 88.0,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child:Container(
+                                child:CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.white,
+                                    child: ClipOval(
+                                        child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                    )))
+
                         ),
-                        borderRadius: BorderRadius.circular(44),
                       ),
 
                       Positioned(
@@ -434,32 +453,12 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                           ),
                         ),
                       ),
-
-                      Positioned(
-                        right: 0,
-                        top: 20,
-                        child: ClipRRect(
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              color:  isOnline == "1" ? CustColors.green : CustColors.warm_grey,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(
-                                  25,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: size.height * 1 / 100),
                     child: Text(
-                      _userName.toString(),
-                      //"Afamefuna",
+                      //_userName.toString(),
+                      "$userName",
                       softWrap: true,
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -468,18 +467,6 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                           fontFamily: 'Corbel_Bold',
                           color: Colors.white),
                     ),
-                  ),
-                  RatingBarIndicator(
-                    direction: Axis.horizontal,
-                    rating: 3.0,
-                    itemBuilder: (context, index) => Icon(
-                      Icons.star,
-                      color: Colors.white,
-                    ),
-                    itemCount: 5,
-                    itemSize: 12.0,
-                    unratedColor: CustColors.azul,
-                    itemPadding: EdgeInsets.all(1),
                   ),
                 ],
               ),
