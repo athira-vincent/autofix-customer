@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/additional_time_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
@@ -32,6 +33,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  final MechanicAddMoreTimeBloc _addMoreTimeBloc = MechanicAddMoreTimeBloc();
   late AnimationController _controller;
   double per = .10;
   String authToken = "", bookingId = "", extendedTime = "0",
@@ -62,7 +64,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             seconds: levelClock)
     );
     getSharedPrefData();
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _mechanicOrderStatusUpdateBloc.dispose();
+    _addMoreTimeBloc.dispose();
 
   }
 
@@ -672,9 +680,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                         isEnableAddMoreBtn = false;
                         _controller.forward();
                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
-
+                        _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
                       });
-
                       Navigator.of(context).pop();
                   },
                   child: Container(

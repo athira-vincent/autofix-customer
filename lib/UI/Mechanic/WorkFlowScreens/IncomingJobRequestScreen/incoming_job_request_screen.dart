@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_request_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
@@ -39,6 +40,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   String customerToken = "", bookingIdEmergency = "", serviceName = "";
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
@@ -329,6 +331,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
     _controller.dispose();
     _emailFocusNode.removeListener(onFocusChange);
     _mechanicOrderStatusUpdateBloc.dispose();
+    _mechanicHomeBloc.dispose();
   }
 
   _getApiResponse() {
@@ -520,6 +523,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                           _controller.stop(canceled: true);
                                           isAccepted = 1;
                                           //callOnFcmApiSendPushNotifications(1, 1);
+                                          _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "2", userId,);
                                           _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                                               authToken, widget.notificationPayloadMdl.bookingId, "2");
                                           //--------- call notification

@@ -5,6 +5,9 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/Customer/PaymentScreens/payment_failed_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/additional_time_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +37,8 @@ class DirectPaymentScreen extends StatefulWidget {
 class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
   bool isDirectPayment = true;
-
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String isPaymentAccepted = "0";
@@ -44,14 +48,12 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   String authToken="";
   String userName="";
 
-
+  String userId = "";
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
 
   String paymentSendStatus="0";
-
-
 
 
   @override
@@ -68,9 +70,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       });
     }
 
-
   }
-
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -78,10 +78,11 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingIdEmergency = "100";
       print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
@@ -90,7 +91,6 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
     });
   }
-
 
   void listenToCloudFirestoreDB() {
     print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
@@ -116,7 +116,6 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     });
   }
 
-
   void updateToCloudFirestoreDB() {
 
     _firestore
@@ -132,7 +131,6 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         print("Failed to add Location: $error"));
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +171,9 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   void changeScreen(){
     if(widget.isMechanicApp){
       updateToCloudFirestoreDB();
+      _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+          authToken, bookingIdEmergency, "8");
+      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId );
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -342,6 +343,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       alignment: Alignment.centerRight,
       child: InkWell(
         onTap: (){
+
           changeScreen();
         },
         child: Container(
@@ -377,6 +379,27 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print("dispose");
+    _mechanicOrderStatusUpdateBloc.dispose();
+    cancelTimer();
+  }
+
+  cancelTimer() {
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
   }
 
   TextStyle warningTextStyle01 = TextStyle(
