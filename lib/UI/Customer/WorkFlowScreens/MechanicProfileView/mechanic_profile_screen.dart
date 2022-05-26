@@ -10,6 +10,7 @@ import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/EmergencyTr
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/TrackingScreens/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/booking_success_screen.dart';
+import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/listeners/NotificationListener.dart';
@@ -73,6 +74,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   var initializationSettingsAndroid;
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+  final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+
 
   final NotificationListenerCall _notificationListener = NotificationListenerCall();
 
@@ -245,7 +248,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
           callOnFcmApiSendPushNotifications(1);
           _showMechanicAcceptanceDialog(context);
-
+          _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+              authToken, "$bookingIdEmergency", "1");
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
 
