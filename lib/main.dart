@@ -113,7 +113,7 @@ class _MyAppState extends State<MyApp> {
 
                   // home: MechanicStartServiceScreen(),
 
-                  //home: MechanicWorkCompletedScreen(),
+                  // home: CustomerApprovedScreen(),
 
                    /*home: FindYourCustomerScreen(
                      latitude: "10.5062492",
