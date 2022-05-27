@@ -431,7 +431,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                     Row(
                       children: [
                         Text(
-                          'Total price including tax',
+                          'Total price',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
