@@ -111,8 +111,17 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             listenToFirestoreTime = "1";
             if(mechanicDiagonsisState=="2")
               {
-                isStartedWork = true;
+                setState(() {
+                  print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
+                  print("updateToCloudFirestoreDB extendedTime $extendedTime");
+                  print("levelClock $levelClock");
+                  updateToCloudFirestoreDB("1", "0", "0");
+                });
                 _controller.forward();
+                _updateTimerListener();
+                isStartedWork = true;
+                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                    authToken, bookingId, "5");
               }
           }
       });
