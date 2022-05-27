@@ -974,6 +974,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       timerObjVar?.cancel();
       timerObjVar = null;
     }
+
     if (timerObj != null) {
       timerObj?.cancel();
       timerObj = null;
