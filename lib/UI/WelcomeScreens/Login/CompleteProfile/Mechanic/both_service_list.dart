@@ -467,6 +467,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                       Transform.scale(
                                         scale: .8,
                                         child: Checkbox(
+                                          activeColor: CustColors.light_navy,
                                           value: _emergencyIsChecked![index],
                                           onChanged: (bool? val){
                                             setState(() {
@@ -594,6 +595,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
     if (root.service!.isEmpty) return ListTile(title: Text(root.catName));
     return ExpansionTile(
+      /*collapsedIconColor: CustColors.light_navy,
+      collapsedTextColor: CustColors.light_navy,
+      iconColor: CustColors.light_navy,*/
       key: PageStorageKey<CategoryList>(root),
       title: Text(
         root.catName,
@@ -642,6 +646,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                   Transform.scale(
                     scale: .4,
                     child: Checkbox(
+                      activeColor: CustColors.light_navy,
                       value: _regularIsChecked![getItemIndex(parentIndex,index)],
                       //value: false,
                       onChanged: (bool? val){
