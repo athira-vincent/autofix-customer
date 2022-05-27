@@ -105,6 +105,28 @@ class _MyAppState extends State<MyApp> {
 
                 home: SplashScreen(),
 
+                // home: ExtraServiceDiagonsisScreen(isEmergency: true),
+
+                 // home: MechanicStartServiceScreen(),
+
+                  // home: MechanicStartServiceScreen(),
+
+                  // home: MechanicStartServiceScreen(),
+
+                  // home: CustomerApprovedScreen(),
+
+                   /*home: FindYourCustomerScreen(
+                     latitude: "10.5062492",
+                     longitude: "76.2426616",
+                   ),*/
+
+                  // home:   PaymentScreen()
+
+                   // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
+
+                  // home:   MechanicWorkProgressScreen(workStatus: "2",)
+
+                // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
 
               );
             },

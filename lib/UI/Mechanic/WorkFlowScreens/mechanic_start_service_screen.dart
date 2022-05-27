@@ -881,6 +881,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                   "Oops! Customer rejected !" : "Congratulations !! $mechanicName",
                                   style: Styles.oopsmechanicNotFoundStyle01,
                                   textAlign: TextAlign.center,
+                                  maxLines: 1,
                                   softWrap: true,
                                 ),
                                 Text(
@@ -888,6 +889,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                   "Customer's Confirmation is mandatory" : "Customer accepted",
                                   style: Styles.smallTitleStyle3,
                                   textAlign: TextAlign.center,
+                                  maxLines: 1,
                                   softWrap: true,
                                 ),
                                 Text(
