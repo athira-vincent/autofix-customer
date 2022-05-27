@@ -474,6 +474,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       controller: _orgTypeController,
                                                       cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
+                                                        suffixIconConstraints: BoxConstraints(
+                                                          minWidth: 25,
+                                                          minHeight: 25,
+                                                        ),
+                                                        suffixIcon: Container(
+                                                          width: 5,
+                                                          height: 10,
+                                                          alignment: Alignment.centerRight,
+                                                          child: IconButton(
+                                                            iconSize: 22,
+                                                            padding: EdgeInsets.zero,
+                                                            icon: Icon(
+                                                              Icons.keyboard_arrow_down_sharp,
+                                                              color: Colors.grey,
+                                                            ),
+                                                            onPressed: () {
+                                                            },
+                                                          ),
+                                                        ),
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_organization_type,
                                                         border: UnderlineInputBorder(
@@ -608,6 +627,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       controller: _ministryGovtController,
                                                       cursorColor: CustColors.materialBlue,
                                                       decoration: InputDecoration(
+                                                        suffixIconConstraints: BoxConstraints(
+                                                          minWidth: 25,
+                                                          minHeight: 25,
+                                                        ),
+                                                        suffixIcon: Container(
+                                                          width: 5,
+                                                          height: 10,
+                                                          alignment: Alignment.centerRight,
+                                                          child: IconButton(
+                                                            iconSize: 22,
+                                                            padding: EdgeInsets.zero,
+                                                            icon: Icon(
+                                                              Icons.keyboard_arrow_down_sharp,
+                                                              color: Colors.grey,
+                                                            ),
+                                                            onPressed: () {
+                                                            },
+                                                          ),
+                                                        ),
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_ministry_govt,
                                                         border: UnderlineInputBorder(

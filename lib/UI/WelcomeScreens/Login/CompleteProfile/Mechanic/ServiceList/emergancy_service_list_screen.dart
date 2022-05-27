@@ -261,6 +261,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                           Transform.scale(
                                             scale: .4,
                                             child: Checkbox(
+                                              activeColor: CustColors.light_navy,
                                               value: _emergencyIsChecked![index],
                                               onChanged: (bool? val){
                                                 setState(() {

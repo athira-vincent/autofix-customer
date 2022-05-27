@@ -148,25 +148,6 @@ class MechanicApiProvider {
     }
   }
 
-  Future<MechanicAddMoreServiceMdl> postMechanicAddMoreServiceUpdate(
-      token, bookingId, serviceIds )async {
-    Map<String, dynamic> _resp = await _queryProvider.postMechanicAddMoreServiceUpdate(
-        token, bookingId, serviceIds);
-    // ignore: unnecessary_null_comparison
-    if (_resp != null) {
-      if (_resp['status'] == "error") {
-        final errorMsg = MechanicAddMoreServiceMdl(status: "error", message: _resp['message'], data: null);
-        return errorMsg;
-      } else {
-        var data = {"data": _resp};
-        return MechanicAddMoreServiceMdl.fromJson(data);
-      }
-    } else {
-      final errorMsg = MechanicAddMoreServiceMdl(status: "error", message: "No Internet connection", data: null);
-      return errorMsg;
-    }
-  }
-
   Future<MechanicIncomingJobMdl> postMechanicAddTimeUpdateRequest(
       token, extendTime, bookingId, )async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicAddTimeUpdateRequest(
