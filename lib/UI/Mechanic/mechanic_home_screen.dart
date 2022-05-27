@@ -68,6 +68,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _getCurrentMechanicLocation();
+
   }
 
   Future<void> getSharedPrefData() async {
@@ -79,7 +80,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
       userName =  shdPre.getString(SharedPrefKeys.userName).toString();
     });
-    _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
     print('userFamilyId  MechanicHomeScreen ' + authToken.toString());
     print('userId  MechanicHomeScreen ' + userId.toString());
     print('userName  MechanicHomeScreen ' + userName.toString());

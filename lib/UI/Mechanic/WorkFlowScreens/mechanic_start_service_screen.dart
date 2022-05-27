@@ -823,7 +823,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           Padding(
             padding: const EdgeInsets.all(20),
             child: Container(
-              height: MediaQuery.of(context).size.width +10,
+              height: MediaQuery.of(context).size.width + 10,
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -862,9 +862,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                             margin: EdgeInsets.only(
                                 left: size.width * 1 / 100,
                                 right: size.width * 1 / 100,
-                                top: size.height * 5 / 100
+                                top: size.height * 3 / 100
                             ),
-                            height: size.height * 18 / 100,
+                            height: size.height * 15 / 100,
                             width: size.width,
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(
@@ -880,16 +880,22 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                   isWaiting == "-1" ?
                                   "Oops! Customer rejected !" : "Congratulations !! $mechanicName",
                                   style: Styles.oopsmechanicNotFoundStyle01,
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
                                 ),
                                 Text(
                                   isWaiting == "-1" ?
                                   "Customer's Confirmation is mandatory" : "Customer accepted",
                                   style: Styles.smallTitleStyle3,
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
                                 ),
                                 Text(
                                   "Press Continue to start Work",
                                   //"Wait for Customer Response...!",
                                   style: Styles.TryAfterSomeTimetyle01,
+                                  textAlign: TextAlign.center,
+                                  softWrap: true,
                                 ),
                               ],
                             ),
@@ -913,8 +919,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       alignment: Alignment.bottomRight,
       child: Container(
         margin: EdgeInsets.only(
-          right: size.width * 2.2 / 100,
-            top: size.height * 5 / 100
+            right: size.width * 2.2 / 100,
+            top: size.height * 3 / 100
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
