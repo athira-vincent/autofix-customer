@@ -79,8 +79,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      // bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      bookingId = "532";
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // bookingId = "532";
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
 
 
