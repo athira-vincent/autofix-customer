@@ -172,7 +172,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   }
 
   Future<void> setReminderData() async {
-
+    _hasActiveService = true;
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
@@ -182,7 +182,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       setState(() {
         vehicleName = event.get('carName');
         customerName = event.get('customerName');
-        _hasActiveService = true;
       });
     });
   }
