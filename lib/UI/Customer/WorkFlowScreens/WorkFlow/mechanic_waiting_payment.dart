@@ -316,13 +316,13 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
             Row(
               children: [
                 Text("$mechanicName ",style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 17,
                   fontFamily: "Samsung_SharpSans_Medium",
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),),
                 Text("is waiting for payment..",style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 16,
                   fontFamily: "Samsung_SharpSans_Medium",
                   fontWeight: FontWeight.w500,
                   color: CustColors.light_navy

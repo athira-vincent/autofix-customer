@@ -583,15 +583,18 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                                 alignment: Alignment.center,
                                 child:Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text('${allData[index]['serviceName']}',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelTitle_12,
-                                        ),
-                                      ],
+                                    Expanded(
+                                      flex: 2,
+                                      child: Row(
+                                        children: [
+                                          Text('${allData[index]['serviceName']}',
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            overflow: TextOverflow.visible,
+                                            style: Styles.textLabelTitle_12,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(width: 5,),
                                     Expanded(

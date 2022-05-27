@@ -149,13 +149,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         if (value.status == "error") {
           setState(() {
            // _isLoading = false;
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(value.message.toString(),
                   style: const TextStyle(
                       fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: const Duration(seconds: 2),
               backgroundColor: CustColors.peaGreen,
-            ));
+            ));*/
           });
         } else {
           setState(() {
