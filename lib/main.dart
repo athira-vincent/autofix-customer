@@ -108,6 +108,7 @@ class _MyAppState extends State<MyApp> {
                 ),
 
                 home: SplashScreen(),
+
                 //home: EmergencyServiceListScreen(),
 
                  // home: ExtraServiceDiagonsisScreen(isEmergency: true),
