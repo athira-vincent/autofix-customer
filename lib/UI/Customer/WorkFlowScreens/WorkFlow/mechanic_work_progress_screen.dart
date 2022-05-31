@@ -182,6 +182,14 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               )).then((value){
           });
         }
+        else if(mechanicDiagonsisState =="2")
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+          }
+
       }
       else if(widget.workStatus =="2")
       {

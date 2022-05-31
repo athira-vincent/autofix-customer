@@ -7,13 +7,11 @@ import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/picked_up_vehicle_screen.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_bloc.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/firestoreProvider/fireStoreProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -585,15 +583,18 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                                 alignment: Alignment.center,
                                 child:Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text('${allData[index]['serviceName']}',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelTitle_12,
-                                        ),
-                                      ],
+                                    Expanded(
+                                      flex: 2,
+                                      child: Row(
+                                        children: [
+                                          Text('${allData[index]['serviceName']}',
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            overflow: TextOverflow.visible,
+                                            style: Styles.textLabelTitle_12,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(width: 5,),
                                     Expanded(

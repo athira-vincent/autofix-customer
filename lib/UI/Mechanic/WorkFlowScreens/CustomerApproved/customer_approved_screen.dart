@@ -43,7 +43,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   int extendedTimeVal = 00;
   String extendedTimeText = "";
 
-  String listenToFirestoreTime = "0", customerDiagonsisApproval = "";
+  String listenToFirestoreTime = "0", customerDiagonsisApproval = "",mechanicDiagonsisState="",mechanicStartedOrNot="";
 
   double _setValue(double value) {
     return value * per + value;
@@ -80,7 +80,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // bookingId = "444";
+      // bookingId = "532";
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
 
 
@@ -93,6 +93,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         customerName = event.get('customerName');
         updatedServiceTime = event.get('updatedServiceTime');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
+        mechanicDiagonsisState = event.get('mechanicDiagonsisState');
+
+        print('_firestore11 mechanicDiagonsisState >>> $mechanicDiagonsisState');
+
         print('_firestore11 updatedServiceTime >>> $updatedServiceTime');
         if(listenToFirestoreTime == "0")
           {
@@ -105,6 +109,20 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     seconds: levelClock)
             );
             listenToFirestoreTime = "1";
+            if(mechanicDiagonsisState=="2")
+              {
+                setState(() {
+                  print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
+                  print("updateToCloudFirestoreDB extendedTime $extendedTime");
+                  print("levelClock $levelClock");
+                  updateToCloudFirestoreDB("1", "0", "0");
+                });
+                _controller.forward();
+                _updateTimerListener();
+                isStartedWork = true;
+                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                    authToken, bookingId, "5");
+              }
           }
       });
     });
@@ -126,6 +144,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +197,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         top: size.height * 3.4 / 100,
       ),
       child: Text(
-        "Customer approval ! ",
+        "Customer approved ! ",
         style: TextStyle(
         fontSize: 16,
         fontFamily: "Samsung_SharpSans_Medium",
