@@ -112,107 +112,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   _listenOtpVerificationResponse() {
-    _signupBloc.otpVerificationResponse.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
-          print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
 
-      } else {
-
-        setState(() {
-          print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
-          _isLoading = false;
-          if( widget.fromPage == "3")
-          {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ResetPasswordScreen(
-                        otpNumber: textEditingController.text.toString(),
-                      )),
-            );
-          }
-          else if( widget.fromPage == "2")
-          {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  CustomerMainLandingScreen()));
-          }
-          else if( widget.userType == TextStrings.user_customer)
-          {
-            Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) =>
-                      AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-            );
-          }
-         else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
-          {
-            Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) =>
-                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-            );
-          }
-         else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
-          {
-            Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) =>
-                      WorkSelectionScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
-            );
-          }
-         else if( widget.userType == '1')
-          {
-          Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (context) =>
-                    LoginScreen()),
-          );
-        }
-         else
-          {
-          Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (context) =>
-                    LoginScreen()),
-          );
-        }
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
-    _signupBloc.postPhoneLoginOtpVerification.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
-          print("message postPhoneLoginOtpVerification >>>>>>>  ${value.message}");
-          print("errrrorr postPhoneLoginOtpVerification >>>>>>>  ${value.status}");
-          _isLoading = false;
-        });
-
-      } else {
-        if( widget.fromPage == "2")
-        {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>  CustomerMainLandingScreen()));
-        }
-
-      }
-    });
   }
 
 
@@ -365,6 +265,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                   child: MaterialButton(
                                                     onPressed: () {
                                                       setState(() {
+                                                        print(widget.fromPage.toString() + '>>>>>>>>>>>>>>>>widget.fromPage');
+
                                                         if(widget.fromPage=="3")
                                                           {
                                                             _isLoading = true;
@@ -387,14 +289,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                         {
                                                           _isLoading = true;
                                                           if(textEditingController.text == widget.otpNumber){
-                                                            //_signupBloc.postPhoneLoginOtpVerificationRequest(authToken.toString(),widget.otpNumber,'${widget.userTypeId}');
-                                                                if( widget.fromPage == "2")
-                                                                {
-                                                                  Navigator.pushReplacement(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) =>  CustomerMainLandingScreen()));
-                                                                }
+                                                            print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
+                                                                    if(widget.userTypeId.toString() == "1")
+                                                                    {
+                                                                      Navigator.pushReplacement(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) =>  CustomerMainLandingScreen()));
+                                                                    }
+                                                                    else{
+                                                                      Navigator.pushReplacement(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) => MechanicHomeScreen()));
+                                                                    }
                                                           }
                                                           else
                                                           {
@@ -420,6 +328,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if( widget.fromPage == "2")
                                                           {
+                                                            print(widget.userTypeId.toString() + '>>>>>>>>>>>>>>>>widget.userTypeId');
+
                                                             if(widget.userTypeId.toString() == "1")
                                                               {
                                                                 Navigator.pushReplacement(

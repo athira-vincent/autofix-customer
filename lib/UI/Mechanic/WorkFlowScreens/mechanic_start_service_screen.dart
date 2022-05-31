@@ -86,7 +86,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      //bookingId = "100";
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
 
@@ -462,7 +461,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           children: [
             Align(
                 alignment: Alignment.centerLeft ,
-                child: Text("Change selected service",
+                child: Text("Add Additional Service",
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: "Samsung_SharpSans_Medium",
@@ -645,7 +644,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     serviceList = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: true, isMechanicApp: true,),
+          builder: (context) => AddMoreServicesListScreen(
+              isAddService: true, isMechanicApp: true,),
         ));
 
     if(serviceList!.isNotEmpty){
@@ -657,13 +657,17 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         additionalServiceNames = "";
         allData.removeRange(1, allData.length);
         for(int i = 0; i<serviceList!.length ; i++){
-          allData.add({
-            'isDefault' : '0',
-            'serviceId' : '${serviceList[i].service!.id.toString()}',
-            'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
-            'serviceCost' : '${serviceList[i].fee.toString()}',
-            'serviceTime' : '${serviceList[i].time.split(":").first.toString()}'
-          });
+          if(serviceList[i].service!.serviceName.toString() != selectedServiceName)
+            {
+              allData.add({
+                'isDefault' : '0',
+                'serviceId' : '${serviceList[i].service!.id.toString()}',
+                'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
+                'serviceCost' : '${serviceList[i].fee.toString()}',
+                'serviceTime' : '${serviceList[i].time.split(":").first.toString()}'
+              });
+            }
+
         }
         print(" allData >>>>>>>> _awaitReturnValueFromSecondScreenOnAdd  $allData" );
 
@@ -735,7 +739,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true),
+          builder: (context) => AddMoreServicesListScreen(isAddService: false, isMechanicApp: true,),
         ));
 
     print(">>>>> widget.isAddService == false === ${result.first}");

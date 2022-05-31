@@ -128,13 +128,9 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-
-      // bookingIdEmergency = '95';
-
       print('ExtraServiceDiagonsisScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
     });

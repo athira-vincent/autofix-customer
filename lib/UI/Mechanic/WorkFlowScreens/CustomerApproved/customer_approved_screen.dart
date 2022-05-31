@@ -80,7 +80,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // bookingId = "532";
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
 
 
@@ -293,10 +292,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           ),
           Expanded(
             child: Text(
-              customerDiagonsisApproval == "-1" ?
-              "Customer disagree with the diagnostic test report and estimated cost. Go ahead with requested service."
-              :
-              "Customer agree with the diagnostic test report and estimated cost . So you can start repair ",
+              customerDiagonsisApproval == "-1"
+              ? "Customer disagree with the diagnostic test report and estimated cost. Go ahead with requested service."
+              : mechanicDiagonsisState == "2"
+                  ? "Go ahead with requested service."
+                  : "Customer agree with the diagnostic test report and estimated cost . So you can start repair ",
               style: warningTextStyle01,
             ),
           )

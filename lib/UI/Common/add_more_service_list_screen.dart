@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,7 @@ class AddMoreServicesListScreen extends StatefulWidget {
   final bool isAddService;
   bool isMechanicApp;
 
+
   AddMoreServicesListScreen({ required this.isAddService,required this.isMechanicApp});
 
   @override
@@ -26,11 +28,17 @@ class AddMoreServicesListScreen extends StatefulWidget {
 class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
   String authToken="", userId = "";
+  String  bookingId = "";
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
   //final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
 
   List<bool>? _serviceIsChecked;
   List<MechanicService>? selectedServiceList = [];
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -45,12 +53,15 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-
+      // bookingId = "443";
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
 
-     // _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
-      //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
+    });
+    await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
+      setState(() {
 
+      });
     });
   }
 
@@ -63,6 +74,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         });
       } else {
         setState(() {
+
           _serviceIsChecked = List<bool>.filled(value.data!.mechanicDetails!.mechanicService!.length, false);
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
@@ -174,6 +186,15 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                     textAlignVertical: TextAlignVertical.center,
                     textAlign: TextAlign.left,
                     style: Styles.searchTextStyle01,
+                    onChanged: (text) {
+
+                      if (text != null && text.isNotEmpty && text != "" ) {
+                        setState(() {
+                          print('First text field: $text');
+                        });
+                      }
+
+                    },
                     decoration: InputDecoration(
                         hintText: "Search Your  additional services ",
                         border: InputBorder.none,
@@ -304,7 +325,8 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                               this._serviceIsChecked![index] = val!;
                               //isChecked ? false : true;
                               val
-                                  ? selectedServiceList!.add(service)
+                                  ?
+                                    selectedServiceList!.add(service)
                                   : selectedServiceList!.remove(service);
                               print("sgsjhgj 001 $val");
                               print(">>>>>>>>> Selected Make List data " + selectedServiceList!.length.toString());

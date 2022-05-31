@@ -3,8 +3,10 @@
 import 'package:auto_fix/Constants/text_strings.dart';
 
 class InputValidator {
+
   final String? ch;
   InputValidator({required this.ch});
+
   String? nameChecking(String? value) {
     String pattern = r'^[a-z A-Z,.\-]+$';
     RegExp regExp = RegExp(pattern);
@@ -35,6 +37,7 @@ class InputValidator {
 
     if (value.length > 100) return TextStrings.invalidName;
     if (!regExp.hasMatch(value)) {
+      print(regExp.toString() + '>>>>>>>>>>');
       return TextStrings.invalidName;
     } else {
       return null;
@@ -81,7 +84,7 @@ class InputValidator {
     // String pattern =
     //     r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,}$';
     String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[A-Za-z\d@$!%*#?&_]).{8,}$';
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     RegExp regExp = RegExp(pattern);
     if (value!.isEmpty) return ch! + " is " + TextStrings.errRequired;
 

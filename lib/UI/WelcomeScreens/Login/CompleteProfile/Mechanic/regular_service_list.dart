@@ -243,12 +243,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                         children: [
                           Expanded(
                             child: regularServiceList.length != 0
-                                ?
-                            ListView.builder(
-                              itemBuilder: (BuildContext context, int index) =>
-                                  _buildTiles(regularServiceList[index],size, index),
-                              itemCount: regularServiceList.length,
-                            )
+                                ? ListView.builder(
+                                  itemBuilder: (BuildContext context, int index) =>
+                                      _buildTiles(regularServiceList[index],size, index),
+                                  itemCount: regularServiceList.length,
+                                )
                                 :
                             Center(
                               child: Text('No Results found.'),
@@ -368,194 +367,196 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
   Widget _buildTiles(CategoryList root, Size size,int parentIndex) {
 
+    print('parentIndex >>>>>>>>>>>>>>>>>>root.service!.length. $parentIndex');
+
+    print('root >>>>>>>>>>>>>>>>>>root.service!.length. $root');
+
+
     if (root.service!.isEmpty) return ListTile(title: Text(root.catName));
     return ExpansionTile(
       key: PageStorageKey<CategoryList>(root),
       title: Text(
         root.catName,
       ),
-      //children: root.service.map(Text(root.service[0].serviceName)).toList(),
       children: <Widget>[
-        //ListTile(title: Text(root.service![0].serviceName),)
-        root.service!.length != 0 ?
-        ListView.builder(
-          key: PageStorageKey<CategoryList>(root),
-          physics: ClampingScrollPhysics(),
-          //controller: _scrollController,
-          shrinkWrap: true,
-          //scrollDirection: Axis.vertical,
-          itemCount:  root.service!.length,
-          itemBuilder: (context, index) {
+        root.service!.length != 0
+            ? ListView.builder(
+                  key: PageStorageKey<CategoryList>(root),
+                  physics: ClampingScrollPhysics(),
+                  //controller: _scrollController,
+                  shrinkWrap: true,
+                  //scrollDirection: Axis.vertical,
+                  itemCount:  root.service!.length,
+                  itemBuilder: (context, index) {
+                    print('index >>>>>>>>>>>>>>>>>>root.service!.length. $index');
 
-            TextEditingController _rateController = TextEditingController();
-            TextEditingController _timeController = TextEditingController();
-            _rateController.text = root.service![index].minPrice.toString();
-            _timeController.text = "10:00";
-            _rateController.addListener(() {
-              int itemIndex = getItemIndex(parentIndex,index);
-              var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,_rateController.text, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, selectedServiceMdlList[itemIndex].isEnable);
-              selectedServiceMdlList.removeAt(itemIndex);
-              selectedServiceMdlList.insert(itemIndex,temp);
-            });
-            _timeController.addListener(() {
-              int itemIndex = getItemIndex(parentIndex,index);
-              var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
-              selectedServiceMdlList.removeAt(itemIndex);
-              selectedServiceMdlList.insert(itemIndex,temp);
-            });
+                    TextEditingController _rateController = TextEditingController();
+                    TextEditingController _timeController = TextEditingController();
+                    _rateController.text = root.service![index].minPrice.toString();
+                    _timeController.text = "10:00";
+                    _rateController.addListener(() {
+                      int itemIndex = getItemIndex(parentIndex,index);
+                      var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,_rateController.text, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, selectedServiceMdlList[itemIndex].isEnable);
+                      selectedServiceMdlList.removeAt(itemIndex);
+                      selectedServiceMdlList.insert(itemIndex,temp);
+                    });
+                    _timeController.addListener(() {
+                      int itemIndex = getItemIndex(parentIndex,index);
+                      var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
+                      selectedServiceMdlList.removeAt(itemIndex);
+                      selectedServiceMdlList.insert(itemIndex,temp);
+                    });
 
-            return Container(
-              child: Row(
-                children: [
-                  Transform.scale(
-                    scale: .4,
-                    child: Checkbox(
-                      value: _regularIsChecked![getItemIndex(parentIndex,index)],
-                      //value: false,
-                      onChanged: (bool? val){
-                        setState(() {
-                          this._regularIsChecked![getItemIndex(parentIndex,index)] = val!;
+                    return Container(
+                      child: Row(
+                        children: [
+                          Transform.scale(
+                            scale: .4,
+                            child: Checkbox(
+                              value: _regularIsChecked![getItemIndex(parentIndex,index)],
+                              //value: false,
+                              onChanged: (bool? val){
+                                setState(() {
+                                  this._regularIsChecked![getItemIndex(parentIndex,index)] = val!;
 
-                          print("sgsjhgj 001 $val");
-                          if(val){
-                            int itemIndex = getItemIndex(parentIndex,index);
-                            print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
-                            var temp =   SelectedServicesMdl(parentIndex,index,selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, val);
-                            selectedServiceMdlList.removeAt(itemIndex);
-                            selectedServiceMdlList.insert(itemIndex, temp);
-                          }else{
-                            int itemIndex = getItemIndex(parentIndex,index);
-                            print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
-                            //serviceSpecialisationList.remove(regularServiceList[index]);
-                            var temp= SelectedServicesMdl(parentIndex,index,selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, val);
-                            selectedServiceMdlList.removeAt(itemIndex);
-                            selectedServiceMdlList.insert(itemIndex,temp);
-                          }
-                          //print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
-                        });
-                      },
-                    ),
-                  ),
-
-                  Text(
-                    '${root.service![index].serviceName.toString()}',
-                  ),
-                  SizedBox(
-                    width: size.width / 100 * 18,
-                  ),
-                  Container(
-                    width: size.width * 15 / 100,
-                    height: size.height * 4 / 100,
-                    padding: EdgeInsets.only(
-                        top: size.height * 1 / 100,
-                        bottom: size.width * 1 / 100
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(2.8),
-                      ),
-                      border: Border.all(
-                          color: CustColors.pinkish_grey02,
-                          width: 0.3
-                      ),
-                      //color: Colors.redAccent,
-                    ),
-                    child: Center(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.5,
-                            horizontal: 6.0,
+                                  print("sgsjhgj 001 $val");
+                                  if(val){
+                                    int itemIndex = getItemIndex(parentIndex,index);
+                                    print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
+                                    var temp =   SelectedServicesMdl(parentIndex,index,selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, val);
+                                    selectedServiceMdlList.removeAt(itemIndex);
+                                    selectedServiceMdlList.insert(itemIndex, temp);
+                                  }else{
+                                    int itemIndex = getItemIndex(parentIndex,index);
+                                    print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
+                                    //serviceSpecialisationList.remove(regularServiceList[index]);
+                                    var temp= SelectedServicesMdl(parentIndex,index,selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, val);
+                                    selectedServiceMdlList.removeAt(itemIndex);
+                                    selectedServiceMdlList.insert(itemIndex,temp);
+                                  }
+                                  //print(">>>>>>>>> Selected Make List data " + emergencyServiceList.length.toString());
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                        validator: (value){
-                          if(value!.isEmpty){
-                            return "Fill field";
-                          }
-                          else if(int.parse(value) < int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount) || int.parse(value) > int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
-                            return selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount + " - " + selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
-                          }
-                          else{
-                            return null;
-                          }
-                        },
-                        cursorColor: CustColors.light_navy,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              '${root.service![index].serviceName.toString()}',
+                            ),
+                          ),
+                          Container(
+                            width: size.width * 15 / 100,
+                            height: size.height * 4 / 100,
+                            padding: EdgeInsets.only(
+                                top: size.height * 1 / 100,
+                                bottom: size.width * 1 / 100
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(2.8),
+                              ),
+                              border: Border.all(
+                                  color: CustColors.pinkish_grey02,
+                                  width: 0.3
+                              ),
+                              //color: Colors.redAccent,
+                            ),
+                            child: Center(
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12.5,
+                                    horizontal: 6.0,
+                                  ),
+                                ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return "Fill field";
+                                  }
+                                  else if(int.parse(value) < int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount) || int.parse(value) > int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
+                                    return selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount + " - " + selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
+                                  }
+                                  else{
+                                    return null;
+                                  }
+                                },
+                                cursorColor: CustColors.light_navy,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                controller: _rateController,
+                                style: Styles.searchTextStyle02,
+                                enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                                //readOnly: _regularIsChecked![getItemIndex(parentIndex,index)],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: size.width / 100 * 5,
+                          ),
+                          Container(
+                            width: size.width * 15 / 100,
+                            height: size.height * 4 / 100,
+                            padding: EdgeInsets.only(
+                                top: size.height * 1 / 100,
+                                bottom: size.width * 1 / 100
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(2.8),
+                              ),
+                              border: Border.all(
+                                  color: CustColors.pinkish_grey02,
+                                  width: 0.3
+                              ),
+                              //color: Colors.redAccent,
+                            ),
+                            child: Center(
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 12.5,
+                                    horizontal: 6.0,
+                                  ),
+                                ),
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return "Fill field";
+                                  }
+                                  /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
+                                                              return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
+                                                            }*/
+                                  else{
+                                    return null;
+                                  }
+                                },
+                                cursorColor: CustColors.light_navy,
+                                /*inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],*/
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                keyboardType: TextInputType.datetime,
+                                //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                controller: _timeController,
+                                style: Styles.searchTextStyle02,
+                                enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                                //readOnly: _regularIsChecked![index],
+                              ),
+                            ),
+                          ),
                         ],
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        //initialValue: '${regularServiceList[index].serviceName.toString()}',
-                        controller: _rateController,
-                        style: Styles.searchTextStyle02,
-                        enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
-                        //readOnly: _regularIsChecked![getItemIndex(parentIndex,index)],
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width / 100 * 5,
-                  ),
-                  Container(
-                    width: size.width * 15 / 100,
-                    height: size.height * 4 / 100,
-                    padding: EdgeInsets.only(
-                        top: size.height * 1 / 100,
-                        bottom: size.width * 1 / 100
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(2.8),
-                      ),
-                      border: Border.all(
-                          color: CustColors.pinkish_grey02,
-                          width: 0.3
-                      ),
-                      //color: Colors.redAccent,
-                    ),
-                    child: Center(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.5,
-                            horizontal: 6.0,
-                          ),
-                        ),
-                        validator: (value){
-                          if(value!.isEmpty){
-                            return "Fill field";
-                          }
-                          /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                      return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                    }*/
-                          else{
-                            return null;
-                          }
-                        },
-                        cursorColor: CustColors.light_navy,
-                        /*inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],*/
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.datetime,
-                        //initialValue: '${regularServiceList[index].serviceName.toString()}',
-                        controller: _timeController,
-                        style: Styles.searchTextStyle02,
-                        enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
-                        //readOnly: _regularIsChecked![index],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        )
-            :
-        Container(),
-      ],
+                    );
+                  },
+                )
+            : Container(),
+          ],
 
     );
   }
@@ -569,6 +570,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
 
 }
+
 class SelectedServicesMdl{
   final int parentIndex;
   final int childIndex;
