@@ -469,6 +469,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _brandController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 25,
+                  minHeight: 25,
+                ),
+                suffixIcon: Container(
+                  width: 5,
+                  height: 10,
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                    },
+                  ),
+                ),
                 isDense: true,
                 hintText:
                 "Select your vehicle brand",
@@ -554,10 +573,29 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Model name'  ).nameCheckingWithNumeric,
+                  'Model name'  ).emptyChecking,
               controller: _modelController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 25,
+                  minHeight: 25,
+                ),
+                suffixIcon: Container(
+                  width: 5,
+                  height: 10,
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                    },
+                  ),
+                ),
                 isDense: true,
                 hintText:
                 "Select your car variant",
@@ -631,6 +669,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _engineTypeController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 25,
+                  minHeight: 25,
+                ),
+                suffixIcon: Container(
+                  width: 5,
+                  height: 10,
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                    },
+                  ),
+                ),
                 isDense: true,
                 hintText:
                 "Select your engine model",
@@ -705,6 +762,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _yearController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 25,
+                  minHeight: 25,
+                ),
+                suffixIcon: Container(
+                  width: 5,
+                  height: 10,
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                    },
+                  ),
+                ),
                 isDense: true,
                 hintText:
                 "Select your vehicle manufacture date",

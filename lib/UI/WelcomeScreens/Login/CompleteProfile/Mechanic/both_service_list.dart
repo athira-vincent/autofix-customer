@@ -496,11 +496,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                         ),
                                       ),
 
-                                      Text(
-                                        '${emergencyServiceList[index].serviceName.toString()}',
-                                      ),
-                                      SizedBox(
-                                        width: size.width / 100 * 18,
+                                      Expanded(
+                                        flex: 3,
+                                        child: Text(
+                                          '${emergencyServiceList[index].serviceName.toString()}',
+                                        ),
                                       ),
                                       Flexible(
                                         child: TextFormField(
@@ -592,12 +592,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
 
   Widget _buildTiles(CategoryList root, Size size,int parentIndex) {
+    print('parentIndex >>>>>>>>>>>>>>>>>>root.service!.length. $parentIndex');
 
+    print('root >>>>>>>>>>>>>>>>>>root.service!.length. $root');
     if (root.service!.isEmpty) return ListTile(title: Text(root.catName));
     return ExpansionTile(
-      /*collapsedIconColor: CustColors.light_navy,
-      collapsedTextColor: CustColors.light_navy,
-      iconColor: CustColors.light_navy,*/
       key: PageStorageKey<CategoryList>(root),
       title: Text(
         root.catName,
@@ -614,6 +613,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //scrollDirection: Axis.vertical,
           itemCount:  root.service!.length,
           itemBuilder: (context, index) {
+            print('index >>>>>>>>>>>>>>>>>>root.service!.length. $index');
 
             TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
@@ -681,12 +681,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       },
                     ),
                   ),
-
-                  Text(
-                    '${root.service![index].serviceName.toString()}',
-                  ),
-                  SizedBox(
-                    width: size.width / 100 * 12,
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      '${root.service![index].serviceName.toString()}',
+                    ),
                   ),
                   Container(
                     width: size.width * 15 / 100,
@@ -809,7 +808,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   int getItemIndex(int parentIndex, int childIndex){
     int itemIndex = regularServiceMdlList.indexWhere((item) => item.parentIndex == parentIndex && item.childIndex == childIndex);
     print("itemIndex >>>>>>>> " + itemIndex.toString());
-    return itemIndex;
+    return childIndex;
   }
 
   Widget nextButtons(Size size) {
