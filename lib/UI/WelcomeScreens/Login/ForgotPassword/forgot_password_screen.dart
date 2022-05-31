@@ -218,7 +218,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
-                                                  hintText: 'Your emailid',
+                                                  hintText: 'Your Email Id',
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,

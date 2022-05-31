@@ -86,7 +86,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      // bookingId = "443";
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
 
