@@ -85,7 +85,6 @@ class _MyAppState extends State<MyApp> {
       statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
 
-
     return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
         builder: (context, child) {
@@ -108,7 +107,7 @@ class _MyAppState extends State<MyApp> {
 
                  // home: ExtraServiceDiagonsisScreen(isEmergency: true),
 
-                 // home: MechanicStartServiceScreen(),
+                  // home: MechanicStartServiceScreen(),
 
                   // home: MechanicMyProfileScreen(),
 
