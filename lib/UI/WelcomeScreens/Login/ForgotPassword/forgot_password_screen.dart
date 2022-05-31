@@ -115,6 +115,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
@@ -218,7 +219,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                 cursorColor: CustColors.whiteBlueish,
                                                 decoration: InputDecoration(
                                                   isDense: true,
-                                                  hintText: 'Your Email Id',
+                                                  hintText: 'Your email id',
                                                   border: UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                       color: CustColors.greyish,
