@@ -239,7 +239,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                           ch: AppLocalizations.of(context)!.text_phone,   //"Phone number"
                                                       ).phoneNumChecking,
                                                       controller: _phoneNoController,
-                                                      cursorColor: CustColors.whiteBlueish,
+                                                      //cursorColor: CustColors.whiteBlueish,
+                                                      cursorColor: Colors.black,
                                                       decoration: InputDecoration(
                                                         isDense: true,
                                                         hintText: AppLocalizations.of(context)!.text_hint_phone,  //'Enter your phone Number',

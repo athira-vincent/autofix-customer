@@ -17,6 +17,7 @@ import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCus
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
@@ -103,7 +104,8 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                home: SplashScreen(),
+                //home: SplashScreen(),
+                home: EmergencyServiceListScreen(),
 
                  // home: MechanicWorkCompletedScreen(),
                 //home: MechanicStartServiceScreen(),

@@ -145,7 +145,9 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(
+                      6.0,14.0,6.0,6.0
+                  ),
                   child: Container(
                       alignment: Alignment.centerLeft,
                       child: Text("Select Emergency Services",
@@ -195,7 +197,10 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               textAlignVertical: TextAlignVertical.center,
-
+                              onChanged: (val){
+                                print(val);
+                                //_serviceListBloc.postServiceListRequest(authToken, val, null, "1" );
+                              },
                               textAlign: TextAlign.left,
                               style: Styles.searchTextStyle01,
                               decoration: InputDecoration(
