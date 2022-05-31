@@ -104,8 +104,8 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                //home: SplashScreen(),
-                home: EmergencyServiceListScreen(),
+                home: SplashScreen(),
+                //home: EmergencyServiceListScreen(),
 
                  // home: MechanicWorkCompletedScreen(),
                 //home: MechanicStartServiceScreen(),
