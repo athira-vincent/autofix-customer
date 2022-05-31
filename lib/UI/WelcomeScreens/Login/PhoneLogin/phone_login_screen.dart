@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -70,7 +71,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          if(value.message.contains(TextStrings.error_txt_account_not_exist) ){
+            // String msg = value.message.split(":").last.toString();
+            SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
+          }
+          else{
+            SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          }
         });
       } else {
         setState(() {
@@ -285,10 +292,17 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                               onPressed: () {
                                                 print("${_phoneNoController.text}");
                                                 setState(() {
+
+                                                if (_formKey.currentState!.validate()) {
+                                                  print("_formKey.currentState!.validate()");
                                                   _isLoading=true;
+                                                  _signinBloc.phoneLogin("${_phoneNoController.text}");
+                                                }else {
+                                                  print("_formKey.currentState!.validate() - else");
+                                                  setState(() => _autoValidate = AutovalidateMode.always);
+                                                }
 
-                                                  _signinBloc.phoneLogin("${_phoneNoController.text}");                                                });
-
+                                                });
                                               },
                                               child: Container(
                                                 height: 45,

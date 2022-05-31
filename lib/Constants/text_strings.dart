@@ -47,5 +47,7 @@ class TextStrings {
 
   static const hpSuccess     = "Success";
 
+  static const  error_txt_account_not_exist    = "This account does not exist!";
+
 
 }

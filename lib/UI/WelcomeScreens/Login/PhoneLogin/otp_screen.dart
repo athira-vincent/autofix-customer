@@ -302,8 +302,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                     alignment: Alignment.centerLeft,
                                     //color: Colors.red,
                                     child: Text(
-                                      AppLocalizations.of(context)!.text_otp_screen_desc,
-                                      /*"Enter your code number to verify your phone "
+                                      //AppLocalizations.of(context)!.text_otp_screen_desc,
+                                      "Please enter the verification code sent to your mail id. ",
+                                      /*"Enter your code number to verify your phone \n"
                                       "Enter the 4 digit code .",*/
                                       textAlign: TextAlign.left,
                                       softWrap: true,
