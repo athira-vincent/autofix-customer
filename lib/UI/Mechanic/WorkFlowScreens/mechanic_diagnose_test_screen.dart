@@ -441,7 +441,8 @@ class _MechanicDiagnoseTestScreenState extends State<MechanicDiagnoseTestScreen>
     serviceList = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: true,isMechanicApp: true,),
+          builder: (context) => AddMoreServicesListScreen(
+              isAddService: true,isMechanicApp: true),
         ));
 
     setState(() {

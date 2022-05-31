@@ -713,7 +713,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     serviceList = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(isAddService: true,isMechanicApp: false,),
+          builder: (context) => AddMoreServicesListScreen(
+            isAddService: true,isMechanicApp: false,),
         ));
 
     setState(() {

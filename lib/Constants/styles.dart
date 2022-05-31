@@ -426,7 +426,7 @@ class Styles {
 
 
   static const searchTextStyle01 =  TextStyle(
-    color: CustColors.warm_grey02,
+    color: CustColors.greyish_brown,
     fontSize: 10,
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w600,
