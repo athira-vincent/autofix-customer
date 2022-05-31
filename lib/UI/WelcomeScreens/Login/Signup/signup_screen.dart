@@ -228,7 +228,7 @@ class _SignupScreenState extends State<SignupScreen> {
             {
               _signupBloc.userDefault(
                 value.data!.signUp!.token.toString(),
-                TextStrings.user_mechanic,
+                TextStrings.user_customer,
                 "${value.data!.signUp!.customer?.firstName.toString()}",
               );
               Navigator.pushReplacement(

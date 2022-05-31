@@ -573,7 +573,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ],
               validator: InputValidator(
                   ch :
-                  'Model name'  ).emptyChecking,
+                  'Model name'  ).nameCheckingWithNumeric,
               controller: _modelController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(

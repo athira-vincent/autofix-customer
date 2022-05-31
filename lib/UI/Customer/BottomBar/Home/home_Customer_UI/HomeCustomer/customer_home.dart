@@ -430,14 +430,11 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(15),
-                                            child: snapshot.data?.data?.categoryList?[0].service?[index].icon.toString().length != 0
-                                                ?
-                                            Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
-                                              width: 35,
-                                              //height: 35,
-                                              fit: BoxFit.cover,)
-                                                :
-                                            Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                            child: snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != ""
+                                                ? Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
+                                                  width: 35,
+                                                  fit: BoxFit.cover,)
+                                                : Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                             //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                           ),
                                         ),
