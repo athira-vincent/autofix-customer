@@ -17,6 +17,7 @@ import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/TrackingScreens/FindYourCus
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_diagnose_test_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
@@ -85,7 +86,6 @@ class _MyAppState extends State<MyApp> {
       statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
 
-
     return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
         builder: (context, child) {
@@ -105,29 +105,10 @@ class _MyAppState extends State<MyApp> {
                 ),
 
                 home: SplashScreen(),
+                //home: EmergencyServiceListScreen(),
 
-                 // home: ExtraServiceDiagonsisScreen(isEmergency: true),
-
-                 // home: MechanicStartServiceScreen(),
-
-                  // home: MechanicMyProfileScreen(),
-
-                  // home: MechanicWaitingPaymentScreen(),
-
-                  // home: CustomerApprovedScreen(),
-
-                   /*home: FindYourCustomerScreen(
-                     latitude: "10.5062492",
-                     longitude: "76.2426616",
-                   ),*/
-
-                  // home:   PaymentScreen()
-
-                   // home:   ExtraServiceDiagonsisScreen(isEmergency:true,)
-
-                  // home:   MechanicWorkProgressScreen(workStatus: "2",)
-
-                // home: MechanicTrackingScreen(latitude: "10.0159", longitude: "76.3419",)
+                 // home: MechanicWorkCompletedScreen(),
+                //home: MechanicStartServiceScreen(),
 
               );
             },

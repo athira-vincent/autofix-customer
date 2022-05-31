@@ -211,7 +211,7 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
                                 child: Row(
                                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Total price including tax ",style: TextStyle(
+                                    Text("Total price",style: TextStyle(
                                         fontSize: 14,
                                         fontFamily: "Samsung_SharpSans_Medium",
                                         fontWeight: FontWeight.w400,

@@ -177,7 +177,19 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
             bottom: size.height * 1 / 100
           ),
           child: Text(
-            'Congratulations!! ${mechanicName}',
+            'Congratulations!! ',
+            textAlign: TextAlign.center,
+            style: Styles.appBarTextBlue2,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(
+              //left: size.width * 6 / 100,
+              top: size.height * 3 / 100,
+              bottom: size.height * 1 / 100
+          ),
+          child: Text(
+            ' ${mechanicName}',
             textAlign: TextAlign.center,
             style: Styles.appBarTextBlack,
           ),

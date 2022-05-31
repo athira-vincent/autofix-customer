@@ -199,8 +199,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           icon: Icon(
                                             // Based on passwordVisible state choose the icon
                                             _passwordVisible
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
                                             color: Colors.grey,
                                           ),
                                           onPressed: () {
@@ -296,8 +296,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           icon: Icon(
                                             // Based on passwordVisible state choose the icon
                                             _confirmPasswordVisible
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
                                             color: Colors.grey,
                                           ),
                                           onPressed: () {

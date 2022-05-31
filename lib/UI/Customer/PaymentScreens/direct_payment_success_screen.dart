@@ -161,7 +161,7 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
         children: [
           SvgPicture.asset("assets/image/ic_star_blue.svg",
               height: size.height * 5 / 100, width: size.width * 5 / 100),
-          Text("Review later", style: buttonTextStyle,)
+          Text(" Review later", style: buttonTextStyle,)
         ],
       ),
     );
@@ -182,7 +182,7 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
         children: [
           SvgPicture.asset("assets/image/ic_star_yellow.svg",
               height: size.height * 5 / 100, width: size.width * 5 / 100),
-          Text("Review Now", style: buttonTextStyle,)
+          Text(" Review Now", style: buttonTextStyle,)
         ],
       ),
     );

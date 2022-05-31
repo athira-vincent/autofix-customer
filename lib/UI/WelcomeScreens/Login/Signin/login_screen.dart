@@ -170,9 +170,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   validator:
                                                   InputValidator(
                                                       ch: AppLocalizations.of(context)!.text_hint_email,
-                                                  ).emptyChecking,
+                                                  ).emailValidator,
                                                   controller: _userNameController,
-                                                  cursorColor: CustColors.whiteBlueish,
+                                                  cursorColor: CustColors.light_navy,
                                                   decoration: InputDecoration(
                                                     isDense: true,
                                                     hintText: AppLocalizations.of(context)!.text_hint_email,
@@ -212,6 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   style: Styles.textLabelTitle,
                                                 ),
                                                 TextFormField(
+                                                  cursorColor: CustColors.light_navy,
                                                   textAlignVertical: TextAlignVertical.center,
                                                   obscureText: !_passwordVisible!,
                                                   validator:
@@ -322,7 +323,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 onPressed: () {
 
                                                   if (_formKey.currentState!.validate()) {
-
                                                     setState(() {
                                                       _isLoading = true;
                                                       _signinBloc.postSignInRequest(_userNameController.text, _passwordController.text);
@@ -489,7 +489,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          if(value.message!.contains(TextStrings.error_txt_account_not_exist) ){
+            // String msg = value.message.split(":").last.toString();
+            SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
+          }
+          else{
+            SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          }
+          //SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
         setState(() {
