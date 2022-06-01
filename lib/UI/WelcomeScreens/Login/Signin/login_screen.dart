@@ -547,7 +547,6 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
           socialLoginIsLoading = false;
           print('value.status succes 222222 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
-
           if(value.data!.socialLogin!.user!.userTypeId.toString() == "1"){
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
