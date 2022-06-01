@@ -209,10 +209,8 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       ),
       child: Text(
         widget.isMechanicApp && !isDirectPayment
-            ?
-        "payment received "
-            :
-        "Direct payment ",
+            ? "payment received "
+            : "Direct payment ",
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -228,7 +226,11 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
-          top: size.height * 8.2 / 100
+          top: size.height * 3 / 100
+      ),
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
       ),
       child: Row(
         children: [
@@ -307,14 +309,18 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
-          top: size.height * 4.5 / 100
+          top: size.height * 3 / 100
+      ),
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
       ),
       child: Row(
         children: [
           Container(
             padding: EdgeInsets.only(
                 top: size.width * 5 / 100,
-                bottom: size.width * 5 / 100
+                bottom: size.width * 3 / 100
             ),
             margin: EdgeInsets.only(
               left: size.width * 5 / 100,
@@ -349,7 +355,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
         child: Container(
           margin: EdgeInsets.only(
               right: size.width * 6.2 / 100,
-              top: size.height * 7.5 / 100
+              top: size.height * 5 / 100
           ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(

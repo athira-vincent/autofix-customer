@@ -311,6 +311,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerDiagonsisApproval": "0",
         "requestFromApp" : "0",
         "paymentStatus" : "0",
+        "totalTimeTakenByMechanic": "0",
         "isPaymentRequested" : "0",
         "isPaymentAccepted" : "0",
         "extendedTime" : "0",

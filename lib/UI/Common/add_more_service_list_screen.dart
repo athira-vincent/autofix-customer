@@ -1,8 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
-import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
 
   List<bool>? _serviceIsChecked;
-  List<MechanicService>? selectedServiceList = [];
+  List<Datum>? selectedServiceList = [];
 
 
   @override
@@ -53,9 +53,13 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      // bookingId = "443";
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
+      _mechanicProfileBloc.fetchServiceListOfMechanic(
+          authToken,
+          userId,
+          "0",
+          "200",
+          "");
 
     });
     await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
@@ -66,7 +70,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
   }
 
   _listenServiceListResponse() {
-    _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
+    _mechanicProfileBloc.MechanicServicesBasedListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -75,7 +79,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
       } else {
         setState(() {
 
-          _serviceIsChecked = List<bool>.filled(value.data!.mechanicDetails!.mechanicService!.length, false);
+          _serviceIsChecked = List<bool>.filled(value.data!.mechanicServicesList!.data!.length, false);
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
 
@@ -191,8 +195,26 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                       if (text != null && text.isNotEmpty && text != "" ) {
                         setState(() {
                           print('First text field: $text');
+                          _mechanicProfileBloc.fetchServiceListOfMechanic(
+                              authToken,
+                              userId,
+                              "0",
+                              "200",
+                              "$text");
                         });
                       }
+                      else
+                        {
+                          setState(() {
+                            print('no text field: $text');
+                            _mechanicProfileBloc.fetchServiceListOfMechanic(
+                                authToken,
+                                userId,
+                                "0",
+                                "200",
+                                "");
+                          });
+                        }
 
                     },
                     decoration: InputDecoration(
@@ -258,18 +280,18 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         ),
         color: CustColors.pale_grey,
         child: StreamBuilder(
-            stream:  _mechanicProfileBloc.MechanicProfileResponse,
-            builder: (context, AsyncSnapshot<MechanicProfileMdl> snapshot) {
+            stream:  _mechanicProfileBloc.MechanicServicesBasedListResponse,
+            builder: (context, AsyncSnapshot<MechanicServicesBasedListMdl> snapshot) {
               print("${snapshot.hasData}");
               print("${snapshot.connectionState}");
-              print("+++++++++++++++${snapshot.data?.data?.mechanicDetails?.mechanicService?.length}++++++++++++++++");
+              print("+++++++++++++++${snapshot.data?.data?.mechanicServicesList?.data?.length}++++++++++++++++");
 
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return Center(child: CircularProgressIndicator());
                 default:
                   return
-                    snapshot.data?.data?.mechanicDetails?.mechanicService?.length != 0 && snapshot.data?.data?.mechanicDetails?.mechanicService?.length != null
+                    snapshot.data?.data?.mechanicServicesList?.data?.length != 0 && snapshot.data?.data?.mechanicServicesList?.data?.length != null
                         ? mainServiceList(size, snapshot,context)
                         : Container();
               }
@@ -279,7 +301,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     );
   }
 
-  Widget mainServiceList(Size size, AsyncSnapshot<MechanicProfileMdl> snapshot, BuildContext context1,){
+  Widget mainServiceList(Size size, AsyncSnapshot<MechanicServicesBasedListMdl> snapshot, BuildContext context1,){
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 5.9 / 100,
@@ -287,15 +309,15 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
         top: size.height * 3.7 / 100,
         // bottom: size.height * ,
       ),
-      child:  snapshot.data?.data?.mechanicDetails?.mechanicService?.length != 0 && snapshot.data?.data?.mechanicDetails?.mechanicService?.length != null
+      child:  snapshot.data?.data?.mechanicServicesList?.data?.length != 0 && snapshot.data?.data?.mechanicServicesList?.data?.length != null
           ? ListView.builder(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount:snapshot.data!.data!.mechanicDetails!.mechanicService!.length,
+                itemCount:snapshot.data!.data!.mechanicServicesList?.data!.length,
                 itemBuilder: (context, index) {
-                  return serviceListItems(size, index, snapshot.data!.data!.mechanicDetails!.mechanicService![index]);
+                  return serviceListItems(size, index, snapshot.data!.data!.mechanicServicesList?.data![index]);
                 },
               )
           : Center(
@@ -304,7 +326,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
     );
   }
 
-  Widget serviceListItems(Size size, int index, MechanicService service,  ){
+  Widget serviceListItems(Size size, int index, Datum? service,  ){
     return Column(
       children: [
         Container(
@@ -326,7 +348,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                               //isChecked ? false : true;
                               val
                                   ?
-                                    selectedServiceList!.add(service)
+                                    selectedServiceList!.add(service!)
                                   : selectedServiceList!.remove(service);
                               print("sgsjhgj 001 $val");
                               print(">>>>>>>>> Selected Make List data " + selectedServiceList!.length.toString());
@@ -344,7 +366,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                     print(">>>>> ");
                     if(widget.isAddService == false){
                       print(">>>>> widget.isAddService == false ");
-                      selectedServiceList!.add(service);
+                      selectedServiceList!.add(service!);
                        Navigator.pop(context,selectedServiceList);
                     }
                   },
@@ -353,7 +375,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                       top: 2,bottom: 2.5
                     ),
                     child: Text(
-                      '${service.service!.serviceName}',
+                      '${service?.service?.serviceName}',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 12,

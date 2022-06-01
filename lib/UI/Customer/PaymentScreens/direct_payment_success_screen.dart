@@ -73,6 +73,10 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
           right: size.width * 6 / 100,
           top: size.height * 5 / 100
       ),
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
+      ),
       child: Padding(
         padding: const EdgeInsets.all(5),
         child: Row(
@@ -148,7 +152,6 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
 
   Widget reviewLaterButton(Size size){
     return Container(
-      width: size.width * 42 / 100,
       decoration: Styles.rateBoxDecorationStyle01,
       padding: EdgeInsets.only(
           left:  size.width * 6 / 100,
@@ -169,7 +172,6 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
 
   Widget reviewNowButton(Size size){
     return Container(
-      width: size.width * 42 / 100,
       decoration: Styles.rateBoxDecorationStyle02,
       padding: EdgeInsets.only(
           left:  size.width * 6 / 100,

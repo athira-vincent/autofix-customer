@@ -7,13 +7,14 @@ import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/customer_approved_screen.dart';
 
-import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
 
@@ -258,8 +259,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
                                  Container(
                                    margin: EdgeInsets.only(
-                                       left: size.width * 27.5 / 100,
-                                       right: size.width * 27.5 / 100,
                                        top: size.height * 6 / 100
                                    ),
                                    child: Column(
@@ -274,7 +273,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                width: size.width * 4 / 100,
                                                height: size.height * 4 / 100,),
                                              SizedBox(width: 10,),
-                                             Expanded(
+                                            /* Expanded(
                                                 child: Text("$serviceTotalTimeForFirebase:00",
                                                   style: TextStyle(
                                                       fontSize: 36,
@@ -284,13 +283,13 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                       letterSpacing: .7
                                                   ),
                                                 ),
-                                              ),
-                                             /*CountdownMechanicTimer(
+                                              ),*/
+                                             CountdownMechanicTimer(
                                                animation: StepTween(
                                                  begin: levelClock, // THIS IS A USER ENTERED NUMBER
                                                  end: 0,
                                                ).animate(_controller),
-                                             ),*/
+                                             ),
                                            ],
                                          ),
                                        ),
@@ -634,7 +633,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
 
-    List<MechanicService>? serviceList = [];
+    List<Datum>? serviceList = [];
     serviceList.clear();
     additionalServiceNames = "";
     serviceTotalCostForFirebase = "${allData[0]['serviceCost']}";
@@ -657,12 +656,12 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         additionalServiceNames = "";
         allData.removeRange(1, allData.length);
         for(int i = 0; i<serviceList!.length ; i++){
-          if(serviceList[i].service!.serviceName.toString() != selectedServiceName)
+          if(serviceList[i].service?.serviceName.toString() != selectedServiceName)
             {
               allData.add({
                 'isDefault' : '0',
-                'serviceId' : '${serviceList[i].service!.id.toString()}',
-                'serviceName' : '${serviceList[i].service!.serviceName.toString()}',
+                'serviceId' : '${serviceList[i].id.toString()}',
+                'serviceName' : '${serviceList[i].service?.serviceName.toString()}',
                 'serviceCost' : '${serviceList[i].fee.toString()}',
                 'serviceTime' : '${serviceList[i].time.split(":").first.toString()}'
               });
@@ -734,7 +733,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   void _awaitReturnValueFromSecondScreenOnChange(BuildContext context) async {
 
-    List<MechanicService> result = [];
+    List<Datum> result = [];
     result.clear();
     result = await Navigator.push(
         context,

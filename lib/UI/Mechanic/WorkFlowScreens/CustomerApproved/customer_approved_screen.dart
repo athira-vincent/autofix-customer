@@ -52,7 +52,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   late StateSetter extraTimeStateSetter;
   Timer? timerObj;
   Timer? timerObjVar;
-  late int timeCounter;
+  int timeCounter = 0;
 
   @override
   void initState() {
@@ -64,6 +64,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             seconds: levelClock)
     );
     getSharedPrefData();
+
+
   }
 
   @override
@@ -128,17 +130,18 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time ) {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingId}')
-        .update({
-        'isWorkStarted': "$isWorkStarted",
-        'isWorkCompleted': "$isWorkCompleted",
-        "extendedTime": "$time",
-        "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-        "mechanicFromPage" : "MechanicWorkCompletedScreen",
-      //===================== code for send the list of additional services =========
-    })
+        _firestore
+            .collection("ResolMech")
+            .doc('${bookingId}')
+            .update({
+            'isWorkStarted': "$isWorkStarted",
+            'isWorkCompleted': "$isWorkCompleted",
+            "extendedTime": "$time",
+            "totalTimeTakenByMechanic" : "$timeCounter",
+            "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+            "mechanicFromPage" : "MechanicWorkCompletedScreen",
+          //===================== code for send the list of additional services =========
+        })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
@@ -271,6 +274,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Widget customerApprovedScreenStartWorkText(Size size){
     return Container(
       decoration: Styles.boxDecorationStyle,
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
+      ),
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
@@ -308,6 +315,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Widget customerApprovedScreenWarningText(Size size){
     return Container(
       decoration: Styles.boxDecorationStyle,
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
+      ),
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
@@ -340,14 +351,16 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Widget customerApprovedScreenTimer(Size size){
     return Container(
       margin: EdgeInsets.only(
-          left: size.width * 27.5 / 100,
-          right: size.width * 27.5 / 100,
-          top: size.height * 4.3 / 100
+          top: size.height * 6 / 100
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset('assets/image/ic_alarm.svg',
                   width: size.width * 4 / 100,
@@ -408,7 +421,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             else
             {
               setState(() {
+
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
+                print("timerCountr11111111111 ${timeCounter}");
+
                 updateToCloudFirestoreDB("1","1", extendedTime);
                 _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                     authToken, bookingId, "6");
@@ -416,6 +432,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     context,
                     MaterialPageRoute(
                         builder: (context) => MechanicWorkCompletedScreen()));
+
               });
             }
 
@@ -696,9 +713,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                                  seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
                          );
                          print("clock2 _controller ${_controller.status}");
-                        //_controller.reset();
+                         print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
+
+                      //_controller.reset();
                         isEnableAddMoreBtn = false;
                         _controller.forward();
+                         _updateTimerListener();
                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
                         _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
                       });
