@@ -41,7 +41,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
   double totalFees = 0.0;
   String authToken="", userId = "", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
-  String totalEstimatedTime = "", totalExtendedTime = "", mechanicName = "", totalEstimatedCost = "";
+  String totalEstimatedTime = "", totalExtendedTime = "",totalTimeTakenByMechanic = "", mechanicName = "", totalEstimatedCost = "";
 
   double _setValue(double value) {
     return value * per + value;
@@ -76,7 +76,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      //bookingId = "100";
 
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
       _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
@@ -85,6 +84,8 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         mechanicName = event.get('mechanicName');
         totalEstimatedCost = event.get("updatedServiceCost");
         totalEstimatedTime = event.get('updatedServiceTime');
+        totalTimeTakenByMechanic = event.get('totalTimeTakenByMechanic');
+
         //totalExtendedTime = event.get('extendedTime');
         String extendedTime = event.get('extendedTime');
         int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
@@ -322,7 +323,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                 width: 10,
                               ),
                               Text(
-                                "$totalExtendedTime" + ": 00",
+                                "$totalTimeTakenByMechanic" + ": 00",
                                 style: Styles.textSuccessfulTitleStyle03,
                               ),
                             ],
@@ -377,16 +378,26 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
 
                     if (snapshot.hasData) {
                       List allData = [];
-                      if(customerDiagonsisApproval == "1"){
+                      if(customerDiagonsisApproval == "1")
+                      {
                         allData = snapshot.data?.data()!['updatedServiceList'].toList();
-                        //allData.add(snapshot.data?.data()!['updatedServiceList'].toList()) ;
-                      }else if(customerDiagonsisApproval == "-1"){
+                        print('StreamBuilder11 ++++ ${allData.length} ');
+                        print('StreamBuilder11 ++++ ${allData[0]['serviceCost'].toString()} ');
+                      }
+                      else if(customerDiagonsisApproval == "-1")
+                      {
                         allData = snapshot.data?.data()!['serviceModel'].toList();
-                        //allData.add(snapshot.data?.data()!['serviceModel'].toList()) ;
+                        print('StreamBuilder22 ++++ ${allData.length} ');
+                        print('StreamBuilder22 ++++ ${allData[0]['serviceCost'].toString()} ');
+                      }
+                      else
+                      {
+                        allData = snapshot.data?.data()!['serviceModel'].toList();
+                        print('StreamBuilder22 ++++ ${allData.length} ');
+                        print('StreamBuilder22 ++++ ${allData[0]['serviceCost'].toString()} ');
                       }
 
-                      print('StreamBuilder ++++ ${allData.length} ');
-                      print('StreamBuilder ++++ ${allData[0]['serviceCost'].toString()} ');
+
 
 
                       return  ListView.builder(

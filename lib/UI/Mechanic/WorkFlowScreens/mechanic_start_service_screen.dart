@@ -259,8 +259,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
                                  Container(
                                    margin: EdgeInsets.only(
-                                       left: size.width * 27.5 / 100,
-                                       right: size.width * 27.5 / 100,
                                        top: size.height * 6 / 100
                                    ),
                                    child: Column(
@@ -275,7 +273,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                width: size.width * 4 / 100,
                                                height: size.height * 4 / 100,),
                                              SizedBox(width: 10,),
-                                             Expanded(
+                                            /* Expanded(
                                                 child: Text("$serviceTotalTimeForFirebase:00",
                                                   style: TextStyle(
                                                       fontSize: 36,
@@ -285,13 +283,13 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                       letterSpacing: .7
                                                   ),
                                                 ),
-                                              ),
-                                             /*CountdownMechanicTimer(
+                                              ),*/
+                                             CountdownMechanicTimer(
                                                animation: StepTween(
                                                  begin: levelClock, // THIS IS A USER ENTERED NUMBER
                                                  end: 0,
                                                ).animate(_controller),
-                                             ),*/
+                                             ),
                                            ],
                                          ),
                                        ),
