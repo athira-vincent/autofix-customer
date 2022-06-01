@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool? _passwordVisible;
   double per = .10;
   double perfont = .10;
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -534,16 +535,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     _signinBloc.socialLoginResponse.listen((value) async {
       if (value.status == "error") {
+        print('value.status error00000 >>>>>>>>>>>>>>>>+++${value.status}');
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
+        print('value.status succes 11111 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
-          if(value.data!.socialLogin!.user!.userTypeId == "1"){
+          print('value.status succes 222222 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
+          if(value.data!.socialLogin!.user!.userTypeId.toString() == "1"){
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
@@ -554,7 +558,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerMainLandingScreen()));
-          }else if(value.data!.socialLogin!.user!.userTypeId == "2"){
+          }
+          else if(value.data!.socialLogin!.user!.userTypeId.toString() == "2"){
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_mechanic,
@@ -567,6 +572,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MechanicHomeScreen()));
+          }
+          else if(value.data!.socialLogin!.user!.userTypeId.toString() == "3"){
+            print('Please login through Relex App >>>>>>>>>>>>>>>>+++');
+            SnackBarWidget().setMaterialSnackBar('Please login through Relex App',_scaffoldKey);
           }
         });
       }
