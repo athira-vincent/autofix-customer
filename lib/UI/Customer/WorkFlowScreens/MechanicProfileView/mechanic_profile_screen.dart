@@ -523,7 +523,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            '${widget.mechanicListData?.mechanic?[0].yearExp} Year',
+                            widget.mechanicListData?.mechanic?[0].yearExp != null
+                                ? '${widget.mechanicListData?.mechanic[0].yearExp} Year'
+                                : '0 Year',
                             textAlign: TextAlign.center,
                             style: Styles.badgeTextStyle,
                           ),

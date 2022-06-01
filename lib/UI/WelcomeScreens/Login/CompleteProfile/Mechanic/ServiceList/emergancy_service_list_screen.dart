@@ -1,10 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +24,12 @@ class EmergencyServiceListScreen extends StatefulWidget {
 
 class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen> {
 
-  final ServiceListBloc _serviceListBloc = ServiceListBloc();
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
 
-  List<Service> emergencyServiceList = [];
-  List<Service> selectedServiceList = [];
+  List<ServiceListAll> emergencyServiceList = [];
+  List<ServiceListAll> selectedServiceList = [];
 
   String title = "";
   List<bool>? _emergencyIsChecked;
@@ -56,12 +56,13 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+      //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
 
   _listenServiceListResponse() {
-    _serviceListBloc.postServiceList.listen((value) {
+    _homeCustomerBloc.postSearchService.listen((value) {
       if (value.status == "error") {
         setState(() {
           //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
@@ -77,8 +78,8 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
-          print(value.data!.categoryList![0].service!.length);
-          emergencyServiceList = value.data!.categoryList![0].service!;
+          print(value.data!.serviceListAll!.length);
+          emergencyServiceList = value.data!.serviceListAll!;
 
           for(int i=0;i<emergencyServiceList.length;i++){
             selectedServiceMdlList.add(SelectedServicesMdl(emergencyServiceList[i].id.toString(),emergencyServiceList[i].minPrice, "10:00", false));
@@ -199,7 +200,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                               textAlignVertical: TextAlignVertical.center,
                               onChanged: (val){
                                 print(val);
-                                //_serviceListBloc.postServiceListRequest(authToken, val, null, "1" );
+                                _homeCustomerBloc.postSearchServiceRequest("$authToken", val,"25","1");
                               },
                               textAlign: TextAlign.left,
                               style: Styles.searchTextStyle01,
