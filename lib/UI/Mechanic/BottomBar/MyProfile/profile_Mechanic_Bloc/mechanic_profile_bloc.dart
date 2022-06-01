@@ -1,3 +1,4 @@
+import 'package:auto_fix/Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/MechanicProfileCorporateEditMdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/MechanicProfileIndividualEditMdl.dart';
@@ -15,6 +16,27 @@ class MechanicProfileBloc {
   ) async {
     MechanicProfileMdl _MechanicProfileMdl = await repository.postMechanicFetchProfileRequest(token, userId);
     postMechanicProfile.sink.add(_MechanicProfileMdl);
+  }
+
+  /// ===============  Service List of Mechanic ================== ///
+
+  final postMechanicServicesBasedList = PublishSubject<MechanicServicesBasedListMdl>();
+  Stream<MechanicServicesBasedListMdl> get MechanicServicesBasedListResponse => postMechanicServicesBasedList.stream;
+
+
+  fetchServiceListOfMechanic(
+      token,
+      mechanicId,
+      page,
+      size,
+      search)  async {
+    MechanicServicesBasedListMdl _mechanicServicesBasedListMdl = await repository.fetchServiceListOfMechanic(
+        token,
+        mechanicId,
+        page,
+        size,
+        search) ;
+    postMechanicServicesBasedList.sink.add(_mechanicServicesBasedListMdl);
   }
 
 

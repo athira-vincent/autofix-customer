@@ -271,6 +271,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Widget customerApprovedScreenStartWorkText(Size size){
     return Container(
       decoration: Styles.boxDecorationStyle,
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
+      ),
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
@@ -308,6 +312,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Widget customerApprovedScreenWarningText(Size size){
     return Container(
       decoration: Styles.boxDecorationStyle,
+      padding: EdgeInsets.only(
+          top: size.width * 3 / 100,
+          bottom: size.width * 3 / 100
+      ),
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,

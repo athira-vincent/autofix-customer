@@ -365,4 +365,19 @@ class Repository {
           token);
 
 
+  /// ===============  Service List of Mechanic ================== ///
+  Future<dynamic>  fetchServiceListOfMechanic(
+      token,
+      mechanicId,
+      page,
+      size,
+      search)  =>
+      _mechanicApiProvider.fetchServiceListOfMechanic(
+          token,
+          mechanicId,
+          page,
+          size,
+          search);
+
+
 }

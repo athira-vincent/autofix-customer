@@ -836,6 +836,68 @@ class QueryProvider {
   }
 
 
+  /// ===============  Service List of Mechanic ================== ///
+
+  fetchServiceListOfMechanic(
+      token,
+      mechanicId,
+      page,
+      size,
+      search) async {
+    String _query = """
+                {
+                 mechanicServicesList(
+                   mechanicId: ${int.parse(mechanicId.toString())}, 
+                   page: ${int.parse(page.toString())}, 
+                   size: ${int.parse(size.toString())}, 
+                   search: "$search") 
+                  {
+                    totalItems
+                    data 
+                    {
+                      id
+                      fee
+                      time
+                       service 
+                       {
+                          id
+                          serviceName
+                          serviceCode
+                          description
+                          icon
+                          minPrice
+                          maxPrice
+                          categoryId
+                          status
+                          category 
+                          {
+                              id
+                              catType
+                              catName
+                              icon
+                              status
+                            }
+                       }
+                      status
+                      userId
+                      serviceId
+                    }
+                    totalPages
+                    currentPage
+                  }
+                }
+        
+             """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+
   fcmTokenUpdate(String fcmToken,String Authtoken) async {
     String _query = """
       mutation {
