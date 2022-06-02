@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
 
   @override
@@ -84,6 +86,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        key: scaffoldKey,
         body: SafeArea(
           child: Container(
             width: size.width,
@@ -269,6 +272,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   void changeScreen(int selectedOptionValue){
+    print(selectedOptionValue);
     if( selectedOptionValue == 1)
       {
         Navigator.pushReplacement(
@@ -276,6 +280,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
             MaterialPageRoute(
                 builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
       }
+    else if( selectedOptionValue == -1)
+    {
+      SnackBarWidget().setMaterialSnackBar( "Please choose a payment method", scaffoldKey);
+    }
+
 
   }
 
