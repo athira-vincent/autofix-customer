@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -8,13 +10,16 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dar
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart' as path;
 
 class MechanicMyProfileScreen extends StatefulWidget {
 
@@ -34,8 +39,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   double perfont = .10;
   bool _isLoadingPage = true;
   bool _isLoading = false;
-  String _userName = "", _imageUrl = "", _userType = "",  userId = "" ;
-
+  String _userName = "", _imageUrl = "", _userType = "",_orgName ="",profilepic="";
+  final picker = ImagePicker();
+  File? _images;
 
   double _setValue(double value) {
     return value * per + value;
@@ -88,7 +94,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   bool editProfileEnabled = false;
 
-  String authToken="", userName = "";
+  String authToken="";
+  String id="";
 
   @override
   void initState() {
@@ -105,11 +112,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      userId = shdPre.getString(SharedPrefKeys.userID).toString();
+      id = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId'+authToken.toString());
       _isLoadingPage=true;
-      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
+      _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
 
     });
   }
@@ -117,6 +123,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   _listenServiceListResponse() {
 
     _mechanicProfileBloc.MechanicProfileResponse.listen((value) {
+      print("jgjhgghvj 01 $value");
       if (value.status == "error") {
         setState(() {
           _isLoadingPage = false;
@@ -147,7 +154,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           _isLoading = false;
           _isLoadingPage = true;
           editProfileEnabled = false;
-          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, userId);
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
         });
       }
     });
@@ -163,7 +170,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           _isLoading = false;
           _isLoadingPage = true;
           editProfileEnabled = false;
-          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,userId);
+          _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
         });
       }
     });
@@ -189,7 +196,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -198,8 +204,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
               children: [
                 Column(
                         children: [
-                         // appBarCustomUi(),
-                          profileImageAndKmAndReviewCount(),
+                          appBarCustomUi(),
+                          profileImageAndKmAndReviewCount(size),
                           NameTextUi(),
                           EmailTextUi(),
                           PhoneTextUi(),
@@ -237,21 +243,18 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
       children: [
         Row(
           children: [
-            /*IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.pop(context),
-            ),*/
-            Container(
-              padding: const EdgeInsets.fromLTRB(20,5,20,5),
-              /*margin: EdgeInsets.only(
-                left: 20
-              ),*/
-              child: Text(
-                '$userName',
-                textAlign: TextAlign.center,
-                style: Styles.appBarTextBlack,
-              ),
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.arrow_back, color: Colors.black),
+            //   onPressed: () => Navigator.pop(context),
+            // ),
+            // Text(
+            //   _userType == "1" ? '$_userName' : _orgName,
+            //   textAlign: TextAlign.center,
+            //   style: Styles.appBarTextBlack,
+            //   //'Mahesh',
+            //   // textAlign: TextAlign.center,
+            //   // style: Styles.appBarTextBlack,
+            // ),
             Spacer(),
 
           ],
@@ -260,7 +263,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget profileImageAndKmAndReviewCount() {
+  Widget profileImageAndKmAndReviewCount(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,10,10,10),
       child: Container(
@@ -275,16 +278,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,75,155,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedGray.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(50,75,155,0),
+                        padding: const EdgeInsets.fromLTRB(00,65,155,0),
                         child: InkWell(
                           onTap: (){
                             setState(() {
@@ -300,6 +294,31 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               print('editProfileEnabled $editProfileEnabled');
                             });
                           },
+                          child: Image.asset(
+                            'assets/image/mechanicProfileView/curvedGray.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(80,75,155,0),
+                        // child: InkWell(
+                        //   onTap: (){
+                        //     setState(() {
+                        //       print('editProfileEnabled $editProfileEnabled');
+                        //       if(editProfileEnabled)
+                        //       {
+                        //         editProfileEnabled=false;
+                        //       }
+                        //       else
+                        //       {
+                        //         editProfileEnabled=true;
+                        //       }
+                        //       print('editProfileEnabled $editProfileEnabled');
+                        //     });
+                        //   },
                           child: Container(
                             height: 50,
                             child: Row(
@@ -314,44 +333,69 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               ],
                             ),
                           ),
-                        ),
+                       // ),
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(97,10,0,0),
-                    child: Container(
-                      width: 125.0,
-                      height: 125.0,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child:Container(
-                              child:CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: Colors.white,
-                                  child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                  )))
+                  Align(
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                     Center(
+                      child: Container(
+                        width: 125.0,
+                        height: 125.0,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child:Container(
+                                child:CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.white,
+                                    child: ClipOval(
+                                      child: _imageUrl !=null&&_imageUrl!=""
+                                      ?
+                                      Image.network(_imageUrl,
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      )
+                                          :
+                                      SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                                      width:150,
+                                      height:150,
+                                      fit:BoxFit.cover),
+                                    )))
 
+                        ),
                       ),
                     ),
-                  ),
+                  editProfileEnabled == true
+                  ?
+                      InkWell(
+                        onTap: (){
+                          _showDialogSelectPhoto();
+                        },
+                        child: Center(
+                          child: Container(
+                            child: Image.asset(
+                                'assets/image/ic_camera_black.png',
+                              width: size.width * 4.8/100,
+                            ),
+                          ),
+                        ),
+                      )
+                      :
+                      Container(),
+                  ],
+        ),
+      ),
 
                   Stack(
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(155,75,0,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedWhite.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(200,75,40,0),
-                        child:InkWell(
+                        padding: const EdgeInsets.fromLTRB(155,65,0,0),
+                        child: InkWell(
                           onTap: () {
                             showDialog(
                                 context: context,
@@ -360,6 +404,25 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                   return deactivateDialog();
                                 });
                           },
+                          child: Image.asset(
+                            'assets/image/mechanicProfileView/curvedWhite.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(200,75,40,0),
+                        // child:InkWell(
+                        //   onTap: () {
+                        //     showDialog(
+                        //         context: context,
+                        //         builder: (BuildContext context)
+                        //         {
+                        //           return deactivateDialog();
+                        //         });
+                        //   },
                           child: Container(
                             child: Row(
                               children: [
@@ -374,7 +437,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             ),
                           ),
                         ),
-                      ),
+                      //),
                     ],
                   ),
 
@@ -386,6 +449,89 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         ),
       ),
     );
+  }
+  _showDialogSelectPhoto() async{
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+      builder: (builder){
+        return Container(
+          height: 115,
+          child: ListView(
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.camera_alt,
+                  color: CustColors.blue,
+                ),
+                title: Text('Camera',
+                style: TextStyle(
+                  fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15,
+                  color:Colors.black)),
+                onTap: ()async{
+                  Navigator.pop(context);
+                  XFile? image= await picker.pickImage(
+                    source: ImageSource.camera,imageQuality: 30);
+
+                  setState(() {
+                    if (image != null){
+                      _images = File(image.path);
+                      uploadImageToFirebase(_images!);
+                      String filename = path.basename(image.path);
+                    }
+                  });
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.image,
+                  color:CustColors.blue,
+                ),
+                title: Text('Gallery',
+                style: TextStyle(
+                  fontFamily: 'Corabel_Regular',
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15,
+                  color: Colors.black)),
+                onTap: () async{
+                  Navigator.pop(context);
+                  XFile? image = (await picker.pickImage(
+                    source: ImageSource.gallery, imageQuality: 30));
+                  setState(() {
+                    if(image != null){
+                      _images = (File(image.path));
+                      uploadImageToFirebase(_images!);
+                      String fileName = path.basename(image.path);
+                    }
+                  });
+                },
+              )
+            ],
+          ),
+        );
+      }
+    );
+  }
+  Future uploadImageToFirebase(File images) async{
+    String fileName = path.basename(images.path);
+    Reference reference = FirebaseStorage.instance.ref().child("SupportChatImages").child(fileName);
+    UploadTask uploadTask = reference.putFile(images);
+    uploadTask.whenComplete(() async{
+      try{
+        String fileImageurl = "";
+        fileImageurl = await reference.getDownloadURL();
+        setState(() {
+          _imageUrl = fileImageurl;
+        });
+      }catch(onError){
+        print("Error");
+      }
+      print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+_imageUrl.toString());
+    });
   }
 
   Widget NameTextUi() {
@@ -417,6 +563,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
                           enabled: editProfileEnabled,
+                          readOnly: !editProfileEnabled,
                           style: Styles.appBarTextBlack15,
                           focusNode: _nameFocusNode,
                           keyboardType: TextInputType.name,
@@ -443,9 +590,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
-                      editProfileEnabled == false
+                      editProfileEnabled == true
                       ? Text(
-                          'Your name',
+                          //'Your name',
+                          _userType == "1" ? 'Your name' : 'Contact person',
                           textAlign: TextAlign.center,
                           style: Styles.textLabelSubTitle,
                         )
@@ -1123,7 +1271,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _stateController.text,
                               "",
                               1,
-                              _yearOfExistenceController.text,);
+                              _yearOfExistenceController.text,
+                            );
                           }
                         else
                           {
@@ -1137,7 +1286,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               1,
                               _yearOfExistenceController.text,
                               _orgNameController.text,
-                              _orgTypeController.text,);
+                              _orgTypeController.text,
+                            );
                             print("Cooperate");
                         }
                       });
@@ -1435,6 +1585,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context);
+
+
             },
             child: Text("Cancel")),
         CupertinoDialogAction(
@@ -1444,6 +1596,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             ),
             isDefaultAction: true,
             onPressed: () async {
+
               setState(() {
                 setDeactivate();
                 Navigator.pushAndRemoveUntil(
@@ -1451,6 +1604,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     MaterialPageRoute(
                         builder: (context) => LoginScreen()),
                     ModalRoute.withName("/LoginScreen"));
+
               });
             },
             child: Text("Logout")),

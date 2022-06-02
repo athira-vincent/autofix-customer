@@ -251,9 +251,9 @@ class CustomerApiProvider {
   }
 
   Future<CustomerDetailsMdl>   postCustFetchProfileRequest(
-      token)async {
+      token,id)async {
     Map<String, dynamic> _resp = await _queryProvider. postCustFetchProfileRequest(
-      token,);
+      token,id);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

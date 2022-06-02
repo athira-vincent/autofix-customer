@@ -105,6 +105,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
 
   bool isloading = false;
+  bool saveloading = false;
 
   double per = .10;
   double perfont = .10;
@@ -130,6 +131,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     super.initState();
     getSharedPrefData();
     _listenFetchProfileResponse();
+    _listenUpdateProfileResponse();
   }
 
   Future<void> getSharedPrefData() async {
@@ -139,8 +141,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
     });
-
-    _fetchProfileBloc.postCustomerProfileRequest(authToken);
+    String id=shdPre.getString(SharedPrefKeys.userID,).toString();
+    _fetchProfileBloc.postCustomerProfileRequest(authToken,id);
   }
 
 
@@ -149,13 +151,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         if (value.status == "error") {
           setState(() {
            // _isLoading = false;
-            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(value.message.toString(),
                   style: const TextStyle(
                       fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: const Duration(seconds: 2),
               backgroundColor: CustColors.peaGreen,
-            ));*/
+            ));
           });
         } else {
           setState(() {
@@ -170,6 +172,31 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           });
         }
       });
+
+  }
+  _listenUpdateProfileResponse(){
+    _changeProfileBloc.postCustomerIndividualEditProfile.listen((value) {
+      print("dbjbjbdjdbkj 001");
+      if(value.status== "error"){
+        setState(() {
+          // _isLoading = false;
+          saveloading=false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+        });
+      }
+      else{
+        setState(() {
+          saveloading=false;
+          getSharedPrefData();
+        });
+      }
+    });
   }
 
   void setProfileData(CustomerProfileMdl value){
@@ -239,7 +266,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                         Column(
                           children: [
                             StateTextUi(size),
-                            ministryTextUi(size),
+                            //ministryTextUi(size),
                             NameTextUi(size),
                             EmailTextUi(size),
                             PhoneTextUi(size),
@@ -301,29 +328,46 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,65,155,0),
                         child:
-                        Image.asset(
-                          'assets/image/mechanicProfileView/curvedGray.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              print('editProfileEnabled $editProfileEnabled');
+                              if(editProfileEnabled)
+                              {
+                                editProfileEnabled=false;
+                              }
+                              else
+                              {
+                                editProfileEnabled=true;
+                              }
+                              print('editProfileEnabled $editProfileEnabled');
+                            });
+                          },
+                          child: Image.asset(
+                            'assets/image/mechanicProfileView/curvedGray.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      InkWell(
-                        onTap: (){
-                          setState(() {
-                            print('editProfileEnabled $editProfileEnabled');
-                            if(editProfileEnabled)
-                            {
-                              editProfileEnabled=false;
-                            }
-                            else
-                            {
-                              editProfileEnabled=true;
-                            }
-                            print('editProfileEnabled $editProfileEnabled');
-                          });
-                        },
-                        child: Container(
+                      // InkWell(
+                      //   onTap: (){
+                      //     setState(() {
+                      //       print('editProfileEnabled $editProfileEnabled');
+                      //       if(editProfileEnabled)
+                      //       {
+                      //         editProfileEnabled=false;
+                      //       }
+                      //       else
+                      //       {
+                      //         editProfileEnabled=true;
+                      //       }
+                      //       print('editProfileEnabled $editProfileEnabled');
+                      //     });
+                      //   },
+                      //   child:
+                        Container(
                           margin: EdgeInsets.only(
                             left: size.width * 18 / 100,
                             top: size.height * 10 / 100
@@ -340,7 +384,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             ],
                           ),
                         ),
-                      ),
+                      //),
                     ],
                   ),
 
@@ -359,14 +403,17 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                         radius: 50,
                                         backgroundColor: Colors.white,
                                         child: ClipOval(
-                                          child: _imageUrl == null
+                                          child: _imageUrl != null&&_imageUrl!=""
                                               ?
-                                          SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg')
-                                              :
                                           Image.network(_imageUrl,
                                             width: 150,
                                             height: 150,
-                                            fit: BoxFit.cover,),
+                                            fit: BoxFit.cover,)
+                                              :
+                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                                              width: 150,
+                                              height: 150,
+                                              fit: BoxFit.cover,)
                                         )))
 
                             ),
@@ -400,23 +447,34 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,65,0,0),
-                        child: Image.asset(
-                          'assets/image/mechanicProfileView/curvedWhite.png',
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context)
+                                {
+                                  return deactivateDialog();
+                                });
+                          },
+                          child: Image.asset(
+                            'assets/image/mechanicProfileView/curvedWhite.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context)
-                              {
-                                return deactivateDialog();
-                              });
-                        },
-                        child: Container(
+                      // InkWell(
+                      //   onTap: () {
+                      //     showDialog(
+                      //         context: context,
+                      //         builder: (BuildContext context)
+                      //         {
+                      //           return deactivateDialog();
+                      //         });
+                      //   },
+                       // child:
+                        Container(
                           margin: EdgeInsets.only(
                               left: size.width * 55 / 100,
                               top: size.height * 10 / 100
@@ -433,7 +491,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             ],
                           ),
                         ),
-                      ),
+                      //),
                     ],
                   ),
                 ],
@@ -564,7 +622,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Container(
                         child: TextFormField(
-                          enabled: editProfileEnabled,
+                          //enabled: editProfileEnabled,
+                          enabled: false,
                           readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
@@ -656,7 +715,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Container(
                         child: TextFormField(
-                          enabled: editProfileEnabled,
+                         // enabled: editProfileEnabled,
+                          enabled: false,
                           readOnly: !editProfileEnabled,
                           textAlignVertical: TextAlignVertical.center,
                           maxLines: 1,
@@ -811,100 +871,100 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     );
   }
 
-  Widget ministryTextUi(Size size) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20,5,20,5),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: (){
-              if(editProfileEnabled == true){
-                print("on tap Ministry/Govt. agency ");
-                showMinistryGovtSelector();
-              }
-            },
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      color: CustColors.whiteBlueish,
-                      borderRadius: BorderRadius.circular(11.0)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('assets/image/ic_location.svg',
-                      height: size.height * 2.5 / 100,
-                      width: size.width * 2.5 / 100,
-                    ),
-                    //child: Icon(Icons.mail, color: CustColors.blue),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: TextFormField(
-                            readOnly: true,
-                            enabled: false,
-                            textAlignVertical: TextAlignVertical.center,
-                            maxLines: 1,
-                            style: Styles.appBarTextBlack15,
-                            focusNode: _ministryGovtFocusNode,
-                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_ministry_govt).emptyChecking,
-                            controller: _ministryGovtController,
-                            cursorColor: CustColors.light_navy,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              hintText:  'Ministry',
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: 2.8,
-                                horizontal: 0.0,
-                              ),
-                              hintStyle: Styles.appBarTextBlack15,),
-                          ),
-                        ),
-                        editProfileEnabled != true
-                            ?
-                        Text(
-                          'Your ministry/govt agency ',
-                          textAlign: TextAlign.center,
-                          style: Styles.textLabelSubTitle,
-                        )
-                            :
-                        Container(),
-                      ],
-                    ),
-                  ),
-                ),
-                Spacer(),
-                editProfileEnabled == true
-                    ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
-                )
-                    : Container(),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,5),
-            child: Divider(),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget ministryTextUi(Size size) {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(20,5,20,5),
+  //     child: Column(
+  //       children: [
+  //         InkWell(
+  //           onTap: (){
+  //             if(editProfileEnabled == true){
+  //               print("on tap Ministry/Govt. agency ");
+  //               showMinistryGovtSelector();
+  //             }
+  //           },
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                 decoration: BoxDecoration(
+  //                     color: CustColors.whiteBlueish,
+  //                     borderRadius: BorderRadius.circular(11.0)
+  //                 ),
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.all(15),
+  //                   child: SvgPicture.asset('assets/image/ic_location.svg',
+  //                     height: size.height * 2.5 / 100,
+  //                     width: size.width * 2.5 / 100,
+  //                   ),
+  //                   //child: Icon(Icons.mail, color: CustColors.blue),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Padding(
+  //                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     mainAxisAlignment: MainAxisAlignment.start,
+  //                     children: [
+  //                       Container(
+  //                         child: TextFormField(
+  //                           readOnly: true,
+  //                           enabled: false,
+  //                           textAlignVertical: TextAlignVertical.center,
+  //                           maxLines: 1,
+  //                           style: Styles.appBarTextBlack15,
+  //                           focusNode: _ministryGovtFocusNode,
+  //                           validator: InputValidator(ch: AppLocalizations.of(context)!.text_ministry_govt).emptyChecking,
+  //                           controller: _ministryGovtController,
+  //                           cursorColor: CustColors.light_navy,
+  //                           decoration: InputDecoration(
+  //                             isDense: true,
+  //                             hintText:  'Ministry',
+  //                             border: InputBorder.none,
+  //                             focusedBorder: InputBorder.none,
+  //                             enabledBorder: InputBorder.none,
+  //                             errorBorder: InputBorder.none,
+  //                             disabledBorder: InputBorder.none,
+  //                             contentPadding: EdgeInsets.symmetric(
+  //                               vertical: 2.8,
+  //                               horizontal: 0.0,
+  //                             ),
+  //                             hintStyle: Styles.appBarTextBlack15,),
+  //                         ),
+  //                       ),
+  //                       editProfileEnabled != true
+  //                           ?
+  //                       Text(
+  //                         'Your ministry/govt agency ',
+  //                         textAlign: TextAlign.center,
+  //                         style: Styles.textLabelSubTitle,
+  //                       )
+  //                           :
+  //                       Container(),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //               Spacer(),
+  //               editProfileEnabled == true
+  //                   ? Container(
+  //                   child: Padding(
+  //                     padding: const EdgeInsets.all(15),
+  //                     child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+  //                   )
+  //               )
+  //                   : Container(),
+  //             ],
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: const EdgeInsets.fromLTRB(0,5,0,5),
+  //           child: Divider(),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget OrganisationTypeTextUi(Size size) {
     return Padding(
@@ -1004,25 +1064,30 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget individualSaveChangeButton (Size size){
-    return InkWell(
+    return saveloading?CircularProgressIndicator():
+    InkWell(
       onTap: (){
 
         if (_formKey.currentState!.validate()) {
           //_isLoading = true;
+          saveloading = true;
 
           _changeProfileBloc.postCustomerIndividualEditProfileRequest(
               authToken,
               _nameController.text.toString(),"",
               selectedState, 1,
               _imageUrl);
+          setState(() {
 
+          });
         } else {
           print("individual _formKey.currentState!.validate() - else");
           setState(() => _autoValidate = AutovalidateMode.always);
         }
 
       },
-      child: Container(
+      child:
+      Container(
         width: size.width,
         height: size.height * 7 / 100,
         color: CustColors.light_navy,
@@ -1041,11 +1106,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget corporateSaveChangeButton (Size size){
-    return InkWell(
+    return saveloading?CircularProgressIndicator():
+    InkWell(
       onTap: (){
 
         if (_formKey.currentState!.validate()) {
           //_isLoading = true;
+          saveloading = true;
 
           _changeProfileBloc.postCustomerCorporateEditProfileRequest(
               authToken,
@@ -1081,11 +1148,13 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget governmentSaveChangeButton (Size size){
-    return InkWell(
+    return saveloading?CircularProgressIndicator():
+    InkWell(
       onTap: (){
 
         if (_formKey.currentState!.validate()) {
           //_isLoading = true;
+          saveloading = true;
 
           _changeProfileBloc.postCustomerGovernmentEditProfileRequest(
               authToken,
@@ -1297,7 +1366,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                     },
                                   )
                                       : Center(
-                                    child: Text('No Results found.'),
+                                        child: Text('No Results found.'),
                                   ),
                                 ),
                               ])),
