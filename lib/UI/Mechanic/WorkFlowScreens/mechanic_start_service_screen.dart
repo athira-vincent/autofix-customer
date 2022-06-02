@@ -889,7 +889,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                 ),
                                 Text(
                                   isWaiting == "-1" ?
-                                  "Customer's Confirmation is mandatory" : "Customer accepted",
+                                  //"Confirmation was mandatory" : "Customer accepted",
+                                  "Continue with requested service" : "Customer accepted",
                                   style: Styles.smallTitleStyle3,
                                   textAlign: TextAlign.center,
                                   maxLines: 1,
