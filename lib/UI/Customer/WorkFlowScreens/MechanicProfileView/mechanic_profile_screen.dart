@@ -183,7 +183,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         });
       }
     });
-    _homeCustomerBloc.mechanicsBookingIDResponse.listen((value) async {
+    _homeCustomerBloc.mechanicsEmergencyBookingIDResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -197,10 +197,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
           shdPre.setString(SharedPrefKeys.serviceIdEmergency, "${widget.serviceIds}");
           shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "${widget.mechanicId}");
-          shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.mechanicBooking?.id}");
+          shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.emergencyBooking?.id}");
 
-          bookingIdEmergency = "${value.data?.mechanicBooking?.id}";
-          _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.mechanicBooking?.id}",);
+          bookingIdEmergency = "${value.data?.emergencyBooking?.id}";
+          _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.emergencyBooking?.id}",);
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
@@ -960,7 +960,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         {
           print('serviceIdEmergency>>>>>>>>11111 ' + serviceIdEmergency.toString());
 
-          _homeCustomerBloc.postMechanicsBookingIDRequest(
+          _homeCustomerBloc.postMechanicsEmergencyServiceBookingIDRequest(
             authToken,
             '${_homeCustomerBloc.dateConvert(DateTime.now())}',
             '${_homeCustomerBloc.timeConvert(DateTime.now())}',

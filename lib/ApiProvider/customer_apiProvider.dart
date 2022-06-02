@@ -2,6 +2,7 @@
 
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergencyBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/customer_start_service_mdl.dart';
@@ -82,14 +83,14 @@ class CustomerApiProvider {
   }
 
 
-  /// =============== Mechanics Booking Id  ================== ///
+  /// =============== Mechanics Regular Service Booking Id  ================== ///
 
-  Future<MechanicBookingMdl> postMechanicsBookingIDRequest(
+  Future<MechanicBookingMdl> postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
       serviceId, mechanicId, reqType,
       totalPrice, paymentType, travelTime) async {
-    Map<String, dynamic> _resp = await _queryProvider.postMechanicsBookingIDRequest(
+    Map<String, dynamic> _resp = await _queryProvider.postMechanicsRegularServiceBookingIDRequest(
         token, date, time,
         latitude, longitude,
         serviceId, mechanicId, reqType,
@@ -108,6 +109,34 @@ class CustomerApiProvider {
       return errorMsg;
     }
   }
+
+  /// =============== Mechanics Emergency Service Booking Id  ================== ///
+
+  Future<EmergencyBookingMdl> postMechanicsEmergencyServiceBookingIDRequest(
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
+    Map<String, dynamic> _resp = await _queryProvider.postMechanicsEmergencyServiceBookingIDRequest(
+        token, date, time,
+        latitude, longitude,
+        serviceId, mechanicId, reqType,
+        totalPrice, paymentType, travelTime);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = EmergencyBookingMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return EmergencyBookingMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = EmergencyBookingMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
 
 
   /// =============== Update Mechanic Booking Id  ================== ///
