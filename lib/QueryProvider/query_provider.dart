@@ -2154,4 +2154,129 @@ class QueryProvider {
     );
   }
 
+
+  // 23/05/2022**********add price and fault**********
+
+  postAddPriceFaultReviewRequest(
+      token,mechanicId) async {
+    String _query = """ 
+     query
+     {
+  mechanic_Details(id: $mechanicId) {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    accountType
+    jwtToken
+    status
+    mechanic {
+      id
+      orgName
+      orgType
+      yearExp
+      mechType
+      workType
+      numMech
+      rcNumber
+      address
+      apprentice_cert
+      identification_cert
+      yearExist
+      rate
+      reviewCount
+      userId
+      profilePic
+      state
+      status
+      brands
+    }
+    mechanicService {
+      service{
+        serviceName
+      }
+      id
+      fee
+      time
+      status
+      userId
+      serviceId
+    }
+  }
+}
+
+
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
+  postUpdateAddPriceFaultReviewRequest(token,mechanicId,time,fee,serviceId) async {
+    String _query = """  
+      mutation  {
+  updateTimeFees(time: "$time", fee: "$fee", mechanicId: $mechanicId, serviceId: $serviceId) {
+    message
+  }
+}
+ 
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+  postEmrgRegAddPriceReviewRequest(
+      token,page,size,search,userId,catType) async {
+    String _query = """ 
+     query
+     {
+  addPriceServiceList(
+    page: $page
+    size: $size
+    search: "$search"
+    userId: $userId
+    catType: $catType
+  ) {
+    totalItems
+    data {
+      id
+      serviceCode
+      serviceName
+      minPrice
+      maxPrice
+      icon
+      status
+      categoryId
+      category{id}
+      mechanicService{
+        id
+        time
+        fee
+      }
+    }
+    totalPages
+    currentPage
+  }
+}
+
+
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 }
