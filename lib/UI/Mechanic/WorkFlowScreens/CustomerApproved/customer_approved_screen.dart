@@ -137,7 +137,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             'isWorkStarted': "$isWorkStarted",
             'isWorkCompleted': "$isWorkCompleted",
             "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : "$timeCounter",
+            "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : timeCounter-1,
             "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
             "mechanicFromPage" : "MechanicWorkCompletedScreen",
           //===================== code for send the list of additional services =========
