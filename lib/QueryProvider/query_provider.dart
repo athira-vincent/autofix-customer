@@ -1526,11 +1526,11 @@ class QueryProvider {
   }
 
   postCustFetchProfileRequest(
-      token) async {
+      token,id) async {
     String _query = """ 
      query
      {
-        customer_Details(jwtToken: "$token") {
+        customer_Details(id: $id) {
             id
             userCode
             firstName

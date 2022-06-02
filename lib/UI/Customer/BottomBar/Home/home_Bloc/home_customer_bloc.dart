@@ -201,10 +201,10 @@ class HomeCustomerBloc {
   Stream<CustomerDetailsMdl> get postFetchProfileResponse => postFetchProfile.stream;
 
   postCustFetchProfileRequest(
-      token,) async {
+      token,id) async {
 
     CustomerDetailsMdl _customerDetailsMdl = await repository.postCustFetchProfileRequest(
-        token,);
+        token,id);
     postFetchProfile.sink.add(_customerDetailsMdl);
   }
 

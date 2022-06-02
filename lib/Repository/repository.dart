@@ -281,9 +281,9 @@ class Repository {
 
   // Fetch Profile Customer Request
   Future<dynamic>  postCustFetchProfileRequest(
-      token)  =>
+      token,id)  =>
       _customerFetchProfileApiProvider.postCustFetchProfileRequest(
-          token);
+          token,id);
 
   // Fetch Mechanic Online Offline Request
   Future<dynamic>  postMechanicOnlineOfflineRequest(
