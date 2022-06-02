@@ -103,14 +103,27 @@ class Repository {
           otp,
           userTypeId);
 
-  /// =============== Mechanics Booking Id  ================== ///
+  /// =============== Mechanics Regular Service Booking Id  ================== ///
 
-  Future<dynamic> postMechanicsBookingIDRequest(
+  Future<dynamic> postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
       serviceId, mechanicId, reqType,
       totalPrice, paymentType, travelTime) =>
-      _customerApiProvider.postMechanicsBookingIDRequest(
+      _customerApiProvider.postMechanicsRegularServiceBookingIDRequest(
+          token, date, time,
+          latitude, longitude,
+          serviceId, mechanicId, reqType,
+          totalPrice, paymentType, travelTime);
+
+  /// =============== Mechanics Emergency Service Booking Id  ================== ///
+
+  Future<dynamic> postMechanicsEmergencyServiceBookingIDRequest(
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) =>
+      _customerApiProvider.postMechanicsEmergencyServiceBookingIDRequest(
           token, date, time,
           latitude, longitude,
           serviceId, mechanicId, reqType,

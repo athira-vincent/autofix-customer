@@ -1,6 +1,7 @@
 
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergencyBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/customer_start_service_mdl.dart';
@@ -99,24 +100,44 @@ class HomeCustomerBloc {
 
 
 
-  /// =============== Mechanics Booking ID ================== ///
+  /// =============== Mechanics Regular Service Booking Id  ================== ///
 
 
-  final postMechanicsBookingIDList = BehaviorSubject<MechanicBookingMdl>();
-  Stream<MechanicBookingMdl> get mechanicsBookingIDResponse => postMechanicsBookingIDList.stream;
+  final postMechanicsRegularBookingIDList = BehaviorSubject<MechanicBookingMdl>();
+  Stream<MechanicBookingMdl> get mechanicsRegularBookingIDResponse => postMechanicsRegularBookingIDList.stream;
 
-  postMechanicsBookingIDRequest(
+  postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
       serviceId, mechanicId, reqType,
       totalPrice, paymentType, travelTime) async {
 
-    MechanicBookingMdl _mechanicsBookingMdl = await repository.postMechanicsBookingIDRequest(
+    MechanicBookingMdl _mechanicsBookingMdl = await repository.postMechanicsRegularServiceBookingIDRequest(
         token, date, time,
         latitude, longitude,
         serviceId, mechanicId, reqType,
         totalPrice, paymentType, travelTime);
-    postMechanicsBookingIDList.sink.add(_mechanicsBookingMdl);
+    postMechanicsRegularBookingIDList.sink.add(_mechanicsBookingMdl);
+  }
+
+  /// =============== Mechanics Emergency Service Booking Id  ================== ///
+
+
+  final postMechanicsEmergencyBookingIDList = BehaviorSubject<EmergencyBookingMdl>();
+  Stream<EmergencyBookingMdl> get mechanicsEmergencyBookingIDResponse => postMechanicsEmergencyBookingIDList.stream;
+
+  postMechanicsEmergencyServiceBookingIDRequest(
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
+
+    EmergencyBookingMdl _mechanicsBookingMdl = await repository.postMechanicsEmergencyServiceBookingIDRequest(
+        token, date, time,
+        latitude, longitude,
+        serviceId, mechanicId, reqType,
+        totalPrice, paymentType, travelTime);
+    postMechanicsEmergencyBookingIDList.sink.add(_mechanicsBookingMdl);
   }
 
 

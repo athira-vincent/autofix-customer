@@ -645,9 +645,9 @@ class QueryProvider {
   }
 
 
-  /// =============== Mechanics Booking Id  ================== ///
+  /// =============== Mechanics Regular Service Booking Id  ================== ///
 
-  postMechanicsBookingIDRequest(
+  postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
       serviceId, mechanicId, reqType,
@@ -686,6 +686,115 @@ class QueryProvider {
     return await GqlClient.I.mutation11(_query,
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
+
+  /// =============== Mechanics Emergency Service Booking Id  ================== ///
+
+  postMechanicsEmergencyServiceBookingIDRequest(
+      token, date, time,
+      latitude, longitude,
+      serviceId, mechanicId, reqType,
+      totalPrice, paymentType, travelTime) async {
+    String _query = """  
+    mutation {
+        emergencyBooking(
+           bookedDate: "$date"
+              bookedTime: "$time"
+              latitude: ${double.parse(latitude.toString())}
+              longitude: ${double.parse(longitude.toString())}
+              serviceId: ${int.parse(serviceId.toString())}
+              mechanicId:${int.parse(mechanicId.toString())}
+              reqType: ${int.parse(reqType.toString())}
+              totalPrice: ${int.parse(totalPrice.toString())}
+              paymentType: ${int.parse(paymentType.toString())}
+              travelTime:  ""
+        
+          ) {
+            id
+            bookingCode
+            reqType
+            bookStatus
+            totalPrice
+            tax
+            commission
+            serviceCharge
+            totalTime
+            serviceTime
+            latitude
+            longitude
+            mechLatitude
+            mechLongitude
+            extend
+            totalExt
+            extendTime
+            bookedDate
+            isRated
+            status
+            customerId
+            mechanicId
+            vehicleId
+            mechanic {
+              id
+              userCode
+              firstName
+              lastName
+              emailId
+              phoneNo
+              status
+              userTypeId
+              jwtToken
+              fcmToken
+              otpCode
+              isProfile
+              otpVerified
+            }
+            customer {
+              id
+              userCode
+              firstName
+              lastName
+              emailId
+              phoneNo
+              status
+              userTypeId
+              jwtToken
+              fcmToken
+              otpCode
+              isProfile
+              otpVerified
+            }
+            vehicle {
+              id
+              brand
+              model
+              engine
+              year
+              plateNo
+              lastMaintenance
+              milege
+              vehiclePic
+              latitude
+              longitude
+              defaultVehicle
+              status
+              userId
+            }
+            bookService {
+              id
+              mechanicId
+              customerId
+              status
+              serviceId
+              bookMechanicId
+            }
+          }
+        }
+
+    """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
 
   /// =============== Update Mechanic Booking Id  ================== ///
 

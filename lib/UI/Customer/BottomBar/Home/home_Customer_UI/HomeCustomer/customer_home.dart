@@ -78,6 +78,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
+
   bool _isLoading = false;
 
   @override
