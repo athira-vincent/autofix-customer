@@ -72,7 +72,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _homeCustomerBloc.postSearchServiceRequest("$authToken", "s","","");
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", null,null,null);
     });
   }
 
@@ -229,7 +229,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                   if (text != null && text.isNotEmpty && text != "" ) {
                     setState(() {
                       print('First text field: $text');
-                      _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}","","");
+                      _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}",null,null);
                     });
                   }
 
@@ -292,6 +292,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
                                           itemCount: snapshot.data?.data?.serviceListAll?.length,
                                           itemBuilder: (context, index) {
                                             return  GestureDetector(
@@ -400,6 +401,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data?.data?.serviceListAll?.length,
                             itemBuilder: (context, index) {
                               return  GestureDetector(
