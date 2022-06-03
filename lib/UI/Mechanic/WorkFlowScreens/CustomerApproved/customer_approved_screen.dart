@@ -78,6 +78,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // Maria code here
       // bookingId = "100";
 
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
