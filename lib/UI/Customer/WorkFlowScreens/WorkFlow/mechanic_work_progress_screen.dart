@@ -37,6 +37,11 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   Timer? timerObjVar;
   Timer? timerObj;
+
+  Timer? timerObj1;
+  Timer? timerObjVar1;
+  int timeCounter = 0;
+
   String mechanicDiagonsisState = "0";
   String isWorkCompleted = "0";
   String isPaymentRequested = "0";
@@ -129,6 +134,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                 levelClock)
         );
         _controller.forward();
+        _updateTimerListener();
 
       });
       setState(() {
@@ -152,7 +158,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           print('isWorkCompleted ++++ $isWorkCompleted');
 
           extendedTimeFromFirestore = querySnapshot.get("extendedTime");
-          int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore')).inSeconds;
+          int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore') + int.parse('$timeCounter')).inSeconds ;
           if(extendedTimeFromFirestore.toString() != "0")
           {
             if(extendedTimeFirstTymCall == "0")
@@ -665,6 +671,19 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       timerCouterTime?.cancel();
       timerCouterTime = null;
     }
+  }
+
+
+  void _updateTimerListener() {
+
+    timeCounter = _controller.duration!.inMinutes;
+    timerObj1 = Timer.periodic(Duration(minutes: 1), (Timer t) {
+      timerObjVar1 = t;
+
+      print('Timer timerObj ++++++' + timerObjVar1.toString());
+      timeCounter = timeCounter - 1;
+      print("timeCounter >>>>>> " + timeCounter.toString());
+    });
   }
 
 }
