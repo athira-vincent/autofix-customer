@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
 
-                home: MechanicWorkProgressScreen(workStatus: "2",),
+                home: SplashScreen(),
               );
             },
           );
