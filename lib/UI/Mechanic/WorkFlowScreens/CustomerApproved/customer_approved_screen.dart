@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/additional_time_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
@@ -54,6 +53,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   Timer? timerObjVar;
   int timeCounter = 0;
 
+  Timer? totalTimerObj;
+  int totalTimeTaken = 0;
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,13 +71,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _mechanicOrderStatusUpdateBloc.dispose();
-    _addMoreTimeBloc.dispose();
-
-  }
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -82,6 +78,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // Maria code here
 
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
 
@@ -120,7 +117,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   updateToCloudFirestoreDB("1", "0", "0");
                 });
                 _controller.forward();
-                _updateTimerListener();
+                _totalTimeCounter();
+                _updateTimerListener(int.parse(updatedServiceTime));
                 isStartedWork = true;
                 _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                     authToken, bookingId, "5");
@@ -131,14 +129,19 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time ) {
-        _firestore
+
+    print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
+
+
+    _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
             'isWorkStarted': "$isWorkStarted",
             'isWorkCompleted': "$isWorkCompleted",
             "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
+            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+           // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
             "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
             "mechanicFromPage" : "MechanicWorkCompletedScreen",
           //===================== code for send the list of additional services =========
@@ -350,7 +353,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Expanded(
-            child: Text("Note:  If you click the ‘Start repair’ button, it will enables the timer countdown feature also.",
+            child: Text(
+              isStartedWork
+                  ? "Note: If you click the ‘Work Finished’ button, it will stop the timer countdown & end work."
+                  : "Note:  If you click the ‘Start repair’ button, it will enables the timer countdown feature also.",
               style: warningTextStyle01,
             ),
           )
@@ -424,7 +430,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 updateToCloudFirestoreDB("1", "0", "0");
               });
               _controller.forward();
-              _updateTimerListener();
+              _totalTimeCounter();
+              _updateTimerListener(int.parse(updatedServiceTime));
               isStartedWork = true;
               _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                   authToken, bookingId, "5");
@@ -498,9 +505,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     );
   }
 
-  void _updateTimerListener() {
+  void _updateTimerListener(int count) {
 
-    timeCounter = _controller.duration!.inMinutes;
+    print('_updateTimerListener >>>>>000 ${count}');
+
+    timeCounter = count;
     timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar = t;
 
@@ -514,6 +523,25 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       }
     });
   }
+
+  void _totalTimeCounter() {
+
+    totalTimerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
+
+      totalTimeTaken = totalTimeTaken + 1;
+
+      print('Timer totalTimerObj ++++++' + totalTimerObj.toString());
+
+      print("totalTimeTaken >>>>>> " + totalTimeTaken.toString());
+    });
+    /*Timer(const Duration(minutes: 1), () {
+      totalTimeTaken = totalTimeTaken + 1;
+      print("totalTimeTaken >>>>>>>> " + totalTimeTaken.toString());
+    });*/
+  }
+
+
+
 
   Widget mechanicAddMoreTimeButton(Size size){
     return Align(
@@ -711,26 +739,39 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     setState(() {
                       _controller.stop();
 
+                      print("level extendedTimeVal clock1 >>>> " + extendedTimeVal.toString());
+                      print("level extendedTime clock1 >>>> " + extendedTime.toString());
+                      print("level levelClock clock1 >>>> " + levelClock.toString());
+                      print("level timeCounter clock1 >>>> " + timeCounter.toString());
+
+
+
                       newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
                         extendedTime = newTime.toString();
-                        print("level extendedTime clock1 >>>> " + newTime.toString());
-                        print("level clock1 >>>> " + levelClock.toString());
-                        newTimeSec = Duration(minutes: int.parse('$extendedTime')).inSeconds;
+                        newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
                         levelClock = newTimeSec;
-                        print("level sec clock2 >>>> " + newTimeSec.toString());
                          _controller = AnimationController(
                              vsync: this,
                              duration: Duration(
                                  seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
                          );
-                         print("clock2 _controller ${_controller.status}");
-                         print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
+
+                      print("level extendedTimeVal clock2 >>>> " + extendedTimeVal.toString());
+                      print("level extendedTime clock2 >>>> " + extendedTime.toString());
+                      print("level newTimeSec clock2 >>>> " + newTimeSec.toString());
+                      print("level levelClock clock2 >>>> " + levelClock.toString());
+                      print("level timeCounter clock2 >>>> " + timeCounter.toString());
+
+
+
+                      print("clock2 _controller ${_controller.status}");
+                      print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
 
                       //_controller.reset();
                         isEnableAddMoreBtn = false;
                         _controller.forward();
-                         _updateTimerListener();
-                        updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
+                         _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
+                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
                         _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
                       });
                       Navigator.of(context).pop();
@@ -804,5 +845,34 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       fontWeight: FontWeight.w600,
       color: Colors.black,
   );
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _mechanicOrderStatusUpdateBloc.dispose();
+    _addMoreTimeBloc.dispose();
+    cancelTimer();
+    print("dispose");
+  }
+
+  cancelTimer() {
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
+
+    if (totalTimerObj != null) {
+      totalTimerObj?.cancel();
+      totalTimerObj = null;
+    }
+  }
+
 
 }

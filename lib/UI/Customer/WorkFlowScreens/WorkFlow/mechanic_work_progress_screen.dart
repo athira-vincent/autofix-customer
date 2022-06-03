@@ -642,6 +642,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     cancelTimer1();
     if(widget.workStatus =="3") {
       cancelTimer();
+      cancelTimer2();
     }
     super.dispose();
     print("dispose");
@@ -670,6 +671,19 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     if (timerCouterTime != null) {
       timerCouterTime?.cancel();
       timerCouterTime = null;
+    }
+  }
+
+  cancelTimer2() {
+
+    if (timerObjVar1 != null) {
+      timerObjVar1?.cancel();
+      timerObjVar1 = null;
+    }
+
+    if (timerObj1 != null) {
+      timerObj1?.cancel();
+      timerObj1 = null;
     }
   }
 
