@@ -95,52 +95,52 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
         print('_firestore11 updatedServiceTime >>> $updatedServiceTime');
         if(listenToFirestoreTime == "0")
+        {
+          levelClock = int.parse('${updatedServiceTime.split(":").first}') ;
+          int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
+          levelClock = sec;
+          _controller = AnimationController(
+              vsync: this,
+              duration: Duration(
+                  seconds: levelClock)
+          );
+          listenToFirestoreTime = "1";
+          if(mechanicDiagonsisState=="2")
           {
-            levelClock = int.parse('${updatedServiceTime.split(":").first}') ;
-            int sec = Duration(minutes: int.parse('$levelClock')).inSeconds;
-            levelClock = sec;
-            _controller = AnimationController(
-                vsync: this,
-                duration: Duration(
-                    seconds: levelClock)
-            );
-            listenToFirestoreTime = "1";
-            if(mechanicDiagonsisState=="2")
-              {
-                setState(() {
-                  print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
-                  print("updateToCloudFirestoreDB extendedTime $extendedTime");
-                  print("levelClock $levelClock");
-                  updateToCloudFirestoreDB("1", "0", "0");
-                });
-                _controller.forward();
-                _updateTimerListener();
-                isStartedWork = true;
-                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                    authToken, bookingId, "5");
-              }
+            setState(() {
+              print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
+              print("updateToCloudFirestoreDB extendedTime $extendedTime");
+              print("levelClock $levelClock");
+              updateToCloudFirestoreDB("1", "0", "0");
+            });
+            _controller.forward();
+            _updateTimerListener();
+            isStartedWork = true;
+            _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                authToken, bookingId, "5");
           }
+        }
       });
     });
   }
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time ) {
-        _firestore
-            .collection("ResolMech")
-            .doc('${bookingId}')
-            .update({
-            'isWorkStarted': "$isWorkStarted",
-            'isWorkCompleted': "$isWorkCompleted",
-            "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-            "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-            "mechanicFromPage" : "MechanicWorkCompletedScreen",
-          //===================== code for send the list of additional services =========
-        })
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+      'isWorkStarted': "$isWorkStarted",
+      'isWorkCompleted': "$isWorkCompleted",
+      "extendedTime": "$time",
+      "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+      "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+      "mechanicFromPage" : "MechanicWorkCompletedScreen",
+      //===================== code for send the list of additional services =========
+    })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
-       // "totalTimeTakenByMechanic" : timeCounter == 0 ? "$timeCounter" : "${timeCounter - 1}",
+    // "totalTimeTakenByMechanic" : timeCounter == 0 ? "$timeCounter" : "${timeCounter - 1}",
   }
 
 
@@ -197,11 +197,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       child: Text(
         "Customer approved ! ",
         style: TextStyle(
-        fontSize: 16,
-        fontFamily: "Samsung_SharpSans_Medium",
-        fontWeight: FontWeight.w400,
-        color: CustColors.light_navy,
-      ),),
+          fontSize: 16,
+          fontFamily: "Samsung_SharpSans_Medium",
+          fontWeight: FontWeight.w400,
+          color: CustColors.light_navy,
+        ),),
     );
   }
 
@@ -221,10 +221,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               ),),
               Text(
                 mechanicName,
-               // "George Dola",
+                // "George Dola",
                 style: TextStyle(
-                color: CustColors.light_navy
-              ),)
+                    color: CustColors.light_navy
+                ),)
             ],
           ),
           Row(
@@ -260,7 +260,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       child: Container(
         margin: EdgeInsets.only(
           //left: size.width * 20 /100,
-         // right: size.width * 20 / 100,
+          // right: size.width * 20 / 100,
           // bottom: size.height * 1 /100,
           top: size.height * 3.3 / 100,
         ),
@@ -413,37 +413,37 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       alignment: Alignment.centerRight,
       child: InkWell(
         onTap: (){
-            if(isStartedWork == false){
-              setState(() {
-                print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
-                //isStartedWork = !isStartedWork;
-                print("updateToCloudFirestoreDB extendedTime $extendedTime");
-                print("levelClock $levelClock");
-                updateToCloudFirestoreDB("1", "0", "0");
-              });
-              _controller.forward();
-              _totalTimeCounter();
-              _updateTimerListener();
-              isStartedWork = true;
+          if(isStartedWork == false){
+            setState(() {
+              print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
+              //isStartedWork = !isStartedWork;
+              print("updateToCloudFirestoreDB extendedTime $extendedTime");
+              print("levelClock $levelClock");
+              updateToCloudFirestoreDB("1", "0", "0");
+            });
+            _controller.forward();
+            _totalTimeCounter();
+            _updateTimerListener();
+            isStartedWork = true;
+            _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                authToken, bookingId, "5");
+          }
+          else
+          {
+            setState(() {
+
+              print("updateToCloudFirestoreDB extendedTime $extendedTime");
+              print("timerCountr11111111111 ${timeCounter}");
+
+              updateToCloudFirestoreDB("1","1", extendedTime);
               _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                  authToken, bookingId, "5");
-            }
-            else
-            {
-              setState(() {
-
-                print("updateToCloudFirestoreDB extendedTime $extendedTime");
-                print("timerCountr11111111111 ${timeCounter}");
-
-                updateToCloudFirestoreDB("1","1", extendedTime);
-                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                    authToken, bookingId, "6");
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MechanicWorkCompletedScreen()));
-              });
-            }
+                  authToken, bookingId, "6");
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MechanicWorkCompletedScreen()));
+            });
+          }
 
           /*if(widget.serviceModel == "1"){
                         Navigator.pushReplacement(
@@ -653,17 +653,17 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                           ),
                           Container(
                             margin: EdgeInsets.only(
-                              left: 8
+                                left: 8
                             ),
                             child: Column(
                               children: [
                                 InkWell(
-                                    onTap: (){
-                                      extraTimeStateSetter(() {
-                                        if(extendedTimeVal < 30){
-                                          extendedTimeVal = extendedTimeVal + 1;
-                                        }
-                                      });
+                                  onTap: (){
+                                    extraTimeStateSetter(() {
+                                      if(extendedTimeVal < 30){
+                                        extendedTimeVal = extendedTimeVal + 1;
+                                      }
+                                    });
                                   },
                                   child: Container(
                                     child: Icon(
@@ -684,8 +684,8 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                                   child: Container(
                                     //color: Colors.tealAccent,
                                     child:  Icon(
-                                        Icons.keyboard_arrow_down,
-                                      ),
+                                      Icons.keyboard_arrow_down,
+                                    ),
                                   ),
                                 )
                               ],
@@ -710,66 +710,66 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             ),
             child: _isLoading
                 ? Center(
-                  child: Container(
-                    height: _setValue(28),
-                    width: _setValue(28),
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          CustColors.peaGreen),
-                    ),
-                  ),
+              child: Container(
+                height: _setValue(28),
+                width: _setValue(28),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      CustColors.peaGreen),
+                ),
+              ),
             )
                 : MaterialButton(
-                  onPressed: () async {
-                    int newTime;
-                    int newTimeSec;
-                    setState(() {
-                      _controller.stop();
+              onPressed: () async {
+                int newTime;
+                int newTimeSec;
+                setState(() {
+                  _controller.stop();
 
-                      newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
-                        extendedTime = newTime.toString();
-                        print("level extendedTime clock1 >>>> " + newTime.toString());
-                        print("level clock1 >>>> " + levelClock.toString());
-                        newTimeSec = Duration(minutes: int.parse('$extendedTime')).inSeconds;
-                        levelClock = newTimeSec;
-                        print("level sec clock2 >>>> " + newTimeSec.toString());
-                         _controller = AnimationController(
-                             vsync: this,
-                             duration: Duration(
-                                 seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
-                         );
-                         print("clock2 _controller ${_controller.status}");
-                         print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
+                  newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
+                  extendedTime = newTime.toString();
+                  print("level extendedTime clock1 >>>> " + newTime.toString());
+                  print("level clock1 >>>> " + levelClock.toString());
+                  newTimeSec = Duration(minutes: int.parse('$extendedTime')).inSeconds;
+                  levelClock = newTimeSec;
+                  print("level sec clock2 >>>> " + newTimeSec.toString());
+                  _controller = AnimationController(
+                      vsync: this,
+                      duration: Duration(
+                          seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
+                  );
+                  print("clock2 _controller ${_controller.status}");
+                  print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
 
-                      //_controller.reset();
-                        isEnableAddMoreBtn = false;
-                        _controller.forward();
-                         _updateTimerListener();
-                        updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
-                        _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
-                      });
-                      Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(
-                        left: size.width * 2.5 / 100,
-                        right: size.width * 2.5 / 100,
-                        top: size.height * 1 / 100,
-                        bottom: size.height * 1 / 100
+                  //_controller.reset();
+                  isEnableAddMoreBtn = false;
+                  _controller.forward();
+                  _updateTimerListener();
+                  updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
+                  _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                    left: size.width * 2.5 / 100,
+                    right: size.width * 2.5 / 100,
+                    top: size.height * 1 / 100,
+                    bottom: size.height * 1 / 100
+                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(6),
                     ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(6),
-                        ),
-                        color: CustColors.light_navy
-                    ),
-                    child: Text(
-                      'Add time ',
-                      textAlign: TextAlign.center,
-                      style: Styles.textButtonLabelSubTitle,
-                    ),
-                  ),
+                    color: CustColors.light_navy
+                ),
+                child: Text(
+                  'Add time ',
+                  textAlign: TextAlign.center,
+                  style: Styles.textButtonLabelSubTitle,
+                ),
+              ),
             ),
           ),
         ],
@@ -814,10 +814,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   TextStyle warningTextStyle01 = TextStyle(
-      fontSize: 12,
-      fontFamily: "Samsung_SharpSans_Regular",
-      fontWeight: FontWeight.w600,
-      color: Colors.black,
+    fontSize: 12,
+    fontFamily: "Samsung_SharpSans_Regular",
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
   );
 
   @override

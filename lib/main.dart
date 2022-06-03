@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/customer_approved_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -89,9 +88,8 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home: SplashScreen(),
 
-                //home: CustomerApprovedScreen(),
+                home: SplashScreen(),
               );
             },
           );
