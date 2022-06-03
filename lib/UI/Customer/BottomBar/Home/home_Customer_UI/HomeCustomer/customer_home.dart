@@ -3,8 +3,8 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -433,7 +433,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                             padding: const EdgeInsets.all(15),
                                             child:
                                             snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != ""
-                                              //Uri.tryParse(snapshot.data?.data?.categoryList?[0].service?[index].icon.toString())?.hasAbsolutePath ?? false
                                                 ? Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
                                                   width: 35,
                                                   fit: BoxFit.cover,)
