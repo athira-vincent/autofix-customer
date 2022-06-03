@@ -154,6 +154,7 @@ flutter:
     - assets/image/img_started_work_bg.png
     - assets/image/mechanicTracking/mechanicMapIcon.png
     - assets/image/CustomerType/profileAvathar.svg
+    - assets/image/phoneLogin/EmailBgImage.svg
 
   fonts:
     - family: Montserrat_SemiBold

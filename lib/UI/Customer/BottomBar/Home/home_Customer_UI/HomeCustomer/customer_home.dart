@@ -431,7 +431,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(15),
-                                            child: snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != ""
+                                            child:
+                                            snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != ""
+                                              //Uri.tryParse(snapshot.data?.data?.categoryList?[0].service?[index].icon.toString())?.hasAbsolutePath ?? false
                                                 ? Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
                                                   width: 35,
                                                   fit: BoxFit.cover,)

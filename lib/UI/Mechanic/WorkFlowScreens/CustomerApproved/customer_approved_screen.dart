@@ -82,6 +82,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
 
 
@@ -137,7 +138,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             'isWorkStarted': "$isWorkStarted",
             'isWorkCompleted': "$isWorkCompleted",
             "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : timeCounter-1,
+            "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
             "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
             "mechanicFromPage" : "MechanicWorkCompletedScreen",
           //===================== code for send the list of additional services =========
@@ -233,7 +234,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
           ),
           Row(
             children: [
-              Text("Customer ", style: TextStyle(
+              /*Text("Customer ", style: TextStyle(
 
               ),),
               Text(
@@ -247,7 +248,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 " rejected the services you added." :
                 " approved the services you added.",style: TextStyle(
 
-              ),)
+              ),),*/
+
+              Text(
+                "Continue with the approved services",
+                style: TextStyle(),)
             ],
           )
         ],
@@ -298,14 +303,20 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Expanded(
-            child: Text(
+            child:
+            Text(
+              "Go ahead with requested service.",
+              style: warningTextStyle01,
+            ),
+            /*Text(
               customerDiagonsisApproval == "-1"
               ? "Customer disagree with the diagnostic test report and estimated cost. Go ahead with requested service."
               : mechanicDiagonsisState == "2"
                   ? "Go ahead with requested service."
                   : "Customer agree with the diagnostic test report and estimated cost . So you can start repair ",
               style: warningTextStyle01,
-            ),
+            ),*/
+
           )
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,6 +26,9 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController _emailController = TextEditingController();
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
@@ -65,26 +69,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
+          SnackBarWidget().setMaterialSnackBar( "${value.message.toString().split(":").last}", scaffoldKey);
+
         });
       } else {
         setState(() {
           _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-
-          /*Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));*/
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -117,6 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+          key: scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
             behavior: MyBehavior(),

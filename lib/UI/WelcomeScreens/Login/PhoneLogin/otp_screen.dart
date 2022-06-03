@@ -167,10 +167,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
-                          ),
+                          widget.fromPage == "3"
+                            ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: SvgPicture.asset('assets/image/phoneLogin/EmailBgImage.svg',height: MediaQuery.of(context).size.height *0.23,),
+                            )
+                            : Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: SvgPicture.asset('assets/image/phoneLogin/otp_login_bg.svg',height: MediaQuery.of(context).size.height *0.23,),
+                            ),
                         ],
                       ),
                     ),

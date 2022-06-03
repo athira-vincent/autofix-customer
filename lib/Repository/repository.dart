@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_pr
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/AddPriceFault/add_price_fault_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
@@ -47,6 +48,7 @@ class Repository {
   final _addMechanicMyJobReviewApiProvider = MechanicMyJobReviewApiProvider();
 
   final _categoryListApiProvider = CategoryListApiProvider();
+  final _AddPriceFaultApiProvider = AddPriceFaultApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId) =>
@@ -279,9 +281,9 @@ class Repository {
 
   // Fetch Profile Customer Request
   Future<dynamic>  postCustFetchProfileRequest(
-      token)  =>
+      token,id)  =>
       _customerFetchProfileApiProvider.postCustFetchProfileRequest(
-          token);
+          token,id);
 
   // Fetch Mechanic Online Offline Request
   Future<dynamic>  postMechanicOnlineOfflineRequest(
@@ -391,6 +393,23 @@ class Repository {
           page,
           size,
           search);
+
+
+  // add price and fault
+  Future<dynamic> postAddFetchPriceFaultReviewRequest(
+      token,mechanicId) =>
+      _AddPriceFaultApiProvider.postAddPriceFaultReviewRequest(
+          token,mechanicId);
+  // update price and fault
+  Future<dynamic>postUpdateAddPriceFaultReviewRequest(
+      token,mechanicId,time,fee,serviceId) =>
+      _AddPriceFaultApiProvider.postUpdateAddPriceFaultReviewRequest(
+          token,mechanicId,time,fee,serviceId);
+// emergency and regular services
+  Future<dynamic>postEmrgRegAddPriceReviewRequest(
+      token,page,size,search,userId,catType) =>
+      _AddPriceFaultApiProvider.postEmrgRegAddPriceReviewRequest(
+          token, page, size, search, userId, catType);
 
 
 }
