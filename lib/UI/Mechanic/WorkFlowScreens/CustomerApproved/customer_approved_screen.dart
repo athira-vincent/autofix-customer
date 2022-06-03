@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/CustomerApproved/additional_time_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/MechanicWorkComleted/mechanic_work_completed_screen.dart';
 import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_bloc.dart';
@@ -350,7 +349,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Expanded(
-            child: Text("Note:  If you click the ‘Start repair’ button, it will enables the timer countdown feature also.",
+            child: Text(
+              isStartedWork
+                  ? "Note: If you click the ‘Work Finished’ button, it will stop the timer countdown & end work."
+                  : "Note:  If you click the ‘Start repair’ button, it will enables the timer countdown feature also.",
               style: warningTextStyle01,
             ),
           )
