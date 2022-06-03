@@ -51,7 +51,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   late StateSetter extraTimeStateSetter;
   Timer? timerObj;
   Timer? timerObjVar;
+  Timer? totalTimerObj;
   int timeCounter = 0;
+  int totalTimeTaken = 0;
 
   @override
   void initState() {
@@ -67,20 +69,13 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _mechanicOrderStatusUpdateBloc.dispose();
-    _addMoreTimeBloc.dispose();
-
-  }
-
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId = "100";
 
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
 
@@ -137,7 +132,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             'isWorkStarted': "$isWorkStarted",
             'isWorkCompleted': "$isWorkCompleted",
             "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
+            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
             "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
             "mechanicFromPage" : "MechanicWorkCompletedScreen",
           //===================== code for send the list of additional services =========
@@ -145,6 +140,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
+       // "totalTimeTakenByMechanic" : timeCounter == 0 ? "$timeCounter" : "${timeCounter - 1}",
   }
 
 
@@ -426,6 +422,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 updateToCloudFirestoreDB("1", "0", "0");
               });
               _controller.forward();
+              _totalTimeCounter();
               _updateTimerListener();
               isStartedWork = true;
               _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
@@ -445,7 +442,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     context,
                     MaterialPageRoute(
                         builder: (context) => MechanicWorkCompletedScreen()));
-
               });
             }
 
@@ -516,6 +512,23 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       }
     });
   }
+
+  void _totalTimeCounter() {
+
+    totalTimerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
+
+      totalTimeTaken = totalTimeTaken + 1;
+
+      print('Timer totalTimerObj ++++++' + totalTimerObj.toString());
+
+      print("totalTimeTaken >>>>>> " + totalTimeTaken.toString());
+    });
+    /*Timer(const Duration(minutes: 1), () {
+      totalTimeTaken = totalTimeTaken + 1;
+      print("totalTimeTaken >>>>>>>> " + totalTimeTaken.toString());
+    });*/
+  }
+
 
   Widget mechanicAddMoreTimeButton(Size size){
     return Align(
@@ -806,5 +819,32 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       fontWeight: FontWeight.w600,
       color: Colors.black,
   );
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _mechanicOrderStatusUpdateBloc.dispose();
+    _addMoreTimeBloc.dispose();
+    cancelTimer();
+    print("dispose");
+  }
+
+  cancelTimer() {
+    if (timerObjVar != null) {
+      timerObjVar?.cancel();
+      timerObjVar = null;
+    }
+
+    if (timerObj != null) {
+      timerObj?.cancel();
+      timerObj = null;
+    }
+
+    if (totalTimerObj != null) {
+      totalTimerObj?.cancel();
+      totalTimerObj = null;
+    }
+  }
 
 }
