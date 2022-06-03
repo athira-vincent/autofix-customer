@@ -444,12 +444,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 print("timerCountr11111111111 ${timeCounter}");
 
                 updateToCloudFirestoreDB("1","1", extendedTime);
-                /*_mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                     authToken, bookingId, "6");
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MechanicWorkCompletedScreen()));*/
+                        builder: (context) => MechanicWorkCompletedScreen()));
 
               });
             }
