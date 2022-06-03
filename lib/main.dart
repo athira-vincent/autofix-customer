@@ -92,6 +92,7 @@ class _MyAppState extends State<MyApp> {
         create: (context) => LocaleProvider(),
         builder: (context, child) {
           final provider = Provider.of<LocaleProvider>(context,listen: false);
+
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(
