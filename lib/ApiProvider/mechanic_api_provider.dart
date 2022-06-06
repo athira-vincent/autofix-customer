@@ -8,10 +8,8 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_active_service_mdl.
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_location_update_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_online_offline_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/IncomingJobRequestScreen/incoming_request_mdl.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/OrderStatusUpdateApi/order_status_update_mdl.dart';
-import 'package:auto_fix/UI/Mechanic/WorkFlowScreens/mechanic_start_service_mdl.dart';
-
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_request_mdl.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_mdl.dart';
 
 class MechanicApiProvider {
 
