@@ -415,9 +415,9 @@ class _EmergencyServices extends State<EmergencyServices>{
                         Padding(
                           padding: const EdgeInsets.only(left: 12.0),
                           child: Text('''Edited prices should need approval from admin.
-So please wait for the approval from adminside.
-click save changes to send modified rates to
-adminside''',
+        So please wait for the approval from adminside.
+        click save changes to send modified rates to
+        adminside''',
                             style: TextStyle(
                               fontFamily: 'SamsungSharpSans-Regular',
                               fontSize: 12,
