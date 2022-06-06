@@ -27,7 +27,7 @@ class _EmergencyServices extends State<EmergencyServices>{
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
   MechanicDetails? _mechanicDetails;
   UpdateTimeFees? _updateTimeFees;
-  AddPriceServiceList? _AddPriceServiceList;
+   AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
   @override
@@ -80,7 +80,7 @@ class _EmergencyServices extends State<EmergencyServices>{
       }else{
         setState(() {
           _isLoadingPage = true;
-          _AddPriceServiceList = value.data!.addPriceServiceList;
+          _AddPriceServiceList = value.data!.addPriceServiceList!;
           _selectionList=[];
           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
             //if(_AddPriceServiceList!.data![i].status==1) {
@@ -412,16 +412,19 @@ class _EmergencyServices extends State<EmergencyServices>{
                         SvgPicture.asset("assets/images/Group 3460.svg",
                             width: 30,
                             height: 30),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text('''Edited prices should need approval from admin.
-                            So please wait for the approval from adminside.
-                            click save changes to send modified rates to
-                            adminside''',
-                            style: TextStyle(
-                              fontFamily: 'SamsungSharpSans-Regular',
-                              fontSize: 12,
-                            ),),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Text("Edited prices should need approval from admin."
+                                "So please wait for the approval from adminside."
+                                "click save changes to send modified rates to"
+                                "adminside",
+                              style: TextStyle(
+                                fontFamily: 'SamsungSharpSans-Regular',
+                                fontSize: 12,
+                              ),),
+                          ),
                         )
                       ],
                     ),
