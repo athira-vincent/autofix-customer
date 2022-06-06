@@ -19,8 +19,7 @@ import 'package:sizer/sizer.dart';
 import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
 import 'UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
-import 'UI/Mechanic/SideBar/MyJobReview/AddPriceFault/add_price_fault.dart';
-import 'UI/Mechanic/SideBar/MyJobReview/AddPriceFault/regularServices.dart';
+
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
