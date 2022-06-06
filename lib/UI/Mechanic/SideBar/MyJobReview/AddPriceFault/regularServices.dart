@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/cust_colors.dart';
@@ -19,9 +20,9 @@ class RegularServices extends StatefulWidget{
 }
 class _RegularServices extends State<RegularServices>{
   String authToken = "", mechanicId = "",
-   search="" ;
+      search="" ;
   int page=0,size=10;
-      bool _isLoadingPage = false;
+  bool _isLoadingPage = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
   MechanicDetails? _mechanicDetails;
@@ -47,7 +48,7 @@ class _RegularServices extends State<RegularServices>{
       print('userFamilyId ' + authToken.toString());
       //print('userId ' + userId.toString());
       _addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
-         authToken,
+          authToken,
           mechanicId);
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
@@ -56,10 +57,10 @@ class _RegularServices extends State<RegularServices>{
           search,
           mechanicId,
           2);
-       // (
-       //    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsInVzZXJUeXBlSWQiOjIsImlhdCI6MTY1MzYzNTM5MCwiZXhwIjoxNjUzNzIxNzkwfQ.9X7mXkvlVX6XxXuXxs5go-Sfp1Mn7IrNXgKoZ_Y-WFs",
-       //    //authToken,
-       //    mechanicId );
+      // (
+      //    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsInVzZXJUeXBlSWQiOjIsImlhdCI6MTY1MzYzNTM5MCwiZXhwIjoxNjUzNzIxNzkwfQ.9X7mXkvlVX6XxXuXxs5go-Sfp1Mn7IrNXgKoZ_Y-WFs",
+      //    //authToken,
+      //    mechanicId );
     });
   }
   _listenApiResponse(){
@@ -140,35 +141,35 @@ class _RegularServices extends State<RegularServices>{
         child: Container(
           child: Column(
             children: [
-             Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left:15,right:15,top: 26.0),
-                child: Container(
-                  height: 35,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(left:15,right:15,top: 26.0),
+                  child: Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.white
+                        ),
+                        borderRadius: BorderRadius.circular(10)
                     ),
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: TextField(
-                    decoration:
-                    InputDecoration(
-                      // border: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.circular(10),
-                      //   borderSide: BorderSide(color: Colors.white)
-                      // ),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'Search Your  Service',
-                      contentPadding: EdgeInsets.only(top: 1),
+                    child: TextField(
+                      decoration:
+                      InputDecoration(
+                        // border: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   borderSide: BorderSide(color: Colors.white)
+                        // ),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search Your  Service',
+                        contentPadding: EdgeInsets.only(top: 1),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
               _isLoadingPage==false?Center(child: CircularProgressIndicator()):
               Container(
                 child: ListView.builder(
@@ -192,145 +193,145 @@ class _RegularServices extends State<RegularServices>{
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 16.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex:290,
-                                    child: Row(
-                                     children:[
-                                       InkWell(
-                                         onTap:(){
-                                           setState(() {
-                                             bool s=!_selectionList[index];
-                                             _selectionList.removeAt(index);
-                                             _selectionList.insert(index,s );
-                                             if(!_selectionList[index]){
-                                               _textEditContoller.text=_AddPriceServiceList!.data![0].mechanicService![0].time;
-                                               _textEditContoller01.text=_AddPriceServiceList!.data![0].mechanicService![0].fee;
-                                               setState(() {
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex:290,
+                                  child: Row(
+                                    children:[
+                                      InkWell(
+                                        onTap:(){
+                                          setState(() {
+                                            bool s=!_selectionList[index];
+                                            _selectionList.removeAt(index);
+                                            _selectionList.insert(index,s );
+                                            if(!_selectionList[index]){
+                                              _textEditContoller.text=_AddPriceServiceList!.data![0].mechanicService![0].time;
+                                              _textEditContoller01.text=_AddPriceServiceList!.data![0].mechanicService![0].fee;
+                                              setState(() {
 
-                                               });
-                                             }
-                                           });
-                                         },
+                                              });
+                                            }
+                                          });
+                                        },
                                         child: Container(
-                                        // child: Icon(Icons.square,
-                                        // size: 8,),
+                                          // child: Icon(Icons.square,
+                                          // size: 8,),
 
-                                        decoration: BoxDecoration(color:_selectionList[index]? const Color(0xff173a8d):Colors.transparent,
-                                          borderRadius: BorderRadius.circular(2),
-                                          border: Border.all(width: 1,color:_selectionList[index]?Colors.transparent: const Color(0xff173a8d))
+                                          decoration: BoxDecoration(color:_selectionList[index]? const Color(0xff173a8d):Colors.transparent,
+                                              borderRadius: BorderRadius.circular(2),
+                                              border: Border.all(width: 1,color:_selectionList[index]?Colors.transparent: const Color(0xff173a8d))
+                                          ),
+                                          width: 13,
+                                          height: 13,
                                         ),
-                                        width: 13,
-                                        height: 13,
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left:10.0,right:30.0),
-                                      child: Text(
-                                        //_mechanicDetails!.mechanicService![index].service!.serviceName,
-                                        _AddPriceServiceList!.data![index].serviceName.toString(),
-                                        //'Towing service',
-                                      style: TextStyle(
-                                        fontFamily: 'SamsungSharpSans-Medium',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),),
-                                    ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left:10.0,right:30.0),
+                                        child: Text(
+                                          //_mechanicDetails!.mechanicService![index].service!.serviceName,
+                                          _AddPriceServiceList!.data![index].serviceName.toString(),
+                                          //'Towing service',
+                                          style: TextStyle(
+                                            fontFamily: 'SamsungSharpSans-Medium',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),),
+                                      ),
                                     ],
-                                    ),
                                   ),
+                                ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:20.0,bottom: 05),
-                                    child: Expanded(
-                                      flex:50,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: const Color(0xffd3dcf2)
-                                            ),
-                                            borderRadius: BorderRadius.circular(05)
-                                        ),
-                                        height: 30,
-                                        width: 72,
-                                        child: TextButton(
-                                          onPressed: () {  },
-                                          style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.zero,
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left:15.0,bottom: 4),
-                                            child:
-                                            TextFormField(
-                                              decoration: InputDecoration(
-                                              border: InputBorder.none
-                                              ),
-                                              enabled: _selectionList[index],
-                                              controller: _textEditContoller,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp('[0-9 :]')),
-                                              ],
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:05.0,bottom: 05),
-                                    child: Expanded(
-                                      flex:120,
-                                      child: Container(
-                                        decoration: BoxDecoration(
+                                Padding(
+                                  padding: const EdgeInsets.only(left:20.0,bottom: 05),
+                                  child: Expanded(
+                                    flex:50,
+                                    child: Container(
+                                      decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: const Color(0xffd3dcf2)
+                                              color: const Color(0xffd3dcf2)
                                           ),
                                           borderRadius: BorderRadius.circular(05)
+                                      ),
+                                      height: 30,
+                                      width: 72,
+                                      child: TextButton(
+                                        onPressed: () {  },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.zero,
                                         ),
-                                        height: 30,
-                                        width: 72,
-                                        child: TextButton(
-
-                                          onPressed: () {  },
-                                          style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.zero,
-
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left:20.0,right:15.0,bottom: 4),
-                                            child:
-                                            TextFormField(
-
-                                              decoration: InputDecoration(
-                                                  border: InputBorder.none
-                                              ),
-                                              enabled: _selectionList[index],
-                                              controller: _textEditContoller01,
-                                              maxLines: 1,
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp('[0-9 ]')),
-                                              ],
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left:15.0,bottom: 4),
+                                          child:
+                                          TextFormField(
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none
+                                            ),
+                                            enabled: _selectionList[index],
+                                            controller: _textEditContoller,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp('[0-9 :]')),
+                                            ],
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left:05.0,bottom: 05),
+                                  child: Expanded(
+                                    flex:120,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color(0xffd3dcf2)
+                                          ),
+                                          borderRadius: BorderRadius.circular(05)
+                                      ),
+                                      height: 30,
+                                      width: 72,
+                                      child: TextButton(
+
+                                        onPressed: () {  },
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left:20.0,right:15.0,bottom: 4),
+                                          child:
+                                          TextFormField(
+
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none
+                                            ),
+                                            enabled: _selectionList[index],
+                                            controller: _textEditContoller01,
+                                            maxLines: 1,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp('[0-9 ]')),
+                                            ],
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
                           //),
                           Padding(
                             padding: const EdgeInsets.only(left: 15.0,right: 15.0),
@@ -350,19 +351,19 @@ class _RegularServices extends State<RegularServices>{
                     padding: const EdgeInsets.only(left:15.0),
                     child: Row(
                       children: [
-                        Icon(Icons.notification_important,
-                        size: 30,
-                        color: const Color(0xff173a8d),),
+                        SvgPicture.asset("assets/images/Group 3460.svg",
+                            width: 30,
+                            height: 30),
                         Padding(
                           padding: const EdgeInsets.only(left: 12.0),
                           child: Text('''Edited prices should need approval from admin.
 So please wait for the approval from adminside.
 click save changes to send modified rates to
 adminside''',
-                          style: TextStyle(
-                            fontFamily: 'SamsungSharpSans-Regular',
-                            fontSize: 12,
-                          ),),
+                            style: TextStyle(
+                              fontFamily: 'SamsungSharpSans-Regular',
+                              fontSize: 12,
+                            ),),
                         )
                       ],
                     ),
@@ -375,28 +376,28 @@ adminside''',
                   height: 40,
                   width: 130,
                   child: TextButton(
-                      onPressed: () async {
-                        SharedPreferences shdPre = await SharedPreferences.getInstance();
-                        setState(() {
-                          for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
-                            if(_selectionList[i]){
-                              _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
-                                  authToken,
-                                  mechanicId,
-                                  _timeList![i], _priceList![i], 1
-                              );
-                            }
+                    onPressed: () async {
+                      SharedPreferences shdPre = await SharedPreferences.getInstance();
+                      setState(() {
+                        for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
+                          if(_selectionList[i]){
+                            _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
+                                authToken,
+                                mechanicId,
+                                _timeList![i], _priceList![i], 1
+                            );
                           }
+                        }
 
-                        });
-                      },
-                      child: Text('Save changes',
+                      });
+                    },
+                    child: Text('Save changes',
                       style: TextStyle(
                         fontFamily: 'SamsungSharpSans-Medium',
                         fontSize: 12,
                         color: Colors.white,
                       ),
-                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
                       primary: Color(0xff173a8d),
@@ -409,7 +410,7 @@ adminside''',
                 ),
               ),
               SizedBox(height: 10)
-    ],
+            ],
           ),
         ),
       ),
