@@ -35,6 +35,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
+import 'UI/Mechanic/SideBar/MyJobReview/AddPriceFault/add_price_fault.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -108,7 +109,8 @@ class _MyAppState extends State<MyApp> {
                 ),
 
 
-                home: SplashScreen(),
+               // home: SplashScreen(),
+                home: Addpricefault(),
 
               );
             },
