@@ -20,6 +20,7 @@ import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
 import 'UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 
+import 'UI/Mechanic/mechanic_home_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 

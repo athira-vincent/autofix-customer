@@ -197,6 +197,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -211,7 +212,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           EmailTextUi(),
                           PhoneTextUi(),
                           StateTextUi(),
-                          OrgNameTextUi(),
+                         // OrgNameTextUi(),
                           OrgTypeTextUi(),
                           YearOfExperienceTextUi(),
                           NextButton()
@@ -303,38 +304,23 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(80,75,155,0),
-                        // child: InkWell(
-                        //   onTap: (){
-                        //     setState(() {
-                        //       print('editProfileEnabled $editProfileEnabled');
-                        //       if(editProfileEnabled)
-                        //       {
-                        //         editProfileEnabled=false;
-                        //       }
-                        //       else
-                        //       {
-                        //         editProfileEnabled=true;
-                        //       }
-                        //       print('editProfileEnabled $editProfileEnabled');
-                        //     });
-                        //   },
-                          child: Container(
-                            height: 50,
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.edit,
-                                  size: 15,
-                                  color: CustColors.blue,
-                                ),
-                                Text('Edit Profile',
-                                  style: Styles.appBarTextBlack17,),
-                              ],
+                      Container(
+                        // height: 50,
+                        margin: EdgeInsets.only(
+                            left: size.width * 18 / 100,
+                            top: size.height * 10 / 100
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.edit,
+                              size: 15,
+                              color: CustColors.blue,
                             ),
-                          ),
-                       // ),
+                            Text('Edit Profile',
+                              style: Styles.appBarTextBlack17,),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -379,8 +365,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         onTap: (){
                           _showDialogSelectPhoto();
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 170.0),
+                        child: Center(
                           child: Container(
                             child: Image.asset(
                                 'assets/image/ic_camera_black.png',
@@ -417,31 +402,23 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(200,75,40,0),
-                        // child:InkWell(
-                        //   onTap: () {
-                        //     showDialog(
-                        //         context: context,
-                        //         builder: (BuildContext context)
-                        //         {
-                        //           return deactivateDialog();
-                        //         });
-                        //   },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: 15,
-                                  color: CustColors.blue,
-                                ),
-                                Text('Logout',
-                                  style: Styles.appBarTextBlack17,),
-                              ],
-                            ),
-                          ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: size.width * 55 / 100,
+                            top: size.height * 10 / 100
                         ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.logout,
+                              size: 15,
+                              color: CustColors.blue,
+                            ),
+                            Text('Logout',
+                              style: Styles.appBarTextBlack17,),
+                          ],
+                        ),
+                      ),
                       //),
                     ],
                   ),
