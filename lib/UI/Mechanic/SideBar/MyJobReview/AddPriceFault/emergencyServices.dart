@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/cust_colors.dart';
@@ -408,15 +409,15 @@ class _EmergencyServices extends State<EmergencyServices>{
                     padding: const EdgeInsets.only(left:15.0),
                     child: Row(
                       children: [
-                        Icon(Icons.notification_important,
-                          size: 30,
-                          color: const Color(0xff173a8d),),
+                        SvgPicture.asset("assets/images/Group 3460.svg",
+                            width: 30,
+                            height: 30),
                         Padding(
                           padding: const EdgeInsets.only(left: 12.0),
                           child: Text('''Edited prices should need approval from admin.
-So please wait for the approval from adminside.
-click save changes to send modified rates to
-adminside''',
+                            So please wait for the approval from adminside.
+                            click save changes to send modified rates to
+                            adminside''',
                             style: TextStyle(
                               fontFamily: 'SamsungSharpSans-Regular',
                               fontSize: 12,
