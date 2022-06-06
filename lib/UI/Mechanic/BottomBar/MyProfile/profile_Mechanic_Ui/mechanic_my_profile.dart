@@ -201,38 +201,38 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      appBarCustomUi(),
-                      profileImageAndKmAndReviewCount(size),
-                      NameTextUi(),
-                      EmailTextUi(),
-                      PhoneTextUi(),
-                      StateTextUi(),
-                      OrgNameTextUi(),
-                      OrgTypeTextUi(),
-                      YearOfExperienceTextUi(),
-                      NextButton()
-                    ],
-                  ),
-                  Visibility(
-                    visible: _isLoadingPage,
-                    child: Align(
+            child: Stack(
+              children: [
+                Column(
+                        children: [
+                          appBarCustomUi(),
+                          profileImageAndKmAndReviewCount(size),
+                          NameTextUi(),
+                          EmailTextUi(),
+                          PhoneTextUi(),
+                          StateTextUi(),
+                          OrgNameTextUi(),
+                          OrgTypeTextUi(),
+                          YearOfExperienceTextUi(),
+                          NextButton()
+                        ],
+                      ),
+                Visibility(
+                  visible: _isLoadingPage,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
                       alignment: Alignment.center,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustColors.peaGreen),
-                        ),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.peaGreen),
                       ),
                     ),
                   ),
-                ],
-              )
+                ),
+              ],
+            )
           ),
         ),
       ),
@@ -320,21 +320,21 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         //       print('editProfileEnabled $editProfileEnabled');
                         //     });
                         //   },
-                        child: Container(
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Edit Profile',
-                                style: Styles.appBarTextBlack17,),
-                            ],
+                          child: Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 15,
+                                  color: CustColors.blue,
+                                ),
+                                Text('Edit Profile',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
-                        ),
-                        // ),
+                       // ),
                       ),
                     ],
                   ),
@@ -342,58 +342,58 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     alignment: Alignment.center,
                     child: Stack(
                       children: [
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15.0),
-                            child: Container(
-                              width: 125.0,
-                              height: 125.0,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child:Container(
-                                      child:CircleAvatar(
-                                          radius: 50,
-                                          backgroundColor: Colors.white,
-                                          child: ClipOval(
-                                            child: _imageUrl !=null&&_imageUrl!=""
-                                                ?
-                                            Image.network(_imageUrl,
-                                              width: 150,
-                                              height: 150,
-                                              fit: BoxFit.cover,
-                                            )
-                                                :
-                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
-                                                width:150,
-                                                height:150,
-                                                fit:BoxFit.cover),
-                                          )))
+                     Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: Container(
+                          width: 125.0,
+                          height: 125.0,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child:Container(
+                                  child:CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: Colors.white,
+                                      child: ClipOval(
+                                        child: _imageUrl !=null&&_imageUrl!=""
+                                        ?
+                                        Image.network(_imageUrl,
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover,
+                                        )
+                                            :
+                                        SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                                        width:150,
+                                        height:150,
+                                        fit:BoxFit.cover),
+                                      )))
 
-                              ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  editProfileEnabled == true
+                  ?
+                      InkWell(
+                        onTap: (){
+                          _showDialogSelectPhoto();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 170.0),
+                          child: Container(
+                            child: Image.asset(
+                                'assets/image/ic_camera_black.png',
+                              width: size.width * 7/100,
                             ),
                           ),
                         ),
-                        editProfileEnabled == true
-                            ?
-                        InkWell(
-                          onTap: (){
-                            _showDialogSelectPhoto();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 170.0),
-                            child: Container(
-                              child: Image.asset(
-                                'assets/image/ic_camera_black.png',
-                                width: size.width * 7/100,
-                              ),
-                            ),
-                          ),
-                        )
-                            :
-                        Container(),
-                      ],
-                    ),
-                  ),
+                      )
+                      :
+                      Container(),
+                  ],
+        ),
+      ),
 
                   Stack(
                     alignment: Alignment.center,
@@ -428,20 +428,20 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         //           return deactivateDialog();
                         //         });
                         //   },
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.logout,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Logout',
-                                style: Styles.appBarTextBlack17,),
-                            ],
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  size: 15,
+                                  color: CustColors.blue,
+                                ),
+                                Text('Logout',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                       //),
                     ],
                   ),
@@ -457,68 +457,68 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   }
   _showDialogSelectPhoto() async{
     showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (builder){
-          return Container(
-            height: 115,
-            child: ListView(
-              children: [
-                ListTile(
-                  leading: Icon(
-                    Icons.camera_alt,
-                    color: CustColors.blue,
-                  ),
-                  title: Text('Camera',
-                      style: TextStyle(
-                          fontFamily: 'Corbel_Regular',
-                          fontWeight: FontWeight.normal,
-                          fontSize: 15,
-                          color:Colors.black)),
-                  onTap: ()async{
-                    Navigator.pop(context);
-                    XFile? image= await picker.pickImage(
-                        source: ImageSource.camera,imageQuality: 30);
-
-                    setState(() {
-                      if (image != null){
-                        _images = File(image.path);
-                        uploadImageToFirebase(_images!);
-                        String filename = path.basename(image.path);
-                      }
-                    });
-                  },
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+      builder: (builder){
+        return Container(
+          height: 115,
+          child: ListView(
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.camera_alt,
+                  color: CustColors.blue,
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.image,
-                    color:CustColors.blue,
-                  ),
-                  title: Text('Gallery',
-                      style: TextStyle(
-                          fontFamily: 'Corabel_Regular',
-                          fontWeight: FontWeight.normal,
-                          fontSize: 15,
-                          color: Colors.black)),
-                  onTap: () async{
-                    Navigator.pop(context);
-                    XFile? image = (await picker.pickImage(
-                        source: ImageSource.gallery, imageQuality: 30));
-                    setState(() {
-                      if(image != null){
-                        _images = (File(image.path));
-                        uploadImageToFirebase(_images!);
-                        String fileName = path.basename(image.path);
-                      }
-                    });
-                  },
-                )
-              ],
-            ),
-          );
-        }
+                title: Text('Camera',
+                style: TextStyle(
+                  fontFamily: 'Corbel_Regular',
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15,
+                  color:Colors.black)),
+                onTap: ()async{
+                  Navigator.pop(context);
+                  XFile? image= await picker.pickImage(
+                    source: ImageSource.camera,imageQuality: 30);
+
+                  setState(() {
+                    if (image != null){
+                      _images = File(image.path);
+                      uploadImageToFirebase(_images!);
+                      String filename = path.basename(image.path);
+                    }
+                  });
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.image,
+                  color:CustColors.blue,
+                ),
+                title: Text('Gallery',
+                style: TextStyle(
+                  fontFamily: 'Corabel_Regular',
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15,
+                  color: Colors.black)),
+                onTap: () async{
+                  Navigator.pop(context);
+                  XFile? image = (await picker.pickImage(
+                    source: ImageSource.gallery, imageQuality: 30));
+                  setState(() {
+                    if(image != null){
+                      _images = (File(image.path));
+                      uploadImageToFirebase(_images!);
+                      String fileName = path.basename(image.path);
+                    }
+                  });
+                },
+              )
+            ],
+          ),
+        );
+      }
     );
   }
   Future uploadImageToFirebase(File images) async{
@@ -596,26 +596,26 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         ),
                       ),
                       editProfileEnabled == true
-                          ? Text(
-                        //'Your name',
-                        _userType == "1" ? 'Your name' : 'Contact person',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
-                      )
-                          : Container(),
+                      ? Text(
+                          //'Your name',
+                          _userType == "1" ? 'Your name' : 'Contact person',
+                          textAlign: TextAlign.center,
+                          style: Styles.textLabelSubTitle,
+                        )
+                      : Container(),
                     ],
                   ),
                 ),
               ),
               Spacer(),
               editProfileEnabled == true
-                  ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
+              ? Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                )
               )
-                  : Container(),
+              : Container(),
             ],
           ),
           Padding(
@@ -680,10 +680,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         ),
                       ),
                       Text(
-                        'Your email',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
-                      )
+                            'Your email',
+                            textAlign: TextAlign.center,
+                            style: Styles.textLabelSubTitle,
+                          )
                     ],
                   ),
                 ),
@@ -731,9 +731,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             print("on tap state ");
 
                             if(editProfileEnabled == true)
-                            {
-                              _awaitReturnValueFromSecondScreen(context);
-                            }
+                              {
+                                _awaitReturnValueFromSecondScreen(context);
+                              }
 
 
                           },
@@ -858,12 +858,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         ),
                         editProfileEnabled == false
                             ? Container(
-                          child: Text(
-                            'Your organization name',
-                            textAlign: TextAlign.start,
-                            style: Styles.textLabelSubTitle,
-                          ),
-                        )
+                              child: Text(
+                                  'Your organization name',
+                                  textAlign: TextAlign.start,
+                                  style: Styles.textLabelSubTitle,
+                                ),
+                            )
                             : Container(),
                       ],
                     ),
@@ -971,11 +971,11 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
               ),
               editProfileEnabled == true
                   ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                      )
                   )
-              )
                   : Container(),
             ],
           ),
@@ -1216,10 +1216,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       editProfileEnabled == false
                           ? Text(
-                        'Your experience',
-                        textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
-                      )
+                              'Your experience',
+                              textAlign: TextAlign.center,
+                              style: Styles.textLabelSubTitle,
+                            )
                           : Container(),
                     ],
                   ),
@@ -1247,77 +1247,77 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   Widget NextButton() {
     return editProfileEnabled==true
         ?  Container(
-      width: double.infinity,
-      child: _isLoading
-          ? Center(
-        child: Container(
-          height: _setValue(28),
-          width: _setValue(28),
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-                CustColors.peaGreen),
-          ),
-        ),
-      )
-          : Container(
-        child: MaterialButton(
-          onPressed: () {
+          width: double.infinity,
+          child: _isLoading
+              ? Center(
+                  child: Container(
+                    height: _setValue(28),
+                    width: _setValue(28),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          CustColors.peaGreen),
+                    ),
+                  ),
+                )
+              : Container(
+                  child: MaterialButton(
+                    onPressed: () {
 
-            setState(() {
-              print("$_userType");
-              if(_userType == "1")
-              {
-                print("Individual");
-                _isLoading = true;
-                _mechanicProfileBloc.postMechanicEditProfileIndividualRequest(
-                  authToken,
-                  _nameController.text,
-                  _nameController.text,
-                  _stateController.text,
-                  _imageUrl,
-                  1,
-                  _yearOfExistenceController.text,
-                );
-              }
-              else
-              {
-                _isLoading = true;
-                _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
-                  authToken,
-                  _nameController.text,
-                  _nameController.text,
-                  _stateController.text,
-                  _imageUrl,
-                  1,
-                  _yearOfExistenceController.text,
-                  _orgNameController.text,
-                  _orgTypeController.text,
-                );
-                print("Cooperate");
-              }
-            });
-          },
-          child: Container(
-            height: 50,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Save',
-                  textAlign: TextAlign.center,
-                  style: Styles.textButtonLabelSubTitle,
+                      setState(() {
+                        print("$_userType");
+                        if(_userType == "1")
+                          {
+                            print("Individual");
+                            _isLoading = true;
+                            _mechanicProfileBloc.postMechanicEditProfileIndividualRequest(
+                              authToken,
+                              _nameController.text,
+                              _nameController.text,
+                              _stateController.text,
+                              _imageUrl,
+                              1,
+                              _yearOfExistenceController.text,
+                            );
+                          }
+                        else
+                          {
+                            _isLoading = true;
+                            _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
+                              authToken,
+                              _nameController.text,
+                              _nameController.text,
+                              _stateController.text,
+                              _imageUrl,
+                              1,
+                              _yearOfExistenceController.text,
+                              _orgNameController.text,
+                              _orgTypeController.text,
+                            );
+                            print("Cooperate");
+                        }
+                      });
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Save',
+                            textAlign: TextAlign.center,
+                            style: Styles.textButtonLabelSubTitle,
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: CustColors.materialBlue,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            _setValue(0))),
+                  ),
                 ),
-              ],
-            ),
-          ),
-          color: CustColors.materialBlue,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                  _setValue(0))),
-        ),
-      ),
-    )
+        )
         :  Container();
   }
 
@@ -1507,51 +1507,51 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                   EdgeInsets.only(top: _setValue(22.4)),
                                   child: orgTypeList.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: orgTypeList.length,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                          onTap: () {
-                                            final dial_Code = orgTypeList[index];
-                                            setState(() {
-                                              _orgTypeController.text = dial_Code.toString();
-                                            });
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: orgTypeList.length,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                                onTap: () {
+                                                  final dial_Code = orgTypeList[index];
+                                                  setState(() {
+                                                    _orgTypeController.text = dial_Code.toString();
+                                                  });
 
-                                            Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                  ),
+                                                  child: Text(
+                                                    '${orgTypeList[index]}',
+                                                    style: TextStyle(
+                                                        fontSize:12,
+                                                        fontFamily:
+                                                        'Corbel-Light',
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                        color:
+                                                        Color(0xff0b0c0d)),
+                                                  ),
+                                                ));
                                           },
-                                          child: Container(
-                                            margin: EdgeInsets.only(
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                            ),
-                                            child: Text(
-                                              '${orgTypeList[index]}',
-                                              style: TextStyle(
-                                                  fontSize:12,
-                                                  fontFamily:
-                                                  'Corbel-Light',
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  color:
-                                                  Color(0xff0b0c0d)),
-                                            ),
-                                          ));
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context,
-                                        int index) {
-                                      return Container(
-                                          margin: EdgeInsets.only(
-                                              top: _setValue(12.7),
-                                              left: _setValue(41.3),
-                                              right: _setValue(41.3),
-                                              bottom: _setValue(12.9)),
-                                          child: Divider(
-                                            height: 0,
-                                          ));
-                                    },
-                                  )
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                                margin: EdgeInsets.only(
+                                                    top: _setValue(12.7),
+                                                    left: _setValue(41.3),
+                                                    right: _setValue(41.3),
+                                                    bottom: _setValue(12.9)),
+                                                child: Divider(
+                                                  height: 0,
+                                                ));
+                                          },
+                                        )
                                       : Center(
                                     child: Text('No Results found.'),
                                   ),

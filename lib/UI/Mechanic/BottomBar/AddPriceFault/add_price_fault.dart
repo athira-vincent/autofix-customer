@@ -1,7 +1,5 @@
-import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/AddPriceFault/add_price_fault_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../../../Constants/cust_colors.dart';
 import 'regularServices.dart';
 import 'emergencyServices.dart';
 class Addpricefault extends StatefulWidget{
@@ -102,8 +100,11 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
                       textAlign: TextAlign.start,))
               ],),
               Flexible(
-                child: TabBarView(children: [RegularServices(),
-                EmergencyServices()],),
+                child: TabBarView(children:
+                [
+                  RegularServices(),
+                  EmergencyServices()
+                ],),
               )
             ],
           ),

@@ -6,6 +6,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
@@ -501,7 +502,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
             child: _index == 0
                 ? MechanicHomeUIScreen()
                 : _index == 1 ? MechanicAddPriceScreen()
-                : _index == 2 ? MechanicMyServiceScreen()
+                : _index == 2 ? Addpricefault(position: 1,)
                 : MechanicMyProfileScreen(),
           ),
         ],

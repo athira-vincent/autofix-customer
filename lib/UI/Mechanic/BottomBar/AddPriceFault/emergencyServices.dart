@@ -1,7 +1,7 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/cust_colors.dart';
@@ -10,15 +10,15 @@ import 'add_price_fault_mdl.dart';
 import 'emrg_reglr_add_price_mdl.dart';
 import 'update_time_add_price_mdl.dart';
 
-class RegularServices extends StatefulWidget{
-  RegularServices({Key? key,}): super(key: key);
+class EmergencyServices extends StatefulWidget{
+  EmergencyServices({Key? key,}): super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return _RegularServices();
+    return _EmergencyServices();
   }
 
 }
-class _RegularServices extends State<RegularServices>{
+class _EmergencyServices extends State<EmergencyServices>{
   String authToken = "", mechanicId = "",
       search="" ;
   int page=0,size=10;
@@ -27,7 +27,7 @@ class _RegularServices extends State<RegularServices>{
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
   MechanicDetails? _mechanicDetails;
   UpdateTimeFees? _updateTimeFees;
-  AddPriceServiceList? _AddPriceServiceList;
+   AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
   @override
@@ -56,7 +56,7 @@ class _RegularServices extends State<RegularServices>{
           size,
           search,
           mechanicId,
-          2);
+          1);
       // (
       //    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsInVzZXJUeXBlSWQiOjIsImlhdCI6MTY1MzYzNTM5MCwiZXhwIjoxNjUzNzIxNzkwfQ.9X7mXkvlVX6XxXuXxs5go-Sfp1Mn7IrNXgKoZ_Y-WFs",
       //    //authToken,
@@ -80,7 +80,7 @@ class _RegularServices extends State<RegularServices>{
       }else{
         setState(() {
           _isLoadingPage = true;
-          _AddPriceServiceList = value.data!.addPriceServiceList;
+          _AddPriceServiceList = value.data!.addPriceServiceList!;
           _selectionList=[];
           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
             //if(_AddPriceServiceList!.data![i].status==1) {
@@ -128,6 +128,14 @@ class _RegularServices extends State<RegularServices>{
           _isLoadingPage = true;
           _updateTimeFees = value.data!.updateTimeFees;
           _selectionList=[];
+          // for(int i=0;i<_mechanicDetails!.mechanicService!.length;i++){
+          //   if(_mechanicDetails!.mechanicService![i].status==1) {
+          //     _selectionList.add(true);
+          //   }
+          //   else{
+          //     _selectionList.add(false);
+          //   }
+          // };
           print("ldjgjgj ${_mechanicDetails!.firstName}");
         });
       }
@@ -192,11 +200,25 @@ class _RegularServices extends State<RegularServices>{
                       return Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 16.0),
+                            padding: const EdgeInsets.only(left: 34.0,right: 16.0,top: 16.0),
+                            // child: InkWell(
+                            //   onTap:(){
+                            //     setState(() {
+                            //       bool s=!_selectionList[index];
+                            //       _selectionList.removeAt(index);
+                            //       _selectionList.insert(index,s );
+                            //       if(!_selectionList[index]){
+                            //         _textEditContoller.text=_mechanicDetails!.mechanicService![index].time;
+                            //         setState(() {
+                            //
+                            //         });
+                            //       }
+                            //     });
+                            //   },
                             child: Row(
                               children: [
                                 Expanded(
-                                  flex:290,
+                                  flex:150,
                                   child: Row(
                                     children:[
                                       InkWell(
@@ -227,7 +249,7 @@ class _RegularServices extends State<RegularServices>{
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left:10.0,right:30.0),
+                                        padding: const EdgeInsets.only(left:23.0,right:27.0),
                                         child: Text(
                                           //_mechanicDetails!.mechanicService![index].service!.serviceName,
                                           _AddPriceServiceList!.data![index].serviceName.toString(),
@@ -243,41 +265,50 @@ class _RegularServices extends State<RegularServices>{
                                 ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(left:20.0,bottom: 05),
-                                  child: Expanded(
-                                    flex:50,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color(0xffd3dcf2)
-                                          ),
-                                          borderRadius: BorderRadius.circular(05)
-                                      ),
-                                      height: 30,
-                                      width: 72,
-                                      child: TextButton(
-                                        onPressed: () {  },
-                                        style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.zero,
+                                  padding: const EdgeInsets.only(left:07.0,bottom: 05),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xffd3dcf2)
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left:15.0,bottom: 4),
-                                          child:
-                                          TextFormField(
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none
-                                            ),
-                                            enabled: _selectionList[index],
-                                            controller: _textEditContoller,
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp('[0-9 :]')),
-                                            ],
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                        borderRadius: BorderRadius.circular(05)
+                                    ),
+                                    height: 30,
+                                    width: 72,
+                                    child: TextButton(
+                                      // height: 30,
+                                      // width: 60,
+                                      // decoration: BoxDecoration(
+                                      //   border: Border.all(color: const Color(0xffc7c0c0),
+                                      //   width: 1),
+                                      //   borderRadius: BorderRadius.circular(05)
+                                      // ),
+                                      onPressed: () {  },
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        //primary: Color(0xffd3dcf2),
+                                        // shape:
+                                        // RoundedRectangleBorder(
+                                        //   borderRadius: BorderRadius.circular(10),
+                                        // ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left:15.0,bottom: 4),
+                                        child:
+                                        TextFormField(
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none
+                                          ),
+                                          enabled: _selectionList[index],
+                                          controller: _textEditContoller,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp('[0-9 :]')),
+                                          ],
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
@@ -285,47 +316,74 @@ class _RegularServices extends State<RegularServices>{
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left:05.0,bottom: 05),
-                                  child: Expanded(
-                                    flex:120,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color(0xffd3dcf2)
-                                          ),
-                                          borderRadius: BorderRadius.circular(05)
-                                      ),
-                                      height: 30,
-                                      width: 72,
-                                      child: TextButton(
-
-                                        onPressed: () {  },
-                                        style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.zero,
-
+                                  padding: const EdgeInsets.only(left:10.0,bottom: 05),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xffd3dcf2)
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left:20.0,right:15.0,bottom: 4),
-                                          child:
-                                          TextFormField(
+                                        borderRadius: BorderRadius.circular(05)
+                                    ),
+                                    height: 30,
+                                    width: 72,
+                                    child: TextButton(
+                                      onPressed: () {  },
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left:15.0,bottom: 4),
+                                        child:
+                                        TextFormField(
 
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none
-                                            ),
-                                            enabled: _selectionList[index],
-                                            controller: _textEditContoller01,
-                                            maxLines: 1,
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp('[0-9 ]')),
-                                            ],
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none
+                                          ),
+                                          enabled: _selectionList[index],
+                                          controller: _textEditContoller01,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp('[0-9]')),
+                                          ],
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
+                                      // child: Padding(
+                                      //   padding: const EdgeInsets.only(left:5.0),
+                                      //   child: Row(
+                                      //     children: [
+                                      //       Padding(
+                                      //         padding: const EdgeInsets.only(right: 5.0),
+                                      //         child: Text('₦',
+                                      //
+                                      //           style: TextStyle(
+                                      //             fontSize: 12,
+                                      //             fontWeight: FontWeight.w500,
+                                      //             color: Colors.black
+                                      //           ),),
+                                      //       ),
+                                      //       SizedBox(height: 10,),
+                                      //       Text(
+                                      //         _mechanicDetails!.mechanicService![index].fee,
+                                      //         //'800',
+                                      //       style: TextStyle(
+                                      //         fontSize: 12,
+                                      //           fontWeight: FontWeight.w500,
+                                      //         color: Colors.black,
+                                      //       ),),
+                                      //       Padding(
+                                      //         padding: const EdgeInsets.only(left: 5.0),
+                                      //         child: Icon(Icons.edit,
+                                      //         size: 12,
+                                      //         color: const Color(0xff173a8d),),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
                                     ),
                                   ),
                                 ),
@@ -354,16 +412,19 @@ class _RegularServices extends State<RegularServices>{
                         SvgPicture.asset("assets/images/Group 3460.svg",
                             width: 30,
                             height: 30),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text('''Edited prices should need approval from admin.
-So please wait for the approval from adminside.
-click save changes to send modified rates to
-adminside''',
-                            style: TextStyle(
-                              fontFamily: 'SamsungSharpSans-Regular',
-                              fontSize: 12,
-                            ),),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Text("Edited prices should need approval from admin."
+                                "So please wait for the approval from adminside."
+                                "click save changes to send modified rates to"
+                                "adminside",
+                              style: TextStyle(
+                                fontFamily: 'SamsungSharpSans-Regular',
+                                fontSize: 12,
+                              ),),
+                          ),
                         )
                       ],
                     ),
@@ -409,7 +470,6 @@ adminside''',
                   ),
                 ),
               ),
-              SizedBox(height: 10)
             ],
           ),
         ),

@@ -143,6 +143,7 @@ flutter:
     - assets/json/
     - assets/image/home_customer/
     - assets/image/home_customer/banner1.png
+    - assets/images/Group 3460.svg
     - assets/image/mechanicProfileView/directionMechnanicTracking.svg
     - assets/map_style/map_style.json
     - assets/image/mechanicTracking/
