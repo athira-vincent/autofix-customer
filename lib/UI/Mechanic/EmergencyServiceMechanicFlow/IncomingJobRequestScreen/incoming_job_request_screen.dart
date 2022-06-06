@@ -266,6 +266,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "isPaymentAccepted" : "0",
       "extendedTime" : "0",
       "totalTimeTakenByMechanic": "0",
+      "currentUpdatedTime": "0",
       "customerFromPage" : "MechanicTrackingScreen",
       "mechanicFromPage" : "FindYourCustomerScreen",
       "isWorkStarted" : "0",

@@ -60,6 +60,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String extendedTimeFromFirestore="0";
+  String currentUpdatedTime="0";
+
 
   String extendedTimeFirstTymCall="0";
 
@@ -120,6 +122,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
       setState(() {
         extendedTimeFromFirestore = event.get("extendedTime");
+        currentUpdatedTime = event.get("currentUpdatedTime");
+
         isPaymentRequested = event.get("isPaymentRequested");
         isWorkCompleted = event.get("isWorkCompleted");
         mechanicDiagonsisState = event.get("mechanicDiagonsisState");
@@ -155,10 +159,14 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         }
         else if(widget.workStatus =="2") {
           isWorkCompleted = querySnapshot.get("isWorkCompleted");
+          currentUpdatedTime = querySnapshot.get("currentUpdatedTime");
+
           print('isWorkCompleted ++++ $isWorkCompleted');
 
           extendedTimeFromFirestore = querySnapshot.get("extendedTime");
-          int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore') + int.parse('$timeCounter')).inSeconds ;
+          int sec = Duration(minutes: int.parse('$currentUpdatedTime')).inSeconds ;
+
+          //int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore') + int.parse('$timeCounter')).inSeconds ;
           if(extendedTimeFromFirestore.toString() != "0")
           {
             if(extendedTimeFirstTymCall == "0")
