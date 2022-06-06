@@ -326,7 +326,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,65,155,0),
+                        padding: const EdgeInsets.fromLTRB(0,80,155,0),
                         child:
                         InkWell(
                           onTap: (){
@@ -393,29 +393,32 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     child: Stack(
                       children: [
                         Center(
-                          child: Container(
-                            width: 125.0,
-                            height: 125.0,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child:Container(
-                                    child:CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child: _imageUrl != null&&_imageUrl!=""
-                                              ?
-                                          Image.network(_imageUrl,
-                                            width: 150,
-                                            height: 150,
-                                            fit: BoxFit.cover,)
-                                              :
-                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Container(
+                              width: 125.0,
+                              height: 125.0,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child:Container(
+                                      child:CircleAvatar(
+                                          radius: 50,
+                                          backgroundColor: Colors.white,
+                                          child: ClipOval(
+                                            child: _imageUrl != null&&_imageUrl!=""
+                                                ?
+                                            Image.network(_imageUrl,
                                               width: 150,
                                               height: 150,
                                               fit: BoxFit.cover,)
-                                        )))
+                                                :
+                                              SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                                                width: 150,
+                                                height: 150,
+                                                fit: BoxFit.cover,)
+                                          )))
 
+                              ),
                             ),
                           ),
                         ),
@@ -446,7 +449,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(155,65,0,0),
+                        padding: const EdgeInsets.fromLTRB(155,80,0,0),
                         child: InkWell(
                           onTap: () {
                             showDialog(
