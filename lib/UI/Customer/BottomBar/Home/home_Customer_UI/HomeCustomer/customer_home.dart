@@ -67,7 +67,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
    String CurrentLongitude ="76.244164";
 
   String location ='Null, Press Button';
-  String Address = 'search';
+  String Address = '';
+  String displayAddress = 'Kakkanad';
+
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
@@ -215,7 +217,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    print('$Address Address=====');
+    setState(() {
+      displayAddress = '${place.locality},';//${place.name},
+    });
+    print(" displayAddress >>>>>> " + displayAddress);
 
   }
 
@@ -286,7 +291,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     width: 50,
                     child: Column(
                       children: [
-                        Text('Elenjikkal house Empyreal Garden',
+                        Text('$displayAddress',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,

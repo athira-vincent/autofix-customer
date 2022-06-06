@@ -48,7 +48,6 @@ void main() async {
 
 class MyApp extends StatefulWidget {
 
-
   @override
   _MyAppState createState() => _MyAppState();
 
@@ -90,7 +89,9 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
+
                 home: SplashScreen(),
+
               );
             },
           );

@@ -38,8 +38,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String location ='Null, Press Button';
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
-  String Address = 'search';
-  String displayAddress = 'search';
+  String Address = '';
+  String displayAddress = '';
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
@@ -239,7 +239,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    displayAddress = '${place.thoroughfare},${place.subLocality},${place.locality},';//${place.name},
+   setState(() {
+     displayAddress = '${place.locality},';//${place.name},
+   });
     print(" displayAddress >>>>>> " + displayAddress);
   }
 
