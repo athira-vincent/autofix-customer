@@ -18,6 +18,7 @@ class RegularServices extends StatefulWidget{
   }
 
 }
+
 class _RegularServices extends State<RegularServices>{
   String authToken = "", mechanicId = "",
    search="" ;
@@ -266,11 +267,13 @@ class _RegularServices extends State<RegularServices>{
                                             padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                             child:
                                             TextFormField(
+                                              keyboardType: TextInputType.number,
                                               decoration: InputDecoration(
                                               border: InputBorder.none
                                               ),
                                               enabled: _selectionList[index],
                                               controller: _textEditContoller,
+
                                               inputFormatters: [
                                                 FilteringTextInputFormatter.allow(
                                                     RegExp('[0-9 :]')),
