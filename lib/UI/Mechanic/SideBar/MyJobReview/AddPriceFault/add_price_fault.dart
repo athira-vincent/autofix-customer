@@ -102,8 +102,11 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
                       textAlign: TextAlign.start,))
               ],),
               Flexible(
-                child: TabBarView(children: [RegularServices(),
-                EmergencyServices()],),
+                child: TabBarView(children:
+                [
+                  RegularServices(),
+                  EmergencyServices()
+                ],),
               )
             ],
           ),
