@@ -102,7 +102,6 @@ class _MyAppState extends State<MyApp> {
                 ),
                 // home: MechanicWorkProgressScreen(workStatus: "2",),
                 home: SplashScreen(),
-
               );
             },
           );
