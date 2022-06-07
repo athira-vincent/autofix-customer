@@ -3,8 +3,8 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
-import 'package:auto_fix/UI/Customer/WorkFlowScreens/WorkFlow/schedule_regular_service_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -67,7 +67,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
    String CurrentLongitude ="76.244164";
 
   String location ='Null, Press Button';
-  String Address = 'search';
+  String Address = '';
+  String displayAddress = 'Kakkanad';
+
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
@@ -215,7 +217,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    print('$Address Address=====');
+    setState(() {
+      displayAddress = '${place.locality},';//${place.name},
+    });
+    print(" displayAddress >>>>>> " + displayAddress);
 
   }
 
@@ -286,7 +291,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     width: 50,
                     child: Column(
                       children: [
-                        Text('Elenjikkal house Empyreal Garden',
+                        Text('$displayAddress',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.visible,
@@ -433,7 +438,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                             padding: const EdgeInsets.all(15),
                                             child:
                                             snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != ""
-                                              //Uri.tryParse(snapshot.data?.data?.categoryList?[0].service?[index].icon.toString())?.hasAbsolutePath ?? false
                                                 ? Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
                                                   width: 35,
                                                   fit: BoxFit.cover,)

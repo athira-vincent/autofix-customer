@@ -84,7 +84,7 @@ class UpcomingCompletedService {
   int totalPrice;
   double tax;
   double commission;
-  int serviceCharge;
+  var serviceCharge;
   String totalTime;
   String serviceTime;
   double latitude;

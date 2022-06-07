@@ -73,7 +73,7 @@ dependencies:
   intl: ^0.17.0
   geolocator: ^8.2.0
   geocoding: ^2.0.2
-  file_picker: ^4.5.0
+  file_picker: ^4.6.1
   fdottedline: ^1.0.1
   slider_button: ^2.0.0
   flutter_local_notifications: ^9.5.2
@@ -143,6 +143,7 @@ flutter:
     - assets/json/
     - assets/image/home_customer/
     - assets/image/home_customer/banner1.png
+    - assets/images/Group 3460.svg
     - assets/image/mechanicProfileView/directionMechnanicTracking.svg
     - assets/map_style/map_style.json
     - assets/image/mechanicTracking/
@@ -155,6 +156,7 @@ flutter:
     - assets/image/mechanicTracking/mechanicMapIcon.png
     - assets/image/CustomerType/profileAvathar.svg
     - assets/image/phoneLogin/EmailBgImage.svg
+    - assets/images/Group 3460.svg
 
   fonts:
     - family: Montserrat_SemiBold
