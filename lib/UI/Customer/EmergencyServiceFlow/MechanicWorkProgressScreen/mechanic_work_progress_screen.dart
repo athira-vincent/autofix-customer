@@ -71,10 +71,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Timer? timerForCouterTime;
   Timer? timerCouterTime;
 
+
   late Timer _timer;
   int _start = 15;
 
   Timer? countdownTimer;
+
+
   Duration myDuration = Duration(seconds: 0);
   var days = "0";
   var hours = "0";
@@ -659,13 +662,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                         end: 0,
                       ).animate(_controller),
                     ),
-                    /*Text(
+                    Text(
                       '$hours:$minutes:$seconds',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           fontSize: 50),
-                    ),*/
+                    ),
                   ],
                 ),
 
