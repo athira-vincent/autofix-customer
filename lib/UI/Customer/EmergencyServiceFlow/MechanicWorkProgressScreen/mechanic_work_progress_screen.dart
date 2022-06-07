@@ -72,54 +72,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Timer? timerCouterTime;
 
 
-  late Timer _timer;
-  int _start = 15;
-
-  Timer? countdownTimer;
-
-
-  Duration myDuration = Duration(seconds: 0);
-  var days = "0";
-  var hours = "0";
-  var minutes = "0";
-  var seconds = "0";
-
-  void startTimer1() {
-      myDuration =Duration(seconds: levelClock);
-      countdownTimer =
-          Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
-
-  }
-  // Step 4
-  void stopTimer() {
-    setState(() => countdownTimer!.cancel());
-  }
-  // Step 5
-  void resetTimer() {
-    stopTimer();
-    setState(() {
-      myDuration =Duration(seconds: levelClock);
-      //setCountDown();
-    }
-    );
-  }
-  // Step 6
-  void setCountDown() {
-    final reduceSecondsBy = 1;
-    setState(() {
-      var seconds = myDuration.inSeconds - reduceSecondsBy;
-      print('${seconds} ++secondsseconds');
-      if (seconds < 0) {
-        countdownTimer!.cancel();
-      } else {
-        myDuration = Duration(seconds: seconds);
-      }
-    });
-  }
-
-
-
-
 
   @override
   void initState() {
@@ -174,11 +126,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         isPaymentRequested = event.get("isPaymentRequested");
         isWorkCompleted = event.get("isWorkCompleted");
         mechanicDiagonsisState = event.get("mechanicDiagonsisState");
-        totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedTime = event.get('timerCounter');
         mechanicName = event.get('mechanicName');
         int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
         levelClock = sec;
-        startTimer1();
         _controller = AnimationController(
             vsync: this,
             duration: Duration(
@@ -205,7 +156,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         else if(widget.workStatus =="2") {
           isWorkCompleted = querySnapshot.get("isWorkCompleted");
           extendedTime = querySnapshot.get("extendedTime");
-          currentUpdatedTime = querySnapshot.get("currentUpdatedTime");
+          currentUpdatedTime = querySnapshot.get("timerCounter");
 
           print('isWorkCompleted ++++ $isWorkCompleted');
           print('extendedTime ++++ $extendedTime');
@@ -216,27 +167,18 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
             if(extendedTimeFirstTymCall == "0")
             {
               extendedTimeFirstTymCall = "1";
-
-              print('levelClock  levelClock1 ++++ ${levelClock}');
-              print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
-
               setState(() {
                 int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
                 levelClock = sec;
-                resetTimer();
-                print("clock22 _controller ${_controller.status}");
-                print("clock22 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
+
+               /* _controller.stop();
                 _controller = AnimationController(
                     vsync: this,
                     duration: Duration(
                         seconds:
                         levelClock)
                 );
-                print("clock33 _controller ${_controller.status}");
-                print("clock33 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
-                _controller.forward();
-                print("clock44 _controller ${_controller.status}");
-                print("clock44 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
+                _controller.forward();*/
               });
 
             }
@@ -329,16 +271,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   @override
   Widget build(BuildContext context) {
-
-
-    String strDigits(int n) => n.toString().padLeft(2, '0');
-     days = strDigits(myDuration.inDays);
-     hours = strDigits(myDuration.inHours.remainder(24));
-     minutes = strDigits(myDuration.inMinutes.remainder(60));
-     seconds = strDigits(myDuration.inSeconds.remainder(60));
-
-
-
 
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
@@ -662,13 +594,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                         end: 0,
                       ).animate(_controller),
                     ),
-                    /*Text(
-                      '$hours:$minutes:$seconds',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 50),
-                    ),*/
+
                   ],
                 ),
 

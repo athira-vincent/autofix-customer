@@ -158,7 +158,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           .doc('${bookingId}')
           .update({
         'updatedServiceList': "",
-        //===================== code for send the list of additional services =========
       })
           .then((value) => print("updatedServiceList ended Added"))
           .catchError((error) =>
@@ -174,9 +173,9 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           'updatedServiceList': FieldValue.arrayUnion(allData),
           'updatedServiceCost': "$serviceTotalCostForFirebase",
           'updatedServiceTime': "$serviceTotalTimeForFirebase",
+          'timerCounter': "$serviceTotalTimeForFirebase",
           "customerFromPage": "ExtraServiceDiagonsisScreen(isEmergency: true,)",
           "mechanicFromPage": "CustomerApprovedScreen",
-          //===================== code for send the list of additional services =========
         })
             .then((value) => print("updatedServiceList Added"))
             .catchError((error) =>
@@ -191,6 +190,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
           'updatedServiceList': FieldValue.arrayUnion(allData),
           'updatedServiceCost': "$serviceTotalCostForFirebase",
           'updatedServiceTime': "$serviceTotalTimeForFirebase",
+          'timerCounter': "$serviceTotalTimeForFirebase",
           "customerFromPage": "ExtraServiceDiagonsisScreen(isEmergency: true,)",
           "mechanicFromPage": "CustomerApprovedScreen",
           //===================== code for send the list of additional services =========
