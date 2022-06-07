@@ -520,7 +520,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           //   topRight: Radius.circular(48),
           // ),
           child: SizedBox(
-            height: size.height * 0.092,
+            height: size.height * 0.098,
             child: BottomNavigationBar(
               selectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',

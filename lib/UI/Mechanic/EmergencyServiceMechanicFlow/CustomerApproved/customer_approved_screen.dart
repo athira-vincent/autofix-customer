@@ -771,7 +771,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                         isEnableAddMoreBtn = false;
                         _controller.forward();
                          _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
-                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"$levelClock");
+                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
                         _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
                       });
                       Navigator.of(context).pop();
