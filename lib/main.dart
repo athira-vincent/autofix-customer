@@ -28,15 +28,24 @@ void main() async {
   await initHiveForFlutter();
   await runZonedGuarded(() async {
    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
-        appId: '1:54966987696:android:96f910e016709a2ca84475',
-        messagingSenderId: '54966987696',
-        authDomain: 'autofix-336509.firebaseapp.com',
-        projectId: 'autofix-336509',
-      ),
-    );
+
+   if(Platform.isAndroid)
+     {
+       await Firebase.initializeApp(
+         options: const FirebaseOptions(
+           apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
+           appId: '1:54966987696:android:96f910e016709a2ca84475',
+           messagingSenderId: '54966987696',
+           authDomain: 'autofix-336509.firebaseapp.com',
+           projectId: 'autofix-336509',
+         ),
+       );
+     }
+   else
+     {
+       await Firebase.initializeApp();
+     }
+
     //FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -90,7 +99,6 @@ class _MyAppState extends State<MyApp> {
                 ),
                 // home: MechanicWorkProgressScreen(workStatus: "2",),
                 home: SplashScreen(),
-
               );
             },
           );
