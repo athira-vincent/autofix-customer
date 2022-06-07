@@ -25,6 +25,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
           child: Container(
