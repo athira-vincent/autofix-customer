@@ -662,13 +662,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                         end: 0,
                       ).animate(_controller),
                     ),
-                    Text(
+                    /*Text(
                       '$hours:$minutes:$seconds',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           fontSize: 50),
-                    ),
+                    ),*/
                   ],
                 ),
 
