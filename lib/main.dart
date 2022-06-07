@@ -18,6 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
+import 'UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 
 import 'UI/Mechanic/mechanic_home_screen.dart';
@@ -91,7 +92,8 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-                home: SplashScreen(),
+               // home: SplashScreen(),
+                home: Addpricefault(),
               );
             },
           );
