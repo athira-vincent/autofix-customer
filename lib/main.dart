@@ -91,7 +91,6 @@ class _MyAppState extends State<MyApp> {
                   //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
-
                 // home: MechanicWorkProgressScreen(workStatus: "2",),
                 home: SplashScreen(),
 
