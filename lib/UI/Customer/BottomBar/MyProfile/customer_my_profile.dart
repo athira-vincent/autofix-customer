@@ -235,61 +235,61 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return  Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                Form(
-                    autovalidateMode: _autoValidate,
-                    key: _formKey,
-                    child:
-                      _userType == "1"
-                          ?
-                          Column(
-                            children: [
-                              NameTextUi(size),
-                              EmailTextUi(size),
-                              PhoneTextUi(size),
-                              StateTextUi(size),
-                              editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
-                            ],
-                          )
-                          :
-                        _userType == "2"
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  appBarCustomUi(size),
+                  profileImageAndKmAndReviewCount(size),
+                  Form(
+                      autovalidateMode: _autoValidate,
+                      key: _formKey,
+                      child:
+                        _userType == "1"
                             ?
+                            Column(
+                              children: [
+                                NameTextUi(size),
+                                EmailTextUi(size),
+                                PhoneTextUi(size),
+                                StateTextUi(size),
+                                editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
+                              ],
+                            )
+                            :
+                          _userType == "2"
+                              ?
+                            Column(
+                              children: [
+                                NameTextUi(size),
+                                OrganisationTypeTextUi(size),     // --------------------- Industry
+                                EmailTextUi(size),
+                                PhoneTextUi(size),
+                                StateTextUi(size),
+                                editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
+                              ],
+                            )
+                              :
                           Column(
                             children: [
+                              StateTextUi(size),
+                              //ministryTextUi(size),
                               NameTextUi(size),
-                              OrganisationTypeTextUi(size),     // --------------------- Industry
                               EmailTextUi(size),
                               PhoneTextUi(size),
-                              StateTextUi(size),
-                              editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
+                              editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
                             ],
-                          )
-                            :
-                        Column(
-                          children: [
-                            StateTextUi(size),
-                            //ministryTextUi(size),
-                            NameTextUi(size),
-                            EmailTextUi(size),
-                            PhoneTextUi(size),
-                            editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
-                          ],
-                        ),
-                ),
-              ],
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+
     );
   }
 
@@ -297,7 +297,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 10 / 100,
-        //top: size.height * 3.3 / 100
+        top: size.height * 3.3 / 100
       ),
       child: Stack(
         children: [
@@ -423,10 +423,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                               height: 150,
                                               fit: BoxFit.cover,)
                                                 :
-                                              SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
-                                                width: 150,
-                                                height: 150,
-                                                fit: BoxFit.cover,)
+                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                                              width: 150,
+                                              height: 150,
+                                              fit: BoxFit.cover,)
                                           )))
 
                               ),
@@ -586,7 +586,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   ),
                 ),
               ),
-              Spacer(),
+              //Spacer(),
               editProfileEnabled == true
                   ? Container(
                   child: Padding(
@@ -629,13 +629,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  padding: const EdgeInsets.fromLTRB(10,0,00,0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
                         child: TextFormField(
+
                           //enabled: editProfileEnabled,
                           enabled: false,
                           readOnly: !editProfileEnabled,
@@ -679,15 +680,15 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   ),
                 ),
               ),
-              Spacer(),
-              editProfileEnabled == true
-                  ? Container(
-                    // child: Padding(
-                    //   padding: const EdgeInsets.all(15),
-                    //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    // )
-              )
-                  : Container(),
+              //Spacer(),
+              // editProfileEnabled == true
+              //     ? Container(
+              //       // child: Padding(
+              //       //   padding: const EdgeInsets.all(15),
+              //       //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+              //       // )
+              // )
+              //     : Container(),
             ],
           ),
           Padding(
@@ -1056,7 +1057,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     ),
                   ),
                 ),
-                Spacer(),
+                //Spacer(),
                 editProfileEnabled == true
                     ? Container(
                     child: Padding(

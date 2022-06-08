@@ -321,7 +321,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-
+          color: Colors.red,
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
