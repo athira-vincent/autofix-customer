@@ -218,7 +218,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     setState(() {
-      displayAddress = '${place.locality},';//${place.name},
+      displayAddress = '${place.locality}';//${place.name},
     });
     print(" displayAddress >>>>>> " + displayAddress);
 
