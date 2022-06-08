@@ -2,11 +2,15 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/HelpAndSupport/help_and_support.dart';
+import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
+import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Customer/SideBar/BookNow/cust_book_now.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -254,11 +258,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 18.76,
             ),
           ),
-          /* onTap: () {
+           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerEditProfileScreen()));
-          },*/
+                MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
+          },
         ),
 
         ListTile(
@@ -308,7 +312,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print(" on Tap Privacy policy");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Privacypolicy()));
             },
           ),
         ),
@@ -321,7 +327,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print("on Tap Help & support Center");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HelpAndSupport()));
             },
           ),
         ),
@@ -334,8 +342,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              //_logout();
-              print("on Tap Terms & conditions");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TermsAndConditon()));
             },
           ),
         ),
