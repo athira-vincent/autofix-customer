@@ -670,10 +670,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Spacer(),
               editProfileEnabled == true
                   ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
+                    // child: Padding(
+                    //   padding: const EdgeInsets.all(15),
+                    //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                    // )
               )
                   : Container(),
             ],
@@ -762,10 +762,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Spacer(),
               editProfileEnabled == true
                   ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
+                  // child: Padding(
+                  //   padding: const EdgeInsets.all(15),
+                  //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  // )
               )
                   : Container(),
             ],
