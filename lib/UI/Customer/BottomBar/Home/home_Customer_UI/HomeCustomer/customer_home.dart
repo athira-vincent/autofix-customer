@@ -239,8 +239,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 serviceBanners(),
                 emergencyService(size),
                 regularService(),
-                upcomingServices(),
-                sparePartsServices()
+                //upcomingServices(),
+                //sparePartsServices()
 
               ],
             ),

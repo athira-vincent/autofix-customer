@@ -6,9 +6,9 @@ import 'package:auto_fix/UI/Common/HelpAndSupport/help_and_support.dart';
 import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
 import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/BookNow/cust_book_now.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart';
-import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -245,7 +245,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerMyAppointmentScreen()));
+                MaterialPageRoute(builder: (context) => CustomerMyServicesScreen()));
           },
         ),
 
