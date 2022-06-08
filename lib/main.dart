@@ -93,7 +93,6 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
                 home: SplashScreen(),
-               // home: Addpricefault(),
                 //home:EmergencyServiceListScreen(),
               );
             },
