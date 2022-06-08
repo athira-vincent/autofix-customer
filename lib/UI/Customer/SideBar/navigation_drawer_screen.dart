@@ -25,35 +25,10 @@ class CustomerNavigationDrawerScreen extends StatefulWidget {
   }
 }
 
-class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen>
-{
-  String? _userName;
-  String? _userEmail;
+class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen> {
+
   String authToken="";
   String userName="", profileImageUrl = "";
-
-  _logout() async {
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
-   /* shdPre.setString(SharedPrefKeys.token, "");
-    shdPre.setBool(SharedPrefKeys.isUserLoggedIn, false);
-    shdPre.setString(SharedPrefKeys.userName, "");
-    shdPre.setString(SharedPrefKeys.userEmail, "");
-    shdPre.setString(SharedPrefKeys.mechanicID, "");
-    shdPre.setString(SharedPrefKeys.userProfilePic, "");
-    GqlClient.I
-        .config(token: shdPre.getString(SharedPrefKeys.token).toString());
-    Navigator.pop(context);
-    // SharedPreferences preferences = await SharedPreferences.getInstance();
-    // await preferences.clear();
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => MechanicSigninScreen(),
-      ),
-          (route) => false,
-    );*/
-  }
 
   @override
   void initState() {
@@ -67,7 +42,6 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      _userEmail = shdPre.getString(SharedPrefKeys.userEmail).toString();
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('profileImageUrl>>>>>>>>> MechanicSideBarScreen' + profileImageUrl.toString());

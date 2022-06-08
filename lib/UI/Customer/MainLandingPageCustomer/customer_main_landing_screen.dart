@@ -28,7 +28,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   double per = .10;
   double perfont = .10;
 
-  String authToken="";
+  String authToken="",profileImageUrl="";
   String userName="";
 
 
@@ -57,8 +57,9 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
 
 
-      print('authToken>>>>>>>>>' + authToken.toString());
-
+      profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
     });
   }
 

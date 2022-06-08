@@ -35,7 +35,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   TextEditingController searchController = new TextEditingController();
   String? filter;
-  String authToken="";
+  String authToken="",profileImageUrl = "";
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
@@ -109,7 +109,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-
+      profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      print('authToken>>>>>>>>> ' + authToken.toString());
+      print('profileImageUrl>>>>>>>>> _HomeCustomerUIScreenState' + profileImageUrl.toString());
       print('authToken>>>>>>>>>' + authToken.toString());
       print('serviceIdEmergency>>>>>>>>' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>>' + mechanicIdEmergency.toString());

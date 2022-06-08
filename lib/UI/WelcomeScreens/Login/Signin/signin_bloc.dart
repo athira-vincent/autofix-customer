@@ -48,6 +48,8 @@ class SigninBloc {
     shdPre.setString(SharedPrefKeys.profileImageUrl,imageUrl);
     GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
+    print("profileImageUrl===================================${shdPre.getString(SharedPrefKeys.profileImageUrl).toString()}");
+
   }
 
   void userDefaultData(String token,String userType, String userName, String userId,String imageUrl, ) async {
