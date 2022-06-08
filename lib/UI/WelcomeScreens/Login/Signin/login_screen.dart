@@ -500,6 +500,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
+                "",           //----- profile image url should b updated
                 //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString(),"0"
@@ -513,6 +514,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
+                "",           //----- profile image url should b updated
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString(),"0"
             );
@@ -545,6 +547,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
+                "",                        //----- profile image url should b updated
                 value.data!.socialLogin!.user!.firstName.toString(),
                 value.data!.socialLogin!.user!.id.toString(),"0");
             setFcmToken(value.data!.socialLogin!.token.toString());
@@ -557,6 +560,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_mechanic,
+                "",           //----- profile image url should b updated
                 value.data!.socialLogin!.user!.firstName.toString(),
                 value.data!.socialLogin!.user!.id.toString(),
                 "0"

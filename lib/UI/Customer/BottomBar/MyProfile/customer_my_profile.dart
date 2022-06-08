@@ -216,6 +216,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _signinBloc.userDefaultData(
         authToken,
         TextStrings.user_customer,
+        _imageUrl,           //----- profile image url should b updated
         //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
         value.data!.customerDetails!.firstName.toString(),
         value.data!.customerDetails!.id.toString(),

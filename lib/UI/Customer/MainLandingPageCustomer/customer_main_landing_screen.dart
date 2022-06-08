@@ -306,13 +306,18 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               preferredSize: Size.fromHeight(0),
               child: Container()
           ),
-      body: Container(
-        width: double.infinity,
-        child: _index == 0
-            ? HomeCustomerUIScreen()
-            : _index == 1 ? SparePartsListScreen()
-            : _index == 2 ? CustomerMyServicesScreen()
-            : CustomerMyProfileScreen(),
+      body:
+
+      Center(
+          child:  IndexedStack(
+            index: _index,
+            children: <Widget> [
+              HomeCustomerUIScreen(),
+              SparePartsListScreen(),
+               CustomerMyServicesScreen(),
+               CustomerMyProfileScreen(),
+            ],
+          )
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

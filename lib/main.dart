@@ -76,7 +76,6 @@ class _MyAppState extends State<MyApp> {
       statusBarBrightness: Brightness.light,
       statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
-
     return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
         builder: (context, child) {

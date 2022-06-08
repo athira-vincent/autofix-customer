@@ -1,18 +1,11 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Customer/SideBar/BookNow/cust_book_now.dart';
-import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart';
-import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
-import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
-import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,11 +17,9 @@ class MechanicSideBarScreen extends StatefulWidget {
 }
 
 class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
-  String? _userName;
-  String? _userEmail;
   String isOnline = "";
   String authToken="";
-  String userName="";
+  String userName="", profileImageUrl = "";
 
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -53,20 +44,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
     );*/
   }
 
-  _getUser() async {
-    SharedPreferences _shdPre = await SharedPreferences.getInstance();
-    _userName = _shdPre.getString(SharedPrefKeys.userName).toString();
-    _userEmail = _shdPre.getString(SharedPrefKeys.userEmail).toString();
-    isOnline = _shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
-    setState(() {});
-  }
 
   @override
   void initState() {
     super.initState();
     getSharedPrefData();
-
-    _getUser();
   }
 
   Future<void> getSharedPrefData() async {
@@ -74,12 +56,13 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
 
-
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
+      //_userEmail = shdPre.getString(SharedPrefKeys.userEmail).toString();
+      isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
+      profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
 
       print('authToken>>>>>>>>> ' + authToken.toString());
-
 
     });
   }
@@ -106,8 +89,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: Image.asset(
               'assets/image/ic_my_wallet.png',
-              width: 14.28,
-              height: 18.76,
+              width: 19.28,
+              height: 21.76,
             ),
           ),
           onTap: () {
@@ -118,10 +101,10 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
         ),
 
         ListTile(
-          contentPadding: EdgeInsets.only(left: 20.4, top: 13),
+          contentPadding: EdgeInsets.only(left: 20.4,),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.26, 0),
             child: Text(
               "Order details",
               style: Styles.navDrawerTextStyle02,
@@ -130,8 +113,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: Image.asset(
               'assets/image/ic_order_details.png',
-              width: 14.28,
-              height: 18.76,
+              width: 18.28,
+              height: 20.76,
             ),
           ),
           /*onTap: () {
@@ -145,7 +128,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.45, 0),
+            //alignment: Alignment.centerLeft,
             child: Text(
               "My brand specialization",
               style: Styles.navDrawerTextStyle02,
@@ -154,8 +138,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: Image.asset(
               'assets/image/ic_my_specialization.png',
-              width: 14.28,
-              height: 18.76,
+              width: 18.28,
+              height: 20.76,
             ),
           ),
          /* onTap: () {
@@ -169,7 +153,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.35, 0),
             child: Text(
               "My job appointment",
               style: Styles.navDrawerTextStyle02,
@@ -193,7 +177,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.25, 0),
             child: Text(
               "My job reviews",
               style: Styles.navDrawerTextStyle02,
@@ -202,8 +186,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: Image.asset(
               'assets/image/ic_job_review.png',
-              width: 14.28,
-              height: 18.76,
+              width: 18.28,
+              height: 20.76,
             ),
           ),
           /*onTap: () {
@@ -226,8 +210,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: SvgPicture.asset(
               'assets/image/ic_edit_profile.svg',
-              width: 14.28,
-              height: 18.76,
+              width: 18.28,
+              height: 20.76,
             ),
           ),
          /* onTap: () {
@@ -241,7 +225,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.28, 0),
             child: Text(
               "Add price & fault",
               style: Styles.navDrawerTextStyle02,
@@ -250,15 +234,15 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: Image.asset(
               'assets/image/ic_price_fault.png',
-              width: 14.28,
-              height: 18.76,
+              width: 18.28,
+              height: 20.76,
             ),
           ),
-          /* onTap: () {
+           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerEditProfileScreen()));
-          },*/
+                MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
+          },
         ),
 
         ListTile(
@@ -274,8 +258,8 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           leading: Container(
             child: SvgPicture.asset(
               'assets/image/ic_logout.svg',
-              width: 21.84,
-              height: 20.44,
+              width: 18.28,
+              height: 20.76,
             ),
           ),
           onTap: () {
@@ -308,7 +292,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print(" on Tap Privacy policy");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Privacypolicy()));
             },
           ),
         ),
@@ -321,7 +307,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print("on Tap Help & support Center");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HelpAndSupport()));
             },
           ),
         ),
@@ -334,8 +322,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              //_logout();
-              print("on Tap Terms & conditions");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TermsAndConditon()));
             },
           ),
         ),
@@ -428,7 +417,15 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                                     radius: 50,
                                     backgroundColor: Colors.white,
                                     child: ClipOval(
-                                        child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                        child: profileImageUrl != null && profileImageUrl != ""
+                                            ?
+                                         Image.network(profileImageUrl,
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover,
+                                         )
+                                            :
+                                        SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                     )))
 
                         ),
@@ -456,6 +453,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                     ],
                   ),
                   Container(
+                    margin: EdgeInsets.only(
+                      top: 5
+                    ),
                     child: Text(
                       //_userName.toString(),
                       "$userName",
