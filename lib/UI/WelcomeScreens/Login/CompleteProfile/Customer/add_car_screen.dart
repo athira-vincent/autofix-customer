@@ -30,9 +30,11 @@ class AddCarScreen extends StatefulWidget {
 
   final String userType;
   final String userCategory;
+  final String fromPage;
 
 
-  AddCarScreen({required this.userType,required this.userCategory});
+
+  AddCarScreen({required this.userType,required this.userCategory,required this.fromPage});
 
   @override
   State<StatefulWidget> createState() {
@@ -229,11 +231,19 @@ class _AddCarScreenState extends State<AddCarScreen> {
            else
              {
 
-               Navigator.pushReplacement(
-                   context,
-                   MaterialPageRoute(
-                       builder: (context) =>
-                           CustomerMainLandingScreen()));
+               if(widget.fromPage == "2")
+                 {
+                   Navigator.pop(context);
+                 }
+               else
+                 {
+                   Navigator.pushReplacement(
+                       context,
+                       MaterialPageRoute(
+                           builder: (context) =>
+                               CustomerMainLandingScreen()));
+                 }
+
                FocusScope.of(context).unfocus();
                _isAddMore = false;
              }
