@@ -84,6 +84,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
           _isLoading = false;
           _signinBloc.userDefaultData(value.data!.signInPhoneNo!.jwtToken.toString(),
               value.data!.signInPhoneNo!.userTypeId.toString(),
+              "",           //----- profile image url should b updated
               value.data!.signInPhoneNo!.firstName.toString(),
               value.data!.signInPhoneNo!.id.toString());
           Navigator.push(

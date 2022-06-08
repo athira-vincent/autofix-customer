@@ -195,6 +195,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _signinBloc.userDefault(
         authToken,
         TextStrings.user_mechanic,
+        _imageUrl,                    //----- profile image url should b updated
         //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
         value.data!.mechanicDetails!.firstName.toString(),
         value.data!.mechanicDetails!.id.toString(), isOnline

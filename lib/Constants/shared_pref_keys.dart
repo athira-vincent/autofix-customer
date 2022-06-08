@@ -6,6 +6,7 @@ class SharedPrefKeys {
   static const userCategory = "userCategory";
   static const userLanguage = "userLanguage";
   static const userLanguageCode = "userLanguageCode";
+  static const profileImageUrl = "profileImageUrl";
 
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";

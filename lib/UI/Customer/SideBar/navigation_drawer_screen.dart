@@ -25,7 +25,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
   String? _userName;
   String? _userEmail;
   String authToken="";
-  String userName="";
+  String userName="", profileImageUrl = "";
 
   _logout() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -50,18 +50,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     );*/
   }
 
-  _getUser() async {
-    SharedPreferences _shdPre = await SharedPreferences.getInstance();
-    _userName = _shdPre.getString(SharedPrefKeys.userName).toString();
-    _userEmail = _shdPre.getString(SharedPrefKeys.userEmail).toString();
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
     getSharedPrefData();
-    _getUser();
   }
 
   Future<void> getSharedPrefData() async {
@@ -69,12 +61,11 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
 
-
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
+      _userEmail = shdPre.getString(SharedPrefKeys.userEmail).toString();
+      profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('authToken>>>>>>>>> ' + authToken.toString());
-
 
     });
   }
@@ -189,7 +180,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           contentPadding: EdgeInsets.only(left: 20.4, top: 13),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.22, 0),
             child: Text(
               "Order details",
               style: Styles.navDrawerTextStyle02,
@@ -261,7 +252,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.21, 0),
+            alignment: Alignment(-1.28, 0),
             child: Text(
               "My Appointments",
               style: Styles.navDrawerTextStyle02,
@@ -499,7 +490,15 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                                     radius: 50,
                                     backgroundColor: Colors.white,
                                     child: ClipOval(
-                                        child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                        child: profileImageUrl != null && profileImageUrl != ""
+                                            ?
+                                        Image.network(profileImageUrl,
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover,
+                                        )
+                                            :
+                                        SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                     )))
 
                         ),
