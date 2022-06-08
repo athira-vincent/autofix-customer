@@ -505,31 +505,16 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           child: AppBar(),
         ),
       body:  Center(
-      child:  IndexedStack(
-      index: _index,
-      children: <Widget> [
-           MechanicHomeUIScreen(),
-           Addpricefault(position: 1,),
-           MechanicMyServicesScreen(),
-           MechanicMyProfileScreen(),
-      ],
-    )
-    ),
-
-
-      /*Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            child: _index == 0
-                ? MechanicHomeUIScreen()
-                : _index == 1 ? Addpricefault(position: 1,)
-                : _index == 2 ? MechanicMyServicesScreen()
-                : MechanicMyProfileScreen(),
+            child:  IndexedStack(
+                  index: _index,
+                  children: <Widget> [
+                       MechanicHomeUIScreen(),
+                       Addpricefault(position: 1,),
+                       MechanicMyServicesScreen(),
+                       MechanicMyProfileScreen(),
+                  ],
+                )
           ),
-        ],
-      ),*/
-      //floatingActionButton: ,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -537,10 +522,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           ],
         ),
         child: ClipRRect(
-          // borderRadius: BorderRadius.only(
-          //   topLeft: Radius.circular(48),
-          //   topRight: Radius.circular(48),
-          // ),
           child: SizedBox(
             height: size.height * 0.098,
             child: BottomNavigationBar(
@@ -554,7 +535,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                   fontSize: 0),
               items: bottomNavigationBarItems,
               currentIndex: _index,
-              //backgroundColor: CustColors.blue,
               type: BottomNavigationBarType.fixed,
               selectedItemColor: Colors.blue,
               unselectedItemColor: Colors.grey,
