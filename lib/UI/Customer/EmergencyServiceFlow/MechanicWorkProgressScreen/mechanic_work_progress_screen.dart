@@ -59,7 +59,9 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-  String extendedTimeFromFirestore="0";
+  String extendedTime="0";
+  String currentUpdatedTime="0";
+
 
   String extendedTimeFirstTymCall="0";
 
@@ -71,14 +73,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
 
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
     workStatus = widget.workStatus.toString();
-    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
+    timerObj = Timer.periodic(Duration(seconds: 3), (Timer t) {
       timerObjVar = t;
       print('Timer listenToCloudFirestoreDB ++++++');
 
@@ -119,11 +120,13 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
       setState(() {
-        extendedTimeFromFirestore = event.get("extendedTime");
+        extendedTime= event.get("extendedTime");
+        currentUpdatedTime = event.get("currentUpdatedTime");
+
         isPaymentRequested = event.get("isPaymentRequested");
         isWorkCompleted = event.get("isWorkCompleted");
         mechanicDiagonsisState = event.get("mechanicDiagonsisState");
-        totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedTime = event.get('timerCounter');
         mechanicName = event.get('mechanicName');
         int sec = Duration(minutes: int.parse('${totalEstimatedTime.split(":").first}')).inSeconds;
         levelClock = sec;
@@ -135,9 +138,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         );
         _controller.forward();
         _updateTimerListener();
-
-      });
-      setState(() {
 
       });
     });
@@ -155,18 +155,32 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         }
         else if(widget.workStatus =="2") {
           isWorkCompleted = querySnapshot.get("isWorkCompleted");
-          print('isWorkCompleted ++++ $isWorkCompleted');
+          extendedTime = querySnapshot.get("extendedTime");
+          currentUpdatedTime = querySnapshot.get("timerCounter");
 
-          extendedTimeFromFirestore = querySnapshot.get("extendedTime");
-          int sec = Duration(minutes: int.parse('$extendedTimeFromFirestore') + int.parse('$timeCounter')).inSeconds ;
-          if(extendedTimeFromFirestore.toString() != "0")
+          print('isWorkCompleted ++++ $isWorkCompleted');
+          print('extendedTime ++++ $extendedTime');
+          print('currentUpdatedTime ++++ $currentUpdatedTime');
+
+          if(extendedTime.toString() != "0")
           {
             if(extendedTimeFirstTymCall == "0")
             {
               extendedTimeFirstTymCall = "1";
-              print('levelClock  levelClock1 ++++ ${levelClock}');
-              levelClock = sec ;
-              print('levelClock  sec ++++ ${sec}');
+              setState(() {
+                int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
+                levelClock = sec;
+
+               /* _controller.stop();
+                _controller = AnimationController(
+                    vsync: this,
+                    duration: Duration(
+                        seconds:
+                        levelClock)
+                );
+                _controller.forward();*/
+              });
+
             }
 
           }
@@ -257,7 +271,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
 
   @override
   Widget build(BuildContext context) {
-
 
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
@@ -573,12 +586,18 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
                                   fontWeight: FontWeight.bold,
                                   fontSize: 40)));
                     }),*/
-                CountdownMechanicTimer(
-                  animation: StepTween(
-                    begin: levelClock, // THIS IS A USER ENTERED NUMBER
-                    end: 0,
-                  ).animate(_controller),
+                Column(
+                  children: [
+                    CountdownMechanicTimer(
+                      animation: StepTween(
+                        begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                        end: 0,
+                      ).animate(_controller),
+                    ),
+
+                  ],
                 ),
+
               ],
             ),
           ),

@@ -113,7 +113,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                   print("updateToCloudFirestoreDB isStartedWork $isStartedWork");
                   print("updateToCloudFirestoreDB extendedTime $extendedTime");
                   print("levelClock $levelClock");
-                  updateToCloudFirestoreDB("1", "0", "0");
+                  updateToCloudFirestoreDB("1", "0", "0","0");
                 });
                 _controller.forward();
                 _totalTimeCounter();
@@ -127,27 +127,51 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     });
   }
 
-  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time ) {
+  void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time,String currentUpdatedTime ) {
 
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
 
 
-    _firestore
+    if(currentUpdatedTime == "0")
+      {
+        _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-            'isWorkStarted': "$isWorkStarted",
-            'isWorkCompleted': "$isWorkCompleted",
-            "extendedTime": "$time",
-            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-           // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
-            "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-            "mechanicFromPage" : "MechanicWorkCompletedScreen",
+          'isWorkStarted': "$isWorkStarted",
+          'isWorkCompleted': "$isWorkCompleted",
+          "extendedTime": "$time",
+          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
+          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+          "mechanicFromPage" : "MechanicWorkCompletedScreen",
           //===================== code for send the list of additional services =========
         })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
+            .then((value) => print("Location Added"))
+            .catchError((error) =>
+            print("Failed to add Location: $error"));
+      }
+    else
+      {
+        _firestore
+            .collection("ResolMech")
+            .doc('${bookingId}')
+            .update({
+          'isWorkStarted': "$isWorkStarted",
+          'isWorkCompleted': "$isWorkCompleted",
+          "extendedTime": "$time",
+          "timerCounter": "$currentUpdatedTime",
+          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
+          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+          "mechanicFromPage" : "MechanicWorkCompletedScreen",
+          //===================== code for send the list of additional services =========
+        })
+            .then((value) => print("Location Added"))
+            .catchError((error) =>
+            print("Failed to add Location: $error"));
+      }
+
   }
 
 
@@ -426,7 +450,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 //isStartedWork = !isStartedWork;
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
                 print("levelClock $levelClock");
-                updateToCloudFirestoreDB("1", "0", "0");
+                updateToCloudFirestoreDB("1", "0", "0","0");
               });
               _controller.forward();
               _totalTimeCounter();
@@ -442,7 +466,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 print("updateToCloudFirestoreDB extendedTime $extendedTime");
                 print("timerCountr11111111111 ${timeCounter}");
 
-                updateToCloudFirestoreDB("1","1", extendedTime);
+                updateToCloudFirestoreDB("1","1", extendedTime,"0");
                 _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                     authToken, bookingId, "6");
                 Navigator.pushReplacement(
@@ -770,7 +794,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                         isEnableAddMoreBtn = false;
                         _controller.forward();
                          _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
-                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString());
+                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
                         _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
                       });
                       Navigator.of(context).pop();

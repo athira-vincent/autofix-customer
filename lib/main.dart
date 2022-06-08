@@ -3,9 +3,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/l10n/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,11 +15,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
-import 'UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
-import 'UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
-
-import 'UI/Mechanic/mechanic_home_screen.dart';
-import 'UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -31,16 +23,23 @@ void main() async {
   await initHiveForFlutter();
   await runZonedGuarded(() async {
    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
-        appId: '1:54966987696:android:96f910e016709a2ca84475',
-        messagingSenderId: '54966987696',
-        authDomain: 'autofix-336509.firebaseapp.com',
-        projectId: 'autofix-336509',
-      ),
-    );
-    //FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+   if(Platform.isAndroid)
+     {
+       await Firebase.initializeApp(
+         options: const FirebaseOptions(
+           apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
+           appId: '1:54966987696:android:96f910e016709a2ca84475',
+           messagingSenderId: '54966987696',
+           authDomain: 'autofix-336509.firebaseapp.com',
+           projectId: 'autofix-336509',
+         ),
+       );
+     }
+   else
+     {
+       await Firebase.initializeApp();
+     }
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
         runApp(MyApp());
@@ -50,7 +49,6 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -80,7 +78,6 @@ class _MyAppState extends State<MyApp> {
         create: (context) => LocaleProvider(),
         builder: (context, child) {
           final provider = Provider.of<LocaleProvider>(context,listen: false);
-
           return Sizer(
             builder: (context, orientation, deviceType) {
               return MaterialApp(
