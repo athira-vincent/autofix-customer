@@ -103,7 +103,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   String? selectedMonthText= 'Jan' ;
   String? selectedYearText= '2018';
   List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  List<String> yearList = [for(int i=2018; i<2050; i+=1) i.toString()];
+  List<String> yearList = [for(int i=2018; i<2022; i+=1) i.toString()];
 
   String? selectedBrand = '' ;
 

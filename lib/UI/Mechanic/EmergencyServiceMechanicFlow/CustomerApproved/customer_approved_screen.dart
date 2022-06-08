@@ -621,7 +621,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   Widget setupAlertDialogAddExtraTime(Size size ) {
     return Container(
-      height: 280.0, // Change as per your requirement
+      height: 300.0, // Change as per your requirement
       child: Column(
         children: [
           Container(

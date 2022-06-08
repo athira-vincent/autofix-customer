@@ -434,7 +434,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                         ),
                       ),
 
-                      Positioned(
+                     /* Positioned(
                         right: 1.5,
                         bottom: 1,
                         child: ClipRRect(
@@ -452,7 +452,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
                             child: Image.asset("assets/image/ic_camera.png"),
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                   Container(
