@@ -206,9 +206,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
           child: SingleChildScrollView(
@@ -246,8 +244,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             )
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget appBarCustomUi() {
