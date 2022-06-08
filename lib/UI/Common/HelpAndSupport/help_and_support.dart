@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class Privacypolicy extends StatefulWidget {
+class HelpAndSupport extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _Privacypolicy();
+    return _HelpAndSupport();
   }
 
 }
-class _Privacypolicy extends State<Privacypolicy>{
+class _HelpAndSupport extends State<HelpAndSupport>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: InkWell(
+          onTap: (){
+            Navigator.pop(context);
+          },
+            child: Icon(Icons.arrow_back)
+        ),
         backgroundColor: const Color(0xff173a8d),
         toolbarHeight: 60,
         elevation: 0,
         title: Container(
-          child: Text('Privacy policy',
+          child: Text('Terms & conditions',
             style: TextStyle(
               fontFamily: 'SamsungSharpSans-Medium',
               fontSize: 16.7,
@@ -30,7 +35,7 @@ class _Privacypolicy extends State<Privacypolicy>{
         padding: const EdgeInsets.all(10.0),
         child: Container(
           child: WebView(
-            initialUrl: "https://autofix-web.techlabz.in/privacy-policy",
+            initialUrl: "https://autofix-web.techlabz.in/about-us",
             ),
         ),
       ),

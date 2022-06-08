@@ -19,7 +19,7 @@ class RegularServices extends StatefulWidget{
 
 }
 
-class _RegularServices extends State<RegularServices>{
+class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveClientMixin{
   String authToken = "", mechanicId = "",
    search="" ;
   int page=0,size=10;
@@ -246,19 +246,22 @@ class _RegularServices extends State<RegularServices>{
                                             width: 15,
                                             height: 15,
                                       ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(left:08.0),
-                                                child: Text(
-                                                  //_mechanicDetails!.mechanicService![index].service!.serviceName,
-                                                  _AddPriceServiceList!.data![index].serviceName.toString(),
-                                                  //'Towing service',
-                                                  softWrap: true,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontFamily: 'SamsungSharpSans-Medium',
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),),
+                                              Container(
+                                                width:140,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left:08.0),
+                                                  child: Text(
+                                                    //_mechanicDetails!.mechanicService![index].service!.serviceName,
+                                                    _AddPriceServiceList!.data![index].serviceName.toString(),
+                                                    //'Towing service',
+                                                    softWrap: true,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'SamsungSharpSans-Medium',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),),
+                                                ),
                                               ),
                                       ]
                                           ),
@@ -335,7 +338,7 @@ class _RegularServices extends State<RegularServices>{
 
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.only(left:20.0,right:15.0,bottom: 4),
+                                            padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                             child:
                                             TextFormField(
                                               //maxLength: 4,
@@ -478,5 +481,10 @@ class _RegularServices extends State<RegularServices>{
       //backgroundColor: const Color(0xff9f9f9),
     );
   }
+
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }

@@ -238,11 +238,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-          /* onTap: () {
+           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerEditProfileScreen()));
-          },*/
+                MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
+          },
         ),
 
         ListTile(
@@ -292,7 +292,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print(" on Tap Privacy policy");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Privacypolicy()));
             },
           ),
         ),
@@ -305,7 +307,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print("on Tap Help & support Center");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HelpAndSupport()));
             },
           ),
         ),
@@ -318,8 +322,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              //_logout();
-              print("on Tap Terms & conditions");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TermsAndConditon()));
             },
           ),
         ),

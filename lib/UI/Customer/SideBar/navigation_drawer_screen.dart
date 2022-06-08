@@ -2,6 +2,10 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/HelpAndSupport/help_and_support.dart';
+import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
+import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/SideBar/BookNow/cust_book_now.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
@@ -21,7 +25,8 @@ class CustomerNavigationDrawerScreen extends StatefulWidget {
   }
 }
 
-class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen> {
+class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen>
+{
   String? _userName;
   String? _userEmail;
   String authToken="";
@@ -292,7 +297,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerEditProfileScreen()));
+                MaterialPageRoute(builder: (context) => CustomerMyProfileScreen()));
           },
         ),
 
@@ -370,7 +375,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print(" on Tap Privacy policy");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Privacypolicy()));
             },
           ),
         ),
@@ -383,7 +390,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              print("on Tap Help & support Center");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HelpAndSupport()));
             },
           ),
         ),
@@ -396,8 +405,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
-              //_logout();
-              print("on Tap Terms & conditions");
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TermsAndConditon()));
             },
           ),
         ),
@@ -504,7 +514,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                         ),
                       ),
 
-                      Positioned(
+                      /*Positioned(
                         right: 1.5,
                         bottom: 1,
                         child: ClipRRect(
@@ -522,7 +532,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
                             child: Image.asset("assets/image/ic_camera.png"),
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                   Container(
