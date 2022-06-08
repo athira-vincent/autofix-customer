@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
 
-  String authToken = "";
+  String authToken = "",userID="";
   bool _isLoadingPage = false;
   bool _isLoadingButton = false;
 
@@ -58,6 +59,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
 
+  final AddCarBloc _addCarBloc = AddCarBloc();
+
+
 
   @override
   void initState() {
@@ -70,12 +74,13 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData CustomerMyVehicleScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
-
+      userID = shdPre.getString(SharedPrefKeys.userID).toString();
+      print('userFamilyId CustomerMyVehicleScreen'+authToken.toString());
+      print('userID CustomerMyVehicleScreen'+userID.toString());
       _homeCustomerBloc.postCustVehicleListRequest(authToken);
 
     });
@@ -93,11 +98,13 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
         setState(() {
 
-          for(int i = 0; i<=int.parse('${value.data?.custVehicleList?.length}'); i++)
+          for(int i = 0; i<int.parse('${value.data?.custVehicleList?.length}'); i++)
             {
               if(value.data?.custVehicleList?[i].defaultVehicle.toString() == "1")
                 {
                   custVehicleListDefaultValue = value.data?.custVehicleList?[i];
+                  print("sucess postServiceList >>>>>>>  ${custVehicleListDefaultValue}");
+
                 }
             }
 
@@ -124,6 +131,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: AppBar(
+                automaticallyImplyLeading: false,
                 flexibleSpace: appBarCustomUi(),
                 elevation: 0,
                 backgroundColor: CustColors.light_navy,
@@ -872,6 +880,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
       onTap: (){
         setState(() {
           custVehicleListDefaultValue = custVehicleList;
+          _addCarBloc.postUpdateDefaultVehicleApi(
+              authToken,custVehicleList?.id, userID);
         });
       },
       child: Container(
