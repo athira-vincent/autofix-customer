@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -37,6 +39,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   final CustomerProfileBloc _fetchProfileBloc = CustomerProfileBloc();
   final CustomerEditProfileBloc _changeProfileBloc = CustomerEditProfileBloc();
   final SignupBloc _signupBloc = SignupBloc();
+  final SigninBloc _signinBloc = SigninBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -210,6 +213,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
     _userType = value.data!.customerDetails!.customer![0].custType.toString();
     _orgName = value.data!.customerDetails!.customer![0].orgName.toString();
+
+    _signinBloc.userDefaultData(
+        authToken,
+        TextStrings.user_customer,
+        //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
+        value.data!.customerDetails!.firstName.toString(),
+        value.data!.customerDetails!.id.toString(),
+    );
 
     print(">>>>>>>>>>>>> _userType : " + _userType);
   }

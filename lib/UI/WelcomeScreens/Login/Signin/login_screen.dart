@@ -490,14 +490,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          if(value.message!.contains(TextStrings.error_txt_account_not_exist) ){
-            // String msg = value.message.split(":").last.toString();
-            SnackBarWidget().setMaterialSnackBar("Account doesn't exist",_scaffoldKey);
-          }
-          else{
-            SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
-          }
-          //SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
         });
       } else {
         setState(() {
@@ -539,6 +532,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
           socialLoginIsLoading = false;
+          //SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
