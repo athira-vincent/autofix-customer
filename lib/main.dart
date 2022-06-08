@@ -22,6 +22,7 @@ import 'UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
 
 import 'UI/Mechanic/mechanic_home_screen.dart';
+import 'UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -94,6 +95,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                // home: SplashScreen(),
                 home: Addpricefault(),
+                //home:EmergencyServiceListScreen(),
               );
             },
           );

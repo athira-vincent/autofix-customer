@@ -24,6 +24,7 @@ class _RegularServices extends State<RegularServices>{
    search="" ;
   int page=0,size=10;
       bool _isLoadingPage = false;
+  bool saveloading = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
   MechanicDetails? _mechanicDetails;
@@ -31,6 +32,7 @@ class _RegularServices extends State<RegularServices>{
   AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   @override
   void initState() {
     super.initState();
@@ -115,6 +117,7 @@ class _RegularServices extends State<RegularServices>{
       if(value.data == "error"){
         setState(() {
           _isLoadingPage = true;
+          saveloading=false;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.data.toString(),
@@ -127,9 +130,9 @@ class _RegularServices extends State<RegularServices>{
       }else{
         setState(() {
           _isLoadingPage = true;
+          saveloading = false;
           _updateTimeFees = value.data!.updateTimeFees;
           _selectionList=[];
-          print("ldjgjgj ${_mechanicDetails!.firstName}");
         });
       }
     });
@@ -336,6 +339,17 @@ class _RegularServices extends State<RegularServices>{
                                             child:
                                             TextFormField(
                                               //maxLength: 4,
+
+                                              // validator: (value){
+                                              //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
+                                              //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
+                                              //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
+                                              //   }
+                                              //   else {
+                                              //     return null;
+                                              //   }
+                                              // },
+
                                               keyboardType: TextInputType.number,
 
                                               decoration: InputDecoration(
@@ -407,11 +421,13 @@ class _RegularServices extends State<RegularServices>{
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 230.0,top: 24),
-                child: Container(
+                child: saveloading?CircularProgressIndicator():
+                Container(
                   height: 40,
                   width: 130,
                   child: TextButton(
                       onPressed: () async {
+                        saveloading = true;
                         SharedPreferences shdPre = await SharedPreferences.getInstance();
                         setState(() {
                           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
@@ -419,8 +435,18 @@ class _RegularServices extends State<RegularServices>{
                               _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                   authToken,
                                   mechanicId,
-                                  _timeList![i], _priceList![i], 1
+                                  _timeList![i], _priceList![i], 2
+                              // _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              //     authToken,
+                              //     page,
+                              //     size,
+                              //     search,
+                              //     mechanicId,
+                              //   2,
                               );
+                              setState(() {
+                                _autoValidate = AutovalidateMode.always;
+                              });
                             }
                           }
 

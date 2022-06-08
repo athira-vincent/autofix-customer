@@ -22,6 +22,7 @@ class _EmergencyServices extends State<EmergencyServices>{
   String authToken = "", mechanicId = "",
       search="" ;
   int page=0,size=10;
+  bool saveloading = false;
   bool _isLoadingPage = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
@@ -113,6 +114,7 @@ class _EmergencyServices extends State<EmergencyServices>{
     _addPriceFaultReviewBloc.UpdateAddPriceFaultMdlResponse.listen((value) {
       if(value.data == "error"){
         setState(() {
+          saveloading = false;
           _isLoadingPage = true;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -125,6 +127,7 @@ class _EmergencyServices extends State<EmergencyServices>{
         });
       }else{
         setState(() {
+          saveloading = true;
           _isLoadingPage = true;
           _updateTimeFees = value.data!.updateTimeFees;
           _selectionList=[];
@@ -301,12 +304,14 @@ class _EmergencyServices extends State<EmergencyServices>{
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
+                                          keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller,
                                           inputFormatters: [
+                                            LengthLimitingTextInputFormatter(4),
                                             FilteringTextInputFormatter.allow(
                                                 RegExp('[0-9 :]')),
                                           ],
@@ -340,6 +345,16 @@ class _EmergencyServices extends State<EmergencyServices>{
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
+                                          // validator: (value){
+                                          //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
+                                          //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
+                                          //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
+                                          //   }
+                                          //   else {
+                                          //     return null;
+                                          //   }
+                                          // },
+                                          keyboardType: TextInputType.number,
 
                                           decoration: InputDecoration(
                                               border: InputBorder.none
@@ -347,6 +362,7 @@ class _EmergencyServices extends State<EmergencyServices>{
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller01,
                                           inputFormatters: [
+                                            LengthLimitingTextInputFormatter(4),
                                             FilteringTextInputFormatter.allow(
                                                 RegExp('[0-9]')),
                                           ],
@@ -438,12 +454,13 @@ class _EmergencyServices extends State<EmergencyServices>{
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 230.0,top: 24),
-                child: Container(
+                child: saveloading?CircularProgressIndicator():
+                Container(
                   height: 40,
                   width: 130,
                   child: TextButton(
                     onPressed: () async {
-                      SharedPreferences shdPre = await SharedPreferences.getInstance();
+                      saveloading = true;                      SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
                         for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
                           if(_selectionList[i]){
