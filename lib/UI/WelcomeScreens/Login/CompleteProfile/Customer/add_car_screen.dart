@@ -657,14 +657,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget engineTypeTextSelection() {
     return  InkWell(
       onTap: (){
-        if(selectedmodel=='')
+       /* if(selectedmodel=='')
         {
           SnackBarWidget().setMaterialSnackBar( "Please select model first", _scaffoldKey);
         }
         else
         {
           _showDialogForEngineType1(engineList);
-        }
+        }*/
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -673,7 +673,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           children: [
             Text(
 
-              "Select Engine Type",
+              "Engine Type",
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -693,7 +693,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _engineTypeController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
-                suffixIconConstraints: BoxConstraints(
+               /* suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
                 ),
@@ -711,7 +711,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     onPressed: () {
                     },
                   ),
-                ),
+                ),*/
                 isDense: true,
                 hintText:
                 "Select your engine model",
@@ -749,14 +749,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget yearTypeTextSelection() {
     return  InkWell(
       onTap: (){
-        if(selectedmodel=='')
+       /* if(selectedmodel=='')
         {
           SnackBarWidget().setMaterialSnackBar( "Please select model first", _scaffoldKey);
         }
         else
         {
           _showDialogForYear1(yearTypeList);
-        }
+        }*/
 
       },
       child: Container(
@@ -765,8 +765,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
-              "Select Year",
+              "Year",
               style: Styles.textLabelTitle,
             ),
             TextFormField(
@@ -786,7 +785,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               controller: _yearController,
               cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
-                suffixIconConstraints: BoxConstraints(
+                /*suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
                   minHeight: 25,
                 ),
@@ -804,7 +803,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     onPressed: () {
                     },
                   ),
-                ),
+                ),*/
                 isDense: true,
                 hintText:
                 "Select your vehicle manufacture date",
@@ -1139,8 +1138,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                   authToken,
                                   _brandController.text.toString(),
                                   _modelController.text.toString(),
-                                  selectedengine,
-                                  selectedYearType ,
+                                  _engineTypeController.text.toString(),
+                                  _yearController.text.toString(),
                                   _plateNumberController.text,
                                   _lastMaintenanceController.text,
                                   _lowerValue.toString(),
@@ -1209,22 +1208,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     width: 90,
                     child: MaterialButton(
                       onPressed: () {
-                        print( authToken + "  " +
-                            selectedYearType! + "  " +
-                            'kl-34 A213' + "  " +
-                            selectedengine! +  "  " +
-                            _lastMaintenanceController.text + "  " +
-                                _plateNumberController.text + "  " +
-                            _lowerValue.toString() + "  " +
-                            selectedBrand! + "  " +
-                            selectedmodel! + " >>>>>>>>>>>> " +
-                            _brandController.text.toString() + "  " +
-                            _modelController.text + "  " +
-                            _engineTypeController.text + "  " +
-                            _yearController.text + "  " +
-                            _lastMaintenanceController.text + "  " +
-                                _plateNumberController.text + "  " +
-                            _lowerValue.toString() );
+                        print('${authToken   + _brandController.text.toString() + _modelController.text.toString()
+                            + selectedengine.toString() + selectedYearType.toString() +
+                            _plateNumberController.text +
+                            _lastMaintenanceController.text +
+                            _lowerValue.toString() +
+                            imageFirebaseUrl +
+                            latitude +
+                            longitude}' );
                         setState(() {
                           _isLoading = true;
                           _isAddMore = false;
@@ -1238,9 +1229,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               authToken,
                               _brandController.text.toString(),
                               _modelController.text.toString(),
-                              selectedengine,
-                              selectedYearType ,
-                              _plateNumberController.text,
+                              _engineTypeController.text.toString(),
+                                  _yearController.text.toString(),
+                                  _plateNumberController.text,
                               _lastMaintenanceController.text,
                               _lowerValue.toString(),
                               imageFirebaseUrl,
@@ -1531,6 +1522,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                                     selectedmodel=snapshot.data?.data!.modelDetails![index].id;
                                                     selectedModelName = snapshot.data?.data!.modelDetails![index].modelName;
                                                     _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                                    _engineTypeController.text = "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                                    _yearController.text = "${snapshot.data?.data!.modelDetails![index].years}";
 
                                                     final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
                                                     final splitNames= engineName.split(',');
