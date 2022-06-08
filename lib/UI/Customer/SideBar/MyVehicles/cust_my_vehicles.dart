@@ -93,7 +93,14 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
         setState(() {
 
-          custVehicleListDefaultValue = value.data?.custVehicleList?[0];
+          for(int i = 0; i<=int.parse('${value.data?.custVehicleList?.length}'); i++)
+            {
+              if(value.data?.custVehicleList?[i].defaultVehicle.toString() == "1")
+                {
+                  custVehicleListDefaultValue = value.data?.custVehicleList?[i];
+                }
+            }
+
           _brandController.text = '${custVehicleListDefaultValue?.brand.toString()}';
           _modelController.text = '${custVehicleListDefaultValue?.model.toString()}';
           _engineTypeController.text = '${custVehicleListDefaultValue?.engine.toString()}';
