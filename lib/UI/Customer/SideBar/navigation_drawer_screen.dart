@@ -65,16 +65,14 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
-
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       _userEmail = shdPre.getString(SharedPrefKeys.userEmail).toString();
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('authToken>>>>>>>>> ' + authToken.toString());
-
+      print('profileImageUrl>>>>>>>>> MechanicSideBarScreen' + profileImageUrl.toString());
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +179,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         )*/
         navigationBarHeader(size),
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4, top: 13),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -203,9 +201,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerOrderDetailsScreen()));
           },
-        ),
+        ),*/
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -227,7 +225,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerBookNowScreen()));
           },
-        ),
+        ),*/
 
         ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
@@ -611,7 +609,5 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
 
 
   }
-
-
 
 }

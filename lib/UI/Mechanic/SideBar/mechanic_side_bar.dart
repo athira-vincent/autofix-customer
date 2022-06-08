@@ -72,6 +72,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
 
       print('authToken>>>>>>>>> ' + authToken.toString());
+      print('profileImageUrl>>>>>>>>> MechanicSideBarScreen' + profileImageUrl.toString());
 
     });
   }
