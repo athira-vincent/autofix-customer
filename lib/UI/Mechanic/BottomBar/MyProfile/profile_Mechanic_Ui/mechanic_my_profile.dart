@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -89,13 +91,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
   TextEditingController _orgNameController = TextEditingController();
   FocusNode _orgNameFocusNode = FocusNode();
-
-
+  final SigninBloc _signinBloc = SigninBloc();
 
   bool editProfileEnabled = false;
 
   String authToken="";
-  String id="";
+  String id="", isOnline = "";
 
   @override
   void initState() {
@@ -113,6 +114,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       id = shdPre.getString(SharedPrefKeys.userID).toString();
+      isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
       print('userFamilyId'+authToken.toString());
       _isLoadingPage=true;
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
@@ -190,6 +192,13 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     print("fkjhkhkjhkhk $_imageUrl");
     _userType = value.data!.mechanicDetails!.mechanic![0].mechType.toString();
     print(">>>>>>>>>>>>> _userType : " + _userType);
+    _signinBloc.userDefault(
+        authToken,
+        TextStrings.user_mechanic,
+        //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
+        value.data!.mechanicDetails!.firstName.toString(),
+        value.data!.mechanicDetails!.id.toString(), isOnline
+    );
   }
 
 
@@ -556,7 +565,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           validator: InputValidator(
                               ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
                           controller: _nameController,
-                          cursorColor: CustColors.whiteBlueish,
+                          cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
                             hintText:  'Name',
@@ -640,7 +649,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           keyboardType: TextInputType.emailAddress,
                           validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
                           controller: _emailController,
-                          cursorColor: CustColors.whiteBlueish,
+                          cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
                             hintText:  'Email',
@@ -901,8 +910,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             {
                               showOrganisationTypeSelector();
                             }
-
-
                           },
                           child: Container(
                             height: 25,

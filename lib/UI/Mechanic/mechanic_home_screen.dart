@@ -61,6 +61,12 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     return value * perfont + value;
   }
 
+  @override
+  void didUpdateWidget(covariant MechanicHomeScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    getSharedPrefData();
+  }
 
   @override
   void initState() {
@@ -125,8 +131,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
-
-
 
   _listenApiResponse() {
     _mechanicHomeBloc.postMechanicOnlineOffline.listen((value) async {
