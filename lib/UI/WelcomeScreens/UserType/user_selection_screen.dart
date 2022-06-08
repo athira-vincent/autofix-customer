@@ -35,6 +35,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
     Size size = MediaQuery.of(context).size;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.from(colorScheme: const ColorScheme.light(),).copyWith(
         pageTransitionsTheme:  const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
