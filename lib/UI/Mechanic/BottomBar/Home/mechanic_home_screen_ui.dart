@@ -94,7 +94,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData MechanicHomeUIScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
@@ -102,6 +102,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       print('userFamilyId MechanicHomeUIScreen '+authToken.toString());
       print('userId  MechanicHomeUIScreen ' + mechanicId.toString());
       setFcmToken(authToken);
+      _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", mechanicId);
     });
@@ -194,7 +195,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       CurrentLatitude = position.latitude.toString();
       CurrentLongitude = position.longitude.toString();
     });
-    print(location);
+    print(location + "+++++++>>>>>>");
     GetAddressFromLatLong(position);
     print("_getCurrentMechanicLocation >>> CurrentLatitude " + CurrentLatitude + "CurrentLongitude >>" + CurrentLongitude);
     _mechanicHomeBloc.postMechanicLocationUpdateRequest(authToken,mechanicId, CurrentLatitude, CurrentLongitude);
@@ -240,7 +241,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
    setState(() {
-     displayAddress = '${place.locality},';//${place.name},
+     displayAddress = '${place.locality}';//${place.name},
    });
     print(" displayAddress >>>>>> " + displayAddress);
   }
