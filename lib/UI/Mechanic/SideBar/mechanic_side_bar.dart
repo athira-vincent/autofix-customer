@@ -10,6 +10,7 @@ import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart'
 import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -257,11 +258,11 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 18.76,
             ),
           ),
-          /* onTap: () {
+           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerEditProfileScreen()));
-          },*/
+                MaterialPageRoute(builder: (context) =>Addpricefault(position: 1,)));
+          },
         ),
 
         ListTile(

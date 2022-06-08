@@ -18,7 +18,9 @@ class EmergencyServices extends StatefulWidget{
   }
 
 }
-class _EmergencyServices extends State<EmergencyServices>{
+
+class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliveClientMixin{
+
   String authToken = "", mechanicId = "",
       search="" ;
   int page=0,size=10;
@@ -38,6 +40,7 @@ class _EmergencyServices extends State<EmergencyServices>{
     _listenApiResponse();
 
   }
+
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
@@ -64,6 +67,7 @@ class _EmergencyServices extends State<EmergencyServices>{
       //    mechanicId );
     });
   }
+
   _listenApiResponse(){
     _addPriceFaultReviewBloc.EnrgRegAddPriceMdlResponse.listen((value) {
       print("pieuiey 001 ${value.data}");
@@ -144,6 +148,7 @@ class _EmergencyServices extends State<EmergencyServices>{
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -251,17 +256,22 @@ class _EmergencyServices extends State<EmergencyServices>{
                                               width: 15,
                                               height: 15,
                                             ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(left:08.0),
-                                                child: Text(
-                                                  //_mechanicDetails!.mechanicService![index].service!.serviceName,
-                                                  _AddPriceServiceList!.data![index].serviceName.toString(),
-                                                  //'Towing service',
-                                                  style: TextStyle(
-                                                    fontFamily: 'SamsungSharpSans-Medium',
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),),
+                                              Container(
+                                                width:140,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left:08.0),
+                                                  child: Text(
+                                                    //_mechanicDetails!.mechanicService![index].service!.serviceName,
+                                                    _AddPriceServiceList!.data![index].serviceName.toString(),
+                                                    //'Towing service',
+                                                    softWrap: true,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'SamsungSharpSans-Medium',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),),
+                                                ),
                                               ),
                                           ]
                                           ),
@@ -411,7 +421,6 @@ class _EmergencyServices extends State<EmergencyServices>{
                               ],
                             ),
                           ),
-                          //),
                           Padding(
                             padding: const EdgeInsets.only(left: 15.0,right: 15.0),
                             child: Divider(height: 02),
@@ -499,5 +508,9 @@ class _EmergencyServices extends State<EmergencyServices>{
       //backgroundColor: const Color(0xff9f9f9),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }
