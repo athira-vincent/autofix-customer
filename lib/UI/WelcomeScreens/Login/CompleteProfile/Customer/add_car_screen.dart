@@ -107,16 +107,25 @@ class _AddCarScreenState extends State<AddCarScreen> {
   List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   List<String> yearList = [for(int i=2018; i<2022; i+=1) i.toString()];
 
+  List<String> brandList = [];
   String? selectedBrand = '' ;
+  String? selectedBrandName = '' ;
+
 
   List<String> modelList = [];
   String? selectedmodel = '' ;
+  String? selectedModelName = '' ;
+
 
   List<String> engineList = [];
   String? selectedengine = '' ;
+  String? selectedEngineName = '' ;
+
 
   List<String> yearTypeList = [];
   String? selectedYearType = '' ;
+  String? selectedYearName = '' ;
+
 
   String location ='Null, Press Button';
   String Address = 'search';
@@ -199,6 +208,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
         });
 
       } else {
+
+        for(int i = 0; i<value.data!.modelDetails!.length;i++)
+          {
+            if(brandList.contains("${value?.data!.modelDetails![i].brandName}") == false)
+            {
+              brandList.add("${value?.data!.modelDetails![i].brandName}");
+            }
+          }
 
 
       }
@@ -539,7 +556,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           }
         else
           {
-            _showDialogForModel();
+            _showDialogForModel1();
 
           }
 
@@ -646,7 +663,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         }
         else
         {
-          _showDialogForEngineType(engineList);
+          _showDialogForEngineType1(engineList);
         }
       },
       child: Container(
@@ -738,7 +755,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
         }
         else
         {
-          _showDialogForYear(yearTypeList);
+          _showDialogForYear1(yearTypeList);
         }
 
       },
@@ -1386,30 +1403,23 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
-                                        itemCount: snapshot.data?.data?.modelDetails?.length,
+                                        itemCount: brandList?.length,
                                         itemBuilder: (context, index) {
-                                          return  ListTile(
-                                            title: Text("${snapshot.data?.data!.modelDetails![index].brandName}",
-                                                style: TextStyle(
-                                                    fontFamily: 'Corbel_Regular',
-                                                    fontWeight: FontWeight.normal,
-                                                    fontSize: 15,
-                                                    color: Colors.black)),
+                                          print('brandList>>>>>>>>>> $brandList');
+                                          return  InkWell(
                                             onTap: () async {
                                               Navigator.pop(context);
 
                                               setState(() {
                                                 selectedmodel='';
-                                                  modelList = [];
+                                                modelList = [];
                                                 _modelController.text ='';
-                                                engineList=[];
-                                                _engineTypeController.text='';
-                                                yearTypeList=[];
-                                                _yearController.text='';
-
+                                                engineList=[];_engineTypeController.text='';
+                                                yearTypeList=[];_yearController.text='';
                                                 selectedBrand=snapshot.data?.data!.modelDetails![index].id;
-                                                _brandController.text = "${snapshot.data?.data!.modelDetails![index].brandName}";
+                                                selectedBrandName = "${brandList[index]}";
 
+                                                _brandController.text = "${brandList[index]}";
                                                 final modelName= "${snapshot.data?.data!.modelDetails![index].modelName}";
                                                 final splitNames= modelName.split(',');
                                                 for (int i = 0; i < splitNames.length; i++){
@@ -1422,7 +1432,50 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                               });
 
                                             },
+                                            child: Container(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(13),
+                                                    child: Text("${brandList[index]}",
+                                                        style: TextStyle(
+                                                            fontFamily: 'Corbel_Regular',
+                                                            fontWeight: FontWeight.normal,
+                                                            fontSize: 15,
+                                                            color: Colors.black)),
+                                                  ),
+                                                ),
                                           );
+
+                                           /* ListTile(
+                                            title: Text("${snapshot.data?.data!.modelDetails![index].brandName}",
+                                                style: TextStyle(
+                                                    fontFamily: 'Corbel_Regular',
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 15,
+                                                    color: Colors.black)),
+                                            onTap: () async {
+                                              Navigator.pop(context);
+
+                                              setState(() {
+                                                selectedmodel='';
+                                                modelList = [];
+                                                _modelController.text ='';
+                                                engineList=[];_engineTypeController.text='';
+                                                yearTypeList=[];_yearController.text='';
+                                                selectedBrand=snapshot.data?.data!.modelDetails![index].id;
+                                                _brandController.text = "${snapshot.data?.data!.modelDetails![index].brandName}";
+                                                final modelName= "${snapshot.data?.data!.modelDetails![index].modelName}";
+                                                final splitNames= modelName.split(',');
+                                                for (int i = 0; i < splitNames.length; i++){
+                                                  modelList.add(splitNames[i]);
+                                                }
+
+                                                if (_formKey.currentState!.validate()) {
+                                                } else {
+                                                }
+                                              });
+
+                                            },
+                                          );*/
                                         },
                                       )
                                   : Container();
@@ -1432,6 +1485,230 @@ class _AddCarScreenState extends State<AddCarScreen> {
               ),);
         });
   }
+
+  _showDialogForModel1() async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:
+
+                Container(
+                  child: StreamBuilder(
+                      stream:  _addCarBloc.ModelDetailResponse,
+                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
+                        print("${snapshot.hasData}");
+                        print("${snapshot.connectionState}");
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+                          default:
+                            return
+                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
+                                  ? ListView.builder(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data?.data?.modelDetails?.length,
+                                      itemBuilder: (context, index) {
+
+
+                                        return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
+                                            ?  InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    engineList=[];
+                                                    _engineTypeController.text='';
+                                                    yearTypeList=[];
+                                                    _yearController.text='';
+
+                                                    selectedmodel=snapshot.data?.data!.modelDetails![index].id;
+                                                    selectedModelName = snapshot.data?.data!.modelDetails![index].modelName;
+                                                    _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
+
+                                                    final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                                    final splitNames= engineName.split(',');
+                                                    for (int i = 0; i < splitNames.length; i++){
+                                                      engineList.add(splitNames[i]);
+                                                    }
+
+                                                    final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
+                                                    final splityearsNames= yearsNames.split(',');
+                                                    for (int i = 0; i < splityearsNames.length; i++){
+                                                      yearTypeList.add(splityearsNames[i]);
+                                                    }
+                                                    if (_formKey.currentState!.validate()) {
+                                                    } else {
+                                                    }
+                                                  });
+
+                                                },
+                                              child: Container(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(13),
+                                                      child: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
+                                                          style: TextStyle(
+                                                              fontFamily: 'Corbel_Regular',
+                                                              fontWeight: FontWeight.normal,
+                                                              fontSize: 15,
+                                                              color: Colors.black)),
+                                                    ),
+                                                  ),
+                                            )
+                                            :  Container();
+                                      },
+                                    )
+                                  : Container();
+                        }
+                      }),
+                )
+            ),);
+        });
+  }
+
+  _showDialogForEngineType1(List<String> engineList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:
+
+                Container(
+                  child: StreamBuilder(
+                      stream:  _addCarBloc.ModelDetailResponse,
+                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
+                        print("${snapshot.hasData}");
+                        print("${snapshot.connectionState}");
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+                          default:
+                            return
+                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
+                                  ? ListView.builder(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data?.data?.modelDetails?.length,
+                                      itemBuilder: (context, index) {
+
+
+                                        return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
+                                            ?  InkWell(
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                setState(() {
+                                                  selectedengine=engineList[index];
+                                                  selectedEngineName = "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                                  _engineTypeController.text = "${snapshot.data?.data!.modelDetails![index].engineName}";
+                                                  if (_formKey.currentState!.validate()) {
+                                                  } else {
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(13),
+                                                  child: Text("${snapshot.data?.data!.modelDetails![index].engineName}",
+                                                      style: TextStyle(
+                                                          fontFamily: 'Corbel_Regular',
+                                                          fontWeight: FontWeight.normal,
+                                                          fontSize: 15,
+                                                          color: Colors.black)),
+                                                ),
+                                          ),
+                                        )
+                                      :  Container();
+                                },
+                              )
+                                  : Container();
+                        }
+                      }),
+                )
+            ),);
+        });
+  }
+
+  _showDialogForYear1(List<String> yearTypeList) async {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return Container(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:
+
+                Container(
+                  child: StreamBuilder(
+                      stream:  _addCarBloc.ModelDetailResponse,
+                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
+                        print("${snapshot.hasData}");
+                        print("${snapshot.connectionState}");
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+                          default:
+                            return
+                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
+                                  ? ListView.builder(
+                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: snapshot.data?.data?.modelDetails?.length,
+                                        itemBuilder: (context, index) {
+
+
+                                          return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
+                                              ?  InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    selectedYearType=yearTypeList[index];
+                                                    selectedYearName = "${snapshot.data?.data!.modelDetails![index].years}";
+                                                    _yearController.text = "${snapshot.data?.data!.modelDetails![index].years}";
+                                                    if (_formKey.currentState!.validate()) {
+                                                    } else {
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(13),
+                                                    child: Text("${snapshot.data?.data!.modelDetails![index].years}",
+                                                        style: TextStyle(
+                                                            fontFamily: 'Corbel_Regular',
+                                                            fontWeight: FontWeight.normal,
+                                                            fontSize: 15,
+                                                            color: Colors.black)),
+                                                  ),
+                                                ),
+                                          )
+                                      :  Container();
+                                },
+                              )
+                                  : Container();
+                        }
+                      }),
+                )
+            ),);
+        });
+  }
+
+
 
 
   _showDialogForModel() async {
