@@ -68,24 +68,23 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
 
-              appBarCustomUi(size),
-              tabTitleBarCustomUi(size),
-              tabBodyCustomUi(size),
-
+                appBarCustomUi(size),
+                tabTitleBarCustomUi(size),
+                tabBodyCustomUi(size),
 
 
-            ],
+
+              ],
+            ),
           ),
         ),
-      ),
     );
   }
 

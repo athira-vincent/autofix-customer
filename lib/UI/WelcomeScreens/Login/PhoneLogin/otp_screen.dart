@@ -356,7 +356,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                               context,
                                                               new MaterialPageRoute(
                                                                   builder: (context) =>
-                                                                      AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,)),
+                                                                      AddCarScreen(userCategory:widget.userCategory ,userType: widget.userType,fromPage: "1",)),
                                                             );
                                                           }
                                                           else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)

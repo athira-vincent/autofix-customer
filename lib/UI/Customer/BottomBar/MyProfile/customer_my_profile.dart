@@ -137,11 +137,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData CustomerMyProfileScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
+      print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
     });
     String id=shdPre.getString(SharedPrefKeys.userID,).toString();
     _fetchProfileBloc.postCustomerProfileRequest(authToken,id);
@@ -216,13 +216,12 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _signinBloc.userDefaultData(
         authToken,
         TextStrings.user_customer,
-        _imageUrl,           //----- profile image url should b updated
-        //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
         value.data!.customerDetails!.firstName.toString(),
         value.data!.customerDetails!.id.toString(),
+        _imageUrl, //----- profile image url should b updated
     );
 
-    print(">>>>>>>>>>>>> _userType : " + _userType);
+    print(">>>>>>>>>>>>> _userType : CustomerMyProfileScreen" + _userType);
   }
 
   @override

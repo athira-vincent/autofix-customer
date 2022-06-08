@@ -1,6 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/HelpAndSupport/help_and_support.dart';
+import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
+import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobAppointments/my_job_appointments.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -68,6 +72,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
 
       print('authToken>>>>>>>>> ' + authToken.toString());
+      print('profileImageUrl>>>>>>>>> MechanicSideBarScreen' + profileImageUrl.toString());
 
     });
   }

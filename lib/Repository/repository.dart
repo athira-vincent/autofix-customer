@@ -85,6 +85,12 @@ class Repository {
         plateNo, lastMaintenance, milege,
         vehiclePic, latitude, longitude,);
 
+  //Update Default Vehicle
+  Future<dynamic> postUpdateDefaultVehicle(
+      token,vehicleId, customerId)  =>
+      _addCarApiProvider.postUpdateDefaultVehicle(
+          token,vehicleId, customerId) ;
+
   //Otp Verification
   Future<dynamic> postOtpVerificationRequest(
       token,

@@ -1,8 +1,11 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +27,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
 
-  String authToken = "";
+  String authToken = "",userID="";
   bool _isLoadingPage = false;
   bool _isLoadingButton = false;
 
@@ -56,6 +59,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
 
+  final AddCarBloc _addCarBloc = AddCarBloc();
+
+
 
   @override
   void initState() {
@@ -68,12 +74,13 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData CustomerMyVehicleScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      print('userFamilyId'+authToken.toString());
-
+      userID = shdPre.getString(SharedPrefKeys.userID).toString();
+      print('userFamilyId CustomerMyVehicleScreen'+authToken.toString());
+      print('userID CustomerMyVehicleScreen'+userID.toString());
       _homeCustomerBloc.postCustVehicleListRequest(authToken);
 
     });
@@ -91,7 +98,16 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
         setState(() {
 
-          custVehicleListDefaultValue = value.data?.custVehicleList?[0];
+          for(int i = 0; i<int.parse('${value.data?.custVehicleList?.length}'); i++)
+            {
+              if(value.data?.custVehicleList?[i].defaultVehicle.toString() == "1")
+                {
+                  custVehicleListDefaultValue = value.data?.custVehicleList?[i];
+                  print("sucess postServiceList >>>>>>>  ${custVehicleListDefaultValue}");
+
+                }
+            }
+
           _brandController.text = '${custVehicleListDefaultValue?.brand.toString()}';
           _modelController.text = '${custVehicleListDefaultValue?.model.toString()}';
           _engineTypeController.text = '${custVehicleListDefaultValue?.engine.toString()}';
@@ -110,13 +126,12 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
+    return SafeArea(
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: AppBar(
+                automaticallyImplyLeading: false,
                 flexibleSpace: appBarCustomUi(),
                 elevation: 0,
                 backgroundColor: CustColors.light_navy,
@@ -195,9 +210,27 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 )
             ),
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.all(5),
+            child: FloatingActionButton(
+              // isExtended: true,
+              child: Icon(Icons.add),
+              backgroundColor: CustColors.materialBlue,
+              onPressed: () {
+                setState(() {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => AddCarScreen(userCategory:"1" ,userType: TextStrings.user_customer,fromPage: "2",))
+                  ).then((value) {
+                    getSharedPrefData();
+                  });
+                });
+              },
+            ),
+          ),
         ),
-      ),
-    );
+
+      );
   }
 
 
@@ -518,6 +551,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               ),
             )
         ),
+        SizedBox(height: 50,)
       ],
     );
   }
@@ -846,6 +880,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
       onTap: (){
         setState(() {
           custVehicleListDefaultValue = custVehicleList;
+          _addCarBloc.postUpdateDefaultVehicleApi(
+              authToken,custVehicleList?.id, userID);
         });
       },
       child: Container(

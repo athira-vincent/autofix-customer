@@ -296,6 +296,20 @@ class QueryProvider {
               enableDebug: true,token: token, isTokenThere: true, variables: {});
         }
 
+  postUpdateDefaultVehicle(
+      token,vehicleId, customerId) async {
+    String _query = """ 
+        mutation {
+          updateDefaultVehicle(vehicleId: ${int.parse(vehicleId.toString())}, customerId: ${int.parse(customerId.toString())}) {
+            message
+          }
+        }
+          """;
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true,token: token, isTokenThere: true, variables: {});
+  }
+
   postMakeBrandRequest(
       token,) async {
     String _query = """ 
