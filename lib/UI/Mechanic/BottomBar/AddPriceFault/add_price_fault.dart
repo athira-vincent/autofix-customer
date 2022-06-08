@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'regularServices.dart';
 import 'emergencyServices.dart';
+
 class Addpricefault extends StatefulWidget{
   final int position;
   Addpricefault({required this.position});
@@ -11,7 +12,8 @@ class Addpricefault extends StatefulWidget{
   }
 
 }
-class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
+
+class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin ,AutomaticKeepAliveClientMixin{
   int? position;
  // _addpricefault(this.position);
   var regularServives01 = true;
@@ -46,7 +48,7 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back),
+        /*leading: Icon(Icons.arrow_back),*/
         backgroundColor: const Color(0xff173a8d),
         toolbarHeight: 80,
         elevation: 0,
@@ -100,7 +102,9 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
                       textAlign: TextAlign.start,))
               ],),
               Flexible(
-                child: TabBarView(children:
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children:
                 [
                   RegularServices(),
                   EmergencyServices()
@@ -187,6 +191,7 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
       // ),
     );
   }
+
   _onPageViewChange(int page) async{
     setState(() {
       if (page == 0) {
@@ -198,5 +203,9 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin{
       }
     });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }

@@ -306,28 +306,29 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               preferredSize: Size.fromHeight(0),
               child: Container()
           ),
-      body: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            child: _index == 0
-                ? HomeCustomerUIScreen()
-                : _index == 1 ? SparePartsListScreen()
-                : _index == 2 ? CustomerMyServicesScreen()
-                : CustomerMyProfileScreen(),
-          ),
-        ],
+      body:
+
+      Center(
+          child:  IndexedStack(
+            index: _index,
+            children: <Widget> [
+              HomeCustomerUIScreen(),
+              SparePartsListScreen(),
+               CustomerMyServicesScreen(),
+               CustomerMyProfileScreen(),
+            ],
+          )
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-
+          color: Colors.red,
           boxShadow: [
             BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
           ],
         ),
         child: ClipRRect(
           child: SizedBox(
-            height: size.height * 0.092,
+            height: size.height * 0.098,
             child: BottomNavigationBar(
               selectedLabelStyle: TextStyle(
                   fontFamily: 'Corbel_Light',

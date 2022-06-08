@@ -436,7 +436,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
               "Work Selection",
               style: Styles.textLabelTitle,
             ),
@@ -455,7 +454,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   ch :
                   'Work Selection').nameChecking,
               controller: _workSelectionController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 isDense: true,
                 suffixIcon: Align(
@@ -507,7 +506,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
               "Choose vehicle specialised",
               style: Styles.textLabelTitle,
             ),
@@ -525,11 +523,15 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               validator: InputValidator(
                   ch :'vehicle specialised').nameCheckingWithNumericAndBracket,
               controller: _chooseVechicleSpecializedController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
                 isDense: true,
-                hintText:
-                "Select your company specialised vehicles",
+                hintText: "Select your specialised vehicles",
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -626,7 +628,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
               "Upload certificate of apprentice ",
               style: Styles.textLabelTitle,
             ),
@@ -644,8 +645,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               validator: InputValidator(
                   ch :'Upload certificate of apprentice ').emptyChecking,
               controller: _apprenticeCertificateController,
-              cursorColor: CustColors.whiteBlueish,
-
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 isDense: true,
                 suffixIcon: Align(
@@ -710,7 +710,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             validator: InputValidator(
                 ch :'Address').nameCheckingWithNumeric,
             controller: _addressController,
-            cursorColor: CustColors.whiteBlueish,
+            cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:
@@ -756,7 +756,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
               "Means of identification ",
               style: Styles.textLabelTitle,
             ),
@@ -774,7 +773,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
               validator: InputValidator(
                   ch :'Means of identification' ).emptyChecking,
               controller: _identificationProofController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 isDense: true,
                 suffixIcon: Align(
@@ -827,7 +826,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-
               "Number of mechanics",
               style: Styles.textLabelTitle,
             ),
@@ -846,7 +844,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   ch :
                   'Mechanic strength').nameCheckingWithNumeric,
               controller: _noOfMechanicsController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 isDense: true,
                 suffixIcon: Align(
@@ -911,7 +909,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             validator: InputValidator(
                 ch : 'RC number').nameCheckingWithNumeric,
             controller: _rcNumberController,
-            cursorColor: CustColors.whiteBlueish,
+            cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:
@@ -970,7 +968,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             validator: InputValidator(
                 ch : 'Year of existence' ).nameCheckingWithNumeric,
             controller: _yearOfExistenceController,
-            cursorColor: CustColors.whiteBlueish,
+            cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:

@@ -101,9 +101,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
   int? selectedyearIndex = 0 ;
   int? selectedmonthIndex = 0 ;
   String? selectedMonthText= 'Jan' ;
-  String? selectedYearText= '1900';
+  String? selectedYearText= '2018';
   List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  List<String> yearList = [for(int i=1900; i<2050; i+=1) i.toString()];
+  List<String> yearList = [for(int i=2018; i<2022; i+=1) i.toString()];
 
   String? selectedBrand = '' ;
 
@@ -309,9 +309,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
-
-
-
   Widget completeYourProfileText() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
@@ -467,7 +464,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
               validator: InputValidator(
                   ch : 'Brand name' ).nameCheckingWithNumeric,
               controller: _brandController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
@@ -575,7 +572,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ch :
                   'Model name'  ).nameCheckingWithNumeric,
               controller: _modelController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
@@ -667,7 +664,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ch :
                   'Engine Type' ).nameCheckingWithNumericAndBracket,
               controller: _engineTypeController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
@@ -760,7 +757,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ch :
                   'Year' ).nameCheckingWithNumeric,
               controller: _yearController,
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 suffixIconConstraints: BoxConstraints(
                   minWidth: 25,
@@ -846,7 +843,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 }
               });
             },
-            cursorColor: CustColors.whiteBlueish,
+            cursorColor: CustColors.light_navy,
             decoration: InputDecoration(
               isDense: true,
               hintText:
@@ -929,11 +926,29 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   }
                 });
               },
-              cursorColor: CustColors.whiteBlueish,
+              cursorColor: CustColors.light_navy,
               decoration: InputDecoration(
                 isDense: true,
-                hintText:
-                "Select your last service date",
+                hintText: "Select your last service date ",
+                suffixIconConstraints: BoxConstraints(
+                  minWidth: 25,
+                  minHeight: 25,
+                ),
+                suffixIcon: Container(
+                  width: 5,
+                  height: 10,
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                    iconSize: 22,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                    },
+                  ),
+                ),
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -1353,7 +1368,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
-                            return CircularProgressIndicator();
+                            return Center(child: CircularProgressIndicator());
                           default:
                             return
                               snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
@@ -1428,7 +1443,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       print("${snapshot.connectionState}");
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator();
+                          return Center(child: CircularProgressIndicator());
                         default:
                           return
                             snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null

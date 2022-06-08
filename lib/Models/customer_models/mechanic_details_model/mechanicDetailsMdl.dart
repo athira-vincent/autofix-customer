@@ -96,7 +96,7 @@ class MechanicDetails {
   String duration;
   int reviewCount;
   List<MechanicReviewsDatum>? mechanicReviewsData;
-  int mechanicReview;
+  var mechanicReview;
 
   factory MechanicDetails.fromJson(Map<String, dynamic> json) => MechanicDetails(
     id: json["id"] == null ? null : json["id"],

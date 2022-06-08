@@ -36,7 +36,8 @@ class SigninBloc {
     postPhoneLogin.sink.add(_phoneResp);
   }
 
-  void userDefault(String token,String userType, String userName, String userId, String isOnline) async {
+  void userDefault(String token,String userType, String imageUrl,
+      String userName, String userId, String isOnline) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
     shdPre.setBool(SharedPrefKeys.isUserLoggedIn, true);
@@ -44,16 +45,18 @@ class SigninBloc {
     shdPre.setString(SharedPrefKeys.userName, userName);
     shdPre.setString(SharedPrefKeys.userID, userId);
     shdPre.setString(SharedPrefKeys.mechanicIsOnline,isOnline);
+    shdPre.setString(SharedPrefKeys.profileImageUrl,imageUrl);
     GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }
 
-  void userDefaultData(String token,String userType, String userName, String userId, ) async {
+  void userDefaultData(String token,String userType, String userName, String userId,String imageUrl, ) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
     shdPre.setString(SharedPrefKeys.userType, userType);
     shdPre.setString(SharedPrefKeys.userName, userName);
     shdPre.setString(SharedPrefKeys.userID, userId);
+    shdPre.setString(SharedPrefKeys.profileImageUrl,imageUrl);
     GqlClient.I.config(token: shdPre.getString(SharedPrefKeys.token).toString());
     print("token===================================${shdPre.getString(SharedPrefKeys.token)}");
   }

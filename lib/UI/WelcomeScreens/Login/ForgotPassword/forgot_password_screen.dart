@@ -70,7 +70,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         setState(() {
           _isLoading = false;
           SnackBarWidget().setMaterialSnackBar( "${value.message.toString().split(":").last}", scaffoldKey);
-
         });
       } else {
         setState(() {
@@ -207,7 +206,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                                 keyboardType: TextInputType.text,
                                                 validator: InputValidator(ch: "Email ").emailValidator,
                                                 controller: _emailController,
-                                                cursorColor: CustColors.whiteBlueish,
+                                                cursorColor: CustColors.materialBlue,
                                                 decoration: InputDecoration(
                                                   isDense: true,
                                                   hintText: 'Your email id',

@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
@@ -37,6 +39,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   final CustomerProfileBloc _fetchProfileBloc = CustomerProfileBloc();
   final CustomerEditProfileBloc _changeProfileBloc = CustomerEditProfileBloc();
   final SignupBloc _signupBloc = SignupBloc();
+  final SigninBloc _signinBloc = SigninBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -127,7 +130,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSharedPrefData();
     _listenFetchProfileResponse();
@@ -211,6 +213,15 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _userType = value.data!.customerDetails!.customer![0].custType.toString();
     _orgName = value.data!.customerDetails!.customer![0].orgName.toString();
 
+    _signinBloc.userDefaultData(
+        authToken,
+        TextStrings.user_customer,
+        _imageUrl,           //----- profile image url should b updated
+        //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
+        value.data!.customerDetails!.firstName.toString(),
+        value.data!.customerDetails!.id.toString(),
+    );
+
     print(">>>>>>>>>>>>> _userType : " + _userType);
   }
 
@@ -224,61 +235,61 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return  Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                profileImageAndKmAndReviewCount(size),
-                Form(
-                    autovalidateMode: _autoValidate,
-                    key: _formKey,
-                    child:
-                      _userType == "1"
-                          ?
-                          Column(
-                            children: [
-                              NameTextUi(size),
-                              EmailTextUi(size),
-                              PhoneTextUi(size),
-                              StateTextUi(size),
-                              editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
-                            ],
-                          )
-                          :
-                        _userType == "2"
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  appBarCustomUi(size),
+                  profileImageAndKmAndReviewCount(size),
+                  Form(
+                      autovalidateMode: _autoValidate,
+                      key: _formKey,
+                      child:
+                        _userType == "1"
                             ?
+                            Column(
+                              children: [
+                                NameTextUi(size),
+                                EmailTextUi(size),
+                                PhoneTextUi(size),
+                                StateTextUi(size),
+                                editProfileEnabled == true ? individualSaveChangeButton(size) : Container(),
+                              ],
+                            )
+                            :
+                          _userType == "2"
+                              ?
+                            Column(
+                              children: [
+                                NameTextUi(size),
+                                OrganisationTypeTextUi(size),     // --------------------- Industry
+                                EmailTextUi(size),
+                                PhoneTextUi(size),
+                                StateTextUi(size),
+                                editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
+                              ],
+                            )
+                              :
                           Column(
                             children: [
+                              StateTextUi(size),
+                              //ministryTextUi(size),
                               NameTextUi(size),
-                              OrganisationTypeTextUi(size),     // --------------------- Industry
                               EmailTextUi(size),
                               PhoneTextUi(size),
-                              StateTextUi(size),
-                              editProfileEnabled == true ? corporateSaveChangeButton(size) : Container(),
+                              editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
                             ],
-                          )
-                            :
-                        Column(
-                          children: [
-                            StateTextUi(size),
-                            //ministryTextUi(size),
-                            NameTextUi(size),
-                            EmailTextUi(size),
-                            PhoneTextUi(size),
-                            editProfileEnabled == true ? governmentSaveChangeButton(size) : Container(),
-                          ],
-                        ),
-                ),
-              ],
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
+
     );
   }
 
@@ -286,7 +297,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     return Container(
       margin: EdgeInsets.only(
         left: size.width * 10 / 100,
-        //top: size.height * 3.3 / 100
+        top: size.height * 3.3 / 100
       ),
       child: Stack(
         children: [
@@ -326,7 +337,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,65,155,0),
+                        padding: const EdgeInsets.fromLTRB(0,80,155,0),
                         child:
                         InkWell(
                           onTap: (){
@@ -393,29 +404,32 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     child: Stack(
                       children: [
                         Center(
-                          child: Container(
-                            width: 125.0,
-                            height: 125.0,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child:Container(
-                                    child:CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: Colors.white,
-                                        child: ClipOval(
-                                          child: _imageUrl != null&&_imageUrl!=""
-                                              ?
-                                          Image.network(_imageUrl,
-                                            width: 150,
-                                            height: 150,
-                                            fit: BoxFit.cover,)
-                                              :
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Container(
+                              width: 125.0,
+                              height: 125.0,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child:Container(
+                                      child:CircleAvatar(
+                                          radius: 50,
+                                          backgroundColor: Colors.white,
+                                          child: ClipOval(
+                                            child: _imageUrl != null&&_imageUrl!=""
+                                                ?
+                                            Image.network(_imageUrl,
+                                              width: 150,
+                                              height: 150,
+                                              fit: BoxFit.cover,)
+                                                :
                                             SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
                                               width: 150,
                                               height: 150,
                                               fit: BoxFit.cover,)
-                                        )))
+                                          )))
 
+                              ),
                             ),
                           ),
                         ),
@@ -446,7 +460,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     alignment: Alignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(155,65,0,0),
+                        padding: const EdgeInsets.fromLTRB(155,80,0,0),
                         child: InkWell(
                           onTap: () {
                             showDialog(
@@ -572,7 +586,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   ),
                 ),
               ),
-              Spacer(),
+              //Spacer(),
               editProfileEnabled == true
                   ? Container(
                   child: Padding(
@@ -615,13 +629,14 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  padding: const EdgeInsets.fromLTRB(10,0,00,0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
                         child: TextFormField(
+
                           //enabled: editProfileEnabled,
                           enabled: false,
                           readOnly: !editProfileEnabled,
@@ -665,15 +680,15 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   ),
                 ),
               ),
-              Spacer(),
-              editProfileEnabled == true
-                  ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                    )
-              )
-                  : Container(),
+              //Spacer(),
+              // editProfileEnabled == true
+              //     ? Container(
+              //       // child: Padding(
+              //       //   padding: const EdgeInsets.all(15),
+              //       //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+              //       // )
+              // )
+              //     : Container(),
             ],
           ),
           Padding(
@@ -760,10 +775,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               Spacer(),
               editProfileEnabled == true
                   ? Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-                  )
+                  // child: Padding(
+                  //   padding: const EdgeInsets.all(15),
+                  //   child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  // )
               )
                   : Container(),
             ],
@@ -1042,7 +1057,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     ),
                   ),
                 ),
-                Spacer(),
+                //Spacer(),
                 editProfileEnabled == true
                     ? Container(
                     child: Padding(

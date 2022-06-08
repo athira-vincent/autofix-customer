@@ -132,23 +132,46 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
 
 
-    _firestore
+    if(currentUpdatedTime == "0")
+      {
+        _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-            'isWorkStarted': "$isWorkStarted",
-            'isWorkCompleted': "$isWorkCompleted",
-            "extendedTime": "$time",
-            "currentUpdatedTime": "$currentUpdatedTime",
-            "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-           // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
-            "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-            "mechanicFromPage" : "MechanicWorkCompletedScreen",
+          'isWorkStarted': "$isWorkStarted",
+          'isWorkCompleted': "$isWorkCompleted",
+          "extendedTime": "$time",
+          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
+          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+          "mechanicFromPage" : "MechanicWorkCompletedScreen",
           //===================== code for send the list of additional services =========
         })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
+            .then((value) => print("Location Added"))
+            .catchError((error) =>
+            print("Failed to add Location: $error"));
+      }
+    else
+      {
+        _firestore
+            .collection("ResolMech")
+            .doc('${bookingId}')
+            .update({
+          'isWorkStarted': "$isWorkStarted",
+          'isWorkCompleted': "$isWorkCompleted",
+          "extendedTime": "$time",
+          "timerCounter": "$currentUpdatedTime",
+          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
+          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
+          "mechanicFromPage" : "MechanicWorkCompletedScreen",
+          //===================== code for send the list of additional services =========
+        })
+            .then((value) => print("Location Added"))
+            .catchError((error) =>
+            print("Failed to add Location: $error"));
+      }
+
   }
 
 
@@ -598,7 +621,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   Widget setupAlertDialogAddExtraTime(Size size ) {
     return Container(
-      height: 280.0, // Change as per your requirement
+      height: 300.0, // Change as per your requirement
       child: Column(
         children: [
           Container(
@@ -771,7 +794,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                         isEnableAddMoreBtn = false;
                         _controller.forward();
                          _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
-                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"$levelClock");
+                         updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
                         _addMoreTimeBloc.postMechanicSetAddTimeRequest(authToken, extendedTimeVal.toString() + ":00", bookingId);
                       });
                       Navigator.of(context).pop();

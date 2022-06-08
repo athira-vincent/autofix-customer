@@ -29,7 +29,7 @@ class AddPriceFaultReviewBloc{
     UpdateAddPriceFaultMdl _UpdateAddPriceFaultMdl = await repository.postUpdateAddPriceFaultReviewRequest(token,mechanicId,time,fee,serviceId);
     postUpdateAddPriceFaultReview.sink.add(_UpdateAddPriceFaultMdl);
   }
-  final postEnrgRegAddPriceReview = BehaviorSubject<EnrgRegAddPriceMdl>();
+  final postEnrgRegAddPriceReview = PublishSubject<EnrgRegAddPriceMdl>();
   Stream<EnrgRegAddPriceMdl> get EnrgRegAddPriceMdlResponse => postEnrgRegAddPriceReview.stream;
   postEnrgRegAddPriceReviewRequest(
       token,page,size,search,userId,catType)async {
