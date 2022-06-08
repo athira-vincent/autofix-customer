@@ -24,6 +24,7 @@ class _RegularServices extends State<RegularServices>{
    search="" ;
   int page=0,size=10;
       bool _isLoadingPage = false;
+  bool saveloading = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
   MechanicDetails? _mechanicDetails;
@@ -31,6 +32,7 @@ class _RegularServices extends State<RegularServices>{
   AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   @override
   void initState() {
     super.initState();
@@ -115,6 +117,7 @@ class _RegularServices extends State<RegularServices>{
       if(value.data == "error"){
         setState(() {
           _isLoadingPage = true;
+          saveloading=false;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.data.toString(),
@@ -127,9 +130,9 @@ class _RegularServices extends State<RegularServices>{
       }else{
         setState(() {
           _isLoadingPage = true;
+          saveloading = false;
           _updateTimeFees = value.data!.updateTimeFees;
           _selectionList=[];
-          print("ldjgjgj ${_mechanicDetails!.firstName}");
         });
       }
     });
@@ -155,6 +158,15 @@ class _RegularServices extends State<RegularServices>{
                     borderRadius: BorderRadius.circular(10)
                   ),
                   child: TextField(
+                    onChanged: (value){
+                      _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                          authToken,
+                          page,
+                          size,
+                          value,
+                          mechanicId,
+                          2);
+                    },
                     decoration:
                     InputDecoration(
                       // border: OutlineInputBorder(
@@ -176,6 +188,7 @@ class _RegularServices extends State<RegularServices>{
               _AddPriceServiceList!.data!.length != 0 ||  _AddPriceServiceList!.data!.length != null
               ? Container(
                 child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: _AddPriceServiceList!.data!.length,
                     itemBuilder: (BuildContext context, int index){
@@ -209,8 +222,8 @@ class _RegularServices extends State<RegularServices>{
                                              _selectionList.removeAt(index);
                                              _selectionList.insert(index,s );
                                              if(!_selectionList[index]){
-                                               _textEditContoller.text=_AddPriceServiceList!.data![0].mechanicService![0].time;
-                                               _textEditContoller01.text=_AddPriceServiceList!.data![0].mechanicService![0].fee;
+                                               _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"12:00";
+                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                                setState(() {
 
                                                });
@@ -218,37 +231,48 @@ class _RegularServices extends State<RegularServices>{
                                            });
                                          },
                                         child: Container(
-                                        // child: Icon(Icons.square,
-                                        // size: 8,),
+                                          height: 30,
+                                          //color: Colors.yellow,
+                                          child: Row(
+                                            children:[
+                                              Container(
+                                            // child: Icon(Icons.square,
+                                            // size: 8,),
 
-                                        decoration: BoxDecoration(color:_selectionList[index]? const Color(0xff173a8d):Colors.transparent,
-                                          borderRadius: BorderRadius.circular(2),
-                                          border: Border.all(width: 1,color:_selectionList[index]?Colors.transparent: const Color(0xff173a8d))
-                                        ),
-                                        width: 13,
-                                        height: 13,
+                                            decoration: BoxDecoration(color:_selectionList[index]? const Color(0xff173a8d):Colors.transparent,
+                                              borderRadius: BorderRadius.circular(2),
+                                              border: Border.all(width: 1,color:_selectionList[index]?Colors.transparent: const Color(0xff173a8d))
+                                            ),
+                                            width: 15,
+                                            height: 15,
                                       ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left:08.0),
+                                                child: Text(
+                                                  //_mechanicDetails!.mechanicService![index].service!.serviceName,
+                                                  _AddPriceServiceList!.data![index].serviceName.toString(),
+                                                  //'Towing service',
+                                                  softWrap: true,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontFamily: 'SamsungSharpSans-Medium',
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),),
+                                              ),
+                                      ]
+                                          ),
+                                        ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left:10.0,right:30.0),
-                                      child: Text(
-                                        //_mechanicDetails!.mechanicService![index].service!.serviceName,
-                                        _AddPriceServiceList!.data![index].serviceName.toString(),
-                                        //'Towing service',
-                                      style: TextStyle(
-                                        fontFamily: 'SamsungSharpSans-Medium',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),),
-                                    ),
+
                                     ],
                                     ),
                                   ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:20.0,bottom: 05),
-                                    child: Expanded(
-                                      flex:50,
+                                  Expanded(
+                                    flex:120,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:20.0,bottom: 05),
                                       child: Container(
                                         decoration: BoxDecoration(
                                             border: Border.all(
@@ -275,6 +299,7 @@ class _RegularServices extends State<RegularServices>{
                                               controller: _textEditContoller,
 
                                               inputFormatters: [
+                                                LengthLimitingTextInputFormatter(2),
                                                 FilteringTextInputFormatter.allow(
                                                     RegExp('[0-9 :]')),
                                               ],
@@ -289,10 +314,10 @@ class _RegularServices extends State<RegularServices>{
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left:05.0,bottom: 05),
-                                    child: Expanded(
-                                      flex:120,
+                                  Expanded(
+                                    flex:110,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:05.0,bottom: 05),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -313,6 +338,19 @@ class _RegularServices extends State<RegularServices>{
                                             padding: const EdgeInsets.only(left:20.0,right:15.0,bottom: 4),
                                             child:
                                             TextFormField(
+                                              //maxLength: 4,
+
+                                              // validator: (value){
+                                              //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
+                                              //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
+                                              //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
+                                              //   }
+                                              //   else {
+                                              //     return null;
+                                              //   }
+                                              // },
+
+                                              keyboardType: TextInputType.number,
 
                                               decoration: InputDecoration(
                                                   border: InputBorder.none
@@ -321,6 +359,7 @@ class _RegularServices extends State<RegularServices>{
                                               controller: _textEditContoller01,
                                               maxLines: 1,
                                               inputFormatters: [
+                                                LengthLimitingTextInputFormatter(4),
                                                 FilteringTextInputFormatter.allow(
                                                     RegExp('[0-9 ]')),
                                               ],
@@ -382,11 +421,13 @@ class _RegularServices extends State<RegularServices>{
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 230.0,top: 24),
-                child: Container(
+                child: saveloading?CircularProgressIndicator():
+                Container(
                   height: 40,
                   width: 130,
                   child: TextButton(
                       onPressed: () async {
+                        saveloading = true;
                         SharedPreferences shdPre = await SharedPreferences.getInstance();
                         setState(() {
                           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
@@ -394,8 +435,18 @@ class _RegularServices extends State<RegularServices>{
                               _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                   authToken,
                                   mechanicId,
-                                  _timeList![i], _priceList![i], 1
+                                  _timeList![i], _priceList![i], 2
+                              // _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              //     authToken,
+                              //     page,
+                              //     size,
+                              //     search,
+                              //     mechanicId,
+                              //   2,
                               );
+                              setState(() {
+                                _autoValidate = AutovalidateMode.always;
+                              });
                             }
                           }
 

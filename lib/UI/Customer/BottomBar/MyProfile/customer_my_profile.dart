@@ -127,7 +127,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSharedPrefData();
     _listenFetchProfileResponse();
