@@ -13,7 +13,12 @@ class _Privacypolicy extends State<Privacypolicy>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back)
+        ),
         backgroundColor: const Color(0xff173a8d),
         toolbarHeight: 60,
         elevation: 0,
