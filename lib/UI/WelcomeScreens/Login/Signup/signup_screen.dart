@@ -198,16 +198,18 @@ class _SignupScreenState extends State<SignupScreen> {
           print(
               "success Auth token >>>>>>>  ${value.data!.signUp!.token.toString()}");
           _isLoading = false;
-          _signupBloc.userDefault(
+         /* _signupBloc.userDefault(
             value.data!.signUp!.token.toString(),
             TextStrings.user_mechanic,
-            "",
-          );
+            value.data!.signUp!.customer.toString(),
+            value.data!.signUp!.token.toString(),
+          );*/
           if (value.data?.signUp?.customer == null) {
             _signupBloc.userDefault(
               value.data!.signUp!.token.toString(),
               TextStrings.user_mechanic,
               "${value.data!.signUp!.mechanic?.firstName.toString()}",
+              "${value.data!.signUp!.mechanic?.id.toString()}"
             );
             Navigator.pushReplacement(
                 context,
@@ -228,6 +230,7 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.signUp!.token.toString(),
               TextStrings.user_customer,
               "${value.data!.signUp!.customer?.firstName.toString()}",
+              "${value.data!.signUp!.customer?.id.toString()}"
             );
             Navigator.pushReplacement(
                 context,
@@ -779,7 +782,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             textAlignVertical:
                                                                 TextAlignVertical
                                                                     .center,
-                                                            maxLines: 1,
+                                                            maxLines: null,
                                                             style: Styles
                                                                 .textLabelSubTitle,
                                                             focusNode:
@@ -824,6 +827,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               hintText: AppLocalizations
                                                                       .of(context)!
                                                                   .text_hint_ministry_govt,
+                                                              errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
                                                                 borderSide:
@@ -859,7 +863,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               ),
                                                               hintStyle: Styles
                                                                   .textLabelSubTitle,
-                                                              errorStyle: TextStyle(color: Colors.red),
                                                             ),
                                                           ),
                                                         ),
