@@ -503,7 +503,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 "",           //----- profile image url should b updated
                 //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
                 value.data!.signIn!.user!.firstName.toString(),
-                value.data!.signIn!.user!.id.toString(),"0"
+                value.data!.signIn!.user!.id.toString(),
+                "0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
             Navigator.pushReplacement(
@@ -516,7 +517,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextStrings.user_mechanic,
                 "",           //----- profile image url should b updated
                 value.data!.signIn!.user!.firstName.toString(),
-                value.data!.signIn!.user!.id.toString(),"0"
+                value.data!.signIn!.user!.id.toString(),
+                "0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
             Navigator.pushReplacement(

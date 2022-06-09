@@ -13,10 +13,10 @@ class CustomerProfileBloc {
   }
 
   postCustomerProfileRequest(
-      String email,id,
+      String token,id,
       ) async {
     CustomerProfileMdl _customerProfileMdl =
-    await repository.postCustFetchProfileRequest(email,id);
+    await repository.postCustFetchProfileRequest(token,id);
     postCustomerProfile.sink.add(_customerProfileMdl);
   }
 }

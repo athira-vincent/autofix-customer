@@ -250,24 +250,6 @@ class CustomerApiProvider {
     }
   }
 
-  Future<CustomerDetailsMdl>   postCustFetchProfileRequest(
-      token,id)async {
-    Map<String, dynamic> _resp = await _queryProvider. postCustFetchProfileRequest(
-      token,id);
-    // ignore: unnecessary_null_comparison
-    if (_resp != null) {
-      if (_resp['status'] == "error") {
-        final errorMsg = CustomerDetailsMdl(status: "error", message: _resp['message'], data: null);
-        return errorMsg;
-      } else {
-        var data = {"data": _resp};
-        return CustomerDetailsMdl.fromJson(data);
-      }
-    } else {
-      final errorMsg = CustomerDetailsMdl(status: "error", message: "No Internet connection", data: null);
-      return errorMsg;
-    }
-  }
 
   Future<CategoryListHomeMdl> getCategoryListHomeRequest(
       String token, categoryId) async {

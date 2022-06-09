@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Models/customer_models/default_vechicle_model/updateDefaultVehicleMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/vehicleCreate_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_models/signin_mdl.dart';
@@ -27,6 +28,17 @@ class AddCarBloc {
       plateNo, lastMaintenance, milege,
       vehiclePic, latitude, longitude,);
     postAddCar.sink.add(vehicleCreateMdl);
+  }
+
+
+  final postUpdateDefaultVehicle = PublishSubject<UpdateDefaultVehicleMdl>();
+  Stream<UpdateDefaultVehicleMdl> get updateDefaultVehicleResponse => postUpdateDefaultVehicle.stream;
+
+  postUpdateDefaultVehicleApi(
+      token,vehicleId, customerId)async {
+    UpdateDefaultVehicleMdl updateDefaultVehicleMdl = await repository.postUpdateDefaultVehicle(
+        token,vehicleId, customerId);
+    postUpdateDefaultVehicle.sink.add(updateDefaultVehicleMdl);
   }
 
 

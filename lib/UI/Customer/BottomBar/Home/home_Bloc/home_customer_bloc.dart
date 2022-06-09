@@ -195,19 +195,6 @@ class HomeCustomerBloc {
   }
 
 
-  /// =============== Fetch Profile Request ================== ///
-
-  final postFetchProfile = PublishSubject<CustomerDetailsMdl>();
-  Stream<CustomerDetailsMdl> get postFetchProfileResponse => postFetchProfile.stream;
-
-  postCustFetchProfileRequest(
-      token,id) async {
-
-    CustomerDetailsMdl _customerDetailsMdl = await repository.postCustFetchProfileRequest(
-        token,id);
-    postFetchProfile.sink.add(_customerDetailsMdl);
-  }
-
 
   /// =============== Vehicle List Request ================== ///
 

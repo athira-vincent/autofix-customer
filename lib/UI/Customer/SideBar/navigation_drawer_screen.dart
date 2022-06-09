@@ -6,9 +6,9 @@ import 'package:auto_fix/UI/Common/HelpAndSupport/help_and_support.dart';
 import 'package:auto_fix/UI/Common/PrivacyPolicy/privacy_policy.dart';
 import 'package:auto_fix/UI/Common/TermsAndCondition/terms_and_conditions.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/BookNow/cust_book_now.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/cust_edit_profile.dart';
-import 'package:auto_fix/UI/Customer/SideBar/MyAppointments/cust_my_appointment.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Customer/SideBar/OrderDetails/cust_order_details.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -25,35 +25,10 @@ class CustomerNavigationDrawerScreen extends StatefulWidget {
   }
 }
 
-class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen>
-{
-  String? _userName;
-  String? _userEmail;
+class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawerScreen> {
+
   String authToken="";
   String userName="", profileImageUrl = "";
-
-  _logout() async {
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
-   /* shdPre.setString(SharedPrefKeys.token, "");
-    shdPre.setBool(SharedPrefKeys.isUserLoggedIn, false);
-    shdPre.setString(SharedPrefKeys.userName, "");
-    shdPre.setString(SharedPrefKeys.userEmail, "");
-    shdPre.setString(SharedPrefKeys.mechanicID, "");
-    shdPre.setString(SharedPrefKeys.userProfilePic, "");
-    GqlClient.I
-        .config(token: shdPre.getString(SharedPrefKeys.token).toString());
-    Navigator.pop(context);
-    // SharedPreferences preferences = await SharedPreferences.getInstance();
-    // await preferences.clear();
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => MechanicSigninScreen(),
-      ),
-          (route) => false,
-    );*/
-  }
 
   @override
   void initState() {
@@ -65,16 +40,13 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
-
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      _userEmail = shdPre.getString(SharedPrefKeys.userEmail).toString();
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('authToken>>>>>>>>> ' + authToken.toString());
-
+      print('profileImageUrl>>>>>>>>> MechanicSideBarScreen' + profileImageUrl.toString());
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +153,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         )*/
         navigationBarHeader(size),
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4, top: 13),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -203,9 +175,9 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerOrderDetailsScreen()));
           },
-        ),
+        ),*/
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -227,7 +199,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerBookNowScreen()));
           },
-        ),
+        ),*/
 
         ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
@@ -273,7 +245,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerMyAppointmentScreen()));
+                MaterialPageRoute(builder: (context) => CustomerMyServicesScreen()));
           },
         ),
 
@@ -611,7 +583,5 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
 
 
   }
-
-
 
 }
