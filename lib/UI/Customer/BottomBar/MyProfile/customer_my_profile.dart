@@ -25,7 +25,8 @@ import 'package:path/path.dart' as path;
 
 class CustomerMyProfileScreen extends StatefulWidget {
 
-  CustomerMyProfileScreen();
+  bool isEnableEditing;
+  CustomerMyProfileScreen({required this.isEnableEditing});
 
   @override
   State<StatefulWidget> createState() {
@@ -131,6 +132,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   @override
   void initState() {
     super.initState();
+    editProfileEnabled = widget.isEnableEditing;
     getSharedPrefData();
     _listenFetchProfileResponse();
     _listenUpdateProfileResponse();

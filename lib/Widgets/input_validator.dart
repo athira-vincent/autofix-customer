@@ -84,7 +84,7 @@ class InputValidator {
     // String pattern =
     //     r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_])[A-Za-z\d@$!%*#?&_]{8,}$';
     String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~_]).{8,}$';
     RegExp regExp = RegExp(pattern);
     if (value!.isEmpty) return ch! + " is " + TextStrings.errRequired;
 
