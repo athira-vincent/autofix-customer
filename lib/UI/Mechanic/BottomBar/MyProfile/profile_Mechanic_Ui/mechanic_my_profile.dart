@@ -49,6 +49,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     return value * per + value;
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
+
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameFocusNode = FocusNode();
 
@@ -157,6 +160,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           _isLoadingPage = true;
           editProfileEnabled = false;
           _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Updation Successful",
+                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
         });
       }
     });
@@ -216,14 +225,40 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         children: [
                           appBarCustomUi(),
                           profileImageAndKmAndReviewCount(size),
-                          NameTextUi(),
-                          EmailTextUi(),
-                          PhoneTextUi(),
-                          StateTextUi(),
+                 Form(
+                   autovalidateMode: _autoValidate,
+                   key: _formKey,
+                   child: _userType == "1"
+                     ?
+                       Column(
+                         children: [
+                           NameTextUi(),
+                           EmailTextUi(),
+                           PhoneTextUi(),
+                           StateTextUi(),
+                           // OrgNameTextUi(),
+                           //OrgTypeTextUi(),
+                           YearOfExperienceTextUi(),
+                           editProfileEnabled  == true ? NextButton() : Container(),
+                         ],
+                       )
+                       :
+                   _userType == "2"
+                     ?
+                   Column(
+                       children: [
+                         NameTextUi(),
+                         EmailTextUi(),
+                         PhoneTextUi(),
+                         StateTextUi(),
                          // OrgNameTextUi(),
-                          OrgTypeTextUi(),
-                          YearOfExperienceTextUi(),
-                          NextButton()
+                         OrgTypeTextUi(),
+                         YearOfExperienceTextUi(),
+                         editProfileEnabled == true ? NextButton() : Container(),
+                     ],
+                   ):Column()
+                 )
+
                         ],
                       ),
                 Visibility(
@@ -288,6 +323,19 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(00,80,155,0),
+                        child: Image.asset(
+                          'assets/image/mechanicProfileView/curvedGray.png',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Container(
+                        // height: 50,
+                        margin: EdgeInsets.only(
+                            left: size.width * 18 / 100,
+                            top: size.height * 10 / 100
+                        ),
                         child: InkWell(
                           onTap: (){
                             setState(() {
@@ -303,34 +351,68 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               print('editProfileEnabled $editProfileEnabled');
                             });
                           },
-                          child: Image.asset(
-                            'assets/image/mechanicProfileView/curvedGray.png',
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 15,
+                                color: CustColors.light_navy,
+                              ),
+                              Text('Edit Profile',
+                                style: Styles.appBarTextBlack17,),
+                            ],
                           ),
-                        ),
-                      ),
-                      Container(
-                        // height: 50,
-                        margin: EdgeInsets.only(
-                            left: size.width * 18 / 100,
-                            top: size.height * 10 / 100
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              size: 15,
-                              color: CustColors.blue,
-                            ),
-                            Text('Edit Profile',
-                              style: Styles.appBarTextBlack17,),
-                          ],
                         ),
                       ),
                     ],
                   ),
+
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(155,80,0,0),
+                        child: Image.asset(
+                          'assets/image/mechanicProfileView/curvedWhite.png',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Container(
+                        //color: Colors.green,
+                        //height: size.height * 8 / 100,
+                        margin: EdgeInsets.only(
+                            left: size.width * 50 / 100,
+                            top: size.height * 10 / 100
+                        ),
+                        child: InkWell(
+                          onTap: (){
+                              showDialog(
+                              context: context,
+                              builder: (BuildContext context)
+                              {
+                              return deactivateDialog();
+                              });
+
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.logout,
+                                size: 15,
+                                color: CustColors.blue,
+                              ),
+                              Text('Logout',
+                                style: Styles.appBarTextBlack17,),
+                            ],
+                          ),
+                        ),
+                      ),
+                      //),
+                    ],
+                  ),
+
                   Align(
                     alignment: Alignment.center,
                     child: Stack(
@@ -387,48 +469,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         ),
       ),
 
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(155,80,0,0),
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context)
-                                {
-                                  return deactivateDialog();
-                                });
-                          },
-                          child: Image.asset(
-                            'assets/image/mechanicProfileView/curvedWhite.png',
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: size.width * 55 / 100,
-                            top: size.height * 10 / 100
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.logout,
-                              size: 15,
-                              color: CustColors.blue,
-                            ),
-                            Text('Logout',
-                              style: Styles.appBarTextBlack17,),
-                          ],
-                        ),
-                      ),
-                      //),
-                    ],
-                  ),
+
 
                 ],
               ),
@@ -566,7 +607,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
-                            hintText:  'Name',
+                            hintText: 'Name',
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -587,6 +628,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           style: Styles.textLabelSubTitle,
                         )
                       : Container(),
+
                     ],
                   ),
                 ),
@@ -925,7 +967,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               cursorColor: CustColors.whiteBlueish,
                               decoration: InputDecoration(
                                 isDense: true,
-                                hintText:  'State',
+                                hintText:  'Organization',
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
@@ -1237,7 +1279,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     width: _setValue(28),
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          CustColors.peaGreen),
+                          CustColors.light_navy),
                     ),
                   ),
                 )
@@ -1270,7 +1312,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _nameController.text,
                               _stateController.text,
                               _imageUrl,
-                              1,
+                              2,
                               _yearOfExistenceController.text,
                               _orgNameController.text,
                               _orgTypeController.text,

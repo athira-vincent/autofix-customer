@@ -246,6 +246,8 @@ class Repository {
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 
+  Future<dynamic> postBrandDetailsRequest(token,search)
+      => _vehicleSpecializationApiProvider.postBrandDetailsRequest(token,search);
 
   // Get vehicleSpecialization
   Future<dynamic> getvehicleSpecializationList() => _vehicleSpecializationApiProvider.getVehicleSpecialization();
@@ -384,6 +386,11 @@ class Repository {
       token)  =>
       _customerApiProvider.postCustVehicleListRequest(
           token);
+
+  Future<dynamic>   postAddMechanicReviewAndRatingRequest(
+      token,rating, feedback, bookingId, bookingType) =>
+      _customerApiProvider. postAddMechanicReviewAndRatingRequest(
+          token,rating, feedback, bookingId, bookingType);
 
 
   /// ===============  Service List of Mechanic ================== ///

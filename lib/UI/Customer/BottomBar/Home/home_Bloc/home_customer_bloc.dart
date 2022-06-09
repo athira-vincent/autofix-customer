@@ -209,6 +209,19 @@ class HomeCustomerBloc {
     postCustVehicleList.sink.add(_custVehicleListMdl);
   }
 
+  /// =============== Add Mechanic Review Request ================== ///
+
+  final postAddMechanicReviewAndRatingList = PublishSubject<CustVehicleListMdl>();
+  Stream<CustVehicleListMdl> get postAddMechanicReviewAndRatingResponse => postAddMechanicReviewAndRatingList.stream;
+
+  postAddMechanicReviewAndRatingRequest(
+      token,rating, feedback, bookingId, bookingType) async {
+
+    CustVehicleListMdl _custVehicleListMdl = await repository. postAddMechanicReviewAndRatingRequest(
+        token,rating, feedback, bookingId, bookingType);
+    postAddMechanicReviewAndRatingList.sink.add(_custVehicleListMdl);
+  }
+
 
   final postCustomerAddMoreServiceRequest = PublishSubject<CustomerAddMoreServiceMdl>();
   Stream<CustomerAddMoreServiceMdl> get postCustomerAddMoreServiceResponse => postCustomerAddMoreServiceRequest.stream;

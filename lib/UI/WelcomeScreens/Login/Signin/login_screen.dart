@@ -81,9 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return
+      Scaffold(
         key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
@@ -314,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 width: _setValue(28),
                                                 child: CircularProgressIndicator(
                                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                                      CustColors.peaGreen),
+                                                      CustColors.light_navy),
                                                 ),
                                               ),
                                             )
@@ -463,7 +462,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-          )),
+          ),
     );
   }
 

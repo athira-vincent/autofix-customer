@@ -255,6 +255,32 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  postBrandDetailsRequest(
+      token,search) async {
+    String _query = """ 
+       {
+        brandList(page: 0, size: 300, search: "$search") {
+          totalItems
+          data {
+            id
+            brandName
+            icon
+            status
+          }
+          totalPages
+          currentPage
+        }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
@@ -2078,6 +2104,24 @@ class QueryProvider {
 
 
 
+  postAddMechanicReviewAndRatingRequest(
+      token,rating, feedback, bookingId, bookingType) async {
+    String _query = """ 
+    mutation {
+        addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
+          message
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 
   postCustVehicleListRequest(
       token) async {
@@ -2247,6 +2291,7 @@ class QueryProvider {
     return await GqlClient.I.mutation11(_query,
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
+
   postEmrgRegAddPriceReviewRequest(
       token,page,size,search,userId,catType) async {
     String _query = """ 
@@ -2292,5 +2337,7 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+
 
 }
