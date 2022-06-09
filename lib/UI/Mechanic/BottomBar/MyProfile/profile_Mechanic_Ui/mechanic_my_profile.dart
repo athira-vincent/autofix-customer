@@ -21,8 +21,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 class MechanicMyProfileScreen extends StatefulWidget {
+
   bool isEnableEditing;
   MechanicMyProfileScreen({required this.isEnableEditing});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -103,6 +105,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     // TODO: implement initState
     editProfileEnabled = widget.isEnableEditing;
     super.initState();
+    editProfileEnabled = widget.isEnableEditing;
     getSharedPrefData();
     _listenServiceListResponse();
 

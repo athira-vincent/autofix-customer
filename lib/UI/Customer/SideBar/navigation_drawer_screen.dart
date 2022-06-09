@@ -393,7 +393,6 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
   Widget navigationBarHeader(Size size){
     return Container(
       width: double.infinity,
-      //height: 174.3 + MediaQuery.of(context).padding.top,
       height: size.height * 37 / 100,
       decoration: BoxDecoration(
         color: CustColors.light_navy,
@@ -404,7 +403,6 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
         ),
       ),
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             margin: EdgeInsets.only(
@@ -435,12 +433,10 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           Align(
             alignment: Alignment.centerRight,
             child: Container(
-              //color: Colors.redAccent,
               margin: EdgeInsets.only(
                   top: size.height * 5 / 100,
                   right: size.width * 10 / 100
               ),
-              //alignment: Alignment.bottomRight,
               child: Column(
                 //mainAxisAlignment: MainAxisAlignment.end,
                 children: [

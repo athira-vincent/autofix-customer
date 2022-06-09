@@ -23,7 +23,7 @@ class _HelpAndSupport extends State<HelpAndSupport>{
         toolbarHeight: 60,
         elevation: 0,
         title: Container(
-          child: Text('Terms & conditions',
+          child: Text('Help & Support',
             style: TextStyle(
               fontFamily: 'SamsungSharpSans-Medium',
               fontSize: 16.7,

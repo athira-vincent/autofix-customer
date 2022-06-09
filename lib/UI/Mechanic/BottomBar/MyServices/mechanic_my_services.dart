@@ -67,15 +67,17 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              appBarCustomUi(size),
-              tabTitleBarCustomUi(size),
-              tabBodyCustomUi(size),
-            ],
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                appBarCustomUi(size),
+                tabTitleBarCustomUi(size),
+                tabBodyCustomUi(size),
+              ],
+            ),
           ),
         ),
       ),
