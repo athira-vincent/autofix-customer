@@ -605,7 +605,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
     });
   }
 
-
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
