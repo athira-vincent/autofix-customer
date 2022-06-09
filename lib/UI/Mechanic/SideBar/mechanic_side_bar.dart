@@ -67,7 +67,6 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
 
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      //_userEmail = shdPre.getString(SharedPrefKeys.userEmail).toString();
       isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
 
@@ -183,7 +182,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           },
         ),
 
-        ListTile(
+       /* ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -200,12 +199,12 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-          /*onTap: () {
+          *//*onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerMyAppointmentScreen()));
-          },*/
-        ),
+          },*//*
+        ),*/
 
         ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
