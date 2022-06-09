@@ -25,7 +25,9 @@ import 'package:path/path.dart' as path;
 
 class MechanicMyProfileScreen extends StatefulWidget {
 
-  MechanicMyProfileScreen();
+  bool isEnableEditing;
+  MechanicMyProfileScreen({required this.isEnableEditing});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -105,6 +107,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    editProfileEnabled = widget.isEnableEditing;
     getSharedPrefData();
     _listenServiceListResponse();
 

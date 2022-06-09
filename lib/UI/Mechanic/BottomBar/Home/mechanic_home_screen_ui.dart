@@ -43,7 +43,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
-  late bool _hasActiveService;
+  bool _hasActiveService = false;
 
 
   final List<String> imageList = [
@@ -162,11 +162,20 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           //_isLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
           setState(() {
-            _hasActiveService = false;
+            if(value.data?.currentlyWorkingService.toString() == 'null')
+              {
+                _hasActiveService = false;
+              }
+            else
+              {
+                _hasActiveService = true;
+
+              }
+
           });
         });
       }else{
-          setState(() async {
+          setState(()  {
             setReminderData();
           });
       }
@@ -265,9 +274,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       upcomingServices(size),
                       brandSpecialization(size),
                       dashBoardItemsWidget(size),
-                      _hasActiveService ? SizedBox(
+                      _hasActiveService
+                          ? SizedBox(
                         height: size.height * 0.092,
-                      ) : Container(),
+                      )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -602,7 +613,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     return Column(
       children: [
         Container(
-          height: size.height * 12 / 100,
+          height: size.height * 13 / 100,
           width: size.width * 24 / 100,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(7),
@@ -622,7 +633,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             borderRadius: BorderRadius.circular(5),
             child: Image.network(
               iconImage!,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
           ),
         ),
