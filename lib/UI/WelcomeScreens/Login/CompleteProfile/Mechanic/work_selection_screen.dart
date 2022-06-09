@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Models/customer_models/brand_list_model/brandListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/CompleteProfile/mechanic_complete_profile_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
@@ -498,7 +499,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   Widget vehicleSpecializedTextSelection() {
     return InkWell(
       onTap: (){
-        _awaitReturnValueFromSecondScreen(context);
+        _awaitReturnValueFromSecondScreen1(context);
       },
       child: Container(
         margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -563,6 +564,47 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
     );
   }
 
+  void _awaitReturnValueFromSecondScreen1(BuildContext context) async {
+
+    // start the SecondScreen and wait for it to finish with a result
+    List<Datum> vehicleSpecialisationList = [];
+    vehicleSpecialisationList.clear();
+    selectedVehicleId="";
+    selectedVehicles = "";
+    _chooseVechicleSpecializedController.text="";
+    vehicleSpecialisationList = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VehicleSpecializationScreen(),
+        ));
+
+    setState(() {
+      for(int i = 0; i<vehicleSpecialisationList.length ; i++){
+        if(vehicleSpecialisationList.length-1 == i){
+          selectedVehicleId = selectedVehicleId
+              + vehicleSpecialisationList[i].id.toString() ;
+          selectedVehicles = selectedVehicles
+              + vehicleSpecialisationList[i].brandName.toString() ;
+        }
+        else{
+          selectedVehicleId = selectedVehicleId
+              + vehicleSpecialisationList[i].id.toString() + ",";
+          selectedVehicles = selectedVehicles
+              + vehicleSpecialisationList[i].brandName.toString() + ",";
+
+        }
+      }
+      if(selectedState!='[]')
+      {
+        _chooseVechicleSpecializedController.text = selectedVehicles;
+        print ("Selected state @ sign up: " + selectedState );
+        print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
+        print ("Selected selectedVehicles @ sign up: " + selectedVehicles.trim() );
+      }
+
+    });
+  }
+
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
 
     // start the SecondScreen and wait for it to finish with a result
@@ -594,15 +636,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
           //+ ( vehicleSpecialisationList.length == i ? "" : ", ") ;
 
         }
-
-        /*selectedVehicleId = selectedVehicleId
-            + vehicleSpecialisationList[i].id.toString()
-            + ( vehicleSpecialisationList.length == i ? "" : ", ") ;
-        selectedVehicles = selectedVehicles
-            + vehicleSpecialisationList[i].name.toString()
-            + ( vehicleSpecialisationList.length == i ? "" : ", ") ;*/
       }
-      //selectedState = result;
       if(selectedState!='[]')
         {
           _chooseVechicleSpecializedController.text = selectedVehicles;

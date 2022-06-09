@@ -160,6 +160,13 @@ class Styles {
     fontSize: 15,
   );
 
+  static const textButtonLabelSubTitle12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Medium',
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+    fontSize: 13,
+  );
+
 
   static const textLabelSubTitleBlue = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',

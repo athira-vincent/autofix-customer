@@ -255,6 +255,32 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
+  postBrandDetailsRequest(
+      token,search) async {
+    String _query = """ 
+       {
+        brandList(page: 0, size: 300, search: "$search") {
+          totalItems
+          data {
+            id
+            brandName
+            icon
+            status
+          }
+          totalPages
+          currentPage
+        }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
   postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
@@ -2082,7 +2108,7 @@ class QueryProvider {
       token,rating, feedback, bookingId, bookingType) async {
     String _query = """ 
     mutation {
-        addRating(rating: ${int.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
+        addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
           message
         }
       }

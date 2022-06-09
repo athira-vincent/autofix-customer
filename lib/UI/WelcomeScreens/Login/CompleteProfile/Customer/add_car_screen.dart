@@ -211,9 +211,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
         for(int i = 0; i<value.data!.modelDetails!.length;i++)
           {
-            if(brandList.contains("${value?.data!.modelDetails![i].brandName}") == false)
+            if(brandList.contains("${value.data!.modelDetails![i].brandName}") == false)
             {
-              brandList.add("${value?.data!.modelDetails![i].brandName}");
+              brandList.add("${value.data!.modelDetails![i].brandName}");
             }
           }
 
@@ -1122,7 +1122,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   )
                   : Container(
                       height: 45,
-                      width: 110,
+                      width: 160,
                       child: MaterialButton(
                         onPressed: () {
                           setState(() {
@@ -1164,9 +1164,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'Add More',
+                                'Add more vehicles',
                                 textAlign: TextAlign.center,
-                                style: Styles.textButtonLabelSubTitle,
+                                style: Styles.textButtonLabelSubTitle12,
                               ),
                             ],
                           ),
@@ -1205,7 +1205,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     )
                   : Container(
                     height: 45,
-                    width: 90,
+                    width: 80,
                     child: MaterialButton(
                       onPressed: () {
                         print('${authToken   + _brandController.text.toString() + _modelController.text.toString()
@@ -1253,9 +1253,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Next',
+                              'Finish',
                               textAlign: TextAlign.center,
-                              style: Styles.textButtonLabelSubTitle,
+                              style: Styles.textButtonLabelSubTitle12,
                             ),
                           ],
                         ),
@@ -1394,7 +1394,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         scrollDirection: Axis.vertical,
                                         shrinkWrap: true,
-                                        itemCount: brandList?.length,
+                                        itemCount: brandList.length,
                                         itemBuilder: (context, index) {
                                           print('brandList>>>>>>>>>> $brandList');
                                           return  InkWell(

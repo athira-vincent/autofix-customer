@@ -39,6 +39,9 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var _firestoreData ;
 
+  TextEditingController _feedBackController = TextEditingController();
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,9 +60,11 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
     });
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
       setState(() {
-        totalEstimatedTime = event.get('updatedServiceTime');
+        totalEstimatedTime = event.get('totalTimeTakenByMechanic');
         totalEstimatedCost = event.get('updatedServiceCost');
         mechanicName = event.get('mechanicName');
+        print('mechanicName authToken>>>>>>>>> ' + mechanicName.toString());
+
       });
     });
   }
@@ -92,7 +97,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         ),
                         child: Row(
                           children: [
-                            rateMechanicScreenTimeCostWidget(size,"Work completed in","Min "," 20:15",true),
+                            rateMechanicScreenTimeCostWidget(size,"Work completed in","Min "," $totalEstimatedTime:00",true),
                             Spacer(),
                             Container(
                               height: size.height * 5 /100,
@@ -103,7 +108,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                               ),
                             ),
                             Spacer(),
-                            rateMechanicScreenTimeCostWidget(size,"Amount you paid","₦ ","1600",false),
+                            rateMechanicScreenTimeCostWidget(size,"Amount you paid","₦ ","$totalEstimatedCost",false),
                           ],
                         ),
                       ),
@@ -233,7 +238,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                           ],
                           keyboardType: TextInputType.multiline,
                           validator: InputValidator(ch: "text",).emptyChecking,
-                          //controller: _userNameController,
+                          controller: _feedBackController,
                           cursorColor: CustColors.whiteBlueish,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -250,6 +255,15 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         child: postReviewButton(size),
                         onTap: (){
                           print("On Press Continue");
+                          print("${_feedBackController.text}");
+                          print("${bookingIdEmergency}");
+                          print("${_rating}");
+
+
+
+
+                          _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
+                              authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
 
                           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                               CustomerMainLandingScreen()), (Route<dynamic> route) => false);

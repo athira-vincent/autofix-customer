@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/customer_models/brand_list_model/brandListMdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_mdl.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class VehicleSpecializationScreen extends StatefulWidget {
@@ -26,25 +29,57 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
 
   List<VehicleSpecialization> _countryData = [];
   String? countryCode;
-  String selectedState = "";
+  String selectedState = "",authToken = "", bookingId = "";
   bool isloading = false;
   //List<String> vehicleSpecialisationList =[];
   List<VehicleSpecialization> vehicleSpecialisationList = [];
+
+  List<Datum>? _brandListData = [];
+  List<Datum> vehicleSpecialisationbrandList = [];
+
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    getSharedPrefData();
+
+
     vehicleSpecialisationList.clear();
     _specializationBloc.dialvehicleSpecializationListRequest();
     _populateCountryList();
   }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      print('CustomerApprovedScreen bookingId >>>> $bookingId');
+      _specializationBloc. postBrandDetailsRequest(
+          authToken,"");
+    });
+  }
+
 
   _populateCountryList() {
     _specializationBloc.vehicleSpecializationCode.listen((value) {
       setState(() {
         _countryData = value.cast<VehicleSpecialization>();
       });
+    });
+    _specializationBloc.postBrandListResponse.listen((value) {
+      if (value.status == "error") {
+
+      } else {
+
+        setState(() {
+          _brandListData = value.data?.brandList?.data;
+        });
+      }
     });
   }
 
@@ -80,10 +115,11 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                     style: Styles.textLabelTitle,
                   ),
                 ),
-                Expanded(
+                /*Expanded(
                   child: Container(
                     //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
-                    margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
+                    margin: EdgeInsets.only(*//*left: ScreenSize().setValue(5),*/
+                /*
                         top: ScreenSize().setValue(22.4)),
                     child: _countryData.length != 0
                         ? Container(
@@ -153,14 +189,14 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                                             ),
                                           ],
                                         ),
-                                        /*Padding(
+                                        *//*Padding(
                                           padding: const EdgeInsets.all(0),
                                           child: Text(_countryData[index].name,
                                             style: Styles.textLabelTitle12,
                                             maxLines: 2,
                                             textAlign: TextAlign.center,
                                             overflow: TextOverflow.visible,),
-                                        ),*/
+                                        ),*//*
                                       ],
                                     ),
                                   ),
@@ -172,11 +208,96 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                             child: Text('No Results found.'),
                           ),
                   ),
+                ),*/
+                Expanded(
+                  child: Container(
+                    //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
+                    margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
+                        top: ScreenSize().setValue(22.4)),
+                    child: _brandListData?.length != 0
+                        ? Container(
+                            child: GridView.builder(
+                              itemCount:_brandListData?.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: 1.5,
+                                crossAxisSpacing: 1,
+                                mainAxisSpacing: 1,
+                              ),
+                              itemBuilder: (context,index,) {
+                                return GestureDetector(
+                                  onTap:(){
+                                    setState(() {
+                                      if(_brandListData![index].value=="1")
+                                      {
+                                        _brandListData![index].value="0";
+                                        if (vehicleSpecialisationList.contains(_brandListData![index])) {
+                                          vehicleSpecialisationList.remove(_countryData[index]);
+                                        }
+                                      }
+                                      else
+                                      {
+                                        _brandListData![index].value="1";
+                                        vehicleSpecialisationbrandList.insert(0, _brandListData![index]);
+                                      }
+                                      print(vehicleSpecialisationbrandList);
+                                    });
+                                  },
+                                  child:Container(
+
+                                    child: Column(
+                                      mainAxisAlignment:MainAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          alignment: Alignment.topRight,
+                                          children: [
+
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color:  _countryData[index].value=="0"?Colors.white:CustColors.whiteBlueish,
+                                                  borderRadius: BorderRadius.circular(11.0)
+                                              ),
+                                              height: 50,
+                                              width: 50,
+                                              child: Container(
+                                                  child: Image.network(_brandListData![index].icon,
+                                                    fit: BoxFit.contain,
+                                                    height: 50,
+                                                    width: 50,)
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 20,
+                                              width: 20,
+                                              child: Align(
+                                                alignment: Alignment.topRight,
+                                                child: Container(
+                                                  child: _brandListData![index].value=="1"
+                                                      ? Icon( Icons.check_circle,size: 20,color: CustColors.light_navy,)
+                                                      : Container(),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : Center(
+                            child: Text('No BrandList found.'),
+                          ),
+                  ),
                 ),
 
                 InkWell(
                   onTap: (){
-                    Navigator.pop(context,vehicleSpecialisationList);
+                    Navigator.pop(context,vehicleSpecialisationbrandList);
                   },
                   child: Row(
                     children: [
