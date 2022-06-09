@@ -329,12 +329,28 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                       ),
                       Positioned(
                         bottom: 65,
-                        child: Container(
-                          width: 25,
-                          height: 25,
-                          child: SvgPicture.asset(
-                            'assets/image/CustomerType/myvehicleDelete.svg',
-                            fit: BoxFit.contain,
+                        child: InkWell(
+                          onTap: (){
+                            setState(() {
+                              print('delete vechicle');
+                              if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
+                                {
+                                  snapshot.data?.data?.custVehicleList?.removeAt(i);
+                                }
+                              else
+                                {
+
+
+                                }
+                            });
+                          },
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            child: SvgPicture.asset(
+                              'assets/image/CustomerType/myvehicleDelete.svg',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ),
