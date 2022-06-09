@@ -1087,7 +1087,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget individualSaveChangeButton (Size size){
-    return saveloading?CircularProgressIndicator():
+    return saveloading ? CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+          CustColors.light_navy),
+    ):
     InkWell(
       onTap: (){
 
@@ -1129,7 +1132,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget corporateSaveChangeButton (Size size){
-    return saveloading?CircularProgressIndicator():
+    return saveloading ? CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+          CustColors.light_navy),
+    ):
     InkWell(
       onTap: (){
 
@@ -1171,7 +1177,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget governmentSaveChangeButton (Size size){
-    return saveloading?CircularProgressIndicator():
+    return saveloading ? CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+        CustColors.light_navy),):
     InkWell(
       onTap: (){
 
