@@ -49,6 +49,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     return value * per + value;
   }
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
+
   TextEditingController _nameController = TextEditingController();
   FocusNode _nameFocusNode = FocusNode();
 
@@ -216,14 +219,40 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         children: [
                           appBarCustomUi(),
                           profileImageAndKmAndReviewCount(size),
-                          NameTextUi(),
-                          EmailTextUi(),
-                          PhoneTextUi(),
-                          StateTextUi(),
+                 Form(
+                   autovalidateMode: _autoValidate,
+                   key: _formKey,
+                   child: _userType == "1"
+                     ?
+                       Column(
+                         children: [
+                           NameTextUi(),
+                           EmailTextUi(),
+                           PhoneTextUi(),
+                           StateTextUi(),
+                           // OrgNameTextUi(),
+                           //OrgTypeTextUi(),
+                           YearOfExperienceTextUi(),
+                           editProfileEnabled  == true ? NextButton() : Container(),
+                         ],
+                       )
+                       :
+                   _userType == "2"
+                     ?
+                   Column(
+                       children: [
+                         NameTextUi(),
+                         EmailTextUi(),
+                         PhoneTextUi(),
+                         StateTextUi(),
                          // OrgNameTextUi(),
-                          OrgTypeTextUi(),
-                          YearOfExperienceTextUi(),
-                          NextButton()
+                         OrgTypeTextUi(),
+                         YearOfExperienceTextUi(),
+                         editProfileEnabled == true ? NextButton() : Container(),
+                     ],
+                   ):Column()
+                 )
+
                         ],
                       ),
                 Visibility(
@@ -925,7 +954,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               cursorColor: CustColors.whiteBlueish,
                               decoration: InputDecoration(
                                 isDense: true,
-                                hintText:  'State',
+                                hintText:  'Organization',
                                 border: InputBorder.none,
                                 focusedBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
@@ -1270,7 +1299,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _nameController.text,
                               _stateController.text,
                               _imageUrl,
-                              1,
+                              2,
                               _yearOfExistenceController.text,
                               _orgNameController.text,
                               _orgTypeController.text,

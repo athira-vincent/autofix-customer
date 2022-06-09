@@ -81,7 +81,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             content: Text("Password Reset Successful",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
 
           Navigator.push(
@@ -379,7 +379,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     )
                                         : Container(
 
-                                      child: MaterialButton(
+                                        child: MaterialButton(
                                         onPressed: () {
                                           if (_formKey.currentState!.validate()) {
                                             checkPassWord(_newPasswordController.text,

@@ -269,7 +269,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CustomerMyProfileScreen()));
+                MaterialPageRoute(builder: (context) => CustomerMyProfileScreen(isEnableEditing: true)));
           },
         ),
 

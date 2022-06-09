@@ -316,7 +316,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               HomeCustomerUIScreen(),
               SparePartsListScreen(),
                CustomerMyServicesScreen(),
-               CustomerMyProfileScreen(),
+               CustomerMyProfileScreen(isEnableEditing: false,),
             ],
           )
       ),
