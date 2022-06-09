@@ -511,7 +511,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                        MechanicHomeUIScreen(),
                        Addpricefault(position: 1,),
                        MechanicMyServicesScreen(),
-                       MechanicMyProfileScreen(),
+                       MechanicMyProfileScreen(isEnableEditing: false),
                   ],
                 )
           ),

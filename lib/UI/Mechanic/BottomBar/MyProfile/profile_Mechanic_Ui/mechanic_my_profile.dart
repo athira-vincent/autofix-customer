@@ -9,14 +9,11 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/state_list.dart';
-import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,8 +21,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 class MechanicMyProfileScreen extends StatefulWidget {
-
-  MechanicMyProfileScreen();
+  bool isEnableEditing;
+  MechanicMyProfileScreen({required this.isEnableEditing});
 
   @override
   State<StatefulWidget> createState() {
@@ -104,6 +101,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    editProfileEnabled = widget.isEnableEditing;
     super.initState();
     getSharedPrefData();
     _listenServiceListResponse();
@@ -137,7 +135,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
         });
       } else {
@@ -152,7 +150,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         setState(() {
           _isLoading = false;
           _isLoadingPage = false;
-          editProfileEnabled = false;
+          editProfileEnabled = true;
         });
       } else {
         setState(() {
@@ -161,7 +159,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           editProfileEnabled = false;
           _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Updation Successful",
+            content: Text("Updated Successfully",
                 style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
@@ -174,7 +172,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         setState(() {
           _isLoading = false;
           _isLoadingPage = false;
-          editProfileEnabled = false;
+          editProfileEnabled = true;
         });
       } else {
         setState(() {
@@ -182,6 +180,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
           _isLoadingPage = true;
           editProfileEnabled = false;
           _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken,id);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Updated Successfully",
+                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
         });
       }
     });
@@ -223,7 +227,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
               children: [
                 Column(
                         children: [
-                          appBarCustomUi(),
+                          //appBarCustomUi(),
                           profileImageAndKmAndReviewCount(size),
                  Form(
                    autovalidateMode: _autoValidate,
@@ -287,18 +291,18 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
       children: [
         Row(
           children: [
-            // IconButton(
-            //   icon: Icon(Icons.arrow_back, color: Colors.black),
-            //   onPressed: () => Navigator.pop(context),
-            // ),
-            // Text(
-            //   _userType == "1" ? '$_userName' : _orgName,
-            //   textAlign: TextAlign.center,
-            //   style: Styles.appBarTextBlack,
-            //   //'Mahesh',
-            //   // textAlign: TextAlign.center,
-            //   // style: Styles.appBarTextBlack,
-            // ),
+            IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.pop(context),
+            ),
+            Text(
+              _userType == "1" ? '$_userName' : _orgName,
+              textAlign: TextAlign.center,
+              style: Styles.appBarTextBlack,
+              //'Mahesh',
+              // textAlign: TextAlign.center,
+              // style: Styles.appBarTextBlack,
+            ),
             Spacer(),
 
           ],
@@ -330,12 +334,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Container(
-                        // height: 50,
-                        margin: EdgeInsets.only(
-                            left: size.width * 18 / 100,
-                            top: size.height * 10 / 100
-                        ),
+                      Align(
+                        alignment: Alignment.centerLeft,
                         child: InkWell(
                           onTap: (){
                             setState(() {
@@ -351,16 +351,24 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               print('editProfileEnabled $editProfileEnabled');
                             });
                           },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                size: 15,
-                                color: CustColors.light_navy,
-                              ),
-                              Text('Edit Profile',
-                                style: Styles.appBarTextBlack17,),
-                            ],
+                          child: Container(
+                            height: size.height * 5 / 100,
+                            width: size.width * 20 / 100,
+                            margin: EdgeInsets.only(
+                                left: size.width * 18 / 100,
+                                top: size.height * 11 / 100
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 15,
+                                  color: CustColors.light_navy,
+                                ),
+                                Text(' Edit Profile',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -379,33 +387,35 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Container(
-                        //color: Colors.green,
-                        //height: size.height * 8 / 100,
-                        margin: EdgeInsets.only(
-                            left: size.width * 50 / 100,
-                            top: size.height * 10 / 100
-                        ),
+                      Align(
+                        alignment: Alignment.centerRight,
                         child: InkWell(
                           onTap: (){
-                              showDialog(
-                              context: context,
-                              builder: (BuildContext context)
-                              {
-                              return deactivateDialog();
-                              });
-
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context)
+                                {
+                                  return deactivateDialog();
+                                });
                           },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.logout,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Logout',
-                                style: Styles.appBarTextBlack17,),
-                            ],
+                          child: Container(
+                            height: size.height * 5 / 100,
+                            width: size.width * 20 / 100,
+                            margin: EdgeInsets.only(
+                                right: size.width * 15 / 100,
+                                top: size.height * 10 / 100
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  size: 15,
+                                  color: CustColors.light_navy,
+                                ),
+                                Text(' Logout',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -430,7 +440,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                       radius: 50,
                                       backgroundColor: Colors.white,
                                       child: ClipOval(
-                                        child: _imageUrl !=null&&_imageUrl!=""
+                                        child: _imageUrl != null && _imageUrl != ""
                                         ?
                                         Image.network(_imageUrl,
                                           width: 150,
@@ -468,8 +478,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                   ],
         ),
       ),
-
-
 
                 ],
               ),
@@ -1312,7 +1320,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _nameController.text,
                               _stateController.text,
                               _imageUrl,
-                              2,
+                              1,
                               _yearOfExistenceController.text,
                               _orgNameController.text,
                               _orgTypeController.text,
