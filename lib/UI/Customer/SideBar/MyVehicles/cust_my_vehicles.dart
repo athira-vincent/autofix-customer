@@ -895,9 +895,18 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     return  InkWell(
       onTap: (){
         setState(() {
-          custVehicleListDefaultValue = custVehicleList;
-          _addCarBloc.postUpdateDefaultVehicleApi(
-              authToken,custVehicleList?.id, userID);
+          if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
+          {
+            custVehicleListDefaultValue = custVehicleList;
+            _addCarBloc.postUpdateDefaultVehicleApi(
+                authToken,custVehicleList?.id, userID);
+          }
+          else
+          {
+
+
+          }
+
         });
       },
       child: Container(

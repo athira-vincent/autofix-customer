@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:auto_fix/Models/customer_models/add_rating_model/addRatingMdl.dart';
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergencyBookingMdl.dart';
@@ -246,6 +247,27 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CustVehicleListMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+  Future<AddRatingMdl>    postAddMechanicReviewAndRatingRequest(
+      token,rating, feedback, bookingId, bookingType)async {
+    Map<String, dynamic> _resp = await _queryProvider. postAddMechanicReviewAndRatingRequest(
+        token,rating, feedback, bookingId, bookingType);
+
+    print('$_resp >>>>>>>>>>>>>>>>>>+++++++++++++++++++_resp');
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = AddRatingMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return AddRatingMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = AddRatingMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }
