@@ -300,6 +300,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         "customerLongitude" : "${widget.longitude}",
         "customerFcmToken" : "$token",
         "mechanicName" : "${widget.mechanicListData?.firstName}",
+        "mechanicID" : "${widget.mechanicId}",
         "mechanicAddress" : "",
         "mechanicLatitude" : "${widget.latitude}",
         "mechanicLongitude" : "${widget.longitude}",
