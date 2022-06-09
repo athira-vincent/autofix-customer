@@ -2338,6 +2338,28 @@ class QueryProvider {
     );
   }
 
+  postVechicleUpdateRequest(
+      token, id,
+      status) async {
+    String _query = """ 
+     mutation {
+        vehicle_Update(
+          id: ${int.parse(id.toString())}
+          status: 0
+        ) {
+          message
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 
 
 }
