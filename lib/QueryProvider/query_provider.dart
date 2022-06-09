@@ -2078,6 +2078,24 @@ class QueryProvider {
 
 
 
+  postAddMechanicReviewAndRatingRequest(
+      token,rating, feedback, bookingId, bookingType) async {
+    String _query = """ 
+    mutation {
+        addRating(rating: ${int.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
+          message
+        }
+      }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 
   postCustVehicleListRequest(
       token) async {
@@ -2247,6 +2265,7 @@ class QueryProvider {
     return await GqlClient.I.mutation11(_query,
         enableDebug: true,token: token, isTokenThere: true, variables: {});
   }
+
   postEmrgRegAddPriceReviewRequest(
       token,page,size,search,userId,catType) async {
     String _query = """ 
@@ -2292,5 +2311,7 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+
 
 }

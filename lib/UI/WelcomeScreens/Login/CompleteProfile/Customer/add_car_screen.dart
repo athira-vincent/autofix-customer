@@ -243,6 +243,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                  _yearController.text='';
                  _lastMaintenanceController.text='';
                  _plateNumberController.text='';
+                 imageFirebaseUrl="";
+                 _images = null;
                  _isAddMore = false;
              }
            else
@@ -279,9 +281,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     print('${_images?.path}' + ">>>>>>> image from Widget");
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: ScrollConfiguration(
@@ -332,8 +332,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget completeYourProfileText() {
@@ -1150,6 +1149,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             });
                           } else {
                             setState(() {
+                              _isAddMore = false;
                               _isLoading = false;
                               print('error');
                             });
@@ -1561,310 +1561,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         }
                       }),
                 )
-            ),);
-        });
-  }
-
-  _showDialogForEngineType1(List<String> engineList) async {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (builder) {
-          return Container(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child:
-
-                Container(
-                  child: StreamBuilder(
-                      stream:  _addCarBloc.ModelDetailResponse,
-                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
-                        print("${snapshot.hasData}");
-                        print("${snapshot.connectionState}");
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Center(child: CircularProgressIndicator());
-                          default:
-                            return
-                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
-                                  ? ListView.builder(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data?.data?.modelDetails?.length,
-                                      itemBuilder: (context, index) {
-
-
-                                        return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
-                                            ?  InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                setState(() {
-                                                  selectedengine=engineList[index];
-                                                  selectedEngineName = "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                                  _engineTypeController.text = "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                                  if (_formKey.currentState!.validate()) {
-                                                  } else {
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(13),
-                                                  child: Text("${snapshot.data?.data!.modelDetails![index].engineName}",
-                                                      style: TextStyle(
-                                                          fontFamily: 'Corbel_Regular',
-                                                          fontWeight: FontWeight.normal,
-                                                          fontSize: 15,
-                                                          color: Colors.black)),
-                                                ),
-                                          ),
-                                        )
-                                      :  Container();
-                                },
-                              )
-                                  : Container();
-                        }
-                      }),
-                )
-            ),);
-        });
-  }
-
-  _showDialogForYear1(List<String> yearTypeList) async {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (builder) {
-          return Container(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child:
-
-                Container(
-                  child: StreamBuilder(
-                      stream:  _addCarBloc.ModelDetailResponse,
-                      builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
-                        print("${snapshot.hasData}");
-                        print("${snapshot.connectionState}");
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Center(child: CircularProgressIndicator());
-                          default:
-                            return
-                              snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
-                                  ? ListView.builder(
-                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data?.data?.modelDetails?.length,
-                                        itemBuilder: (context, index) {
-
-
-                                          return '${snapshot.data?.data!.modelDetails![index].brandName}' == selectedBrandName
-                                              ?  InkWell(
-                                                onTap: () async {
-                                                  Navigator.pop(context);
-                                                  setState(() {
-                                                    selectedYearType=yearTypeList[index];
-                                                    selectedYearName = "${snapshot.data?.data!.modelDetails![index].years}";
-                                                    _yearController.text = "${snapshot.data?.data!.modelDetails![index].years}";
-                                                    if (_formKey.currentState!.validate()) {
-                                                    } else {
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(13),
-                                                    child: Text("${snapshot.data?.data!.modelDetails![index].years}",
-                                                        style: TextStyle(
-                                                            fontFamily: 'Corbel_Regular',
-                                                            fontWeight: FontWeight.normal,
-                                                            fontSize: 15,
-                                                            color: Colors.black)),
-                                                  ),
-                                                ),
-                                          )
-                                      :  Container();
-                                },
-                              )
-                                  : Container();
-                        }
-                      }),
-                )
-            ),);
-        });
-  }
-
-
-
-
-  _showDialogForModel() async {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (builder) {
-          return Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-
-              Container(
-                child: StreamBuilder(
-                    stream:  _addCarBloc.ModelDetailResponse,
-                    builder: (context, AsyncSnapshot<ModelDetailsMdl> snapshot) {
-                      print("${snapshot.hasData}");
-                      print("${snapshot.connectionState}");
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
-                        default:
-                          return
-                            snapshot.data?.data?.modelDetails?.length != 0 && snapshot.data?.data?.modelDetails?.length != null
-                                ? ListView.builder(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: snapshot.data?.data?.modelDetails?.length,
-                                    itemBuilder: (context, index) {
-                                      return modelList.contains('${snapshot.data?.data!.modelDetails![index].modelName}')
-                                      ?   ListTile(
-                                        title: Text("${snapshot.data?.data!.modelDetails![index].modelName}",
-                                            style: TextStyle(
-                                                fontFamily: 'Corbel_Regular',
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 15,
-                                                color: Colors.black)),
-                                        onTap: () async {
-                                          Navigator.pop(context);
-
-                                          setState(() {
-                                            engineList=[];
-                                            _engineTypeController.text='';
-                                            yearTypeList=[];
-                                            _yearController.text='';
-
-                                            selectedmodel=snapshot.data?.data!.modelDetails![index].id;
-                                            _modelController.text = "${snapshot.data?.data!.modelDetails![index].modelName}";
-
-                                            final engineName= "${snapshot.data?.data!.modelDetails![index].engineName}";
-                                            final splitNames= engineName.split(',');
-                                            for (int i = 0; i < splitNames.length; i++){
-                                              engineList.add(splitNames[i]);
-                                            }
-
-                                            final yearsNames= "${snapshot.data?.data!.modelDetails![index].years}";
-                                            final splityearsNames= yearsNames.split(',');
-                                            for (int i = 0; i < splityearsNames.length; i++){
-                                              yearTypeList.add(splityearsNames[i]);
-                                            }
-                                            if (_formKey.currentState!.validate()) {
-                                            } else {
-                                            }
-                                          });
-
-                                        },
-                                      )
-                                      :  Container();
-                                    },
-                                  )
-                                : Container();
-                      }
-                    }),
-              )
-            ),);
-        });
-  }
-
-  _showDialogForEngineType(List<String> engineList) async {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (builder) {
-          return Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: engineList.length,
-                itemBuilder: (context, index) {
-                  return  ListTile(
-                    title: Text("${engineList[index]}",
-                        style: TextStyle(
-                            fontFamily: 'Corbel_Regular',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                            color: Colors.black)),
-                    onTap: () async {
-                      Navigator.pop(context);
-
-                      setState(() {
-
-                        selectedengine=engineList[index];
-                        _engineTypeController.text = engineList[index];
-                        if (_formKey.currentState!.validate()) {
-                        } else {
-                        }
-                      });
-
-                    },
-                  );
-                },
-              ),
-            ),);
-        });
-  }
-
-  _showDialogForYear(List<String> yearTypeList) async {
-    showModalBottomSheet(
-        context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
-        builder: (builder) {
-          return Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: yearTypeList.length,
-                itemBuilder: (context, index) {
-                  return  ListTile(
-                    title: Text("${yearTypeList[index]}",
-                        style: TextStyle(
-                            fontFamily: 'Corbel_Regular',
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                            color: Colors.black)),
-                    onTap: () async {
-                      Navigator.pop(context);
-
-                      setState(() {
-
-                        selectedYearType=yearTypeList[index];
-                        _yearController.text = yearTypeList[index];
-                        if (_formKey.currentState!.validate()) {
-                        } else {
-                        }
-                      });
-
-                    },
-                  );
-                },
-              ),
             ),);
         });
   }

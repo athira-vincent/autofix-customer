@@ -385,6 +385,11 @@ class Repository {
       _customerApiProvider.postCustVehicleListRequest(
           token);
 
+  Future<dynamic>   postAddMechanicReviewAndRatingRequest(
+      token,rating, feedback, bookingId, bookingType) =>
+      _customerApiProvider. postAddMechanicReviewAndRatingRequest(
+          token,rating, feedback, bookingId, bookingType);
+
 
   /// ===============  Service List of Mechanic ================== ///
   Future<dynamic>  fetchServiceListOfMechanic(
