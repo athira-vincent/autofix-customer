@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:ffi';
+
 import 'package:auto_fix/Constants/text_strings.dart';
 
 class InputValidator {
