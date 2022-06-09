@@ -2343,7 +2343,7 @@ class QueryProvider {
       status) async {
     String _query = """ 
      mutation {
-        vehicle_Update(
+        vehicle_Update
           id: ${int.parse(id.toString())}
           status: 0
         ) {

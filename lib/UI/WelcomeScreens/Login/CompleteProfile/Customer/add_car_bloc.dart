@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Models/customer_models/default_vechicle_model/updateDefaultVehicleMdl.dart';
+import 'package:auto_fix/Models/customer_models/vehicle_update_model/vehicleUpdateMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/vehicleCreate_Mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_models/signin_mdl.dart';
@@ -56,6 +57,18 @@ class AddCarBloc {
     ModelDetailsMdl modelDetail = await repository.postModelDetailRequest(token,type);
     postModelDetail.sink.add(modelDetail);
   }
+
+  final postVechicleDelete = BehaviorSubject<VehicleUpdateMdl>();
+  Stream<VehicleUpdateMdl> get VechicleDeleteResponse => postVechicleDelete.stream;
+  postVechicleUpdateRequest(
+      token, id,
+      status)  async {
+    VehicleUpdateMdl modelDetail = await repository.postVechicleUpdateRequest(
+        token, id,
+        status) ;
+    postVechicleDelete.sink.add(modelDetail);
+  }
+
 
 
 

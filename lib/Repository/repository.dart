@@ -213,6 +213,14 @@ class Repository {
       _addCarApiProvider.postModelDetailRequest(
         token,type);
 
+  // Model Detail List
+  Future<dynamic> postVechicleUpdateRequest(
+      token, id,
+      status) =>
+      _addCarApiProvider.postVechicleUpdateRequest(
+          token, id,
+          status);
+
   // Mechanic My Wallet
     Future<dynamic> postMechanicFetchMyWalletRequest(
         token,type) =>

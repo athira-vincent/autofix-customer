@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart'
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,6 +41,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
     'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
   ];
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
@@ -128,6 +130,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
+          key: _scaffoldKey,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: AppBar(
@@ -335,7 +338,19 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                               print('delete vechicle');
                               if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
                                 {
-                                  snapshot.data?.data?.custVehicleList?.removeAt(i);
+                                  if(snapshot.data?.data?.custVehicleList?[i].defaultVehicle == 1)
+                                    {
+                                      SnackBarWidget().setMaterialSnackBar( "Default vehicle can't be deleted", _scaffoldKey);
+
+                                    }
+                                  else
+                                    {
+                                      _addCarBloc.postVechicleUpdateRequest(
+                                          authToken, snapshot.data?.data?.custVehicleList?[i].id,
+                                          "0");
+                                      snapshot.data?.data?.custVehicleList?.removeAt(i);
+                                    }
+
                                 }
                               else
                                 {
