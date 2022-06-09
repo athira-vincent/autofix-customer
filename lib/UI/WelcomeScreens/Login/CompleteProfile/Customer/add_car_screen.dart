@@ -281,9 +281,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     print('${_images?.path}' + ">>>>>>> image from Widget");
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: ScrollConfiguration(
@@ -334,8 +332,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget completeYourProfileText() {
@@ -1152,6 +1149,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             });
                           } else {
                             setState(() {
+                              _isAddMore = false;
                               _isLoading = false;
                               print('error');
                             });
