@@ -246,6 +246,8 @@ class Repository {
   // Get State
   Future<dynamic> getStateList() => _signupApiProvider.getStates();
 
+  Future<dynamic> postBrandDetailsRequest(token,search)
+      => _vehicleSpecializationApiProvider.postBrandDetailsRequest(token,search);
 
   // Get vehicleSpecialization
   Future<dynamic> getvehicleSpecializationList() => _vehicleSpecializationApiProvider.getVehicleSpecialization();

@@ -1,3 +1,4 @@
+import 'package:auto_fix/Models/customer_models/brand_list_model/brandListMdl.dart';
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_mdl.dart';
 
@@ -17,6 +18,17 @@ class vehicleSpecializationBloc {
     vehicleSpecializationDataList.clear();
     vehicleSpecializationDataList.addAll(_vehicleSpecialization.vehicleSpecialization);
     vehicleSpecializationCode.sink.add(_vehicleSpecialization.vehicleSpecialization);
+  }
+
+
+  final postBrandListRequest = PublishSubject<BrandListMdl>();
+  Stream<BrandListMdl> get postBrandListResponse => postBrandListRequest.stream;
+
+  postBrandDetailsRequest(
+      token,search)  async {
+    BrandListMdl _mechanicIncomingRequestMdl = await repository.postBrandDetailsRequest(
+        token,search);
+    postBrandListRequest.sink.add(_mechanicIncomingRequestMdl);
   }
 
 
