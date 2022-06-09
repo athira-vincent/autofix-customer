@@ -86,7 +86,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
         // drawerHeader,
         navigationBarHeader(size),
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4, top: 13),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -108,9 +108,9 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => MechanicMyWalletScreen()));
           },
-        ),
+        ),*/
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4,),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -127,14 +127,14 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-          /*onTap: () {
+          *//*onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerOrderDetailsScreen()));
-          },*/
-        ),
+          },*//*
+        ),*/
 
-        ListTile(
+        /*ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
@@ -152,12 +152,12 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
               height: 20.76,
             ),
           ),
-         /* onTap: () {
+         *//* onTap: () {
             Navigator.pop(context);
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CustomerBookNowScreen()));
-          },*/
-        ),
+          },*//*
+        ),*/
 
         ListTile(
           contentPadding: EdgeInsets.only(left: 20.4),
