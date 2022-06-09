@@ -313,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 width: _setValue(28),
                                                 child: CircularProgressIndicator(
                                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                                      CustColors.peaGreen),
+                                                      CustColors.light_navy),
                                                 ),
                                               ),
                                             )

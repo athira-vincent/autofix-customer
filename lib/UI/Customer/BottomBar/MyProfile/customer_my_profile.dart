@@ -145,7 +145,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId CustomerMyProfileScreen'+authToken.toString());
     });
-    String id=shdPre.getString(SharedPrefKeys.userID,).toString();
+    String id = shdPre.getString(SharedPrefKeys.userID,).toString();
     _fetchProfileBloc.postCustomerProfileRequest(authToken,id);
   }
 
@@ -160,7 +160,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   style: const TextStyle(
                       fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: const Duration(seconds: 2),
-              backgroundColor: CustColors.peaGreen,
+              backgroundColor: CustColors.light_navy,
             ));
           });
         } else {
@@ -190,13 +190,20 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
         });
       }
       else{
         setState(() {
-          saveloading=false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Successfully Updated",
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+          saveloading = false;
           getSharedPrefData();
         });
       }
@@ -1080,7 +1087,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget individualSaveChangeButton (Size size){
-    return saveloading?CircularProgressIndicator():
+    return saveloading ? CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+          CustColors.light_navy),
+    ):
     InkWell(
       onTap: (){
 
@@ -1122,7 +1132,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget corporateSaveChangeButton (Size size){
-    return saveloading?CircularProgressIndicator():
+    return saveloading ? CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+          CustColors.light_navy),
+    ):
     InkWell(
       onTap: (){
 
@@ -1164,7 +1177,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   }
 
   Widget governmentSaveChangeButton (Size size){
-    return saveloading?CircularProgressIndicator():
+    return saveloading ? CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(
+        CustColors.light_navy),):
     InkWell(
       onTap: (){
 
