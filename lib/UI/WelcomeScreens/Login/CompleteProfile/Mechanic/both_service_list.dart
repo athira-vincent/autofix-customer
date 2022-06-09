@@ -212,7 +212,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                 ],
               ),
 
-
             ),
           ),
         ),
