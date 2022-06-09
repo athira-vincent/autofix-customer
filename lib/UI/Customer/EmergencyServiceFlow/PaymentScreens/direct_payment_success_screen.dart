@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -135,13 +136,13 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
           InkWell(
             onTap: (){
 
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                  CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+             /* Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                  CustomerMainLandingScreen()), (Route<dynamic> route) => false);*/
 
-              /*Navigator.pushReplacement(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RateMechanicScreen()));*/
+                      builder: (context) => RateMechanicScreen()));
             },
               child: reviewNowButton(size)),
         ],
