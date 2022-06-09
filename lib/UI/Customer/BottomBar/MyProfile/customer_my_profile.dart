@@ -185,6 +185,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         setState(() {
           // _isLoading = false;
           saveloading=false;
+          editProfileEnabled = true;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -196,6 +197,69 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
       }
       else{
         setState(() {
+          editProfileEnabled = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Successfully Updated",
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+          saveloading = false;
+          getSharedPrefData();
+        });
+      }
+    });
+    _changeProfileBloc.postCustomerCorporateEditProfile.listen((value) {
+      print("dbjbjbdjdbkj 002");
+      if(value.status== "error"){
+        setState(() {
+          // _isLoading = false;
+          saveloading=false;
+          editProfileEnabled = true;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+        });
+      }
+      else{
+        setState(() {
+          editProfileEnabled = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Successfully Updated",
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+          saveloading = false;
+          getSharedPrefData();
+        });
+      }
+    });
+    _changeProfileBloc.postCustomerGovernmentEditProfile.listen((value) {
+      print("dbjbjbdjdbkj 003");
+      if(value.status== "error"){
+        setState(() {
+          // _isLoading = false;
+          saveloading = false;
+          editProfileEnabled = true;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+        });
+      }
+      else{
+        setState(() {
+          editProfileEnabled = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text("Successfully Updated",
                 style: const TextStyle(
@@ -250,7 +314,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  appBarCustomUi(size),
+                  //appBarCustomUi(size),
                   profileImageAndKmAndReviewCount(size),
                   Form(
                       autovalidateMode: _autoValidate,
@@ -347,7 +411,16 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,80,155,0),
                         child:
-                        InkWell(
+                        Image.asset(
+                          'assets/image/mechanicProfileView/curvedGray.png',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: InkWell(
                           onTap: (){
                             setState(() {
                               print('editProfileEnabled $editProfileEnabled');
@@ -362,47 +435,27 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               print('editProfileEnabled $editProfileEnabled');
                             });
                           },
-                          child: Image.asset(
-                            'assets/image/mechanicProfileView/curvedGray.png',
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
+                          child: Container(
+                            height: size.height * 5 / 100,
+                            width: size.width * 20 / 100,
+                            margin: EdgeInsets.only(
+                              left: size.width * 18 / 100,
+                              top: size.height * 11 / 100
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  size: 15,
+                                  color: CustColors.light_navy,
+                                ),
+                                Text(' Edit Profile',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      // InkWell(
-                      //   onTap: (){
-                      //     setState(() {
-                      //       print('editProfileEnabled $editProfileEnabled');
-                      //       if(editProfileEnabled)
-                      //       {
-                      //         editProfileEnabled=false;
-                      //       }
-                      //       else
-                      //       {
-                      //         editProfileEnabled=true;
-                      //       }
-                      //       print('editProfileEnabled $editProfileEnabled');
-                      //     });
-                      //   },
-                      //   child:
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: size.width * 18 / 100,
-                            top: size.height * 10 / 100
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Edit Profile',
-                                style: Styles.appBarTextBlack17,),
-                            ],
-                          ),
-                        ),
                       //),
                     ],
                   ),
@@ -469,6 +522,15 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,80,0,0),
+                        child: Image.asset(
+                          'assets/image/mechanicProfileView/curvedWhite.png',
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
                         child: InkWell(
                           onTap: () {
                             showDialog(
@@ -478,42 +540,27 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   return deactivateDialog();
                                 });
                           },
-                          child: Image.asset(
-                            'assets/image/mechanicProfileView/curvedWhite.png',
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.cover,
+                          child: Container(
+                            height: size.height * 5 / 100,
+                            width: size.width * 20 / 100,
+                            margin: EdgeInsets.only(
+                                right: size.width * 15 / 100,
+                                top: size.height * 11 / 100
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  size: 15,
+                                  color: CustColors.light_navy,
+                                ),
+                                Text(' Logout',
+                                  style: Styles.appBarTextBlack17,),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      // InkWell(
-                      //   onTap: () {
-                      //     showDialog(
-                      //         context: context,
-                      //         builder: (BuildContext context)
-                      //         {
-                      //           return deactivateDialog();
-                      //         });
-                      //   },
-                       // child:
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: size.width * 55 / 100,
-                              top: size.height * 10 / 100
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.logout,
-                                size: 15,
-                                color: CustColors.blue,
-                              ),
-                              Text('Logout',
-                                style: Styles.appBarTextBlack17,),
-                            ],
-                          ),
-                        ),
-                      //),
                     ],
                   ),
                 ],
@@ -1097,7 +1144,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         if (_formKey.currentState!.validate()) {
           //_isLoading = true;
           saveloading = true;
-
+          //editProfileEnabled = false;
           _changeProfileBloc.postCustomerIndividualEditProfileRequest(
               authToken,
               _nameController.text.toString(),"",
@@ -1142,7 +1189,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         if (_formKey.currentState!.validate()) {
           //_isLoading = true;
           saveloading = true;
-
+         // editProfileEnabled = false;
           _changeProfileBloc.postCustomerCorporateEditProfileRequest(
               authToken,
               _nameController.text.toString(), "",
@@ -1186,7 +1233,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
         if (_formKey.currentState!.validate()) {
           //_isLoading = true;
           saveloading = true;
-
+          //editProfileEnabled = false;
           _changeProfileBloc.postCustomerGovernmentEditProfileRequest(
               authToken,
               _nameController.text.toString(), "",
