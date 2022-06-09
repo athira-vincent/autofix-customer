@@ -314,9 +314,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
         backgroundColor: CustColors.whiteBlueish,
         body: ScrollConfiguration(
@@ -457,6 +455,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           decoration:
                                                               InputDecoration(
                                                             isDense: true,
+                                                            errorStyle: TextStyle(color: Colors.red),
                                                             hintText: widget
                                                                         .userCategory ==
                                                                     TextStrings
@@ -584,6 +583,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               hintText: AppLocalizations
                                                                       .of(context)!
                                                                   .text_hint_organization_type,
+                                                              errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
                                                                 borderSide:
@@ -706,6 +706,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               hintText: AppLocalizations
                                                                       .of(context)!
                                                                   .text_hint_state,
+                                                              errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
                                                                 borderSide:
@@ -858,6 +859,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               ),
                                                               hintStyle: Styles
                                                                   .textLabelSubTitle,
+                                                              errorStyle: TextStyle(color: Colors.red),
                                                             ),
                                                           ),
                                                         ),
@@ -916,6 +918,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   .materialBlue,
                                                           decoration:
                                                               InputDecoration(
+                                                            errorStyle: TextStyle(color: Colors.red),
                                                             isDense: true,
                                                             hintText: AppLocalizations
                                                                     .of(context)!
@@ -999,6 +1002,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     cursorColor:
                                                         CustColors.materialBlue,
                                                     decoration: InputDecoration(
+                                                      errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       hintText:
                                                           AppLocalizations.of(
@@ -1074,6 +1078,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     cursorColor:
                                                         CustColors.materialBlue,
                                                     decoration: InputDecoration(
+                                                      errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       hintText:
                                                           AppLocalizations.of(
@@ -1153,9 +1158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 _stateFocusNode,
                                                             //keyboardType: TextInputType.phone,
                                                             validator: InputValidator(
-                                                                    ch: AppLocalizations.of(
-                                                                            context)!
-                                                                        .text_state)
+                                                                    ch: AppLocalizations.of(context)!.text_state)
                                                                 .emptyChecking,
                                                             controller:
                                                                 _stateController,
@@ -1196,6 +1199,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               hintText: AppLocalizations
                                                                       .of(context)!
                                                                   .text_hint_state,
+                                                              errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
                                                                 borderSide:
@@ -1287,6 +1291,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                             hintText: AppLocalizations
                                                                     .of(context)!
                                                                 .text_hint_experience_year,
+                                                            errorStyle: TextStyle(color: Colors.red),
                                                             border:
                                                                 UnderlineInputBorder(
                                                               borderSide:
@@ -1404,6 +1409,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               hintText: AppLocalizations
                                                                       .of(context)!
                                                                   .text_hint_upload_photo,
+                                                              errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
                                                                 borderSide:
@@ -1516,6 +1522,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           AppLocalizations.of(
                                                                   context)!
                                                               .text_password,
+                                                      errorStyle: TextStyle(color: Colors.red),
                                                       errorMaxLines: 3,
                                                       border:
                                                           UnderlineInputBorder(
@@ -1608,6 +1615,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     style: Styles
                                                         .textLabelSubTitle,
                                                     decoration: InputDecoration(
+                                                      errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       suffixIconConstraints:
                                                           BoxConstraints(
@@ -1718,7 +1726,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               AlwaysStoppedAnimation<
                                                                       Color>(
                                                                   CustColors
-                                                                      .peaGreen),
+                                                                      .light_navy),
                                                         ),
                                                       ),
                                                     )
@@ -1728,9 +1736,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           print(">>>>>>>>>>>>>>>> imageFirebaseUrl " +
                                                               imageFirebaseUrl
                                                                   .toString());
-                                                          if (_formKey
-                                                              .currentState!
-                                                              .validate()) {
+                                                          if (_formKey.currentState!.validate()) {
                                                             print(
                                                                 "_formKey.currentState!.validate()");
                                                             widget.userCategory ==
@@ -1760,8 +1766,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                             ? signUpMechanicCorporate(context)
                                                                             : signUpCustomerGovernment(context);
                                                           } else {
-                                                            print(
-                                                                "_formKey.currentState!.validate() - else");
+                                                            print("_formKey.currentState!.validate() - else");
                                                             setState(() =>
                                                                 _autoValidate =
                                                                     AutovalidateMode
@@ -1852,8 +1857,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   void _awaitReturnValueFromSecondScreen(BuildContext context) async {
@@ -1952,9 +1956,12 @@ class _SignupScreenState extends State<SignupScreen> {
     } else {
       setState(() {
         _isLoading = false;
+        print(">>> print ");
+        setSnackBar(errorMsg);
+        print(errorMsg);
+        //SnackBarWidget().setMaterialSnackBar(errorMsg, _scaffoldKey);
+        print("signUpCustomerIndividual - else");
       });
-      SnackBarWidget().setMaterialSnackBar(errorMsg, _scaffoldKey);
-      print("signUpCustomerIndividual - else");
       return false;
     }
   }
@@ -2827,7 +2834,7 @@ class _SignupScreenState extends State<SignupScreen> {
       content: Text('$msg',
           style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
       duration: Duration(seconds: 2),
-      backgroundColor: CustColors.peaGreen,
+      backgroundColor: CustColors.light_navy,
     ));
   }
 
