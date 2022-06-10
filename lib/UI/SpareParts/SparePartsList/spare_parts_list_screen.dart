@@ -58,11 +58,41 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SafeArea(
+    return  SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: Stack(
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 200,
+                      alignment: Alignment.center,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 220,
+                            height: 170,
+                            child: SvgPicture.asset(
+                              "assets/image/NoCart.svg",
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            /*Stack(
               alignment: Alignment.bottomCenter,
               children: [
                 Column(
@@ -75,9 +105,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                 ? Container()
                 : ViewCartUi(),
               ],
-            )),
-      ),
-    );
+            )*/
+
+        ),
+      );
   }
 
   Widget appBarCustomUi() {
