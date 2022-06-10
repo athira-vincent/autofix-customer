@@ -409,7 +409,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                             child: Text("Edited prices should need approval from admin."
                               "So please wait for the approval from adminside."
                               "click save changes to send modified rates to"
-                              "adminside",
+                              " adminside",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontFamily: 'SamsungSharpSans-Regular',
