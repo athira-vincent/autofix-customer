@@ -248,6 +248,34 @@ class HomeCustomerBloc {
     postCustomerCompletedOrdersList.sink.add(_customerCompletedOrdersListMdl);
   }
 
+  /// =============== Customer Upcoming Orders Request ================== ///
+
+  final postCustomerUpcomingOrdersList = PublishSubject<CustomerCompletedOrdersListMdl>();
+  Stream<CustomerCompletedOrdersListMdl> get postCustomerUpcomingOrdersResponse => postCustomerUpcomingOrdersList.stream;
+
+  postCustomerUpcomingOrdersRequest(
+      token,count, recent, customerId) async {
+
+    CustomerCompletedOrdersListMdl _customerCompletedOrdersListMdl = await repository.postCustomerCompletedOrdersRequest(
+        token,count, recent, customerId);
+    postCustomerUpcomingOrdersList.sink.add(_customerCompletedOrdersListMdl);
+  }
+
+
+  /// =============== Customer All Services Orders Request ================== ///
+
+  final postCustomerAllServicesOrdersList = PublishSubject<CustomerCompletedOrdersListMdl>();
+  Stream<CustomerCompletedOrdersListMdl> get postCustomerAllServicesOrdersResponse => postCustomerAllServicesOrdersList.stream;
+
+  postCustomerAllServicesOrdersRequest(
+      token,count, recent, customerId) async {
+
+    CustomerCompletedOrdersListMdl _customerCompletedOrdersListMdl = await repository.postCustomerCompletedOrdersRequest(
+        token,count, recent, customerId);
+    postCustomerAllServicesOrdersList.sink.add(_customerCompletedOrdersListMdl);
+  }
+
+
 
   /// =============== Date Conversion ================== ///
 
