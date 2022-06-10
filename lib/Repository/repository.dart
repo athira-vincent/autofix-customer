@@ -432,5 +432,10 @@ class Repository {
       _AddPriceFaultApiProvider.postEmrgRegAddPriceReviewRequest(
           token, page, size, search, userId, catType);
 
+  Future<dynamic> postCustomerCompletedOrdersRequest(
+      token,count, recent, customerId) =>
+      _customerApiProvider.postCustomerCompletedOrdersRequest(
+          token,count, recent, customerId);
+
 
 }

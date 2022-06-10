@@ -2360,6 +2360,101 @@ class QueryProvider {
     );
   }
 
+  postCustomerCompletedOrdersRequest(
+      token,count, recent, customerId) async {
+    String _query = """ 
+     {
+        cust_completed_orders(count: 300, recent: ${int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) {
+          id
+          bookingCode
+          reqType
+          bookStatus
+          totalPrice
+          tax
+          commission
+          serviceCharge
+          totalTime
+          serviceTime
+          latitude
+          longitude
+          mechLatitude
+          mechLongitude
+          extend
+          totalExt
+          extendTime
+          bookedDate
+          isRated
+          status
+          customerId
+          mechanicId
+          vehicleId
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            status
+            userTypeId
+            jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
+          }
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            status
+            userTypeId
+            jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
+          }
+          vehicle {
+            id
+            brand
+            model
+            engine
+            year
+            plateNo
+            lastMaintenance
+            milege
+            vehiclePic
+            latitude
+            longitude
+            defaultVehicle
+            status
+            userId
+          }
+          bookService {
+            id
+            mechanicId
+            customerId
+            status
+            serviceId
+            bookMechanicId
+          }
+        }
+      }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+
 
 
 }
