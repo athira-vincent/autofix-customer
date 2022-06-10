@@ -33,6 +33,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
    AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
+  AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   @override
   void initState() {
     super.initState();
@@ -119,6 +120,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
       if(value.data == "error"){
         setState(() {
           saveloading = false;
+          print('abcdefg02');
           _isLoadingPage = true;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -131,19 +133,20 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
         });
       }else{
         setState(() {
-          saveloading = true;
-          _isLoadingPage = true;
+          saveloading = false;
+          print('abcdefg01');
+          getSharedPrefData();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Service Added',
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+          //_isLoadingPage = true;
           _updateTimeFees = value.data!.updateTimeFees;
-          _selectionList=[];
-          // for(int i=0;i<_mechanicDetails!.mechanicService!.length;i++){
-          //   if(_mechanicDetails!.mechanicService![i].status==1) {
-          //     _selectionList.add(true);
-          //   }
-          //   else{
-          //     _selectionList.add(false);
-          //   }
-          // };
-          print("ldjgjgj ${_mechanicDetails!.firstName}");
+          //_selectionList=[];
+          //print("ldjgjgj ${_mechanicDetails!.firstName}");
         });
       }
     });
@@ -196,7 +199,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                   ),
                 ),
               ),
-              _isLoadingPage==false?Center(child: CircularProgressIndicator()):
+              _isLoadingPage==false?Center(child: CircularProgressIndicator(color: CustColors.light_navy)):
               Container(
                 child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
@@ -449,7 +452,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                             child: Text("Edited prices should need approval from admin."
                                 "So please wait for the approval from adminside."
                                 "click save changes to send modified rates to"
-                                "adminside",
+                                " adminside",
                               style: TextStyle(
                                 fontFamily: 'SamsungSharpSans-Regular',
                                 fontSize: 12,
@@ -463,21 +466,30 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 230.0,top: 24),
-                child: saveloading?CircularProgressIndicator():
+                child: saveloading?CircularProgressIndicator(color: CustColors.light_navy):
                 Container(
                   height: 40,
                   width: 130,
                   child: TextButton(
                     onPressed: () async {
-                      saveloading = true;                      SharedPreferences shdPre = await SharedPreferences.getInstance();
+                      SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
                         for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
+                          saveloading = true;
+                          print('abcdefg03');
                           if(_selectionList[i]){
+
                             _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                 authToken,
                                 mechanicId,
                                 _timeList![i], _priceList![i], 1
                             );
+                            _isLoadingPage=false;
+                            setState(() {
+                              _autoValidate = AutovalidateMode.always;
+                            });
+                          }else{
+
                           }
                         }
 
@@ -501,6 +513,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                   ),
                 ),
               ),
+              SizedBox(height: 10)
             ],
           ),
         ),
