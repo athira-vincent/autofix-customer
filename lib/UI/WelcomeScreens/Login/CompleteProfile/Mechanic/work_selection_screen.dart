@@ -1054,7 +1054,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   width: _setValue(28),
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
+                        CustColors.light_navy),
                   ),
                 ),
               )
@@ -1133,7 +1133,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                   width: _setValue(28),
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
-                        CustColors.peaGreen),
+                        CustColors.light_navy),
                   ),
                 ),
               )

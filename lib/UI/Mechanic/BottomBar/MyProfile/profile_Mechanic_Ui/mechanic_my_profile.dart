@@ -277,7 +277,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       alignment: Alignment.center,
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            CustColors.peaGreen),
+                            CustColors.light_navy),
                       ),
                     ),
                   ),
@@ -771,8 +771,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               {
                                 _awaitReturnValueFromSecondScreen(context);
                               }
-
-
                           },
                           child: Container(
                             height: 25,
@@ -1228,11 +1226,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
                                   RegExp('[0-9]')),
+                               LengthLimitingTextInputFormatter(2),
                             ],
                             validator: InputValidator(
                                 ch : 'Year of existence' ).nameCheckingWithNumeric,
                             controller: _yearOfExistenceController,
-                            cursorColor: CustColors.whiteBlueish,
+                            cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
                               hintText:  'Experience',
