@@ -85,15 +85,15 @@ class CustCompletedOrder {
   int reqType;
   int bookStatus;
   int totalPrice;
-  double tax;
-  int commission;
-  double serviceCharge;
+  var tax;
+  var commission;
+  var serviceCharge;
   dynamic totalTime;
-  String serviceTime;
+  dynamic serviceTime;
   double latitude;
   double longitude;
-  double mechLatitude;
-  double mechLongitude;
+  dynamic mechLatitude;
+  dynamic mechLongitude;
   dynamic extend;
   dynamic totalExt;
   dynamic extendTime;
@@ -114,15 +114,15 @@ class CustCompletedOrder {
     reqType: json["reqType"] == null ? null : json["reqType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
-    tax: json["tax"] == null ? null : json["tax"].toDouble(),
+    tax: json["tax"] == null ? null : json["tax"],
     commission: json["commission"] == null ? null : json["commission"],
-    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"].toDouble(),
+    serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
     totalTime: json["totalTime"],
-    serviceTime: json["serviceTime"] == null ? null : json["serviceTime"],
+    serviceTime: json["serviceTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
-    mechLatitude: json["mechLatitude"] == null ? null : json["mechLatitude"].toDouble(),
-    mechLongitude: json["mechLongitude"] == null ? null : json["mechLongitude"].toDouble(),
+    mechLatitude: json["mechLatitude"],
+    mechLongitude: json["mechLongitude"],
     extend: json["extend"],
     totalExt: json["totalExt"],
     extendTime: json["extendTime"],
@@ -148,11 +148,11 @@ class CustCompletedOrder {
     "commission": commission == null ? null : commission,
     "serviceCharge": serviceCharge == null ? null : serviceCharge,
     "totalTime": totalTime,
-    "serviceTime": serviceTime == null ? null : serviceTime,
+    "serviceTime": serviceTime,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
-    "mechLatitude": mechLatitude == null ? null : mechLatitude,
-    "mechLongitude": mechLongitude == null ? null : mechLongitude,
+    "mechLatitude": mechLatitude,
+    "mechLongitude": mechLongitude,
     "extend": extend,
     "totalExt": totalExt,
     "extendTime": extendTime,
@@ -176,6 +176,7 @@ class BookService {
     required this.customerId,
     required this.status,
     required this.serviceId,
+    required this.service,
     required this.bookMechanicId,
   });
 
@@ -184,6 +185,7 @@ class BookService {
   dynamic customerId;
   int status;
   int serviceId;
+  Service? service;
   dynamic bookMechanicId;
 
   factory BookService.fromJson(Map<String, dynamic> json) => BookService(
@@ -192,6 +194,7 @@ class BookService {
     customerId: json["customerId"],
     status: json["status"] == null ? null : json["status"],
     serviceId: json["serviceId"] == null ? null : json["serviceId"],
+    service: json["service"] == null ? null : Service.fromJson(json["service"]),
     bookMechanicId: json["bookMechanicId"],
   );
 
@@ -201,7 +204,52 @@ class BookService {
     "customerId": customerId,
     "status": status == null ? null : status,
     "serviceId": serviceId == null ? null : serviceId,
+    "service": service == null ? null : service?.toJson(),
     "bookMechanicId": bookMechanicId,
+  };
+}
+
+class Service {
+  Service({
+    required this.serviceName,
+    required this.serviceCode,
+    required this.description,
+    required this.id,
+    required this.minPrice,
+    required this.maxPrice,
+    required this.icon,
+    required this.categoryId,
+  });
+
+  String serviceName;
+  String serviceCode;
+  dynamic description;
+  String id;
+  String minPrice;
+  String maxPrice;
+  String icon;
+  int categoryId;
+
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
+    serviceName: json["serviceName"] == null ? null : json["serviceName"],
+    serviceCode: json["serviceCode"] == null ? null : json["serviceCode"],
+    description: json["description"],
+    id: json["id"] == null ? null : json["id"],
+    minPrice: json["minPrice"] == null ? null : json["minPrice"],
+    maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
+    icon: json["icon"] == null ? null : json["icon"],
+    categoryId: json["categoryId"] == null ? null : json["categoryId"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "serviceName": serviceName == null ? null : serviceName,
+    "serviceCode": serviceCode == null ? null : serviceCode,
+    "description": description,
+    "id": id == null ? null : id,
+    "minPrice": minPrice == null ? null : minPrice,
+    "maxPrice": maxPrice == null ? null : maxPrice,
+    "icon": icon == null ? null : icon,
+    "categoryId": categoryId == null ? null : categoryId,
   };
 }
 

@@ -2343,7 +2343,7 @@ class QueryProvider {
       status) async {
     String _query = """ 
      mutation {
-        vehicle_Update
+        vehicle_Update(
           id: ${int.parse(id.toString())}
           status: 0
         ) {
@@ -2364,7 +2364,8 @@ class QueryProvider {
       token,count, recent, customerId) async {
     String _query = """ 
      {
-        cust_completed_orders(count: 300, recent: ${int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) {
+        cust_completed_orders(count: 300, recent: ${recent == null?null: int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) 
+        {
           id
           bookingCode
           reqType
@@ -2405,6 +2406,7 @@ class QueryProvider {
           }
           customer {
             id
+          
             userCode
             firstName
             lastName
@@ -2440,6 +2442,17 @@ class QueryProvider {
             customerId
             status
             serviceId
+            service
+            {
+              serviceName
+              serviceCode
+              description
+              id
+              minPrice
+              maxPrice
+              icon
+              categoryId
+            }
             bookMechanicId
           }
         }
