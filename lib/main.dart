@@ -30,7 +30,6 @@ void main() async {
   await initHiveForFlutter();
   await runZonedGuarded(() async {
    WidgetsFlutterBinding.ensureInitialized();
-
    if(Platform.isAndroid)
      {
        await Firebase.initializeApp(
