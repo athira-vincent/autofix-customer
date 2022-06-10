@@ -1,5 +1,6 @@
 
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
+import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergencyBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
@@ -231,6 +232,20 @@ class HomeCustomerBloc {
     CustomerAddMoreServiceMdl _mechanicAddMoreServiceMdl = await repository. postCustomerAddMoreServiceUpdate(
         token, bookingId, serviceIds, totalPrice, travelTime);
     postCustomerAddMoreServiceRequest.sink.add(_mechanicAddMoreServiceMdl);
+  }
+
+
+  /// =============== Customer Completed Orders Request ================== ///
+
+  final postCustomerCompletedOrdersList = PublishSubject<CustomerCompletedOrdersListMdl>();
+  Stream<CustomerCompletedOrdersListMdl> get postCustomerCompletedOrdersResponse => postCustomerCompletedOrdersList.stream;
+
+  postCustomerCompletedOrdersRequest(
+      token,count, recent, customerId) async {
+
+    CustomerCompletedOrdersListMdl _customerCompletedOrdersListMdl = await repository.postCustomerCompletedOrdersRequest(
+        token,count, recent, customerId);
+    postCustomerCompletedOrdersList.sink.add(_customerCompletedOrdersListMdl);
   }
 
 

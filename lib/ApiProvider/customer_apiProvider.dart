@@ -2,6 +2,7 @@
 
 import 'package:auto_fix/Models/customer_models/add_rating_model/addRatingMdl.dart';
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
+import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergencyBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
@@ -287,6 +288,26 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CategoryListHomeMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  Future<CustomerCompletedOrdersListMdl> postCustomerCompletedOrdersRequest(
+      token,count, recent, customerId) async {
+    Map<String, dynamic> _resp = await _queryProvider.postCustomerCompletedOrdersRequest(
+        token,count, recent, customerId);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = CustomerCompletedOrdersListMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return CustomerCompletedOrdersListMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = CustomerCompletedOrdersListMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,6 +33,9 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
 
   double totalFees = 0.0;
   String authToken="";
+
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
 
   double _setValue(double value) {
     return value * per + value;
@@ -94,7 +98,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
       child: Row(
         children: [
           Text(
-            'My Job Appointments',
+            'My Services',
             textAlign: TextAlign.center,
             style: Styles.appBarTextBlack,
           ),

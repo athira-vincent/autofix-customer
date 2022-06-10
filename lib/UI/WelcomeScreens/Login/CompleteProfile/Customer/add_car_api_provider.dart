@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:auto_fix/Models/customer_models/default_vechicle_model/updateDefaultVehicleMdl.dart';
+import 'package:auto_fix/Models/customer_models/vehicle_update_model/vehicleUpdateMdl.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/vehicleCreate_Mdl.dart';
 
@@ -95,6 +96,26 @@ class AddCarApiProvider {
     }
   }
 
+  Future<VehicleUpdateMdl> postVechicleUpdateRequest(
+      token, id,
+      status)  async {
+    Map<String, dynamic> _resp = await _queryProvider.postVechicleUpdateRequest(
+        token, id,
+        status);
+    // ignore: unnecessary_null_comparison
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = VehicleUpdateMdl(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return VehicleUpdateMdl.fromJson(data);
+      }
+    } else {
+      final errorMsg = VehicleUpdateMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 
 
 }

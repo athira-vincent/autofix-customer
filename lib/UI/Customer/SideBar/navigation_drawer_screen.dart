@@ -231,7 +231,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           title: Align(
             alignment: Alignment(-1.28, 0),
             child: Text(
-              "My Appointments",
+              "My Services",
               style: Styles.navDrawerTextStyle02,
             ),
           ),
