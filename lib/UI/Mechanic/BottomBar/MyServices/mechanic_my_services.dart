@@ -130,23 +130,23 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                     ),
                     selectedService == "1"
                         ? Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30))
-                      ),
-                    )
+                            height: 10,
+                            decoration: BoxDecoration(
+                                color: CustColors.light_navy,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30))
+                            ),
+                          )
                         : Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30))
-                      ),
-                    ),
+                            height: 10,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30),
+                                    topRight: Radius.circular(30))
+                            ),
+                          ),
 
                   ],
                 ),

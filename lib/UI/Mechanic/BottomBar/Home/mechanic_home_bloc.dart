@@ -68,7 +68,33 @@ class HomeMechanicBloc {
     postMechanicUpComingService.sink.add(_mechanicUpComingServiceMdl);
   }
 
-  /// =============== Mechanic Upcoming Service ================== ///
+  /// =============== Mechanic Completed Service ================== ///
+
+  final postMechanicCompletedService = PublishSubject<MechanicUpcomingServiceMdl>();
+  Stream<MechanicUpcomingServiceMdl> get postMechanicCompletedServiceResponse => postMechanicCompletedService.stream;
+
+  postMechanicCompletedServiceRequest(
+      token, type, mechanicId) async {
+
+    MechanicUpcomingServiceMdl _mechanicUpComingServiceMdl = await repository.postMechanicUpComingServiceRequest(
+        token, type, mechanicId);
+    postMechanicCompletedService.sink.add(_mechanicUpComingServiceMdl);
+  }
+
+  /// =============== Mechanic All Service ================== ///
+
+  final postMechanicAllService = PublishSubject<MechanicUpcomingServiceMdl>();
+  Stream<MechanicUpcomingServiceMdl> get postMechanicAllServiceResponse => postMechanicAllService.stream;
+
+  postMechanicAllServiceRequest(
+      token, type, mechanicId) async {
+
+    MechanicUpcomingServiceMdl _mechanicUpComingServiceMdl = await repository.postMechanicUpComingServiceRequest(
+        token, type, mechanicId);
+    postMechanicAllService.sink.add(_mechanicUpComingServiceMdl);
+  }
+
+  /// =============== Mechanic Active Service ================== ///
 
   final postMechanicActiveService = PublishSubject<MechanicActiveServiceUpdateMdl>();
   Stream<MechanicActiveServiceUpdateMdl> get postMechanicActiveServiceResponse => postMechanicActiveService.stream;
