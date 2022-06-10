@@ -25,7 +25,7 @@ class RateMechanicScreen extends StatefulWidget {
 class _RateMechanicScreenState extends State<RateMechanicScreen> {
 
   late double _rating;
-  double _initialRating = 0.0;
+  double _initialRating = 1.0;
   int textTotalCount = 350,textCount = 0;
 
   var scaffoldKey = GlobalKey<ScaffoldState>();

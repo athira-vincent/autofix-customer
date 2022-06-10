@@ -213,6 +213,14 @@ class Repository {
       _addCarApiProvider.postModelDetailRequest(
         token,type);
 
+  // Model Detail List
+  Future<dynamic> postVechicleUpdateRequest(
+      token, id,
+      status) =>
+      _addCarApiProvider.postVechicleUpdateRequest(
+          token, id,
+          status);
+
   // Mechanic My Wallet
     Future<dynamic> postMechanicFetchMyWalletRequest(
         token,type) =>
@@ -423,6 +431,11 @@ class Repository {
       token,page,size,search,userId,catType) =>
       _AddPriceFaultApiProvider.postEmrgRegAddPriceReviewRequest(
           token, page, size, search, userId, catType);
+
+  Future<dynamic> postCustomerCompletedOrdersRequest(
+      token,count, recent, customerId) =>
+      _customerApiProvider.postCustomerCompletedOrdersRequest(
+          token,count, recent, customerId);
 
 
 }
