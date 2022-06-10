@@ -46,6 +46,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
 
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _orgNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _stateController = TextEditingController();
@@ -54,6 +55,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
 
 
   FocusNode _nameFocusNode = FocusNode();
+  FocusNode _orgNameNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
   FocusNode _stateFocusNode = FocusNode();
@@ -284,7 +286,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
     _userType = value.data!.customerDetails!.customer![0].custType.toString();
-    _orgName = value.data!.customerDetails!.customer![0].orgName.toString();
+    _orgNameController.text = value.data!.customerDetails!.customer![0].orgName.toString();
 
     _signinBloc.userDefaultData(
         authToken,
@@ -336,8 +338,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                               ?
                             Column(
                               children: [
-                                NameTextUi(size),
+                                OrgNameTextUi(size),
                                 OrganisationTypeTextUi(size),     // --------------------- Industry
+                                NameTextUi(size),
                                 EmailTextUi(size),
                                 PhoneTextUi(size),
                                 StateTextUi(size),
@@ -1036,6 +1039,95 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
   //   );
   // }
 
+  Widget OrgNameTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: CustColors.whiteBlueish,
+                    borderRadius: BorderRadius.circular(11.0)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Icon(Icons.person, color: CustColors.blue),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: TextFormField(
+                          enabled: editProfileEnabled,
+                          readOnly: !editProfileEnabled,
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          style: Styles.appBarTextBlack15,
+                          focusNode: _orgNameNode,
+                          keyboardType: TextInputType.name,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z ]')),
+                          ],
+                          validator: InputValidator(
+                              ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                          controller: _orgNameController,
+                          cursorColor: CustColors.light_navy,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            hintText: 'Organisation Name',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 2.8,
+                              horizontal: 0.0,
+                            ),
+                            hintStyle: Styles.appBarTextBlack15,),
+                        ),
+                      ),
+                      editProfileEnabled != true
+                          ?
+                      Text(
+                        'Organisation name',
+                        textAlign: TextAlign.center,
+                        style: Styles.textLabelSubTitle,
+                      )
+                          :
+                      Container(),
+                    ],
+                  ),
+                ),
+              ),
+              //Spacer(),
+              editProfileEnabled == true
+                  ? Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                  )
+              )
+                  : Container(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget OrganisationTypeTextUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
@@ -1148,7 +1240,8 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           _changeProfileBloc.postCustomerIndividualEditProfileRequest(
               authToken,
               _nameController.text.toString(),"",
-              selectedState, 1,
+              _stateController.text.toString(),1,
+              //selectedState, 1,
               _imageUrl);
           setState(() {
 
@@ -1193,9 +1286,9 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           _changeProfileBloc.postCustomerCorporateEditProfileRequest(
               authToken,
               _nameController.text.toString(), "",
-              selectedState, 1,
+              _stateController.text.toString(), 1,
               _imageUrl,
-              _orgName,       // org name
+              _orgNameController.text.toString(),       // org name
               _orgTypeController.text.toString()
           );
 
@@ -1237,7 +1330,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
           _changeProfileBloc.postCustomerGovernmentEditProfileRequest(
               authToken,
               _nameController.text.toString(), "",
-              selectedState, 1,
+              _stateController.text.toString(), 1,
               _imageUrl, " "    //ministryName
           );
 
