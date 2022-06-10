@@ -196,11 +196,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
 
   void setProfileData(MechanicProfileMdl value){
+    String yearOfExistence = value.data!.mechanicDetails!.mechanic![0].yearExp;
     _nameController.text = value.data!.mechanicDetails!.firstName.toString() ;
     _emailController.text = value.data!.mechanicDetails!.emailId.toString();
     _phoneController.text = value.data!.mechanicDetails!.phoneNo.toString();
     _stateController.text = value.data!.mechanicDetails!.mechanic![0].state.toString();
-    _yearOfExistenceController.text = value.data!.mechanicDetails!.mechanic![0].yearExp.toString();
+    _yearOfExistenceController.text = yearOfExistence == null || yearOfExistence == "" ? "0" : yearOfExistence;
     _orgNameController.text = value.data!.mechanicDetails!.mechanic![0].orgName.toString();
     _orgTypeController.text = value.data!.mechanicDetails!.mechanic![0].orgType.toString();
     _userName = value.data!.mechanicDetails!.firstName.toString();
@@ -229,45 +230,43 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
             child: Stack(
               children: [
                 Column(
-                        children: [
-                          //appBarCustomUi(),
-                          profileImageAndKmAndReviewCount(size),
-                 Form(
-                   autovalidateMode: _autoValidate,
-                   key: _formKey,
-                   child: _userType == "1"
-                     ?
-                       Column(
-                         children: [
-                           NameTextUi(),
-                           EmailTextUi(),
-                           PhoneTextUi(),
-                           StateTextUi(),
-                           // OrgNameTextUi(),
-                           //OrgTypeTextUi(),
-                           YearOfExperienceTextUi(),
-                           editProfileEnabled  == true ? NextButton() : Container(),
-                         ],
-                       )
-                       :
-                   _userType == "2"
-                     ?
-                   Column(
-                       children: [
-                         NameTextUi(),
-                         EmailTextUi(),
-                         PhoneTextUi(),
-                         StateTextUi(),
-                         // OrgNameTextUi(),
-                         OrgTypeTextUi(),
-                         YearOfExperienceTextUi(),
-                         editProfileEnabled == true ? NextButton() : Container(),
-                     ],
-                   ):Column()
-                 )
+                  children: [
+                    //appBarCustomUi(),
+                    profileImageAndKmAndReviewCount(size),
+                    Form(
+                        autovalidateMode: _autoValidate,
+                        key: _formKey,
+                        child: _userType == "1"
+                            ?
+                        Column(
+                          children: [
+                            NameTextUi(),
+                            YearOfExperienceTextUi(),
+                            EmailTextUi(),
+                            PhoneTextUi(),
+                            StateTextUi(),
+                            editProfileEnabled  == true ? NextButton() : Container(),
+                          ],
+                        )
+                            :
+                        _userType == "2"
+                            ?
+                        Column(
+                          children: [
+                            OrgNameTextUi(),
+                            OrgTypeTextUi(),
+                            YearOfExperienceTextUi(),
+                            NameTextUi(),
+                            EmailTextUi(),
+                            PhoneTextUi(),
+                            StateTextUi(),
+                            editProfileEnabled == true ? NextButton() : Container(),
+                          ],
+                        ):Column()
+                    )
 
-                        ],
-                      ),
+                  ],
+                ),
                 Visibility(
                   visible: _isLoadingPage,
                   child: Align(
@@ -631,7 +630,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
-                      editProfileEnabled == true
+                      editProfileEnabled != true
                       ? Text(
                           //'Your name',
                           _userType == "1" ? 'Your name' : 'Contact person',
@@ -716,11 +715,15 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
+                      editProfileEnabled != true
+                          ?
                       Text(
                             'Your email',
                             textAlign: TextAlign.center,
                             style: Styles.textLabelSubTitle,
                           )
+                          :
+                      Container()
                     ],
                   ),
                 ),
@@ -802,7 +805,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           ),
                         ),
                       ),
-                      editProfileEnabled == false
+                      editProfileEnabled != true
                           ? Text(
                         'Your state',
                         textAlign: TextAlign.center,
@@ -875,7 +878,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             validator: InputValidator(
                                 ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
                             controller: _orgNameController,
-                            cursorColor: CustColors.whiteBlueish,
+                            cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
                               hintText:  'Organization Name',
@@ -891,14 +894,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               hintStyle: Styles.appBarTextBlack15,),
                           ),
                         ),
-                        editProfileEnabled == false
-                            ? Container(
-                              child: Text(
-                                  'Your organization name',
-                                  textAlign: TextAlign.start,
-                                  style: Styles.textLabelSubTitle,
-                                ),
-                            )
+                        editProfileEnabled != true
+                            ? Text(
+                                'Your organization name',
+                                textAlign: TextAlign.start,
+                                style: Styles.textLabelSubTitle,
+                              )
                             : Container(),
                       ],
                     ),
@@ -990,7 +991,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           ),
                         ),
                       ),
-                      editProfileEnabled == false
+                      editProfileEnabled != true
                           ? Text(
                         'Your organization type',
                         textAlign: TextAlign.center,
@@ -1075,12 +1076,15 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             hintStyle: Styles.appBarTextBlack15,),
                         ),
                       ),
-
+                      editProfileEnabled != true
+                          ?
                       Text(
                         'Your phone number',
                         textAlign: TextAlign.center,
                         style: Styles.textLabelSubTitle,
                       )
+                          :
+                      Container()
                     ],
                   ),
                 ),
@@ -1157,7 +1161,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           ),
                         ),
                       ),
-                      editProfileEnabled == false
+                      editProfileEnabled != true
                           ? Text(
                         'Your address',
                         textAlign: TextAlign.center,
@@ -1217,6 +1221,8 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           height: 25,
                           width: 300,
                           child: TextFormField(
+                            enabled: editProfileEnabled,
+                            readOnly: !editProfileEnabled,
                             textAlignVertical: TextAlignVertical.center,
                             maxLines: 1,
                             style: Styles.appBarTextBlack15,
@@ -1247,7 +1253,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           ),
                         ),
                       ),
-                      editProfileEnabled == false
+                      editProfileEnabled != true
                           ? Text(
                               'Your experience',
                               textAlign: TextAlign.center,
@@ -1305,7 +1311,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             _mechanicProfileBloc.postMechanicEditProfileIndividualRequest(
                               authToken,
                               _nameController.text,
-                              _nameController.text,
+                              "",
                               _stateController.text,
                               _imageUrl,
                               1,
@@ -1318,7 +1324,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
                               authToken,
                               _nameController.text,
-                              _nameController.text,
+                              "",
                               _stateController.text,
                               _imageUrl,
                               1,
