@@ -126,14 +126,17 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
+
         });
       }else{
         setState(() {
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           saveloading = false;
+          getSharedPrefData();
           _updateTimeFees = value.data!.updateTimeFees;
-          _selectionList=[];
+          //_selectionList=[];
         });
+
       }
     });
   }
@@ -184,7 +187,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                 ),
               ),
             ),
-              _isLoadingPage==false?Center(child: CircularProgressIndicator()):
+              _isLoadingPage==false?Center(child: CircularProgressIndicator(color:CustColors.light_navy)):
               _AddPriceServiceList!.data!.length != 0 ||  _AddPriceServiceList!.data!.length != null
               ? Container(
                 child: ListView.builder(
@@ -424,17 +427,17 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 230.0,top: 24),
-                child: saveloading?CircularProgressIndicator():
+                child: saveloading?CircularProgressIndicator(color: CustColors.light_navy):
                 Container(
                   height: 40,
                   width: 130,
                   child: TextButton(
                       onPressed: () async {
-                        saveloading = true;
                         SharedPreferences shdPre = await SharedPreferences.getInstance();
                         setState(() {
                           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
                             if(_selectionList[i]){
+                              saveloading = true;
                               _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                   authToken,
                                   mechanicId,
@@ -447,15 +450,18 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               //     mechanicId,
                               //   2,
                               );
+                              _isLoadingPage=false;
                               setState(() {
                                 _autoValidate = AutovalidateMode.always;
                               });
+                            }else{
+
                             }
                           }
 
                         });
                       },
-                      child: Text('Save changes',
+                      child: Text('Save Changes',
                       style: TextStyle(
                         fontFamily: 'SamsungSharpSans-Medium',
                         fontSize: 12,
