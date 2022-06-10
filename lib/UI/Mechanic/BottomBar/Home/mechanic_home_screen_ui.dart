@@ -105,6 +105,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", mechanicId);
+
     });
   }
 
