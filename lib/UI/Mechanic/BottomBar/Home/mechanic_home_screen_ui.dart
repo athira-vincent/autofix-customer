@@ -564,7 +564,22 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           return
                             snapshot.data?.data?.brandDetails?.length != 0 && snapshot.data?.data?.brandDetails?.length != null
                                 ? brandSpecializationList(size,snapshot)
-                                : Container();
+                                : Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(7),
+                                          border: Border.all(
+                                            color: Colors.white,
+                                          ),
+                                          color: CustColors.white_04
+                                      ),
+                                      child: SvgPicture.asset(
+                                        "assets/image/NoBrand.svg",
+                                        //fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                );
                       }
                     }
                 ),

@@ -158,6 +158,7 @@ flutter:
     - assets/image/CustomerType/profileAvathar.svg
     - assets/image/phoneLogin/EmailBgImage.svg
     - assets/images/Group 3460.svg
+    - assets/image/NoBrand.svg
 
   fonts:
     - family: Montserrat_SemiBold
