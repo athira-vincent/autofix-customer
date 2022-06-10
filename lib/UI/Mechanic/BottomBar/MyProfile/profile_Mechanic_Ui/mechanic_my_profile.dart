@@ -954,7 +954,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         child: InkWell(
                           onTap: () async {
                             print("on tap state ");
-
                             if(editProfileEnabled == true)
                             {
                               showOrganisationTypeSelector();
