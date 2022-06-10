@@ -74,11 +74,13 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
   _listenServiceListResponse() {
     _homeCustomerBloc.postCustomerCompletedOrdersResponse.listen((value) {
         if (value.status == "error") {
-
-
+          setState(() {
+            isLoadingCompletedServices = false;
+          });
         } else {
 
           setState(() {
+            isLoadingCompletedServices = false;
             CustomerCompletedServicesList = value.data;
           });
 
@@ -87,11 +89,14 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
       });
     _homeCustomerBloc.postCustomerUpcomingOrdersResponse.listen((value) {
       if (value.status == "error") {
-
+        setState(() {
+          isLoadingUpcomingServices = false;
+        });
 
       } else {
 
         setState(() {
+          isLoadingUpcomingServices = false;
           CustomerUpcomingServicesList = value.data;
         });
       }
@@ -100,9 +105,12 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     _homeCustomerBloc.postCustomerAllServicesOrdersResponse.listen((value) {
       if (value.status == "error") {
 
-
+        setState(() {
+          isLoadingAllServices = false;
+        });
       } else {
         setState(() {
+          isLoadingAllServices = false;
           CustomerAllServicesList = value.data;
         });
 
@@ -322,7 +330,10 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5,5,5,5),
-          child: Container(
+          child:
+          isLoadingUpcomingServices == true
+              ? progressBarDarkBlue()
+              : Container(
             child: CustomerUpcomingServicesList?.custCompletedOrders?.length == 0 || CustomerUpcomingServicesList?.custCompletedOrders?.length == null
                 ? Container()
                 : ListView.builder(
@@ -567,7 +578,10 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5,5,5,5),
-          child: Container(
+          child:
+          isLoadingCompletedServices == true
+              ? progressBarDarkBlue()
+              : Container(
             child:
             CustomerCompletedServicesList?.custCompletedOrders?.length == 0 || CustomerCompletedServicesList?.custCompletedOrders?.length == null
                 ? Container()
@@ -813,7 +827,10 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5,5,5,5),
-          child: Container(
+          child:
+          isLoadingAllServices == true
+              ? progressBarDarkBlue()
+              : Container(
             child: CustomerAllServicesList?.custCompletedOrders?.length == 0 || CustomerAllServicesList?.custCompletedOrders?.length == null
                 ? Container()
                 : ListView.builder(
@@ -1043,6 +1060,16 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget progressBarDarkBlue() {
+    return Container(
+      height: 60.0,
+      child: new Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.blue),
+          )),
     );
   }
 
