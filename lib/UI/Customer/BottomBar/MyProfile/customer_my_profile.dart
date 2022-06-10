@@ -420,28 +420,28 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: InkWell(
-                          onTap: (){
-                            setState(() {
-                              print('editProfileEnabled $editProfileEnabled');
-                              if(editProfileEnabled)
-                              {
-                                editProfileEnabled=false;
-                              }
-                              else
-                              {
-                                editProfileEnabled=true;
-                              }
-                              print('editProfileEnabled $editProfileEnabled');
-                            });
-                          },
-                          child: Container(
-                            height: size.height * 5 / 100,
-                            width: size.width * 20 / 100,
-                            margin: EdgeInsets.only(
-                              left: size.width * 18 / 100,
-                              top: size.height * 11 / 100
-                            ),
+                        child: Container(
+                          height: size.height * 5 / 100,
+                          width: size.width * 28 / 100,
+                          margin: EdgeInsets.only(
+                            left: size.width * 18 / 100,
+                            top: size.height * 11 / 100
+                          ),
+                          child: InkWell(
+                            onTap: (){
+                              setState(() {
+                                print('editProfileEnabled $editProfileEnabled');
+                                if(editProfileEnabled)
+                                {
+                                  editProfileEnabled=false;
+                                }
+                                else
+                                {
+                                  editProfileEnabled=true;
+                                }
+                                print('editProfileEnabled $editProfileEnabled');
+                              });
+                            },
                             child: Row(
                               children: [
                                 Icon(
@@ -531,22 +531,22 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context)
-                                {
-                                  return deactivateDialog();
-                                });
-                          },
-                          child: Container(
-                            height: size.height * 5 / 100,
-                            width: size.width * 20 / 100,
-                            margin: EdgeInsets.only(
-                                right: size.width * 15 / 100,
-                                top: size.height * 11 / 100
-                            ),
+                        child: Container(
+                          height: size.height * 5 / 100,
+                          width: size.width * 20 / 100,
+                          margin: EdgeInsets.only(
+                              right: size.width * 15 / 100,
+                              top: size.height * 11 / 100
+                          ),
+                          child: InkWell(
+                            onTap: (){
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context)
+                                  {
+                                    return deactivateDialog();
+                                  });
+                            },
                             child: Row(
                               children: [
                                 Icon(
