@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final corporateMechCompleteProfileMdl = corporateMechCompleteProfileMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 CorporateMechCompleteProfileMdl corporateMechCompleteProfileMdlFromJson(String str) => CorporateMechCompleteProfileMdl.fromJson(json.decode(str));

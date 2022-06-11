@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final mechanicBookingMdl = mechanicBookingMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MechanicBookingMdl mechanicBookingMdlFromJson(String str) => MechanicBookingMdl.fromJson(json.decode(str));

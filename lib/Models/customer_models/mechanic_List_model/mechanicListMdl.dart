@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final mechanicListMdl = mechanicListMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MechanicListMdl mechanicListMdlFromJson(String str) => MechanicListMdl.fromJson(json.decode(str));
@@ -338,7 +334,7 @@ class MechanicService {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "fee": fee == null ? null : fee,
-    "fee": time == null ? null : time,
+    "time": time == null ? null : time,
     "service": service == null ? null : service?.toJson(),
     "status": status == null ? null : status,
     "userId": userId == null ? null : userId,

@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final bookingDetailsMdl = bookingDetailsMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 BookingDetailsMdl bookingDetailsMdlFromJson(String str) => BookingDetailsMdl.fromJson(json.decode(str));

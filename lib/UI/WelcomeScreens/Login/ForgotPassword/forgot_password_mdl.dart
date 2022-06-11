@@ -1,8 +1,5 @@
-// To parse this JSON data, do
-//
-//     final forgotPasswordMdl = forgotPasswordMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
+
 import 'dart:convert';
 
 ForgotPasswordMdl forgotPasswordMdlFromJson(String str) => ForgotPasswordMdl.fromJson(json.decode(str));

@@ -26,7 +26,7 @@ class CustomerApprovedScreen extends StatefulWidget {
 
 class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with TickerProviderStateMixin{
 
-  bool isStartedWork = false, isEnableAddMoreBtn = false;
+  bool isStartedWork = false, isEnableAddMoreBtn = false,isEnableAddMoreBtnFirstTym = false;
   bool _isLoading = false;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
@@ -60,8 +60,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             seconds: levelClock)
     );
     getSharedPrefData();
-
-
   }
 
 
@@ -71,25 +69,16 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // Maria code here
-
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
-
-
+      updateToCloudFirestoreMechanicCurrentScreenDB();
     });
     await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
-      print('_firestore');
-
       setState(() {
         mechanicName = event.get('mechanicName');
         customerName = event.get('customerName');
         updatedServiceTime = event.get('updatedServiceTime');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
         mechanicDiagonsisState = event.get('mechanicDiagonsisState');
-
-        print('_firestore11 mechanicDiagonsisState >>> $mechanicDiagonsisState');
-
-        print('_firestore11 updatedServiceTime >>> $updatedServiceTime');
         if(listenToFirestoreTime == "0")
           {
             levelClock = int.parse('${updatedServiceTime.split(":").first}') ;
@@ -100,7 +89,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 duration: Duration(
                     seconds: levelClock)
             );
-            listenToFirestoreTime = "1";
+             listenToFirestoreTime = "1";
             if(mechanicDiagonsisState=="2")
               {
                 setState(() {
@@ -171,10 +160,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   @override
   Widget build(BuildContext context) {
-    print(' Widget build _firestore11 levelClock >>> $levelClock');
-
     Size size = MediaQuery.of(context).size;
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -198,7 +184,9 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
+                    isEnableAddMoreBtnFirstTym
+                    ? Container()
+                    : isEnableAddMoreBtn ? mechanicAddMoreTimeButton(size) : Container(),
                     mechanicStartServiceButton(size),
                   ],
                 )
@@ -468,25 +456,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
               });
             }
-
-          /*if(widget.serviceModel == "1"){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CustomerMainLandingScreen()));
-                      }
-                      else if(isStartedWork){
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MechanicWorkCompletedScreen()));
-                      }
-                      else{
-                        setState(() {
-                          isStartedWork = !isStartedWork;
-                        });
-                      }*/
-
         },
         child: Container(
           margin: EdgeInsets.only(
@@ -526,7 +495,14 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar = t;
       print('Timer timerObj ++++++' + timerObjVar.toString());
-      timeCounter = timeCounter - 1;
+      if(timeCounter == 0)
+        {
+          timeCounter = 0;
+        }
+      else
+        {
+          timeCounter = timeCounter - 1;
+        }
       print("timeCounter >>>>>> " + timeCounter.toString());
       if( timeCounter < 6 ){
         setState(() {
@@ -551,7 +527,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
       child: InkWell(
         onTap: (){
           setState(() {
-
+            isEnableAddMoreBtnFirstTym = true;
             showDialog(
                 context: context,
                 builder: (BuildContext context) {

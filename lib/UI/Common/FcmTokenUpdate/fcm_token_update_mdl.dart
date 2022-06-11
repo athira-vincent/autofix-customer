@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final fcmTokenUpdateMdl = fcmTokenUpdateMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 FcmTokenUpdateMdl fcmTokenUpdateMdlFromJson(String str) => FcmTokenUpdateMdl.fromJson(json.decode(str));

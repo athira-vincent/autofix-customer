@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final customerCompletedOrdersListMdl = customerCompletedOrdersListMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 CustomerCompletedOrdersListMdl customerCompletedOrdersListMdlFromJson(String str) => CustomerCompletedOrdersListMdl.fromJson(json.decode(str));
