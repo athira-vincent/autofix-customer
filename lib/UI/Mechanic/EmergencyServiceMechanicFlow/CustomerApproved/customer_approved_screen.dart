@@ -532,9 +532,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void _updateTimerListener(int count) {
-
     print('_updateTimerListener >>>>>000 ${count}');
-
     timeCounter = count;
     timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar = t;
@@ -551,19 +549,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void _totalTimeCounter() {
-
     totalTimerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
-
       totalTimeTaken = totalTimeTaken + 1;
-
       print('Timer totalTimerObj ++++++' + totalTimerObj.toString());
-
       print("totalTimeTaken >>>>>> " + totalTimeTaken.toString());
     });
-    /*Timer(const Duration(minutes: 1), () {
-      totalTimeTaken = totalTimeTaken + 1;
-      print("totalTimeTaken >>>>>>>> " + totalTimeTaken.toString());
-    });*/
   }
 
 
@@ -764,14 +754,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     int newTimeSec;
                     setState(() {
                       _controller.stop();
-
                       print("level extendedTimeVal clock1 >>>> " + extendedTimeVal.toString());
                       print("level extendedTime clock1 >>>> " + extendedTime.toString());
                       print("level levelClock clock1 >>>> " + levelClock.toString());
                       print("level timeCounter clock1 >>>> " + timeCounter.toString());
-
-
-
                       newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
                         extendedTime = newTime.toString();
                         newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
@@ -781,20 +767,14 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                              duration: Duration(
                                  seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
                          );
-
                       print("level extendedTimeVal clock2 >>>> " + extendedTimeVal.toString());
                       print("level extendedTime clock2 >>>> " + extendedTime.toString());
                       print("level newTimeSec clock2 >>>> " + newTimeSec.toString());
                       print("level levelClock clock2 >>>> " + levelClock.toString());
                       print("level timeCounter clock2 >>>> " + timeCounter.toString());
-
-
-
                       print("clock2 _controller ${_controller.status}");
                       print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
-
-                      //_controller.reset();
-                        isEnableAddMoreBtn = false;
+                       isEnableAddMoreBtn = false;
                         _controller.forward();
                          _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
                          updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");
