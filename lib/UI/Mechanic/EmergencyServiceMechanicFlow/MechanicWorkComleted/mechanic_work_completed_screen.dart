@@ -33,25 +33,13 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   var _firestoreData ;
-
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   double totalFees = 0.0;
   String authToken="", userId = "", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
   String totalEstimatedTime = "", totalExtendedTime = "",totalTimeTakenByMechanic = "", mechanicName = "", totalEstimatedCost = "";
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
-  Timer? timerObjVar;
-  Timer? timerObj;
 
   @override
   void initState() {
@@ -616,18 +604,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     super.dispose();
     print("dispose");
     _mechanicOrderStatusUpdateBloc.dispose();
-    cancelTimer();
   }
 
-  cancelTimer() {
-    if (timerObjVar != null) {
-      timerObjVar?.cancel();
-      timerObjVar = null;
-    }
 
-    if (timerObj != null) {
-      timerObj?.cancel();
-      timerObj = null;
-    }
-  }
 }
