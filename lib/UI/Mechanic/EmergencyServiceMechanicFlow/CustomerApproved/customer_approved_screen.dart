@@ -28,7 +28,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   bool isStartedWork = false, isEnableAddMoreBtn = false;
   bool _isLoading = false;
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   final MechanicAddMoreTimeBloc _addMoreTimeBloc = MechanicAddMoreTimeBloc();
@@ -36,22 +35,17 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   double per = .10;
   String authToken = "", bookingId = "", extendedTime = "0",
       customerName= "", mechanicName = "", updatedServiceTime = "00.00";
-
   int levelClock = 0;
   int extendedTimeVal = 00;
   String extendedTimeText = "";
-
   String listenToFirestoreTime = "0", customerDiagonsisApproval = "",mechanicDiagonsisState="",mechanicStartedOrNot="";
-
   double _setValue(double value) {
     return value * per + value;
   }
-
   late StateSetter extraTimeStateSetter;
   Timer? timerObj;
   Timer? timerObjVar;
   int timeCounter = 0;
-
   Timer? totalTimerObj;
   int totalTimeTaken = 0;
 
@@ -536,7 +530,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
     timeCounter = count;
     timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar = t;
-
       print('Timer timerObj ++++++' + timerObjVar.toString());
       timeCounter = timeCounter - 1;
       print("timeCounter >>>>>> " + timeCounter.toString());
