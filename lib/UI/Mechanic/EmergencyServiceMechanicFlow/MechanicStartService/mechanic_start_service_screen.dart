@@ -512,7 +512,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         children: [
           Row(
             children: [
-              Text("Add additional fault",
+              Text("Add additional faults",
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: "Samsung_SharpSans_Medium",
