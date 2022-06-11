@@ -1,32 +1,19 @@
 // @dart=2.9
 import 'dart:async';
 import 'dart:io';
-
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/mechanic_start_service_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
-import 'package:auto_fix/l10n/l10n.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
-import 'Constants/text_strings.dart';
 import 'Provider/locale_provider.dart';
-import 'UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
-import 'UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 
@@ -71,7 +58,7 @@ class _MyAppState extends State<MyApp> {
 
    Locale _locale = Locale.fromSubtags(languageCode: 'en') ;
 
-  void setLocale(Locale value) {
+   void setLocale(Locale value) {
     setState(() {
       _locale = value;
     });
@@ -96,15 +83,12 @@ class _MyAppState extends State<MyApp> {
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: 'ResolMech',
                 theme: ThemeData(
-                  //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
 
                 home: SplashScreen(),
 
-                // home: CustomerApprovedScreen(),
-
-                  // home: FindYourCustomerScreen(latitude: "10.5056105",longitude: "76.2437479",)
+                // home: MechanicStartServiceScreen(),
 
               );
             },

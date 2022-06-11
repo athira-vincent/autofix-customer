@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final phoneLoginOtpVerificationMdl = phoneLoginOtpVerificationMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 PhoneLoginOtpVerificationMdl phoneLoginOtpVerificationMdlFromJson(String str) => PhoneLoginOtpVerificationMdl.fromJson(json.decode(str));

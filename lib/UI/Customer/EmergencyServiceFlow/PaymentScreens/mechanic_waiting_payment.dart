@@ -60,13 +60,13 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
+      updateToCloudFirestoreMechanicCurrentScreenDB();
     });
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
       setState(() {
         totalEstimatedTime = event.get('updatedServiceTime');
         totalEstimatedCost = event.get('updatedServiceCost');
         customerDiagonsisApproval = event.get('customerDiagonsisApproval');
-
         mechanicName = event.get('mechanicName');
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
       });
@@ -74,6 +74,17 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
     });
   }
 
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+          "customerFromPage" : "C6",
+        })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
 
 

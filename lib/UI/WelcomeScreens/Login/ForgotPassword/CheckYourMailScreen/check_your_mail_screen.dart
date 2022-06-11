@@ -4,9 +4,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScr
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
-import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
-import 'package:auto_fix/Widgets/input_validator.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

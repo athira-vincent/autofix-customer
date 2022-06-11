@@ -1,8 +1,4 @@
-// To parse this JSON data, do
-//
-//     final addServicesMdl = addServicesMdlFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 AddServicesMdl addServicesMdlFromJson(String str) => AddServicesMdl.fromJson(json.decode(str));

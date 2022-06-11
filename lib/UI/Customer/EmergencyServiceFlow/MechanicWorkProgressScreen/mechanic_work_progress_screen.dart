@@ -140,8 +140,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
           .update({
-        "customerFromPage" : "C2",
-      })
+            "customerFromPage" : "C2",
+          })
           .then((value) => print("Location Added"))
           .catchError((error) =>
           print("Failed to add Location: $error"));
@@ -164,8 +164,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
           .update({
-        "customerFromPage" : "C5",
-      })
+            "customerFromPage" : "C5",
+          })
           .then((value) => print("Location Added"))
           .catchError((error) =>
           print("Failed to add Location: $error"));

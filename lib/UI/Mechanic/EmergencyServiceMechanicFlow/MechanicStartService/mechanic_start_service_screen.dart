@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
+import '../../../../Models/mechanic_models/mechanic_Services_List_Mdl/mechanicServicesListMdl.dart';
 
 class MechanicStartServiceScreen extends StatefulWidget {
 
@@ -512,7 +512,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
         children: [
           Row(
             children: [
-              Text("Add additional fault",
+              Text("Add additional faults",
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: "Samsung_SharpSans_Medium",
