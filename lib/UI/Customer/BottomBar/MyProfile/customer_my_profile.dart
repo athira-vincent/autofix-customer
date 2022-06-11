@@ -282,6 +282,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _phoneController.text = value.data!.customerDetails!.phoneNo.toString();
     _stateController.text = value.data!.customerDetails!.customer![0].state.toString();
     _orgTypeController.text = value.data!.customerDetails!.customer![0].orgType.toString();
+    _ministryGovtController.text = value.data!.customerDetails!.customer![0].ministryName.toString();
 
     _userName = value.data!.customerDetails!.firstName.toString();
     _imageUrl = value.data!.customerDetails!.customer![0].profilePic.toString();
@@ -351,7 +352,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           Column(
                             children: [
                               StateTextUi(size),
-                              //ministryTextUi(size),
+                              ministryTextUi(size),
                               NameTextUi(size),
                               EmailTextUi(size),
                               PhoneTextUi(size),
@@ -944,100 +945,99 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     );
   }
 
-  // Widget ministryTextUi(Size size) {
-  //   return Padding(
-  //     padding: const EdgeInsets.fromLTRB(20,5,20,5),
-  //     child: Column(
-  //       children: [
-  //         InkWell(
-  //           onTap: (){
-  //             if(editProfileEnabled == true){
-  //               print("on tap Ministry/Govt. agency ");
-  //               showMinistryGovtSelector();
-  //             }
-  //           },
-  //           child: Row(
-  //             children: [
-  //               Container(
-  //                 decoration: BoxDecoration(
-  //                     color: CustColors.whiteBlueish,
-  //                     borderRadius: BorderRadius.circular(11.0)
-  //                 ),
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.all(15),
-  //                   child: SvgPicture.asset('assets/image/ic_location.svg',
-  //                     height: size.height * 2.5 / 100,
-  //                     width: size.width * 2.5 / 100,
-  //                   ),
-  //                   //child: Icon(Icons.mail, color: CustColors.blue),
-  //                 ),
-  //               ),
-  //               Expanded(
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.fromLTRB(10,0,10,0),
-  //                   child: Column(
-  //                     crossAxisAlignment: CrossAxisAlignment.start,
-  //                     mainAxisAlignment: MainAxisAlignment.start,
-  //                     children: [
-  //                       Container(
-  //                         child: TextFormField(
-  //                           readOnly: true,
-  //                           enabled: false,
-  //                           textAlignVertical: TextAlignVertical.center,
-  //                           maxLines: 1,
-  //                           style: Styles.appBarTextBlack15,
-  //                           focusNode: _ministryGovtFocusNode,
-  //                           validator: InputValidator(ch: AppLocalizations.of(context)!.text_ministry_govt).emptyChecking,
-  //                           controller: _ministryGovtController,
-  //                           cursorColor: CustColors.light_navy,
-  //                           decoration: InputDecoration(
-  //                             isDense: true,
-  //                             hintText:  'Ministry',
-  //                             border: InputBorder.none,
-  //                             focusedBorder: InputBorder.none,
-  //                             enabledBorder: InputBorder.none,
-  //                             errorBorder: InputBorder.none,
-  //                             disabledBorder: InputBorder.none,
-  //                             contentPadding: EdgeInsets.symmetric(
-  //                               vertical: 2.8,
-  //                               horizontal: 0.0,
-  //                             ),
-  //                             hintStyle: Styles.appBarTextBlack15,),
-  //                         ),
-  //                       ),
-  //                       editProfileEnabled != true
-  //                           ?
-  //                       Text(
-  //                         'Your ministry/govt agency ',
-  //                         textAlign: TextAlign.center,
-  //                         style: Styles.textLabelSubTitle,
-  //                       )
-  //                           :
-  //                       Container(),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //               Spacer(),
-  //               editProfileEnabled == true
-  //                   ? Container(
-  //                   child: Padding(
-  //                     padding: const EdgeInsets.all(15),
-  //                     child: Icon(Icons.edit,size: 15, color: CustColors.blue),
-  //                   )
-  //               )
-  //                   : Container(),
-  //             ],
-  //           ),
-  //         ),
-  //         Padding(
-  //           padding: const EdgeInsets.fromLTRB(0,5,0,5),
-  //           child: Divider(),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget ministryTextUi(Size size) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20,5,20,5),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: (){
+              if(editProfileEnabled == true){
+                print("on tap Ministry/Govt. agency ");
+                showMinistryGovtSelector();
+              }
+            },
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: CustColors.whiteBlueish,
+                      borderRadius: BorderRadius.circular(11.0)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: SvgPicture.asset('assets/image/ic_location.svg',
+                      height: size.height * 2.5 / 100,
+                      width: size.width * 2.5 / 100,
+                    ),
+                    //child: Icon(Icons.mail, color: CustColors.blue),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: TextFormField(
+                            readOnly: true,
+                            enabled: false,
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: null,
+                            style: Styles.appBarTextBlack15,
+                            focusNode: _ministryGovtFocusNode,
+                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_ministry_govt).emptyChecking,
+                            controller: _ministryGovtController,
+                            cursorColor: CustColors.light_navy,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintText:  'Ministry',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 2.8,
+                                horizontal: 0.0,
+                              ),
+                              hintStyle: Styles.appBarTextBlack15,),
+                          ),
+                        ),
+                        editProfileEnabled != true
+                            ?
+                        Text(
+                          'Your ministry/govt agency ',
+                          textAlign: TextAlign.center,
+                          style: Styles.textLabelSubTitle,
+                        )
+                            :
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ),
+                editProfileEnabled == true
+                    ? Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Icon(Icons.edit,size: 15, color: CustColors.blue),
+                    )
+                )
+                    : Container(),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,5),
+            child: Divider(),
+          )
+        ],
+      ),
+    );
+  }
 
   Widget OrgNameTextUi(Size size) {
     return Padding(
@@ -1331,7 +1331,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               authToken,
               _nameController.text.toString(), "",
               _stateController.text.toString(), 1,
-              _imageUrl, " "    //ministryName
+              _imageUrl, _ministryGovtController.text.toString()    //ministryName
           );
 
         } else {
