@@ -122,10 +122,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time,String currentUpdatedTime ) {
-
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
-
-
     if(currentUpdatedTime == "0")
       {
         _firestore
@@ -157,12 +154,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             .catchError((error) =>
             print("Failed to add Location: $error"));
       }
-
   }
 
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
-
     _firestore
         .collection("ResolMech")
         .doc('${bookingId}')
