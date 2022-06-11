@@ -279,7 +279,6 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          //"Estimated Cost",
                           "Time taken",
                           style: Styles.textLabelTitleEmergencyServiceName,
                         ),
@@ -302,7 +301,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
                                 width: 10,
                               ),
                               Text(
-                                "$totalTimeTakenByMechanic" + ": 00",
+                                "$totalTimeTakenByMechanic" + " Min",
                                 style: Styles.textSuccessfulTitleStyle03,
                               ),
                             ],

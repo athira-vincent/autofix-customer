@@ -24,7 +24,7 @@ class RateMechanicScreen extends StatefulWidget {
 
 class _RateMechanicScreenState extends State<RateMechanicScreen> {
 
-  late double _rating;
+  double _rating = 1.0;
   double _initialRating = 1.0;
   int textTotalCount = 350,textCount = 0;
 
@@ -97,7 +97,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         ),
                         child: Row(
                           children: [
-                            rateMechanicScreenTimeCostWidget(size,"Work completed in","Min "," $totalEstimatedTime:00",true),
+                            rateMechanicScreenTimeCostWidget(size,"Work completed in","Min "," $totalEstimatedTime",true),
                             Spacer(),
                             Container(
                               height: size.height * 5 /100,
@@ -326,12 +326,6 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(postDataText,style: TextStyle(
-                fontSize: 28,
-                fontFamily: "SharpSans_Bold",
-                fontWeight: FontWeight.bold,
-                color: CustColors.light_navy
-            ),),
             Text(dataText,
               style: TextStyle(
                   fontFamily: "SharpSans_Bold",
@@ -339,7 +333,16 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                   letterSpacing: .5
-              ),)
+              ),),
+            SizedBox(width: 5,),
+            Text(postDataText,style: TextStyle(
+                fontSize: 28,
+                fontFamily: "SharpSans_Bold",
+                fontWeight: FontWeight.bold,
+                color: CustColors.light_navy,
+                letterSpacing: .5
+            ),),
+
           ],
         ),
       ],

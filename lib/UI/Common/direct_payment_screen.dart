@@ -61,14 +61,6 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     super.initState();
     getSharedPrefData();
 
-    if(!widget.isMechanicApp){
-      timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
-        timerObjVar = t;
-        print('Timer listenToCloudFirestoreDB ++++++');
-        listenToCloudFirestoreDB();
-      });
-    }
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -81,15 +73,47 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      //bookingIdEmergency = "100";
+
       print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
       print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-
+      if(!widget.isMechanicApp){
+        listenToCloudFirestoreDB();
+        updateToCloudFirestoreCustomerCurrentScreenDB();
+      }
+      else
+        {
+          updateToCloudFirestoreMechanicCurrentScreenDB("M5");
+        }
 
     });
   }
+
+  void updateToCloudFirestoreCustomerCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+            "customerFromPage" : "C8",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
+  void updateToCloudFirestoreMechanicCurrentScreenDB(String mechanicFromPage) {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+            "mechanicFromPage" : "$mechanicFromPage",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
 
   void listenToCloudFirestoreDB() {
     print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
@@ -170,6 +194,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   void changeScreen(){
     if(widget.isMechanicApp){
       updateToCloudFirestoreDB();
+      updateToCloudFirestoreMechanicCurrentScreenDB("M6");
       _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
           authToken, bookingIdEmergency, "8");
       _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId );
@@ -392,20 +417,8 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
     super.dispose();
     print("dispose");
     _mechanicOrderStatusUpdateBloc.dispose();
-    cancelTimer();
   }
 
-  cancelTimer() {
-    if (timerObjVar != null) {
-      timerObjVar?.cancel();
-      timerObjVar = null;
-    }
-
-    if (timerObj != null) {
-      timerObj?.cancel();
-      timerObj = null;
-    }
-  }
 
   TextStyle warningTextStyle01 = TextStyle(
     fontSize: 12,

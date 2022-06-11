@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -80,13 +81,12 @@ class _MyAppState extends State<MyApp> {
                 supportedLocales: AppLocalizations.supportedLocales,
                 title: 'ResolMech',
                 theme: ThemeData(
-                  //brightness: Brightness.light,
                   primaryColor: Colors.white,
                 ),
 
-                // home: SplashScreen(),
+                home: SplashScreen(),
 
-                home: CustomerApprovedScreen(),
+                // home: CustomerApprovedScreen(),
 
                   // home: FindYourCustomerScreen(latitude: "10.5056105",longitude: "76.2437479",)
 

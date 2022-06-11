@@ -52,18 +52,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('PaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       print('PaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-
+      updateToCloudFirestoreMechanicCurrentScreenDB();
 
     });
   }
 
 
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+      "customerFromPage" : "C7",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
   void updateToCloudFirestoreDB() {
 

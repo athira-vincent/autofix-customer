@@ -1,9 +1,12 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DirectPaymentSuccessScreen extends StatefulWidget {
 
@@ -16,6 +19,57 @@ class DirectPaymentSuccessScreen extends StatefulWidget {
 }
 
 class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen> {
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  String authToken="";
+  String userName="";
+
+  String userId = "";
+  String serviceIdEmergency="";
+  String mechanicIdEmergency="";
+  String bookingIdEmergency="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPrefData();
+
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
+      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+
+      print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+      updateToCloudFirestoreMechanicCurrentScreenDB();
+
+    });
+  }
+
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+            "customerFromPage" : "C9",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +189,6 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
               child: reviewLaterButton(size)),
           InkWell(
             onTap: (){
-
-             /* Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                  CustomerMainLandingScreen()), (Route<dynamic> route) => false);*/
 
               Navigator.pushReplacement(
                   context,
