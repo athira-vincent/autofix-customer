@@ -49,16 +49,12 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-  bool _isLoadingPage = true;
   double distanceInMeters = 0.0;
-
-
   String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
   String? _mapStyle;
   Set<Marker> markers = Set(); //markers for google map
   BitmapDescriptor? customerIcon;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Widget? _googleMap;
   List<LatLng> polylineCoordinates = [];
   GoogleMapController? mapController;
   PolylinePoints polylinePoints = PolylinePoints();
@@ -72,28 +68,15 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     zoom: 25,
   );
   double totalDistance = 0.0;
-  String? _placeDistance;
-
   double speedOfMechanic = 0.0;
-
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-
   double _setValue(double value) {
     return value * per + value;
   }
-
-
-  GoogleMapController? _controller ;
   static const LatLng _center = const LatLng(10.0159, 76.3419);
-  //Map<MarkerId, Marker> markers = {};
-  final Set<Polyline>_polyline={};
-  LatLng _lastMapPosition = _center;
   List<LatLng> latlng = [];
-
-  //String CurrentLatitude ="10.506402";
-  //String CurrentLongitude ="76.244164";
-  String location ='Null, Press Button';
-  String Address = 'search';
+  String location ='';
+  String Address = '';
   String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
   bool isArrived = false;
 
@@ -101,26 +84,17 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     mapStyling();
     customerMarker (LatLng(double.parse(
         widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
     _getCurrentLocation();
-
     Timer.periodic(Duration(seconds: 20), (Timer t) {
-      print('Timer ++++++');
       _getCurrentLocation();
     });
-
     getSharedPrefData();
     _listenServiceListResponse();
-    /*Timer(const Duration(seconds: 15), () {
-      setState(() {
-        isArrived = true;
-      });
-    });*/
   }
 
   mapStyling() {
@@ -171,7 +145,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     _mechanicOrderStatusUpdateBloc.MechanicOrderStatusUpdateResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
-          _isLoadingPage = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.message.toString(),
                 style: const TextStyle(
@@ -182,53 +155,28 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         });
       } else {
         setState(() {
-          _isLoadingPage = false;
-
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => MechanicStartServiceScreen()));
-
-          /*if(widget.serviceModel == "0"){
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicStartServiceScreen(serviceModel: "",)));
-          }
-          else if(widget.serviceModel == "1"){
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: "",)));
-          }
-          else if(widget.serviceModel == "2" || widget.serviceModel == "3"){
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicDiagnoseTestScreen(serviceModel: "",)));
-          }*/
         });
       }
     });
   }
 
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData FindYourCustomerScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      print('userFamilyId'+authToken.toString());
-      print('userFamilyId'+bookingId.toString());
+      print('userFamilyId FindYourCustomerScreen '+authToken.toString());
+      print('bookingId FindYourCustomerScreen '+bookingId.toString());
+      updateToCloudFirestoreMechanicCurrentScreenDB();
       _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
-
         carName = event.get('carName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
-
-       // mechanicName = event.get('mechanicName');
-        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
-
       });
     });
   }
@@ -435,23 +383,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     );
     polylines[id] = polyline;
     setState(() {});
-    _googleMap = _googleMapIntegrate();
-  }
-
-  Widget _googleMapIntegrate() {
-    return GoogleMap( //Map widget from google_maps_flutter package
-      zoomGesturesEnabled: true, //enable Zoom in, out on map
-      initialCameraPosition: _kGooglePlex!,
-      markers: markers, //markers to show on map
-      polylines: Set<Polyline>.of(polylines.values), //polylines
-      mapType: MapType.normal, //map type
-      onMapCreated: (controller) { //method called when map is created
-        setState(() {
-          controller.setMapStyle(_mapStyle);
-          mapController = controller;
-        });
-      },
-    );
   }
 
   Future<void> GetAddressFromLatLong(Position position)async {
@@ -469,31 +400,30 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         .doc('${bookingId}')
         .update({
         'mechanicArrivalState': "1",
-        "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '1')",
-        "mechanicFromPage" : "MechanicStartServiceScreen",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-  /*void listenToCloudFirestoreDB() {
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingId}");
-    reference.snapshots().listen((querySnapshot) {
-      setState(() {
-        carName = querySnapshot.get("carName");
 
-        print('carName  ++++ $carName');
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
 
-      });
-    });
-  }*/
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+          "mechanicFromPage" : "M1",
+        })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    //final provider = Provider.of<LocaleProvider>(context,listen: false);
-    //provider.setPayload(notificationPayloadMdl);
-    //print("provider >>>>>>>>>>> " + provider.toString());
-    Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
@@ -653,7 +583,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                _isLoadingPage = false;
                                                 updateToCloudFirestoreDB();
                                                 _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                                                     authToken, bookingId, "3");
@@ -813,56 +742,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   void dispose() {
     super.dispose();
     _mechanicOrderStatusUpdateBloc.dispose();
-  }
-
-  _showProductTourDialog(BuildContext context) async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-                backgroundColor: Colors.white,
-                insetPadding: EdgeInsets.only(left: 20, right: 20),
-
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                contentPadding: const EdgeInsets.all(20),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            "Wait few minutes !",
-                            style: Styles.waitingTextBlack17,
-                          ),
-                          Text(
-                            "Wait for the response from George Dola!",
-                            style: Styles.awayTextBlack,
-                          ),
-                          Container(
-                              height: 150,
-                              child: SvgPicture.asset(
-                                'assets/image/mechanicProfileView/waitForMechanic.svg',
-                                height: 200,
-                                fit: BoxFit.cover,
-                              )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-          });
-        });
-
-
   }
 
 }

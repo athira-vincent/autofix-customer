@@ -138,15 +138,11 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-          'isWorkStarted': "$isWorkStarted",
-          'isWorkCompleted': "$isWorkCompleted",
-          "extendedTime": "$time",
-          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
-          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-          "mechanicFromPage" : "MechanicWorkCompletedScreen",
-          //===================== code for send the list of additional services =========
-        })
+              'isWorkStarted': "$isWorkStarted",
+              'isWorkCompleted': "$isWorkCompleted",
+              "extendedTime": "$time",
+              "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+            })
             .then((value) => print("Location Added"))
             .catchError((error) =>
             print("Failed to add Location: $error"));
@@ -157,16 +153,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-          'isWorkStarted': "$isWorkStarted",
-          'isWorkCompleted': "$isWorkCompleted",
-          "extendedTime": "$time",
-          "timerCounter": "$currentUpdatedTime",
-          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
-          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-          "mechanicFromPage" : "MechanicWorkCompletedScreen",
-          //===================== code for send the list of additional services =========
-        })
+              'isWorkStarted': "$isWorkStarted",
+              'isWorkCompleted': "$isWorkCompleted",
+              "extendedTime": "$time",
+              "timerCounter": "$currentUpdatedTime",
+              "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+            })
             .then((value) => print("Location Added"))
             .catchError((error) =>
             print("Failed to add Location: $error"));
@@ -175,7 +167,18 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
 
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
 
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+          "mechanicFromPage" : "M3",
+        })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {

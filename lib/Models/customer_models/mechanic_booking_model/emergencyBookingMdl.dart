@@ -85,9 +85,9 @@ class EmergencyBooking {
   int reqType;
   int bookStatus;
   int totalPrice;
-  int tax;
-  int commission;
-  int serviceCharge;
+  var tax;
+  var commission;
+  var serviceCharge;
   dynamic totalTime;
   String serviceTime;
   double latitude;

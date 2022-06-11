@@ -35,8 +35,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   // 4 - ready to pickup vehicle - screen 094
   // 5 - mechanic reached your location - screen 102
 
-  Timer? timerObjVar;
-  Timer? timerObj;
 
   Timer? timerObj1;
   Timer? timerObjVar1;
@@ -79,21 +77,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     super.initState();
     getSharedPrefData();
     workStatus = widget.workStatus.toString();
-    timerObj = Timer.periodic(Duration(seconds: 3), (Timer t) {
-      timerObjVar = t;
-      print('Timer listenToCloudFirestoreDB ++++++');
-
-      listenToCloudFirestoreDB();
-    });
-
-
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
             seconds:
             levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-    );
-
+       );
   }
 
   @override
@@ -110,10 +99,11 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      updateToCloudFirestoreMechanicCurrentScreenDB();
+      listenToCloudFirestoreDB();
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
 
     });
@@ -122,7 +112,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       setState(() {
         extendedTime= event.get("extendedTime");
         currentUpdatedTime = event.get("currentUpdatedTime");
-
         isPaymentRequested = event.get("isPaymentRequested");
         isWorkCompleted = event.get("isWorkCompleted");
         mechanicDiagonsisState = event.get("mechanicDiagonsisState");
@@ -143,21 +132,59 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     });
   }
 
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+
+    if(widget.workStatus == "1")
+    {
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingIdEmergency}')
+          .update({
+        "customerFromPage" : "C2",
+      })
+          .then((value) => print("Location Added"))
+          .catchError((error) =>
+          print("Failed to add Location: $error"));
+    }
+    else if(widget.workStatus == "2")
+    {
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingIdEmergency}')
+          .update({
+            "customerFromPage" : "C4",
+          })
+          .then((value) => print("Location Added"))
+          .catchError((error) =>
+          print("Failed to add Location: $error"));
+    }
+    else if(widget.workStatus == "3")
+    {
+      _firestore
+          .collection("ResolMech")
+          .doc('${bookingIdEmergency}')
+          .update({
+        "customerFromPage" : "C5",
+      })
+          .then((value) => print("Location Added"))
+          .catchError((error) =>
+          print("Failed to add Location: $error"));
+    }
+
+  }
+
 
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("$bookingIdEmergency");
     reference.snapshots().listen((querySnapshot) {
-
         if(widget.workStatus =="1") {
           mechanicDiagonsisState = querySnapshot.get("mechanicDiagonsisState");
           print('mechanicDiagonsisState ++++ $mechanicDiagonsisState');
-
         }
         else if(widget.workStatus =="2") {
           isWorkCompleted = querySnapshot.get("isWorkCompleted");
           extendedTime = querySnapshot.get("extendedTime");
           currentUpdatedTime = querySnapshot.get("timerCounter");
-
           print('isWorkCompleted ++++ $isWorkCompleted');
           print('extendedTime ++++ $extendedTime');
           print('currentUpdatedTime ++++ $currentUpdatedTime');
@@ -170,21 +197,9 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               setState(() {
                 int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
                 levelClock = sec;
-
-               /* _controller.stop();
-                _controller = AnimationController(
-                    vsync: this,
-                    duration: Duration(
-                        seconds:
-                        levelClock)
-                );
-                _controller.forward();*/
               });
-
             }
-
           }
-
         }
         else if(widget.workStatus =="3") {
           isPaymentRequested = querySnapshot.get("isPaymentRequested");
@@ -313,19 +328,15 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
         top: size.height * 3 / 100,
       ),
       child: Text(
-        workStatus == "1" ?
-          "Mechanic arrived"
-            :
-            workStatus == "2" ?
-              "Mechanic start repair"
-                :
-            workStatus == "3"?
-            "Job completed"
-                :
-            workStatus == "4"?
-            "Ready to pick up your vehicle "
-                :
-            "Mechanic reached your location.",
+        workStatus == "1"
+            ? "Mechanic arrived"
+            : workStatus == "2"
+            ? "Mechanic start repair"
+            : workStatus == "3"
+            ? "Job completed"
+            : workStatus == "4"
+            ? "Ready to pick up your vehicle "
+            : "Mechanic reached your location.",
         style: Styles.workProgressTitleText,),
     );
   }
@@ -349,9 +360,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     return Center(
       child: Container(
         margin: EdgeInsets.only(
-          //left: size.width * 6 /100,
-          //right: size.width * 6 / 100,
-          // bottom: size.height * 1 /100,
           top: size.height * 3.4 / 100,
         ),
         child: Stack(
@@ -660,25 +668,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     _controller.dispose();
     cancelTimer1();
     if(widget.workStatus =="3") {
-      cancelTimer();
       cancelTimer2();
     }
     super.dispose();
     print("dispose");
   }
 
-  cancelTimer() {
-
-    if (timerObjVar != null) {
-      timerObjVar?.cancel();
-      timerObjVar = null;
-    }
-
-    if (timerObj != null) {
-      timerObj?.cancel();
-      timerObj = null;
-    }
-  }
 
   cancelTimer1() {
 
