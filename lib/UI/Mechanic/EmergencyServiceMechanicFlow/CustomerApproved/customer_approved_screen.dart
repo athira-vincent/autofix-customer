@@ -750,7 +750,7 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                         extendedTime = newTime.toString();
                         newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
                         levelClock = newTimeSec;
-                         _controller = AnimationController(
+                        _controller = AnimationController(
                              vsync: this,
                              duration: Duration(
                                  seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
