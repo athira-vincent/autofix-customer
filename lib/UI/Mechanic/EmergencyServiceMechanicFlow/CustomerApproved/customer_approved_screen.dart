@@ -545,8 +545,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
 
-
-
   Widget mechanicAddMoreTimeButton(Size size){
     return Align(
       alignment: Alignment.centerLeft,
