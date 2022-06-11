@@ -336,37 +336,37 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
               : Container(
                   child: CustomerUpcomingServicesList?.custCompletedOrders?.length == 0 || CustomerUpcomingServicesList?.custCompletedOrders?.length == null
                       ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                                color:CustColors.materialBlue, spreadRadius: 1),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 220,
-                              height: 170,
-                              child: SvgPicture.asset(
-                                "assets/image/NoSerivice.svg",
-                                fit: BoxFit.contain,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: double.infinity,
+                              height: 200,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color:CustColors.materialBlue, spreadRadius: 1),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 220,
+                                    height: 170,
+                                    child: SvgPicture.asset(
+                                      "assets/image/NoSerivice.svg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
+                          ),
+                        )
                       : ListView.builder(
                     itemCount:CustomerUpcomingServicesList?.custCompletedOrders?.length,
                     shrinkWrap: true,

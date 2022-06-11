@@ -45,7 +45,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
   Set<Marker> markers = Set(); //markers for google map
   BitmapDescriptor? customerIcon;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Widget? _googleMap;
   List<LatLng> polylineCoordinates = [];
   GoogleMapController? mapController;
   PolylinePoints polylinePoints = PolylinePoints();
@@ -59,25 +58,17 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     zoom: 25,
   );
   double totalDistance = 0.0;
-  String? _placeDistance;
-  double _speed = 0.0;
   var _firestoreData ;
   double distanceInMeters = 0.0;
   var updatingLat = 0.0;
   String mechanicArrivalState = "0";
-   Timer? timerObjVar;
-   Timer? timerObj;
-
+  Timer? timerObjVar;
+  Timer? timerObj;
   String authToken="";
   String userName="";
-
-
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
-
-
-
 
   @override
   void initState() {
@@ -88,47 +79,35 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     customerMarker (LatLng(double.parse(widget.latitude.toString()), double.parse(widget.longitude.toString())));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
-    _googleMap = _googleMapIntegrate();
-    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      timerObjVar = t;
-      print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB();
-    });
   }
 
-
   Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
+    print('getSharedPrefData MechanicTrackingScreen Customer App');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-
-
+      updateToCloudFirestoreMechanicCurrentScreenDB();
+      print('authToken>>>>>>>>>MechanicTrackingScreen Customer App ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>>MechanicTrackingScreen Customer App ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>>MechanicTrackingScreen Customer App ' + mechanicIdEmergency.toString());
+      print('bookingIdEmergency>>>>>>>>>MechanicTrackingScreen Customer App ' + bookingIdEmergency.toString());
+      listenToCloudFirestoreDB();
     });
   }
 
-
   void listenToCloudFirestoreDB() {
-    print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
-
         mechanicArrivalState = querySnapshot.get("mechanicArrivalState");
         print('mechanicArrivalState ++++ $mechanicArrivalState');
         if(mechanicArrivalState =="1")
           {
-            updateToCloudFirestoreDB();
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -140,21 +119,17 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     });
   }
 
-
-  void updateToCloudFirestoreDB() {
-
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
     _firestore
         .collection("ResolMech")
         .doc('${bookingIdEmergency}')
         .update({
-            'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "1")'
+          "customerFromPage" : "C1",
         })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
-
   }
-
 
   mapStyling() {
     print('latlong from another screen ${widget.latitude} ${widget.longitude}');
@@ -215,23 +190,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
   }
 
-
-  Widget _googleMapIntegrate() {
-    return GoogleMap( //Map widget from google_maps_flutter package
-      zoomGesturesEnabled: true, //enable Zoom in, out on map
-      initialCameraPosition: _kGooglePlex!,
-      markers: markers, //markers to show on map
-      polylines: Set<Polyline>.of(polylines.values), //polylines
-      mapType: MapType.normal, //map type
-      onMapCreated: (controller) { //method called when map is created
-        setState(() {
-          controller.setMapStyle(_mapStyle);
-          mapController = controller;
-        });
-      },
-    );
-  }
-
   setPolyline(LatLng startlatLng, LatLng endlatLng,) async {
     print('MechanicTrackingScreen setPolyline');
     List<LatLng> polylineCoordinates = [];
@@ -266,8 +224,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
   }
 
-
-
   addPolyLine(List<LatLng> polylineCoordinates) {
     PolylineId id = PolylineId("poly");
     Polyline polyline = Polyline(
@@ -278,10 +234,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     );
     polylines[id] = polyline;
     setState(() {});
-    _googleMap = _googleMapIntegrate();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -415,7 +368,10 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "${distanceInMeters/1000} km",
+                                            int.parse('${(distanceInMeters).toString().split('.').first}') <= 500
+                                                ? "${(distanceInMeters).toStringAsFixed(2)} m"
+                                                : "${(distanceInMeters/1000).toStringAsFixed(2)} km",
+                                            // "${distanceInMeters/1000} km",
                                             style: Styles.waitingTextBlack17,
                                           ),
                                           Text(
@@ -559,8 +515,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       ),
     );
   }
-
-
 
   @override
   void dispose() {

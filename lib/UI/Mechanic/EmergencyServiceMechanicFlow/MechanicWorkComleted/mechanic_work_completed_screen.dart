@@ -33,39 +33,19 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   var _firestoreData ;
-
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   double totalFees = 0.0;
   String authToken="", userId = "", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
   String totalEstimatedTime = "", totalExtendedTime = "",totalTimeTakenByMechanic = "", mechanicName = "", totalEstimatedCost = "";
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
-  Timer? timerObjVar;
-  Timer? timerObj;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
-    _listenServiceListResponse();
-    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      timerObjVar = t;
-      print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB();
-    });
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -76,26 +56,20 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId ' + authToken.toString());
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-
+      updateToCloudFirestoreMechanicCurrentScreenDB();
+      listenToCloudFirestoreDB();
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
       _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
-
         customerDiagonsisApproval = event.get("customerDiagonsisApproval");
         mechanicName = event.get('mechanicName');
         totalEstimatedCost = event.get("updatedServiceCost");
         totalEstimatedTime = event.get('updatedServiceTime');
         totalTimeTakenByMechanic = event.get('totalTimeTakenByMechanic');
-
-        //totalExtendedTime = event.get('extendedTime');
         String extendedTime = event.get('extendedTime');
         int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
         totalExtendedTime = time.toString();
         print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
-
         print('_firestoreData>>>>>>>>> ' + totalEstimatedCost);
-        setState(() {
-
-        });
       });
     });
   }
@@ -125,18 +99,23 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         .collection("ResolMech")
         .doc('${bookingId}')
         .update({
-      'isPaymentRequested': "1",
-      "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '3',)",
-      "mechanicFromPage" : "DirectPaymentScreen",
-      //===================== code for send the list of additional services =========
-    })
+          'isPaymentRequested': "1",
+        })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
 
-  _listenServiceListResponse() {
-
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+            "mechanicFromPage" : "M4",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
   }
 
 
@@ -625,18 +604,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
     super.dispose();
     print("dispose");
     _mechanicOrderStatusUpdateBloc.dispose();
-    cancelTimer();
   }
 
-  cancelTimer() {
-    if (timerObjVar != null) {
-      timerObjVar?.cancel();
-      timerObjVar = null;
-    }
 
-    if (timerObj != null) {
-      timerObj?.cancel();
-      timerObj = null;
-    }
-  }
 }

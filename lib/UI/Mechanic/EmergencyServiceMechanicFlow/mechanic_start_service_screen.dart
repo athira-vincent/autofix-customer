@@ -30,27 +30,19 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-
   bool isExpanded = true;
-
   String authToken="", bookingId = "";
   String isCustomerApproved = "0";
-
   String customerDiagonsisApproval = "0";
   String oldSelectedServiceId = "";
   Timer? timerObjVar;
   Timer? timerObj;
-
   List allData = [];
   String selectedServiceName = "", additionalServiceNames = "", customerName = "", mechanicName = "" ;
   String serviceTotalCostForFirebase = "", serviceTotalTimeForFirebase = "";
-
   late AnimationController _controller;
   int levelClock = 0;
   int  selectedServiceTime = 0, timeInMinutes = 0;
-  Timer? timerForCouterTime;
-  Timer? timerCouterTime;
-
   String startOrUpdateState = "0";
   String isWaiting = "-2";
 
@@ -59,12 +51,6 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-
-    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      timerObjVar = t;
-      print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB();
-    });
     _controller = AnimationController(
         vsync: this,
         duration: Duration(
@@ -88,28 +74,36 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
-
+      updateToCloudFirestoreMechanicCurrentScreenDB();
+      listenToCloudFirestoreDB();
     });
     await _firestore.collection("ResolMech").doc('${bookingId}').snapshots().listen((event) {
       setState(() {
         customerName = event.get('customerName').toString();
         mechanicName = event.get('mechanicName').toString();
         allData = event.get('serviceModel').toList();
-        print('_firestoreData coming>>>>>>>>> allData' + '${allData}');
-
         selectedServiceName = allData[0]['serviceName'];
         serviceTotalTimeForFirebase = allData[0]['serviceTime'];
         serviceTotalCostForFirebase = allData[0]['serviceCost'];
-
         selectedServiceTime = Duration(minutes: int.parse('${allData[0]['serviceTime'].split(".").first}')).inSeconds;
         levelClock =  selectedServiceTime;
       });
-      setState(() {
-
-      });
-      print('_firestoreData>>>>>>>>> ' + selectedServiceName);
     });
   }
+
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+            "mechanicFromPage" : "M2",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
 
   void listenToCloudFirestoreDB() {
     DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc('${bookingId}');
@@ -153,52 +147,47 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     print("serviceTotalTimeForFirebase  >>>>>>>>>> " + serviceTotalTimeForFirebase);
 
     if(allData.isNotEmpty) {
-      _firestore
-          .collection("ResolMech")
-          .doc('${bookingId}')
-          .update({
-        'updatedServiceList': "",
-      })
+            _firestore
+                .collection("ResolMech")
+                .doc('${bookingId}')
+                .update({
+              'updatedServiceList': "",
+            })
           .then((value) => print("updatedServiceList ended Added"))
           .catchError((error) =>
           print("Failed to add updatedServiceList: $error"));
 
-      if (startOrUpdateState == "0") {
-        _firestore
-            .collection("ResolMech")
-            .doc('${bookingId}')
-            .update({
-          'mechanicDiagonsisState': "2",
-          'customerDiagonsisApproval' : "-1",
-          'updatedServiceList': FieldValue.arrayUnion(allData),
-          'updatedServiceCost': "$serviceTotalCostForFirebase",
-          'updatedServiceTime': "$serviceTotalTimeForFirebase",
-          'timerCounter': "$serviceTotalTimeForFirebase",
-          "customerFromPage": "ExtraServiceDiagonsisScreen(isEmergency: true,)",
-          "mechanicFromPage": "CustomerApprovedScreen",
-        })
-            .then((value) => print("updatedServiceList Added"))
-            .catchError((error) =>
-            print("Failed to add updatedServiceList: $error"));
-      }
-      else {
-        _firestore
-            .collection("ResolMech")
-            .doc('${bookingId}')
-            .update({
-          'mechanicDiagonsisState': "1",
-          'updatedServiceList': FieldValue.arrayUnion(allData),
-          'updatedServiceCost': "$serviceTotalCostForFirebase",
-          'updatedServiceTime': "$serviceTotalTimeForFirebase",
-          'timerCounter': "$serviceTotalTimeForFirebase",
-          "customerFromPage": "ExtraServiceDiagonsisScreen(isEmergency: true,)",
-          "mechanicFromPage": "CustomerApprovedScreen",
-          //===================== code for send the list of additional services =========
-        })
-            .then((value) => print("updatedServiceList Added"))
-            .catchError((error) =>
-            print("Failed to add updatedServiceList: $error"));
-      }
+          if (startOrUpdateState == "0") {
+                  _firestore
+                      .collection("ResolMech")
+                      .doc('${bookingId}')
+                      .update({
+                    'mechanicDiagonsisState': "2",
+                    'customerDiagonsisApproval' : "-1",
+                    'updatedServiceList': FieldValue.arrayUnion(allData),
+                    'updatedServiceCost': "$serviceTotalCostForFirebase",
+                    'updatedServiceTime': "$serviceTotalTimeForFirebase",
+                    'timerCounter': "$serviceTotalTimeForFirebase",
+                  })
+                .then((value) => print("updatedServiceList Added"))
+                .catchError((error) =>
+                print("Failed to add updatedServiceList: $error"));
+          }
+          else {
+                _firestore
+                    .collection("ResolMech")
+                    .doc('${bookingId}')
+                    .update({
+                  'mechanicDiagonsisState': "1",
+                  'updatedServiceList': FieldValue.arrayUnion(allData),
+                  'updatedServiceCost': "$serviceTotalCostForFirebase",
+                  'updatedServiceTime': "$serviceTotalTimeForFirebase",
+                  'timerCounter': "$serviceTotalTimeForFirebase",
+                })
+                .then((value) => print("updatedServiceList Added"))
+                .catchError((error) =>
+                print("Failed to add updatedServiceList: $error"));
+          }
     }
   }
 

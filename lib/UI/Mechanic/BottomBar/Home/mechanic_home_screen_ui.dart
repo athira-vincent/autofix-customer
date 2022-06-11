@@ -105,6 +105,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", mechanicId);
+
     });
   }
 
@@ -527,18 +528,21 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
-            child: Text(
-              'My brand specialisation ',
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.visible,
-              style: Styles.sparepartsForYourModelsStyle,
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
+              child: Text(
+                'My brand specialisation ',
+                maxLines: 2,
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.visible,
+                style: Styles.sparepartsForYourModelsStyle,
+              ),
             ),
           ),
           Container(
             height: size.height * 15 / 100,
+            alignment: Alignment.center,
             margin: EdgeInsets.all(0),
             child: Stack(
               children: [
@@ -565,18 +569,23 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                             snapshot.data?.data?.brandDetails?.length != 0 && snapshot.data?.data?.brandDetails?.length != null
                                 ? brandSpecializationList(size,snapshot)
                                 : Padding(
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(10),
                                   child: Container(
+                                    width: double.infinity,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(7),
-                                          border: Border.all(
-                                            color: Colors.white,
-                                          ),
-                                          color: CustColors.white_04
-                                      ),
-                                      child: SvgPicture.asset(
-                                        "assets/image/NoBrand.svg",
-                                        //fit: BoxFit.contain,
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            color:CustColors.materialBlue, spreadRadius: 1),
+                                      ],
+                                    ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          "assets/image/NoBrand.svg",
+                                          //fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                 );

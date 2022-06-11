@@ -28,7 +28,6 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
 
   bool isStartedWork = false, isEnableAddMoreBtn = false;
   bool _isLoading = false;
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   final MechanicAddMoreTimeBloc _addMoreTimeBloc = MechanicAddMoreTimeBloc();
@@ -36,22 +35,17 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   double per = .10;
   String authToken = "", bookingId = "", extendedTime = "0",
       customerName= "", mechanicName = "", updatedServiceTime = "00.00";
-
   int levelClock = 0;
   int extendedTimeVal = 00;
   String extendedTimeText = "";
-
   String listenToFirestoreTime = "0", customerDiagonsisApproval = "",mechanicDiagonsisState="",mechanicStartedOrNot="";
-
   double _setValue(double value) {
     return value * per + value;
   }
-
   late StateSetter extraTimeStateSetter;
   Timer? timerObj;
   Timer? timerObjVar;
   int timeCounter = 0;
-
   Timer? totalTimerObj;
   int totalTimeTaken = 0;
 
@@ -128,25 +122,18 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void updateToCloudFirestoreDB(String isWorkStarted, String isWorkCompleted, String time,String currentUpdatedTime ) {
-
     print("updateToCloudFirestoreDB totalTimeTaken clock2222222222 >>>> " + totalTimeTaken.toString());
-
-
     if(currentUpdatedTime == "0")
       {
         _firestore
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-          'isWorkStarted': "$isWorkStarted",
-          'isWorkCompleted': "$isWorkCompleted",
-          "extendedTime": "$time",
-          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
-          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-          "mechanicFromPage" : "MechanicWorkCompletedScreen",
-          //===================== code for send the list of additional services =========
-        })
+              'isWorkStarted': "$isWorkStarted",
+              'isWorkCompleted': "$isWorkCompleted",
+              "extendedTime": "$time",
+              "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+            })
             .then((value) => print("Location Added"))
             .catchError((error) =>
             print("Failed to add Location: $error"));
@@ -157,25 +144,30 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
             .collection("ResolMech")
             .doc('${bookingId}')
             .update({
-          'isWorkStarted': "$isWorkStarted",
-          'isWorkCompleted': "$isWorkCompleted",
-          "extendedTime": "$time",
-          "timerCounter": "$currentUpdatedTime",
-          "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
-          // "totalTimeTakenByMechanic" : timeCounter==0 ? "$timeCounter" : "${timeCounter - 1}",
-          "customerFromPage" : "MechanicWorkProgressScreen(workStatus: '2')",
-          "mechanicFromPage" : "MechanicWorkCompletedScreen",
-          //===================== code for send the list of additional services =========
-        })
+              'isWorkStarted': "$isWorkStarted",
+              'isWorkCompleted': "$isWorkCompleted",
+              "extendedTime": "$time",
+              "timerCounter": "$currentUpdatedTime",
+              "totalTimeTakenByMechanic" : "${totalTimeTaken.toString()}",
+            })
             .then((value) => print("Location Added"))
             .catchError((error) =>
             print("Failed to add Location: $error"));
       }
-
   }
 
 
-
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingId}')
+        .update({
+          "mechanicFromPage" : "M3",
+        })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -529,13 +521,10 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void _updateTimerListener(int count) {
-
     print('_updateTimerListener >>>>>000 ${count}');
-
     timeCounter = count;
     timerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
       timerObjVar = t;
-
       print('Timer timerObj ++++++' + timerObjVar.toString());
       timeCounter = timeCounter - 1;
       print("timeCounter >>>>>> " + timeCounter.toString());
@@ -548,22 +537,12 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
   }
 
   void _totalTimeCounter() {
-
     totalTimerObj = Timer.periodic(Duration(minutes: 1), (Timer t) {
-
       totalTimeTaken = totalTimeTaken + 1;
-
       print('Timer totalTimerObj ++++++' + totalTimerObj.toString());
-
       print("totalTimeTaken >>>>>> " + totalTimeTaken.toString());
     });
-    /*Timer(const Duration(minutes: 1), () {
-      totalTimeTaken = totalTimeTaken + 1;
-      print("totalTimeTaken >>>>>>>> " + totalTimeTaken.toString());
-    });*/
   }
-
-
 
 
   Widget mechanicAddMoreTimeButton(Size size){
@@ -761,37 +740,27 @@ class _CustomerApprovedScreenState extends State<CustomerApprovedScreen> with Ti
                     int newTimeSec;
                     setState(() {
                       _controller.stop();
-
                       print("level extendedTimeVal clock1 >>>> " + extendedTimeVal.toString());
                       print("level extendedTime clock1 >>>> " + extendedTime.toString());
                       print("level levelClock clock1 >>>> " + levelClock.toString());
                       print("level timeCounter clock1 >>>> " + timeCounter.toString());
-
-
-
                       newTime = int.parse('$extendedTime') +  int.parse('${extendedTimeVal.toString()}');
                         extendedTime = newTime.toString();
                         newTimeSec = Duration(minutes: int.parse('$extendedTimeVal') + int.parse('$timeCounter')).inSeconds;
                         levelClock = newTimeSec;
-                         _controller = AnimationController(
+                        _controller = AnimationController(
                              vsync: this,
                              duration: Duration(
                                  seconds: newTimeSec) // gameData.levelClock is a user entered number elsewhere in the applciation
                          );
-
                       print("level extendedTimeVal clock2 >>>> " + extendedTimeVal.toString());
                       print("level extendedTime clock2 >>>> " + extendedTime.toString());
                       print("level newTimeSec clock2 >>>> " + newTimeSec.toString());
                       print("level levelClock clock2 >>>> " + levelClock.toString());
                       print("level timeCounter clock2 >>>> " + timeCounter.toString());
-
-
-
                       print("clock2 _controller ${_controller.status}");
                       print("clock2 _controller.duration!.inMinutes ${_controller.duration!.inMinutes}");
-
-                      //_controller.reset();
-                        isEnableAddMoreBtn = false;
+                       isEnableAddMoreBtn = false;
                         _controller.forward();
                          _updateTimerListener(int.parse((int.parse(levelClock.toString())/60).toInt().toString()));
                          updateToCloudFirestoreDB("1","0", extendedTimeVal.toString(),"${_controller.duration!.inMinutes}");

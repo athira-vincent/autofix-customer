@@ -33,37 +33,20 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
 
 
   BuildContext? contextAlert;
-
   double per = .10;
   double perfont = .10;
   double height = 0;
   String selectedState = "";
-
   List serviceIds = [];
-
-
   double totalFees = 0.0;
   bool isWorkStartedState = false;
-
   String mechanicName = "";
-
-
-
   final HomeCustomerBloc _addMoreServiceBloc = HomeCustomerBloc();
-
-
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var _firestoreData ;
-
   String isWorkStarted = "0";
   String isWorkStartedButtonClick = "0";
-
-
-
-  Timer? timerObjVar;
-  Timer? timerObj;
   String mechanicDiagonsisState = "0";
-
   String authToken="";
   String userName="";
   String serviceIdEmergency="";
@@ -79,16 +62,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
-    _listenServiceListResponse();
-
-    timerObj = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      timerObjVar = t;
-      print('Timer listenToCloudFirestoreDB ++++++');
-      listenToCloudFirestoreDB(context);
-    });
-
   }
 
   void listenToCloudFirestoreDB(BuildContext context) {
@@ -100,27 +74,16 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         });
           if(isWorkStarted == "1")
           {
-
             if(isWorkStartedButtonClick == "1")
             {
-              //Navigator.of(context, rootNavigator: true).pop();
-             /* Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                  MechanicWorkProgressScreen(workStatus: "2",)), (Route<dynamic> route) => false);*/
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
+               Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MechanicWorkProgressScreen(workStatus: "2",)));
             }
-
-
-
           }
       });
   }
-
-
-
-
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -132,6 +95,8 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('ExtraServiceDiagonsisScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
+      updateToCloudFirestoreMechanicCurrentScreenDB();
+      listenToCloudFirestoreDB(context);
       _firestoreData = _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots();
     });
     await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
@@ -142,27 +107,26 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
         oldTotalEstimatedTime = event.get('serviceModel')[0]['serviceTime'];
         oldTotalEstimatedCost = event.get('serviceModel')[0]['serviceCost'];
         mechanicName = event.get('mechanicName');
-
         List allData = event.get('updatedServiceList').toList();
-        print('allData StreamBuilder ++++ ${allData.length} ');
-        print('allData StreamBuilder ++++ ${allData[0]['serviceCost']} ');
-
         for(int i = 0; i< allData.length ; i++)
           serviceIds.add('${allData[i]['serviceId']}');
-
-        print('StreamBuilder serviceIds ++++ $serviceIds ');
-        print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
       });
     });
   }
 
-
+  void updateToCloudFirestoreMechanicCurrentScreenDB() {
+    _firestore
+        .collection("ResolMech")
+        .doc('${bookingIdEmergency}')
+        .update({
+            "customerFromPage" : "C3",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
   void updateToCloudFirestoreDB(String customerDiagonsisApproval) {
-    print('customerDiagonsisApproval00 $customerDiagonsisApproval');
-    print('customerDiagonsisApproval00 $customerDiagonsisApproval');
-
-
     if(customerDiagonsisApproval == "-1")
       {
         print('customerDiagonsisApproval11 -1');
@@ -173,38 +137,26 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
               'customerDiagonsisApproval': "-1",
               'updatedServiceCost': "$oldTotalEstimatedCost",
               'updatedServiceTime': "$oldTotalEstimatedTime",
-              'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "2",)'
-
+               'timerCounter': "$oldTotalEstimatedTime",
             })
             .then((value) => print("Uploaded to firestore"))
             .catchError((error) =>
             print("Failed to upload: $error"));
       }
-    else{
+    else
+    {
       print('customerDiagonsisApproval22 1');
       _firestore
           .collection("ResolMech")
           .doc('${bookingIdEmergency}')
           .update({
             'customerDiagonsisApproval': "1",
-            'customerFromPage': 'MechanicWorkProgressScreen(workStatus: "2",)'
-
           })
           .then((value) => print("Uploaded to firestore"))
           .catchError((error) =>
           print("Failed to upload: $error"));
     }
-
-
-
   }
-
-
-
-  _listenServiceListResponse() {
-
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -218,12 +170,10 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
               alignment: Alignment.center,
               children: [
                 Column(
-
                   children: [
                     appBarCustomUi(size),
                     infoText(),
                     bagroundBgText(size),
-
                     selectedRepairDetailsUi(size),
                     estimatedAndTimeTakenUi(size),
                     RequestButton( size,context)
@@ -448,10 +398,9 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                               height: 25,
                               width: 25,
                               child: SvgPicture.asset(
-                                widget.isEmergency ?
-                                'assets/image/MechanicType/mechanic_work_clock.svg'
-                                :
-                                'assets/image/ic_calendar_blue.svg',
+                                widget.isEmergency
+                                ? 'assets/image/MechanicType/mechanic_work_clock.svg'
+                                : 'assets/image/ic_calendar_blue.svg',
                                 fit: BoxFit.contain,
                               )
                           ),
@@ -459,10 +408,9 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                             width: 10,
                           ),
                           Text(
-                            widget.isEmergency ?
-                            "${totalEstimatedTime} Min"
-                            :
-                            "12 Jan 2022",
+                            widget.isEmergency
+                            ? "${totalEstimatedTime} Min"
+                            : "12 Jan 2022",
                             style: Styles.textSuccessfulTitleStyle03,
                           ),
                         ],
@@ -519,7 +467,6 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                   ],
                 ),
               ),
-
             ],
           ),
         ),
@@ -760,20 +707,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    cancelTimer();
     print("dispose");
   }
 
-  cancelTimer() {
-
-    if (timerObjVar != null) {
-      timerObjVar?.cancel();
-      timerObjVar = null;
-    }
-
-    if (timerObj != null) {
-      timerObj?.cancel();
-      timerObj = null;
-    }
-  }
 }
