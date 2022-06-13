@@ -1146,82 +1146,66 @@ class QueryProvider {
   postMechanicMyJobReviewRequest(String token, mechanicId) async {
     String _query = """
     {
-  mechanicReviewList(mechanicId: $mechanicId) {
-    id
-    userCode
-    firstName
-    lastName
-    emailId
-    phoneNo
-    userTypeId
-    status
-    jwtToken
-    fcmToken
-    otpCode
-    isProfile
-    otpVerified
-    mechanic {
-      id
-      displayName
-      userName
-      password
-      firstName
-      lastName
-      emailId
-      phoneNo
-      address
-      startTime
-      endTime
-      city
-      licenseNo
-      state
-      licenseDate
-      latitude
-      longitude
-      serviceId
-      profilePic
-      licenseProof
-      status
-      rate
-      reviewCount
-    }
-    mechanicStatus {
-      distance
-    }
-    mechanicService {
-      id
-      fee
-      service{
+  mechanicReviewList(mechanicId: $mechanicId)  {
         id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+        mechanic {
+          id
+          address
+          state
+          profilePic
+          status
+          rate
+          reviewCount
+        }
+        mechanicStatus {
+          distance
+        }
+        mechanicService {
+          id
+          fee
+          service{
+            id
+          }
+          status
+          userId
+        }
+        totalAmount
+        distance
+        duration
+        reviewCount
+        mechanicReviewsData {
+          id
+          transType
+          rating
+          feedback
+          bookingId
+          orderId
+          status
+          order{
+            id
+          }
+          bookings{
+            id
+          }
+          productData{
+            id
+          }
+        }
+        mechanicReview
+        bookingsCount
       }
-      status
-      userId
-    }
-    totalAmount
-    distance
-    duration
-    reviewCount
-    mechanicReviewsData {
-      id
-      transType
-      rating
-      feedback
-      bookingId
-      orderId
-      status
-      order{
-        id
-      }
-      bookings{
-        id
-      }
-      productData{
-        id
-      }
-    }
-    mechanicReview
-    bookingsCount
-  }
 }
      """;
     log(_query);

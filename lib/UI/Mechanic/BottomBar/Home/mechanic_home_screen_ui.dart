@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dar
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -704,28 +705,40 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
               ),
             ),
           ),
-          Container(
-            height: size.height * 18 / 100,
-            width: size.width * 40 / 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
+          InkWell(
+            onTap: ()
+            {
+              setState(() {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MechanicMyJobReviewScreen(),
+                    ));
+              });
+            },
+            child: Container(
+              height: size.height * 18 / 100,
+              width: size.width * 40 / 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white,
+                  ),
                   color: Colors.white,
+              ),
+              padding: EdgeInsets.only(
+                  left: size.width * 10 / 100,
+                  right: size.width * 10 / 100,
+                  top: size.height * 5 / 100,
+                  bottom: size.height * 5 / 100
+              ),
+              //ClipRRect for image border radius
+              child: ClipRRect(
+                //borderRadius: BorderRadius.circular(5),
+                child: SvgPicture.asset(
+                  "assets/image/ic_home_job_review.svg",
+                  //fit: BoxFit.cover,
                 ),
-                color: Colors.white,
-            ),
-            padding: EdgeInsets.only(
-                left: size.width * 10 / 100,
-                right: size.width * 10 / 100,
-                top: size.height * 5 / 100,
-                bottom: size.height * 5 / 100
-            ),
-            //ClipRRect for image border radius
-            child: ClipRRect(
-              //borderRadius: BorderRadius.circular(5),
-              child: SvgPicture.asset(
-                "assets/image/ic_home_job_review.svg",
-                //fit: BoxFit.cover,
               ),
             ),
           ),
