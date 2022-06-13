@@ -13,7 +13,6 @@ import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -343,7 +342,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
       padding: const EdgeInsets.only(top: 20),
       child: Container(
         child: Text(
-          AppLocalizations.of(context)!.text_complete_your_profile,
+          'Complete your profile',
           style: Styles.textCompleteYourProfile,
         ),
       ),

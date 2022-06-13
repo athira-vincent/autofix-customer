@@ -26,7 +26,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 class SignupScreen extends StatefulWidget {
@@ -385,8 +384,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     children: [
                                       Container(
                                         child: Text(
-                                          AppLocalizations.of(context)!
-                                              .text_sign_up,
+                                          'Sign Up',
                                           style: Styles.textHeadLogin,
                                         ),
                                       ),
@@ -412,13 +410,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           widget.userCategory ==
                                                                   TextStrings
                                                                       .user_category_individual
-                                                              ? AppLocalizations
-                                                                      .of(
-                                                                          context)!
-                                                                  .text_name
-                                                              : AppLocalizations
-                                                                      .of(context)!
-                                                                  .text_organization_name,
+                                                              ? 'Name'
+                                                              : 'Name of Organization',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -443,12 +436,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   ch: widget.userCategory ==
                                                                           TextStrings
                                                                               .user_category_individual
-                                                                      ? AppLocalizations.of(
-                                                                              context)!
-                                                                          .text_name
-                                                                      : AppLocalizations.of(
-                                                                              context)!
-                                                                          .text_organization_name)
+                                                                      ? 'Name'
+                                                                      : 'Name of Organization')
                                                               .nameChecking,
                                                           controller:
                                                               _nameController,
@@ -463,12 +452,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                         .userCategory ==
                                                                     TextStrings
                                                                         .user_category_individual
-                                                                ? AppLocalizations.of(
-                                                                        context)!
-                                                                    .text_hint_name
-                                                                : AppLocalizations.of(
-                                                                        context)!
-                                                                    .text_hint_organization_name,
+                                                                ? 'Your Name'
+                                                                : 'Your Organization Name',
                                                             border:
                                                                 UnderlineInputBorder(
                                                               borderSide:
@@ -521,9 +506,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_organization_type,
+                                                          'Type of Organization',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -583,9 +566,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: AppLocalizations
-                                                                      .of(context)!
-                                                                  .text_hint_organization_type,
+                                                              hintText: 'Select your organization from list',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -641,9 +622,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_state,
+                                                          'State/FCT',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -667,9 +646,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 _stateFocusNode,
                                                             //keyboardType: TextInputType.phone,
                                                             validator: InputValidator(
-                                                                    ch: AppLocalizations.of(
-                                                                            context)!
-                                                                        .text_state)
+                                                                    ch: 'State/FCT')
                                                                 .emptyChecking,
                                                             controller:
                                                                 _stateController,
@@ -706,9 +683,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: AppLocalizations
-                                                                      .of(context)!
-                                                                  .text_hint_state,
+                                                              hintText: 'Select your state/ FCT',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -764,9 +739,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_ministry_govt,
+                                                          'Ministry/Govt. Agency',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -824,9 +797,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: AppLocalizations
-                                                                      .of(context)!
-                                                                  .text_hint_ministry_govt,
+                                                              hintText: 'Select your ministry/govt agency from list',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -885,9 +856,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_contact_person,
+                                                          'Contact Person Name',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -910,9 +879,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           ],
                                                           validator:
                                                               InputValidator(
-                                                            ch: AppLocalizations
-                                                                    .of(context)!
-                                                                .text_contact_person,
+                                                            ch: 'Contact Person Name',
                                                           ).nameChecking,
                                                           controller:
                                                               _contactPersonController,
@@ -923,9 +890,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               InputDecoration(
                                                             errorStyle: TextStyle(color: Colors.red),
                                                             isDense: true,
-                                                            hintText: AppLocalizations
-                                                                    .of(context)!
-                                                                .text_hint_contact_person,
+                                                            hintText: 'Enter your name',
                                                             border:
                                                                 UnderlineInputBorder(
                                                               borderSide:
@@ -975,9 +940,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .text_phone,
+                                                    'Phone Number',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -996,9 +959,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           15),
                                                     ],
                                                     validator: InputValidator(
-                                                      ch: AppLocalizations.of(
-                                                              context)!
-                                                          .text_phone,
+                                                      ch: 'Phone Number',
                                                     ).phoneNumChecking,
                                                     controller:
                                                         _phoneController,
@@ -1008,9 +969,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       hintText:
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_hint_phone,
+                                                          'Enter your Phone number',
                                                       border:
                                                           UnderlineInputBorder(
                                                         borderSide: BorderSide(
@@ -1055,9 +1014,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .text_email,
+                                                    'Email',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -1072,9 +1029,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     keyboardType: TextInputType
                                                         .emailAddress,
                                                     validator: InputValidator(
-                                                            ch: AppLocalizations
-                                                                    .of(context)!
-                                                                .text_email)
+                                                            ch: 'Email')
                                                         .emailValidator,
                                                     controller:
                                                         _emailController,
@@ -1084,9 +1039,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                       errorStyle: TextStyle(color: Colors.red),
                                                       isDense: true,
                                                       hintText:
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_hint_email,
+                                                          'Your email id',
                                                       border:
                                                           UnderlineInputBorder(
                                                         borderSide: BorderSide(
@@ -1135,9 +1088,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_state,
+                                                          'State/FCT',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -1161,7 +1112,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 _stateFocusNode,
                                                             //keyboardType: TextInputType.phone,
                                                             validator: InputValidator(
-                                                                    ch: AppLocalizations.of(context)!.text_state)
+                                                                    ch: 'State/FCT')
                                                                 .emptyChecking,
                                                             controller:
                                                                 _stateController,
@@ -1199,9 +1150,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: AppLocalizations
-                                                                      .of(context)!
-                                                                  .text_hint_state,
+                                                              hintText: 'Select your state/ FCT',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -1260,9 +1209,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_experience_year,
+                                                          'Year of experience',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -1291,9 +1238,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                           decoration:
                                                               InputDecoration(
                                                             isDense: true,
-                                                            hintText: AppLocalizations
-                                                                    .of(context)!
-                                                                .text_hint_experience_year,
+                                                            hintText: 'Add your year of experience',
                                                             errorStyle: TextStyle(color: Colors.red),
                                                             border:
                                                                 UnderlineInputBorder(
@@ -1347,9 +1292,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_upload_photo,
+                                                          'Upload photo',
                                                           style: Styles
                                                               .textLabelTitle,
                                                         ),
@@ -1399,19 +1342,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                           .zero,
                                                                   icon: Icon(
                                                                     // Based on passwordVisible state choose the icon
-                                                                    Icons
-                                                                        .camera_alt,
-                                                                    color: Colors
-                                                                        .grey,
+                                                                    Icons.camera_alt,
+                                                                    color: Colors.grey,
                                                                   ),
                                                                   onPressed:
                                                                       () {},
                                                                 ),
                                                               ),
                                                               isDense: true,
-                                                              hintText: AppLocalizations
-                                                                      .of(context)!
-                                                                  .text_hint_upload_photo,
+                                                              hintText: 'Upload your profile photo',
                                                               errorStyle: TextStyle(color: Colors.red),
                                                               border:
                                                                   UnderlineInputBorder(
@@ -1463,9 +1402,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .text_password,
+                                                    'Password',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -1476,9 +1413,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     obscureText:
                                                         !_passwordVisible!,
                                                     validator: InputValidator(
-                                                            ch: AppLocalizations
-                                                                    .of(context)!
-                                                                .text_password)
+                                                            ch: 'Password')
                                                         .passwordChecking,
                                                     controller:
                                                         _passwordController,
@@ -1522,9 +1457,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                       ),
                                                       hintText:
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_password,
+                                                          'Password',
                                                       errorStyle: TextStyle(color: Colors.red),
                                                       errorMaxLines: 3,
                                                       border:
@@ -1593,9 +1526,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .text_confirm_password,
+                                                    'Confirm password',
                                                     style:
                                                         Styles.textLabelTitle,
                                                   ),
@@ -1606,9 +1537,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                     obscureText:
                                                         !_confirmPasswordVisible!,
                                                     validator: InputValidator(
-                                                            ch: AppLocalizations
-                                                                    .of(context)!
-                                                                .text_password)
+                                                            ch: 'Password')
                                                         .passwordChecking,
                                                     controller:
                                                         _confirmPwdController,
@@ -1653,9 +1582,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                       ),
                                                       hintText:
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .text_password,
+                                                          'Password',
                                                       errorMaxLines: 3,
                                                       border:
                                                           UnderlineInputBorder(
@@ -1787,9 +1714,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                     .center,
                                                             children: [
                                                               Text(
-                                                                AppLocalizations.of(
-                                                                        context)!
-                                                                    .text_sign_up,
+                                                               'Sign Up',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -1818,17 +1743,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 text: TextSpan(
                                                   children: <TextSpan>[
                                                     TextSpan(
-                                                      text: AppLocalizations.of(
-                                                              context)!
-                                                          .text_already_have_account,
+                                                      text:'Already have an account ? ',
                                                       style: Styles
                                                           .textLabelSubTitle,
                                                     ),
                                                     TextSpan(
                                                         text:
-                                                            AppLocalizations.of(
-                                                                    context)!
-                                                                .text_sign_in,
+                                                            'Sign in',
                                                         style: Styles
                                                             .textLabelTitle_10,
                                                         recognizer:

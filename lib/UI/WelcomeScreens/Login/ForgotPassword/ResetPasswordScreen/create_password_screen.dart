@@ -5,7 +5,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -172,13 +171,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(AppLocalizations.of(context)!.text_password,
+                                  Text('Password',
                                     style: Styles.textLabelTitle,
                                   ),
                                   TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     obscureText: _passwordVisible,
-                                    validator: InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
+                                    validator: InputValidator(ch: 'Password').passwordChecking,
                                     controller: _newPasswordController,
                                     focusNode: _newPasswordFocusNode,
                                     maxLines: 1,
@@ -211,7 +210,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           },
                                         ),
                                       ),
-                                      hintText: AppLocalizations.of(context)!.text_password,
+                                      hintText: 'Password',
                                       errorMaxLines: 3,
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(
@@ -268,14 +267,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(AppLocalizations.of(context)!.text_confirm_password,
+                                  Text('Confirm password',
                                     style: Styles.textLabelTitle,
                                   ),
                                   TextFormField(
                                     textAlignVertical: TextAlignVertical.center,
                                     obscureText: _confirmPasswordVisible,
                                     validator:
-                                    InputValidator(ch: AppLocalizations.of(context)!.text_password).passwordChecking,
+                                    InputValidator(ch: 'Confirm Password').passwordChecking,
                                     controller: _confirmPwdController,
                                     focusNode: _confirmPwdFocusNode,
                                     maxLines: 1,
@@ -308,7 +307,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           },
                                         ),
                                       ),
-                                      hintText: AppLocalizations.of(context)!.text_password,
+                                      hintText: 'Password',
                                       errorMaxLines: 3,
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(

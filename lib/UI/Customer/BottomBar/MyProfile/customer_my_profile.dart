@@ -20,7 +20,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 class CustomerMyProfileScreen extends StatefulWidget {
@@ -801,7 +800,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(15),
                           ],
-                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
+                          validator: InputValidator(ch: 'Phone Number',).phoneNumChecking,
                           controller: _phoneController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
@@ -894,7 +893,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             maxLines: 1,
                             style: Styles.appBarTextBlack15,
                             focusNode: _stateFocusNode,
-                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
+                            validator: InputValidator(ch: 'State/FCT').emptyChecking,
                             controller: _stateController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
@@ -988,7 +987,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             maxLines: null,
                             style: Styles.appBarTextBlack15,
                             focusNode: _ministryGovtFocusNode,
-                            validator: InputValidator(ch: AppLocalizations.of(context)!.text_ministry_govt).emptyChecking,
+                            validator: InputValidator(ch: 'Ministry/Govt. Agency').emptyChecking,
                             controller: _ministryGovtController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
@@ -1080,7 +1079,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 RegExp('[a-zA-Z ]')),
                           ],
                           validator: InputValidator(
-                              ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                              ch :'Name of Organization').nameChecking,
                           controller: _orgNameController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
@@ -1179,7 +1178,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   RegExp('[a-zA-Z ]')),
                             ],
                             validator: InputValidator(
-                                ch :AppLocalizations.of(context)!.text_hint_organization_type).emptyChecking,
+                                ch :'Select your organization from list').emptyChecking,
                             controller: _orgTypeController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(

@@ -4,7 +4,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/StateList/states_mdl.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class SelectStateScreen extends StatefulWidget {
@@ -64,7 +63,7 @@ class _SelectStateScreenState extends State<SelectStateScreen> {
               )
             ],
             title: Text(
-              AppLocalizations.of(context)!.text_hint_state,
+              'Select your state/ FCT',
               style: Styles.titleTextSelectStateStyle,
             ),
           ),

@@ -8,7 +8,6 @@ import 'package:auto_fix/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckYourMailScreen extends StatefulWidget {
   const CheckYourMailScreen({Key? key}) : super(key: key);
@@ -152,7 +151,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                 },
                                 child: Container(
                                   child: Text(
-                                    AppLocalizations.of(context)!.text_check_mail,   //'Check your mail',
+                                    'Check your mail',   //'Check your mail',
                                     style: Styles.textHeadLogin,
                                   ),
                                 ),
@@ -163,9 +162,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                 alignment: Alignment.centerLeft,
                                 //color: Colors.red,
                                 child: Text(
-                                  AppLocalizations.of(context)!.text_check_mail_screen_desc,
-                                  /*"Please check your email , we have sent you an "
-                                  "email that contains a link to reset your password. ",*/
+                                  'Please check your email , we have sent you an \nemail that contains a link to reset your password. ',
                                   textAlign: TextAlign.justify,
                                   softWrap: true,
                                   style: Styles.textLabelSubTitle12,
@@ -217,7 +214,7 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      AppLocalizations.of(context)!.text_btn_go_to_mail,     //'Go to email',
+                                                      'Go to email',     //'Go to email',
                                                       textAlign: TextAlign.center,
                                                       style: Styles.textButtonLabelSubTitle,
                                                     ),
@@ -245,11 +242,11 @@ class _CheckYourMailScreenState extends State<CheckYourMailScreen> {
                                         text: TextSpan(
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: AppLocalizations.of(context)!.text_check_spam,     //"Did not receive the email? Check your spam filter Or ",
+                                              text: 'Did not receive the email? Check your spam filter Or ',     //"Did not receive the email? Check your spam filter Or ",
                                               style: Styles.textLabelSubTitle,
                                             ),
                                             TextSpan(
-                                                text: AppLocalizations.of(context)!.text_try_another,   //'try another email address ',
+                                                text: 'try another email address ',   //'try another email address ',
                                                 style: Styles.textLabelTitle_10,
                                                 recognizer: TapGestureRecognizer()
                                                   ..onTap = () {

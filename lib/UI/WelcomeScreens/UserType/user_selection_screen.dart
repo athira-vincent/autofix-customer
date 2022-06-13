@@ -7,7 +7,6 @@ import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/user_type_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserSelectionScreen extends StatefulWidget {
   const UserSelectionScreen({Key? key}) : super(key: key);
@@ -61,8 +60,8 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text( AppLocalizations.of(context)!.text_user_selection_red,style: Styles.textLabelSubTitleRed,),
-                      Text(AppLocalizations.of(context)!.text_user_selection_blue,style: Styles.textLabelSubTitleBlue,),
+                      Text( 'Select ! ',style: Styles.textLabelSubTitleRed,),
+                      Text('What type of user are you ?',style: Styles.textLabelSubTitleBlue,),
                     ],
                   ),
                   //child: Text("Select ! What type of user are you ?"),
@@ -99,7 +98,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             },
                             child: UserTypeSelectionWidget(
                               imagePath: 'assets/image/UserType/img_user_customer.png',
-                              titleText: Text(AppLocalizations.of(context)!.text_customer,
+                              titleText: Text('Customer',
                                 style: Styles.titleTextStyle),
                               //titleText: ,
                             ),
@@ -120,7 +119,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                             },
                             child: UserTypeSelectionWidget(
                               imagePath: 'assets/image/UserType/img_user_mechanic.png',
-                              titleText: Text(AppLocalizations.of(context)!.text_mechanic,
+                              titleText: Text('Mechanic',
                                   style: Styles.titleTextStyle),
                             ),
                           ),

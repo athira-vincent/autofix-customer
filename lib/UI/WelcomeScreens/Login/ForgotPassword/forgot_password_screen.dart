@@ -9,11 +9,9 @@ import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../main.dart';
 import '../PhoneLogin/otp_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -167,7 +165,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     },
                                     child: Container(
                                       child: Text(
-                                        AppLocalizations.of(context)!.forgot_password,
+                                        'Forgot password',
                                         style: Styles.textHeadLogin,
                                       ),
                                     ),

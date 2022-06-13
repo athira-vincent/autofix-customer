@@ -6,7 +6,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/user_category.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicSelectionScreen extends StatefulWidget {
@@ -40,7 +39,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                       right: size.width * 0.181,
                       left: size.width * 0.172
                   ),
-                  child: Text(AppLocalizations.of(context)!.text_customer,
+                  child: Text('Customer',
                       style: Styles.hiddenTextBlack
                   ),
                   //child: Text("Select ! What type of user are you ?"),
@@ -65,7 +64,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                               right: size.width * 0.181,
                               left: size.width * 0.172
                           ),
-                          child: Text(AppLocalizations.of(context)!.text_mechanic,
+                          child: Text('Mechanic',
                               style: Styles.TitleTextBlack
                           ),
                         ),
@@ -74,7 +73,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                           onTap: () async {
                             setUserCategory(TextStrings.user_category_individual);
                           },
-                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
+                          child: UserCategorySelectionWidget(titleText: 'Individual',
                             imagePath: "assets/image/MechanicType/img_individual.png",),
                         ),
 
@@ -82,7 +81,7 @@ class _MechanicSelectionScreenState extends State<MechanicSelectionScreen> {
                           onTap: () async {
                             setUserCategory(TextStrings.user_category_corporate);
                           },
-                          child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
+                          child: UserCategorySelectionWidget(titleText: 'Corporate',
                             imagePath: "assets/image/MechanicType/img_corporate.png",),
                         ),
                       ],

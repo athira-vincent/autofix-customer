@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../main.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WalkThroughPages extends StatefulWidget {
   @override
@@ -66,7 +65,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                             flex: 1,
                             child: Container(
                               child: Text(
-                                AppLocalizations.of(context)!.text_select_language,
+                                'SELECT LANGUAGE',
                                 style: Styles.SelectLanguageWalkThroughStyle,
                               ),
                             ),
@@ -177,7 +176,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                             },
                             child: Center(
                               child: Text(
-                                AppLocalizations.of(context)!.next,
+                                'Next',
                                 style: Styles.nextWalkThroughStyle,
                               ),
                             ),
@@ -189,7 +188,7 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                             },
                             child: Center(
                               child: Text(
-                                AppLocalizations.of(context)!.text_skip,
+                                'Skip',
                                 style: Styles.skipWalkThroughStyle,
                               ),
                             ),
@@ -202,17 +201,17 @@ class WalkThroughPagesState extends State<WalkThroughPages> {
                             setIswalked();
                           },
                           child: Container(
-                        width: 10,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(.5),
-                            border: Border.all(color: Colors.white, width: .3)),
-                        height: 20.5,
-                        child: Text(
-                          AppLocalizations.of(context)!.text_get_started,
-                          style: Styles.nextWalkThroughStyle,
-                        ),
-                      ),
+                            width: 10,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(.5),
+                                border: Border.all(color: Colors.white, width: .3)),
+                            height: 20.5,
+                            child: Text(
+                              'Get Started',
+                              style: Styles.nextWalkThroughStyle,
+                            ),
+                          ),
                     ),
                   ),
                 ),

@@ -12,7 +12,6 @@ import 'package:auto_fix/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SparePartsListScreen extends StatefulWidget {
   const SparePartsListScreen({Key? key}) : super(key: key);
