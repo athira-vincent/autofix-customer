@@ -241,7 +241,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                         Column(
                           children: [
                             NameTextUi(),
-                            YearOfExperienceTextUi(),
+                            YearOfExperienceTextUi(size),
                             EmailTextUi(),
                             PhoneTextUi(),
                             StateTextUi(),
@@ -253,9 +253,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             ?
                         Column(
                           children: [
-                            OrgNameTextUi(),
-                            OrgTypeTextUi(),
-                            YearOfExperienceTextUi(),
+                            OrgNameTextUi(size),
+                            OrgTypeTextUi(size),
+                            YearOfExperienceTextUi(size),
                             NameTextUi(),
                             EmailTextUi(),
                             PhoneTextUi(),
@@ -587,7 +587,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(13),
                   child: Icon(Icons.person, color: CustColors.blue),
                 ),
               ),
@@ -612,7 +612,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                 RegExp('[a-zA-Z ]')),
                           ],
                           validator: InputValidator(
-                              ch : _userType == "1" ? 'Name' : 'Contact person', ).nameChecking,
+                              ch : _userType == "1" ? 'Name' : 'Contact person', ).emptyChecking,
                           controller: _nameController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
@@ -675,7 +675,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(13),
                   child: Icon(Icons.email, color: CustColors.blue),
                 ),
               ),
@@ -752,7 +752,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(13),
                   child: Icon(Icons.location_on_rounded, color: CustColors.blue),
                 ),
               ),
@@ -835,7 +835,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget OrgNameTextUi() {
+  Widget OrgNameTextUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
       child: Column(
@@ -849,7 +849,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Icon(Icons.person, color: CustColors.blue),
+                  child: SvgPicture.asset('assets/image/ic_org_name.svg',
+                    height: size.height * 2.5 / 100,
+                    width: size.width * 2.5 / 100,
+                  ),
                 ),
               ),
               Expanded(
@@ -875,7 +878,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                   RegExp('[a-zA-Z ]')),
                             ],
                             validator: InputValidator(
-                                ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                                ch :AppLocalizations.of(context)!.text_organization_name).emptyChecking,
                             controller: _orgNameController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
@@ -925,7 +928,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget OrgTypeTextUi() {
+  Widget OrgTypeTextUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
       child: Column(
@@ -939,7 +942,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Icon(Icons.work, color: CustColors.blue),
+                  child:  SvgPicture.asset('assets/image/ic_org_type.svg',
+                    height: size.height * 2.5 / 100,
+                    width: size.width * 2.5 / 100,
+                  ),
                 ),
               ),
               Expanded(
@@ -1033,7 +1039,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(13),
                   child: Icon(Icons.phone, color: CustColors.blue),
                 ),
               ),
@@ -1190,7 +1196,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget YearOfExperienceTextUi() {
+  Widget YearOfExperienceTextUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
       child: Column(
@@ -1203,8 +1209,16 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Icon(Icons.badge_outlined, color: CustColors.blue),
+                  padding: const EdgeInsets.all(13.5),
+                  child: _userType == "1"
+                      ?
+                  Icon(Icons.badge_outlined, color: CustColors.blue)
+                      :
+                  SvgPicture.asset('assets/image/ic_existance.svg',
+                    height: size.height * 2.8 / 100,
+                    width: size.width * 2.8 / 100,
+                  )
+                  ,
                 ),
               ),
               Expanded(
@@ -1300,10 +1314,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
               : Container(
                   child: MaterialButton(
                     onPressed: () {
-
-                      setState(() {
-                        print("$_userType");
-                        if(_userType == "1")
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          print("$_userType");
+                          if(_userType == "1")
                           {
                             print("Individual");
                             _isLoading = true;
@@ -1317,7 +1331,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _yearOfExistenceController.text,
                             );
                           }
-                        else
+                          else
                           {
                             _isLoading = true;
                             _mechanicProfileBloc.postMechanicEditProfileCorporateRequest(
@@ -1332,8 +1346,13 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               _orgTypeController.text,
                             );
                             print("Cooperate");
-                        }
-                      });
+                          }
+                        });
+                      }else{
+                        print("individual _formKey.currentState!.validate() - else");
+                        setState(() => _autoValidate = AutovalidateMode.always);
+                      }
+
                     },
                     child: Container(
                       height: 50,

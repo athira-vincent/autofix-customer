@@ -1052,7 +1052,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(13),
-                  child: SvgPicture.asset('assets/image/ic_organisation_name.svg',
+                  child: SvgPicture.asset('assets/image/ic_org_name.svg',
                     height: size.height * 2.5 / 100,
                     width: size.width * 2.5 / 100,
                   ),
