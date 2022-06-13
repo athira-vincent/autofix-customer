@@ -1682,10 +1682,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                   padding: EdgeInsets.only(top: _setValue(22.4)),
                                   child: ministryGovtList.length != 0
                                       ? ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: ministryGovtList.length,
-                                    itemBuilder: (context, index) {
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: ministryGovtList.length,
+                                      itemBuilder: (context, index) {
                                       return InkWell(
                                           onTap: () {
                                             final dial_Code =
