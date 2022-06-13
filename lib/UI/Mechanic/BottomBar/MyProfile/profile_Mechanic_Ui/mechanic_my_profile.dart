@@ -201,6 +201,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _emailController.text = value.data!.mechanicDetails!.emailId.toString();
     _phoneController.text = value.data!.mechanicDetails!.phoneNo.toString();
     _stateController.text = value.data!.mechanicDetails!.mechanic![0].state.toString();
+    _addressController.text = value.data!.mechanicDetails!.mechanic![0].address.toString();
     _yearOfExistenceController.text = yearOfExistence == null || yearOfExistence == "" ? "0" : yearOfExistence;
     _orgNameController.text = value.data!.mechanicDetails!.mechanic![0].orgName.toString();
     _orgTypeController.text = value.data!.mechanicDetails!.mechanic![0].orgType.toString();
@@ -244,6 +245,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                             YearOfExperienceTextUi(size),
                             EmailTextUi(),
                             PhoneTextUi(),
+                            //AddressTextUi(size),
                             StateTextUi(),
                             editProfileEnabled  == true ? NextButton() : Container(),
                           ],
@@ -1106,7 +1108,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     );
   }
 
-  Widget AddressTextUi() {
+  Widget AddressTextUi(Size size) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20,5,20,5),
       child: Column(
@@ -1120,7 +1122,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Icon(Icons.location_history_outlined, color: CustColors.blue),
+                  child: SvgPicture.asset('assets/image/ic_address.svg',
+                    height: size.height * 2.8 / 100,
+                    width: size.width * 2.8 / 100,
+                  ),
                 ),
               ),
               Expanded(
@@ -1146,8 +1151,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               FilteringTextInputFormatter.allow(
                                   RegExp('[a-zA-Z0-9 ]')),
                             ],
-                            validator: InputValidator(
-                                ch :'Address').nameCheckingWithNumeric,
+                            validator: InputValidator(ch :'Address').emptyChecking,
                             controller: _addressController,
                             cursorColor: CustColors.whiteBlueish,
                             decoration: InputDecoration(
