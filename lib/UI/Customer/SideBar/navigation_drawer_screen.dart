@@ -229,7 +229,7 @@ class _CustomerNavigationDrawerScreenState extends State<CustomerNavigationDrawe
           contentPadding: EdgeInsets.only(left: 20.4),
           visualDensity: VisualDensity(horizontal: 0, vertical: -3),
           title: Align(
-            alignment: Alignment(-1.28, 0),
+            alignment: Alignment(-1.22, 0),
             child: Text(
               "My Services",
               style: Styles.navDrawerTextStyle02,
