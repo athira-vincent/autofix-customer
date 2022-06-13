@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   primaryColor: Colors.white,
                 ),
-                home: CustomerMyVehicleScreen(),
+                home: SplashScreen(),
                 // home: DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,),
 
                 // home: AddCarScreen(userType: TextStrings.user_mechanic , userCategory: "0",fromPage: "0",),
