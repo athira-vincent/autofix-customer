@@ -612,7 +612,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                 RegExp('[a-zA-Z ]')),
                           ],
                           validator: InputValidator(
-                              ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                              ch : _userType == "1" ? 'Name' : 'Contact person', ).nameChecking,
                           controller: _nameController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
@@ -643,7 +643,6 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                   ),
                 ),
               ),
-              Spacer(),
               editProfileEnabled == true
               ? Container(
                 child: Padding(
@@ -1234,12 +1233,12 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                LengthLimitingTextInputFormatter(2),
                             ],
                             validator: InputValidator(
-                                ch : 'Year of existence' ).nameCheckingWithNumeric,
+                                ch : _userType == "1" ? 'Year of experience' : 'Year of existence').nameCheckingWithNumeric,
                             controller: _yearOfExistenceController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText:  'Experience',
+                              hintText: _userType == "1" ? 'Experience' : 'Existence',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -1255,7 +1254,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                       ),
                       editProfileEnabled != true
                           ? Text(
-                              'Your experience',
+                              _userType == "1" ? 'Your experience' : 'Your existence',
                               textAlign: TextAlign.center,
                               style: Styles.textLabelSubTitle,
                             )

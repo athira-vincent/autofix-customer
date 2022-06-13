@@ -589,7 +589,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(13),
                   child: Icon(Icons.person, color: CustColors.blue),
                 ),
               ),
@@ -614,12 +614,12 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                                 RegExp('[a-zA-Z ]')),
                           ],
                           validator: InputValidator(
-                              ch :AppLocalizations.of(context)!.text_organization_name).nameChecking,
+                              ch : _userType == "1" ? "Name" : "Contact Person").nameChecking,
                           controller: _nameController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
                             isDense: true,
-                            hintText:  'Name',
+                            hintText:  _userType == "1" ? "Name" : "Contact Person",
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -924,7 +924,6 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     ),
                   ),
                 ),
-                Spacer(),
                 editProfileEnabled == true
                     ? Container(
                       child: Padding(
@@ -966,7 +965,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: SvgPicture.asset('assets/image/ic_location.svg',
+                    child: SvgPicture.asset('assets/image/ic_ministry.svg',
                       height: size.height * 2.5 / 100,
                       width: size.width * 2.5 / 100,
                     ),
@@ -1052,8 +1051,11 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                     borderRadius: BorderRadius.circular(11.0)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Icon(Icons.person, color: CustColors.blue),
+                  padding: const EdgeInsets.all(13),
+                  child: SvgPicture.asset('assets/image/ic_organisation_name.svg',
+                    height: size.height * 2.5 / 100,
+                    width: size.width * 2.5 / 100,
+                  ),
                 ),
               ),
               Expanded(
@@ -1149,7 +1151,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.person, color: CustColors.blue),
+                    child: SvgPicture.asset('assets/image/ic_org_type.svg',
+                      height: size.height * 2.5 / 100,
+                      width: size.width * 2.5 / 100,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -1178,7 +1183,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
                               isDense: true,
-                              hintText:  'Industry',
+                              hintText:  'Organization Type',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
