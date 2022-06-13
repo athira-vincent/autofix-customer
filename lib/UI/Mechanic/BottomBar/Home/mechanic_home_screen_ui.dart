@@ -75,6 +75,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     setFcmToken(authToken);
+    getSharedPrefData();
   }
 
   void registerNotification() async {
