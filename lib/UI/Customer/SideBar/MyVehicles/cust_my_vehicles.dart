@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_ca
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,10 +27,14 @@ class CustomerMyVehicleScreen extends StatefulWidget {
 class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+  final AddCarBloc _addCarBloc = AddCarBloc();
+
 
 
   String authToken = "",userID="";
   bool _isLoadingPage = false;
+  bool _isDefaultLoading = false;
+
   bool _isLoadingButton = false;
 
   CustVehicleList? custVehicleListDefaultValue;
@@ -61,7 +66,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
 
-  final AddCarBloc _addCarBloc = AddCarBloc();
 
 
 
@@ -115,6 +119,27 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           _engineTypeController.text = '${custVehicleListDefaultValue?.engine.toString()}';
           _yearController.text = '${custVehicleListDefaultValue?.year.toString()}';
           _lastMaintenanceController.text = '${custVehicleListDefaultValue?.lastMaintenance.toString()}';
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("sucess postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
+    _addCarBloc.updateDefaultVehicleResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          _isDefaultLoading = false;
+
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+
+      } else {
+
+        setState(() {
+          _isDefaultLoading = false;
+          SnackBarWidget().setMaterialSnackBar( "Vehicle set as default", _scaffoldKey);
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("sucess postServiceList >>>>>>>  ${value.status}");
@@ -345,10 +370,12 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                     }
                                   else
                                     {
-                                      _addCarBloc.postVechicleUpdateRequest(
-                                          authToken, snapshot.data?.data?.custVehicleList?[i].id,
-                                          "0");
-                                      snapshot.data?.data?.custVehicleList?.removeAt(i);
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context)
+                                          {
+                                            return deleteVehicleDialog(i,snapshot.data?.data?.custVehicleList);
+                                          });
                                     }
 
                                 }
@@ -912,19 +939,35 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         setState(() {
           if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
           {
-            custVehicleListDefaultValue = custVehicleList;
+            _isDefaultLoading = true;
             _addCarBloc.postUpdateDefaultVehicleApi(
-                authToken,custVehicleList?.id, userID);
+                authToken,custVehicleListDefaultValue?.id, userID);
+            if(custVehicleList?.id != null)
+              {
+                custVehicleListDefaultValue = custVehicleList;
+              }
           }
           else
           {
-
+            _isDefaultLoading = false;
 
           }
 
         });
       },
-      child: Container(
+      child:
+      _isDefaultLoading == true
+      ? Center(
+        child: Container(
+          height: 30,
+          width: 30,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+                CustColors.light_navy),
+          ),
+        ),
+      )
+      : Container(
         width: double.infinity,
         height: 50,
         alignment: Alignment.center,
@@ -945,6 +988,48 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget deleteVehicleDialog(int i, List<CustVehicleList>? custVehicleList) {
+    return CupertinoAlertDialog(
+      title: Text("Delete vehicle?",
+          style: TextStyle(
+            fontFamily: 'Formular',
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: CustColors.materialBlue,
+          )),
+      content: Text("Are you sure you want to delete?"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel")),
+        CupertinoDialogAction(
+            textStyle: TextStyle(
+              color: CustColors.rusty_red,
+              fontWeight: FontWeight.normal,
+            ),
+            isDefaultAction: true,
+            onPressed: () async {
+              setState(() {
+                _addCarBloc.postVechicleUpdateRequest(
+                    authToken, custVehicleList?[i].id,
+                    "0");
+                custVehicleList?.removeAt(i);
+                Navigator.pop(context);
+
+              });
+            },
+            child: Text("Delete")),
+      ],
     );
   }
 
