@@ -329,7 +329,7 @@ class _MechanicSideBarScreenState extends State<MechanicSideBarScreen> {
           child: ListTile(
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
-              "Terms & conditions",
+              "Legal",
               style: Styles.navDrawerTextStyle02,
             ),
             onTap: () {
