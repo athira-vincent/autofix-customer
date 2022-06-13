@@ -16,6 +16,8 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
+
 
 void main() async {
   await initHiveForFlutter();
@@ -86,6 +88,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Colors.white,
                 ),
                 home: SplashScreen(),
+               //home: Addpricefault(),
 
                 // home: MechanicStartServiceScreen(),
 
