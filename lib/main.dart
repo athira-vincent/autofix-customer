@@ -85,7 +85,6 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   primaryColor: Colors.white,
                 ),
-
                 home: SplashScreen(),
 
                 // home: MechanicStartServiceScreen(),
@@ -95,6 +94,5 @@ class _MyAppState extends State<MyApp> {
           );
         });
   }
-
 
 }
