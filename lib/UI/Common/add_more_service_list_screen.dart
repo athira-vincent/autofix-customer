@@ -110,7 +110,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Add additional faults",
+                    child: Text("Add additional service",
                       style: TextStyle(
                         fontSize: 15.3,
                         fontFamily: "Samsung_SharpSans_Medium",
