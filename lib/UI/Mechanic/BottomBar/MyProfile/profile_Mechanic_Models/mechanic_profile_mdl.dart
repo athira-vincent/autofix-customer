@@ -20,6 +20,7 @@ class MechanicProfileMdl {
   String status;
   Data? data;
 
+
   factory MechanicProfileMdl.fromJson(Map<String, dynamic> json) => MechanicProfileMdl(
     message: json["message"] == null ? null : json["message"],
     status: json["status"] == null ? null : json["status"],
@@ -116,6 +117,15 @@ class Mechanic {
     required this.orgType,
     required this.yearExp,
     required this.mechType,
+    required this.workType,
+    required this.numMech,
+    required this.rcNumber,
+    required this.address,
+    required this.apprenticeCert,
+    required this.identificationCert,
+    required this.yearExist,
+    required this.rate,
+    required this.reviewCount,
     required this.userId,
     required this.profilePic,
     required this.state,
@@ -128,6 +138,15 @@ class Mechanic {
   dynamic orgType;
   String yearExp;
   String mechType;
+  String workType;
+  dynamic numMech;
+  dynamic rcNumber;
+  String address;
+  String apprenticeCert;
+  String identificationCert;
+  dynamic yearExist;
+  int rate;
+  int reviewCount;
   int userId;
   String profilePic;
   String state;
@@ -140,6 +159,15 @@ class Mechanic {
     orgType: json["orgType"],
     yearExp: json["yearExp"] == null ? null : json["yearExp"],
     mechType: json["mechType"] == null ? null : json["mechType"],
+    workType: json["workType"] == null ? null : json["workType"],
+    numMech: json["numMech"],
+    rcNumber: json["rcNumber"],
+    address: json["address"] == null ? null : json["address"],
+    apprenticeCert: json["apprentice_cert"] == null ? null : json["apprentice_cert"],
+    identificationCert: json["identification_cert"] == null ? null : json["identification_cert"],
+    yearExist: json["yearExist"],
+    rate: json["rate"] == null ? null : json["rate"],
+    reviewCount: json["reviewCount"] == null ? null : json["reviewCount"],
     userId: json["userId"] == null ? null : json["userId"],
     profilePic: json["profilePic"] == null ? null : json["profilePic"],
     state: json["state"] == null ? null : json["state"],
@@ -153,6 +181,15 @@ class Mechanic {
     "orgType": orgType,
     "yearExp": yearExp == null ? null : yearExp,
     "mechType": mechType == null ? null : mechType,
+    "workType": workType == null ? null : workType,
+    "numMech": numMech,
+    "rcNumber": rcNumber,
+    "address": address == null ? null : address,
+    "apprentice_cert": apprenticeCert == null ? null : apprenticeCert,
+    "identification_cert": identificationCert == null ? null : identificationCert,
+    "yearExist": yearExist,
+    "rate": rate == null ? null : rate,
+    "reviewCount": reviewCount == null ? null : reviewCount,
     "userId": userId == null ? null : userId,
     "profilePic": profilePic == null ? null : profilePic,
     "state": state == null ? null : state,
