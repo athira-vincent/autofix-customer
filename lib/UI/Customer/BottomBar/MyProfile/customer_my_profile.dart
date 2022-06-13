@@ -292,9 +292,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
     _signinBloc.userDefaultData(
         authToken,
         TextStrings.user_customer,
+      _imageUrl, //----- profile image url should b updated
         value.data!.customerDetails!.firstName.toString(),
         value.data!.customerDetails!.id.toString(),
-        _imageUrl, //----- profile image url should b updated
+
     );
 
     print(">>>>>>>>>>>>> _userType : CustomerMyProfileScreen" + _userType);
@@ -708,7 +709,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                             FilteringTextInputFormatter.allow(
                                 RegExp('[a-zA-Z ]')),
                           ],*/
-                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
+                          validator: InputValidator(ch: "Email").emailValidator,
                           controller: _emailController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(

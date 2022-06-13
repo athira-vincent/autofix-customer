@@ -91,9 +91,8 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   primaryColor: Colors.white,
                 ),
+                // home: SplashScreen(),
                 home: SplashScreen(),
-               //home: Addpricefault(),
-
                 // home: WorkSelectionScreen(userType: TextStrings.user_mechanic , userCategory: "0",),
                 // home: EmergencyServiceListScreen(),
               );
