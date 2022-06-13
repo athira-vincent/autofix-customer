@@ -205,6 +205,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
           print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
+          _isAddMore = false;
         });
 
       } else {
@@ -227,6 +228,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
           print("message postSignUpCustomerIndividual >>>>>>>  ${value.message}");
           print("errrrorr postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
+          _isAddMore = false;
+
         });
 
       } else {
