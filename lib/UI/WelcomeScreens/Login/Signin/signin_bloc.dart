@@ -52,7 +52,8 @@ class SigninBloc {
 
   }
 
-  void userDefaultData(String token,String userType, String userName, String userId,String imageUrl, ) async {
+  void userDefaultData(String token,String userType, String imageUrl,
+      String userName, String userId, ) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
     shdPre.setString(SharedPrefKeys.userType, userType);
