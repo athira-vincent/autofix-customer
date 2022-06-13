@@ -6,7 +6,6 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_screen.dart';
 import 'package:auto_fix/Widgets/indicator_widget.dart';
 import 'package:auto_fix/Widgets/user_category.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {
@@ -41,7 +40,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                         right: size.width * 0.181,
                         left: size.width * 0.172
                     ),
-                    child: Text(AppLocalizations.of(context)!.text_mechanic,
+                    child: Text('Mechanic',
                       style: Styles.hiddenTextBlack
                     ),
                   ),
@@ -65,7 +64,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                                 right: size.width * 0.181,
                                 left: size.width * 0.172
                             ),
-                            child: Text(AppLocalizations.of(context)!.text_customer,
+                            child: Text('Customer',
                                 style: Styles.TitleTextBlack
                             ),
                             //child: Text("Select ! What type of user are you ?"),
@@ -75,7 +74,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                             onTap: (){
                               setUserCategory(TextStrings.user_category_individual);
                             },
-                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_individual,
+                            child: UserCategorySelectionWidget(titleText: 'Individual',
                               imagePath: "assets/image/CustomerType/img_individual.png",),
                           ),
 
@@ -83,7 +82,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                             onTap: (){
                               setUserCategory(TextStrings.user_category_corporate);
                             },
-                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_corporate,
+                            child: UserCategorySelectionWidget(titleText: 'Corporate',
                               imagePath: "assets/image/CustomerType/img_corporate.png",),
                           ),
 
@@ -91,7 +90,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                             onTap: (){
                               setUserCategory(TextStrings.user_category_government);
                             },
-                            child: UserCategorySelectionWidget(titleText: AppLocalizations.of(context)!.text_govt_bodies,
+                            child: UserCategorySelectionWidget(titleText: 'Government Bodies',
                               imagePath: "assets/image/CustomerType/img_government_bodies.png",),
                           ),
                         ],

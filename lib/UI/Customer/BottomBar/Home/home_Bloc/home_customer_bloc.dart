@@ -1,4 +1,5 @@
 
+import 'package:auto_fix/Models/customer_models/add_rating_model/addRatingMdl.dart';
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
@@ -212,15 +213,15 @@ class HomeCustomerBloc {
 
   /// =============== Add Mechanic Review Request ================== ///
 
-  final postAddMechanicReviewAndRatingList = PublishSubject<CustVehicleListMdl>();
-  Stream<CustVehicleListMdl> get postAddMechanicReviewAndRatingResponse => postAddMechanicReviewAndRatingList.stream;
+  final postAddMechanicReviewAndRatingList = PublishSubject<AddRatingMdl>();
+  Stream<AddRatingMdl> get postAddMechanicReviewAndRatingResponse => postAddMechanicReviewAndRatingList.stream;
 
   postAddMechanicReviewAndRatingRequest(
       token,rating, feedback, bookingId, bookingType) async {
 
-    CustVehicleListMdl _custVehicleListMdl = await repository. postAddMechanicReviewAndRatingRequest(
+    AddRatingMdl _addRatingMdl = await repository. postAddMechanicReviewAndRatingRequest(
         token,rating, feedback, bookingId, bookingType);
-    postAddMechanicReviewAndRatingList.sink.add(_custVehicleListMdl);
+    postAddMechanicReviewAndRatingList.sink.add(_addRatingMdl);
   }
 
 

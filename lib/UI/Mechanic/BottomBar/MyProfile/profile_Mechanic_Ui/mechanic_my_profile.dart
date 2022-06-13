@@ -17,7 +17,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart' as path;
 
 class MechanicMyProfileScreen extends StatefulWidget {
@@ -698,7 +697,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           focusNode: _emailFocusNode,
                           enabled: false,
                           keyboardType: TextInputType.emailAddress,
-                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_email).emailValidator,
+                          validator: InputValidator(ch: 'Email').emailValidator,
                           controller: _emailController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(
@@ -786,7 +785,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                               style: Styles.appBarTextBlack15,
                               focusNode: _stateFocusNode,
                               //keyboardType: TextInputType.phone,
-                              validator: InputValidator(ch: AppLocalizations.of(context)!.text_state).emptyChecking,
+                              validator: InputValidator(ch: 'State/FCT').emptyChecking,
                               controller: _stateController,
                               cursorColor: CustColors.whiteBlueish,
                               decoration: InputDecoration(
@@ -880,7 +879,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                                   RegExp('[a-zA-Z ]')),
                             ],
                             validator: InputValidator(
-                                ch :AppLocalizations.of(context)!.text_organization_name).emptyChecking,
+                                ch :'Name of Organization').emptyChecking,
                             controller: _orgNameController,
                             cursorColor: CustColors.light_navy,
                             decoration: InputDecoration(
@@ -1065,7 +1064,7 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(15),
                           ],
-                          validator: InputValidator(ch: AppLocalizations.of(context)!.text_phone,).phoneNumChecking,
+                          validator: InputValidator(ch: 'Phone Number',).phoneNumChecking,
                           controller: _phoneController,
                           cursorColor: CustColors.light_navy,
                           decoration: InputDecoration(

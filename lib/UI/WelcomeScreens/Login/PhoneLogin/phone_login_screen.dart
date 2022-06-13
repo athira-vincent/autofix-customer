@@ -11,7 +11,6 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../main.dart';
 
@@ -78,12 +77,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _signinBloc.userDefaultData(value.data!.signInPhoneNo!.jwtToken.toString(),
+          _signinBloc.userDefaultData(
+            value.data!.signInPhoneNo!.jwtToken.toString(),
               value.data!.signInPhoneNo!.userTypeId.toString(),
+            "",
               value.data!.signInPhoneNo!.firstName.toString(),
             value.data!.signInPhoneNo!.id.toString(),
-              "",           //----- profile image url should b updated
-
+                         //----- profile image url should b updated
               );
           Navigator.push(
             context,
@@ -178,7 +178,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                     },
                                     child: Container(
                                       child: Text(
-                                        AppLocalizations.of(context)!.text_phone,   //'Phone Number',
+                                        'Phone Number',   //'Phone Number',
                                         style: Styles.textHeadLogin,
                                       ),
                                     ),
@@ -189,8 +189,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                     alignment: Alignment.centerLeft,
                                     //color: Colors.red,
                                     child: Text(
-                                      //"Enter your phone number ,you will receive a 4 digit code for  phone number varification. Select your country code before enter your Number."
-                                      AppLocalizations.of(context)!.text_phone_screen_desc,
+                                      'Enter your phone number ,you will receive a 4 digit code for  phone number verification. Select your country code before enter your Number.',
                                       textAlign: TextAlign.left,
                                       softWrap: true,
                                       style: Styles.textLabelSubTitle12,
@@ -206,7 +205,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                AppLocalizations.of(context)!.text_phone,   //'Phone Number',
+                                                'Phone Number',   //'Phone Number',
                                                 style: Styles.textLabelTitle,
                                               ),
                                               Row(
@@ -235,14 +234,14 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                       focusNode: _phoneNoFocusNode,
                                                       keyboardType: TextInputType.phone,
                                                       validator: InputValidator(
-                                                          ch: AppLocalizations.of(context)!.text_phone,   //"Phone number"
+                                                          ch: 'Phone Number',   //"Phone number"
                                                       ).phoneNumChecking,
                                                       controller: _phoneNoController,
                                                       //cursorColor: CustColors.whiteBlueish,
                                                       cursorColor: Colors.black,
                                                       decoration: InputDecoration(
                                                         isDense: true,
-                                                        hintText: AppLocalizations.of(context)!.text_hint_phone,  //'Enter your phone Number',
+                                                        hintText: 'Enter your Phone number',  //'Enter your phone Number',
                                                         border: UnderlineInputBorder(
                                                           borderSide: BorderSide(
                                                             color: CustColors.greyish,
@@ -311,8 +310,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      //'Send',
-                                                      AppLocalizations.of(context)!.text_btn_send,
+                                                      'Send',
                                                       textAlign: TextAlign.center,
                                                       style: Styles.textButtonLabelSubTitle,
                                                     ),
@@ -333,11 +331,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                             text: TextSpan(
                                               children: <TextSpan>[
                                                 TextSpan(
-                                                  text: AppLocalizations.of(context)!.text_back_to,  // "Back to ",
+                                                  text: 'Back to ',  // "Back to ",
                                                   style: Styles.textLabelSubTitle,
                                                 ),
                                                 TextSpan(
-                                                    text: AppLocalizations.of(context)!.text_sign_up,  //'SignUp',
+                                                    text: 'Sign Up',  //'SignUp',
                                                     style: Styles.textLabelTitle_10,
                                                     recognizer: TapGestureRecognizer()
                                                       ..onTap = () {

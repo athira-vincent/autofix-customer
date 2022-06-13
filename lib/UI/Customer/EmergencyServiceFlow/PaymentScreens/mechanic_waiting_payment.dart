@@ -93,216 +93,214 @@ class _MechanicWaitingPaymentScreenState extends State<MechanicWaitingPaymentScr
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+          height: size.height,
+          width: size.width,
           child: Container(
-            height: size.height,
-            width: size.width,
-            child: Container(
-              margin: EdgeInsets.only(
+            margin: EdgeInsets.only(
                 left: size.width * 2 / 100,
                 right: size.width * 2 /100,
                 top: size.height * 2 / 100,
                 bottom: size.height * 1 / 100
-              ),
-              child: Column(
-                children: [
-                  mechanicWaitingTitle(size),
+            ),
+            child: Column(
+              children: [
+                mechanicWaitingTitle(size),
 
-                  Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 18 /100,
-                      right: size.width * 18 /100,
-                      bottom: size.height * 1 /100,
-                      top: size.height * 4 / 100,
+                Container(
+                  margin: EdgeInsets.only(
+                    left: size.width * 18 /100,
+                    right: size.width * 18 /100,
+                    bottom: size.height * 1 /100,
+                    top: size.height * 4 / 100,
 
-                    ),
-                      child: Image.asset("assets/image/img_payment_waiting_bg.png"),
                   ),
+                  child: Image.asset("assets/image/img_payment_waiting_bg.png"),
+                ),
 
-                  totalCostSection(size),
+                totalCostSection(size),
 
-                  Container(
-                    margin: EdgeInsets.only(
-                      left: size.width * 3 /100,
-                      right: size.width * 3 /100,
-                      bottom: size.height * 2 /100,
-                      top: size.height * 3 / 100,
+                Container(
+                  margin: EdgeInsets.only(
+                    left: size.width * 3 /100,
+                    right: size.width * 3 /100,
+                    bottom: size.height * 2 /100,
+                    top: size.height * 3 / 100,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      //color: Colors.yellow,
-                      color : CustColors.whiteBlueish,
-                    ),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                              margin: EdgeInsets.only(
-                                left: size.width * 3.5 /100,
-                                // right: size.width * 18 /100,
-                                //bottom: size.height * 5 /100,
-                                top: size.height * 2 / 100,
-                              ),
-                              child: Text("Service invoice",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontFamily: "Samsung_SharpSans_Medium",
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black,
-                              ),
-                              ),
+                    //color: Colors.yellow,
+                    color : CustColors.whiteBlueish,
+                  ),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: size.width * 3.5 /100,
+                            // right: size.width * 18 /100,
+                            //bottom: size.height * 5 /100,
+                            top: size.height * 2 / 100,
+                          ),
+                          child: Text("Service invoice",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: "Samsung_SharpSans_Medium",
+                              fontWeight: FontWeight.w300,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
+                      ),
 
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: size.width * 2 /100,
-                            right: size.width * 2 /100,
-                            bottom: size.height * 2 /100,
-                            top: size.height * 1.5 / 100,
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: size.width * 2 /100,
+                          right: size.width * 2 /100,
+                          bottom: size.height * 2 /100,
+                          top: size.height * 1.5 / 100,
+                        ),
+                        padding: EdgeInsets.only(
+                          left: size.width * 2 / 100,
+                          right: size.width * 1.5 /100,
+                          top: size.height * 1 /100,
+                          bottom: size.height * 1 /100,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
                           ),
-                          padding: EdgeInsets.only(
-                            left: size.width * 2 / 100,
-                            right: size.width * 1.5 /100,
-                            top: size.height * 1 /100,
-                            bottom: size.height * 1 /100,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Repair Details",style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Repair Details",style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: "Samsung_SharpSans_Medium",
                                     fontWeight: FontWeight.w400,
                                     color: Colors.black
+                                ),),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    right: size.width * 2.7 / 100,
+                                  ),
+                                  child: Text("Price",style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black
                                   ),),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      right: size.width * 2.7 / 100,
-                                    ),
-                                    child: Text("Price",style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: "Samsung_SharpSans_Medium",
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black
-                                    ),),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
+                            ),
 
 
-                                 isExpanded
-                                  ? Column(
-                                          children: [
-                                            serviceDetailListItem(size),
-                                          ],
-                                    )
-                                 : Container(),
+                            isExpanded
+                                ? Column(
+                              children: [
+                                serviceDetailListItem(size),
+                              ],
+                            )
+                                : Container(),
 
 
-                              Container(
-                                margin: EdgeInsets.only(
+                            Container(
+                              margin: EdgeInsets.only(
                                   top: size.height * 1.2 / 100,
                                   bottom: size.height * 1.2 / 100
-                                ),
-                                child: Row(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Total price",style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Samsung_SharpSans_Medium",
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black
-                                    ),),
-                                   Spacer(),
-                                    Text("₦ $totalEstimatedCost",style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Samsung_SharpSans_Medium",
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black
-                                    ),),
-                                    InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                          isExpanded = !isExpanded;
-                                        });
-                                      },
-                                      child: Container(
-                                        height: size.height * 1.5 / 100,
-                                        width: size.width * 1.5 / 100,
-                                        margin: EdgeInsets.only(
+                              ),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Total price",style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black
+                                  ),),
+                                  Spacer(),
+                                  Text("₦ $totalEstimatedCost",style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black
+                                  ),),
+                                  InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        isExpanded = !isExpanded;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: size.height * 1.5 / 100,
+                                      width: size.width * 1.5 / 100,
+                                      margin: EdgeInsets.only(
                                           left: size.width * .9 / 100,
                                           right: size.width * .2 / 100
-                                        ),
-                                        child: Image.asset(
-                                          isExpanded ? "assets/image/ic_arrow_collapse.png"
-                                              : "assets/image/ic_arrow_expand.png"
-                                          ,),
                                       ),
+                                      child: Image.asset(
+                                        isExpanded ? "assets/image/ic_arrow_collapse.png"
+                                            : "assets/image/ic_arrow_expand.png"
+                                        ,),
                                     ),
-                                    //---------- icon expand and  collapse
-                                  ],
-                                ),
+                                  ),
+                                  //---------- icon expand and  collapse
+                                ],
                               ),
+                            ),
 
-                            ],
-                          ),
+                          ],
                         ),
+                      ),
 
-                      ],
-                    ),
-
+                    ],
                   ),
 
-                  InkWell(
-                    onTap: (){
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PaymentScreen()));
-                    },
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        margin: EdgeInsets.only(
+                ),
+
+                InkWell(
+                  onTap: (){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PaymentScreen()));
+                  },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: EdgeInsets.only(
                           right: size.width * 4 / 100
-                        ),
-                        padding: EdgeInsets.only(
+                      ),
+                      padding: EdgeInsets.only(
                           top: size.height * 1 / 100,
                           bottom: size.height * 1 / 100,
                           left: size.width * 2.5 / 100,
                           right: size.width * 2.5 / 100
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          color: CustColors.light_navy,
-                        ),
-                        child: Text("Payment options",
-                          style: TextStyle(
-                            color: Colors.white,
-                        ),),
                       ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                        color: CustColors.light_navy,
+                      ),
+                      child: Text("Payment options",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),),
                     ),
                   ),
+                ),
 
-                ],
-              ),
+              ],
             ),
           ),
         ),

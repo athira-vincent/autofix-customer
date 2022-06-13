@@ -75,207 +75,204 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
 
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      rateMechanicScreenTitle(size),
-                      rateMechanicScreenImage(size),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    rateMechanicScreenTitle(size),
+                    rateMechanicScreenImage(size),
 
-                      Container(
-                        margin: EdgeInsets.only(
+                    Container(
+                      margin: EdgeInsets.only(
                           top: size.height * 2 / 100,
                           left: size.width * 6.5 / 100,
                           right: size.width * 6.5 / 100
-                        ),
-                        child: Row(
-                          children: [
-                            rateMechanicScreenTimeCostWidget(size,"Work completed in","Min "," $totalEstimatedTime",true),
-                            Spacer(),
-                            Container(
-                              height: size.height * 5 /100,
-                              child: VerticalDivider(
-                                color: CustColors.pale_grey01,
-                                width: 20,
-                                thickness: 2,
-                              ),
-                            ),
-                            Spacer(),
-                            rateMechanicScreenTimeCostWidget(size,"Amount you paid","₦ ","$totalEstimatedCost",false),
-                          ],
-                        ),
                       ),
+                      child: Row(
+                        children: [
+                          rateMechanicScreenTimeCostWidget(size,"Work completed in","Min "," $totalEstimatedTime",true),
+                          Spacer(),
+                          Container(
+                            height: size.height * 5 /100,
+                            child: VerticalDivider(
+                              color: CustColors.pale_grey01,
+                              width: 20,
+                              thickness: 2,
+                            ),
+                          ),
+                          Spacer(),
+                          rateMechanicScreenTimeCostWidget(size,"Amount you paid","₦ ","$totalEstimatedCost",false),
+                        ],
+                      ),
+                    ),
 
-                    ],
-                  ),
+                  ],
                 ),
-                Container(
-                  // color: Colors.purpleAccent,
-                  color: CustColors.white_02,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
+              ),
+              Container(
+                // color: Colors.purpleAccent,
+                color: CustColors.white_02,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
                           top: size.height * 3.5 / 100,
                           left: size.width * 39 / 100,
                           right: size.width * 39 / 100
-                        ),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child:Container(
-                                child:CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Colors.white,
-                                    child: ClipOval(
-                                      child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                    ),),),
-                        ),
                       ),
-                      Container(
-                        child: Text("How was your experience with",
-                          style: TextStyle(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child:Container(
+                          child:CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.white,
+                            child: ClipOval(
+                              child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                            ),),),
+                      ),
+                    ),
+                    Container(
+                      child: Text("How was your experience with",
+                        style: TextStyle(
                             fontSize: 10.7,
                             fontFamily: "Samsung_SharpSans_Medium",
                             fontWeight: FontWeight.w400,
                             color: CustColors.light_navy
-                          ),),
-                      ),
-                      Container(
-                        child: Text("$mechanicName",
-                           style: TextStyle(
+                        ),),
+                    ),
+                    Container(
+                      child: Text("$mechanicName",
+                        style: TextStyle(
                             fontSize: 19,
                             fontFamily: "Samsung_SharpSans_Medium",
                             fontWeight: FontWeight.w400,
                             color: Colors.black
                         ),),
-                      ),
+                    ),
 
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: size.width * 10 / 100,
-                            right: size.width * 10 / 100,
-                            top: size.height * 2.5 / 100
-                        ),
-                        child: RatingBar(
-                          initialRating: _initialRating,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          ratingWidget: RatingWidget(
-                            full: _image('assets/image/IconsRatingBar/star_active.png'),
-                            half: _image('assets/image/IconsRatingBar/star_half.png'),
-                            empty: _image('assets/image/IconsRatingBar/star_inactive.png'),
-                          ),
-                          itemPadding: EdgeInsets.symmetric(horizontal: 8.1),
-                          onRatingUpdate: (rating) {
-                            setState(() {
-                              _rating = rating;
-                            });
-                          },
-                          updateOnDrag: true,
-                        ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: size.width * 10 / 100,
+                          right: size.width * 10 / 100,
+                          top: size.height * 2.5 / 100
                       ),
-
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: size.width * 6 / 100,
-                            right: size.width * 6 / 100,
-                            top: size.height * 4 / 100
+                      child: RatingBar(
+                        initialRating: _initialRating,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        ratingWidget: RatingWidget(
+                          full: _image('assets/image/IconsRatingBar/star_active.png'),
+                          half: _image('assets/image/IconsRatingBar/star_half.png'),
+                          empty: _image('assets/image/IconsRatingBar/star_inactive.png'),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Write a review",
-                              style: TextStyle(
+                        itemPadding: EdgeInsets.symmetric(horizontal: 8.1),
+                        onRatingUpdate: (rating) {
+                          setState(() {
+                            _rating = rating;
+                          });
+                        },
+                        updateOnDrag: true,
+                      ),
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: size.width * 6 / 100,
+                          right: size.width * 6 / 100,
+                          top: size.height * 4 / 100
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Write a review",
+                            style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: "Samsung_SharpSans_Medium",
                                 fontWeight: FontWeight.w400,
                                 color: Colors.black
-                              ),
                             ),
-                            Text("$textCount/$textTotalCount"),
-                          ],
-                        ),
+                          ),
+                          Text("$textCount/$textTotalCount"),
+                        ],
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: size.width * 6 / 100,
-                            right: size.width * 5 / 100,
-                          top: size.height * 1.4 / 100,
-                        ),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                                color: CustColors.pinkish_grey02,
-                                width: 0.3
-                            )
-                        ),
-                        child: TextFormField(
-                          onChanged: (val){
-                            setState(() {
-                              //print(val);
-                              if(val.length <= textTotalCount ) {
-                                textCount = val.length;
-                              }
-                            });
-                          },
-                          //maxLength: 350,
-                          textAlignVertical: TextAlignVertical.center,
-                          maxLines: 4,
-                          style: Styles.reviewTextStyle01,
-                         // focusNode: _userNameFocusNode,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(350)
-                          ],
-                          keyboardType: TextInputType.multiline,
-                          validator: InputValidator(ch: "text",).emptyChecking,
-                          controller: _feedBackController,
-                          cursorColor: CustColors.whiteBlueish,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            isDense: true,
-                            hintText: "Specify your feedback ",
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 12.8,
-                              horizontal: 6.0,
-                            ),
-                            hintStyle: Styles.reviewTextStyle01,),
-                        ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: size.width * 6 / 100,
+                        right: size.width * 5 / 100,
+                        top: size.height * 1.4 / 100,
                       ),
-                      InkWell(
-                        child: postReviewButton(size),
-                        onTap: (){
-                          print("On Press Continue");
-                          print("${_feedBackController.text}");
-                          print("${bookingIdEmergency}");
-                          print("${_rating}");
-
-
-
-
-                          _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
-                              authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
-
-                          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                              CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          border: Border.all(
+                              color: CustColors.pinkish_grey02,
+                              width: 0.3
+                          )
+                      ),
+                      child: TextFormField(
+                        onChanged: (val){
+                          setState(() {
+                            //print(val);
+                            if(val.length <= textTotalCount ) {
+                              textCount = val.length;
+                            }
+                          });
                         },
+                        //maxLength: 350,
+                        textAlignVertical: TextAlignVertical.center,
+                        maxLines: 4,
+                        style: Styles.reviewTextStyle01,
+                        // focusNode: _userNameFocusNode,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(350)
+                        ],
+                        keyboardType: TextInputType.multiline,
+                        validator: InputValidator(ch: "text",).emptyChecking,
+                        controller: _feedBackController,
+                        cursorColor: CustColors.whiteBlueish,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          isDense: true,
+                          hintText: "Specify your feedback ",
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.8,
+                            horizontal: 6.0,
+                          ),
+                          hintStyle: Styles.reviewTextStyle01,),
                       ),
-                      SizedBox(height: 20,)
-                    ],
-                  ),
+                    ),
+                    InkWell(
+                      child: postReviewButton(size),
+                      onTap: (){
+                        print("On Press Continue");
+                        print("${_feedBackController.text}");
+                        print("${bookingIdEmergency}");
+                        print("${_rating}");
 
+
+
+
+                        _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
+                            authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
+
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+                      },
+                    ),
+                    SizedBox(height: 20,)
+                  ],
                 ),
-              ],
-            ),
+
+              ),
+            ],
           ),
         ),
       ),

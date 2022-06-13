@@ -18,7 +18,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -311,7 +310,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
       padding: const EdgeInsets.only(top: 20),
       child: Container(
         child: Text(
-          AppLocalizations.of(context)!.text_complete_your_profile,
+          'Complete your profile',
           style: Styles.textCompleteYourProfile,
         ),
       ),
