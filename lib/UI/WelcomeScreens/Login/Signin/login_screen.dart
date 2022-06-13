@@ -494,7 +494,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-
+          SnackBarWidget().setMaterialSnackBar("Login Successful",_scaffoldKey);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
@@ -506,6 +506,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
+
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
