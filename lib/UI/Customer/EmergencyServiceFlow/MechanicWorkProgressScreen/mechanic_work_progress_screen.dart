@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechani
 import 'package:auto_fix/Widgets/Countdown.dart';
 import 'package:auto_fix/Widgets/count_down_widget.dart';
 import 'package:auto_fix/Widgets/mechanicWorkTimer.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   // 4 - ready to pickup vehicle - screen 094
   // 5 - mechanic reached your location - screen 102
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Timer? timerObj1;
   Timer? timerObjVar1;
@@ -101,7 +103,8 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      // bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingIdEmergency = "734";
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
@@ -193,6 +196,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
           {
             if(extendedTimeFirstTymCall == "0")
             {
+              SnackBarWidget().setMaterialSnackBar( "Mechanic added extra time for work completion.", _scaffoldKey);
               extendedTimeFirstTymCall = "1";
               setState(() {
                 int sec = Duration(minutes: int.parse('${currentUpdatedTime.split(":").first}')).inSeconds;
@@ -288,34 +292,32 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                width: size.width,
-                height: size.height,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      startedWorkScreenTitle(size),
+    return  Scaffold(
+      key: _scaffoldKey,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: size.width,
+            height: size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                startedWorkScreenTitle(size),
 
-                      startedWorkScreenTitleImage(size),
+                startedWorkScreenTitleImage(size),
 
-                      startedWorkScreenBottomCurve(size),
+                startedWorkScreenBottomCurve(size),
 
-                      workStatus == "2"
-                          ? startedWorkScreenTimer(size)
-                          : workStatus == "3"
-                          ? startedWorkScreenSuccess(size)
-                          : startedWorkScreenWarningText(size) ,
-                    ],
-                ),
-              ),
+                workStatus == "2"
+                    ? startedWorkScreenTimer(size)
+                    : workStatus == "3"
+                    ? startedWorkScreenSuccess(size)
+                    : startedWorkScreenWarningText(size) ,
+              ],
             ),
           ),
         ),
+      ),
     );
 
   }
@@ -360,7 +362,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
     return Center(
       child: Container(
         margin: EdgeInsets.only(
-          top: size.height * 3.4 / 100,
+          top: size.height * 3.2 / 100,
         ),
         child: Stack(
           children: [
