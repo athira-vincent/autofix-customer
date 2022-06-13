@@ -75,6 +75,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _getCurrentMechanicLocation();
+    _listenNotification(context);
 
   }
 
@@ -164,6 +165,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
 
+      print("message received onMessage");
+
       //Future<void>.delayed(const Duration(seconds: 2));//faking task delay
 
       setState(() {
@@ -229,7 +232,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _listenNotification(context);
     Size size = MediaQuery.of(context).size;
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
