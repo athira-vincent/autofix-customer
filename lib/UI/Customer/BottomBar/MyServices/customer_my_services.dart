@@ -64,8 +64,8 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
       userID = shdPre.getString(SharedPrefKeys.userID).toString();
 
       print('userFamilyId'+authToken.toString());
-      _homeCustomerBloc.postCustomerCompletedOrdersRequest(authToken, 300, "1", "$userID");
-      _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "0", "$userID");
+      _homeCustomerBloc.postCustomerCompletedOrdersRequest(authToken, 300, "0", "$userID");
+      _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "1", "$userID");
       _homeCustomerBloc.postCustomerAllServicesOrdersRequest(authToken, 300, null, "$userID");
 
     });

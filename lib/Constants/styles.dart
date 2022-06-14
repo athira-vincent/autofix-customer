@@ -15,10 +15,17 @@ class Styles {
     fontFamily: 'Samsung_SharpSans_Medium',
     fontWeight: FontWeight.w500,
     color: Colors.black,
-    fontSize: 15,
+    fontSize: 16,
   );
 
   static const textLabelSubTitle = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w500,
+    color: CustColors.blackishgrey,
+    fontSize: 11,
+  );
+
+  static const textLabelSubTitle05 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w500,
     color: CustColors.blackishgrey,
