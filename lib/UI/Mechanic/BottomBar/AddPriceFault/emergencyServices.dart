@@ -35,6 +35,9 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
   List<String>? _priceList=[];
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   int checkID=0;
+  int tempCounter = 0;
+  List<String> _lodingIdList=[];
+
   @override
   void initState() {
     super.initState();
@@ -137,16 +140,29 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
         });
       }else{
         setState(() {
-          saveloading = false;
           print('abcdefg01');
           getSharedPrefData();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Service Added',
-                  style: const TextStyle(
-                      fontFamily: 'Roboto_Regular', fontSize: 14)),
-              duration: const Duration(seconds: 2),
-              backgroundColor: CustColors.peaGreen,
-            ));
+
+          print('${_selectionList.length} >>>length');
+
+
+          print('${_lodingIdList.length} >>>length');
+
+          print('$tempCounter  >>>> tempCounter');
+
+          if(_lodingIdList.length == tempCounter)
+            {
+              saveloading = false;
+
+              tempCounter = 0;
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Service Added',
+                    style: const TextStyle(
+                        fontFamily: 'Roboto_Regular', fontSize: 14)),
+                duration: const Duration(seconds: 2),
+                backgroundColor: CustColors.peaGreen,
+              ));
+            }
 
 
           _isLoadingPage = true;
@@ -480,10 +496,21 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                       setState(() {
                         saveloading = true;
                         int temp=0;
+                        for(int i =0;i<_selectionList.length;i++)
+                        {
+                          if(_selectionList[i])
+                          {
+                            _lodingIdList.add(_selectionList[i].toString());
+                          }
+                        }
                         for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
 
                           print('abcdefg03');
                           if(_selectionList[i]){
+
+
+                            print('_selectionList');
+                            tempCounter = tempCounter + 1;
                             temp=_AddPriceServiceList!.data![i].id;
                             _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                 authToken,
