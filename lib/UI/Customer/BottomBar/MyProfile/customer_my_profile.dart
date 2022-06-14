@@ -823,7 +823,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
                       Text(
                         'Your phone number',
                         textAlign: TextAlign.center,
-                        style: Styles.textLabelSubTitle,
+                        style: Styles.textLabelSubTitle05,
                       )
                           :
                       Container(),

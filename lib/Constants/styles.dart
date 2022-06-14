@@ -22,7 +22,14 @@ class Styles {
     fontFamily: 'Samsung_SharpSans_Regular',
     fontWeight: FontWeight.w500,
     color: CustColors.blackishgrey,
-    fontSize: 12,
+    fontSize: 11,
+  );
+
+  static const textLabelSubTitle05 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w500,
+    color: CustColors.blackishgrey,
+    fontSize: 10,
   );
 
   static const MyVechiclesSubTitle = TextStyle(

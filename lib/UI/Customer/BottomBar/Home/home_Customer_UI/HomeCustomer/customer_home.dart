@@ -29,10 +29,6 @@ class HomeCustomerUIScreen extends StatefulWidget {
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
-
-
-
-
   TextEditingController searchController = new TextEditingController();
   String? filter;
   String authToken="",profileImageUrl = "";
@@ -66,9 +62,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
    String CurrentLatitude ="10.506402";
    String CurrentLongitude ="76.244164";
 
-  String location ='Null, Press Button';
+  String location ='';
   String Address = '';
-  String displayAddress = 'Kakkanad';
+  String displayAddress = '';
 
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
@@ -84,6 +80,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   bool _isLoading = false;
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    getSharedPrefData();
+    super.didChangeDependencies();
+  }
+
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -94,9 +98,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     _listenServiceListResponse();
 
   }
-
-
-
 
 
 
