@@ -61,7 +61,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
    String CurrentLatitude ="10.506402";
    String CurrentLongitude ="76.244164";
 
-  String location ='Null, Press Button';
+  String location ='';
   String Address = '';
   String displayAddress = '';
 
@@ -76,6 +76,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
   bool _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    getSharedPrefData();
+    super.didChangeDependencies();
+  }
+
 
   @override
   void initState() {

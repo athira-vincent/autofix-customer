@@ -1654,7 +1654,84 @@ class QueryProvider {
 
   postMechanicUpcomingServiceRequest(
       token, type, mechanicId) async {
-    String _query = """
+    String _query;
+    if(type.toString()=="undefined")
+      {
+        _query = """
+      {
+      UpcomingCompletedServices(mechanicId: $mechanicId) {
+        id
+        bookingCode
+        reqType
+        bookStatus
+        totalPrice
+        tax
+        commission
+        serviceCharge
+        totalTime
+        serviceTime
+        latitude
+        longitude
+        extend
+        totalExt
+        extendTime
+        bookedDate
+        isRated
+        status
+        customerId
+        mechanicId
+        vehicleId
+        mechanic {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+        }
+        customer {
+          id
+          userCode
+          firstName
+          lastName
+          emailId
+          phoneNo
+          status
+          userTypeId
+          jwtToken
+          fcmToken
+          otpCode
+          isProfile
+          otpVerified
+        }
+        vehicle {
+          id
+          brand
+          model
+          engine
+          year
+          plateNo
+          lastMaintenance
+          milege
+          vehiclePic
+          latitude
+          longitude
+          defaultVehicle
+          status
+        }
+      }
+    }
+    """;
+      }
+    else{
+      _query = """
       {
       UpcomingCompletedServices(type: $type, mechanicId: $mechanicId) {
         id
@@ -1726,6 +1803,8 @@ class QueryProvider {
       }
     }
     """;
+    }
+
     log(_query);
     return await GqlClient.I.query01(
       _query,

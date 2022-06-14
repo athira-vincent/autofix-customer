@@ -488,7 +488,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                         ),
                                         Text(
                                           //"Service Id :Vien232",
-                                          "Service Id : " + plateNumber,
+                                          "Plate No : " + plateNumber,
                                           style: Styles.SelectLanguageWalkThroughStyle,
                                         ),
                                       ],

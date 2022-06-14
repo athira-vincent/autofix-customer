@@ -80,8 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
+    return Scaffold(
         key: _scaffoldKey,
           backgroundColor: CustColors.whiteBlueish,
           body: ScrollConfiguration(
@@ -488,12 +487,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
+          SnackBarWidget().setSnackBar(value.message.toString().split(":").last,context);
         });
       } else {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setMaterialSnackBar("Login Successful",_scaffoldKey);
+          SnackBarWidget().setSnackBar("Login Successful",context);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
@@ -536,7 +535,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
           socialLoginIsLoading = false;
           //SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          SnackBarWidget().setSnackBar(value.message.toString(),context);
         });
       } else {
         print('value.status succes 11111 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
@@ -574,7 +573,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           else if(value.data!.socialLogin!.user!.userTypeId.toString() == "3"){
             print('Please login through Relex App >>>>>>>>>>>>>>>>+++');
-            SnackBarWidget().setMaterialSnackBar('Please login through Relex App',_scaffoldKey);
+            SnackBarWidget().setSnackBar('Please login through Relex App',context);
           }
         });
       }
