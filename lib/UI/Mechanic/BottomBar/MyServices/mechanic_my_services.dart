@@ -65,9 +65,9 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       print('userFamilyId'+authToken.toString());
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
       _mechanicHomeBloc.postMechanicCompletedServiceRequest("$authToken", "0", mechanicId);
-      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "0", mechanicId);
+      _mechanicHomeBloc.postMechanicAllServiceRequest("$authToken", "undefined", mechanicId);
     });
   }
 
@@ -650,7 +650,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                 ),
                                 SizedBox(height: 5,),
                                 Container(
-                                  child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?[index].customer?.firstName} ${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].customer?.lastName}',
+                                  child: Text('${CustomerCompletedServicesList?.upcomingCompletedServices?[index].customer?.firstName} ${CustomerCompletedServicesList?.upcomingCompletedServices?[index].customer?.lastName.toString()} ',
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,

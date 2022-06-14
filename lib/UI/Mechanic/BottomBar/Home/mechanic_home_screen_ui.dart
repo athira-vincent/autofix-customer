@@ -106,7 +106,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       setFcmToken(authToken);
       _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
-      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "0", mechanicId);
+      _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
 
     });
   }

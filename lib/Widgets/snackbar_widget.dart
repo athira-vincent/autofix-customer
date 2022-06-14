@@ -8,8 +8,8 @@ class SnackBarWidget  {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('$message',
           style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-      duration: Duration(seconds: 5),
-      backgroundColor: Colors.blueAccent,
+      duration: Duration(seconds: 3),
+      backgroundColor: CustColors.light_navy,
     ));
   }
 
