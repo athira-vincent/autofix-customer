@@ -494,7 +494,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
           //SnackBarWidget().setSnackBar("Login Successful",context);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
-            SnackBarWidget().setSnackBar("Customer Login Successful",context);
+            // SnackBarWidget().setSnackBar("Customer Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
@@ -510,7 +510,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 MaterialPageRoute(
                     builder: (context) => CustomerMainLandingScreen()));
           }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
-            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+            // SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
