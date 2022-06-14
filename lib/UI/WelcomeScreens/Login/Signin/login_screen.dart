@@ -492,8 +492,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setSnackBar("Login Successful",context);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
+            SnackBarWidget().setSnackBar("Customer Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
@@ -509,7 +509,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerMainLandingScreen()));
-          }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
+          }else {
+            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);  //if(value.data!.signIn!.user!.userTypeId == "2"
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
@@ -544,6 +545,7 @@ class _LoginScreenState extends State<LoginScreen> {
           socialLoginIsLoading = false;
           print('value.status succes 222222 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
           if(value.data!.socialLogin!.user!.userTypeId.toString() == "1"){
+            SnackBarWidget().setSnackBar("Customer Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
@@ -557,6 +559,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     builder: (context) => CustomerMainLandingScreen()));
           }
           else if(value.data!.socialLogin!.user!.userTypeId.toString() == "2"){
+            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_mechanic,
