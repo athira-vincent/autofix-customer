@@ -67,45 +67,48 @@ class _Addpricefault extends State<Addpricefault> with TickerProviderStateMixin 
         length: 2,
 
         child: Container(
-          color: Colors.white,
+          color: const Color(0xff9f9f9),
           //margin: EdgeInsets.only(right: 60),
           child: Container(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right:90.0),
-                  child: TabBar(
-                    onTap: (int index){
-                      setState(() {
-                        position=index;
-                        print("position 02 $position");
-                      });
-                    },
-                    controller: _tabController,
-                     indicatorWeight: 7,
-                    //isScrollable: true,
-                    padding: EdgeInsets.zero,
+                Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right:90.0),
+                    child: TabBar(
+                      onTap: (int index){
+                        setState(() {
+                          position=index;
+                          print("position 02 $position");
+                        });
+                      },
+                      controller: _tabController,
+                       indicatorWeight: 7,
+                      //isScrollable: true,
+                      padding: EdgeInsets.zero,
               indicatorSize: TabBarIndicatorSize.label,
-                     indicator: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4)),
-                         shape: BoxShape.rectangle,color: Color(0xff173a8d)),
-                    labelPadding: EdgeInsets.all(0),
-                    indicatorPadding: EdgeInsets.only(left:05,right: 20),
-                    indicatorColor: Color(0xff173a8d),
-                    tabs: [
-                  Container(
-                    width: double.infinity,
-                      //width: 150,
-                      color: Colors.white,
-                     //alignment: Alignment.topLeft,
-                     padding: EdgeInsets.only(left:10,bottom: 15,top: 15),
-                      child: Text('Regular Services')),
-                      Container(
-                          width: 360,
-                          color: Colors.white,
-                          padding: EdgeInsets.only(bottom: 15,top: 15),
-                          child: Text("Emergency Services",
-                          textAlign: TextAlign.start,)),
-                  ],),
+                       indicator: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4)),
+                           shape: BoxShape.rectangle,color: Color(0xff173a8d)),
+                      labelPadding: EdgeInsets.all(0),
+                      indicatorPadding: EdgeInsets.only(left:05,right: 20),
+                      indicatorColor: Color(0xff173a8d),
+                      tabs: [
+                    Container(
+                      width: double.infinity,
+                        //width: 150,
+                        color: Colors.white,
+                       //alignment: Alignment.topLeft,
+                       padding: EdgeInsets.only(left:10,bottom: 15,top: 15),
+                        child: Text('Regular Services')),
+                        Container(
+                            width: 360,
+                            color: Colors.white,
+                            padding: EdgeInsets.only(bottom: 15,top: 15),
+                            child: Text("Emergency Services",
+                            textAlign: TextAlign.start,)),
+                    ],),
+                  ),
                 ),
                 Flexible(
                   child: TabBarView(

@@ -34,6 +34,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
   List<String>? _timeList=[];
   List<String>? _priceList=[];
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
+  int checkID=0;
   @override
   void initState() {
     super.initState();
@@ -123,27 +124,32 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           print('abcdefg02');
           _isLoadingPage = true;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.data.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
+          if(checkID!=0) {
+            if(checkID==value)
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(value.data.toString(),
+                  style: const TextStyle(
+                      fontFamily: 'Roboto_Regular', fontSize: 14)),
+              duration: const Duration(seconds: 2),
+              backgroundColor: CustColors.peaGreen,
+            ));
+          }
         });
       }else{
         setState(() {
           saveloading = false;
           print('abcdefg01');
           getSharedPrefData();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Service Added',
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-          //_isLoadingPage = true;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Service Added',
+                  style: const TextStyle(
+                      fontFamily: 'Roboto_Regular', fontSize: 14)),
+              duration: const Duration(seconds: 2),
+              backgroundColor: CustColors.peaGreen,
+            ));
+
+
+          _isLoadingPage = true;
           _updateTimeFees = value.data!.updateTimeFees;
           //_selectionList=[];
           //print("ldjgjgj ${_mechanicDetails!.firstName}");
@@ -217,7 +223,8 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                       });
                       _textEditContoller01.addListener(() {
                         _priceList!.removeAt(index);
-                        _priceList!.insert(index, _textEditContoller01.text);
+                        _priceList!.insert(index,
+                            _textEditContoller01.text);
                       });
                       return Column(
                         children: [
@@ -249,9 +256,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                           child: Row(
                                             children:[
                                               Container(
-                                              // child: Icon(Icons.square,
-                                              // size: 8,),
-
                                               decoration: BoxDecoration(color:_selectionList[index]? const Color(0xff173a8d):Colors.transparent,
                                                   borderRadius: BorderRadius.circular(2),
                                                   border: Border.all(width: 1,color:_selectionList[index]?Colors.transparent: const Color(0xff173a8d))
@@ -474,15 +478,19 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                     onPressed: () async {
                       SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
+                        saveloading = true;
+                        int temp=0;
                         for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
-                          saveloading = true;
+
                           print('abcdefg03');
                           if(_selectionList[i]){
-
+                            temp=_AddPriceServiceList!.data![i].id;
                             _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                 authToken,
                                 mechanicId,
-                                _timeList![i], _priceList![i], 1
+                                _timeList![i],
+                                _priceList![i],
+                                1
                             );
                             _isLoadingPage=false;
                             setState(() {
@@ -491,6 +499,9 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                           }else{
 
                           }
+                         if(i==_AddPriceServiceList!.data!.length-1){
+                           checkID=temp;
+                         }
                         }
 
                       });
