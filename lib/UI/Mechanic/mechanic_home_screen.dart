@@ -62,13 +62,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   }
 
   @override
-  void didUpdateWidget(covariant MechanicHomeScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-    getSharedPrefData();
-  }
-
-  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -543,6 +536,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
               onTap: (index) {
                 setState(() {
                   _index = index;
+                  getSharedPrefData();
                 });
               },
             ),

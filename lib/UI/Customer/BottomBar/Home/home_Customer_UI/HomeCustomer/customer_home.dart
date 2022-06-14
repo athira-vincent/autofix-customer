@@ -37,7 +37,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
 
-
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
     'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
@@ -65,7 +64,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String location ='';
   String Address = '';
   String displayAddress = '';
-
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
@@ -98,8 +96,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     _listenServiceListResponse();
 
   }
-
-
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -242,7 +238,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 regularService(),
                 //upcomingServices(),
                 //sparePartsServices()
-
               ],
             ),
           ),
@@ -262,7 +257,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 flex:1,
                 child: InkWell(
                   onTap: () {
-
                       print("clicked");
                       Navigator.push(
                           context,
