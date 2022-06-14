@@ -46,7 +46,6 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -56,13 +55,26 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
 
-
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
     });
   }
+// @override
+//   void didUpdateWidget(covariant CustomerMainLandingScreen oldWidget) {
+//     // TODO: implement didUpdateWidget
+//     getSharedPrefData();
+//     print('didUpdateWidget');
+//     super.didUpdateWidget(oldWidget);
+//   }
 
+  /*@override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    getSharedPrefData();
+    print('didChangeDependencies');
+    super.didChangeDependencies();
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -251,7 +263,6 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                               ),
                             ),
                           ),
-                         
                         ],
                       ),
                     ),
@@ -315,8 +326,8 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
             children: <Widget> [
               HomeCustomerUIScreen(),
               SparePartsListScreen(),
-               CustomerMyServicesScreen(),
-               CustomerMyProfileScreen(isEnableEditing: false,),
+              CustomerMyServicesScreen(),
+              CustomerMyProfileScreen(isEnableEditing: false,),
             ],
           )
       ),
@@ -348,6 +359,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               onTap: (index) {
                 setState(() {
                   _index = index;
+                  getSharedPrefData();
                 });
               },
             ),

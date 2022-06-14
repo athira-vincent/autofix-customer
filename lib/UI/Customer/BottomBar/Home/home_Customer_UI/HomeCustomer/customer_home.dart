@@ -29,10 +29,6 @@ class HomeCustomerUIScreen extends StatefulWidget {
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
-
-
-
-
   TextEditingController searchController = new TextEditingController();
   String? filter;
   String authToken="",profileImageUrl = "";
@@ -40,7 +36,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
-
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -68,8 +63,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   String location ='Null, Press Button';
   String Address = '';
-  String displayAddress = 'Kakkanad';
-
+  String displayAddress = '';
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
@@ -94,11 +88,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     _listenServiceListResponse();
 
   }
-
-
-
-
-
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -241,7 +230,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 regularService(),
                 //upcomingServices(),
                 //sparePartsServices()
-
               ],
             ),
           ),
@@ -261,7 +249,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 flex:1,
                 child: InkWell(
                   onTap: () {
-
                       print("clicked");
                       Navigator.push(
                           context,
