@@ -2344,11 +2344,10 @@ class QueryProvider {
   postUpdateAddPriceFaultReviewRequest(token,mechanicId,time,fee,serviceId) async {
     String _query = """  
       mutation  {
-  updateTimeFees(time: "$time", fee: "$fee", mechanicId: $mechanicId, serviceId: $serviceId) {
-    message
-  }
-}
- 
+        updateTimeFees(time: "$time", fee: "$fee", mechanicId: $mechanicId, serviceId: $serviceId) {
+          message
+        }
+      }
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,

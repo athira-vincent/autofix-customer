@@ -487,12 +487,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setSnackBar(value.message.toString().split(":").last,context);
+          SnackBarWidget().setMaterialSnackBar("Login Successful",_scaffoldKey);
         });
       } else {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setSnackBar("Login Successful",context);
+          SnackBarWidget().setMaterialSnackBar("Login Successful",_scaffoldKey);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),

@@ -33,10 +33,16 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
    AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
+  List<String>? _serviceIdList=[];
+
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   int checkID=0;
   int tempCounter = 0;
   List<String> _lodingIdList=[];
+  List<String>? _timeListEmergency=[];
+  List<String>? _priceListEmergency=[];
+  List<String>? _serviceIdEmergency=[];
+
 
   @override
   void initState() {
@@ -102,15 +108,13 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             }
             print("fddfds ${_timeList}");
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
-              _timeList!.add(
-                  _AddPriceServiceList!.data![i].mechanicService![0].time);
+              _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time);
             }else{
               _timeList!.add("12:00");
             }
             print("ewqr ${_priceList}");
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
-              _priceList!.add(
-                  _AddPriceServiceList!.data![i].mechanicService![0].fee);
+              _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee);
             }
             else{
               _priceList!.add(_AddPriceServiceList!.data![i].minPrice);
@@ -143,7 +147,19 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           print('abcdefg01');
           getSharedPrefData();
 
-          print('${_selectionList.length} >>>length');
+          saveloading = false;
+
+          tempCounter = 0;
+          _lodingIdList = [];
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Service Added',
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.peaGreen,
+          ));
+
+          /*print('${_selectionList.length} >>>length');
 
 
           print('${_lodingIdList.length} >>>length');
@@ -155,6 +171,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
               saveloading = false;
 
               tempCounter = 0;
+              _lodingIdList = [];
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Service Added',
                     style: const TextStyle(
@@ -162,7 +179,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 duration: const Duration(seconds: 2),
                 backgroundColor: CustColors.peaGreen,
               ));
-            }
+            }*/
 
 
           _isLoadingPage = true;
@@ -494,24 +511,56 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                     onPressed: () async {
                       SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
-                        saveloading = true;
+
                         int temp=0;
                         for(int i =0;i<_selectionList.length;i++)
                         {
                           if(_selectionList[i])
                           {
                             _lodingIdList.add(_selectionList[i].toString());
+                            _timeListEmergency?.add('${_timeList![i]}');
+                            _priceListEmergency?.add('${_priceList![i]}');
+                            _serviceIdEmergency?.add('${_AddPriceServiceList?.data?[i].id}');
+
+
                           }
                         }
-                        for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
+
+                        print('$_timeListEmergency >>>>_timeListEmergency ');
+                        print('$_priceListEmergency >>>>_priceListEmergency ');
+                        print('$_serviceIdEmergency >>>>_serviceIdEmergency ');
+
+
+
+                        if(_lodingIdList.length == 0)
+                          {
+                            saveloading = false;
+
+                          }
+                        else
+                          {
+                            saveloading = true;
+
+                          }
+                        _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
+                            authToken,
+                            mechanicId,
+                            "${_timeListEmergency}",
+                            "${_priceListEmergency}",
+                            "${_serviceIdEmergency}",
+                        );
+                       /* for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
 
                           print('abcdefg03');
                           if(_selectionList[i]){
 
 
+
+
                             print('_selectionList');
                             tempCounter = tempCounter + 1;
                             temp=_AddPriceServiceList!.data![i].id;
+
                             _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                                 authToken,
                                 mechanicId,
@@ -529,7 +578,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                          if(i==_AddPriceServiceList!.data!.length-1){
                            checkID=temp;
                          }
-                        }
+                        }*/
 
                       });
                     },
