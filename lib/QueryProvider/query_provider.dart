@@ -2071,43 +2071,52 @@ class QueryProvider {
       token, userId) async {
     String _query = """ 
     {
-     mechanic_Details(id: $userId) {
+  mechanic_Details(id: $userId) {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    accountType
+    jwtToken
+    status
+    mechanic {
       id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      userTypeId
-      accountType
-      jwtToken
+      orgName
+      orgType
+      yearExp
+      mechType
+      workType
+      numMech
+      rcNumber
+      address
+      apprentice_cert
+      identification_cert
+      yearExist
+      rate
+      reviewCount
+      userId
+      profilePic
+      state
       status
-      mechanic {
+      brands
+    }
+    mechanicService {
+      id
+      fee
+      time
+      service{
         id
-        orgName
-        orgType
-        yearExp
-        mechType
-        userId
-        profilePic
-        state
-        status
-        brands
+        serviceName
       }
-      mechanicService {
-        id
-        fee
-        time
-        service{
-          id
-          serviceName
-        }
-        status
-        userId
-        serviceId
-      }
+      status
+      userId
+      serviceId
     }
   }
+}
     """;
     log(_query);
     return await GqlClient.I.query01(

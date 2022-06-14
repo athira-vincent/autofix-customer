@@ -195,7 +195,16 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
 
 
   void setProfileData(MechanicProfileMdl value){
-    String yearOfExistence = value.data!.mechanicDetails!.mechanic![0].yearExp;
+    _userType = value.data!.mechanicDetails!.mechanic![0].mechType.toString();
+    String yearOfExistence = "";
+    if(_userType == "1"){
+      yearOfExistence = value.data!.mechanicDetails!.mechanic![0].yearExp;
+      print("yearExp >>>> " + yearOfExistence.toString());
+    }else{
+      yearOfExistence = value.data!.mechanicDetails!.mechanic![0].yearExist;
+      print("yearExist >>>> " + yearOfExistence.toString() );
+    }
+
     _nameController.text = value.data!.mechanicDetails!.firstName.toString() ;
     _emailController.text = value.data!.mechanicDetails!.emailId.toString();
     _phoneController.text = value.data!.mechanicDetails!.phoneNo.toString();
@@ -207,8 +216,9 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
     _userName = value.data!.mechanicDetails!.firstName.toString();
     _imageUrl = value.data!.mechanicDetails!.mechanic![0].profilePic.toString();
     print("fkjhkhkjhkhk $_imageUrl");
-    _userType = value.data!.mechanicDetails!.mechanic![0].mechType.toString();
+
     print(">>>>>>>>>>>>> _userType : " + _userType);
+    print(">>>>>>>>>>>>> yearOfExistence : " + yearOfExistence.toString());
     _signinBloc.userDefault(
         authToken,
         TextStrings.user_mechanic,

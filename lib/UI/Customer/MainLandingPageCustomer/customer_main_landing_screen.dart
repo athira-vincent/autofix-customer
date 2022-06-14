@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dar
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
+import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
 
   String authToken="",profileImageUrl="";
   String userName="";
-
+  DateTime timeBackPressed = DateTime.now();
 
 
   double _setValue(double value) {
@@ -60,21 +61,6 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
     });
   }
-// @override
-//   void didUpdateWidget(covariant CustomerMainLandingScreen oldWidget) {
-//     // TODO: implement didUpdateWidget
-//     getSharedPrefData();
-//     print('didUpdateWidget');
-//     super.didUpdateWidget(oldWidget);
-//   }
-
-  /*@override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    getSharedPrefData();
-    print('didChangeDependencies');
-    super.didChangeDependencies();
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -211,157 +197,174 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
           label: ''
       ),
     ];
-    return Scaffold(
-      drawer: CustomerNavigationDrawerScreen(),
-      key: scaffoldKey,
-      appBar: _index == 0
-        ? PreferredSize(
-            preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
-            child: AppBar(
-              actions: [],
-              automaticallyImplyLeading: false,
-              flexibleSpace: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 21, top: 20 + MediaQuery.of(context).padding.top),
-                    child: GestureDetector(
-                        onTap: () {
-                          scaffoldKey.currentState?.openDrawer();
-                        },
-                        child: Image.asset(
-                          'assets/image/ic_drawer.png',
-                          width: 30,
-                          height: 30,
-                        )),
-                  ),
-
-                  Expanded(
-                    child: Container(
+    return WillPopScope(
+      onWillPop: () async{
+        final difference = DateTime.now().difference(timeBackPressed);
+        final isExitWarning = difference >= Duration(seconds: 2);
+        timeBackPressed = DateTime.now();
+        if(isExitWarning){
+          /* final message = 'Press back again to exit';
+            Fluttertoast.showToast(msg: message,fontSize: 18);
+            */
+          return false;
+        }else{
+          //Fluttertoast.cancel();
+          ShowPopUpWidget().showPopUp(context);
+          return true;
+        }
+      },
+      child: Scaffold(
+        drawer: CustomerNavigationDrawerScreen(),
+        key: scaffoldKey,
+        appBar: _index == 0
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
+              child: AppBar(
+                actions: [],
+                automaticallyImplyLeading: false,
+                flexibleSpace: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
                       margin: EdgeInsets.only(
-                          top: 25 + MediaQuery.of(context).padding.top, left: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            //"Hi $_userName",
-                            "Welcome",
-                            style: Styles.homeWelcomeTextStyle,
-                          ),
-                          Expanded(
-                            child: RichText(
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                text:   " $userName",
-                                style: Styles.homeNameTextStyle,
-                                children: <TextSpan>[
-                                  TextSpan(text: " !",
-                                    style: Styles.homeWelcomeSymbolTextStyle,),
-                                ],
+                          left: 21, top: 20 + MediaQuery.of(context).padding.top),
+                      child: GestureDetector(
+                          onTap: () {
+                            scaffoldKey.currentState?.openDrawer();
+                          },
+                          child: Image.asset(
+                            'assets/image/ic_drawer.png',
+                            width: 30,
+                            height: 30,
+                          )),
+                    ),
+
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: 25 + MediaQuery.of(context).padding.top, left: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              //"Hi $_userName",
+                              "Welcome",
+                              style: Styles.homeWelcomeTextStyle,
+                            ),
+                            Expanded(
+                              child: RichText(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  text:   " $userName",
+                                  style: Styles.homeNameTextStyle,
+                                  children: <TextSpan>[
+                                    TextSpan(text: " !",
+                                      style: Styles.homeWelcomeSymbolTextStyle,),
+                                  ],
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    /*Container(
+                      margin: EdgeInsets.only(
+                           top: 25 + MediaQuery.of(context).padding.top,
+                        right: size.width * 4.2/100
+                      ),
+                      child: Stack(
+                        children: [
+                              GestureDetector(
+                              onTap: () {},
+                                child: SvgPicture.asset(
+                                  'assets/image/notification_icon.svg',
+                                  width: 22,
+                                  height: 22,
+                                ),
+                              ),
+                          Positioned(
+                            right: 0,
+                            child: _counter > 0 ? Container(
+                              padding: EdgeInsets.all(1),
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: new Text(
+                               '$_counter',
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ) : Container(),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-
-                  /*Container(
-                    margin: EdgeInsets.only(
-                         top: 25 + MediaQuery.of(context).padding.top,
-                      right: size.width * 4.2/100
-                    ),
-                    child: Stack(
-                      children: [
-                            GestureDetector(
-                            onTap: () {},
-                              child: SvgPicture.asset(
-                                'assets/image/notification_icon.svg',
-                                width: 22,
-                                height: 22,
-                              ),
-                            ),
-                        Positioned(
-                          right: 0,
-                          child: _counter > 0 ? Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: new BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            constraints: BoxConstraints(
-                              minWidth: 12,
-                              minHeight: 12,
-                            ),
-                            child: new Text(
-                             '$_counter',
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ) : Container(),
-                        ),
-                      ],
-                    ),
-                  ),*/
-                ],
+                    ),*/
+                  ],
+                ),
+                backgroundColor: Colors.white,
+                shadowColor: Colors.white,
               ),
-              backgroundColor: Colors.white,
-              shadowColor: Colors.white,
+            )
+          : PreferredSize(
+                preferredSize: Size.fromHeight(0),
+                child: Container()
             ),
-          )
-        : PreferredSize(
-              preferredSize: Size.fromHeight(0),
-              child: Container()
-          ),
-      body:
+        body:
 
-      Center(
-          child:  IndexedStack(
-            index: _index,
-            children: <Widget> [
-              HomeCustomerUIScreen(),
-              SparePartsListScreen(),
-              CustomerMyServicesScreen(),
-              CustomerMyProfileScreen(isEnableEditing: false,),
-            ],
-          )
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.red,
-          boxShadow: [
-            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-          ],
+        Center(
+            child:  IndexedStack(
+              index: _index,
+              children: <Widget> [
+                HomeCustomerUIScreen(),
+                SparePartsListScreen(),
+                CustomerMyServicesScreen(),
+                CustomerMyProfileScreen(isEnableEditing: false,),
+              ],
+            )
         ),
-        child: ClipRRect(
-          child: SizedBox(
-            height: size.height * 0.098,
-            child: BottomNavigationBar(
-              selectedLabelStyle: TextStyle(
-                  fontFamily: 'Corbel_Light',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 0),
-              unselectedLabelStyle: TextStyle(
-                  fontFamily: 'Corbel_Light',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 0),
-              items: bottomNavigationBarItems,
-              currentIndex: _index,
-              //backgroundColor: CustColors.blue,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: Colors.blue,
-              unselectedItemColor: Colors.grey,
-              onTap: (index) {
-                setState(() {
-                  _index = index;
-                  getSharedPrefData();
-                });
-              },
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            boxShadow: [
+              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+            ],
+          ),
+          child: ClipRRect(
+            child: SizedBox(
+              height: size.height * 0.098,
+              child: BottomNavigationBar(
+                selectedLabelStyle: TextStyle(
+                    fontFamily: 'Corbel_Light',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 0),
+                unselectedLabelStyle: TextStyle(
+                    fontFamily: 'Corbel_Light',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 0),
+                items: bottomNavigationBarItems,
+                currentIndex: _index,
+                //backgroundColor: CustColors.blue,
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Colors.blue,
+                unselectedItemColor: Colors.grey,
+                onTap: (index) {
+                  setState(() {
+                    _index = index;
+                    getSharedPrefData();
+                  });
+                },
+              ),
             ),
           ),
         ),
