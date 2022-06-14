@@ -237,7 +237,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         keyboardType: TextInputType.multiline,
                         validator: InputValidator(ch: "text",).emptyChecking,
                         controller: _feedBackController,
-                        cursorColor: CustColors.whiteBlueish,
+                        cursorColor: CustColors.light_navy,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
