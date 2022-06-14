@@ -535,7 +535,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
           socialLoginIsLoading = false;
           //SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
-          SnackBarWidget().setSnackBar(value.message.toString(),context);
+          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       } else {
         print('value.status succes 11111 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
@@ -573,7 +573,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           else if(value.data!.socialLogin!.user!.userTypeId.toString() == "3"){
             print('Please login through Relex App >>>>>>>>>>>>>>>>+++');
-            SnackBarWidget().setSnackBar('Please login through Relex App',context);
+            SnackBarWidget().setMaterialSnackBar('Please login through Relex App',_scaffoldKey);
           }
         });
       }

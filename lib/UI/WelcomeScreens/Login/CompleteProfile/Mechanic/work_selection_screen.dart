@@ -90,7 +90,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
   List<String> workSelectionList = ['Regular Services','Emergency Services','Both'];
   String? selectedworkSelection = '' ;
 
-  List<String> noOfMechanicsSelectionList = ['2','3','4'];
+  List<String> noOfMechanicsSelectionList = ['1-25','25-50','50-75','75-100'];
   String? noOfMechanicsSelection = '' ;
 
   String? _fileName_meansOfIdentification;
