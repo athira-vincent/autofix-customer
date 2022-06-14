@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _isLoading = false;
   bool? _passwordVisible;
@@ -492,6 +492,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         setState(() {
           _isLoading = false;
+          //SnackBarWidget().setSnackBar("Login Successful",context);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
             SnackBarWidget().setSnackBar("Customer Login Successful",context);
             _signinBloc.userDefault(
@@ -504,13 +505,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 "0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
-
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerMainLandingScreen()));
-          }else {
-            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);  //if(value.data!.signIn!.user!.userTypeId == "2"
+          }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
+            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,

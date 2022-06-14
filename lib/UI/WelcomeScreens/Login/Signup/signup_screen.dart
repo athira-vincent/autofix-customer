@@ -2161,7 +2161,7 @@ class _SignupScreenState extends State<SignupScreen> {
         _isLoading = true;
         _signupBloc.signUp(
             5,
-            _nameController.text,
+            _contactPersonController.text,
             _emailController.text,
             _phoneController.text,
             _passwordController.text,

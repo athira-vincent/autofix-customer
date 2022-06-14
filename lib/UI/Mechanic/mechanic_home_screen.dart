@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mec
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
+import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +49,8 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  DateTime timeBackPressed = DateTime.now();
 
   String location ='Null, Press Button';
   String CurrentLatitude ="10.506402";
@@ -359,186 +362,203 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
           label: ''
       ),
     ];
-    return Scaffold(
-      drawer: MechanicSideBarScreen(),
-      key: scaffoldKey,
-      appBar: _index == 0
-        ? PreferredSize(
-            preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
-            child: AppBar(
-              actions: [],
-              automaticallyImplyLeading: false,
-              flexibleSpace: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
+    return WillPopScope(
+      onWillPop: () async{
+        final difference = DateTime.now().difference(timeBackPressed);
+        final isExitWarning = difference >= Duration(seconds: 2);
+        timeBackPressed = DateTime.now();
+        if(isExitWarning){
+          /* final message = 'Press back again to exit';
+            Fluttertoast.showToast(msg: message,fontSize: 18);
+            */
+          return false;
+        }else{
+          //Fluttertoast.cancel();
+          ShowPopUpWidget().showPopUp(context);
+          return true;
+        }
+      },
+      child: Scaffold(
+        drawer: MechanicSideBarScreen(),
+        key: scaffoldKey,
+        appBar: _index == 0
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
+              child: AppBar(
+                actions: [],
+                automaticallyImplyLeading: false,
+                flexibleSpace: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
 
-                    margin: EdgeInsets.only(
-                        left: 21, top: 20 + MediaQuery.of(context).padding.top),
-
-                    child: GestureDetector(
-                        onTap: () {
-                          scaffoldKey.currentState?.openDrawer();
-                        },
-                        child: Image.asset(
-                          'assets/image/ic_drawer.png',
-                          width: 30,
-                          height: 30,
-                        )),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: 25 + MediaQuery.of(context).padding.top, left: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Welcome",
-                          style: Styles.homeWelcomeTextStyle,
-                        ),
-                        Text(
-                          " $userName",  //" Athira",
-                          style: Styles.homeNameTextStyle,
-                        ),
-                        Text(
-                          " !",
-                          style: Styles.homeWelcomeSymbolTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Spacer(),
-
-                  InkWell(
-                    onTap: (){
-                      setState(() {
-                        if(isOnline == "1"){
-                          _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
-                        }else{
-                          _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
-                        }
-                      });// !isOnline
-                    },
-                    child: Container(
                       margin: EdgeInsets.only(
-                        top: 25 + MediaQuery.of(context).padding.top,
-                        right: 10 + MediaQuery.of(context).padding.right
-                      ),
-                      padding: EdgeInsets.only(
-                          left: 7, right: 7,
-                          top: 4, bottom: 4
-                      ),
-                      decoration: BoxDecoration(
-                          color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
-                          borderRadius: BorderRadius.circular(4),
-                          boxShadow: [new BoxShadow(
-                            color: CustColors.roseText1,
-                            blurRadius: 10.0,
-                          ),]
-                      ),
-                      //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
-                      child: Text(
-                          isOnline == "1" ? "Online" : "Offline",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontFamily: "Samsung_SharpSans_Medium",
-                            fontWeight: FontWeight.w400
+                          left: 21, top: 20 + MediaQuery.of(context).padding.top),
+
+                      child: GestureDetector(
+                          onTap: () {
+                            scaffoldKey.currentState?.openDrawer();
+                          },
+                          child: Image.asset(
+                            'assets/image/ic_drawer.png',
+                            width: 30,
+                            height: 30,
+                          )),
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 25 + MediaQuery.of(context).padding.top, left: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Welcome",
+                            style: Styles.homeWelcomeTextStyle,
                           ),
+                          Text(
+                            " $userName",  //" Athira",
+                            style: Styles.homeNameTextStyle,
+                          ),
+                          Text(
+                            " !",
+                            style: Styles.homeWelcomeSymbolTextStyle,
+                          ),
+                        ],
                       ),
                     ),
-                  ),
 
-                  Container(
-                    margin: EdgeInsets.only(
-                         top: 25 + MediaQuery.of(context).padding.top,
-                         right: size.width * 4.2/100
-                    ),
-                    /*child: Stack(
-                      children: [
-                        SvgPicture.asset(
-                              'assets/image/notification_icon.svg',
-                              width: 22,
-                              height: 22,
-                            ),
-                        Positioned(
-                          right: 0,
-                          child: _counter > 0 ? Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: new BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            constraints: BoxConstraints(
-                              minWidth: 12,
-                              minHeight: 12,
-                            ),
-                            child: new Text(
-                             '$_counter',
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ) : Container(),
+                    Spacer(),
 
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          if(isOnline == "1"){
+                            _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
+                          }else{
+                            _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
+                          }
+                        });// !isOnline
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: 25 + MediaQuery.of(context).padding.top,
+                          right: 10 + MediaQuery.of(context).padding.right
                         ),
-                      ],
-                    ),*/
-                  ),
-                ],
-              ),
-              backgroundColor: Colors.white,
-              shadowColor: Colors.white,
-            ),
-          )
-        :  PreferredSize(
-          preferredSize: Size.fromHeight(0.0),
-          child: AppBar(),
-        ),
-      body:  Center(
-            child:  IndexedStack(
-                  index: _index,
-                  children: <Widget> [
-                       MechanicHomeUIScreen(),
-                       Addpricefault(position: 1,),
-                       MechanicMyServicesScreen(),
-                       MechanicMyProfileScreen(isEnableEditing: false,),
+                        padding: EdgeInsets.only(
+                            left: 7, right: 7,
+                            top: 4, bottom: 4
+                        ),
+                        decoration: BoxDecoration(
+                            color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
+                            borderRadius: BorderRadius.circular(4),
+                            boxShadow: [new BoxShadow(
+                              color: CustColors.roseText1,
+                              blurRadius: 10.0,
+                            ),]
+                        ),
+                        //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                        child: Text(
+                            isOnline == "1" ? "Online" : "Offline",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: "Samsung_SharpSans_Medium",
+                              fontWeight: FontWeight.w400
+                            ),
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(
+                           top: 25 + MediaQuery.of(context).padding.top,
+                           right: size.width * 4.2/100
+                      ),
+                      /*child: Stack(
+                        children: [
+                          SvgPicture.asset(
+                                'assets/image/notification_icon.svg',
+                                width: 22,
+                                height: 22,
+                              ),
+                          Positioned(
+                            right: 0,
+                            child: _counter > 0 ? Container(
+                              padding: EdgeInsets.all(1),
+                              decoration: new BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: new Text(
+                               '$_counter',
+                                style: new TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ) : Container(),
+
+                          ),
+                        ],
+                      ),*/
+                    ),
                   ],
-                )
+                ),
+                backgroundColor: Colors.white,
+                shadowColor: Colors.white,
+              ),
+            )
+          :  PreferredSize(
+            preferredSize: Size.fromHeight(0.0),
+            child: AppBar(),
           ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
-          ],
-        ),
-        child: ClipRRect(
-          child: SizedBox(
-            height: size.height * 0.098,
-            child: BottomNavigationBar(
-              selectedLabelStyle: TextStyle(
-                  fontFamily: 'Corbel_Light',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 0),
-              unselectedLabelStyle: TextStyle(
-                  fontFamily: 'Corbel_Light',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 0),
-              items: bottomNavigationBarItems,
-              currentIndex: _index,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: Colors.blue,
-              unselectedItemColor: Colors.grey,
-              onTap: (index) {
-                setState(() {
-                  _index = index;
-                  getSharedPrefData();
-                });
-              },
+        body:  Center(
+              child:  IndexedStack(
+                    index: _index,
+                    children: <Widget> [
+                         MechanicHomeUIScreen(),
+                         Addpricefault(position: 1,),
+                         MechanicMyServicesScreen(),
+                         MechanicMyProfileScreen(isEnableEditing: false,),
+                    ],
+                  )
+            ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+            ],
+          ),
+          child: ClipRRect(
+            child: SizedBox(
+              height: size.height * 0.098,
+              child: BottomNavigationBar(
+                selectedLabelStyle: TextStyle(
+                    fontFamily: 'Corbel_Light',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 0),
+                unselectedLabelStyle: TextStyle(
+                    fontFamily: 'Corbel_Light',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 0),
+                items: bottomNavigationBarItems,
+                currentIndex: _index,
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Colors.blue,
+                unselectedItemColor: Colors.grey,
+                onTap: (index) {
+                  setState(() {
+                    _index = index;
+                    getSharedPrefData();
+                  });
+                },
+              ),
             ),
           ),
         ),
