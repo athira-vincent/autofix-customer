@@ -74,6 +74,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   void didUpdateWidget(covariant MechanicHomeUIScreen oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+    print("xkkhhnbb 001");
     setFcmToken(authToken);
     getSharedPrefData();
   }

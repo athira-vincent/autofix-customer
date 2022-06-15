@@ -469,7 +469,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
     _userNameController.dispose();
     _passwordController.dispose();
-    _signinBloc.dispose();
+    //_signinBloc.dispose();
   }
 
 
@@ -487,14 +487,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoading = false;
-          SnackBarWidget().setSnackBar(value.message.toString().split(":").last,context);
+          SnackBarWidget().setMaterialSnackBar(value.message.toString().split(":").last,_scaffoldKey);
         });
       } else {
-        setState(() {
+       if(mounted) setState(() {
           _isLoading = false;
+        });
           //SnackBarWidget().setSnackBar("Login Successful",context);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
-            // SnackBarWidget().setSnackBar("Customer Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
@@ -509,8 +509,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => CustomerMainLandingScreen()));
+            SnackBarWidget().setSnackBar("Customer Login Successful",context);
+
           }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
-            // SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
@@ -520,12 +521,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 "0"
             );
             setFcmToken(value.data!.signIn!.token.toString());
-            Navigator.pushReplacement(
-                context,
+
+            Navigator.of(context).pushReplacement(
+
                 MaterialPageRoute(
-                    builder: (context) => MechanicHomeScreen()));
+                    builder: (context) {
+                      return MechanicHomeScreen();}
+                ));
+
+            SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+            /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Mechanic Login Successful",
+                  style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
+              duration: Duration(seconds: 3),
+              backgroundColor: CustColors.light_navy,
+            ));*/
+            //SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
           }
-        });
+
+
       }
     });
 

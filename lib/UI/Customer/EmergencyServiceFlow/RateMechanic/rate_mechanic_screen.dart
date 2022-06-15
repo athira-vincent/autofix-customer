@@ -260,8 +260,11 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
 
 
 
+
                         _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
                             authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
+
+                        setDeactivate();
 
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                             CustomerMainLandingScreen()), (Route<dynamic> route) => false);
@@ -387,4 +390,14 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
       //color: Colors.amber,
     );
   }
+
+
+  void setDeactivate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(SharedPrefKeys.bookingIdEmergency, "");
+    prefs.setString(SharedPrefKeys.serviceIdEmergency, "");
+    prefs.setString(SharedPrefKeys.mechanicIdEmergency, "");
+
+  }
+
 }

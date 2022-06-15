@@ -181,6 +181,7 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
         children: [
           InkWell(
             onTap: (){
+              setDeactivate();
 
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                   CustomerMainLandingScreen()), (Route<dynamic> route) => false);
@@ -258,5 +259,13 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
     //letterSpacing: .7,
     //wordSpacing: .7
   );
+
+  void setDeactivate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(SharedPrefKeys.bookingIdEmergency, "");
+    prefs.setString(SharedPrefKeys.serviceIdEmergency, "");
+    prefs.setString(SharedPrefKeys.mechanicIdEmergency, "");
+
+  }
 
 }
