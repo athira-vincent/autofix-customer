@@ -989,6 +989,7 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             inputFormatters: [
               FilteringTextInputFormatter.allow(
                   RegExp('[0-9]')),
+              LengthLimitingTextInputFormatter(3),
             ],
             validator: InputValidator(
                 ch : 'Year of existence' ).nameCheckingWithNumeric,
