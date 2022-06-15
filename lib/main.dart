@@ -86,7 +86,6 @@ class _MyAppState extends State<MyApp> {
                 // home: DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,),
                 // home: FindYourCustomerScreen(latitude: "38.2345",longitude: "74.323",),
                 home: SplashScreen(),
-
               );
             },
           );
