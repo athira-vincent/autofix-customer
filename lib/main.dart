@@ -96,11 +96,11 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   primaryColor: Colors.white,
                 ),
-                // home: WorkSelectionScreen(userType: TextStrings.user_mechanic,userCategory: "2",),
+                 home: WorkSelectionScreen(userType: TextStrings.user_mechanic,userCategory: "2",),
                 // home: DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,),
                 // home: FindYourCustomerScreen(latitude: "38.2345",longitude: "74.323",),
                 // home: AddCarScreen(userType: TextStrings.user_mechanic , userCategory: "0",fromPage: "0",),
-                home: SplashScreen(),
+                //home: SplashScreen(),
               );
             },
           );
