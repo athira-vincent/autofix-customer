@@ -1132,7 +1132,6 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
 
                     child: MaterialButton(
                       onPressed: () {
-
                         if (_formKey.currentState!.validate()) {
                           _completeProfileBloc.postCompleteProfileCorporateRequest(
                               authToken,
