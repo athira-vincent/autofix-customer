@@ -58,6 +58,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
+      isloading=true;
       _specializationBloc.postBrandDetailsRequest(
           authToken,"");
     });
@@ -73,10 +74,14 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
     _specializationBloc.postBrandListResponse.listen((value) {
       if (value.status == "error") {
 
+        setState(() {
+          isloading=false;
+        });
       } else {
 
         setState(() {
           _brandListData = value.data?.brandList?.data;
+          isloading=false;
         });
       }
     });
@@ -213,7 +218,9 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                     //padding: EdgeInsets.only(top: ScreenSize().setValue(22.4)),
                     margin: EdgeInsets.only(/*left: ScreenSize().setValue(5),*/
                         top: ScreenSize().setValue(22.4)),
-                    child: _brandListData?.length != 0
+                    child:
+                    isloading == false
+                    ? _brandListData?.length != 0
                         ? Container(
                             child: GridView.builder(
                               itemCount:_brandListData?.length,
@@ -290,7 +297,17 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
                           )
                         : Center(
                             child: Text('No BrandList found.'),
-                          ),
+                          )
+                    :Center(
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              CustColors.light_navy),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
 

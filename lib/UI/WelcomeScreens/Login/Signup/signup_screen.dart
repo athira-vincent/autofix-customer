@@ -1227,7 +1227,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                   .number,
                                                           inputFormatters: [
                                                             LengthLimitingTextInputFormatter(
-                                                                3),
+                                                                2),
                                                           ],
                                                           //validator: InputValidator(ch: AppLocalizations.of(context)!.text_experience_year).phoneNumChecking,
                                                           controller:
