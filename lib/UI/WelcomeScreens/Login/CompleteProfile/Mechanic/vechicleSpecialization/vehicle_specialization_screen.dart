@@ -58,7 +58,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('CustomerApprovedScreen bookingId >>>> $bookingId');
-      _specializationBloc. postBrandDetailsRequest(
+      _specializationBloc.postBrandDetailsRequest(
           authToken,"");
     });
   }
