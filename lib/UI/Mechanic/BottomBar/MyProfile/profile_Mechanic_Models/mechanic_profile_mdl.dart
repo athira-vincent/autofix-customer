@@ -145,7 +145,7 @@ class Mechanic {
   String apprenticeCert;
   String identificationCert;
   dynamic yearExist;
-  int rate;
+  var rate;
   int reviewCount;
   int userId;
   String profilePic;

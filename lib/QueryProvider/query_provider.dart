@@ -2089,7 +2089,6 @@ class QueryProvider {
       yearExp
       mechType
       workType
-      numMech
       rcNumber
       address
       apprentice_cert
