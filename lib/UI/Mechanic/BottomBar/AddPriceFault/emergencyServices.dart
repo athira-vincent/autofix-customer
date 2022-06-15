@@ -90,7 +90,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
         });
       }else{
@@ -138,7 +138,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                   style: const TextStyle(
                       fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: const Duration(seconds: 2),
-              backgroundColor: CustColors.peaGreen,
+              backgroundColor: CustColors.light_navy,
             ));
           }
         });
@@ -156,7 +156,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
 
           /*print('${_selectionList.length} >>>length');
