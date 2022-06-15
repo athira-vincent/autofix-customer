@@ -5,7 +5,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
-import 'package:auto_fix/UI/Mechanic/BottomBar/AddPrice/add_price_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';

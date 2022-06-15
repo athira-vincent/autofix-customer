@@ -77,7 +77,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
         });
       }else{
@@ -124,7 +124,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
 
         });
