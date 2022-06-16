@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
@@ -8,6 +9,7 @@ import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.da
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -50,20 +52,23 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
   }
 
   Future<void> getSharedPrefData() async {
+    String localProfileUrl = "", localProfileName = "", localUserId = "";
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      userName = shdPre.getString(SharedPrefKeys.userName).toString();
-
-      profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      localUserId = shdPre.getString(SharedPrefKeys.userID).toString();
+      localProfileName = shdPre.getString(SharedPrefKeys.userName).toString();
+      localProfileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      Provider.of<ProfileDataProvider>(context, listen: false).setProfile(localUserId, localProfileName, localProfileUrl);
       print('authToken>>>>>>>>> ' + authToken.toString());
-      print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
+      //print('profileImageUrl>>>>>>>>> CustomerMainLandingScreen' + profileImageUrl.toString());
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    userName = Provider.of<ProfileDataProvider>(context).getName;
     Size size = MediaQuery.of(context).size;
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -361,7 +366,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                 onTap: (index) {
                   setState(() {
                     _index = index;
-                    getSharedPrefData();
+                    //getSharedPrefData();
                   });
                 },
               ),
