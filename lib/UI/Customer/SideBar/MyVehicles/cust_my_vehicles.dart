@@ -140,7 +140,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         setState(() {
           _isDefaultLoading = false;
           SnackBarWidget().setMaterialSnackBar( "Vehicle set as default", _scaffoldKey);
-
           print("message postServiceList >>>>>>>  ${value.message}");
           print("sucess postServiceList >>>>>>>  ${value.status}");
 
@@ -361,6 +360,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                           onTap: (){
                             setState(() {
                               print('delete vechicle');
+
                               if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
                                 {
                                   if(snapshot.data?.data?.custVehicleList?[i].defaultVehicle == 1)
@@ -940,14 +940,29 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
           {
             _isDefaultLoading = true;
+
+
             _addCarBloc.postUpdateDefaultVehicleApi(
                 authToken,custVehicleListDefaultValue?.id, userID);
             if(custVehicleList?.id != null)
               {
                 custVehicleListDefaultValue = custVehicleList;
+
+                for(int i=0 ; i<int.parse('${snapshot.data?.data?.custVehicleList!.length.toString()}');i++)
+                  {
+                    if(custVehicleListDefaultValue?.id.toString() == snapshot.data?.data?.custVehicleList?[i].id)
+                    {
+                      snapshot.data?.data?.custVehicleList?[i].defaultVehicle = 1;
+                    }
+                    else
+                      {
+                        snapshot.data?.data?.custVehicleList?[i].defaultVehicle = 0;
+
+                      }
+                  }
               }
           }
-          else
+                    else
           {
             _isDefaultLoading = false;
 

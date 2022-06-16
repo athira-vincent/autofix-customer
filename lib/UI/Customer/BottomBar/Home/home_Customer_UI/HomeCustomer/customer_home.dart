@@ -552,7 +552,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>  ScheduleRegularServiceScreen(
-                                              bookingId: '01',
+                                              categoryList:snapshot.data?.data?.categoryList![index],
                                               serviceIds: serviceIds,
                                               serviceType: 'regular',
                                               authToken: authToken,)));
