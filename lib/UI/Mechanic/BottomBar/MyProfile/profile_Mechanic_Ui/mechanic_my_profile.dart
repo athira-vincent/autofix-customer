@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Models/mechanic_profile_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
+import 'package:provider/provider.dart';
 
 class MechanicMyProfileScreen extends StatefulWidget {
 
@@ -144,6 +146,10 @@ class _MechanicMyProfileScreenState extends State<MechanicMyProfileScreen> {
         setState(() {
           _isLoadingPage = false;
           setProfileData(value);
+          Provider.of<ProfileDataProvider>(context, listen: false).setProfile(
+              value.data!.mechanicDetails!.id.toString(),
+              value.data!.mechanicDetails!.firstName.toString(),
+              value.data!.mechanicDetails!.mechanic![0].profilePic.toString());
         });
       }
     });
