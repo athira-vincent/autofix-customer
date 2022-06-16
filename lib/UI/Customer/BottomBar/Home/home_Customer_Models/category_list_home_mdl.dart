@@ -57,6 +57,7 @@ class CategoryList {
     required this.icon,
     required this.status,
     required this.service,
+
   });
 
   String id;
@@ -95,6 +96,9 @@ class Service {
     required this.maxPrice,
     required this.categoryId,
     required this.status,
+    required this.regularStatus,
+
+
   });
 
   String id;
@@ -105,8 +109,11 @@ class Service {
   String maxPrice;
   int categoryId;
   int status;
+  int regularStatus = 0;
+
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
+    regularStatus: json["regularStatus"] == null ? null : json["regularStatus"],
     id: json["id"] == null ? null : json["id"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
     description: json["description"],
@@ -118,6 +125,7 @@ class Service {
   );
 
   Map<String, dynamic> toJson() => {
+    "regularStatus": regularStatus == null ? null : regularStatus,
     "id": id == null ? null : id,
     "serviceName": serviceName == null ? null : serviceName,
     "description": description,

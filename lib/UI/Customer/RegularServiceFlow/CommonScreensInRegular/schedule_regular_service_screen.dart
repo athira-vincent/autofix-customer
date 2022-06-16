@@ -1,21 +1,30 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
-  final String bookingId;
   final String authToken;
   final String serviceIds;
   final String serviceType;
+  final CategoryList? categoryList;
 
-  ScheduleRegularServiceScreen({required this.bookingId,
-    required this.authToken,required this.serviceIds,required this.serviceType});
+  ScheduleRegularServiceScreen
+      ({
+        required this.authToken,
+        required this.serviceIds,
+        required this.serviceType,
+        required this.categoryList
+      });
 
   @override
   State<StatefulWidget> createState() {
@@ -25,13 +34,20 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
 
 class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScreen> {
 
+
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
+  String authToken="";
+
   TextEditingController _serviceTypeController = TextEditingController();
   FocusNode _serviceTypeFocusNode = FocusNode();
 
   TextEditingController _serviceDateController = TextEditingController();
   FocusNode _serviceDateFocusNode = FocusNode();
 
-  List<String> selectedServiceList = [];
+  List<String> selectedServiceNameList = [];
+  List<String> selectedServiceIdList = [];
+
   String selectedServiceModel = "";
 
   List<String> serviceModelList = [
@@ -41,18 +57,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   ];
   DateTime selectedDate = DateTime.now();
 
-  double per = .10;
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
   String additionalServiceNames = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    selectedServiceList.add("Car spray");
+    widget.categoryList!.service![0].regularStatus = 1;
   }
 
   @override
@@ -104,6 +115,16 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         ),
     );
   }
+
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    });
+  }
+
 
   Widget appBarUiWidget(Size size){
     return Container(
@@ -176,19 +197,16 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       child: Column(
         children: [
           listHeaderWidget(size),
-
-          selectedServiceList.length != 0
-              ?
-          ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: selectedServiceList.length,
-            itemBuilder: (context, index) {
-              return serviceListItemWidget(size,index);
-            },
-          )
-              :
-          Container(),
+          selectedServiceNameList.length != 0
+              ? ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: selectedServiceNameList.length,
+                itemBuilder: (context, index) {
+                  return serviceListItemWidget(size,index);
+                },
+              )
+              : Container(),
 
         ],
 
@@ -438,7 +456,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                selectedServiceList[index],
+                selectedServiceNameList[index],
                 style: TextStyle(
                   fontSize: 15,
                   fontFamily: "Samsung_SharpSans_Medium",
@@ -719,7 +737,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     setState(() {
       for(int i = 0; i < serviceList.length ; i++){
 
-        selectedServiceList.add(serviceList[i]);
+        selectedServiceNameList.add(serviceList[i]);
 
       }
       //selectedState = result;
