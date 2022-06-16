@@ -13,8 +13,6 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
-
-
 void main() async {
   await initHiveForFlutter();
   await runZonedGuarded(() async {
