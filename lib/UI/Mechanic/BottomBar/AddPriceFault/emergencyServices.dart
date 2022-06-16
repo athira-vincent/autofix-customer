@@ -58,13 +58,11 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
-      // page = shdPre.getPre.getString(SharedPrefKeys.page).toString();
-      // search = shdPre.getPre.getString(SharedPrefKeys.search).toString();
       print('userFamilyId ' + authToken.toString());
       //print('userId ' + userId.toString());
-      _addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
+      /*_addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
           authToken,
-          mechanicId);
+          mechanicId);*/
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
           page,
@@ -72,10 +70,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           search,
           mechanicId,
           1);
-      // (
-      //    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsInVzZXJUeXBlSWQiOjIsImlhdCI6MTY1MzYzNTM5MCwiZXhwIjoxNjUzNzIxNzkwfQ.9X7mXkvlVX6XxXuXxs5go-Sfp1Mn7IrNXgKoZ_Y-WFs",
-      //    //authToken,
-      //    mechanicId );
     });
   }
 
@@ -158,34 +152,8 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
           ));
-
-          /*print('${_selectionList.length} >>>length');
-
-
-          print('${_lodingIdList.length} >>>length');
-
-          print('$tempCounter  >>>> tempCounter');
-
-          if(_lodingIdList.length == tempCounter)
-            {
-              saveloading = false;
-
-              tempCounter = 0;
-              _lodingIdList = [];
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Service Added',
-                    style: const TextStyle(
-                        fontFamily: 'Roboto_Regular', fontSize: 14)),
-                duration: const Duration(seconds: 2),
-                backgroundColor: CustColors.peaGreen,
-              ));
-            }*/
-
-
           _isLoadingPage = true;
           _updateTimeFees = value.data!.updateTimeFees;
-          //_selectionList=[];
-          //print("ldjgjgj ${_mechanicDetails!.firstName}");
         });
       }
     });
@@ -194,7 +162,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff9f9f9),
+      // backgroundColor: const Color(0xff9f9f9),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
