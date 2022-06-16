@@ -90,7 +90,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
         });
       }else{
@@ -138,7 +138,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                   style: const TextStyle(
                       fontFamily: 'Roboto_Regular', fontSize: 14)),
               duration: const Duration(seconds: 2),
-              backgroundColor: CustColors.peaGreen,
+              backgroundColor: CustColors.light_navy,
             ));
           }
         });
@@ -148,7 +148,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           getSharedPrefData();
 
           saveloading = false;
-
           tempCounter = 0;
           _lodingIdList = [];
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -156,7 +155,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
+            backgroundColor: CustColors.light_navy,
           ));
 
           /*print('${_selectionList.length} >>>length');
@@ -280,6 +279,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                               setState(() {
 
+
                                               });
                                             }
                                           });
@@ -289,7 +289,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                           child: Row(
                                             children:[
                                               Container(
-                                              decoration: BoxDecoration(color:_selectionList[index]? const Color(0xff173a8d):Colors.transparent,
+                                              decoration: BoxDecoration(color:_selectionList[index] ? const Color(0xff173a8d):Colors.transparent,
                                                   borderRadius: BorderRadius.circular(2),
                                                   border: Border.all(width: 1,color:_selectionList[index]?Colors.transparent: const Color(0xff173a8d))
                                               ),
@@ -379,6 +379,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                   padding: const EdgeInsets.only(left:10.0,bottom: 05),
                                   child: Container(
                                     decoration: BoxDecoration(
+
                                         border: Border.all(
                                             color: const Color(0xffd3dcf2)
                                         ),
