@@ -418,7 +418,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                     serviceIds = '${snapshot.data?.data?.serviceListAll?[index].id}';
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
-
                                   });
 
                                 },

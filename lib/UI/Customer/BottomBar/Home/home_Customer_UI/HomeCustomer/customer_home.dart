@@ -561,7 +561,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   categoryList:snapshot.data?.data?.categoryList![index],
                                                   serviceIds: serviceIds,
                                                   serviceType: 'regular',
-                                                  authToken: authToken,)));
+                                                  )));
 
                                       },
                                       child: Container(
