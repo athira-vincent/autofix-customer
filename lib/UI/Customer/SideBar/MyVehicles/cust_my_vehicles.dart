@@ -183,7 +183,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                   alignment: Alignment.center,
                                   child: CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                        CustColors.peaGreen),
+                                        CustColors.light_navy),
                                   ),
                                 ),
                               );
@@ -228,7 +228,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                           alignment: Alignment.center,
                           child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                CustColors.peaGreen),
+                                CustColors.light_navy),
                           ),
                         ),
                       ),
