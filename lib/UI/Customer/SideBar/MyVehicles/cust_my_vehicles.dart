@@ -543,7 +543,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
