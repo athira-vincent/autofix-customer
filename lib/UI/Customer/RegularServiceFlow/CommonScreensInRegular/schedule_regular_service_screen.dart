@@ -13,14 +13,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
-  final String authToken;
   final String serviceIds;
   final String serviceType;
   final CategoryList? categoryList;
 
   ScheduleRegularServiceScreen
       ({
-        required this.authToken,
         required this.serviceIds,
         required this.serviceType,
         required this.categoryList
