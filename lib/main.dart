@@ -13,6 +13,8 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/service_regular_details_screen.dart';
+
 void main() async {
   await initHiveForFlutter();
   await runZonedGuarded(() async {
@@ -80,7 +82,8 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   primaryColor: Colors.white,
                 ),
-                home: SplashScreen(),
+                //home: SplashScreen(),
+                home: ServiceRegularDetailsScreen(),
               );
             },
           );

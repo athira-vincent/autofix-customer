@@ -162,6 +162,7 @@ flutter:
     - assets/image/NoBrand.svg
     - assets/image/NoSerivice.svg
     - assets/image/NoCart.svg
+    - assets/image/group_2974.png
 
   fonts:
     - family: Montserrat_SemiBold
