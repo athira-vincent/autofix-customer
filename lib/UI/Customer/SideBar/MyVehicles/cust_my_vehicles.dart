@@ -37,6 +37,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   bool _isLoadingButton = false;
 
+  bool _isDefaultVehicle = true;
+
   CustVehicleList? custVehicleListDefaultValue;
   CustVehicleList? custVehicleList;
 
@@ -65,6 +67,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
 
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
+
+  String isDefaultId ="";
 
 
 
@@ -108,7 +112,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             {
               if(value.data?.custVehicleList?[i].defaultVehicle.toString() == "1")
                 {
+                  isDefaultId = "${value.data?.custVehicleList?[i].id.toString()}";
                   custVehicleListDefaultValue = value.data?.custVehicleList?[i];
+                  custVehicleList=value.data?.custVehicleList?[i];
                   print("sucess postServiceList >>>>>>>  ${custVehicleListDefaultValue}");
 
                 }
@@ -400,13 +406,16 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                   ),
                   onTap: (){
                     setState(() {
+
                       print('>>>>>>>>>>${snapshot.data?.data?.custVehicleList?[i].vehiclePic.toString()}>>>>>>>');
                       custVehicleList = snapshot.data?.data?.custVehicleList?[i];
+                      print("vddjdbkd $isDefaultId ${custVehicleList!.id}");
                       _brandController.text = '${snapshot.data?.data?.custVehicleList?[i].brand.toString()}';
                       _modelController.text = '${snapshot.data?.data?.custVehicleList?[i].model.toString()}';
                       _engineTypeController.text = '${snapshot.data?.data?.custVehicleList?[i].engine.toString()}';
                       _yearController.text = '${snapshot.data?.data?.custVehicleList?[i].year.toString()}';
                       _lastMaintenanceController.text = '${snapshot.data?.data?.custVehicleList?[i].lastMaintenance.toString()}';
+                      _isDefaultVehicle = snapshot.data?.data?.custVehicleList?[i].defaultVehicle == 1 ? true : false;
                     });
                   },
                 ),
@@ -600,7 +609,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                             ],
                           ),
                         ),
-                        setAsDefaultLife(snapshot),
+                         _isDefaultVehicle == true ? Container() : setAsDefaultLife(snapshot),
+
                       ],
                     ),
                   ),
@@ -935,37 +945,36 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   Widget setAsDefaultLife(AsyncSnapshot<CustVehicleListMdl> snapshot) {
     return  InkWell(
       onTap: (){
+
         setState(() {
+
+          isDefaultId = '${custVehicleList?.id.toString()}';
+         print("default id sss 001  $isDefaultId ");
           if(int.parse('${snapshot.data?.data?.custVehicleList?.length.toString()}') > 1)
           {
             _isDefaultLoading = true;
+            _addCarBloc.postUpdateDefaultVehicleApi(authToken,custVehicleList?.id, userID);
 
-
-            _addCarBloc.postUpdateDefaultVehicleApi(
-                authToken,custVehicleListDefaultValue?.id, userID);
             if(custVehicleList?.id != null)
-              {
-                custVehicleListDefaultValue = custVehicleList;
+                {
+                  custVehicleListDefaultValue = custVehicleList;
+                  print("sucess isDefaultId >>>>>>>  ${isDefaultId}");
+                  print("sucess custVehicleList?.id >>>>>>>  ${custVehicleList?.id}");
 
-                for(int i=0 ; i<int.parse('${snapshot.data?.data?.custVehicleList!.length.toString()}');i++)
-                  {
-                    if(custVehicleListDefaultValue?.id.toString() == snapshot.data?.data?.custVehicleList?[i].id)
-                    {
-                      snapshot.data?.data?.custVehicleList?[i].defaultVehicle = 1;
-                    }
-                    else
-                      {
-                        snapshot.data?.data?.custVehicleList?[i].defaultVehicle = 0;
-
+                    for (int i = 0; i < int.parse('${snapshot.data?.data?.custVehicleList!.length.toString()}'); i++) {
+                      if (custVehicleListDefaultValue?.id.toString() == snapshot.data?.data?.custVehicleList?[i].id) {
+                        snapshot.data?.data?.custVehicleList?[i]
+                            .defaultVehicle = 1;
                       }
-                  }
-              }
-          }
-                    else
-          {
-            _isDefaultLoading = false;
+                      else {
+                        snapshot.data?.data?.custVehicleList?[i].defaultVehicle = 0;
+                      }
+                    }
 
-          }
+                }
+            }
+
+
 
         });
       },
@@ -981,7 +990,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           ),
         ),
       )
-      : Container(
+      :
+      isDefaultId !=  custVehicleList?.id
+      ? Container(
         width: double.infinity,
         height: 50,
         alignment: Alignment.center,
@@ -1001,7 +1012,8 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
             style: Styles.myVechicleYourCarTextStyle,
           ),
         ),
-      ),
+      )
+      : Container(),
     );
   }
 
