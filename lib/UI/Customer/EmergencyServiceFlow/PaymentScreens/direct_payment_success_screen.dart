@@ -76,12 +76,10 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
 
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: SafeArea(
-           child: SingleChildScrollView(
-              child: Container(
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Container(
                 width: size.width,
                 height: size.height,
                 //color: Colors.green,
@@ -94,11 +92,9 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
                       reviewButtonsWidget(size),
                     ]
                 )
-              )
-           ),
+            )
         ),
-       ),
-
+      ),
     );
   }
 
