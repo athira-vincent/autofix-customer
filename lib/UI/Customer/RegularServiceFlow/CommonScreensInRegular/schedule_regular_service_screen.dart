@@ -389,7 +389,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 Align(
                   alignment: Alignment.centerRight,
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
                     child: Container(
                       height: size.height * 7 / 100,
                       width: size.width * 13 / 100,
