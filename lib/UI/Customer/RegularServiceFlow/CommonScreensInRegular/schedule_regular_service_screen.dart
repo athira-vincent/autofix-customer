@@ -409,31 +409,38 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       child: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                child: Container(
-                  height: size.height * 7 / 100,
-                  width: size.width * 13 / 100,
-                  decoration: BoxDecoration(
-                    color: CustColors.white_02,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12),
-                    ),
-                    border: Border.all(
-                      color: CustColors.pinkish_grey03,
-                      width: 0.3,
+          InkWell(
+            onTap: (){
+              setState(() {
+                selectedCategoryList.removeAt(index);
+              });
+            },
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                Container(
+                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  child: Container(
+                    height: size.height * 7 / 100,
+                    width: size.width * 13 / 100,
+                    decoration: BoxDecoration(
+                      color: CustColors.white_02,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(12),
+                      ),
+                      border: Border.all(
+                        color: CustColors.pinkish_grey03,
+                        width: 0.3,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Image.asset("assets/image/ic_delete_blue_white.png",
-                height: size.height * 2.5 / 100,
-              ),
+                Image.asset("assets/image/ic_delete_blue_white.png",
+                  height: size.height * 2.5 / 100,
+                ),
 
-            ],
+              ],
+            ),
           ),
 
           SizedBox(width: 5,),

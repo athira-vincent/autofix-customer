@@ -163,8 +163,6 @@ flutter:
     - assets/image/NoSerivice.svg
     - assets/image/NoCart.svg
     - assets/image/group_2974.png
-    - assets/image/ic_clock.png
-    - assets/image/ic_moneybag.svg
 
   fonts:
     - family: Montserrat_SemiBold
