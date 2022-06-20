@@ -405,9 +405,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
           width: 0.1,
         ),
       ),
-      //color: CustColors.azure,
       child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           InkWell(
             onTap: (){
