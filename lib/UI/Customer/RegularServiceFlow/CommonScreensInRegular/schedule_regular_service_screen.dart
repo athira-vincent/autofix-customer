@@ -46,9 +46,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   List<Service> selectedCategoryList =[];
 
-  List<String> selectedServiceNameList = [];
-  List<String> selectedServiceIdList = [];
-
   String selectedServiceModel = "";
 
   List<String> serviceModelList = [
@@ -58,7 +55,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   ];
   DateTime selectedDate = DateTime.now();
 
-  String additionalServiceNames = "";
 
   @override
   void initState() {
@@ -178,7 +174,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       child: Column(
         children: [
           listHeaderWidget(size),
-          selectedServiceNameList.length != 0
+          selectedCategoryList.length != 0
               ? ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -735,9 +731,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         ));
 
     setState(() {
-      for(int i = 0; i < selectedCategoryList.length ; i++){
-        selectedServiceNameList.add(selectedCategoryList[i].serviceName);
-      }
+
     });
   }
 
