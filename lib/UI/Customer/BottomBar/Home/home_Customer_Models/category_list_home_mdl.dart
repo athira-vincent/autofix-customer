@@ -97,6 +97,8 @@ class Service {
     required this.categoryId,
     required this.status,
     required this.regularStatus,
+    required this.isChecked,
+
 
 
   });
@@ -110,6 +112,8 @@ class Service {
   int categoryId;
   int status;
   int regularStatus = 0;
+  bool isChecked = false;
+
 
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
@@ -122,6 +126,8 @@ class Service {
     maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
     categoryId: json["categoryId"] == null ? null : json["categoryId"],
     status: json["status"] == null ? null : json["status"],
+    isChecked: json["isChecked"] == null ? false : json["isChecked"],
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -134,5 +140,7 @@ class Service {
     "maxPrice": maxPrice == null ? null : maxPrice,
     "categoryId": categoryId == null ? null : categoryId,
     "status": status == null ? null : status,
+    "isChecked": isChecked == null ? null : isChecked,
+
   };
 }
