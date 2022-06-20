@@ -980,7 +980,6 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
     return Container(
       child: Column(
         children:[
-          //Spacer(),
           Padding(
             padding: const EdgeInsets.only(left: 240.0,right: 22.0),
             child: Container(
