@@ -683,7 +683,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                       ),
                                       SizedBox(height: 5,),
                                       Container(
-                                        child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].mechanic?.firstName} ${CustomerUpcomingServicesList?.custCompletedOrders?[index].mechanic?.lastName}',
+                                        child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].mechanic?.firstName.toString()}}',
                                           maxLines: 2,
                                           textAlign: TextAlign.start,
                                           overflow: TextOverflow.visible,

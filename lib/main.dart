@@ -2,6 +2,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -69,7 +71,31 @@ class _MyAppState extends State<MyApp> {
       statusBarBrightness: Brightness.light,
       statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
     ));
-    return ChangeNotifierProvider(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: LocaleProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: ProfileDataProvider(),),
+      ],
+      child:Sizer(
+              builder: (context, orientation, deviceType) {
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  locale: _locale,
+                  localizationsDelegates: AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  title: 'ResolMech',
+                  theme: ThemeData(
+                    primaryColor: Colors.white,
+                  ),
+                  home: SplashScreen(),
+                );
+              },
+            ),
+    );
+    /*return ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
         builder: (context, child) {
           final provider = Provider.of<LocaleProvider>(context,listen: false);
@@ -90,7 +116,7 @@ class _MyAppState extends State<MyApp> {
               );
             },
           );
-        });
+        });*/
   }
 
 }

@@ -160,29 +160,27 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Column(
-                  children: [
-                    appBarCustomUi(size),
-                    infoText(),
-                    bagroundBgText(size),
-                    selectedRepairDetailsUi(size),
-                    estimatedAndTimeTakenUi(size),
-                    RequestButton( size,context)
-                  ],
-                ),
-                isWorkStartedButtonClick == "1"
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                children: [
+                  appBarCustomUi(size),
+                  infoText(),
+                  bagroundBgText(size),
+                  selectedRepairDetailsUi(size),
+                  estimatedAndTimeTakenUi(size),
+                  RequestButton( size,context)
+                ],
+              ),
+              isWorkStartedButtonClick == "1"
                   ? mechanicResponseWidget(size)
                   : Container(),
-              ],
-            ),
+            ],
           ),
         ),
       ),

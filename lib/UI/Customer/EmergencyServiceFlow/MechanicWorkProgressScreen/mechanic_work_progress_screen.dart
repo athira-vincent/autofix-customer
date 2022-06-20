@@ -668,7 +668,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   void dispose() {
     // TODO: implement dispose
     _controller.dispose();
-    cancelTimer1();
     if(widget.workStatus =="3") {
       cancelTimer2();
     }
@@ -677,18 +676,7 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   }
 
 
-  cancelTimer1() {
 
-    if (timerForCouterTime != null) {
-      timerForCouterTime?.cancel();
-      timerForCouterTime = null;
-    }
-
-    if (timerCouterTime != null) {
-      timerCouterTime?.cancel();
-      timerCouterTime = null;
-    }
-  }
 
   cancelTimer2() {
 

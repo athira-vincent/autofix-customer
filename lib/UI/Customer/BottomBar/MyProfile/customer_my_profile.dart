@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
+import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_mdl.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_bloc.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
 
@@ -174,6 +176,10 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               backgroundColor: CustColors.peaGreen,
             ));*/
             setProfileData(value);
+            Provider.of<ProfileDataProvider>(context, listen: false).setProfile(
+                value.data!.customerDetails!.id.toString(),
+                value.data!.customerDetails!.firstName.toString(),
+                value.data!.customerDetails!.customer![0].profilePic.toString());
           });
         }
       });

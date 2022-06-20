@@ -384,7 +384,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
-                    return CircularProgressIndicator();
+                    return CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          CustColors.light_navy),
+                    );
                   default:
                     return
                       snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
@@ -523,68 +526,71 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator();
+                          return CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                CustColors.light_navy),
+                          );
                         default:
                           return
                             snapshot.data?.data?.categoryList?.length != 0 && snapshot.data?.data?.categoryList?.length != null
                                 ? GridView.builder(
-                              itemCount:snapshot.data?.data?.categoryList?.length,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                childAspectRatio: .9,
-                                crossAxisSpacing: .05,
-                                mainAxisSpacing: .05,
-                              ),
-                              itemBuilder: (context,index,) {
-                                return GestureDetector(
-                                  onTap:(){
-                                    print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                                    print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                                    print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                    print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-
-                                    serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
-                                    print(">>>>>>>>>> ServiceId  $serviceIds");
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>  ScheduleRegularServiceScreen(
-                                              bookingId: '01',
-                                              serviceIds: serviceIds,
-                                              serviceType: 'regular',
-                                              authToken: authToken,)));
-
-                                  },
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment:MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: CustColors.whiteBlueish,
-                                              borderRadius: BorderRadius.circular(11.0)
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(15),
-                                            child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(2),
-                                          child: Text('${snapshot.data?.data?.categoryList![index].catName}',
-                                            style: Styles.textLabelTitleEmergencyServiceName,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.visible,),
-                                        ),
-                                      ],
-                                    ),
+                                  itemCount:snapshot.data?.data?.categoryList?.length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4,
+                                    childAspectRatio: .9,
+                                    crossAxisSpacing: .05,
+                                    mainAxisSpacing: .05,
                                   ),
-                                );
-                              },
+                                  itemBuilder: (context,index,) {
+                                    return GestureDetector(
+                                      onTap:(){
+                                        print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                        print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                        print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                        print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+
+                                        serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
+                                        print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  ScheduleRegularServiceScreen(
+                                                  categoryList:snapshot.data?.data?.categoryList![index],
+                                                  serviceIds: serviceIds,
+                                                  serviceType: 'regular',
+                                                  )));
+
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: CustColors.whiteBlueish,
+                                                  borderRadius: BorderRadius.circular(11.0)
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(15),
+                                                child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(2),
+                                              child: Text('${snapshot.data?.data?.categoryList![index].catName}',
+                                                style: Styles.textLabelTitleEmergencyServiceName,
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.visible,),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
                             )
                                 : Container();
                       }
@@ -817,7 +823,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       width: _setValue(28),
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                            CustColors.peaGreen),
+                            CustColors.light_navy),
                       ),
                     ),
                   )

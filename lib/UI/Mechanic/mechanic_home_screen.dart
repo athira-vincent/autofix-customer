@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
@@ -75,19 +76,24 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
   }
 
   Future<void> getSharedPrefData() async {
+    String localProfileUrl = "", localProfileName = "";
     print('getSharedPrefData -------> ');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       isOnline = shdPre.getString(SharedPrefKeys.mechanicIsOnline).toString();
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      userName =  shdPre.getString(SharedPrefKeys.userName).toString();
+      localProfileName =  shdPre.getString(SharedPrefKeys.userName).toString();
+      localProfileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
     });
     print('userFamilyId  MechanicHomeScreen ' + authToken.toString());
     print('userId  MechanicHomeScreen ' + userId.toString());
     print('userName  MechanicHomeScreen ' + userName.toString());
     print('isOnline  MechanicHomeScreen ' + isOnline.toString());
+    Provider.of<ProfileDataProvider>(context, listen: false).setProfile(userId, localProfileName, localProfileUrl);
   }
+
+
 
   Future<void> _getCurrentMechanicLocation() async {
     Position position = await _getGeoLocationPosition();
@@ -227,6 +233,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    userName = Provider.of<ProfileDataProvider>(context).getName;
     Size size = MediaQuery.of(context).size;
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -554,7 +561,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 onTap: (index) {
                   setState(() {
                     _index = index;
-                    getSharedPrefData();
+                    //getSharedPrefData();
                   });
                 },
               ),
