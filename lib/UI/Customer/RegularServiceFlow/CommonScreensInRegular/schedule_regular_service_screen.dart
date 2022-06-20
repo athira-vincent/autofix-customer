@@ -395,6 +395,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   Widget serviceListItemWidget(Size size, int index){
     return Container(
+      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
       decoration: BoxDecoration(
         //color: CustColors.white_02,
         borderRadius: BorderRadius.all(
@@ -473,7 +474,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 ),
               ),
               SizedBox(
-                height: size.height * .2 / 100,
+                height: 5,
               ),
               Row(
                 children: [
@@ -502,6 +503,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    width:5,
                   ),
                   Column(
                     children: [
