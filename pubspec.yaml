@@ -165,6 +165,10 @@ flutter:
     - assets/image/group_2974.png
     - assets/image/ic_clock.png
     - assets/image/ic_moneybag.svg
+    - assets/image/ic_moneybag.svg
+    - assets/image/ic_car1.svg
+    - assets/image/ic_car2.svg
+    - assets/image/ic_carservice.svg
 
   fonts:
     - family: Montserrat_SemiBold
