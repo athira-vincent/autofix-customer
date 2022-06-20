@@ -72,5 +72,6 @@ class CustColors {
   static const pinkish_grey04= Color(0xffc1c1c1);
 
   static const white_04= Color(0xfffafafa);
+  static const light_navy05= Color(0xffc9d6f2);
 
 }
