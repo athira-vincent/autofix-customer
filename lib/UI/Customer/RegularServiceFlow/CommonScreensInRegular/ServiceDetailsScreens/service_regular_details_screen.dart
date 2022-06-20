@@ -116,9 +116,10 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 10.0),
-                                                child: Icon(Icons.ad_units_sharp,
-                                                  size: 20,
-                                                  color: Colors.white,),
+                                                child: Container(
+                                                    height: 15,
+                                                    width:15,
+                                                    child: SvgPicture.asset('assets/image/ic_moneybag.svg')),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 05.0),
@@ -158,9 +159,10 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 10.0),
-                                                child: Icon(Icons.timelapse,
-                                                  size: 20,
-                                                  color: Colors.white,),
+                                                child: Container(
+                                                  height: 15,
+                                                    width:15,
+                                                    child: Image.asset('assets/image/ic_clock.png')),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 04.0),
@@ -193,196 +195,78 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                       }),
                 ),
                 Container(
-                  color: CustColors.light_navy,
-                  child: Column(
-                    children:[
-                      Container(
-                      height: 150,
-                      child: Row(
-                          children:[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 22.0),
-                          child: Container(
-                            height:82,
-                            width: 127,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 00,
-                              ),
-                              borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Column(
-                              children:[
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Text('Total estimated time',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'SamsungSharpSans-Medium',
-                                  fontSize: 10,
-                                  color: Colors.white,
-                              ),),
-                                ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20.0,top: 15),
-                                      child: Icon(Icons.timelapse,
-                                      size: 30,
-                                      color: Colors.white,),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                      child: Text('30',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white
-                                      ),),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                      child: Text('Min',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white
-                                        ),),
-                                    ),
-                                  ],
-                                )
-                            ],
-                            ),
-                          ),
-                        ),
-                            Padding(
-                              padding: const EdgeInsets.only(left:110,right: 22.0),
-                              child: Container(
-                                height:82,
-                                width: 127,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 00,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                child: Column(
-                                  children:[
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: Text('Total estimated cost',
-                                  textAlign: TextAlign.center,
-                                  style:TextStyle(
-                                      fontFamily: 'SamsungSharpSans-Medium',
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                  ),),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 25.0,top: 15),
-                                          child: Icon(Icons.ad_units_sharp,
-                                            size: 25,
-                                            color: Colors.white,),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                          child: Text('₦',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white
-                                            ),),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                          child: Text('30',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white
-                                            ),),
-                                        ),
-                                      ],
-                                    )
-                                ],
-                                ),
-                              ),
-                            ),
-
-                      ]),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        // topLeft: Radius.circular(10),
+                        // topRight: Radius.circular(20),
+                        bottomLeft:Radius.circular(50),
+                        bottomRight:Radius.circular(50)
                     ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 22.0,right: 22.0),
-                        child: Divider(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                          topRight: Radius.circular(20),
-                          bottomLeft:Radius.circular(80),
-                          bottomRight:Radius.circular(80)
-                      ),
-                        ),
-                        height: 100,
+                  ),
+                  child: Container(
+                    //color: Colors.green,
+                    color: CustColors.light_navy,
+                    child: Column(
+                      children:[
+                        Container(
+                        height: 150,
                         child: Row(
                             children:[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 22.0),
-                                child: Container(
-                                  height:82,
-                                  width: 127,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: CustColors.light_navy,
-                                        width: 00,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 22.0),
+                            child: Container(
+                              height:82,
+                              width: 127,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 00,
+                                ),
+                                borderRadius: BorderRadius.circular(10)
+                              ),
+                              child: Column(
+                                children:[
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text('Total estimated time',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'SamsungSharpSans-Medium',
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                ),),
                                   ),
-                                  child: Column(
-                                    children:[
+                                  Row(
+                                    children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 10.0),
-                                        child: Text('VEHICLE PICKING DATE',
-                                          textAlign: TextAlign.center,
+                                        padding: const EdgeInsets.only(left: 20.0,top: 15),
+                                        child:  Container(
+                                            height: 20,
+                                            width: 20,
+                                            child: Image.asset('assets/image/ic_clock.png')),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                        child: Text('30',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white
+                                        ),),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                        child: Text('Min',
                                           style: TextStyle(
-                                            fontFamily: 'SamsungSharpSans-Medium',
-                                            fontSize: 10,
-                                            color: Colors.white,
+                                              fontSize: 15,
+                                              color: Colors.white
                                           ),),
                                       ),
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 15),
-                                            child: Icon(Icons.date_range,
-                                              size: 30,
-                                              color: Colors.white,),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                            child: Text('Mar 5,',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white
-                                              ),),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                            child: Text('2022',
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: Colors.white
-                                              ),),
-                                          ),
-                                        ],
-                                      )
                                     ],
-                                  ),
-                                ),
+                                  )
+                              ],
                               ),
+                            ),
+                          ),
                               Padding(
                                 padding: const EdgeInsets.only(left:110,right: 22.0),
                                 child: Container(
@@ -390,7 +274,7 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                                   width: 127,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: CustColors.light_navy,
+                                        color: Colors.white,
                                         width: 00,
                                       ),
                                       borderRadius: BorderRadius.circular(10)
@@ -399,25 +283,26 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                                     children:[
                                       Padding(
                                         padding: const EdgeInsets.only(top: 10.0),
-                                        child: Text('VEHICLE PICKING TIME',
-                                          textAlign: TextAlign.center,
-                                          style:TextStyle(
-                                            fontFamily: 'SamsungSharpSans-Medium',
-                                            fontSize: 10,
-                                            color: Colors.white,
-                                          ),),
+                                        child: Text('Total estimated cost',
+                                    textAlign: TextAlign.center,
+                                    style:TextStyle(
+                                        fontFamily: 'SamsungSharpSans-Medium',
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                    ),),
                                       ),
                                       Row(
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 15),
-                                            child: Icon(Icons.timelapse,
-                                              size: 30,
-                                              color: Colors.white,),
+                                            padding: const EdgeInsets.only(left: 25.0,top: 15),
+                                            child: Container(
+                                                height: 20,
+                                                width: 20,
+                                                child: SvgPicture.asset('assets/image/ic_moneybag.svg')),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                            child: Text('Mar 5,',
+                                            child: Text('₦',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white
@@ -425,7 +310,7 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                            child: Text('2022',
+                                            child: Text('30',
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white
@@ -433,14 +318,145 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
                                           ),
                                         ],
                                       )
-                                    ],
+                                  ],
                                   ),
                                 ),
                               ),
 
-                            ]),
+                        ]),
                       ),
-                  ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 22.0,right: 22.0),
+                          child: Divider(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.only(
+                        //   topLeft: Radius.circular(10),
+                        //     topRight: Radius.circular(20),
+                        //     bottomLeft:Radius.circular(80),
+                        //     bottomRight:Radius.circular(80)
+                        // ),
+                        //   ),
+                          height: 100,
+                          child: Row(
+                              children:[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 22.0),
+                                  child: Container(
+                                    height:82,
+                                    width: 127,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: CustColors.light_navy,
+                                          width: 00,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Column(
+                                      children:[
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 10.0),
+                                          child: Text('VEHICLE PICKING DATE',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: 'SamsungSharpSans-Medium',
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                            ),),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 15),
+                                              child: Icon(Icons.date_range,
+                                                size: 30,
+                                                color: Colors.white,),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              child: Text('Mar 5,',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white
+                                                ),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              child: Text('2022',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white
+                                                ),),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left:110,right: 22.0),
+                                  child: Container(
+                                    height:82,
+                                    width: 127,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: CustColors.light_navy,
+                                          width: 00,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Column(
+                                      children:[
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 10.0),
+                                          child: Text('VEHICLE PICKING TIME',
+                                            textAlign: TextAlign.center,
+                                            style:TextStyle(
+                                              fontFamily: 'SamsungSharpSans-Medium',
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                            ),),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 15),
+                                              child:  Container(
+                                                  height: 20,
+                                                  width:20,
+                                                  child: Image.asset('assets/image/ic_clock.png')),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              child: Text('Mar 5,',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white
+                                                ),),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              child: Text('2022',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white
+                                                ),),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                              ]),
+                        ),
+                    ],
+                    ),
                   ),
                 ),
                 Padding(
