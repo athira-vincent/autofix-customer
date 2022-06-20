@@ -52,6 +52,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   List<Service> selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
   int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
+  String selectedServiceIds = "";
 
 
   List<String> serviceModelList = [
@@ -661,14 +662,15 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget findMechanicButtonWidget(Size size){
     return InkWell(
       onTap: (){
-        Navigator.push(
+        print('$selectedServiceIds >>>>>>>>>>>selectedServiceIds ');
+       /* Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>  MechanicListScreen(
-                  serviceIds: 'serviceIds',
+                  serviceIds: '$selectedServiceIds',
                   serviceType: 'regular',
                   latitude: widget.latitude,
-                  longitude: widget.longitude,)));
+                  longitude: widget.longitude,)));*/
       },
       child: Align(
         alignment: Alignment.bottomRight,
@@ -705,6 +707,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
     selectedCategoryList = [];
+    selectedServiceIds = "";
     selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -714,6 +717,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     setState(() {
       for(int i = 0; i<selectedCategoryList.length ; i++){
+          selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
           totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
           totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
       }
