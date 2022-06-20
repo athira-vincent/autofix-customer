@@ -416,19 +416,26 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+
+                Align(
+                  alignment: Alignment.centerRight,
                   child: Container(
-                    height: size.height * 7 / 100,
-                    width: size.width * 13 / 100,
-                    decoration: BoxDecoration(
-                      color: CustColors.white_02,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12),
+                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    child: Container(
+                      height: size.height * 7 / 100,
+                      width: size.width * 13 / 100,
+                      decoration: BoxDecoration(
+                          color: CustColors.whiteBlueish,
+                          borderRadius: BorderRadius.circular(11.0)
                       ),
-                      border: Border.all(
-                        color: CustColors.pinkish_grey03,
-                        width: 0.3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child:selectedCategoryList[index].icon.toString() != ""
+                            ? Image.network(selectedCategoryList[index].icon,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(Icons.stop,size: 35,color: CustColors.light_navy,),
+                        //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                       ),
                     ),
                   ),
@@ -436,6 +443,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 Image.asset("assets/image/ic_delete_blue_white.png",
                   height: size.height * 2.5 / 100,
                 ),
+
+
 
               ],
             ),
