@@ -1689,7 +1689,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 width: _setValue(28),
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
-                      CustColors.peaGreen),
+                      CustColors.light_navy),
                 ),
               ),
             )

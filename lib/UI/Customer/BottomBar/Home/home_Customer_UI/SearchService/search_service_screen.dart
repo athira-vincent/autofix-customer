@@ -202,6 +202,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
               child:  TextField(
                 controller: searchController,
                 autofocus: true,
+                cursorColor: CustColors.light_navy,
                 decoration: InputDecoration(
                   hintText: 'Search your Services',
                   contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
@@ -261,7 +262,10 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
-                            return CircularProgressIndicator();
+                            return CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  CustColors.light_navy),
+                            );
                           default:
                             return
                               snapshot.data?.data?.serviceListAll?.length != 0 && snapshot.data?.data?.serviceListAll?.length != null
@@ -414,7 +418,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                     serviceIds = '${snapshot.data?.data?.serviceListAll?[index].id}';
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
 
-
                                   });
 
                                 },
@@ -546,7 +549,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                     width: _setValue(28),
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          CustColors.peaGreen),
+                          CustColors.light_navy),
                     ),
                   ),
               )
