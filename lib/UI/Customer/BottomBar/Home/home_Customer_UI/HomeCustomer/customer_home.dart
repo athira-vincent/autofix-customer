@@ -561,6 +561,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   categoryList:snapshot.data?.data?.categoryList![index],
                                                   serviceIds: serviceIds,
                                                   serviceType: 'regular',
+                                                  latitude: CurrentLatitude,
+                                                  longitude: CurrentLongitude,
                                                   )));
 
                                       },

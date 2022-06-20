@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,16 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
   final String serviceIds;
   final String serviceType;
   final CategoryList? categoryList;
+  final String latitude;
+  final String longitude;
 
   ScheduleRegularServiceScreen
       ({
         required this.serviceIds,
         required this.serviceType,
-        required this.categoryList
+        required this.categoryList,
+        required this.latitude,
+        required this.longitude
       });
 
   @override
@@ -278,7 +283,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 ),
                 Spacer(),
                 Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Estimated price",
@@ -429,20 +433,16 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 child: Text(
                   selectedCategoryList[index].serviceName,
                   softWrap: true,
-                  maxLines: 2,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontFamily: "Samsung_SharpSans_Medium",
                     fontWeight: FontWeight.w200,
                     color: Colors.black,
-                    wordSpacing: .5,
-                    letterSpacing: .7,
-                    height: 1.7,
                   ),
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 1,
               ),
               Row(
                 children: [
@@ -498,13 +498,11 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                           letterSpacing: .2,
                           height: 1.3,
                         ),
-
                       ),
                     ],
                   ),
                 ],
               ),
-
             ],
           ),
         ],
@@ -661,32 +659,44 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   }
 
   Widget findMechanicButtonWidget(Size size){
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 6 / 100,
-            top: size.height * 2.5 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+    return InkWell(
+      onTap: (){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechanicListScreen(
+                  serviceIds: 'serviceIds',
+                  serviceType: 'regular',
+                  latitude: widget.latitude,
+                  longitude: widget.longitude,)));
+      },
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 6 / 100,
+              top: size.height * 2.5 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 4 / 100,
+            right: size.width * 4 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+            "Find available mechanics",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 4 / 100,
-          right: size.width * 4 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-          "Find available mechanics",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
@@ -703,15 +713,12 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         ));
 
     setState(() {
-
       for(int i = 0; i<selectedCategoryList.length ; i++){
           totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
           totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
-
       }
       print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
       print('totalEstimatedTime >>>>>>>>>> $totalEstimatedTime');
-
     });
   }
 
