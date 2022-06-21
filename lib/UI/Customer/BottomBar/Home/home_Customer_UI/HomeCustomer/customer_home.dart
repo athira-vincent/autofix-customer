@@ -565,16 +565,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   latitude: CurrentLatitude,
                                                   longitude: CurrentLongitude,
                                                 )));
-                                        /*Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>  ScheduleRegularServiceScreen(
-                                                  categoryList: snapshot.data?.data?.categoryList![index],
-                                                  serviceIds: serviceIds,
-                                                  serviceType: 'regular',
-                                                  latitude: CurrentLatitude,
-                                                  longitude: CurrentLongitude,
-                                                )));*/
 
                                       },
                                       child: Container(
