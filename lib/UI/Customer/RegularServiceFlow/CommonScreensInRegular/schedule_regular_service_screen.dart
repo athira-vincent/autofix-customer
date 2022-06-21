@@ -362,6 +362,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
           InkWell(
             onTap: (){
               setState(() {
+                for(int i=0; i<widget.categoryList!.service!.length; i++)
+                  {
+                    if(selectedCategoryList[index].id == widget.categoryList!.service![i].id)
+                      {
+                        this.widget.categoryList!.service![i].isChecked = false;
+                      }
+                  }
                 selectedCategoryList.removeAt(index);
               });
             },
@@ -739,7 +746,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     );
     if (selected != null && selected != selectedDate)
       setState(() {
-        //selectedDate = selected;
         String selectedDateFormated = selected.day.toString() + "/"
             + selected.month.toString() + "/" + selected.year.toString();
         print("selectedDateFormated : " + selectedDateFormated);
