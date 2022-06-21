@@ -129,7 +129,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
           "200",
           widget.latitude,
           widget.longitude,
-          "22",   //widget.serviceIds,
+          widget.serviceIds,
           "regular");
     });
   }
