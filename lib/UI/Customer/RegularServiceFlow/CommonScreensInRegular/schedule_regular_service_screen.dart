@@ -663,14 +663,14 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     return InkWell(
       onTap: (){
         print('$selectedServiceIds >>>>>>>>>>>selectedServiceIds ');
-       /* Navigator.push(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>  MechanicListScreen(
                   serviceIds: '$selectedServiceIds',
                   serviceType: 'regular',
                   latitude: widget.latitude,
-                  longitude: widget.longitude,)));*/
+                  longitude: widget.longitude,)));
       },
       child: Align(
         alignment: Alignment.bottomRight,

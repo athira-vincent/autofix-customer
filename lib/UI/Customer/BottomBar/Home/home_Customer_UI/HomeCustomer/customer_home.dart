@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:dio/dio.dart';
@@ -557,13 +558,21 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
+                                                builder: (context) =>  AddMoreRegularServicesListScreen(
+                                                  categoryList: snapshot.data?.data?.categoryList![index],
+                                                  isAddService: true,
+                                                  isMechanicApp: false,
+                                                )));
+                                        /*Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
                                                 builder: (context) =>  ScheduleRegularServiceScreen(
-                                                  categoryList:snapshot.data?.data?.categoryList![index],
+                                                  categoryList: snapshot.data?.data?.categoryList![index],
                                                   serviceIds: serviceIds,
                                                   serviceType: 'regular',
                                                   latitude: CurrentLatitude,
                                                   longitude: CurrentLongitude,
-                                                  )));
+                                                )));*/
 
                                       },
                                       child: Container(
@@ -577,7 +586,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                               ),
                                               child: Padding(
                                                 padding: const EdgeInsets.all(15),
-                                                child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                                child: snapshot.data?.data?.categoryList?[index].icon.toString() != "" && snapshot.data?.data?.categoryList?[index].icon.toString() != "null"
+                                                    ? Image.network(snapshot.data?.data?.categoryList?[index].icon,
+                                                    width: 35,
+                                                    fit: BoxFit.cover,)
+                                                    : Icon(Icons.miscellaneous_services_outlined,size: 35,color: CustColors.light_navy,),
+                                                //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                               ),
                                             ),
                                             Padding(
