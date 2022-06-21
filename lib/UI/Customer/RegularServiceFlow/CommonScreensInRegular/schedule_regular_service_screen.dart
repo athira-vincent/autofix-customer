@@ -67,6 +67,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     // TODO: implement initState
     super.initState();
     widget.categoryList!.service![0].regularStatus = 1;
+
+    selectedCategoryList = widget.selectedService!;
+    for(int i = 0; i<selectedCategoryList.length ; i++){
+      selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
+      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
+      totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
+    }
   }
 
   @override

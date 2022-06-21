@@ -111,7 +111,7 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
                           context,
                           MaterialPageRoute(
                               builder: (context) =>  ScheduleRegularServiceScreen(
-                                selectedService: [],
+                                selectedService: selectedCategoryList,
                                 categoryList: widget.categoryList,
                                 latitude: widget.latitude,
                                 longitude: widget.longitude,
