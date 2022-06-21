@@ -863,9 +863,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2025),
+      initialDate: DateTime(2022,  DateTime.now().month,DateTime.now().day+1),
+      firstDate:   DateTime(2022,  DateTime.now().month,DateTime.now().day+1),
+      lastDate: DateTime(2026),
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
