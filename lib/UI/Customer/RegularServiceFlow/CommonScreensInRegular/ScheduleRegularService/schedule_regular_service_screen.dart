@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/categor
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +53,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   TextEditingController _serviceTimeController = TextEditingController();
   FocusNode _serviceTimeFocusNode = FocusNode();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
   String? _setTime, _setDate;
 
   String? _hour, _minute, _time;
@@ -96,6 +100,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
               child: Stack(
@@ -720,19 +725,39 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         print('${_serviceDateController.text} >>>>>>>>>>>_serviceDateController.text ');
         print('${_serviceTimeController.text} >>>>>>>>>>>_serviceTimeController.text ');
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  MechanicListScreen(
-                  serviceIds: '${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")}',
-                  serviceDate: '${_serviceDateController.text}',
-                  serviceTime: '${_serviceTimeController.text}',
-                  regularServiceType: '${_serviceTypeController.text}',
-                  serviceType: 'regular',
-                  latitude: widget.latitude,
-                  longitude: widget.longitude,
-                  address: widget.address,
-                )));
+        if(selectedListServiceIds.length == 0)
+          {
+            SnackBarWidget().setMaterialSnackBar('Select any service',_scaffoldKey);
+          }
+        else if(_serviceDateController.text == "")
+          {
+            SnackBarWidget().setMaterialSnackBar('Select service date',_scaffoldKey);
+          }
+        else if(_serviceTimeController.text == "")
+          {
+            SnackBarWidget().setMaterialSnackBar('Select service time',_scaffoldKey);
+          }
+        else if(_serviceTypeController.text == "")
+          {
+            SnackBarWidget().setMaterialSnackBar('Select service type',_scaffoldKey);
+          }
+        else
+          {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MechanicListScreen(
+                      serviceIds: '${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")}',
+                      serviceDate: '${_serviceDateController.text}',
+                      serviceTime: '${_serviceTimeController.text}',
+                      regularServiceType: '${_serviceTypeController.text}',
+                      serviceType: 'regular',
+                      latitude: widget.latitude,
+                      longitude: widget.longitude,
+                      address: widget.address,
+                    )));
+          }
+
       },
       child: Align(
         alignment: Alignment.bottomRight,

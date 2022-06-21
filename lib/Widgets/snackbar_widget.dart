@@ -18,7 +18,7 @@ class SnackBarWidget  {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: CustColors.light_navy,
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 3),
 
     );
     _scaffoldKey.currentState!.showSnackBar(snackBar);
