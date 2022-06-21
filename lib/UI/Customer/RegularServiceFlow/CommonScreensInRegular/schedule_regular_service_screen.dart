@@ -68,7 +68,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -99,7 +98,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                                           serviceType: widget.serviceType,
                                           authToken: widget.authToken,
                                           serviceModel : selectedServiceModel,
-
                                         )));*/
                               },
                                 child: findMechanicButtonWidget(size))
@@ -205,9 +203,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 },
               )
               : Container(),
-
         ],
-
       ),
     );
   }
