@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,11 +14,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AddMoreRegularServicesListScreen extends StatefulWidget {
 
   final bool isAddService;
-  bool isMechanicApp;
+  bool isReturnData;
   final CategoryList? categoryList;
+  final String latitude;
+  final String longitude;
 
 
-  AddMoreRegularServicesListScreen({ required this.isAddService,required this.isMechanicApp,required this.categoryList});
+  AddMoreRegularServicesListScreen({required this.latitude,
+    required this.longitude, required this.isAddService,required this.isReturnData,required this.categoryList});
 
   @override
   State<StatefulWidget> createState() {
@@ -94,14 +98,27 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
 
               mainRegularSubServiceList(),
 
-              widget.isAddService
+              widget.isAddService && widget.isReturnData
                   ? InkWell(
                       onTap: (){
                         Navigator.pop(context,selectedCategoryList);
                       },
                       child: nextButton(size)
                   )
-                  : Container(),
+                  : InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>  ScheduleRegularServiceScreen(
+                                selectedService: [],
+                                categoryList: widget.categoryList,
+                                latitude: widget.latitude,
+                                longitude: widget.longitude,
+                              )));
+                    },
+                    child: nextButton(size)
+              ),
             ],
           ),
         ),

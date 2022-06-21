@@ -561,7 +561,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                 builder: (context) =>  AddMoreRegularServicesListScreen(
                                                   categoryList: snapshot.data?.data?.categoryList![index],
                                                   isAddService: true,
-                                                  isMechanicApp: false,
+                                                  isReturnData: false,
+                                                  latitude: CurrentLatitude,
+                                                  longitude: CurrentLongitude,
                                                 )));
                                         /*Navigator.push(
                                             context,
