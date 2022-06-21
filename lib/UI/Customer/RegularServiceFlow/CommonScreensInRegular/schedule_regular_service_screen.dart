@@ -1,9 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,16 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
   final String serviceIds;
   final String serviceType;
   final CategoryList? categoryList;
+  final String latitude;
+  final String longitude;
 
   ScheduleRegularServiceScreen
       ({
         required this.serviceIds,
         required this.serviceType,
-        required this.categoryList
+        required this.categoryList,
+        required this.latitude,
+        required this.longitude
       });
 
   @override
@@ -43,10 +48,12 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   TextEditingController _serviceDateController = TextEditingController();
   FocusNode _serviceDateFocusNode = FocusNode();
 
-  List<String> selectedServiceNameList = [];
-  List<String> selectedServiceIdList = [];
 
-  String selectedServiceModel = "";
+  List<Service> selectedCategoryList =[];
+  String selectedServiceSpecializatonType = "";
+  int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
+  String selectedServiceIds = "";
+
 
   List<String> serviceModelList = [
     "Mobile Mechanic",
@@ -55,7 +62,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   ];
   DateTime selectedDate = DateTime.now();
 
-  String additionalServiceNames = "";
 
   @override
   void initState() {
@@ -68,47 +74,30 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-         body: SafeArea(
-             child: SingleChildScrollView(
-               child: Container(
-                 width: size.width,
-                 height: size.height,
-                  child: Stack(
+
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+              child: Stack(
+                children: [
+                  Image.asset("assets/image/img_schedule_service_bg.png"),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset("assets/image/img_schedule_service_bg.png"),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            appBarUiWidget(size),
-                            serviceCartWidget(size),
-                            totalEstimateWidget(size),
-                            dateTextSelection(size),
-                            serviceTypeTextSelection(size),
-                            InkWell(
-                              onTap: (){
-                                /*Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>  MechanicListScreen(
-                                          bookingId: widget.bookingId,
-                                          serviceIds: widget.serviceIds,
-                                          serviceType: widget.serviceType,
-                                          authToken: widget.authToken,
-                                          serviceModel : selectedServiceModel,
-                                        )));*/
-                              },
-                                child: findMechanicButtonWidget(size))
-                          ],
-                      ),
+                      appBarUiWidget(size),
+                      serviceCartWidget(size),
+                      totalEstimateWidget(size),
+                      dateTextSelection(size),
+                      serviceTypeTextSelection(size),
+                      findMechanicButtonWidget(size)
                     ],
-                  )
-               ),
-           )
-         ),
+                  ),
+                ],
+              )
+          ),
         ),
+      ),
     );
   }
 
@@ -164,7 +153,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       margin: EdgeInsets.only(
         left: size.width * 6 /100,
         right: size.width * 6 /100,
-        // bottom: size.height * 1 /100,
         top: size.height * 1 / 100,
       ),
       padding: EdgeInsets.only(
@@ -193,17 +181,19 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       child: Column(
         children: [
           listHeaderWidget(size),
-          selectedServiceNameList.length != 0
+          selectedCategoryList.length != 0
               ? ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: selectedServiceNameList.length,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: selectedCategoryList.length,
                 itemBuilder: (context, index) {
                   return serviceListItemWidget(size,index);
                 },
               )
               : Container(),
         ],
+
       ),
     );
   }
@@ -258,42 +248,16 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 ),
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  height: size.height * 8 / 100,
-                  width: size.width * 12 / 100,
-                  decoration: BoxDecoration(
-                    color: CustColors.white_02,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12),
-                    ),
-                    border: Border.all(
-                      color: CustColors.pinkish_grey03,
-                      width: 0.3,
-                    ),
-                  ),
-                ),
                 Column(
                   //mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "abc",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "Samsung_SharpSans_Medium",
-                        fontWeight: FontWeight.w200,
-                        color: Colors.black,
-                        wordSpacing: .5,
-                        letterSpacing: .7,
-                        height: 1.7,
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * .3 / 100,
-                    ),
                     Text("Estimated time",
                       style: TextStyle(
                         fontSize: 12,
@@ -305,7 +269,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("20:00 Min",
+                    Text("$totalEstimatedPrice Min",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -318,13 +282,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     ),
                   ],
                 ),
+                Spacer(),
                 Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: size.height * 2.5 / 100,
-                    ),
                     Text("Estimated price",
                       style: TextStyle(
                         fontSize: 12,
@@ -336,7 +297,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("₦ 80",
+                    Text("$totalEstimatedPrice",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -407,13 +368,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   Widget serviceListItemWidget(Size size, int index){
     return Container(
-      padding: EdgeInsets.only(
-        top: size.height * 4 / 100,
-        bottom: size.height * 3 / 100,
-        left: size.width * 2 / 100,
-        right: size.width * 2 / 100
-      ),
-      margin:  EdgeInsets.only(top: 1,bottom: 1),
+      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
       decoration: BoxDecoration(
         //color: CustColors.white_02,
         borderRadius: BorderRadius.all(
@@ -424,109 +379,133 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
           width: 0.1,
         ),
       ),
-      //color: CustColors.azure,
       child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset("assets/image/ic_delete_blue_white.png",
-            height: size.height * 3.5 / 100,
-          ),
-          Container(
-            height: size.height * 8 / 100,
-            width: size.width * 12 / 100,
-            decoration: BoxDecoration(
-              color: CustColors.white_02,
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              border: Border.all(
-                color: CustColors.pinkish_grey03,
-                width: 0.3,
-              ),
-            ),
-          ),
-          Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                selectedServiceNameList[index],
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: "Samsung_SharpSans_Medium",
-                  fontWeight: FontWeight.w200,
-                  color: Colors.black,
-                  wordSpacing: .5,
-                  letterSpacing: .7,
-                  height: 1.7,
+          InkWell(
+            onTap: (){
+              setState(() {
+                selectedCategoryList.removeAt(index);
+              });
+            },
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                    child: Container(
+                      height: size.height * 7 / 100,
+                      width: size.width * 13 / 100,
+                      decoration: BoxDecoration(
+                          color: CustColors.whiteBlueish,
+                          borderRadius: BorderRadius.circular(11.0)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child:selectedCategoryList[index].icon.toString() != ""
+                            ? Image.network(selectedCategoryList[index].icon,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(Icons.stop,size: 35,color: CustColors.light_navy,),
+                        //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: size.height * .3 / 100,
-              ),
-              Text("Estimated time",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: "Samsung_SharpSans_Medium",
-                  fontWeight: FontWeight.w200,
-                  color: Colors.black,
-                  wordSpacing: .5,
-                  letterSpacing: .7,
-                  height: 1.3,
-                ),
-              ),
-              Text("20:00 Min",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: "SharpSans_Bold",
-                  fontWeight: FontWeight.w200,
-                  color: Colors.black,
-                  wordSpacing: .5,
-                  letterSpacing: .2,
-                  height: 1.3,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            width: size.width * 1 / 100,
-          ),
-          Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: size.height * 2.5 / 100,
-              ),
-              Text("Estimated price",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: "Samsung_SharpSans_Medium",
-                  fontWeight: FontWeight.w200,
-                  color: Colors.black,
-                  wordSpacing: .5,
-                  letterSpacing: .7,
-                  height: 1.3,
-                ),
-              ),
-              Text("₦ 80",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: "SharpSans_Bold",
-                  fontWeight: FontWeight.w200,
-                  color: Colors.black,
-                  wordSpacing: .5,
-                  letterSpacing: .2,
-                  height: 1.3,
+                Image.asset("assets/image/ic_delete_blue_white.png",
+                  height: size.height * 2.5 / 100,
                 ),
 
+
+
+              ],
+            ),
+          ),
+
+          SizedBox(width: 5,),
+          Column(
+            //mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 200,
+                child: Text(
+                  selectedCategoryList[index].serviceName,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Samsung_SharpSans_Medium",
+                    fontWeight: FontWeight.w200,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 1,
+              ),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Text("Estimated time",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: "Samsung_SharpSans_Medium",
+                          fontWeight: FontWeight.w200,
+                          color: Colors.black,
+                          wordSpacing: .5,
+                          letterSpacing: .7,
+                          height: 1.3,
+                        ),
+                      ),
+                      Text("${selectedCategoryList[index].maxPrice} Min",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: "SharpSans_Bold",
+                          fontWeight: FontWeight.w200,
+                          color: Colors.black,
+                          wordSpacing: .5,
+                          letterSpacing: .2,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width:5,
+                  ),
+                  Column(
+                    children: [
+                      Text("Estimated price",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: "Samsung_SharpSans_Medium",
+                          fontWeight: FontWeight.w200,
+                          color: Colors.black,
+                          wordSpacing: .5,
+                          letterSpacing: .7,
+                          height: 1.3,
+                        ),
+                      ),
+                      Text("₦ ${selectedCategoryList[index].minPrice}",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: "SharpSans_Bold",
+                          fontWeight: FontWeight.w200,
+                          color: Colors.black,
+                          wordSpacing: .5,
+                          letterSpacing: .2,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
-          /*Divider(
-            color: CustColors.pinkish_grey04,
-            height: 15,
-          )*/
         ],
       ),
     );
@@ -681,32 +660,45 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   }
 
   Widget findMechanicButtonWidget(Size size){
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 6 / 100,
-            top: size.height * 2.5 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+    return InkWell(
+      onTap: (){
+        print('$selectedServiceIds >>>>>>>>>>>selectedServiceIds ');
+       /* Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechanicListScreen(
+                  serviceIds: '$selectedServiceIds',
+                  serviceType: 'regular',
+                  latitude: widget.latitude,
+                  longitude: widget.longitude,)));*/
+      },
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 6 / 100,
+              top: size.height * 2.5 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 4 / 100,
+            right: size.width * 4 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+            "Find available mechanics",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 4 / 100,
-          right: size.width * 4 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-          "Find available mechanics",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
@@ -714,38 +706,23 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   }
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
-
-    // start the SecondScreen and wait for it to finish with a result
-    List<String> serviceList = [];
-    serviceList.clear();
-    additionalServiceNames = "";
-
-    //_chooseVechicleSpecializedController.text="";
-    serviceList = await Navigator.push(
+    selectedCategoryList = [];
+    selectedServiceIds = "";
+    selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddMoreServicesListScreen(
-            isAddService: true,isMechanicApp: false,),
+          builder: (context) => AddMoreRegularServicesListScreen(
+            isAddService: true,isMechanicApp: false,categoryList: widget.categoryList,),
         ));
 
     setState(() {
-      for(int i = 0; i < serviceList.length ; i++){
-
-        selectedServiceNameList.add(serviceList[i]);
-
+      for(int i = 0; i<selectedCategoryList.length ; i++){
+          selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
+          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
+          totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
       }
-      //selectedState = result;
-      if(serviceList!='[]')
-      {
-        /*_chooseVechicleSpecializedController.text = selectedVehicles;
-        print ("Selected state @ sign up: " + selectedState );
-        print ("Selected selectedVehicleId @ sign up: " + selectedVehicleId );
-        print ("Selected selectedVehicles @ sign up: " + selectedVehicles );
-        if (_formKey.currentState!.validate()) {
-        } else {
-        }*/
-      }
-
+      print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
+      print('totalEstimatedTime >>>>>>>>>> $totalEstimatedTime');
     });
   }
 
@@ -763,10 +740,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: _serviceTypeList.length,
                 itemBuilder: (context, index) {
                   return  ListTile(
                     title: Text("${_serviceTypeList[index]}",
+                        maxLines: 1,
+                        softWrap: true,
                         style: TextStyle(
                             fontFamily: 'Corbel_Regular',
                             fontWeight: FontWeight.normal,
@@ -774,16 +754,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             color: Colors.black)),
                     onTap: () async {
                       Navigator.pop(context);
-
                       setState(() {
-                        selectedServiceModel = _serviceTypeList[index];
+                        selectedServiceSpecializatonType = _serviceTypeList[index];
                         _serviceTypeController.text = _serviceTypeList[index];
-                        /*if (_formKey.currentState!.validate()) {
-                        } else {
-
-                        }*/
                       });
-
                     },
                   );
                 },

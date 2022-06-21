@@ -44,8 +44,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage2.png?alt=media&token=419e2555-5c26-4295-8201-6c78f1ed563e',
   ];
 
-  bool isEmergencyService = true;
-  bool isRegularService = false;
+  bool isEmergencyService = false;
+  bool isRegularService = true;
 
    List<Choice> choices = const <Choice>[
     const Choice(title: 'Home', icon: Icons.home),
@@ -561,6 +561,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   categoryList:snapshot.data?.data?.categoryList![index],
                                                   serviceIds: serviceIds,
                                                   serviceType: 'regular',
+                                                  latitude: CurrentLatitude,
+                                                  longitude: CurrentLongitude,
                                                   )));
 
                                       },

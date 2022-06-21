@@ -15,6 +15,9 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/service_regular_details_screen.dart';
+import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/track_service_details_screen.dart';
+import 'UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 
 void main() async {
   await initHiveForFlutter();
@@ -107,7 +110,9 @@ class _MyAppState extends State<MyApp> {
                 theme: ThemeData(
                   primaryColor: Colors.white,
                 ),
-                home: SplashScreen(),
+                //home: SplashScreen(),
+                home: TrackServiceDetailsScreen(),
+                //home: ServiceRegularDetailsScreen(),
               );
             },
           );
