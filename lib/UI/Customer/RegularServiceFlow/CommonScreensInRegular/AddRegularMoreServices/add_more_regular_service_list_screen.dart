@@ -19,10 +19,17 @@ class AddMoreRegularServicesListScreen extends StatefulWidget {
   final CategoryList? categoryList;
   final String latitude;
   final String longitude;
+  final String address;
 
 
-  AddMoreRegularServicesListScreen({required this.latitude,
-    required this.longitude, required this.isAddService,required this.isReturnData,required this.categoryList});
+
+  AddMoreRegularServicesListScreen({
+    required this.latitude,
+    required this.longitude,
+    required this.isAddService,
+    required this.isReturnData,
+    required this.address,
+    required this.categoryList});
 
   @override
   State<StatefulWidget> createState() {
@@ -137,6 +144,7 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
                                     categoryList: widget.categoryList,
                                     latitude: widget.latitude,
                                     longitude: widget.longitude,
+                                    address: '',
                                   )));
                         }
                     },
