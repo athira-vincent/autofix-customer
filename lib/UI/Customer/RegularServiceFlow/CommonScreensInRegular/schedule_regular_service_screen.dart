@@ -47,6 +47,15 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   TextEditingController _serviceDateController = TextEditingController();
   FocusNode _serviceDateFocusNode = FocusNode();
 
+  TextEditingController _serviceTimeController = TextEditingController();
+  FocusNode _serviceTimeFocusNode = FocusNode();
+
+  String? _setTime, _setDate;
+
+  String? _hour, _minute, _time;
+
+  String? dateTime;
+
 
   List<Service> selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
@@ -61,6 +70,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     "Take Vehicle to Mechanic"
   ];
   DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
 
 
   @override
@@ -96,6 +106,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       serviceCartWidget(size),
                       totalEstimateWidget(size),
                       dateTextSelection(size),
+                      timeTextSelection(size),
                       serviceTypeTextSelection(size),
                       findMechanicButtonWidget(size)
                     ],
@@ -375,7 +386,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-
                 Align(
                   alignment: Alignment.centerRight,
                   child: Container(
@@ -402,9 +412,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 Image.asset("assets/image/ic_delete_blue_white.png",
                   height: size.height * 2.5 / 100,
                 ),
-
-
-
               ],
             ),
           ),
@@ -499,6 +506,81 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               validator: InputValidator(
                   ch : 'Service Date').emptyChecking,
               controller: _serviceDateController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
+                hintText: "Vehicle ready for service on",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget timeTextSelection(Size size) {
+    return  InkWell(
+      onTap: () async {
+        //_showDialogForWorkSelection(serviceTypeList);
+        _selectTime(context);
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          left: size.width * 6 /100,
+          right: size.width * 6 /100,
+          // bottom: size.height * 1 /100,
+          top: size.height * 2 / 100,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Select your service time",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _serviceTimeFocusNode,
+              keyboardType: TextInputType.text,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch : 'Service Date').emptyChecking,
+              controller: _serviceTimeController,
               cursorColor: CustColors.whiteBlueish,
               decoration: InputDecoration(
                 isDense: true,
@@ -752,6 +834,21 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         _serviceDateController.text = selectedDateFormated.toString();
       });
   }
+
+  _selectTime(BuildContext context) async {
+     TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime = picked;
+        _hour = selectedTime.hour.toString();
+        _minute = selectedTime.minute.toString();
+        _time = _hour! + ' : ' + _minute!;
+        _serviceTimeController.text = _time!;
+
+      });}
 
 
 
