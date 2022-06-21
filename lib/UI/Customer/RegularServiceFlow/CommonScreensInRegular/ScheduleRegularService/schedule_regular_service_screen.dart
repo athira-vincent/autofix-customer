@@ -6,6 +6,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/categor
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,11 +50,24 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   TextEditingController _serviceDateController = TextEditingController();
   FocusNode _serviceDateFocusNode = FocusNode();
 
+  TextEditingController _serviceTimeController = TextEditingController();
+  FocusNode _serviceTimeFocusNode = FocusNode();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  String? _setTime, _setDate;
+
+  String? _hour, _minute, _time;
+
+  String? dateTime;
+
 
   List<Service> selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
   int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
   String selectedServiceIds = "";
+  List<String> selectedListServiceIds =[];
 
 
   List<String> serviceModelList = [
@@ -62,6 +76,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     "Take Vehicle to Mechanic"
   ];
   DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
 
 
   @override
@@ -72,9 +87,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     selectedCategoryList = widget.selectedService!;
     for(int i = 0; i<selectedCategoryList.length ; i++){
+      selectedListServiceIds.add(selectedCategoryList[i].id);
       selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
-      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
-      totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
+      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].maxPrice}');
     }
   }
 
@@ -85,6 +100,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
               child: Stack(
@@ -97,6 +113,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       serviceCartWidget(size),
                       totalEstimateWidget(size),
                       dateTextSelection(size),
+                      timeTextSelection(size),
                       serviceTypeTextSelection(size),
                       findMechanicButtonWidget(size)
                     ],
@@ -263,35 +280,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Estimated time",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Samsung_SharpSans_Medium",
-                        fontWeight: FontWeight.w200,
-                        color: Colors.black,
-                        wordSpacing: .5,
-                        letterSpacing: .7,
-                        height: 1.3,
-                      ),
-                    ),
-                    Text("$totalEstimatedPrice Min",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "SharpSans_Bold",
-                        fontWeight: FontWeight.w200,
-                        color: Colors.black,
-                        wordSpacing: .5,
-                        letterSpacing: .2,
-                        height: 1.3,
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Estimated price",
@@ -366,8 +354,23 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               print(" on Tap - Add More");
               _awaitReturnValueFromSecondScreenOnAdd(context);
             },
-            child: SvgPicture.asset("assets/image/CustomerType/add_car_plus.svg",
-              height: size.height * 4 / 100,),
+            child:  Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: CustColors.light_navy,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: .5,
+                      ),
+                    ]),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 18,
+                )
+            ),
           ),
         ],
       ),
@@ -392,13 +395,19 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
           InkWell(
             onTap: (){
               setState(() {
+                for(int i=0; i<widget.categoryList!.service!.length; i++)
+                  {
+                    if(selectedCategoryList[index].id == widget.categoryList!.service![i].id)
+                      {
+                        this.widget.categoryList!.service![i].isChecked = false;
+                      }
+                  }
                 selectedCategoryList.removeAt(index);
               });
             },
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-
                 Align(
                   alignment: Alignment.centerRight,
                   child: Container(
@@ -425,16 +434,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 Image.asset("assets/image/ic_delete_blue_white.png",
                   height: size.height * 2.5 / 100,
                 ),
-
-
-
               ],
             ),
           ),
 
           SizedBox(width: 5,),
           Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -453,62 +459,31 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               SizedBox(
                 height: 1,
               ),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Text("Estimated time",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Samsung_SharpSans_Medium",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .7,
-                          height: 1.3,
-                        ),
-                      ),
-                      Text("${selectedCategoryList[index].maxPrice} Min",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "SharpSans_Bold",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .2,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
+                  Text("Estimated price",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Samsung_SharpSans_Medium",
+                      fontWeight: FontWeight.w200,
+                      color: Colors.black,
+                      wordSpacing: .5,
+                      letterSpacing: .7,
+                      height: 1.3,
+                    ),
                   ),
-                  SizedBox(
-                    width:5,
-                  ),
-                  Column(
-                    children: [
-                      Text("Estimated price",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Samsung_SharpSans_Medium",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .7,
-                          height: 1.3,
-                        ),
-                      ),
-                      Text("₦ ${selectedCategoryList[index].minPrice}",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "SharpSans_Bold",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .2,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
+                  Text("₦ ${selectedCategoryList[index].maxPrice}",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: "SharpSans_Bold",
+                      fontWeight: FontWeight.w200,
+                      color: Colors.black,
+                      wordSpacing: .5,
+                      letterSpacing: .2,
+                      height: 1.3,
+                    ),
                   ),
                 ],
               ),
@@ -561,7 +536,81 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     heightFactor: 3.0,
                     child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
-                hintText: "Vehicle ready for service on",
+                hintText: "Service date",
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: CustColors.greyish,
+                    width: .5,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.8,
+                  horizontal: 0.0,
+                ),
+                errorStyle: Styles.textLabelSubTitleRed,
+                hintStyle: Styles.textLabelSubTitle,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Widget timeTextSelection(Size size) {
+    return  InkWell(
+      onTap: () async {
+        _selectTime(context);
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          left: size.width * 6 /100,
+          right: size.width * 6 /100,
+          // bottom: size.height * 1 /100,
+          top: size.height * 2 / 100,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Select your service time",
+              style: Styles.textLabelTitle,
+            ),
+            TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              style: Styles.textLabelSubTitle,
+              focusNode: _serviceTimeFocusNode,
+              keyboardType: TextInputType.text,
+              enabled: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp('[a-zA-Z ]')),
+              ],
+              validator: InputValidator(
+                  ch : 'Service Date').emptyChecking,
+              controller: _serviceTimeController,
+              cursorColor: CustColors.whiteBlueish,
+              decoration: InputDecoration(
+                isDense: true,
+                suffixIcon: Align(
+                    widthFactor: 3.0,
+                    heightFactor: 3.0,
+                    child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
+                ),
+                hintText: "Service time",
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -670,17 +719,45 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget findMechanicButtonWidget(Size size){
     return InkWell(
       onTap: (){
-        print('$selectedServiceIds >>>>>>>>>>>selectedServiceIds ');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>  MechanicListScreen(
-                  serviceIds: '$selectedServiceIds',
-                  serviceType: 'regular',
-                  latitude: widget.latitude,
-                  longitude: widget.longitude,
-                  address: widget.address,
-                )));
+        print('$selectedListServiceIds >>>>>>>>>>>selectedListServiceIds ');
+        print('${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")} >>>>>>>>>>>selectedServiceIds ');
+        print('${_serviceTypeController.text} >>>>>>>>>>>_serviceTypeController.text ');
+        print('${_serviceDateController.text} >>>>>>>>>>>_serviceDateController.text ');
+        print('${_serviceTimeController.text} >>>>>>>>>>>_serviceTimeController.text ');
+
+        if(selectedListServiceIds.length == 0)
+          {
+            SnackBarWidget().setMaterialSnackBar('Select any service',_scaffoldKey);
+          }
+        else if(_serviceDateController.text == "")
+          {
+            SnackBarWidget().setMaterialSnackBar('Select service date',_scaffoldKey);
+          }
+        else if(_serviceTimeController.text == "")
+          {
+            SnackBarWidget().setMaterialSnackBar('Select service time',_scaffoldKey);
+          }
+        else if(_serviceTypeController.text == "")
+          {
+            SnackBarWidget().setMaterialSnackBar('Select service type',_scaffoldKey);
+          }
+        else
+          {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  MechanicListScreen(
+                      serviceIds: '${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")}',
+                      serviceDate: '${_serviceDateController.text}',
+                      serviceTime: '${_serviceTimeController.text}',
+                      regularServiceType: '${_serviceTypeController.text}',
+                      serviceType: 'regular',
+                      latitude: widget.latitude,
+                      longitude: widget.longitude,
+                      address: widget.address,
+                    )));
+          }
+
       },
       child: Align(
         alignment: Alignment.bottomRight,
@@ -717,7 +794,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
     selectedCategoryList = [];
+    selectedListServiceIds =[];
     selectedServiceIds = "";
+    totalEstimatedPrice = 0;
     selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -733,12 +812,11 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     setState(() {
       for(int i = 0; i<selectedCategoryList.length ; i++){
+          selectedListServiceIds.add(selectedCategoryList[i].id);
           selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
-          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
-          totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
+          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].maxPrice}');
       }
       print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
-      print('totalEstimatedTime >>>>>>>>>> $totalEstimatedTime');
     });
   }
 
@@ -785,19 +863,58 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2025),
+      initialDate: DateTime(2022,  DateTime.now().month,DateTime.now().day+1),
+      firstDate:   DateTime(2022,  DateTime.now().month,DateTime.now().day+1),
+      lastDate: DateTime(2026),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: CustColors.light_navy,
+              onPrimary: CustColors.roseText1,
+              onSurface: CustColors.light_navy,
+            ),
+            dialogBackgroundColor:Colors.white,
+          ),
+          child: child!,
+        );
+      },
     );
     if (selected != null && selected != selectedDate)
       setState(() {
-        //selectedDate = selected;
         String selectedDateFormated = selected.day.toString() + "/"
             + selected.month.toString() + "/" + selected.year.toString();
         print("selectedDateFormated : " + selectedDateFormated);
         _serviceDateController.text = selectedDateFormated.toString();
       });
   }
+
+  _selectTime(BuildContext context) async {
+     TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+       builder: (context, child) {
+         return Theme(
+           data: ThemeData.light().copyWith(
+             colorScheme: ColorScheme.light(
+               primary: CustColors.light_navy,
+               onPrimary: CustColors.roseText1,
+               onSurface: CustColors.light_navy,
+             ),
+             dialogBackgroundColor:Colors.white,
+           ),
+           child: child!,
+         );
+       },
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime = picked;
+        print('${picked.format(context)} >>>>selectedTime');
+        _serviceTimeController.text = '${picked.format(context)}';
+      });
+  }
+
 
 
 }
