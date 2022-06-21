@@ -52,6 +52,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   String selectedServiceSpecializatonType = "";
   int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
   String selectedServiceIds = "";
+  List<String> selectedListServiceIds =[];
 
 
   List<String> serviceModelList = [
@@ -70,9 +71,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     selectedCategoryList = widget.selectedService!;
     for(int i = 0; i<selectedCategoryList.length ; i++){
+      selectedListServiceIds.add(selectedCategoryList[i].id);
       selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
-      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
-      totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
+      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].maxPrice}');
     }
   }
 
@@ -261,35 +262,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Estimated time",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Samsung_SharpSans_Medium",
-                        fontWeight: FontWeight.w200,
-                        color: Colors.black,
-                        wordSpacing: .5,
-                        letterSpacing: .7,
-                        height: 1.3,
-                      ),
-                    ),
-                    Text("$totalEstimatedPrice Min",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "SharpSans_Bold",
-                        fontWeight: FontWeight.w200,
-                        color: Colors.black,
-                        wordSpacing: .5,
-                        letterSpacing: .2,
-                        height: 1.3,
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("Estimated price",
@@ -432,7 +404,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
           SizedBox(width: 5,),
           Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -451,62 +423,31 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               SizedBox(
                 height: 1,
               ),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Text("Estimated time",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Samsung_SharpSans_Medium",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .7,
-                          height: 1.3,
-                        ),
-                      ),
-                      Text("${selectedCategoryList[index].maxPrice} Min",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "SharpSans_Bold",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .2,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
+                  Text("Estimated price",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Samsung_SharpSans_Medium",
+                      fontWeight: FontWeight.w200,
+                      color: Colors.black,
+                      wordSpacing: .5,
+                      letterSpacing: .7,
+                      height: 1.3,
+                    ),
                   ),
-                  SizedBox(
-                    width:5,
-                  ),
-                  Column(
-                    children: [
-                      Text("Estimated price",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: "Samsung_SharpSans_Medium",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .7,
-                          height: 1.3,
-                        ),
-                      ),
-                      Text("₦ ${selectedCategoryList[index].minPrice}",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "SharpSans_Bold",
-                          fontWeight: FontWeight.w200,
-                          color: Colors.black,
-                          wordSpacing: .5,
-                          letterSpacing: .2,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
+                  Text("₦ ${selectedCategoryList[index].maxPrice}",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: "SharpSans_Bold",
+                      fontWeight: FontWeight.w200,
+                      color: Colors.black,
+                      wordSpacing: .5,
+                      letterSpacing: .2,
+                      height: 1.3,
+                    ),
                   ),
                 ],
               ),
@@ -714,6 +655,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
     selectedCategoryList = [];
     selectedServiceIds = "";
+    totalEstimatedPrice = 0;
     selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -727,12 +669,11 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
     setState(() {
       for(int i = 0; i<selectedCategoryList.length ; i++){
+          selectedListServiceIds.add(selectedCategoryList[i].id);
           selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
-          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
-          totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
+          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].maxPrice}');
       }
       print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
-      print('totalEstimatedTime >>>>>>>>>> $totalEstimatedTime');
     });
   }
 
@@ -782,6 +723,19 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       initialDate: selectedDate,
       firstDate: DateTime(2022),
       lastDate: DateTime(2025),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: CustColors.light_navy,
+              onPrimary: CustColors.roseText1,
+              onSurface: Color.fromARGB(255, 66, 125, 145),
+            ),
+            dialogBackgroundColor:Colors.white,
+          ),
+          child: child!,
+        );
+      },
     );
     if (selected != null && selected != selectedDate)
       setState(() {
@@ -792,6 +746,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         _serviceDateController.text = selectedDateFormated.toString();
       });
   }
+
 
 
 }
