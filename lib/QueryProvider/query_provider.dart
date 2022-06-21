@@ -1537,7 +1537,6 @@ class QueryProvider {
         }
       }
     }
-
      """;
     log(_query);
     print("Token >>>>>>> $token");
