@@ -19,13 +19,15 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
+  final String address;
 
   ScheduleRegularServiceScreen
       ({
         required this.categoryList,
         required this.selectedService,
         required this.latitude,
-        required this.longitude
+        required this.longitude,
+        required this.address
       });
 
   @override
@@ -676,7 +678,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                   serviceIds: '$selectedServiceIds',
                   serviceType: 'regular',
                   latitude: widget.latitude,
-                  longitude: widget.longitude,)));
+                  longitude: widget.longitude,
+                  address: widget.address,
+                )));
       },
       child: Align(
         alignment: Alignment.bottomRight,
@@ -721,8 +725,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             isAddService: true,
             isReturnData: true,
             categoryList: widget.categoryList,
-          longitude: widget.longitude,
-          latitude: widget.latitude,),
+            longitude: widget.longitude,
+            latitude: widget.latitude,
+            address: widget.address,
+          ),
         ));
 
     setState(() {
