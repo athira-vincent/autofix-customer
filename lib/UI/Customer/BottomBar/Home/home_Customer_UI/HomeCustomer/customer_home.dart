@@ -563,6 +563,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   isReturnData: false,
                                                   latitude: CurrentLatitude,
                                                   longitude: CurrentLongitude,
+                                                  address: Address,
                                                 )));
 
                                       },
