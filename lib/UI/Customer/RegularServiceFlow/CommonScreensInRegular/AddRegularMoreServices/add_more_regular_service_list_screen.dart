@@ -107,11 +107,11 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
                   )
                   : InkWell(
                     onTap: (){
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>  ScheduleRegularServiceScreen(
-                                selectedService: [],
+                                selectedService: selectedCategoryList,
                                 categoryList: widget.categoryList,
                                 latitude: widget.latitude,
                                 longitude: widget.longitude,
