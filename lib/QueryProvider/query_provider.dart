@@ -2538,6 +2538,108 @@ class QueryProvider {
     );
   }
 
+  postMechServiceDetailsRequest(
+      token,type,mechanicId) async {
+    String _query = """ 
+     query
+     {
+  UpcomingCompletedServices(
+  type: $type,
+  mechanicId: $mechanicId
+  ) {
+    id
+    bookingCode
+    reqType
+    bookStatus
+    totalPrice
+    tax
+    commission
+    serviceCharge
+    totalTime
+    serviceTime
+    latitude
+    longitude
+    mechLatitude
+    mechLongitude
+    extend
+    totalExt
+    extendTime
+    bookedDate
+    isRated
+    status
+    customerId
+    mechanicId
+    vehicleId
+    mechanic {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      status
+      userTypeId
+      jwtToken
+      fcmToken
+      otpCode
+      isProfile
+      otpVerified
+
+    }
+    vehicle {
+      id
+      brand
+      model
+      engine
+      year
+      plateNo
+      lastMaintenance
+      milege
+      vehiclePic
+      latitude
+      longitude
+      defaultVehicle
+      status
+      userId
+    }
+    bookService {
+      id
+      mechanicId
+      customerId
+      status
+      serviceId
+      bookMechanicId
+    }
+  }
+}
+
+
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 
 
 }

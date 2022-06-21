@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TrackServiceDetailsScreen extends StatefulWidget{
+class MechTakeVehicleTrackScreen extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return _TrackServiceDetailsScreen();
+    return _MechTakeVehicleTrackScreen();
   }
 
 }
-class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
+class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -226,7 +226,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
                         fontSize: 12,
                         fontFamily: 'SamsungSharpSans-Medium',
                       ),),
-                    SizedBox(height: 05),
+                    SizedBox(height: 02),
                     Text('Savannah estate, plot 176',
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -234,7 +234,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                           color: const Color(0xff9b9b9b)
                       ),),
-                    SizedBox(height: 05),
+                    SizedBox(height: 02),
                     Text('Mar 5,2022',
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -280,7 +280,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,0,5,0),
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -379,7 +379,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,3,5,0),
+            padding: const EdgeInsets.fromLTRB(45,5,5,5),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -478,7 +478,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,3,5,0),
+            padding: const EdgeInsets.fromLTRB(45,5,5,5),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -573,7 +573,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,3,5,0),
+            padding: const EdgeInsets.fromLTRB(45,5,5,5),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -672,7 +672,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,3,5,0),
+            padding: const EdgeInsets.fromLTRB(45,5,5,5),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -771,7 +771,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,3,5,0),
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -824,15 +824,17 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
                         fontSize: 12,
                         fontFamily: 'SamsungSharpSans-Medium',
                       ),),
-                    SizedBox(height: 05),
+                    SizedBox(height: 02),
                     Text('Savannah estate, plot 176',
                       textAlign: TextAlign.start,
+                     // maxLines: 1,
+                      softWrap: true,
                       style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
+                          color: const Color(0xff9b9b9b),
                       ),),
-                    SizedBox(height: 05),
+                    SizedBox(height: 02),
                     Text('Mar 5,2022',
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -878,7 +880,7 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
           ],
         ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,0,5,0),
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
             child: FDottedLine(
               color: CustColors.light_navy05,
               height: 50.0,
@@ -978,10 +980,16 @@ class _TrackServiceDetailsScreen extends State <TrackServiceDetailsScreen>{
   }
   Widget textButtonUi (Size size){
     return Container(
-      child: Column(
+      child: Row(
         children:[
+          Container(
+            height: 10,
+            width: 10,
+            color: Colors.white,
+          ),
+          Spacer(),
           Padding(
-            padding: const EdgeInsets.only(left: 240.0,right: 22.0),
+            padding: const EdgeInsets.only(right: 22.0,top:15,bottom: 20),
             child: Container(
               width: 130,
               child: TextButton(
