@@ -7,19 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ServiceRegularDetailsScreen extends StatefulWidget {
+import '../../../../Mechanic/mechanic_home_screen.dart';
+
+class CustServiceRegularDetailsScreen extends StatefulWidget {
 
 
-  ServiceRegularDetailsScreen(
-   );
+  CustServiceRegularDetailsScreen();
 
   @override
   State<StatefulWidget> createState() {
-    return _ServiceRegularDetailsScreenState();
+    return _CustServiceRegularDetailsScreen();
   }
 }
 
-class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScreen> {
+class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsScreen> {
 
 
   DateTime selectedDate = DateTime.now();
@@ -37,7 +38,15 @@ class _ServiceRegularDetailsScreenState extends State<ServiceRegularDetailsScree
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context)=> MechanicHomeScreen()
+            ));
+          },
+          //onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: CustColors.light_navy,
         elevation: 0,
         title: Container(

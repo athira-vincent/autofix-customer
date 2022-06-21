@@ -4,10 +4,12 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -264,31 +266,28 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(
-            children:[
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      mechanicLocation(context),
-                      upcomingServices(size),
-                      brandSpecialization(size),
-                      dashBoardItemsWidget(size),
-                      _hasActiveService
-                          ? SizedBox(
-                        height: size.height * 0.092,
-                      )
-                          : Container(),
-                    ],
-                  ),
-                ),
-                _hasActiveService ? emergencyServiceReminder(size) : Container(),
-            ],
-          ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Stack(
+          children:[
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  mechanicLocation(context),
+                  upcomingServices(size,context),
+                  brandSpecialization(size),
+                  dashBoardItemsWidget(size),
+                  _hasActiveService
+                      ? SizedBox(
+                    height: size.height * 0.092,
+                  )
+                      : Container(),
+                ],
+              ),
+            ),
+            _hasActiveService ? emergencyServiceReminder(size) : Container(),
+          ],
         ),
       ),
     );
@@ -327,7 +326,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     );
   }
 
-  Widget upcomingServices(Size size) {
+  Widget upcomingServices(Size size,BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,2,0,0),
       child: Column(
@@ -370,7 +369,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                         default:
                           return
                             snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
-                                ? upcomingServicesList(size,snapshot)
+                                ? upcomingServicesList(size,snapshot,context)
                                 : Container(
                                   margin: EdgeInsets.all(10),
                                   padding: EdgeInsets.all(25),
@@ -411,16 +410,26 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     );
   }
 
-  Widget upcomingServicesList(Size size, AsyncSnapshot<MechanicUpcomingServiceMdl> snapshot){
+  Widget upcomingServicesList(Size size, AsyncSnapshot<MechanicUpcomingServiceMdl> snapshot,BuildContext context){
     return  Container(
       child: ListView.builder(
         itemCount: snapshot.data?.data?.upcomingCompletedServices?.length,
         scrollDirection: Axis.horizontal,
-          itemBuilder: (context, i, ){
+          itemBuilder: (context1, i, ){
               return Padding(
                 padding: const EdgeInsets.only(
                   left: 5,),
                 child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MechServiceRegularDetailsScreen(),
+                          ));
+                    });
+
+                  },
                   child: Column(
                     children: [
                       Container(
@@ -459,7 +468,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
-                                              fontSize: 15),),
+                                              fontSize: 15
+                                          ),),
                                         Text(
                                           snapshot.data!.data!.upcomingCompletedServices![i].serviceTime.toString(),
                                           //"09:30 AM",
@@ -514,9 +524,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       ),
                     ],
                   ),
-                  onTap: (){
-
-                  },
                 ),
               );
           }

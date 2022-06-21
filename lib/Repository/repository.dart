@@ -17,6 +17,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/ResetPasswordScr
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/signin_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signup/signup_api_provider.dart';
+import '../UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_api_provider.dart';
 import '../UI/WelcomeScreens/Login/CompleteProfile/Mechanic/vechicleSpecialization/vehicleSpecialization_api_provider.dart';
 
@@ -49,6 +50,7 @@ class Repository {
 
   final _categoryListApiProvider = CategoryListApiProvider();
   final _AddPriceFaultApiProvider = AddPriceFaultApiProvider();
+  final _MechServiceDetailsApiProvider = MechServiceDetailsApiProvider1();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId) =>
@@ -436,6 +438,13 @@ class Repository {
       token,count, recent, customerId) =>
       _customerApiProvider.postCustomerCompletedOrdersRequest(
           token,count, recent, customerId);
+
+  Future<dynamic> postGetMechServiceDetailsReviewRequest(
+      token,type,mechanicId) =>
+      _MechServiceDetailsApiProvider.postMechServiceDetailsRequest(
+          token,type,mechanicId
+      );
+
 
 
 }

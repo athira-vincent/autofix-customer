@@ -15,8 +15,8 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/service_regular_details_screen.dart';
-import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/track_service_details_screen.dart';
+import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
+import 'UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_track_screen.dart';
 import 'UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 
 void main() async {
@@ -92,6 +92,7 @@ class _MyAppState extends State<MyApp> {
                     primaryColor: Colors.white,
                   ),
                   home: SplashScreen(),
+                  //home:ServiceRegularDetailsScreen(),
                 );
               },
             ),
