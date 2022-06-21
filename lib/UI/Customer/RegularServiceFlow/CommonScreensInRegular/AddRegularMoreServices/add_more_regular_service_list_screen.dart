@@ -3,9 +3,10 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/schedule_regular_service_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ScheduleRegularService/schedule_regular_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,9 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
   String authToken="", userId = "";
   String  bookingId = "";
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   List<Service> selectedCategoryList =[];
   HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
@@ -75,6 +79,7 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
 
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         body: Container(
           margin: EdgeInsets.only(
             left: size.width * 6 / 100,
@@ -101,21 +106,39 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
               widget.isAddService && widget.isReturnData
                   ? InkWell(
                       onTap: (){
-                        Navigator.pop(context,selectedCategoryList);
+                        print('${selectedCategoryList.length}');
+                        if(selectedCategoryList.length == 0)
+                        {
+                          print('No service selected1');
+                          SnackBarWidget().setMaterialSnackBar('Select any service',_scaffoldKey);
+
+                        }
+                        else {
+                          Navigator.pop(context, selectedCategoryList);
+                        }
                       },
                       child: nextButton(size)
                   )
                   : InkWell(
                     onTap: (){
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>  ScheduleRegularServiceScreen(
-                                selectedService: selectedCategoryList,
-                                categoryList: widget.categoryList,
-                                latitude: widget.latitude,
-                                longitude: widget.longitude,
-                              )));
+                      print('${selectedCategoryList.length}');
+                      if(selectedCategoryList.length == 0)
+                        {
+                          print('No service selected2');
+                          SnackBarWidget().setMaterialSnackBar('Select any service',_scaffoldKey);
+
+                        }
+                      else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  ScheduleRegularServiceScreen(
+                                    selectedService: selectedCategoryList,
+                                    categoryList: widget.categoryList,
+                                    latitude: widget.latitude,
+                                    longitude: widget.longitude,
+                                  )));
+                        }
                     },
                     child: nextButton(size)
               ),

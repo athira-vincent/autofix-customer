@@ -347,8 +347,23 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               print(" on Tap - Add More");
               _awaitReturnValueFromSecondScreenOnAdd(context);
             },
-            child: SvgPicture.asset("assets/image/CustomerType/add_car_plus.svg",
-              height: size.height * 4 / 100,),
+            child:  Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: CustColors.light_navy,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: .5,
+                      ),
+                    ]),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 18,
+                )
+            ),
           ),
         ],
       ),
@@ -514,7 +529,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     heightFactor: 3.0,
                     child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
-                hintText: "Vehicle ready for service on",
+                hintText: "Service date",
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -550,7 +565,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget timeTextSelection(Size size) {
     return  InkWell(
       onTap: () async {
-        //_showDialogForWorkSelection(serviceTypeList);
         _selectTime(context);
       },
       child: Container(
@@ -589,7 +603,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     heightFactor: 3.0,
                     child: SvgPicture.asset('assets/image/arrow_down.svg',height: 7,width: 7,)
                 ),
-                hintText: "Vehicle ready for service on",
+                hintText: "Service time",
                 border: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: CustColors.greyish,
@@ -843,12 +857,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     if (picked != null)
       setState(() {
         selectedTime = picked;
-        _hour = selectedTime.hour.toString();
-        _minute = selectedTime.minute.toString();
-        _time = _hour! + ' : ' + _minute!;
-        _serviceTimeController.text = _time!;
-
-      });}
+        print('${picked.format(context)} >>>>selectedTime');
+        _serviceTimeController.text = '${picked.format(context)}';
+      });
+  }
 
 
 
