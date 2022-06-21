@@ -57,7 +57,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-   Locale _locale = Locale.fromSubtags(languageCode: 'en') ;
+   Locale _locale = Locale.fromSubtags(languageCode: 'en');
 
    void setLocale(Locale value) {
     setState(() {
