@@ -95,28 +95,6 @@ class _MyAppState extends State<MyApp> {
               },
             ),
     );
-    /*return ChangeNotifierProvider(
-        create: (context) => LocaleProvider(),
-        builder: (context, child) {
-          final provider = Provider.of<LocaleProvider>(context,listen: false);
-          return Sizer(
-            builder: (context, orientation, deviceType) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                locale: _locale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                title: 'ResolMech',
-                theme: ThemeData(
-                  primaryColor: Colors.white,
-                ),
-                //home: SplashScreen(),
-                home: TrackServiceDetailsScreen(),
-                //home: ServiceRegularDetailsScreen(),
-              );
-            },
-          );
-        });*/
   }
 
 }

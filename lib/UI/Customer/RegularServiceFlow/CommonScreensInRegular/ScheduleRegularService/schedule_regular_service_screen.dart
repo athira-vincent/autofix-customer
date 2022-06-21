@@ -872,7 +872,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             colorScheme: ColorScheme.light(
               primary: CustColors.light_navy,
               onPrimary: CustColors.roseText1,
-              onSurface: Color.fromARGB(255, 66, 125, 145),
+              onSurface: CustColors.light_navy,
             ),
             dialogBackgroundColor:Colors.white,
           ),
@@ -893,6 +893,19 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
      TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
+       builder: (context, child) {
+         return Theme(
+           data: ThemeData.light().copyWith(
+             colorScheme: ColorScheme.light(
+               primary: CustColors.light_navy,
+               onPrimary: CustColors.roseText1,
+               onSurface: CustColors.light_navy,
+             ),
+             dialogBackgroundColor:Colors.white,
+           ),
+           child: child!,
+         );
+       },
     );
     if (picked != null)
       setState(() {
