@@ -1,7 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,23 +8,19 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../../Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+
 
 class MechanicListScreen extends StatefulWidget {
 
-  final String bookingId;
-  final String authToken;
   final String serviceIds;
   final String serviceType;
-  final String serviceModel;
   final String latitude;
   final String longitude;
 
   MechanicListScreen({
-    required this.bookingId,
-    required this.authToken,
     required this.serviceIds,
     required this.serviceType,
-    required this.serviceModel,
     required this.latitude,
     required this.longitude
   });
@@ -259,7 +254,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                             customerAddress: "",
                                             mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
                                             mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
-                                            serviceModel: widget.serviceModel,
+                                            serviceModel: 'widget.serviceModel',
                                             serviceIds: widget.serviceIds,
                                             longitude: widget.longitude,
                                             latitude: widget.latitude,

@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularFindMechanicList/mechanic_list_screen.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,16 @@ class ScheduleRegularServiceScreen extends StatefulWidget {
   final String serviceIds;
   final String serviceType;
   final CategoryList? categoryList;
+  final String latitude;
+  final String longitude;
 
   ScheduleRegularServiceScreen
       ({
         required this.serviceIds,
         required this.serviceType,
-        required this.categoryList
+        required this.categoryList,
+        required this.latitude,
+        required this.longitude
       });
 
   @override
@@ -45,11 +50,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
 
   List<Service> selectedCategoryList =[];
+  String selectedServiceSpecializatonType = "";
+  int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
+  String selectedServiceIds = "";
 
-  List<String> selectedServiceNameList = [];
-  List<String> selectedServiceIdList = [];
-
-  String selectedServiceModel = "";
 
   List<String> serviceModelList = [
     "Mobile Mechanic",
@@ -58,7 +62,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   ];
   DateTime selectedDate = DateTime.now();
 
-  String additionalServiceNames = "";
 
   @override
   void initState() {
@@ -178,7 +181,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       child: Column(
         children: [
           listHeaderWidget(size),
-          selectedServiceNameList.length != 0
+          selectedCategoryList.length != 0
               ? ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -189,7 +192,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 },
               )
               : Container(),
-
         ],
 
       ),
@@ -246,42 +248,16 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 ),
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  height: size.height * 8 / 100,
-                  width: size.width * 12 / 100,
-                  decoration: BoxDecoration(
-                    color: CustColors.white_02,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12),
-                    ),
-                    border: Border.all(
-                      color: CustColors.pinkish_grey03,
-                      width: 0.3,
-                    ),
-                  ),
-                ),
                 Column(
                   //mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "abc",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "Samsung_SharpSans_Medium",
-                        fontWeight: FontWeight.w200,
-                        color: Colors.black,
-                        wordSpacing: .5,
-                        letterSpacing: .7,
-                        height: 1.7,
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * .3 / 100,
-                    ),
                     Text("Estimated time",
                       style: TextStyle(
                         fontSize: 12,
@@ -293,7 +269,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("20:00 Min",
+                    Text("$totalEstimatedPrice Min",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -306,13 +282,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     ),
                   ],
                 ),
+                Spacer(),
                 Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: size.height * 2.5 / 100,
-                    ),
                     Text("Estimated price",
                       style: TextStyle(
                         fontSize: 12,
@@ -324,7 +297,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("₦ 80",
+                    Text("$totalEstimatedPrice",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -395,6 +368,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   Widget serviceListItemWidget(Size size, int index){
     return Container(
+      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
       decoration: BoxDecoration(
         //color: CustColors.white_02,
         borderRadius: BorderRadius.all(
@@ -416,19 +390,26 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             child: Stack(
               alignment: Alignment.centerLeft,
               children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+
+                Align(
+                  alignment: Alignment.centerRight,
                   child: Container(
-                    height: size.height * 7 / 100,
-                    width: size.width * 13 / 100,
-                    decoration: BoxDecoration(
-                      color: CustColors.white_02,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12),
+                    padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                    child: Container(
+                      height: size.height * 7 / 100,
+                      width: size.width * 13 / 100,
+                      decoration: BoxDecoration(
+                          color: CustColors.whiteBlueish,
+                          borderRadius: BorderRadius.circular(11.0)
                       ),
-                      border: Border.all(
-                        color: CustColors.pinkish_grey03,
-                        width: 0.3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child:selectedCategoryList[index].icon.toString() != ""
+                            ? Image.network(selectedCategoryList[index].icon,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(Icons.stop,size: 35,color: CustColors.light_navy,),
+                        //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                       ),
                     ),
                   ),
@@ -436,6 +417,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 Image.asset("assets/image/ic_delete_blue_white.png",
                   height: size.height * 2.5 / 100,
                 ),
+
+
 
               ],
             ),
@@ -451,20 +434,16 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 child: Text(
                   selectedCategoryList[index].serviceName,
                   softWrap: true,
-                  maxLines: 2,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontFamily: "Samsung_SharpSans_Medium",
                     fontWeight: FontWeight.w200,
                     color: Colors.black,
-                    wordSpacing: .5,
-                    letterSpacing: .7,
-                    height: 1.7,
                   ),
                 ),
               ),
               SizedBox(
-                height: size.height * .2 / 100,
+                height: 1,
               ),
               Row(
                 children: [
@@ -481,7 +460,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                           height: 1.3,
                         ),
                       ),
-                      Text("20:00 Min",
+                      Text("${selectedCategoryList[index].maxPrice} Min",
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: "SharpSans_Bold",
@@ -493,6 +472,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    width:5,
                   ),
                   Column(
                     children: [
@@ -507,7 +489,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                           height: 1.3,
                         ),
                       ),
-                      Text("₦ 80",
+                      Text("₦ ${selectedCategoryList[index].minPrice}",
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: "SharpSans_Bold",
@@ -517,13 +499,11 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                           letterSpacing: .2,
                           height: 1.3,
                         ),
-
                       ),
                     ],
                   ),
                 ],
               ),
-
             ],
           ),
         ],
@@ -680,32 +660,45 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   }
 
   Widget findMechanicButtonWidget(Size size){
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Container(
-        margin: EdgeInsets.only(
-            right: size.width * 6 / 100,
-            top: size.height * 2.5 / 100
-        ),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
+    return InkWell(
+      onTap: (){
+        print('$selectedServiceIds >>>>>>>>>>>selectedServiceIds ');
+       /* Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechanicListScreen(
+                  serviceIds: '$selectedServiceIds',
+                  serviceType: 'regular',
+                  latitude: widget.latitude,
+                  longitude: widget.longitude,)));*/
+      },
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          margin: EdgeInsets.only(
+              right: size.width * 6 / 100,
+              top: size.height * 2.5 / 100
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(6),
+              ),
+              color: CustColors.light_navy
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 4 / 100,
+            right: size.width * 4 / 100,
+            top: size.height * 1 / 100,
+            bottom: size.height * 1 / 100,
+          ),
+          child: Text(
+            "Find available mechanics",
+            style: TextStyle(
+              fontSize: 14.3,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Samsung_SharpSans_Medium",
+              color: Colors.white,
             ),
-            color: CustColors.light_navy
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 4 / 100,
-          right: size.width * 4 / 100,
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-        ),
-        child: Text(
-          "Find available mechanics",
-          style: TextStyle(
-            fontSize: 14.3,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Samsung_SharpSans_Medium",
-            color: Colors.white,
           ),
         ),
       ),
@@ -714,6 +707,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
     selectedCategoryList = [];
+    selectedServiceIds = "";
     selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -722,9 +716,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         ));
 
     setState(() {
-      for(int i = 0; i < selectedCategoryList.length ; i++){
-        selectedServiceNameList.add(selectedCategoryList[i].serviceName);
+      for(int i = 0; i<selectedCategoryList.length ; i++){
+          selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
+          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].minPrice}');
+          totalEstimatedTime = totalEstimatedTime + int.parse('${selectedCategoryList[i].maxPrice}');
       }
+      print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
+      print('totalEstimatedTime >>>>>>>>>> $totalEstimatedTime');
     });
   }
 
@@ -757,7 +755,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     onTap: () async {
                       Navigator.pop(context);
                       setState(() {
-                        selectedServiceModel = _serviceTypeList[index];
+                        selectedServiceSpecializatonType = _serviceTypeList[index];
                         _serviceTypeController.text = _serviceTypeList[index];
                       });
                     },
