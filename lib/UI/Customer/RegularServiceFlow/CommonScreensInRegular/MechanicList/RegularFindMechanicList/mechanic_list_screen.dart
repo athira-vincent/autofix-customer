@@ -20,6 +20,10 @@ import '../../../../../../Models/customer_models/mechanic_List_model/mechanicLis
 class MechanicListScreen extends StatefulWidget {
 
   final String serviceIds;
+  final String serviceDate;
+  final String serviceTime;
+  final String regularServiceType;
+
   final String serviceType;
   final String latitude;
   final String longitude;
@@ -29,6 +33,9 @@ class MechanicListScreen extends StatefulWidget {
     required this.serviceIds,
     required this.serviceType,
     required this.latitude,
+    required this.serviceDate,
+    required this.serviceTime,
+    required this.regularServiceType,
     required this.longitude,
     required this.address
   });

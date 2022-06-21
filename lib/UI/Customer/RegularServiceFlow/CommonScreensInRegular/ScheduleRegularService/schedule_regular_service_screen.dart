@@ -714,12 +714,20 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   Widget findMechanicButtonWidget(Size size){
     return InkWell(
       onTap: (){
-        print('$selectedServiceIds >>>>>>>>>>>selectedServiceIds ');
+        print('$selectedListServiceIds >>>>>>>>>>>selectedListServiceIds ');
+        print('${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")} >>>>>>>>>>>selectedServiceIds ');
+        print('${_serviceTypeController.text} >>>>>>>>>>>_serviceTypeController.text ');
+        print('${_serviceDateController.text} >>>>>>>>>>>_serviceDateController.text ');
+        print('${_serviceTimeController.text} >>>>>>>>>>>_serviceTimeController.text ');
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>  MechanicListScreen(
-                  serviceIds: '$selectedServiceIds',
+                  serviceIds: '${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")}',
+                  serviceDate: '${_serviceDateController.text}',
+                  serviceTime: '${_serviceTimeController.text}',
+                  regularServiceType: '${_serviceTypeController.text}',
                   serviceType: 'regular',
                   latitude: widget.latitude,
                   longitude: widget.longitude,
@@ -761,6 +769,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   void _awaitReturnValueFromSecondScreenOnAdd(BuildContext context) async {
     selectedCategoryList = [];
+    selectedListServiceIds =[];
     selectedServiceIds = "";
     totalEstimatedPrice = 0;
     selectedCategoryList = await Navigator.push(
