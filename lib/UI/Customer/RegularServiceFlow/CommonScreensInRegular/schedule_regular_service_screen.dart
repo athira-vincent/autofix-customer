@@ -14,17 +14,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
-  final String serviceIds;
-  final String serviceType;
   final CategoryList? categoryList;
+  final List<Service>? selectedService;
+
   final String latitude;
   final String longitude;
 
   ScheduleRegularServiceScreen
       ({
-        required this.serviceIds,
-        required this.serviceType,
         required this.categoryList,
+        required this.selectedService,
         required this.latitude,
         required this.longitude
       });
@@ -712,7 +711,11 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         context,
         MaterialPageRoute(
           builder: (context) => AddMoreRegularServicesListScreen(
-            isAddService: true,isMechanicApp: false,categoryList: widget.categoryList,),
+            isAddService: true,
+            isReturnData: true,
+            categoryList: widget.categoryList,
+          longitude: widget.longitude,
+          latitude: widget.latitude,),
         ));
 
     setState(() {
