@@ -58,7 +58,13 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-     // _homeCustomerBloc.postFindMechanicsListEmergencyRequest("$authToken", widget.bookingId,widget.serviceIds,"regular");
+      _homeCustomerBloc.postFindMechanicsListEmergencyRequest(
+          "$authToken",
+          "0",
+          "200",
+          widget.latitude,
+          widget.longitude,
+          widget.serviceIds,"regular");
     });
   }
 
