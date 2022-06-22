@@ -699,7 +699,7 @@ class QueryProvider {
         bookedTime: "$time"
         latitude: ${double.parse(latitude.toString())}
         longitude: ${double.parse(longitude.toString())}
-        serviceId: ${int.parse(serviceId.toString())}
+        serviceId: $serviceId
         mechanicId:${int.parse(mechanicId.toString())}
         reqType: ${int.parse(reqType.toString())}
         totalPrice: ${int.parse(totalPrice.toString())}
@@ -2538,14 +2538,11 @@ class QueryProvider {
   }
 
   postMechServiceDetailsRequest(
-      token,type,mechanicId) async {
+      token,bookingId) async {
     String _query = """ 
      query
      {
-  UpcomingCompletedServices(
-  type: $type,
-  mechanicId: $mechanicId
-  ) {
+  bookingDetails(bookingId: $bookingId) {
     id
     bookingCode
     reqType
@@ -2558,48 +2555,28 @@ class QueryProvider {
     serviceTime
     latitude
     longitude
-    mechLatitude
-    mechLongitude
     extend
     totalExt
     extendTime
     bookedDate
+    bookedTime
     isRated
     status
+    regularType
+    mechLatitude
+    mechLongitude
+    demoMechanicId
     customerId
-    mechanicId
     vehicleId
-    mechanic {
+    serviceId
+    bookService {
       id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
+      mechanicId
+      customerId
       status
-      userTypeId
-      jwtToken
-      fcmToken
-      otpCode
-      isProfile
-      otpVerified
-
-    }
-    customer {
-      id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      status
-      userTypeId
-      jwtToken
-      fcmToken
-      otpCode
-      isProfile
-      otpVerified
-
+      serviceId
+      bookMechanicId
+      service{id}
     }
     vehicle {
       id
@@ -2617,19 +2594,61 @@ class QueryProvider {
       status
       userId
     }
-    bookService {
+    mechanic {
       id
-      mechanicId
-      customerId
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      accountType
       status
-      serviceId
-      bookMechanicId
+      jwtToken
+      fcmToke
+      otpCode
+      customer{id}
+    }
+    customer {
+      id
+      userCode
+      firstName
+      lastName
+      emailId
+      phoneNo
+      accountType
+      status
+      jwtToken
+      fcmToke
+      otpCode
+      customer{id}
     }
   }
 }
 
 
 
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
+  postTimePriceServiceDetailsRequest(
+      token,services,fee,time) async {
+    String _query = """ 
+     mutation {
+  mechanic_service_add(
+  services: "$services",
+   fee: ["$fee"],
+    time: ["$time"])
+     {
+    message
+  }
+}
     """;
     log(_query);
     return await GqlClient.I.query01(

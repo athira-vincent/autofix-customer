@@ -45,9 +45,15 @@ class TextStrings {
 
   static const app_language_code_yoruba = "yo";
 
-  static const hpSuccess     = "Success";
+  static const hpSuccess   = "Success";
 
-  static const  error_txt_account_not_exist    = "This account does not exist!";
+  static const  error_txt_account_not_exist = "This account does not exist!";
+
+  static const  txt_pick_up = "Pick up & Drop off";
+
+  static const  txt_mobile_mechanic = "Mobile Mechanic";
+
+  static const  txt_take_vehicle = "Take Vehicle to Mechanic";
 
 
 }

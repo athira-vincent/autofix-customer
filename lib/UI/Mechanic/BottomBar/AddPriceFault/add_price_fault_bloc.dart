@@ -1,4 +1,5 @@
 import 'package:auto_fix/Repository/repository.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/time_price_mech_service_add_mdl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'add_price_fault_mdl.dart';
@@ -43,4 +44,14 @@ class AddPriceFaultReviewBloc{
   // dispose(){
   //   postEnrgRegAddPriceReview.close();
   // }
+  final postTimeServicePriceAddReview = PublishSubject<TimePriceServiceDetailsMdl>();
+  Stream<TimePriceServiceDetailsMdl> get TimePriceServiceDetailsMdlResponse => postTimeServicePriceAddReview.stream;
+
+  postTimeServicePriceAddReviewRequest(
+      String token,services,fee,time
+      )async{
+    TimePriceServiceDetailsMdl _TimePriceServiceDetailsMdl = await repository.postTimeServicePriceAddReviewRequest(token,services,fee,time);
+    postTimeServicePriceAddReview.sink.add(_TimePriceServiceDetailsMdl);
+  }
+
 }

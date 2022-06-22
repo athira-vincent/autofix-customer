@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/cust_colors.dart';
+import '../../../WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_mdl.dart';
 import 'add_price_fault_bloc.dart';
 import 'add_price_fault_mdl.dart';
 import 'emrg_reglr_add_price_mdl.dart';
@@ -29,6 +30,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
   MechanicDetails? _mechanicDetails;
+  MechanicServiceAdd? _MechanicServiceAdd;
   UpdateTimeFees? _updateTimeFees;
    AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
@@ -118,7 +120,45 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
         });
       }
     });
-    _addPriceFaultReviewBloc.UpdateAddPriceFaultMdlResponse.listen((value) {
+    // _addPriceFaultReviewBloc.UpdateAddPriceFaultMdlResponse.listen((value) {
+    //   if(value.data == "error"){
+    //     setState(() {
+    //       saveloading = false;
+    //       print('abcdefg02');
+    //       _isLoadingPage = true;
+    //       //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
+    //       if(checkID!=0) {
+    //         if(checkID==value)
+    //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //           content: Text(value.data.toString(),
+    //               style: const TextStyle(
+    //                   fontFamily: 'Roboto_Regular', fontSize: 14)),
+    //           duration: const Duration(seconds: 2),
+    //           backgroundColor: CustColors.light_navy,
+    //         ));
+    //       }
+    //     });
+    //   }else{
+    //     setState(() {
+    //       print('abcdefg01');
+    //       getSharedPrefData();
+    //
+    //       saveloading = false;
+    //       tempCounter = 0;
+    //       _lodingIdList = [];
+    //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //         content: Text('Service Added',
+    //             style: const TextStyle(
+    //                 fontFamily: 'Roboto_Regular', fontSize: 14)),
+    //         duration: const Duration(seconds: 2),
+    //         backgroundColor: CustColors.light_navy,
+    //       ));
+    //       _isLoadingPage = true;
+    //       _updateTimeFees = value.data!.updateTimeFees;
+    //     });
+    //   }
+    // });
+    _addPriceFaultReviewBloc.TimePriceServiceDetailsMdlResponse.listen((value) {
       if(value.data == "error"){
         setState(() {
           saveloading = false;
@@ -127,13 +167,13 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           if(checkID!=0) {
             if(checkID==value)
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(value.data.toString(),
-                  style: const TextStyle(
-                      fontFamily: 'Roboto_Regular', fontSize: 14)),
-              duration: const Duration(seconds: 2),
-              backgroundColor: CustColors.light_navy,
-            ));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(value.data.toString(),
+                    style: const TextStyle(
+                        fontFamily: 'Roboto_Regular', fontSize: 14)),
+                duration: const Duration(seconds: 2),
+                backgroundColor: CustColors.light_navy,
+              ));
           }
         });
       }else{
@@ -152,7 +192,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             backgroundColor: CustColors.light_navy,
           ));
           _isLoadingPage = true;
-          _updateTimeFees = value.data!.updateTimeFees;
+          _MechanicServiceAdd = value.data!.mechanicServiceAdd as MechanicServiceAdd?;
         });
       }
     });
@@ -511,43 +551,18 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                             saveloading = true;
 
                           }
-                        _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
-                            authToken,
-                            mechanicId,
-                            "${_timeListEmergency}",
-                            "${_priceListEmergency}",
-                            "${_serviceIdEmergency}",
+                        // _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
+                        //     authToken,
+                        //     mechanicId,
+                        //     "${_timeListEmergency}",
+                        //     "${_priceListEmergency}",
+                        //     "${_serviceIdEmergency}",
+                         _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
+                           authToken,
+                           "${_timeListEmergency}",
+                           "${_priceListEmergency}",
+                           "${_serviceIdEmergency}",
                         );
-                       /* for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
-
-                          print('abcdefg03');
-                          if(_selectionList[i]){
-
-
-
-
-                            print('_selectionList');
-                            tempCounter = tempCounter + 1;
-                            temp=_AddPriceServiceList!.data![i].id;
-
-                            _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
-                                authToken,
-                                mechanicId,
-                                _timeList![i],
-                                _priceList![i],
-                                1
-                            );
-                            _isLoadingPage=false;
-                            setState(() {
-                              _autoValidate = AutovalidateMode.always;
-                            });
-                          }else{
-
-                          }
-                         if(i==_AddPriceServiceList!.data!.length-1){
-                           checkID=temp;
-                         }
-                        }*/
 
                       });
                     },
