@@ -1,4 +1,5 @@
 import 'package:auto_fix/QueryProvider/query_provider.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/time_price_mech_service_add_mdl.dart';
 
 import 'add_price_fault_mdl.dart';
 import 'emrg_reglr_add_price_mdl.dart';
@@ -59,6 +60,24 @@ class AddPriceFaultApiProvider{
       }
     }else{
       final errorMsg = EnrgRegAddPriceMdl(data: null);
+      return errorMsg;
+    }
+ }
+ Future<TimePriceServiceDetailsMdl> postTimePriceServiceDetailsRequest(
+     token,services,fee,time)async{
+    Map<String, dynamic> _resp = await _queryProvider.postTimePriceServiceDetailsRequest(
+        token,services,fee,time);
+    if(_resp != null){
+      if(_resp['status']=="error"){
+        final errormsg = TimePriceServiceDetailsMdl(data: null);
+        return errormsg;
+      }else{
+        var data = {"data":_resp};
+        print("pieuiey 05 ${TimePriceServiceDetailsMdl.fromJson(data)}");
+        return TimePriceServiceDetailsMdl.fromJson(data);
+      }
+    }else{
+      final errorMsg = TimePriceServiceDetailsMdl(data: null);
       return errorMsg;
     }
  }

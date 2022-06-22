@@ -1,7 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Common/add_more_service_list_screen.dart';
-import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../Constants/shared_pref_keys.dart';
+import 'mech_service_mdl.dart';
+
 import '../../../../Mechanic/mechanic_home_screen.dart';
-import '../../../BottomBar/Home/upcoming_services_mdl.dart';
 import 'mech_service_bloc.dart';
+import 'mech_service_mdl.dart';
 
 class MechServiceRegularDetailsScreen extends StatefulWidget {
 
@@ -25,14 +25,16 @@ class MechServiceRegularDetailsScreen extends StatefulWidget {
 }
 
 class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsScreen> {
-  String authToken = "", type = "",mechanicId = "";
+  String authToken = "", type = "",bookingId = "";
 
   MechServiceDetailsReviewBloc _MechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
 
-  UpcomingCompletedService? _UpcomingCompletedService;
+  BookingDetails? _BookingDetails;
 
 
   DateTime selectedDate = DateTime.now();
+
+  bool isLoading = true;
 
 
 
@@ -42,25 +44,25 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     _listenApiResponse();
     super.initState();
   }
+
   Future<void> getSharedPrefData()async{
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      type = shdPre.getString(SharedPrefKeys.token).toString();
-      mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
+      //type = shdPre.getString(SharedPrefKeys.token).toString();
+      bookingId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       _MechServiceDetailsReviewBloc.postGetMechServiceDetailsReviewRequest(
-        authToken,
-        type,
-        mechanicId
+        authToken, bookingId
       );
     });
   }
+
   _listenApiResponse(){
     _MechServiceDetailsReviewBloc.MechServiceDetailsMdlResponse.listen((value) {
       if(value.data == "error"){
         setState(() {
-         // _isLoadingPage = true;
+          isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.data.toString(),
                 style: const TextStyle(
@@ -71,7 +73,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         });
       }else{
         setState(() {
-          _UpcomingCompletedService = value.data!.upcomingCompletedServices as UpcomingCompletedService;
+          isLoading = false;
+          _BookingDetails= value.data!.bookingDetails;
+         // print('${_BookingDetails?.serviceCharge}');
         });
       }
     });
@@ -106,7 +110,10 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         body: SingleChildScrollView(
           child: Container(
               color: Colors.white,
-              child: Column(
+              child:
+              isLoading == true
+               ? CircularProgressIndicator(color: CustColors.light_navy)
+               : Column(
                 children: [
                   Container(
                     color: CustColors.light_navy,
@@ -188,8 +195,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 05.0),
                                                   child: Text(
-                                                    //'30',
-                                                    _UpcomingCompletedService!.serviceCharge,
+                                                    // '30',
+                                                    //_UpcomingCompletedService!.serviceCharge.toString(),
+                                                    _BookingDetails!.totalPrice.toString(),
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         color: Colors.white
@@ -437,20 +445,22 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                child: Text('Mar 5,',
+                                                child: Text(
+                                                  //'Mar 5,',
+                                                  _BookingDetails!.bookedDate.toString(),
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.white
                                                   ),),
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                child: Text('2022',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white
-                                                  ),),
-                                              ),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              //   child: Text('2022',
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: Colors.white
+                                              //     ),),
+                                              // ),
                                             ],
                                           )
                                         ],
@@ -493,20 +503,22 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                child: Text('Mar 5,',
+                                                child: Text(
+                                                  //'Mar 5,',
+                                                  _BookingDetails!.bookedTime.toString(),
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.white
                                                   ),),
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                child: Text('2022',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white
-                                                  ),),
-                                              ),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              //   child: Text('2022',
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: Colors.white
+                                              //     ),),
+                                              // ),
                                             ],
                                           )
                                         ],
