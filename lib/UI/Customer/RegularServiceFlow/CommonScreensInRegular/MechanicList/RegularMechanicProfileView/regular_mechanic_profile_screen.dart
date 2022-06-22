@@ -392,7 +392,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
         "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
         "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
         "isDefault":  '1',
       }]),
       "updatedServiceList": FieldValue.arrayUnion(yourItemList),
