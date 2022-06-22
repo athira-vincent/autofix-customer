@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
@@ -71,13 +72,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
 
   List<String> serviceModelList = [
-    "Mobile Mechanic",
-    "Pick up & Drop off",
-    "Take Vehicle to Mechanic"
+    TextStrings.txt_mobile_mechanic,
+    TextStrings.txt_pick_up,
+    TextStrings.txt_take_vehicle
   ];
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-
+  String selectedDateForApi = "";
 
   @override
   void initState() {
@@ -748,10 +749,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 MaterialPageRoute(
                     builder: (context) =>  MechanicListScreen(
                       serviceIds: '${selectedListServiceIds.toString().replaceAll("[", "").replaceAll("]", "")}',
-                      serviceDate: '${_serviceDateController.text}',
+                      serviceDate: '${selectedDateForApi}',
                       serviceTime: '${_serviceTimeController.text}',
                       regularServiceType: '${_serviceTypeController.text}',
-                      serviceType: 'regular',
+                      //serviceType: 'regular',
                       latitude: widget.latitude,
                       longitude: widget.longitude,
                       address: widget.address,
@@ -886,6 +887,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             + selected.month.toString() + "/" + selected.year.toString();
         print("selectedDateFormated : " + selectedDateFormated);
         _serviceDateController.text = selectedDateFormated.toString();
+        selectedDateForApi = selected.year.toString() + "-" +  selected.month.toString() + "-" + selected.day.toString();
       });
   }
 

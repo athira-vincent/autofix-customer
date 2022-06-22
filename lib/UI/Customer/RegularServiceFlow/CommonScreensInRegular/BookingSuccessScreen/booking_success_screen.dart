@@ -6,7 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class BookingSuccessScreen extends StatefulWidget {
 
-  BookingSuccessScreen();
+  final String bookingDate;
+  BookingSuccessScreen({
+    required this.bookingDate
+});
 
   @override
   State<StatefulWidget> createState() {
@@ -75,7 +78,7 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
       margin: EdgeInsets.only(
           left: size.width * 6 / 100,
           right: size.width * 6 / 100,
-          top: size.height * 6.5 / 100
+          top: size.height * 4 / 100
       ),
       padding: EdgeInsets.only(
         left: size.width * 3.5 / 100,
@@ -90,7 +93,7 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
           Text(
             "Your service booked successfully ",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontFamily: "Samsung_SharpSans_Medium",
               fontWeight: FontWeight.bold,
               color: CustColors.light_navy, height: 1.5
@@ -107,7 +110,8 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
             ),
           ),
           Text(
-            "Mar 5, 2022",
+            widget.bookingDate,
+           // "Mar 5, 2022",
             style: TextStyle(
                 fontSize: 16,
                 fontFamily: "Samsung_SharpSans_Medium",
@@ -174,7 +178,7 @@ class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
       child: Container(
         margin: EdgeInsets.only(
             right: size.width * 6.2 / 100,
-            top: size.height * 10 / 100
+            top: size.height * 8 / 100
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(

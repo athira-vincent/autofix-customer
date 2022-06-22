@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularMechanicProfileView/regular_mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,14 +25,14 @@ class MechanicListScreen extends StatefulWidget {
   final String serviceTime;
   final String regularServiceType;
 
-  final String serviceType;
+  //final String serviceType;
   final String latitude;
   final String longitude;
   final String address;
 
   MechanicListScreen({
     required this.serviceIds,
-    required this.serviceType,
+    //required this.serviceType,
     required this.latitude,
     required this.serviceDate,
     required this.serviceTime,
@@ -348,16 +349,20 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                           Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) =>  MechanicProfileViewScreen(
+                                                                  builder: (context) =>  RegularMechanicProfileViewScreen(
                                                                     mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
                                                                     authToken: '$authToken',
                                                                     customerAddress: "${widget.address}",
                                                                     mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
                                                                     isEmergency: true,
-                                                                    serviceModel: "",
+                                                                    //serviceModel: "",
                                                                     serviceIds: widget.serviceIds,
                                                                     longitude: widget.longitude,
                                                                     latitude: widget.latitude,
+                                                                    //serviceType : widget.serviceType,
+                                                                    serviceDate : widget.serviceDate,
+                                                                    serviceTime : widget.serviceTime,
+                                                                    regularServiceType : widget.regularServiceType,
                                                                   )));
                                                         },
                                                         child: Padding(
@@ -384,7 +389,18 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                                                   radius: 50,
                                                                                   backgroundColor: Colors.white,
                                                                                   child: ClipOval(
-                                                                                    child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                                                    child:
+                                                                                      snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != null
+                                                                                          && snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != ""
+                                                                                          ?
+                                                                                      Image.network(
+                                                                                        '${snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic.toString()}',
+                                                                                        width: 150,
+                                                                                        height: 150,
+                                                                                        fit: BoxFit.cover,
+                                                                                      )
+                                                                                          :
+                                                                                      SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                                                                   )))
 
                                                                       ),
@@ -414,8 +430,11 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                                                 Padding(
                                                                                   padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                                                                   child: RatingBar.builder(
-                                                                                    initialRating: 0,
-                                                                                    minRating: 1,
+                                                                                    updateOnDrag: false,
+                                                                                    ignoreGestures: true,
+                                                                                    initialRating: double.parse('${snapshot.data?.data?.mechanicList?.data?[index].mechanicReview}'),
+                                                                                    //initialRating: 3.075,
+                                                                                    //minRating: 1,
                                                                                     direction: Axis.horizontal,
                                                                                     allowHalfRating: true,
                                                                                     itemCount: 5,
@@ -748,16 +767,20 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>  MechanicProfileViewScreen(
+                                          builder: (context) =>  RegularMechanicProfileViewScreen(
                                             authToken: '$authToken',
                                             isEmergency: false,
                                             customerAddress: "",
                                             mechanicListData: snapshot.data?.data?.mechanicList?.data![index],
                                             mechanicId: "${snapshot.data?.data?.mechanicList?.data![index].id.toString()}",
-                                            serviceModel: 'widget.serviceModel',
+                                            //serviceModel: 'widget.serviceModel',
                                             serviceIds: widget.serviceIds,
                                             longitude: widget.longitude,
                                             latitude: widget.latitude,
+                                            //serviceType : widget.serviceType,
+                                            serviceDate : widget.serviceDate,
+                                            serviceTime : widget.serviceTime,
+                                            regularServiceType : widget.regularServiceType,
                                           )));
 
                                 },
