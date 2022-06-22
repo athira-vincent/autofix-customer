@@ -1037,7 +1037,9 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => BookingSuccessScreen()));
+                  builder: (context) => BookingSuccessScreen(
+                    bookingDate: "Mar 5, 2022",
+                  )));
         }
       },
       child: Padding(

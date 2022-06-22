@@ -699,7 +699,7 @@ class QueryProvider {
         bookedTime: "$time"
         latitude: ${double.parse(latitude.toString())}
         longitude: ${double.parse(longitude.toString())}
-        serviceId: ${int.parse(serviceId.toString())}
+        serviceId: $serviceId
         mechanicId:${int.parse(mechanicId.toString())}
         reqType: ${int.parse(reqType.toString())}
         totalPrice: ${int.parse(totalPrice.toString())}
