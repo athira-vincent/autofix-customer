@@ -50,9 +50,9 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
       // search = shdPre.getPre.getString(SharedPrefKeys.search).toString();
       print('userFamilyId ' + authToken.toString());
       //print('userId ' + userId.toString());
-      _addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
-         authToken,
-          mechanicId);
+      // _addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
+      //    authToken,
+      //     mechanicId);
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
           page,

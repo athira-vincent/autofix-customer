@@ -10,9 +10,9 @@ class MechServiceDetailsReviewBloc{
   Stream <MechServiceDetailsMdl> get MechServiceDetailsMdlResponse => postMechServiceDetailsReview.stream;
 
   postGetMechServiceDetailsReviewRequest(
-      String token, type, mechanicId
+      String token, bookingId
       )async{
-    MechServiceDetailsMdl _MechServiceDetailsMdl = await repository.postGetMechServiceDetailsReviewRequest( token, type, mechanicId);
+    MechServiceDetailsMdl _MechServiceDetailsMdl = await repository.postGetMechServiceDetailsReviewRequest( token, bookingId);
     postMechServiceDetailsReview.sink.add(_MechServiceDetailsMdl);
   }
 }

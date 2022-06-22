@@ -440,10 +440,16 @@ class Repository {
           token,count, recent, customerId);
 
   Future<dynamic> postGetMechServiceDetailsReviewRequest(
-      token,type,mechanicId) =>
+      token,bookingId) =>
       _MechServiceDetailsApiProvider.postMechServiceDetailsRequest(
-          token,type,mechanicId
+          token,bookingId
       );
+  Future<dynamic> postTimeServicePriceAddReviewRequest(
+      token,services,fee,time) =>
+      _AddPriceFaultApiProvider.postTimePriceServiceDetailsRequest(
+          token,services,fee,time
+      );
+
 
 
 

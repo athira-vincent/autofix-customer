@@ -7,9 +7,9 @@ class MechServiceDetailsApiProvider1 {
   final QueryProvider _queryProvider = QueryProvider();
 
   Future postMechServiceDetailsRequest(
-      token, type, mechanicId)async{
+      token, bookingId)async{
     Map<String,dynamic> _resp = await _queryProvider.postMechServiceDetailsRequest(
-      token, type, mechanicId);
+      token, bookingId);
     if(_resp != null){
       if(_resp['status'] == "error"){
         final errorMsg = MechServiceDetailsMdl(data: null);
