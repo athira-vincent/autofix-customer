@@ -15,8 +15,10 @@ import 'mech_service_mdl.dart';
 
 class MechServiceRegularDetailsScreen extends StatefulWidget {
 
-
-  MechServiceRegularDetailsScreen();
+  final String bookingId;
+  MechServiceRegularDetailsScreen({
+    required this.bookingId
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +27,7 @@ class MechServiceRegularDetailsScreen extends StatefulWidget {
 }
 
 class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsScreen> {
-  String authToken = "", type = "",bookingId = "";
+  String authToken = "", type = "",bookingId = "", userId = "";
 
   MechServiceDetailsReviewBloc _MechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
 
@@ -40,6 +42,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
 
   @override
   void initState() {
+    bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
     super.initState();
@@ -49,8 +52,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      //type = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.userID).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       _MechServiceDetailsReviewBloc.postGetMechServiceDetailsReviewRequest(
         authToken, bookingId
@@ -90,12 +92,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context)=> MechanicHomeScreen()
-            ));
-          },
-          //onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustColors.light_navy,
         elevation: 0,
@@ -110,9 +107,11 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         body: SingleChildScrollView(
           child: Container(
               color: Colors.white,
-              child:
-              isLoading == true
-               ? CircularProgressIndicator(color: CustColors.light_navy)
+              child: isLoading == true
+               ? Container(
+                  width: size.width,
+                  height: size.height,
+                  child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
                : Column(
                 children: [
                   Container(

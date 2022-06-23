@@ -343,14 +343,16 @@ class MechanicService {
 
 class Service {
   Service({
-   required this.id,
-   required this.serviceName,
-   required this.description,
-   required this.icon,
-   required this.minPrice,
-   required this.maxPrice,
-   required this.categoryId,
-   required this.status,
+    required this.id,
+    required this.serviceName,
+    required this.description,
+    required this.icon,
+    required this.minPrice,
+    required this.maxPrice,
+    required this.categoryId,
+    required this.status,
+    required this.regularStatus,
+    required this.isChecked,
   });
 
   String id;
@@ -361,27 +363,34 @@ class Service {
   String maxPrice;
   int categoryId;
   int status;
+  int regularStatus = 0;
+  bool isChecked = false;
+
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
+    regularStatus: json["regularStatus"] == null ? null : json["regularStatus"],
     id: json["id"] == null ? null : json["id"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
     description: json["description"],
-    icon: json["icon"] == null ? null : json["icon"],
+    icon: json["icon"],
     minPrice: json["minPrice"] == null ? null : json["minPrice"],
     maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
     categoryId: json["categoryId"] == null ? null : json["categoryId"],
     status: json["status"] == null ? null : json["status"],
+    isChecked: json["isChecked"] == null ? false : json["isChecked"],
   );
 
   Map<String, dynamic> toJson() => {
+    "regularStatus": regularStatus == null ? null : regularStatus,
     "id": id == null ? null : id,
     "serviceName": serviceName == null ? null : serviceName,
     "description": description,
-    "icon": icon == null ? null : icon,
+    "icon": icon,
     "minPrice": minPrice == null ? null : minPrice,
     "maxPrice": maxPrice == null ? null : maxPrice,
     "categoryId": categoryId == null ? null : categoryId,
     "status": status == null ? null : status,
+    "isChecked": isChecked == null ? null : isChecked,
   };
 }
 

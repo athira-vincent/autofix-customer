@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
@@ -64,7 +65,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   String? dateTime;
 
 
-  List<Service> selectedCategoryList =[];
+  List<Service>? selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
   int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
   String selectedServiceIds = "";
@@ -86,11 +87,11 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     super.initState();
     widget.categoryList!.service![0].regularStatus = 1;
 
-    selectedCategoryList = widget.selectedService!;
-    for(int i = 0; i<selectedCategoryList.length ; i++){
-      selectedListServiceIds.add(selectedCategoryList[i].id);
-      selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
-      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].maxPrice}');
+    selectedCategoryList = widget.selectedService;
+    for(int i = 0; i<selectedCategoryList!.length ; i++){
+      selectedListServiceIds.add(selectedCategoryList![i].id);
+      selectedServiceIds = selectedCategoryList![i].id  + ',' + selectedServiceIds ;
+      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList![i].maxPrice}');
     }
   }
 
@@ -207,12 +208,12 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       child: Column(
         children: [
           listHeaderWidget(size),
-          selectedCategoryList.length != 0
+          selectedCategoryList!.length != 0
               ? ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: selectedCategoryList.length,
+                itemCount: selectedCategoryList!.length,
                 itemBuilder: (context, index) {
                   return serviceListItemWidget(size,index);
                 },
@@ -398,12 +399,12 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               setState(() {
                 for(int i=0; i<widget.categoryList!.service!.length; i++)
                   {
-                    if(selectedCategoryList[index].id == widget.categoryList!.service![i].id)
+                    if(selectedCategoryList![index].id == widget.categoryList!.service![i].id)
                       {
                         this.widget.categoryList!.service![i].isChecked = false;
                       }
                   }
-                selectedCategoryList.removeAt(index);
+                selectedCategoryList!.removeAt(index);
               });
             },
             child: Stack(
@@ -422,8 +423,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
-                        child:selectedCategoryList[index].icon.toString() != ""
-                            ? Image.network(selectedCategoryList[index].icon,
+                        child:selectedCategoryList![index].icon.toString() != ""
+                            ? Image.network(selectedCategoryList![index].icon,
                                 fit: BoxFit.cover,
                               )
                             : Icon(Icons.stop,size: 35,color: CustColors.light_navy,),
@@ -447,7 +448,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               Container(
                 width: 200,
                 child: Text(
-                  selectedCategoryList[index].serviceName,
+                  selectedCategoryList![index].serviceName,
                   softWrap: true,
                   style: TextStyle(
                     fontSize: 14,
@@ -475,7 +476,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       height: 1.3,
                     ),
                   ),
-                  Text("₦ ${selectedCategoryList[index].maxPrice}",
+                  Text("₦ ${selectedCategoryList![index].maxPrice}",
                     style: TextStyle(
                       fontSize: 15,
                       fontFamily: "SharpSans_Bold",
@@ -756,6 +757,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       latitude: widget.latitude,
                       longitude: widget.longitude,
                       address: widget.address,
+                      selectedService: selectedCategoryList,
+
                     )));
           }
 
@@ -812,10 +815,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         ));
 
     setState(() {
-      for(int i = 0; i<selectedCategoryList.length ; i++){
-          selectedListServiceIds.add(selectedCategoryList[i].id);
-          selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
-          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList[i].maxPrice}');
+      for(int i = 0; i<selectedCategoryList!.length ; i++){
+          selectedListServiceIds.add(selectedCategoryList![i].id);
+          selectedServiceIds = selectedCategoryList![i].id  + ',' + selectedServiceIds ;
+          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList![i].maxPrice}');
       }
       print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
     });

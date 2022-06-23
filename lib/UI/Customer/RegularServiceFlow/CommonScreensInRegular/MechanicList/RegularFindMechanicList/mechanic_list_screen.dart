@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularMechanicProfileView/regular_mechanic_profile_screen.dart';
@@ -14,8 +15,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui' as ui;
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart' as category;
 
-import '../../../../../../Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 
 
 class MechanicListScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class MechanicListScreen extends StatefulWidget {
   final String serviceDate;
   final String serviceTime;
   final String regularServiceType;
-
+  final List<category.Service>? selectedService;
   //final String serviceType;
   final String latitude;
   final String longitude;
@@ -34,11 +35,13 @@ class MechanicListScreen extends StatefulWidget {
     required this.serviceIds,
     //required this.serviceType,
     required this.latitude,
+    required this.selectedService,
     required this.serviceDate,
     required this.serviceTime,
     required this.regularServiceType,
     required this.longitude,
-    required this.address
+    required this.address,
+
   });
 
 
@@ -363,6 +366,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                                     serviceDate : widget.serviceDate,
                                                                     serviceTime : widget.serviceTime,
                                                                     regularServiceType : widget.regularServiceType,
+                                                                    selectedService: widget.selectedService!,
                                                                   )));
                                                         },
                                                         child: Padding(
@@ -781,6 +785,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                             serviceDate : widget.serviceDate,
                                             serviceTime : widget.serviceTime,
                                             regularServiceType : widget.regularServiceType,
+                                            selectedService: widget.selectedService!,
                                           )));
 
                                 },

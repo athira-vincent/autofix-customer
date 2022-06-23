@@ -4,30 +4,24 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
-import 'package:auto_fix/Provider/locale_provider.dart';
-import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
+
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/listeners/NotificationListener.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as json;
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart' as category;
 
 
 
@@ -45,6 +39,7 @@ class RegularMechanicProfileViewScreen extends StatefulWidget {
   final String serviceDate;
   final String serviceTime;
   final String regularServiceType;
+  final List<category.Service> selectedService;
  // final String serviceType;
 
 
@@ -61,6 +56,7 @@ class RegularMechanicProfileViewScreen extends StatefulWidget {
     required this.serviceDate,
     required this.serviceTime,
     required this.regularServiceType,
+    required this.selectedService
     //required this.serviceType
   });
 
@@ -101,7 +97,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   String? FcmToken="";
   String authToken="";
-  String userName="";
+  String userName="", userId = "";
 
 
   String serviceIdEmergency="";
@@ -112,6 +108,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   String carNameModel="";
 
   String carPlateNumber="";
+  int totalAmount = 0;
 
   late StateSetter mechanicAcceptance;
 
@@ -128,13 +125,21 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   void initState() {
     // TODO: implement initState
     super.initState();
-    yourItemList.add({
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-      "isDefault":  '1',
-    });
+
+    for(int i = 0; i<= widget.selectedService.length - 1 ; i++){
+      yourItemList.add({
+        "serviceCategoryId": '${widget.selectedService[i].categoryId}',
+        "serviceId" : '${widget.selectedService[i].id}',
+        "serviceName" : '${widget.selectedService[i].serviceName}',
+        "serviceCost" : '${widget.selectedService[i].maxPrice}'
+      });
+      totalAmount = totalAmount + int.parse(widget.selectedService[i].maxPrice);
+    }
+
+    print(' >>>>>>>>>>>>>> yourItemList \n $yourItemList >>>_RegularMechanicProfileViewScreenState yourItemList');
+
+    print(' >>>>>>>>>>>>>> mechanicListData \n ${widget.mechanicListData} >>>>>>>_RegularMechanicProfileViewScreenState mechanicListData');
+
     getSharedPrefData();
     _listen();
 
@@ -148,23 +153,24 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
 
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
+      print('authToken>>>>>>>>>_RegularMechanicProfileViewScreenState ' + authToken.toString());
+      print('serviceIdEmergency>>>>>>>>_RegularMechanicProfileViewScreenState ' + serviceIdEmergency.toString());
+      print('mechanicIdEmergency>>>>>>>_RegularMechanicProfileViewScreenState ' + mechanicIdEmergency.toString());
       //print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
-      totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService?[0].fee.toString()}');
+      totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService[0].fee.toString()}');
       _homeCustomerBloc.fetchMechanicProfileDetails(
           authToken,
           '${widget.mechanicListData?.id}',
           widget.serviceIds,
           widget.latitude,
-         widget.longitude,);
+          widget.longitude,);
 
     });
   }
@@ -199,11 +205,11 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           print("mechanicsRegularBookingIDResponse success booking id >>> " + '${value.data!.mechanicBooking!.id.toString()}' );
 
           if(widget.regularServiceType == TextStrings.txt_pick_up){
-            updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id);
+            updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
           }else if(widget.regularServiceType == TextStrings.txt_mobile_mechanic){
-            updateToCloudFirestoreDBMobileMech(value.data!.mechanicBooking!.id);
+            updateToCloudFirestoreDBMobileMech(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
           }else{
-            updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id);
+            updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
           }
 
           Navigator.pushReplacement(
@@ -333,14 +339,16 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     }
   }*/
 
-  Future<void> updateToCloudFirestoreDBPickUp(int bookingId) async {
+  Future<void> updateToCloudFirestoreDBPickUp(int bookingId, int vehicleId) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
-     yourItemList.add({
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-      "isDefault":  '1',
+
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
     });
 
     _firestore
@@ -348,25 +356,33 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         .doc('${bookingId}')
         .set({
         "bookingId" : "${bookingId}",
-        "bookingDate": "",
-        "bookingTime": "",
-        "customerId": "",
-        "customerName" : "",
-        "customerLatitude" : "",
-        "customerLongitude": "",
-        "mechanicId": "",
-        "mechanicName": "",
-        "mechanicLatitude": "",
-        "mechanicLongitude": "",
-        "serviceList" : "",           //...?
-        "isDriveStarted" : "",
-        "isArrived": "",
-        "isPickedUpVehicle" : "",
-        "isReachedServiceCenter" : "",
-        "isWorkStarted" : "",
-        "isWorkFinshed" : "",
-        "isDropOffVehicle": "",
-        "paymentStatus": ""
+        "bookingDate": "${widget.serviceDate}",
+        "bookingTime": "${widget.serviceTime}",
+        "customerId": "${userId}",
+        "customerName" : "${userName}",
+        "customerLatitude" : "${widget.latitude}",
+        "customerLongitude": "${widget.longitude}",
+        "customerAddress" : "",
+        "customerFcmToken" : "${token}",
+        "mechanicId": "${widget.mechanicId}",
+        "mechanicName": "${widget.mechanicListData!.firstName}",
+        "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
+        "mechanicLongitude": "${widget.mechanicListData!.mechanicStatus[0].longitude}",
+        "mechanicAddress" : "",
+        "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
+        "serviceList" : FieldValue.arrayUnion(yourItemList),
+        "serviceTotalAmount" : '${totalAmount}',
+        "vehicleId": "${vehicleId}",
+        "vehicleName": "",
+        "vehiclePlateNumber" : "",
+        "isDriveStarted" : "-1",
+        "isArrived": "-1",
+        "isPickedUpVehicle" : "-1",
+        "isReachedServiceCenter" : "-1",
+        "isWorkStarted" : "-1",
+        "isWorkFinished" : "-1",
+        "isDropOffVehicle": "-1",
+        "paymentStatus": "-1"
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
@@ -374,60 +390,96 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   }
 
-  Future<void> updateToCloudFirestoreDBMobileMech(int bookingId) async {
+  Future<void> updateToCloudFirestoreDBMobileMech(int bookingId, int vehicleId) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
-    yourItemList.add({
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-      "isDefault":  '1',
+
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
     });
 
     _firestore
         .collection("Regular-MobileMech")
-        .doc('$bookingId')
+        .doc('${bookingId}')
         .set({
-      "serviceModel" : FieldValue.arrayUnion([{
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "isDefault":  '1',
-      }]),
-      "updatedServiceList": FieldValue.arrayUnion(yourItemList),
-      "customerFromPage": "MechanicTrackingScreen",
-
+      "bookingId" : "${bookingId}",
+      "bookingDate": "${widget.serviceDate}",
+      "bookingTime": "${widget.serviceTime}",
+      "customerId": "${userId}",
+      "customerName" : "${userName}",
+      "customerLatitude" : "${widget.latitude}",
+      "customerLongitude": "${widget.longitude}",
+      "customerAddress" : "",
+      "customerFcmToken" : "${token}",
+      "mechanicId": "${widget.mechanicId}",
+      "mechanicName": "${widget.mechanicListData!.firstName}",
+      "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
+      "mechanicLongitude": "${widget.mechanicListData!.mechanicStatus[0].longitude}",
+      "mechanicAddress" : "",
+      "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
+      "serviceList" : FieldValue.arrayUnion(yourItemList),
+      "serviceTotalAmount" : '${totalAmount}',
+      "vehicleId": "${vehicleId}",
+      "vehicleName": "",
+      "vehiclePlateNumber" : "",
+      "isDriveStarted" : "-1",
+      "isArrived": "-1",
+      "isWorkStarted" : "-1",
+      "isWorkFinished" : "-1",
+      "paymentStatus": "-1"
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
-
   }
 
-  Future<void> updateToCloudFirestoreDBTakeVehicle(int bookingId) async {
+  Future<void> updateToCloudFirestoreDBTakeVehicle(int bookingId, int vehicleId) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
-    yourItemList.add({
-      "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-      "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-      "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-      "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-      "isDefault":  '1',
+
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
     });
 
     _firestore
         .collection("Regular-TakeVehicle")
-        .doc('$bookingId')
+        .doc('${bookingId}')
         .set({
-      "serviceModel" : FieldValue.arrayUnion([{
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-        "isDefault":  '1',
-      }]),
-      "updatedServiceList": FieldValue.arrayUnion(yourItemList),
-      "customerFromPage": "MechanicTrackingScreen",
-
+      "bookingId" : "${bookingId}",
+      "bookingDate": "${widget.serviceDate}",
+      "bookingTime": "${widget.serviceTime}",
+      "customerId": "${userId}",
+      "customerName" : "${userName}",
+      "customerLatitude" : "${widget.latitude}",
+      "customerLongitude": "${widget.longitude}",
+      "customerAddress" : "",
+      "customerFcmToken" : "${token}",
+      "mechanicId": "${widget.mechanicId}",
+      "mechanicName": "${widget.mechanicListData!.firstName}",
+      "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
+      "mechanicLongitude": "${widget.mechanicListData!.mechanicStatus[0].longitude}",
+      "mechanicAddress" : "",
+      "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
+      "serviceList" : FieldValue.arrayUnion(yourItemList),
+      "serviceTotalAmount" : '${totalAmount}',
+      "vehicleId": "${vehicleId}",
+      "vehicleName": "",
+      "vehiclePlateNumber" : "",
+      "isDriveStarted" : "-1",
+      "isReachedServiceCenter": "-1",
+      "isReceivedVehicle" : "-1",
+      "isWorkStarted" : "-1",
+      "isWorkFinished" : "-1",
+      "paymentStatus": "-1",
+      "isPickedUpVehicle": "-1",
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
@@ -973,7 +1025,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                 ? '1'
                 : widget.regularServiceType == TextStrings.txt_mobile_mechanic
                 ? '2' : '3',
-            '${widget.mechanicListData?.totalAmount}',
+            '${totalAmount}',
             '1',
             '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);
 
@@ -1013,7 +1065,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       ),
     );
   }
-
 
   _showMechanicAcceptanceDialog(BuildContext context) async {
     Future.delayed(const Duration(seconds: 35), () {
@@ -1077,14 +1128,5 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
 
   }
-
-
-
-
-
-
-
-
-
 
 }
