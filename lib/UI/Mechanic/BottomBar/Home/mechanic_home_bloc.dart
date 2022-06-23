@@ -119,6 +119,15 @@ class HomeMechanicBloc {
     return formatted;
   }
 
+  dateConverter(DateTime Format) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+
+
   /// =============== Time Conversion ================== ///
 
   timeConvert(DateTime Format) {
