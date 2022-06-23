@@ -12,7 +12,7 @@ import 'emrg_reglr_add_price_mdl.dart';
 import 'update_time_add_price_mdl.dart';
 
 class EmergencyServices extends StatefulWidget{
-  EmergencyServices({Key? key,}): super(key: key);
+  EmergencyServices({Key? key}): super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _EmergencyServices();
@@ -104,13 +104,13 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             }
             print("fddfds ${_timeList}");
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
-              _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time);
+              _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time.toString());
             }else{
               _timeList!.add("12:00");
             }
             print("ewqr ${_priceList}");
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
-              _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee);
+              _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee.toString());
             }
             else{
               _priceList!.add(_AddPriceServiceList!.data![i].minPrice);
@@ -530,8 +530,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                             _timeListEmergency?.add('${_timeList![i]}');
                             _priceListEmergency?.add('${_priceList![i]}');
                             _serviceIdEmergency?.add('${_AddPriceServiceList?.data?[i].id}');
-
-
                           }
                         }
 
@@ -544,12 +542,10 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         if(_lodingIdList.length == 0)
                           {
                             saveloading = false;
-
                           }
                         else
                           {
                             saveloading = true;
-
                           }
                         // _addPriceFaultReviewBloc.postUpdateAddPriceFaultReviewRequest(
                         //     authToken,
@@ -557,13 +553,23 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         //     "${_timeListEmergency}",
                         //     "${_priceListEmergency}",
                         //     "${_serviceIdEmergency}",
+                        String s="[";
+                        for(int i=0;i<_timeListEmergency!.length;i++){
+                          s=s+"""\"${_timeListEmergency![i]}\", """;
+                        }
+                        s=s+"]";
+                        String v="[";
+                        for(int i=0;i<_priceListEmergency!.length;i++){
+                          v=v+"""\"${_priceListEmergency![i]}\", """;
+                        }
+                        v=v+"]";
+                        print("hdgjdv 001 $s");
                          _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
                            authToken,
-                           "${_timeListEmergency}",
-                           "${_priceListEmergency}",
-                           "${_serviceIdEmergency}",
+                           _serviceIdEmergency.toString().replaceAll("[", "").replaceAll("]", ""),
+                           s,
+                           v,
                         );
-
                       });
                     },
                     child: Text('Save changes',
@@ -594,7 +600,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
 }

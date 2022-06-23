@@ -2643,8 +2643,8 @@ class QueryProvider {
      mutation {
   mechanic_service_add(
   services: "$services",
-   fee: ["$fee"],
-    time: ["$time"])
+   fee: $fee,
+    time: $time)
      {
     message
   }
