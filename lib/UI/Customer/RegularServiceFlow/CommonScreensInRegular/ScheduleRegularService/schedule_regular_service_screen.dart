@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
   final CategoryList? categoryList;
-  final List<Service>? selectedService;
+  final List selectedService;
 
   final String latitude;
   final String longitude;
@@ -64,7 +64,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   String? dateTime;
 
 
-  List<Service> selectedCategoryList =[];
+  List selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
   int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
   String selectedServiceIds = "";
@@ -86,7 +86,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     super.initState();
     widget.categoryList!.service![0].regularStatus = 1;
 
-    selectedCategoryList = widget.selectedService!;
+    selectedCategoryList = widget.selectedService;
     for(int i = 0; i<selectedCategoryList.length ; i++){
       selectedListServiceIds.add(selectedCategoryList[i].id);
       selectedServiceIds = selectedCategoryList[i].id  + ',' + selectedServiceIds ;
@@ -756,6 +756,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       latitude: widget.latitude,
                       longitude: widget.longitude,
                       address: widget.address,
+                      selectedService: selectedCategoryList,
+
                     )));
           }
 
