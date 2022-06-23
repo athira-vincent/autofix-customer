@@ -2539,95 +2539,98 @@ class QueryProvider {
 
   postMechServiceDetailsRequest(
       token,bookingId) async {
-    String _query = """ 
-     query
-     {
-  bookingDetails(bookingId: $bookingId) {
-    id
-    bookingCode
-    reqType
-    bookStatus
-    totalPrice
-    tax
-    commission
-    serviceCharge
-    totalTime
-    serviceTime
-    latitude
-    longitude
-    extend
-    totalExt
-    extendTime
-    bookedDate
-    bookedTime
-    isRated
-    status
-    regularType
-    mechLatitude
-    mechLongitude
-    demoMechanicId
-    customerId
-    vehicleId
-    serviceId
-    bookService {
+    String _query = """
+      {
+    bookingDetails(bookingId: $bookingId) {
       id
-      mechanicId
-      customerId
-      status
-      serviceId
-      bookMechanicId
-      service{id}
-    }
-    vehicle {
-      id
-      brand
-      model
-      engine
-      year
-      plateNo
-      lastMaintenance
-      milege
-      vehiclePic
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
       latitude
       longitude
-      defaultVehicle
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
       status
-      userId
-    }
-    mechanic {
-      id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      accountType
-      status
-      jwtToken
-      fcmToke
-      otpCode
-      customer{id}
-    }
-    customer {
-      id
-      userCode
-      firstName
-      lastName
-      emailId
-      phoneNo
-      accountType
-      status
-      jwtToken
-      fcmToke
-      otpCode
-      customer{id}
+      regularType
+      mechLatitude
+      mechLongitude
+      demoMechanicId
+      customerId
+      vehicleId
+      serviceId
+      bookService {
+        id
+        mechanicId
+        customerId
+        status
+        serviceId
+        bookMechanicId
+        service{
+          id
+          serviceName
+          minPrice
+        }
+      }
+      vehicle {
+        id
+        brand
+        model
+        engine
+        year
+        plateNo
+        lastMaintenance
+        milege
+        vehiclePic
+        latitude
+        longitude
+        defaultVehicle
+        status
+        userId
+      }
+      mechanic {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        accountType
+        status
+        jwtToken
+        fcmToke
+        otpCode
+        customer{
+          id
+        }
+      }
+      customer {
+        id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        accountType
+        status
+        jwtToken
+        fcmToke
+        otpCode
+        customer{
+          id
+        }
+      }
     }
   }
-}
-
-
-
-
     """;
     log(_query);
     return await GqlClient.I.query01(
@@ -2643,8 +2646,8 @@ class QueryProvider {
      mutation {
   mechanic_service_add(
   services: "$services",
-   fee: ["$fee"],
-    time: ["$time"])
+   fee: $fee,
+    time: $time)
      {
     message
   }

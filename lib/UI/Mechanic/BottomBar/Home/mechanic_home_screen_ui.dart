@@ -425,7 +425,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MechServiceRegularDetailsScreen(),
+                            builder: (context) => MechServiceRegularDetailsScreen(
+                              bookingId: snapshot.data!.data!.upcomingCompletedServices![i].id.toString(),
+                            ),
                           ));
                     });
 
@@ -458,11 +460,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!.day.toString() +
-                                          "-" +
-                                          snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!.month.toString() +
-                                          "-" +
-                                          snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!.year.toString(),
+                                        _mechanicHomeBloc.dateConverter(snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!),
                                          // "02-12-2021",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
