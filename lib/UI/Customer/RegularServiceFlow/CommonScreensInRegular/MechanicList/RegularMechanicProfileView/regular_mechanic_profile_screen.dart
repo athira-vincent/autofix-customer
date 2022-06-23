@@ -38,7 +38,7 @@ class RegularMechanicProfileViewScreen extends StatefulWidget {
   final String serviceDate;
   final String serviceTime;
   final String regularServiceType;
-  final selectedService;
+  final List selectedService;
  // final String serviceType;
 
 
@@ -124,17 +124,15 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     // TODO: implement initState
     super.initState();
 
-    //yourItemList = widget.selectedService;
+    print('${widget.selectedService} >>>>>>>>>>>>>>>>>>>>>>>>>>>_RegularMechanicProfileViewScreenState widget.selectedService');
 
-    for(int i = 0; i<= widget.selectedService!.length; i++){
+    for(int i = 0; i<= widget.selectedService.length; i++){
       yourItemList.add(widget.selectedService[i]);
     }
 
     print('$yourItemList >>>>>>>>>>>>>>>>>>>>>>>>>>>_RegularMechanicProfileViewScreenState yourItemList');
     getSharedPrefData();
     _listen();
-
-    //_listenNotification(context);
   }
 
 
@@ -203,12 +201,12 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             //updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id);
           }
 
-          Navigator.pushReplacement(
+         /* Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => BookingSuccessScreen(
                     bookingDate: _homeCustomerBloc.dateConvert(value.data!.mechanicBooking!.bookedDate!).toString(),
-                  )));
+                  )));*/
 
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
@@ -217,118 +215,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     });
 
   }
-
-  /*Future<void> callOnFcmApiSendPushNotifications(int length) async {
-    String? token;
-    await FirebaseMessaging.instance.getToken().then((value) {
-     token = value;
-      setState(() {
-        FcmToken = value;
-      });
-      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
-    });
-
-
-    final postUrl = 'https://fcm.googleapis.com/fcm/send';
-    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
-
-    final data = {
-      'notification': {
-        'body': 'You have $length new booking',
-        'title': 'Maria',
-        'sound': 'alarmw.wav',
-      },
-
-      'priority': 'high',
-      'data': {
-        "click_action": "FLUTTER_NOTIFICATION_CLICK",
-        "id": "1",
-        "status": "done",
-        "screen": "IncomingJobOfferScreen",
-        "bookingId" : "$bookingIdEmergency",
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-        "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "serviceId" : "${widget.mechanicListData?.mechanicService?[0].service?.id}",
-        "serviceList" : "${yourItemList.toString()}",
-        "carName" : "$carNameBrand [$carNameModel]",
-        "carPlateNumber" : "$carPlateNumber",
-        "customerName" : "$userName",
-        "customerAddress" : "${widget.customerAddress}",
-        "customerLatitude" : "${widget.latitude}",
-        "customerLongitude" : "${widget.longitude}",
-        "customerFcmToken" : "$token",
-        "mechanicName" : "${widget.mechanicListData?.firstName}",
-        "mechanicAddress" : "",
-        "mechanicLatitude" : "${widget.latitude}",
-        "mechanicLongitude" : "${widget.longitude}",
-        "latitude" : "${widget.latitude}",
-        "longitude" : "${widget.longitude}",
-        "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
-        "mechanicArrivalState": "0",
-        "mechanicDiagonsisState": "0",
-        "customerDiagonsisApproval": "0",
-        "requestFromApp" : "0",
-        "paymentStatus" : "0",
-        "totalTimeTakenByMechanic": "0",
-        "isPaymentRequested" : "0",
-        "isPaymentAccepted" : "0",
-        "extendedTime" : "0",
-        "customerFromPage" : "0",
-        "mechanicFromPage" : "0",
-        "updatedServiceCost" : "${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
-        "updatedServiceList" : "",
-        "updatedServiceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
-        "isWorkStarted" : "0",
-        "isWorkCompleted" : "0",
-        "message": "ACTION"
-      },
-      'apns': {
-        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
-        'payload': {
-          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
-        }
-      },
-     'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
-      //'to':'$token'
-      // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
-    };
-
-    print('FcmToken data >>> ${data}');
-    print('FcmToken >>> ${FcmToken}');
-    print('FcmToken token >>> ${token}');
-
-
-    final headers = {
-      'content-type': 'application/json',
-      'Authorization':
-      'key=$serverToken'
-    };
-
-    BaseOptions options = new BaseOptions(
-      connectTimeout: 5000,
-      receiveTimeout: 30 * 1000,    // 30 seconds
-      headers: headers,
-    );
-
-    try {
-      final response = await Dio(options).post(postUrl, data: data);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          print('notification sending success');
-
-        });
-      } else {
-        setState(() {
-          print('notification sending failed');
-
-        });
-      }
-    } catch (e) {
-      print('exception $e');
-    }
-  }*/
 
   Future<void> updateToCloudFirestoreDBPickUp(int bookingId) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
@@ -348,7 +234,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "mechanicName": "${widget.mechanicListData!.firstName}",
         "mechanicLatitude": "${widget.mechanicListData!.mechanicStatus[0].latitude}",
         "mechanicLongitude": "${widget.mechanicListData!.mechanicStatus[0].longitude}",
-        "serviceList" : FieldValue.arrayUnion(yourItemList),
+        "serviceList" : FieldValue.arrayUnion(widget.selectedService),
         "isDriveStarted" : "",
         "isArrived": "",
         "isPickedUpVehicle" : "",
