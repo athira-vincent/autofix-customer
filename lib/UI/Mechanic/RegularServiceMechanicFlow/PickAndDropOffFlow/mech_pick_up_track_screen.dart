@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MechPickUpTrackScreen extends StatefulWidget{
+
+  final String bookingId;
+
+  MechPickUpTrackScreen({
+    required this.bookingId
+  });
+
   @override
   State<StatefulWidget> createState() {
     return _MechPickUpTrackScreen();
