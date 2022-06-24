@@ -22,83 +22,91 @@ import 'package:provider/provider.dart';
 import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
 
 
-void main() async {
-  await initHiveForFlutter();
-  await runZonedGuarded(() async {
-   WidgetsFlutterBinding.ensureInitialized();
-   if(Platform.isAndroid)
-     {
-       await Firebase.initializeApp(
-         options: const FirebaseOptions(
-           apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
-           appId: '1:54966987696:android:96f910e016709a2ca84475',
-           messagingSenderId: '54966987696',
-           authDomain: 'autofix-336509.firebaseapp.com',
-           projectId: 'autofix-336509',
-         ),
-       );
-     }
-   else
-     {
-       await Firebase.initializeApp();
-     }
+  void main() async {
+    await initHiveForFlutter();
+    await runZonedGuarded(() async {
+     WidgetsFlutterBinding.ensureInitialized();
+     if(Platform.isAndroid)
+       {
+         await Firebase.initializeApp(
+           options: const FirebaseOptions(
+             apiKey: 'AIzaSyCnxRej1WXDW1kiBap9xmYR9IXBTcturMY',
+             appId: '1:54966987696:android:96f910e016709a2ca84475',
+             messagingSenderId: '54966987696',
+             authDomain: 'autofix-336509.firebaseapp.com',
+             projectId: 'autofix-336509',
+           ),
+         );
+       }
+     else
+       {
+         await Firebase.initializeApp();
+       }
 
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-        runApp(MyApp());
-      }, (error, stackTrace) {
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
-  });
-}
-
-class MyApp extends StatefulWidget {
-
-  @override
-  _MyAppState createState() => _MyAppState();
-
-  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
-}
-
-class _MyAppState extends State<MyApp> {
-
-   Locale _locale = Locale.fromSubtags(languageCode: 'en');
-
-   void setLocale(Locale value) {
-    setState(() {
-      _locale = value;
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+          runApp(MyApp());
+        }, (error, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  class MyApp extends StatefulWidget {
 
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.light,
-      statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
-    ));
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: LocaleProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value: ProfileDataProvider(),),
-      ],
-      child:Sizer(
-              builder: (context, orientation, deviceType) {
-                return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  locale: _locale,
-                  localizationsDelegates: AppLocalizations.localizationsDelegates,
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  title: 'ResolMech',
-                  theme: ThemeData(
-                    primaryColor: Colors.white,
-                  ),
-                  home: SplashScreen(),
-                  //home: MechMobileTrackScreen(bookingId: "1141"),
-                );
-              },
-            ),
-    );
+    @override
+    _MyAppState createState() => _MyAppState();
+
+    static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
   }
-}
+
+  class _MyAppState extends State<MyApp> {
+
+     Locale _locale = Locale.fromSubtags(languageCode: 'en');
+
+     void setLocale(Locale value) {
+      setState(() {
+        _locale = value;
+      });
+    }
+
+    @override
+    Widget build(BuildContext context) {
+
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
+      ));
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: LocaleProvider(),
+          ),
+          ChangeNotifierProvider.value(
+            value: ProfileDataProvider(),
+          ),
+        ],
+        child:Sizer(
+                builder: (context, orientation, deviceType) {
+                  return MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    locale: _locale,
+                    localizationsDelegates: AppLocalizations.localizationsDelegates,
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    title: 'ResolMech',
+                    theme: ThemeData(
+                      primaryColor: Colors.white,
+                    ),
+                    /*home: CustPickUpTrackScreen(
+                      bookedDate: 'Mar 7,2022',
+                      latitude: "",
+                      longitude: "",
+                      mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                      mechanicName: "Minnu Kurian",
+                      pickingDate: 'Mar 8,2022',
+                    ),*/
+                    home:SplashScreen(),
+                  );
+                },
+              ),
+      );
+    }
+  }
