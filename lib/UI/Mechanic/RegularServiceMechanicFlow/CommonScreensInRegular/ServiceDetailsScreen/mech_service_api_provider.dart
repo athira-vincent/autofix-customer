@@ -5,21 +5,20 @@ import 'mech_service_mdl.dart';
 
 class MechServiceDetailsApiProvider1 {
   final QueryProvider _queryProvider = QueryProvider();
-
-  Future postMechServiceDetailsRequest(
+  Future<MechServiceDetailsMdl> postMechServiceDetailsRequest(
       token, bookingId)async{
     Map<String,dynamic> _resp = await _queryProvider.postMechServiceDetailsRequest(
       token, bookingId);
     if(_resp != null){
       if(_resp['status'] == "error"){
-        final errorMsg = MechServiceDetailsMdl(data: null);
+        final errorMsg = MechServiceDetailsMdl(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       }else{
         var data = {"data": _resp};
         return MechServiceDetailsMdl.fromJson(data);
       }
     }else{
-      final errorMsg = MechServiceDetailsMdl(data: null);
+      final errorMsg = MechServiceDetailsMdl(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }
