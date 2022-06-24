@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,7 +56,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-   Locale _locale = Locale.fromSubtags(languageCode: 'en') ;
+   Locale _locale = Locale.fromSubtags(languageCode: 'en');
 
    void setLocale(Locale value) {
     setState(() {
@@ -64,6 +66,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
       statusBarColor: CustColors.light_navy, //or set color with: Color(0xFF0000FF)
@@ -94,5 +97,4 @@ class _MyAppState extends State<MyApp> {
             ),
     );
   }
-
 }
