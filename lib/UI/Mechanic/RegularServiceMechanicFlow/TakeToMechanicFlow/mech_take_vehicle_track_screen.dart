@@ -13,6 +13,7 @@ class MechTakeVehicleTrackScreen extends StatefulWidget{
   MechTakeVehicleTrackScreen({
     required this.bookingId
   });
+
   @override
   State<StatefulWidget> createState() {
     return _MechTakeVehicleTrackScreen();

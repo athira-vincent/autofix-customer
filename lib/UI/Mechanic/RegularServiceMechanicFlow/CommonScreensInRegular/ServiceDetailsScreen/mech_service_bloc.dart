@@ -7,7 +7,7 @@ class MechServiceDetailsReviewBloc{
   final repository = Repository();
 
   final postMechServiceDetailsReview = PublishSubject<MechServiceDetailsMdl>();
-  Stream <MechServiceDetailsMdl> get MechServiceDetailsMdlResponse => postMechServiceDetailsReview.stream;
+  Stream <MechServiceDetailsMdl> get mechServiceDetailsMdlResponse => postMechServiceDetailsReview.stream;
 
   postGetMechServiceDetailsReviewRequest(
       String token, bookingId
