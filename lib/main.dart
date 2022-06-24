@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                   theme: ThemeData(
                     primaryColor: Colors.white,
                   ),
-                  home: CustPickUpTrackScreen(),
+                  home: SplashScreen(),
                   //home:ServiceRegularDetailsScreen(),
                 );
               },
