@@ -1,11 +1,17 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustTakeVehicleTrackScreen extends StatefulWidget{
+  final String bookingId;
+
+  CustTakeVehicleTrackScreen({
+    required this.bookingId
+  });
   @override
   State<StatefulWidget> createState() {
     return _CustTakeVehicleTrackScreen();
@@ -13,6 +19,45 @@ class CustTakeVehicleTrackScreen extends StatefulWidget{
 
 }
 class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String bookingDate = "";
+
+  @override
+  void initState(){
+    super.initState();
+    listenToCloudFirestoreDB();
+
+  }
+
+  void listenToCloudFirestoreDB() {
+    //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+    _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
+      bookingDate = event.get("bookingDate");
+      /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
+      mechanicName = event.get('mechanicName');
+      totalEstimatedCost = event.get("updatedServiceCost");
+      totalEstimatedTime = event.get('updatedServiceTime');
+      totalTimeTakenByMechanic = event.get('totalTimeTakenByMechanic');
+      String extendedTime = event.get('extendedTime');
+      int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
+      totalExtendedTime = time.toString();
+      print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
+      print('_firestoreData>>>>>>>>> ' + totalEstimatedCost);*/
+    });
+  }
+
+  void updateToCloudFirestoreDB( ) {
+    _firestore
+        .collection("Regular-TakeVehicle")
+        .doc('${widget.bookingId}')
+        .update({
+      'isPaymentRequested': "1",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -151,7 +196,9 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     fontFamily: 'SamsungSharpSans-Medium',
                   ),),
                   SizedBox(height: 05),
-                  Text('Mar 5,2022',
+                  Text(
+                    //'Mar 5,2022',
+                    bookingDate.toString(),
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 12,
