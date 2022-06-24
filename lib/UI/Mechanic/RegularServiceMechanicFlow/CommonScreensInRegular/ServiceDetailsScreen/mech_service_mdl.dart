@@ -12,16 +12,24 @@ String mechServiceDetailsMdlToJson(MechServiceDetailsMdl data) => json.encode(da
 class MechServiceDetailsMdl {
   MechServiceDetailsMdl({
     required this.data,
+    required this.status,
+    required this.message
   });
 
   Data? data;
+  String? status;
+  String? message;
 
   factory MechServiceDetailsMdl.fromJson(Map<String, dynamic> json) => MechServiceDetailsMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    message: json["message"] == null ? null : json["message"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "data": data == null ? null : data!.toJson(),
+    "message": message == null ? null : message,
+    "status": status == null ? null : status,
   };
 }
 
@@ -80,18 +88,18 @@ class BookingDetails {
   int reqType;
   int bookStatus;
   String totalPrice;
-  double tax;
-  double commission;
+  int tax;
+  int commission;
   int serviceCharge;
   String totalTime;
   dynamic serviceTime;
   double latitude;
   double longitude;
-  double extend;
-  double totalExt;
-  String extendTime;
+  dynamic extend;
+  dynamic totalExt;
+  dynamic extendTime;
   DateTime? bookedDate;
-  String bookedTime;
+  dynamic bookedTime;
   int isRated;
   int status;
   dynamic regularType;
@@ -112,18 +120,18 @@ class BookingDetails {
     reqType: json["reqType"] == null ? null : json["reqType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
-    tax: json["tax"] == null ? null : json["tax"].toDouble(),
-    commission: json["commission"] == null ? null : json["commission"].toDouble(),
+    tax: json["tax"] == null ? null : json["tax"],
+    commission: json["commission"] == null ? null : json["commission"],
     serviceCharge: json["serviceCharge"] == null ? null : json["serviceCharge"],
     totalTime: json["totalTime"] == null ? null : json["totalTime"],
     serviceTime: json["serviceTime"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
-    extend: json["extend"] == null ? null : json["extend"].toDouble(),
-    totalExt: json["totalExt"] == null ? null : json["totalExt"].toDouble(),
-    extendTime: json["extendTime"] == null ? null : json["extendTime"],
+    extend: json["extend"],
+    totalExt: json["totalExt"],
+    extendTime: json["extendTime"],
     bookedDate: json["bookedDate"] == null ? null : DateTime.parse(json["bookedDate"]),
-    bookedTime: json["bookedTime"] == null ? null : json["bookedTime"],
+    bookedTime: json["bookedTime"],
     isRated: json["isRated"] == null ? null : json["isRated"],
     status: json["status"] == null ? null : json["status"],
     regularType: json["regularType"],
@@ -152,11 +160,11 @@ class BookingDetails {
     "serviceTime": serviceTime,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
-    "extend": extend == null ? null : extend,
-    "totalExt": totalExt == null ? null : totalExt,
-    "extendTime": extendTime == null ? null : extendTime,
+    "extend": extend,
+    "totalExt": totalExt,
+    "extendTime": extendTime,
     "bookedDate": bookedDate == null ? null : bookedDate!.toIso8601String(),
-    "bookedTime": bookedTime == null ? null : bookedTime,
+    "bookedTime": bookedTime,
     "isRated": isRated == null ? null : isRated,
     "status": status == null ? null : status,
     "regularType": regularType,
@@ -216,16 +224,24 @@ class BookService {
 class Service {
   Service({
     required this.id,
+    required this.serviceName,
+    required this.minPrice,
   });
 
   String id;
+  String serviceName;
+  String minPrice;
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
     id: json["id"] == null ? null : json["id"],
+    serviceName: json["serviceName"] == null ? null : json["serviceName"],
+    minPrice: json["minPrice"] == null ? null : json["minPrice"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
+    "serviceName": serviceName == null ? null : serviceName,
+    "minPrice": minPrice == null ? null : minPrice,
   };
 }
 
