@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MechTakeVehicleTrackScreen extends StatefulWidget{
+
+  final String bookingId;
+
+  MechTakeVehicleTrackScreen({
+    required this.bookingId
+  });
+
   @override
   State<StatefulWidget> createState() {
     return _MechTakeVehicleTrackScreen();
