@@ -51,6 +51,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
   String isArrived = "-1";
   String isPickedUpVehicle = "-1";
   String isReachedServiceCenter = "-1";
+  String isWorkStarted = "-1";
+  String isWorkFinished = "-1";
+
+
 
 
 
@@ -80,6 +84,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
         isArrived = event.get("isArrived");
         isPickedUpVehicle = event.get("isPickedUpVehicle");
         isReachedServiceCenter = event.get("isReachedServiceCenter");
+        isWorkStarted = event.get("isWorkStarted");
+        isWorkFinished = event.get("isWorkFinished");
+
+
 
 
 
@@ -106,7 +114,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                 mechanicReachedNearCustomerForPickUpUi(size),
                 mechanicPickedYourVehicleUi(size),
                 vehicleReachedTheServiceLocationUi(size),
-                mechanicStartedServiceUi(size),
+                mechanicStartedServiceWorkUi(size),
+                workCompletedUi(size),
 
 
                 textButtonUi(size),
@@ -284,7 +293,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${widget.mechanicName} started from location for pickup. ',
+                            Text('Mechanic started from location for pickup. ',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
@@ -349,7 +358,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${widget.mechanicName} started from location for pickup. ',
+                          Text('Mechanic started from location for pickup. ',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
@@ -427,7 +436,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${widget.mechanicName} reached near you. ',
+                            Text('Mechanic reached near you. ',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
@@ -493,7 +502,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${widget.mechanicName} reached near you.',
+                            Text('Mechanic reached near you.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
@@ -814,11 +823,11 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
     );
   }
 
-  Widget mechanicStartedServiceUi(Size size){
+  Widget mechanicStartedServiceWorkUi(Size size){
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
-        child: isReachedServiceCenter == "-1"
+        child: isWorkStarted == "-1"
             ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
@@ -859,7 +868,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Reached the service center. ',
+                          Text('Started work. ',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
@@ -925,7 +934,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Reached the service center.',
+                            Text('Started work.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
@@ -948,13 +957,157 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                   Padding(
                     padding: const EdgeInsets.fromLTRB(23,0,0,0),
                     child: FDottedLine(
-                      color: isReachedServiceCenter == "-1" ? CustColors.light_navy05:CustColors.light_navy,
+                      color: isWorkStarted == "-1" ? CustColors.light_navy05:CustColors.light_navy,
                       height: 50.0,
                     ),
                   ),
                 ],
               ),
       ),
+    );
+  }
+
+  Widget workCompletedUi(Size size){
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
+        child: isWorkFinished == "-1"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy05,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                //color: CustColors.light_navy,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Work Finished. ',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                    child: FDottedLine(
+                      color: CustColors.light_navy05,
+                      height: 50.0,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children:[
+                            Container(
+                              height:50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  color: CustColors.light_navy,
+                                  borderRadius: BorderRadius.circular(25)
+                                //more than 50% of width makes circle
+                              ),
+                            ),
+                            Container(
+                              height: 25,
+                              width: 25,
+                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                fit: BoxFit.contain,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        //Expanded(child: child)
+                      ],
+                    ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Work Finished.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'SamsungSharpSans-Bold',
+                            ),),
+                          SizedBox(height: 02),
+                          Text('${widget.pickingDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SamsungSharpSans-Bold',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                  child: FDottedLine(
+                    color: isWorkFinished == "-1" ? CustColors.light_navy05:CustColors.light_navy,
+                    height: 50.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
     );
   }
 

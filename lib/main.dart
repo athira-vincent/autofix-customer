@@ -95,7 +95,7 @@ import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_trac
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                    /*home: CustPickUpTrackScreen(
+                   /* home: CustPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
                       latitude: "",
                       longitude: "",
@@ -103,8 +103,9 @@ import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_trac
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
+
                     home:SplashScreen(),
-                    //home: MechMobileTrackScreen(bookingId: "1141"),
+
                   );
                 },
               ),
