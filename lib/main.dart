@@ -104,6 +104,7 @@ import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_trac
                       pickingDate: 'Mar 8,2022',
                     ),*/
                     home:SplashScreen(),
+                    //home: MechMobileTrackScreen(bookingId: "1141"),
                   );
                 },
               ),
