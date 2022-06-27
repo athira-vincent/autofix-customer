@@ -422,7 +422,12 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MechPickUpTrackScreen(
-                                    bookingId: _BookingDetails!.id.toString(),
+                                    bookedDate: 'Mar 7,2022',
+                                    latitude: "",
+                                    longitude: "",
+                                    mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                                    mechanicName: "Minnu Kurian",
+                                    pickingDate: 'Mar 8,2022',
                                   ),
                                 ));
                           }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic

@@ -13,27 +13,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DirectPaymentScreen extends StatefulWidget {
+class DirectPaymentRegularScreen extends StatefulWidget {
 
   bool isMechanicApp;
-  bool isPaymentFailed;   // ------ change the variable as isDirectPayment for screen 106
+  bool isPaymentFailed;   // ------ change the variable as isDirectPaymentRegular for screen 106
                             // isMechanicApp - true && isPaymentFailed - true  ==> screen 080,
                             // isMechanicApp - true && isPaymentFailed - false  ==> screen 106,
                             // isMechanicApp - false && isPaymentFailed - false  ==> screen 080 a,
                             // isMechanicApp - false && isPaymentFailed - true  ==> screen 080 a,
 
-  DirectPaymentScreen({
+  DirectPaymentRegularScreen({
     required this.isMechanicApp,
     required this.isPaymentFailed
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DirectPaymentScreenState();
+    return _DirectPaymentRegularScreenState();
   }
 }
 
-class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
+class _DirectPaymentRegularScreenState extends State<DirectPaymentRegularScreen> {
 
   bool isDirectPayment = true;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
@@ -48,11 +48,10 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   String userName="";
 
   String userId = "";
-  String serviceIdEmergency="";
-  String mechanicIdEmergency="";
   String bookingIdEmergency="";
 
-  String paymentSendStatus="0";
+  String paymentStatus="0";
+
 
 
   @override
@@ -70,70 +69,13 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
-      print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-      if(!widget.isMechanicApp){
-        listenToCloudFirestoreDB();
-        updateToCloudFirestoreCustomerCurrentScreenDB();
-      }
-      else
-        {
-          updateToCloudFirestoreMechanicCurrentScreenDB("M5");
-        }
 
     });
-  }
-
-  void updateToCloudFirestoreCustomerCurrentScreenDB() {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
-            "customerFromPage" : "C8",
-          })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-
-  void updateToCloudFirestoreMechanicCurrentScreenDB(String mechanicFromPage) {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
-            "mechanicFromPage" : "$mechanicFromPage",
-          })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-
-
-  void listenToCloudFirestoreDB() {
-    print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
-    reference.snapshots().listen((querySnapshot) {
+    await _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
       setState(() {
-
-        isPaymentAccepted = querySnapshot.get("isPaymentAccepted");
-        print('isPaymentAccepted ++++ $isPaymentAccepted');
-        if(isPaymentAccepted == "1")
-        {
-          if(paymentSendStatus=="1")
-            {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DirectPaymentSuccessScreen()));
-            }
-
-        }
+        paymentStatus = event.get("paymentStatus");
 
       });
     });
@@ -189,30 +131,12 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   }
 
   void changeScreen(){
-    if(widget.isMechanicApp){
-      updateToCloudFirestoreDB();
-      updateToCloudFirestoreMechanicCurrentScreenDB("M6");
-      _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-          authToken, bookingIdEmergency, "8");
-      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId );
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MechanicHomeScreen()));
-    }
-    if(!widget.isMechanicApp && widget.isPaymentFailed){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PaymentFailedScreen()));
-    }
-    else if(!widget.isMechanicApp && !widget.isPaymentFailed){
+    if(!widget.isMechanicApp && !widget.isPaymentFailed){
 
-      if(isPaymentAccepted == "1")
+      print(paymentStatus);
+
+      if(paymentStatus == "1")
       {
-        setState(() {
-          paymentSendStatus = "1";
-        });
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
