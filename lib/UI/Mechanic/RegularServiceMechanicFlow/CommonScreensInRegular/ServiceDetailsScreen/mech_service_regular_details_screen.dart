@@ -440,6 +440,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                 MaterialPageRoute(
                                   builder: (context) => MechTakeVehicleTrackScreen(
                                     bookingId: _BookingDetails!.id.toString(),
+                                    workStartedTime: '',
+                                    reachTime: '',
+                                    bookedDate: '',
                                   ),
                                 ));
                           }

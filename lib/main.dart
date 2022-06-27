@@ -20,6 +20,8 @@ import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
+import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/find_mechanic_by_customer_screen.dart';
+import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
 
 
   void main() async {
@@ -104,7 +106,22 @@ import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_trac
                       pickingDate: 'Mar 8,2022',
                     ),*/
 
-                    home:SplashScreen(),
+                    //home:SplashScreen(),
+                    //home: CustTakeVehicleTrackScreen(
+                    //   bookingId: '1142',
+                    //   bookedDate: "June 27,2022",
+                    //   latitude: "10.011104",
+                    //   longitude:"76.343877",
+                    //   goTime:"09:00",
+                    //   mechanicName:"Shaheen ismail",
+                    //   reachTime:"10:00",
+                    // ),
+                    home: MechTakeVehicleTrackScreen(
+                      bookingId: '1142',
+                      bookedDate: 'june 27,2022',
+                      workStartedTime: '11:00',
+                      reachTime:'10:00'
+                    ),
 
                   );
                 },
