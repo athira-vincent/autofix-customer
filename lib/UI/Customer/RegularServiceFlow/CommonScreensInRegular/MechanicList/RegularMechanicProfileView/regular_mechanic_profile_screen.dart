@@ -315,6 +315,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "vehicleId": "${vehicleId}",
       "vehicleName": "",
       "vehiclePlateNumber" : "",
+      "latitude" : "",
+      "longitude" : "",
       "isBookedDate" : "-1",
       "isDriveStarted" : "-1",
       "isArrived": "-1",
