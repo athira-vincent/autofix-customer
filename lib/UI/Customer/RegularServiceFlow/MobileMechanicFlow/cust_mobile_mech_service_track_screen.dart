@@ -21,6 +21,7 @@ class CustMobileTrackScreen extends StatefulWidget{
   }
 
 }
+
 class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
   HomeCustomerBloc _mechanicHomeBloc = HomeCustomerBloc();
@@ -55,7 +56,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
   void updateToCloudFirestoreDB( ) {
     _firestore
-        .collection("ResolMech")
+        .collection("Regular-MobileMech")
         .doc('${widget.bookingId}')
         .update({
       'isPaymentRequested': "1",
@@ -96,6 +97,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
     );
   }
+
   Widget appBarCustomui(Size size){
     return Container(
       margin: EdgeInsets.only(
@@ -543,6 +545,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
     );
   }
+
   Widget reachedWorkShopUi(Size size){
     return Container(
       child: Column(
@@ -638,6 +641,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
     );
   }
+
   Widget startedWorkUi(Size size){
     return Container(
       child: Column(
@@ -737,6 +741,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
     );
   }
+
   Widget finishedWorkUi(Size size){
     return Container(
       child: Column(
@@ -836,6 +841,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
     );
   }
+
   Widget returnFromUi(Size size){
     return Container(
       child: Column(
@@ -945,6 +951,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
     );
   }
+
   Widget returnAndReachNearUi(Size size){
     return Container(
       child: Row(
@@ -1033,6 +1040,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
     );
   }
+
   Widget textButtonUi (Size size){
     return Container(
       child: Row(
