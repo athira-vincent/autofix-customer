@@ -322,7 +322,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "isArrived": "-1",
       "isWorkStarted" : "-1",
       "isWorkFinished" : "-1",
-      "paymentStatus": "-1"
+      "isPayment": "-1"
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
