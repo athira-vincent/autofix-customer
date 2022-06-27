@@ -94,16 +94,16 @@ import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_trac
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                    home: CustPickUpTrackScreen(
+                    /*home: CustPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
                       latitude: "",
                       longitude: "",
                       mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
-                    ),
+                    ),*/
 
-                    // home:SplashScreen(),
+                    home:SplashScreen(),
 
                   );
                 },
