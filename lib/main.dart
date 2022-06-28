@@ -7,7 +7,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
-import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -105,9 +105,9 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
-
-                    //home: MechMobileTrackScreen(bookingId: "1141"),
-                    home:SplashScreen(),
+                    //home: CustMobileTrackScreen(bookingId: "1141",),
+                    home: MechMobileTrackScreen(bookingId: "1141"),
+                    //home:SplashScreen(),
 
                   );
                 },
