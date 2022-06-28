@@ -111,7 +111,7 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                    // bookingId: "1142",
                    // bookedDate: 'Mar 7,2022',
                    // reachTime: '11:00'),
-                    home:SplashScreen(),
+                    home:SplashScreen() ,
 
                   );
                 },
