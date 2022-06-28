@@ -315,12 +315,14 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "vehicleId": "${vehicleId}",
       "vehicleName": "",
       "vehiclePlateNumber" : "",
+      "latitude" : "",
+      "longitude" : "",
       "isBookedDate" : "-1",
       "isDriveStarted" : "-1",
       "isArrived": "-1",
       "isWorkStarted" : "-1",
       "isWorkFinished" : "-1",
-      "paymentStatus": "-1"
+      "isPayment": "-1"
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
