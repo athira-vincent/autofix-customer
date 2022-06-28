@@ -108,6 +108,7 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     //home: CustMobileTrackScreen(bookingId: "1141",),
                     //home: MechMobileTrackScreen(bookingId: "1141"),
                     home:SplashScreen(),
+
                   );
                 },
               ),

@@ -58,7 +58,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       isWorkFinished = event.get("isWorkFinished");
       isPayment = event.get("isPayment");
 
-
       DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(bookingDate);
 
       //print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
