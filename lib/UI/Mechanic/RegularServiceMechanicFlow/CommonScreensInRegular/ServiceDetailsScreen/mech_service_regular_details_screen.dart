@@ -559,49 +559,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                   ),
                 ),
               ),
-              /*Expanded(
-                flex:110,
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: CustColors.light_navy,
-                        width: 00,
-                      ),
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Column(
-                    children:[
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Container(
-                                height: 15,
-                                width:15,
-                                child: Image.asset('assets/image/ic_clock.png')),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 04.0),
-                            child: Text('30',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white
-                              ),),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 3.0),
-                            child: Text('Min',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white
-                              ),),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),*/
             ],
           ),
         ),

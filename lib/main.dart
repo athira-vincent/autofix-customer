@@ -94,10 +94,10 @@ import 'package:provider/provider.dart';
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                    /*home: MechPickUpTrackScreen(
+                    /*home: CustPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
-                      latitude: "",
-                      longitude: "",
+                      latitude: "9.90874",
+                      longitude: "76.28271",
                       mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',

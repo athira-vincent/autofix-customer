@@ -264,15 +264,19 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "vehicleId": "${vehicleId}",
         "vehicleName": "",
         "vehiclePlateNumber" : "",
-        "isDriveStarted" : "-1",
-        "isArrived": "-1",
-        "isPickedUpVehicle" : "-1",
-        "isReachedServiceCenter" : "-1",
-        "isWorkStarted" : "-1",
-        "isWorkFinished" : "-1",
-        "isDropOffVehicle": "-1",
-        "paymentStatus": "-1"
-    })
+        'isStartedFromLocation': "-1",
+        'isArrived': "-1",
+        'isPickedUpVehicle': "-1",
+        'isReachedServiceCenter': "-1",
+        'isWorkStarted': "-1",
+        'isWorkFinished': "-1",
+        'isStartedFromLocationForDropOff': "-1",
+        'isDropOff': "-1",
+        'isPaymentFinished': "-1",
+        "paymentStatus": "-1",
+        'latitude': '${widget.latitude}',
+        'longitude': '${widget.latitude}'
+      })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
