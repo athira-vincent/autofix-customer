@@ -110,7 +110,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 serviceBookedUi(size),
                 isDriveStarted == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
                 isArrived == "-1" ? mechanicArrivedInactiveUi(size) : mechanicArrivedCompletedUi(size),
-
                 isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
                 isWorkFinished == "-1" ? workFinishedInactiveUi(size) :workFinishedCompletedUi(size),
 

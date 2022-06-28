@@ -72,7 +72,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       //String date = _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate));
 
       print(" >>>> Date : >>>>>" + dateToday.toString());
-
       print(" >>>> Date : >>>>>" + tempDate.toString());
 
       /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
