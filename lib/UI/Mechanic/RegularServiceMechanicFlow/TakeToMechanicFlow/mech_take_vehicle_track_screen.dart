@@ -34,6 +34,8 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   String isWorkStarted = "-1";
   String isWorkFinished = "-1";
   String paymentStatus = "-1";
+  String paymentRecieved = "-1";
+  String completed = "-1";
 
   @override
   void initState(){
@@ -49,6 +51,8 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
       isWorkStarted = event.get("isWorkStarted");
       isWorkFinished = event.get("isWorkFinished");
       paymentStatus = event.get("paymentStatus");
+      paymentRecieved = event.get("paymentRecieved");
+      completed = event.get("completed");
       /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
       totalEstimatedCost = event.get("updatedServiceCost");
@@ -62,12 +66,25 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
     });
   }
 
-  void updateToCloudFirestoreDB( ) {
+  void updateToCloudFirestoreDB(
+      isReachedServiceCenter ,
+      isWorkStarted ,
+      isWorkFinished,
+      paymentStatus,
+      paymentRecieved,
+      completed
+      ) {
     _firestore
         .collection("Regular-TakeVehicle")
         .doc('${widget.bookingId}')
         .update({
-      'isPaymentRequested': "1",
+      'isReachedServiceCenter' : "$isReachedServiceCenter",
+      'isWorkStarted' : "$isWorkStarted",
+      'isWorkFinished' : "$isWorkFinished",
+      'paymentStatus' : "$paymentStatus",
+      'paymentRecieved' : "$paymentRecieved",
+      'completed' : "$completed",
+      //'isPaymentRequested': "1",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -91,6 +108,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 finishedWorkUi(size),
                 paymentRequestUi(size),
                paymentAcceptUi(size),
+                completedUi(size),
                 textButtonUi(size),
               ],
             ),
@@ -268,27 +286,61 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Customer Reached on',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Customer Reached at',
+                        style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
-                  ],
+                        ),),
+                      SizedBox(height: 05),
+                      Text('00:00',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Padding(
@@ -332,27 +384,72 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Customer Reached on',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
+              Expanded(
+                flex: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Customer Reached at',
+                        style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
-                  ],
+                        ),),
+                      SizedBox(height: 05),
+                      Text('${widget.reachTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          updateToCloudFirestoreDB(
+                              '0',
+                              '0',
+                              '-1',
+                              '-1',
+                               '-1',
+                               '-1'
+                          );
+                        });
+                      },
+                      child: Text('START',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: CustColors.white_02,
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Padding(
@@ -422,37 +519,37 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              //   child: Container(
-              //     height: 23,
-              //     width: 55,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: const Color(0xffc9d6f2)
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.only(top: 00.0),
-              //       child: TextButton(
-              //         onPressed: () {  },
-              //         child: Text('TRACK',
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //             color: const Color(0xff919191),
-              //             fontSize: 08,
-              //           ),
-              //         ),
-              //         style: ElevatedButton.styleFrom(
-              //           primary: const Color(0xffc9d6f2),
-              //           shape:
-              //           RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(10)
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('FINISH',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Padding(
@@ -518,37 +615,48 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              //   child: Container(
-              //     height: 23,
-              //     width: 55,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: const Color(0xffc9d6f2)
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.only(top: 00.0),
-              //       child: TextButton(
-              //         onPressed: () {  },
-              //         child: Text('TRACK',
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //             color: const Color(0xff919191),
-              //             fontSize: 08,
-              //           ),
-              //         ),
-              //         style: ElevatedButton.styleFrom(
-              //           primary: const Color(0xffc9d6f2),
-              //           shape:
-              //           RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(10)
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          updateToCloudFirestoreDB(
+                              '0',
+                              '0',
+                              '0',
+                              '-1',
+                               '-1',
+                               '-1'
+                          );
+                        });
+                      },
+                      child: Text('FINISH',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: CustColors.white_02,
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           Padding(
@@ -618,6 +726,37 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+              child: Container(
+                height: 23,
+                width: 55,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xffc9d6f2)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 00.0),
+                  child: TextButton(
+                    onPressed: () {  },
+                    child: Text('FINISH',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: const Color(0xff919191),
+                        fontSize: 08,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffc9d6f2),
+                      shape:
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
           Padding(
@@ -680,6 +819,48 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                             color: const Color(0xff9b9b9b)
                         ),)
                     ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          updateToCloudFirestoreDB(
+                              '0',
+                              '0',
+                              '0',
+                              '0',
+                              '-1',
+                               '-1'
+                          );
+                        });
+                      },
+                      child: Text('PAYMENT',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: CustColors.white_02,
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -752,37 +933,37 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
-                height: 23,
-                width: 55,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffc9d6f2)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('TRACK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+            //   child: Container(
+            //     height: 23,
+            //     width: 55,
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: const Color(0xffc9d6f2)
+            //     ),
+            //     child: Padding(
+            //       padding: const EdgeInsets.only(top: 00.0),
+            //       child: TextButton(
+            //         onPressed: () {  },
+            //         child: Text('TRACK',
+            //           textAlign: TextAlign.center,
+            //           style: TextStyle(
+            //             color: const Color(0xff919191),
+            //             fontSize: 08,
+            //           ),
+            //         ),
+            //         style: ElevatedButton.styleFrom(
+            //           primary: const Color(0xffc9d6f2),
+            //           shape:
+            //           RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(10)
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
           Padding(
@@ -848,6 +1029,106 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   ),
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+              //   child: Container(
+              //     height: 23,
+              //     width: 55,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(10),
+              //         color: CustColors.light_navy
+              //     ),
+              //     child: Padding(
+              //       padding: const EdgeInsets.only(top: 00.0),
+              //       child: TextButton(
+              //         onPressed: () {  },
+              //         child: Text('TRACK',
+              //           textAlign: TextAlign.center,
+              //           style: TextStyle(
+              //             color: CustColors.white_02,
+              //             fontSize: 08,
+              //           ),
+              //         ),
+              //         style: ElevatedButton.styleFrom(
+              //           primary: CustColors.light_navy,
+              //           shape:
+              //           RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(10)
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget paymentAcceptUi(Size size){
+    return Container(
+      child: isWorkFinished == '-1'
+          ?Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      //color: CustColors.light_navy,
+                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Jaymech finished work',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
                 child: Container(
@@ -855,13 +1136,120 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   width: 55,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: CustColors.light_navy
+                      color: const Color(0xffc9d6f2)
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {  },
-                      child: Text('TRACK',
+                      child: Text('FINISH',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      )
+          :Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      //color: CustColors.light_navy,
+                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                          fit: BoxFit.contain,
+                          color: CustColors.white_02),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Jaymech finished work',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          updateToCloudFirestoreDB(
+                              '0',
+                              '0',
+                              '0',
+                              '0',
+                              '0',
+                              '0'
+                          );
+                        });
+                      },
+                      child: Text('ACCEPT',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: CustColors.white_02,
@@ -882,7 +1270,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(45,0,5,5),
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
               color: CustColors.light_navy,
               height: 50.0,
@@ -892,9 +1280,10 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
       ),
     );
   }
-  Widget paymentAcceptUi(Size size){
+  Widget completedUi(Size size){
     return Container(
-      child: Row(
+      child: completed == '-1'
+      ?Row(
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 22.0,top: 00),
@@ -938,6 +1327,52 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
             ),
           ),
         ],
+      )
+      :Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 22.0,top: 00),
+            child: Stack(
+              alignment: Alignment.center,
+              children:[
+                Container(
+                  height:50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: CustColors.light_navy,
+                      borderRadius: BorderRadius.circular(25)
+                    //more than 50% of width makes circle
+                  ),
+                ),
+                Container(
+                  height: 25,
+                  width: 25,
+                  //color: CustColors.light_navy,
+                  child: SvgPicture.asset('assets/image/ic_car1.svg',
+                    fit: BoxFit.contain,
+                  color: CustColors.white_02),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex:200,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0,top: 00),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Payment Recieved',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                    ),),
+                  SizedBox(height: 05),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -952,7 +1387,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
           ),
           Spacer(),
           Padding(
-            padding: const EdgeInsets.only(right: 22.0,top:15,bottom: 20),
+            padding: const EdgeInsets.only(right: 22.0,top: 15,bottom: 20),
             child: Container(
               width: 130,
               child: TextButton(

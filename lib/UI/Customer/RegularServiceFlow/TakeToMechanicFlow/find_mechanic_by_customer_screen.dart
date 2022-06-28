@@ -25,15 +25,20 @@ import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
 import 'dart:ui' as ui;
 
+import 'cust_take_vehicle_track_service_screen.dart';
+
 
 
 class FindMechanicByCustomerScreen extends StatefulWidget {
 
+  final String bookingId;
   final String latitude;
   final String longitude;
 
   FindMechanicByCustomerScreen({
-    required this.latitude,required this.longitude,
+    required this.bookingId,
+    required this.latitude,
+    required this.longitude,
 
   });
 
@@ -172,8 +177,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
-      updateToCloudFirestoreMechanicCurrentScreenDB();
-      _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+      _firestore.collection("Regular-TakeVehicle").doc('1142').snapshots().listen((event) {
         carName = event.get('carName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
@@ -224,7 +228,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       var value1 = event;
       setState(() {
         _firestore
-            .collection("ResolMech")
+            .collection("Regular-TakeVehicle")
             .doc('${bookingId}')
             .update({
             'latitude': value1.latitude.toString(),
@@ -394,31 +398,17 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
   }
 
   void updateToCloudFirestoreDB() {
-
+   print('+++abd ${widget.bookingId}');
     _firestore
-        .collection("ResolMech")
-        .doc('${bookingId}')
+        .collection("Regular-TakeVehicle")
+        .doc('${widget.bookingId}')
         .update({
-        'mechanicArrivalState': "1",
+        'isArrived': "0",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-
-  void updateToCloudFirestoreMechanicCurrentScreenDB() {
-
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingId}')
-        .update({
-          "mechanicFromPage" : "M1",
-        })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-
 
 
 
@@ -584,8 +574,11 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                                             child: MaterialButton(
                                               onPressed: () {
                                                 updateToCloudFirestoreDB();
-                                                _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                                    authToken, bookingId, "3");
+                                                Navigator.pop(context);
+                                                // _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
+                                                //     authToken, bookingId, "3"
+                                                // );
+
                                               },
                                               child: Container(
                                                 height: 30,

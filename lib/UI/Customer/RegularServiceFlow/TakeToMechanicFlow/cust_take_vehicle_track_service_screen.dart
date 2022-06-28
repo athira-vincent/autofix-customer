@@ -41,6 +41,8 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
   String isWorkStarted = "-1";
   String isWorkFinished = "-1";
   String paymentStatus = "-1";
+  String paymentRecieved = "-1";
+  String completed = "-1";
 
   @override
   void initState(){
@@ -58,6 +60,8 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
       isWorkStarted = event.get("isWorkStarted");
       isWorkFinished = event.get("isWorkFinished");
       paymentStatus = event.get("paymentStatus");
+      paymentRecieved = event.get("paymentRecieved");
+      completed = event.get("completed");
       /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
       totalEstimatedCost = event.get("updatedServiceCost");
@@ -71,12 +75,24 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
     });
   }
 
-  void updateToCloudFirestoreDB( ) {
+  void updateToCloudFirestoreDB(
+    isDriveStarted ,
+    isReachedServiceCenter ,
+    isWorkStarted ,
+    isWorkFinished ,
+    paymentStatus,
+      paymentRecieved  ) {
     _firestore
         .collection("Regular-TakeVehicle")
         .doc('${widget.bookingId}')
         .update({
-      'isPaymentRequested': "1",
+      'isDriveStarted' : "$isDriveStarted",
+      'isReachedServiceCenter' : "$isReachedServiceCenter",
+      'isWorkStarted' : "$isWorkStarted",
+      'isWorkFinished' : "$isWorkFinished",
+      'paymentStatus' : "$paymentStatus",
+      'paymentRecieved' : "$paymentRecieved"
+      //'isPaymentRequested': "1",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -209,7 +225,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 32.0,top: 30),
+              padding: const EdgeInsets.only(left: 22.0,top: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -232,7 +248,51 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                   ),)
                 ],
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 130.0,right: 22.0,top: 15),
+              child: Container(
+                height: 23,
+                width: 55,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xffc9d6f2)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 00.0),
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        updateToCloudFirestoreDB(
+                            '0',
+                            '-1',
+                            '-1',
+                            '-1',
+                            '-1',
+                            '-1'
+                        );
+                      });
+                    },
+                    child: Text('START',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: CustColors.white_02,
+                        //const Color(0xff919191),
+                        fontSize: 08,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: CustColors.light_navy,
+                      //const Color(0xffc9d6f2),
+                      shape:
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
           Padding(
@@ -451,8 +511,19 @@ Widget vehicleStartedFromUi(Size size){
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context)
                           => FindMechanicByCustomerScreen(
+                            bookingId: '1142',
                             longitude: '${widget.longitude}',
                             latitude: '${widget.latitude}',)));
+                      setState(() {
+                        updateToCloudFirestoreDB(
+                            '0',
+                            '0',
+                            '-1',
+                            '-1',
+                            '-1',
+                            '-1'
+                        );
+                      });
                     },
                     child: Text('TRACK',
                       textAlign: TextAlign.center,
@@ -1152,7 +1223,7 @@ Widget vehicleStartedFromUi(Size size){
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {  },
-                      child: Text('TRACK',
+                      child: Text('payment',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xff919191),
@@ -1249,8 +1320,19 @@ Widget vehicleStartedFromUi(Size size){
                   child: Padding(
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
-                      onPressed: () {  },
-                      child: Text('TRACK',
+                      onPressed: () {
+                        setState(() {
+                          updateToCloudFirestoreDB(
+                              '0',
+                              '0',
+                              '0',
+                              '0',
+                              '0',
+                              '-1'
+                          );
+                        });
+                      },
+                      child: Text('payment',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -1283,7 +1365,7 @@ Widget vehicleStartedFromUi(Size size){
   }
   Widget completedUi(Size size){
     return Container(
-      child:paymentStatus == "-1"
+      child:completed == "-1"
           ?Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children:[
