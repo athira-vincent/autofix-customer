@@ -422,7 +422,12 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MechPickUpTrackScreen(
-                                    bookingId: _BookingDetails!.id.toString(),
+                                    bookedDate: 'Mar 7,2022',
+                                    latitude: "",
+                                    longitude: "",
+                                    mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                                    mechanicName: "Minnu Kurian",
+                                    pickingDate: 'Mar 8,2022',
                                   ),
                                 ));
                           }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
@@ -554,49 +559,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                   ),
                 ),
               ),
-              /*Expanded(
-                flex:110,
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: CustColors.light_navy,
-                        width: 00,
-                      ),
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: Column(
-                    children:[
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Container(
-                                height: 15,
-                                width:15,
-                                child: Image.asset('assets/image/ic_clock.png')),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 04.0),
-                            child: Text('30',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white
-                              ),),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 3.0),
-                            child: Text('Min',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white
-                              ),),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),*/
             ],
           ),
         ),
