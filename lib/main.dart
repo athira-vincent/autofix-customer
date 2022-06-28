@@ -106,8 +106,8 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       pickingDate: 'Mar 8,2022',
                     ),*/
                     //home: CustMobileTrackScreen(bookingId: "1141",),
-                    home: MechMobileTrackScreen(bookingId: "1141"),
-                    //home:SplashScreen(),
+                    //home: MechMobileTrackScreen(bookingId: "1141"),
+                    home:SplashScreen(),
 
                   );
                 },
