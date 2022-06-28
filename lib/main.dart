@@ -97,7 +97,7 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                   /* home: CustPickUpTrackScreen(
+                    /*home: CustPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
                       latitude: "",
                       longitude: "",
@@ -106,22 +106,8 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       pickingDate: 'Mar 8,2022',
                     ),*/
 
-                    //home:SplashScreen(),
-                    //home: CustTakeVehicleTrackScreen(
-                    //   bookingId: '1142',
-                    //   bookedDate: "June 27,2022",
-                    //   latitude: "10.011104",
-                    //   longitude:"76.343877",
-                    //   goTime:"09:00",
-                    //   mechanicName:"Shaheen ismail",
-                    //   reachTime:"10:00",
-                    // ),
-                    home: MechTakeVehicleTrackScreen(
-                      bookingId: '1142',
-                      bookedDate: 'june 27,2022',
-                      workStartedTime: '11:00',
-                      reachTime:'10:00'
-                    ),
+                    //home: MechMobileTrackScreen(bookingId: "1141"),
+                    home:SplashScreen(),
 
                   );
                 },
