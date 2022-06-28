@@ -20,6 +20,8 @@ import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
+import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/find_mechanic_by_customer_screen.dart';
+import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
 
 
   void main() async {
