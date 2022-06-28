@@ -221,7 +221,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Service booked on',
+                    Text('Booking received on',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
@@ -259,70 +259,70 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
         child: isStartedFromLocation == "-1"
             ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children:[
-                        Container(
-                          height:50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                              color: CustColors.light_navy05,
-                              borderRadius: BorderRadius.circular(25)
-                            //more than 50% of width makes circle
-                          ),
-                        ),
-                        Container(
-                          height: 25,
-                          width: 25,
-                          child: SvgPicture.asset('assets/image/ic_car1.svg',
-                            fit: BoxFit.contain,
-                            //color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    //Expanded(child: child)
-                  ],
-                ),
-                SizedBox(width: 5),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Mechanic started from location for pickup. ',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 02),
-                      Text('${widget.pickingDate}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy05,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Mechanic started from location for pickup. ',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Medium',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(23,0,0,0),
-              child: FDottedLine(
-                color: CustColors.light_navy05,
-                height: 50.0,
-              ),
-            ),
-          ],
-        )
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                    child: FDottedLine(
+                      color: CustColors.light_navy05,
+                      height: 50.0,
+                    ),
+                  ),
+                ],
+              )
             : Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children:[
