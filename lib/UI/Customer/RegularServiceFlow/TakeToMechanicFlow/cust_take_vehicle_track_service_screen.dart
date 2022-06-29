@@ -1,11 +1,13 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/payment_regular_takeVehicleToMechanic_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'find_mechanic_by_customer_screen.dart';
 
 class CustTakeVehicleTrackScreen extends StatefulWidget{
@@ -54,14 +56,17 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
   void listenToCloudFirestoreDB() {
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
-      bookingDate = event.get("bookingDate");
-      isDriveStarted = event.get("isDriveStarted");
-      isReachedServiceCenter = event.get("isReachedServiceCenter");
-      isWorkStarted = event.get("isWorkStarted");
-      isWorkFinished = event.get("isWorkFinished");
-      paymentStatus = event.get("paymentStatus");
-      paymentRecieved = event.get("paymentRecieved");
-      completed = event.get("completed");
+      setState(() {
+        bookingDate = event.get("bookingDate");
+        isDriveStarted = event.get("isDriveStarted");
+        isReachedServiceCenter = event.get("isReachedServiceCenter");
+        isWorkStarted = event.get("isWorkStarted");
+        isWorkFinished = event.get("isWorkFinished");
+        paymentStatus = event.get("paymentStatus");
+        paymentRecieved = event.get("paymentRecieved");
+        completed = event.get("completed");
+      });
+
       /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
       totalEstimatedCost = event.get("updatedServiceCost");
@@ -224,29 +229,32 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Service booked on',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'SamsungSharpSans-Medium',
-                  ),),
-                  SizedBox(height: 05),
-                  Text(
-                    //'Mar 5,2022',
-                    //bookingDate.toString(),
-                    '${widget.bookedDate}',
+            Expanded(
+              flex: 200,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Service booked on',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                    ),),
+                    SizedBox(height: 05),
+                    Text(
+                      //'Mar 5,2022',
+                      //bookingDate.toString(),
+                      '${widget.bookedDate}',
 
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'SamsungSharpSans-Medium',
-                    color: const Color(0xff9b9b9b)
-                  ),)
-                ],
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                      color: const Color(0xff9b9b9b)
+                    ),)
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -1321,7 +1329,11 @@ Widget vehicleStartedFromUi(Size size){
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => PaymentRegularScreen4()));
                         setState(() {
+
                           updateToCloudFirestoreDB(
                               '0',
                               '0',
