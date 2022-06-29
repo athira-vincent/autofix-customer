@@ -1484,7 +1484,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             borderRadius: BorderRadius.circular(10),
                             color: const Color(0xffc9d6f2)
                         ),
-                        child: Text('Add payment',
+                        child: Text('Make payment',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: const Color(0xff919191),
@@ -1571,12 +1571,12 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                                       builder: (context) => PaymentRegularScreen()));
                             }
                           else if(paymentStatus == "0")
-                          {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
-                          }
+                            {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
+                            }
                           else
                           {
 
@@ -1592,7 +1592,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             borderRadius: BorderRadius.circular(10),
                             color: paymentStatus =="1"?CustColors.light_navy05: CustColors.light_navy
                         ),
-                        child: Text('Add payment',
+                        child: Text('Make payment',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color:paymentStatus =="1"?CustColors.light_navy: Colors.white,
