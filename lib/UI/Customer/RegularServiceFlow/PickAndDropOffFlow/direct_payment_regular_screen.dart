@@ -51,6 +51,8 @@ class _DirectPaymentRegularScreenState extends State<DirectPaymentRegularScreen>
   String bookingIdEmergency="";
 
   String paymentStatus="0";
+  String isPaymentFinished="0";
+
 
 
 
@@ -76,6 +78,8 @@ class _DirectPaymentRegularScreenState extends State<DirectPaymentRegularScreen>
     await _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
       setState(() {
         paymentStatus = event.get("paymentStatus");
+        isPaymentFinished = event.get("isPaymentFinished");
+
 
       });
     });
@@ -135,12 +139,9 @@ class _DirectPaymentRegularScreenState extends State<DirectPaymentRegularScreen>
 
       print(paymentStatus);
 
-      if(paymentStatus == "1")
+      if(isPaymentFinished == "0")
       {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DirectPaymentSuccessScreen()));
+        Navigator.of(context).pop();
       }
     }
   }
