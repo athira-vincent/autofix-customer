@@ -55,5 +55,11 @@ class TextStrings {
 
   static const  txt_take_vehicle = "Take Vehicle to Mechanic";
 
+  static const  firebase_mobile_mech = "Regular-MobileMech";
+
+  static const  firebase_pick_up = "Regular-PickUp";
+
+  static const  firebase_take_vehicle = "Regular-TakeVehicle";
+
 
 }
