@@ -4,6 +4,7 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/direct_payment_regular_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -20,6 +21,8 @@ class CustPickUpTrackScreen extends StatefulWidget{
   final String bookedDate;
   final String pickingDate;
   final String mechanicName;
+  final String bookedId;
+
 
 
 
@@ -28,6 +31,7 @@ class CustPickUpTrackScreen extends StatefulWidget{
     required this.latitude,
     required this.bookedDate,
     required this.pickingDate,
+    required this.bookedId,
     required this.longitude,
     required this.mechanicAddress,
     required this.mechanicName,
@@ -88,7 +92,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });
-    await _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
+    await _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
         isStartedFromLocation = event.get("isStartedFromLocation");
         isArrived = event.get("isArrived");
@@ -1560,7 +1564,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         ],
                       ),
                     ),
-                    InkWell(
+                    isPaymentFinished == '-1'
+                    ? InkWell(
                       onTap: (){
                         setState(() {
                           if(paymentStatus == "-1")
@@ -1572,10 +1577,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             }
                           else if(paymentStatus == "0")
                             {
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
+                                      builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,)));
                             }
                           else
                           {
@@ -1600,7 +1605,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                           ),
                         ),
                       ),
-                    ),
+                    )
+                    : Container(),
                   ],
                 ),
                 Padding(
@@ -1747,12 +1753,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
   }
 
 
-
-
-
-
-
-
   Widget textButtonUi (Size size){
     return Container(
       child: Row(
@@ -1768,22 +1768,24 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
             child: Container(
               width: 130,
               child: TextButton(
-              onPressed: () {  },
-              child: Text('Back to home',
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'SamsungSharpSans-Medium',
-                color: Colors.white
-              ),),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                primary: CustColors.light_navy,
-                shape:
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Back to home',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                      color: Colors.white
+                    ),),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      primary: CustColors.light_navy,
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
               ),
-        ),
             ),
           ),
           SizedBox(height: 20)

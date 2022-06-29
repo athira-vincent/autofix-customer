@@ -12,7 +12,10 @@ import '../../../../Mechanic/mechanic_home_screen.dart';
 class CustServiceRegularDetailsScreen extends StatefulWidget {
 
 
-  CustServiceRegularDetailsScreen();
+  final String bookingId;
+  CustServiceRegularDetailsScreen({
+    required this.bookingId
+  });
 
   @override
   State<StatefulWidget> createState() {
