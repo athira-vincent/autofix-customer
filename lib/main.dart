@@ -102,11 +102,10 @@ import 'package:provider/provider.dart';
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
-                    //home: CustMobileTrackScreen(bookingId: "1141",),
+                    home: CustMobileTrackScreen(bookingId: "1141",),
                     //home: MechMobileTrackScreen(bookingId: "1141"),
-                    home:SplashScreen(),
+                    //home:SplashScreen(),
 
-                    home: SplashScreen(),
                   );
                 },
               ),

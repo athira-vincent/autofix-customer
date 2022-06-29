@@ -31,9 +31,10 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   HomeCustomerBloc _mechanicHomeBloc = HomeCustomerBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String isBookedDate = "", isDriveStarted = "", isArrived = "", isWorkStarted = "", isWorkFinished = "",isPayment = "";
+  String isBookedDate = "", scheduledDate = "", isDriveStarted = "", isArrived = "", isWorkStarted = "", isWorkFinished = "",isPayment = "";
   String bookingDate = "", customerName = "", mechanicName = "";
-  DateTime dateToday = DateTime.now() ;
+  DateTime dateToday = DateTime.now();
+  String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
 
   @override
   void initState() {
@@ -50,13 +51,19 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       customerName = event.get("customerName");
       mechanicName = event.get("mechanicName");
       isBookedDate = event.get("isBookedDate");
+      scheduledDate = event.get("scheduledDate");
       isDriveStarted = event.get("isDriveStarted");
+      isDriveStartedTime = event.get("isDriveStartedTime");
       isArrived = event.get("isArrived");
+      isArrivedTime = event.get("isArrivedTime");
       isWorkStarted = event.get("isWorkStarted");
+      isWorkStartedTime = event.get("isWorkStartedTime");
       isWorkFinished = event.get("isWorkFinished");
+      isWorkFinishedTime = event.get("isWorkFinishedTime");
       isPayment = event.get("isPayment");
+      isPaymentTime = event.get("isPaymentTime");
 
-      DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(bookingDate);
+      DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
 
       print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
       if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
@@ -111,11 +118,11 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 isDriveStarted == "-1" ? driveStartedInactiveUi(size) : driveStartedCompletedUi(size),
                 isArrived == "-1" ? mechanicArrivedInactiveUi(size) : mechanicArrivedCompletedUi(size),
                 isWorkStarted == "-1" ? workStartedInactiveUi(size) : workStartedCompletedUi(size),
-                isWorkFinished == "-1" ? workFinishedInactiveUi(size) :workFinishedCompletedUi(size),
+                isWorkFinished == "-1" ? workFinishedInactiveUi(size) : workFinishedCompletedUi(size),
 
                 isWorkFinished == "-1" && isPayment == "-1" ?
                 paymentOptionInActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "2" ?
+                    : isWorkFinished == "0" && isPayment == "5" ?
                         paymentOptionFinishedUi(size)
                     : paymentOptionActiveUi(size),
 
@@ -227,7 +234,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 32.0,top: 30),
+                padding: const EdgeInsets.only(left: 22.0,top: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -237,7 +244,9 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                       fontFamily: 'SamsungSharpSans-Medium',
                     ),),
                     SizedBox(height: 05),
-                    Text(bookingDate.toString(),
+                    Text(
+                      _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                      //bookingDate.toString(),
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 12,
@@ -320,7 +329,8 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                             color: const Color(0xff9b9b9b)
                         ),),
                       SizedBox(height: 02),
-                      Text('Mar 5,2022',
+                      Text('on ${_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(scheduledDate))}'
+                          + '\nat ${isDriveStartedTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -506,21 +516,21 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech started from ',
+                      Text('Jaymech reached',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 02),
+                      /*SizedBox(height: 02),
                       Text('Savannah estate, plot 176',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),),
+                        ),),*/
                       SizedBox(height: 02),
-                      Text('Mar 5,2022',
+                      Text('at ${isArrivedTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1041,7 +1051,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 05),
-                      Text('Mar 5,2022',
+                      Text('at ${isWorkStartedTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1072,87 +1082,87 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children:[
           Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
-                    ),
-                  ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                      fit: BoxFit.contain,),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex:200,
-              child: Padding(
+            children: [
+              Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Jaymech finished work',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      //color: CustColors.light_navy,
+                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                        fit: BoxFit.contain,),
+                    ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
-                height: 23,
-                width: 55,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffc9d6f2)
-                ),
+              Expanded(
+                flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('TRACK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Jaymech finished work',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
         ),
           Padding(
             padding: const EdgeInsets.fromLTRB(45,5,5,0),
@@ -1212,7 +1222,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 05),
-                      Text('Mar 5,2022',
+                      Text('at ${isWorkFinishedTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
