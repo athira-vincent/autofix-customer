@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
@@ -19,9 +18,6 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
-import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/find_mechanic_by_customer_screen.dart';
-import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
 
 
   void main() async {
@@ -99,8 +95,8 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     ),
                     /*home: CustPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
-                      latitude: "",
-                      longitude: "",
+                      latitude: "9.90874",
+                      longitude: "76.28271",
                       mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',

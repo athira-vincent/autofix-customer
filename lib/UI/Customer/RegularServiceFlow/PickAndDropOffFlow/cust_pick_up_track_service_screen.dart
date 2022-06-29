@@ -1,6 +1,10 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,6 +57,12 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
   String isReachedServiceCenter = "-1";
   String isWorkStarted = "-1";
   String isWorkFinished = "-1";
+  String isStartedFromLocationForDropOff = "-1";
+  String isDropOff = "-1";
+  String isPaymentFinished = "-1";
+  String paymentStatus = "-1";
+
+
 
 
 
@@ -86,9 +96,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
         isReachedServiceCenter = event.get("isReachedServiceCenter");
         isWorkStarted = event.get("isWorkStarted");
         isWorkFinished = event.get("isWorkFinished");
-
-
-
+        isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
+        isDropOff = event.get("isDropOff");
+        isPaymentFinished = event.get("isPaymentFinished");
+        paymentStatus = event.get("paymentStatus");
 
 
       });
@@ -110,13 +121,17 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                 appBarCustomui(size),
                 trackServiceBoxUi(size),
                 serviceBookedDateUi(size),
+
                 mechanicStartedToCustomerLoationUi(size),
                 mechanicReachedNearCustomerForPickUpUi(size),
                 mechanicPickedYourVehicleUi(size),
                 vehicleReachedTheServiceLocationUi(size),
                 mechanicStartedServiceWorkUi(size),
                 workCompletedUi(size),
-
+                mechanicStartedToCustomerLoationForDropOffUi(size),
+                mechanicReachedDropOffUi(size),
+                addPaymentUi(size),
+                finishTrackUi(size),
 
                 textButtonUi(size),
               ],
@@ -1110,6 +1125,629 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
           ),
     );
   }
+
+  Widget mechanicStartedToCustomerLoationForDropOffUi(Size size){
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
+        child: isStartedFromLocationForDropOff == "-1"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy05,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                //color: CustColors.light_navy,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Mechanic started from service centre to DropOff ',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                    child: FDottedLine(
+                      color: CustColors.light_navy05,
+                      height: 50.0,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children:[
+                            Container(
+                              height:50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  color: CustColors.light_navy,
+                                  borderRadius: BorderRadius.circular(25)
+                                //more than 50% of width makes circle
+                              ),
+                            ),
+                            Container(
+                              height: 25,
+                              width: 25,
+                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                fit: BoxFit.contain,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        //Expanded(child: child)
+                      ],
+                    ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Mechanic started from service centre to DropOff.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'SamsungSharpSans-Bold',
+                            ),),
+                          SizedBox(height: 02),
+                          Text('${widget.pickingDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SamsungSharpSans-Bold',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                  child: FDottedLine(
+                    color: isStartedFromLocationForDropOff == "-1" ? CustColors.light_navy05:CustColors.light_navy,
+                    height: 50.0,
+                  ),
+                ),
+              ],
+            ),
+      ),
+    );
+  }
+
+
+  Widget mechanicReachedDropOffUi(Size size){
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
+        child: isDropOff == "-1"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy05,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                //color: CustColors.light_navy,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Vehicle dropoff by mechanic.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                    child: FDottedLine(
+                      color: CustColors.light_navy05,
+                      height: 50.0,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Vehicle dropoff by mechanic.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SamsungSharpSans-Bold',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                    child: FDottedLine(
+                      color: isDropOff == "-1" ? CustColors.light_navy05:CustColors.light_navy,
+                      height: 50.0,
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget addPaymentUi(Size size){
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
+        child: isDropOff == "-1"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy05,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                //color: CustColors.light_navy,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(isPaymentFinished == "-1"?'Add payment.':'Payment initiated.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 25,
+                        width: 85,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xffc9d6f2)
+                        ),
+                        child: Text('Add payment',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: const Color(0xff919191),
+                            fontSize: 10
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                    child: FDottedLine(
+                      color: CustColors.light_navy05,
+                      height: 50.0,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children:[
+                            Container(
+                              height:50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  color: CustColors.light_navy,
+                                  borderRadius: BorderRadius.circular(25)
+                                //more than 50% of width makes circle
+                              ),
+                            ),
+                            Container(
+                              height: 25,
+                              width: 25,
+                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                fit: BoxFit.contain,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        //Expanded(child: child)
+                      ],
+                    ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Add payment.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'SamsungSharpSans-Bold',
+                            ),),
+                          SizedBox(height: 02),
+                          Text('${widget.pickingDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SamsungSharpSans-Bold',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          if(paymentStatus == "-1")
+                            {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PaymentRegularScreen()));
+                            }
+                          else if(paymentStatus == "0")
+                          {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
+                          }
+                          else
+                          {
+
+                          }
+
+                        });
+                      },
+                      child: Container(
+                        height: 25,
+                        width: 85,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: paymentStatus =="1"?CustColors.light_navy05: CustColors.light_navy
+                        ),
+                        child: Text('Add payment',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color:paymentStatus =="1"?CustColors.light_navy: Colors.white,
+                              fontSize: 10
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(23,0,0,0),
+                  child: FDottedLine(
+                    color: isDropOff == "-1" ? CustColors.light_navy05:CustColors.light_navy,
+                    height: 50.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+
+  Widget finishTrackUi(Size size){
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
+        child: isPaymentFinished == "-1"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy05,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                //color: CustColors.light_navy,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  //color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Completed',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children:[
+                              Container(
+                                height:50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    color: CustColors.light_navy,
+                                    borderRadius: BorderRadius.circular(25)
+                                  //more than 50% of width makes circle
+                                ),
+                              ),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                  fit: BoxFit.contain,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Expanded(child: child)
+                        ],
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Completed',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'SamsungSharpSans-Bold',
+                              ),),
+                            SizedBox(height: 02),
+                            Text('${widget.pickingDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  fontFamily: 'SamsungSharpSans-Bold',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+
+
 
 
 

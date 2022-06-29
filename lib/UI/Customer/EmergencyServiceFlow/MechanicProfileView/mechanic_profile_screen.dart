@@ -9,7 +9,6 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
@@ -1020,10 +1019,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
       onTap: (){
         print("on press acceptAndContinueButton");
         if(widget.serviceModel == "Pick up & Drop off"){
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PickUpDropOffTrackingScreen()));
+
         }
         if(widget.serviceModel == "Mobile Mechanic"){
           _showMechanicAcceptanceDialog(context);
