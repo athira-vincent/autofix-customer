@@ -556,7 +556,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               Column(
                 children: [
                   Padding(
-
                     padding: const EdgeInsets.only(left: 22.0,top: 00),
                     child: Stack(
                       alignment: Alignment.center,
