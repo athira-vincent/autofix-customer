@@ -13,8 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DirectPaymentScreen extends StatefulWidget {
+class RegularDirectPaymentScreen extends StatefulWidget {
 
+  String firebaseCollection;
+  String bookingId;
   bool isMechanicApp;
   bool isPaymentFailed;   // ------ change the variable as isDirectPayment for screen 106
                             // isMechanicApp - true && isPaymentFailed - true  ==> screen 080,
@@ -22,18 +24,20 @@ class DirectPaymentScreen extends StatefulWidget {
                             // isMechanicApp - false && isPaymentFailed - false  ==> screen 080 a,
                             // isMechanicApp - false && isPaymentFailed - true  ==> screen 080 a,
 
-  DirectPaymentScreen({
+  RegularDirectPaymentScreen({
+    required this.firebaseCollection,
+    required this.bookingId,
     required this.isMechanicApp,
     required this.isPaymentFailed
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DirectPaymentScreenState();
+    return _RegularDirectPaymentScreenState();
   }
 }
 
-class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
+class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen> {
 
   bool isDirectPayment = true;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
@@ -50,7 +54,6 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   String userId = "";
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-  String bookingIdEmergency="";
 
   String paymentSendStatus="0";
 
@@ -72,56 +75,27 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
       print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
+      //print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
       if(!widget.isMechanicApp){
         listenToCloudFirestoreDB();
-        updateToCloudFirestoreCustomerCurrentScreenDB();
       }
       else
-        {
-          updateToCloudFirestoreMechanicCurrentScreenDB("M5");
-        }
-
+        {}
     });
   }
 
-  void updateToCloudFirestoreCustomerCurrentScreenDB() {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
-            "customerFromPage" : "C8",
-          })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-
-  void updateToCloudFirestoreMechanicCurrentScreenDB(String mechanicFromPage) {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
-            "mechanicFromPage" : "$mechanicFromPage",
-          })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-
-
   void listenToCloudFirestoreDB() {
-    print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
-    DocumentReference reference = FirebaseFirestore.instance.collection('ResolMech').doc("${bookingIdEmergency}");
+   // print ('listenToCloudFirestoreDB bookingIdEmergency >>>>>>>> $bookingIdEmergency');
+    DocumentReference reference = FirebaseFirestore.instance.collection("${widget.firebaseCollection}").doc("${widget.bookingId}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
 
-        isPaymentAccepted = querySnapshot.get("isPaymentAccepted");
+        isPaymentAccepted = querySnapshot.get("isPayment");
         print('isPaymentAccepted ++++ $isPaymentAccepted');
         if(isPaymentAccepted == "1")
         {
@@ -132,9 +106,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
                   MaterialPageRoute(
                       builder: (context) => DirectPaymentSuccessScreen()));
             }
-
         }
-
       });
     });
   }
@@ -142,12 +114,10 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
   void updateToCloudFirestoreDB() {
 
     _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
+        .collection("${widget.firebaseCollection}")
+        .doc('${widget.bookingId}')
         .update({
-        'isPaymentAccepted': "1",
-        "customerFromPage" : "MechanicWaitingPaymentScreen",
-        "mechanicFromPage" : "DirectPaymentSuccessScreen",
+        'isPayment': "1",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -160,40 +130,42 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
     Size size = MediaQuery.of(context).size;
 
-    return  Scaffold(
-        body: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                width: size.width,
-                height: size.height,
-                //color: Colors.green,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      titleWidget(size),
-                      InfoTextWidget(size),
-                      widget.isMechanicApp
-                          ?
-                      isDirectPayment
-                          ? MechanicDirectPaymentTitleImageWidget(size)
-                          : MechanicOtherPaymentTitleImageWidget(size)
-                          : customerTitleImageWidget(size),
-                      warningTextWidget(size),
-                      paymentReceivedButton(size)
-                    ]
-                ),
-              ),
-            )
-        )
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: SafeArea(
+             child: SingleChildScrollView(
+               child: Container(
+                 width: size.width,
+                 height: size.height,
+                  //color: Colors.green,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        titleWidget(size),
+                        InfoTextWidget(size),
+                        widget.isMechanicApp
+                            ?
+                        isDirectPayment
+                            ? MechanicDirectPaymentTitleImageWidget(size)
+                            : MechanicOtherPaymentTitleImageWidget(size)
+                            : customerTitleImageWidget(size),
+                        warningTextWidget(size),
+                        paymentReceivedButton(size)
+                      ]
+                  ),
+               ),
+             )
+          )
+        ),
     );
   }
 
   void changeScreen(){
     if(widget.isMechanicApp){
       updateToCloudFirestoreDB();
-      updateToCloudFirestoreMechanicCurrentScreenDB("M6");
       _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-          authToken, bookingIdEmergency, "8");
+          authToken, widget.bookingId, "8");
       _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId );
       Navigator.pushReplacement(
           context,

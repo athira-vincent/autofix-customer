@@ -4,10 +4,9 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/PickUpDropOffTracking/pickUp_dropOff_tracking_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
-import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -19,9 +18,6 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
-import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/find_mechanic_by_customer_screen.dart';
-import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
 
 
   void main() async {
@@ -97,20 +93,16 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                    //  home: CustTakeVehicleTrackScreen(
-                    //   bookingId: "1142",
-                    //   bookedDate: 'Mar 7,2022',
-                    //   latitude: "10.011104",
-                    //   longitude: "76.343877",
-                    //   goTime: "10:00",
-                    //   mechanicName: "Minnu Kurian",
-                    //   reachTime: '11:00',
-                    // ),
-
-                   // home: MechTakeVehicleTrackScreen(
-                   // bookingId: "1142",
-                   // bookedDate: 'Mar 7,2022',
-                   // reachTime: '11:00'),
+                    /*home: CustPickUpTrackScreen(
+                      bookedDate: 'Mar 7,2022',
+                      latitude: "9.90874",
+                      longitude: "76.28271",
+                      mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                      mechanicName: "Minnu Kurian",
+                      pickingDate: 'Mar 8,2022',
+                    ),*/
+                    //home: CustMobileTrackScreen(bookingId: "1141",),
+                    //home: MechMobileTrackScreen(bookingId: "1141"),
                     home:SplashScreen(),
 
                   );
