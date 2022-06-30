@@ -46,13 +46,16 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   void listenToCloudFirestoreDB() {
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
-      bookingDate = event.get("bookingDate");
-      isReachedServiceCenter = event.get("isReachedServiceCenter");
-      isWorkStarted = event.get("isWorkStarted");
-      isWorkFinished = event.get("isWorkFinished");
-      paymentStatus = event.get("paymentStatus");
-      paymentRecieved = event.get("paymentRecieved");
-      completed = event.get("completed");
+      setState(() {
+        bookingDate = event.get("bookingDate");
+        isReachedServiceCenter = event.get("isReachedServiceCenter");
+        isWorkStarted = event.get("isWorkStarted");
+        isWorkFinished = event.get("isWorkFinished");
+        paymentStatus = event.get("paymentStatus");
+        paymentRecieved = event.get("paymentRecieved");
+        completed = event.get("completed");
+      });
+
       /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
       totalEstimatedCost = event.get("updatedServiceCost");
@@ -1075,7 +1078,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   }
   Widget paymentAcceptUi(Size size){
     return Container(
-      child: isWorkFinished == '-1'
+      child: paymentStatus == "-1"
           ?Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children:[
@@ -1172,8 +1175,8 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
         ],
       )
           :Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:[
           Row(
             children: [
               Padding(
@@ -1316,7 +1319,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Payment Recieved',
+                  Text('Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',

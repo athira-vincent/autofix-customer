@@ -19,6 +19,10 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
+import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
+import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
+
 
 
   void main() async {
@@ -94,11 +98,12 @@ import 'package:provider/provider.dart';
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                    /*home: CustPickUpTrackScreen(
+                     home: CustTakeVehicleTrackScreen(
+                      bookingId: "1142",
                       bookedDate: 'Mar 7,2022',
-                      latitude: "9.90874",
-                      longitude: "76.28271",
-                      mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                      latitude: "10.011104",
+                      longitude: "76.343877",
+                      goTime: "10:00",
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
