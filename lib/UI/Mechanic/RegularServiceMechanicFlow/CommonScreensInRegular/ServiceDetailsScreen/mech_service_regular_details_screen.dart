@@ -295,7 +295,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                             children:[
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('VEHICLE PICKING DATE',
+                                                child: Text('SERVICE DATE',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontFamily: 'SamsungSharpSans-Medium',
@@ -356,7 +356,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                             children:[
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('VEHICLE PICKING TIME',
+                                                child: Text('SERVICE TIME',
                                                   textAlign: TextAlign.center,
                                                   style:TextStyle(
                                                     fontFamily: 'SamsungSharpSans-Medium',

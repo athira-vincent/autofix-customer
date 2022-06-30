@@ -410,70 +410,70 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                     ),
                   ),
                   _BookingDetails!.reqType == 2 ?
-                    Padding(
-                    padding: const EdgeInsets.only(left: 255.0,right: 22.0,top: 60.0),
-                    child: SizedBox(
-                      width:100,
-                      height: 40,
-                      child: TextButton(
-                        onPressed: () async {
-                          if(_BookingDetails!.regularType.toString() == "1"){   //pick up and drop off
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CustPickUpTrackScreen(
-                                    bookedDate: 'Mar 7,2022',
-                                    latitude: "",
-                                    longitude: "",
-                                    mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
-                                    mechanicName: "Minnu Kurian",
-                                    pickingDate: 'Mar 8,2022',
-                                  ),
-                                ));
-                          }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CustMobileTrackScreen(
-                                    bookingId: _BookingDetails!.id.toString(),
-                                  ),
-                                ));
-                          }
-                          else if(_BookingDetails!.regularType.toString() == "3"){       //mobile Mechanic
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CustTakeVehicleTrackScreen(
-                                    bookingId: _BookingDetails!.id.toString(),
-                                    reachTime: '',
-                                    bookedDate: '',
-                                    latitude: "",
-                                    longitude: "",
-                                    goTime: "",
-                                    mechanicName: "",
-                                  ),
-                                ));
-                          }
-                        }, child: Text('TRACK',
-                        style: TextStyle(
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
-                      ),
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          primary: CustColors.light_navy,
-                          shape:
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 255.0,right: 22.0,top: 60.0),
+                        child: SizedBox(
+                          width:100,
+                          height: 40,
+                          child: TextButton(
+                            onPressed: () async {
+                              if(_BookingDetails!.regularType.toString() == "1"){   //pick up and drop off
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustPickUpTrackScreen(
+                                        bookedDate: 'Mar 7,2022',
+                                        latitude: "",
+                                        longitude: "",
+                                        mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                                        mechanicName: "Minnu Kurian",
+                                        pickingDate: 'Mar 8,2022',
+                                      ),
+                                    ));
+                              }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustMobileTrackScreen(
+                                        bookingId: _BookingDetails!.id.toString(),
+                                      ),
+                                    ));
+                              }
+                              else if(_BookingDetails!.regularType.toString() == "3"){       //mobile Mechanic
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustTakeVehicleTrackScreen(
+                                        bookingId: _BookingDetails!.id.toString(),
+                                        reachTime: '',
+                                        bookedDate: '',
+                                        latitude: "",
+                                        longitude: "",
+                                        goTime: "",
+                                        mechanicName: "",
+                                      ),
+                                    ));
+                              }
+                            }, child: Text('TRACK',
+                            style: TextStyle(
+                              fontFamily: 'SamsungSharpSans-Medium',
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              primary: CustColors.light_navy,
+                              shape:
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
                   )
-                  :
-                    Container(),
+                        :
+                      Container(),
                   SizedBox(height: 50)
               ],
           ),

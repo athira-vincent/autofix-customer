@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
@@ -889,7 +890,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             + selected.month.toString() + "/" + selected.year.toString();
         print("selectedDateFormated : " + selectedDateFormated);
         _serviceDateController.text = selectedDateFormated.toString();
-        selectedDateForApi = selected.year.toString() + "-" +  selected.month.toString() + "-" + selected.day.toString();
+        //selectedDateForApi = new DateFormat("yyyy-MM-dd").parse(selected);
+        selectedDateForApi = _homeCustomerBloc.dateConverter(selected);
+        //selectedDateForApi = selected.year.toString() + "-" +  selected.month.toString() + "-" + selected.day.toString();
+        //DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
       });
   }
 
