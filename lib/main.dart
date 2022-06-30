@@ -98,7 +98,7 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                     home: CustTakeVehicleTrackScreen(
+                     /*home: CustTakeVehicleTrackScreen(
                       bookingId: "1142",
                       bookedDate: 'Mar 7,2022',
                       latitude: "10.011104",
@@ -107,9 +107,9 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
-                    home: CustMobileTrackScreen(bookingId: "1141",),
+                    //home: CustMobileTrackScreen(bookingId: "1141",),
                     //home: MechMobileTrackScreen(bookingId: "1141"),
-                    //home:SplashScreen(),
+                    home:SplashScreen(),
 
                   );
                 },

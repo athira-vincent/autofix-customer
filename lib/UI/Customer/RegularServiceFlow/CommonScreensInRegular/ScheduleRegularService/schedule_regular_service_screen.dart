@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
 
@@ -753,7 +752,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       serviceDate: '${selectedDateForApi}',
                       serviceTime: '${_serviceTimeController.text}',
                       regularServiceType: '${_serviceTypeController.text}',
-                      //serviceType: 'regular',
+                      serviceType: 'regular',
                       latitude: widget.latitude,
                       longitude: widget.longitude,
                       address: widget.address,
