@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../Mechanic/mechanic_home_screen.dart';
@@ -173,7 +174,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                                   Padding(
                                                     padding: const EdgeInsets.only(left: 05.0,top: 15.0),
                                                     child: Text(
-                                                      _BookingDetails!.totalTime.toString(),
+                                                      _BookingDetails!.serviceTime.toString(),
                                                       style: TextStyle(
                                                           fontSize: 14,
                                                           color: Colors.white
@@ -373,7 +374,8 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                                     padding: const EdgeInsets.only(left: 05.0,top: 15.0),
                                                     child: Text(
                                                       //'Mar 5,',
-                                                      _BookingDetails!.bookedTime.toString(),
+                                                     // _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                                                      _homeCustomerBloc.timeConvert(new DateFormat("hh:mm:ss").parse(_BookingDetails!.bookedTime)).toString(),
                                                       style: TextStyle(
                                                           fontSize: 15,
                                                           color: Colors.white

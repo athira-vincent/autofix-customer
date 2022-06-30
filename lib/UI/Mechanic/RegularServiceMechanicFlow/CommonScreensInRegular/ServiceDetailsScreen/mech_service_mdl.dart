@@ -88,9 +88,9 @@ class BookingDetails {
   int reqType;
   int bookStatus;
   String totalPrice;
-  int tax;
+  dynamic tax;
   int commission;
-  int serviceCharge;
+  dynamic serviceCharge;
   String totalTime;
   dynamic serviceTime;
   double latitude;
