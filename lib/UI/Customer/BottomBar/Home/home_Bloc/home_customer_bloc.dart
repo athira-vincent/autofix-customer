@@ -295,6 +295,13 @@ class HomeCustomerBloc {
 
     return formatted;
   }
+  dateConverter01(DateTime Format) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
 
   dateMonthConverter(DateTime Format) {
     final DateFormat formatter = DateFormat('dd MMM, yyyy');

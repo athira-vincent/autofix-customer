@@ -891,7 +891,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
         print("selectedDateFormated : " + selectedDateFormated);
         _serviceDateController.text = selectedDateFormated.toString();
         //selectedDateForApi = new DateFormat("yyyy-MM-dd").parse(selected);
-        selectedDateForApi = _homeCustomerBloc.dateConverter(selected);
+        selectedDateForApi = _homeCustomerBloc.dateConverter01(selected);
         //selectedDateForApi = selected.year.toString() + "-" +  selected.month.toString() + "-" + selected.day.toString();
         //DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
       });
