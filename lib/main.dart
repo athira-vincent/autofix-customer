@@ -105,16 +105,12 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       longitude: "76.343877",
                       goTime: "10:00",
                       mechanicName: "Minnu Kurian",
-                      reachTime: '11:00',
-                    ),
-
-                      //home: PaymentRegularScreen(),
-
-                    // home: MechTakeVehicleTrackScreen(
-                    // bookingId: "1142",
-                    // bookedDate: 'Mar 7,2022',
-                    // reachTime: '11:00'),
+                      pickingDate: 'Mar 8,2022',
+                    ),*/
+                    home: CustMobileTrackScreen(bookingId: "1141",),
+                    //home: MechMobileTrackScreen(bookingId: "1141"),
                     //home:SplashScreen(),
+
                   );
                 },
               ),

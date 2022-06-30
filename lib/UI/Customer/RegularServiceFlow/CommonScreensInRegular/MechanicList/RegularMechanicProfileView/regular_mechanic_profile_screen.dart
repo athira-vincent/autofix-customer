@@ -19,6 +19,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as json;
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart' as category;
@@ -300,8 +301,10 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         .doc('${bookingId}')
         .set({
       "bookingId" : "${bookingId}",
-      "bookingDate": "${widget.serviceDate}",
-      "bookingTime": "${widget.serviceTime}",
+      "bookingDate": "",
+      "bookingTime": "${DateFormat("hh:mm a").format(DateTime.now())}",
+      "scheduledDate": "${widget.serviceDate}",
+      "scheduledTime" : "${widget.serviceTime}",
       "customerId": "${userId}",
       "customerName" : "${userName}",
       "customerLatitude" : "${widget.latitude}",
