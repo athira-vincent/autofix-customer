@@ -1,0 +1,14 @@
+{"vehicleSpecialization":
+    [
+        {"name":"Ford","id":"1","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Bmw","id":"2","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Corolla","id":"3","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Maruthi","id":"4","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Amaze","id":"5","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Ford","id":"6","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Bmw","id":"7","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Corolla","id":"8","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Maruthi","id":"9","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"},
+        {"name":"Amaze","id":"10","image": "https://www.carlogos.org/car-logos/ford-logo-2017.png","value":"0"}
+    ]
+}

@@ -30,17 +30,82 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   graphql: ^5.0.0
-  webview_flutter: ^2.0.14
+  graphql_flutter: ^5.0.0
+  webview_flutter: ^2.0.13
+  shared_preferences: ^2.0.7
+  http: ^0.13.3
+  cached_network_image: ^3.1.0+1
+  google_maps_flutter: ^2.1.3
+  flutter_polyline_points: ^1.0.0
+  location: ^4.3.0
+  path_provider: ^2.0.4
+  image_picker: 0.8.4+1
+  flutter_staggered_grid_view: ^0.4.1
+  month_picker_dialog: ^0.4.0
+  another_xlider: 1.0.0
+  flutter_rating_bar: ^4.0.0
+  shimmer: ^2.0.0
+  connectivity_plus: ^1.2.0
+  carousel_slider: 4.0.0
+  # FACEBOOK PACKAGE
+  flutter_facebook_login: 2.0.1
+  # FIREBASE PACKAGES
+  google_sign_in: 5.1.0
+  firebase_core: 1.11.0
+  firebase_auth: 2.0.0
+  firebase_storage: ^10.2.8
+  firebase_messaging: 10.0.4
+  dio: ^4.0.4
+
+  animations: ^2.0.0
+  country_code_picker: ^2.0.2
+  sms_otp_auto_verify: ^2.1.0
+  flutter_xlider: ^3.4.0
+  flutter_svg: 0.23.0+1
+  intl: ^0.17.0
+  geolocator: ^8.2.0
+  geocoding: ^2.0.2
+  file_picker: ^4.6.1
+  fdottedline: ^1.0.1
+  slider_button: ^2.0.0
+  flutter_local_notifications: ^9.5.2
+  url_launcher: ^6.1.0
+  cloud_firestore: ^3.1.14
+  sizer: ^2.0.15
+  provider: ^6.0.2
+
+  firebase_crashlytics: 2.5.1
+  flutter_downloader: ^1.7.2
+  flutter_countdown_timer: ^4.1.0
+  will_tabbar: ^1.0.4
+
+
+
+
+
+
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
+  flutter_launcher_icons: ^0.9.1
 
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_logo.png"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -58,11 +123,84 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
+    - assets/image/
+    - assets/image/login/
+    - assets/image/forgotPwd/
+    - assets/image/UserType/
+    - assets/image/CustomerType/
+    - assets/image/MechanicType/
+    - assets/image/phoneLogin/
+    - assets/image/SignUp/
+    - assets/image/mechanicProfileView/
+    - assets/image/mechanicProfileView/curvedGray.png
+    - assets/fonts/
+    - assets/json/
+    - assets/image/home_customer/
+    - assets/image/home_customer/banner1.png
+    - assets/images/Group 3460.svg
+    - assets/image/mechanicProfileView/directionMechnanicTracking.svg
+    - assets/map_style/map_style.json
+    - assets/image/mechanicTracking/
+    - assets/image/MechanicType/incomingRequestBg.svg
+    - assets/image/IconsRatingBar/
+    - assets/image/CustomerType/myvehicleDelete.svg
+    - assets/image/mechanicTracking/mechanicMapIcon1.webp
+    - assets/image/mechanicTracking/carMapIcon.png
+    - assets/image/img_started_work_bg.png
+    - assets/image/mechanicTracking/mechanicMapIcon.png
+    - assets/image/CustomerType/profileAvathar.svg
+    - assets/image/phoneLogin/EmailBgImage.svg
+    - assets/images/Group 3460.svg
+    - assets/image/NoBrand.svg
+    - assets/image/NoSerivice.svg
+    - assets/image/NoCart.svg
+    - assets/image/group_2974.png
+    - assets/image/ic_calender.svg
+    - assets/image/ServiceTrackScreen/
+
+  fonts:
+    - family: Montserrat_SemiBold
+      fonts:
+        - asset: assets/fonts/Montserrat_SemiBold.ttf
+    - family: Montserrat_Light
+      fonts:
+        - asset: assets/fonts/Montserrat_Light.ttf
+    - family: Corbel_Light
+      fonts:
+        - asset: assets/fonts/corbell.ttf
+    - family: Corbel_Bold
+      fonts:
+        - asset: assets/fonts/corbel_bold.ttf
+    - family: Corbel_Regular
+      fonts:
+        - asset: assets/fonts/corbel.ttf
+    - family: Samsung_SharpSans_Bold
+      fonts:
+          - asset: assets/fonts/samsungsharpsans-bold.otf
+    - family: Samsung_SharpSans_Regular
+      fonts:
+          - asset: assets/fonts/samsungsharpsans.otf
+    - family: Samsung_SharpSans_Medium
+      fonts:
+          - asset: assets/fonts/samsungsharpsans-medium.otf
+    - family: harpSans_Medium
+      fonts:
+          - asset: assets/fonts/Sharp Sans Medium.otf
+    - family: SharpSans_Semibold
+      fonts:
+          - asset: assets/fonts/Sharp Sans Semibold.otf
+    - family: SharpSans_Bold
+      fonts:
+          - asset: assets/fonts/SharpSansBold.otf
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
