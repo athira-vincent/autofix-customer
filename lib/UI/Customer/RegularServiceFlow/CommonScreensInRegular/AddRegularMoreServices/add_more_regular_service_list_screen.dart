@@ -144,7 +144,7 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
                                     categoryList: widget.categoryList,
                                     latitude: widget.latitude,
                                     longitude: widget.longitude,
-                                    address: '',
+                                    address: widget.address,
                                   )));
                         }
                     },

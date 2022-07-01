@@ -89,12 +89,12 @@ class CustomerApiProvider {
   Future<MechanicBookingMdl> postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
-      serviceId, mechanicId, reqType,
+      serviceId, mechanicId, reqType, regularServiceType,
       totalPrice, paymentType, travelTime) async {
     Map<String, dynamic> _resp = await _queryProvider.postMechanicsRegularServiceBookingIDRequest(
         token, date, time,
         latitude, longitude,
-        serviceId, mechanicId, reqType,
+        serviceId, mechanicId, reqType, regularServiceType,
         totalPrice, paymentType, travelTime);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {

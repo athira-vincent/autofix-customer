@@ -111,13 +111,13 @@ class HomeCustomerBloc {
   postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
-      serviceId, mechanicId, reqType,
+      serviceId, mechanicId, reqType, regularServiceType,
       totalPrice, paymentType, travelTime) async {
 
     MechanicBookingMdl _mechanicsBookingMdl = await repository.postMechanicsRegularServiceBookingIDRequest(
         token, date, time,
         latitude, longitude,
-        serviceId, mechanicId, reqType,
+        serviceId, mechanicId, reqType, regularServiceType,
         totalPrice, paymentType, travelTime);
     postMechanicsRegularBookingIDList.sink.add(_mechanicsBookingMdl);
   }
@@ -288,9 +288,32 @@ class HomeCustomerBloc {
     return formatted;
   }
 
+  dateConverter(DateTime Format) {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+  dateConverter01(DateTime Format) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+
   dateMonthConverter(DateTime Format) {
     final DateFormat formatter = DateFormat('dd MMM, yyyy');
     final String formatted = formatter.format(Format);
+    print(formatted);
+
+    return formatted;
+  }
+
+  dateMonthConverter02(DateTime? Format) {
+    final DateFormat formatter = DateFormat('dd/MM/yy');
+    final String formatted = formatter.format(Format!);
     print(formatted);
 
     return formatted;
