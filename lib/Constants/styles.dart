@@ -88,6 +88,12 @@ class Styles {
     fontSize: 11,
   );
 
+  static const textLabelSubTitlegrey12 = TextStyle(
+    fontFamily: 'Samsung_SharpSans_Regular',
+    fontWeight: FontWeight.w600,
+    color: CustColors.warm_grey03,
+    fontSize: 9,
+  );
 
   static const textLabelTitle_10 = TextStyle(
     fontFamily: 'Samsung_SharpSans_Medium',
