@@ -17,13 +17,13 @@ class MechPickUpTrackScreen extends StatefulWidget{
   final String bookedDate;
   final String pickingDate;
   final String mechanicName;
-
-
+  final String bookedId;
 
 
   MechPickUpTrackScreen({
     required this.latitude,
     required this.bookedDate,
+    required this.bookedId,
     required this.pickingDate,
     required this.longitude,
     required this.mechanicAddress,

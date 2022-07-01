@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/direct_payment_regular_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/mech_pick_up_track_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -102,19 +103,19 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                     /*home: CustTakeVehicleTrackScreen(
-                      bookingId: "1142",
+                    /*home: MechPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
-                      latitude: "10.011104",
-                      longitude: "76.343877",
-                      goTime: "10:00",
+                      latitude: "9.90874",
+                      bookedId: "1134",
+                      longitude: "76.28271",
+                      mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
                     //home: CustMobileTrackScreen(bookingId: "1141",),
                     //home: MechMobileTrackScreen(bookingId: "1141"),
-                    home:SplashScreen(),
 
+                    home:SplashScreen(),
                   );
                 },
               ),
