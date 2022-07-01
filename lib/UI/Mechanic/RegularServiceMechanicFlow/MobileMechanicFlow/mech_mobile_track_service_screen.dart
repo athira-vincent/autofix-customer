@@ -249,8 +249,9 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
-                      _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
-                      //'Mar 5,2022',
+                      bookingDate,
+                      // _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                      // 'Mar 5,2022',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 12,
@@ -837,12 +838,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CustomerTrackScreen(
-                                  //longitude: "${customerLongitude}",
-                                  /*Manavalassery, Kerala 680121
-                                  10.348847, 76.183234*/
-                                  longitude: "76.183234",
-                                  latitude: "10.348847",
-                                  //latitude: "${customerLatitude}",
+                                  longitude: "${customerLongitude}",
+                                  latitude: "${customerLatitude}",
                                   bookingId: widget.bookingId,
                                 )));
                       },

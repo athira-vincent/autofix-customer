@@ -245,7 +245,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
       print('DISTANCE getPositionStream distanceInMeter===== : ${distanceInMeters.toStringAsFixed(2)}');
       print('DISTANCE getPositionStream distanceInKilometer===== : ${distanceInMeters/1000}');
-        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 500)
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 999)
           {
             isArrived = true;
           }
