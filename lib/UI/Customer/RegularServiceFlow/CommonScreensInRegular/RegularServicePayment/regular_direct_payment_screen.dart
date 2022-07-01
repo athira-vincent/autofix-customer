@@ -117,7 +117,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
         .collection("${widget.firebaseCollection}")
         .doc('${widget.bookingId}')
         .update({
-        'isPayment': "1",
+        'isPayment': "5",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>

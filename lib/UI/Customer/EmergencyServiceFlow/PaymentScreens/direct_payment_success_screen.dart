@@ -53,7 +53,7 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
       print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-      updateToCloudFirestoreMechanicCurrentScreenDB();
+      //updateToCloudFirestoreMechanicCurrentScreenDB();
 
     });
   }
