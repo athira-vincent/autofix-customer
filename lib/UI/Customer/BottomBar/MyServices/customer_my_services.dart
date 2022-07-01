@@ -579,16 +579,17 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                 ),
                                                 SizedBox(height: 5,),
                                                 ListView.builder(
-                                                  itemCount:CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?.length !=0?1:0,
+                                                  //itemCount:CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?.length != 0 ? 1 : 0,
+                                                  itemCount:CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?.length,
                                                   shrinkWrap: true,
                                                   physics: NeverScrollableScrollPhysics(),
-                                                  itemBuilder: (context,index,) {
+                                                  itemBuilder: (context,index001,) {
                                                     return Container(
-                                                      child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
+                                                      child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?[index001].service?.serviceName}',
                                                         maxLines: 2,
                                                         textAlign: TextAlign.start,
                                                         overflow: TextOverflow.ellipsis,
-                                                        style: Styles.textLabelSubTitlegrey11,
+                                                        style: Styles.textLabelSubTitlegrey12,
                                                       ),
                                                     );
                                                   },
