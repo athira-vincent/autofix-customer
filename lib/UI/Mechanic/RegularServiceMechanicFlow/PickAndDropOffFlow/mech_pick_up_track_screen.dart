@@ -44,9 +44,6 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String authToken="";
   String userName="";
-  String serviceIdEmergency="";
-  String mechanicIdEmergency="";
-  String bookingIdEmergency="";
 
   String isStartedFromLocation = "-1";
   String isArrived = "-1";
@@ -74,11 +71,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });
-    await _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
+    await _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
         isStartedFromLocation = event.get("isStartedFromLocation");
         isArrived = event.get("isArrived");
