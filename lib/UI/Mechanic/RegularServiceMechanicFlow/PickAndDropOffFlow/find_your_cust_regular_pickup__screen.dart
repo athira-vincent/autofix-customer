@@ -31,9 +31,11 @@ class FindYourCustomerRegularScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
+  final String bookedId;
+
 
   FindYourCustomerRegularScreen({
-    required this.latitude,required this.longitude,
+    required this.latitude,required this.longitude,required this.bookedId,
 
   });
 
@@ -172,7 +174,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
-      _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
+      _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
         carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('vehiclePlateNumber');
@@ -219,7 +221,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       var value1 = event;
       setState(() {
         _firestore
-        .collection("Regular-PickUp").doc('1138')
+        .collection("Regular-PickUp").doc('${widget.bookedId}')
             .update({
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
@@ -386,7 +388,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   void updateToCloudFirestoreDB() {
 
     _firestore
-        .collection("Regular-PickUp").doc('1138')
+        .collection("Regular-PickUp").doc('${widget.bookedId}')
         .update({
           'isArrived': "0",
         })

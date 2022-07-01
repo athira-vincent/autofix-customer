@@ -88,9 +88,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
     });
     await _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
@@ -1573,14 +1570,14 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PaymentRegularScreen()));
+                                      builder: (context) => PaymentRegularScreen(bookingId: widget.bookedId,)));
                             }
                           else if(paymentStatus == "0")
                             {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,)));
+                                      builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,bookingId:widget.bookedId)));
                             }
                           else
                           {
