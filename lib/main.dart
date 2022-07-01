@@ -106,6 +106,7 @@ import 'package:provider/provider.dart';
                     ),*/
                     //home: CustMobileTrackScreen(bookingId: "1141",),
                     //home: MechMobileTrackScreen(bookingId: "1141"),
+
                     home:SplashScreen(),
                   );
                 },
