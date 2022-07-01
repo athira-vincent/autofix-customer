@@ -103,381 +103,391 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         elevation: 0,
         title: Container(
           child: Text('Service details',
-          style: TextStyle(
+            style: TextStyle(
               fontFamily: 'SamsungSharpSans-Medium',
               fontSize: 16.7,
-          ),),
+            ),),
         ),
       ),
-        body: SingleChildScrollView(
-          child: Container(
-              color: Colors.white,
-              child: isLoading == true
-               ? Container(
-                  width: size.width,
-                  height: size.height,
-                  child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
-               : Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20)
-                      ),
-                      color: CustColors.light_navy,
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: _BookingDetails!.bookService!.length,
-                              itemBuilder: (BuildContext context, int index){
-                                return listViewItems(_BookingDetails!.bookService![index]);
-                              }),
-                        ),
-                        Container(
-                          child: Column(
-                            children:[
-                              Container(
-                                height: 120,
-                                child: Row(
-                                    children:[
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 22.0),
-                                        child: Container(
-                                          height:82,
-                                          width: 127,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.white,
-                                                width: 00,
-                                              ),
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Column(
-                                            children:[
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('Total estimated time',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily: 'SamsungSharpSans-Medium',
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                  ),),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 15.0,top: 15),
-                                                    child:  Container(
-                                                        height: 20,
-                                                        width: 20,
-                                                        child: Image.asset('assets/image/ic_clock.png')),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text(
-                                                      _BookingDetails!.serviceTime.toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text('Min',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 22.0),
-                                        child: Container(
-                                          height:82,
-                                          width: 127,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.white,
-                                                width: 00,
-                                              ),
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Column(
-                                            children:[
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('Total estimated cost',
-                                                  textAlign: TextAlign.center,
-                                                  style:TextStyle(
-                                                    fontFamily: 'SamsungSharpSans-Medium',
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                  ),),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 25.0,top: 15),
-                                                    child: Container(
-                                                        height: 20,
-                                                        width: 20,
-                                                        child: SvgPicture.asset('assets/image/ic_moneybag.svg')),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text('₦',
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text(
-                                                      _BookingDetails!.totalPrice.toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 22.0,right: 22.0),
-                                child: Divider(
-                                  thickness: .7,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Container(
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.only(
-                                //   topLeft: Radius.circular(10),
-                                //     topRight: Radius.circular(20),
-                                //     bottomLeft:Radius.circular(80),
-                                //     bottomRight:Radius.circular(80)
-                                // ),
-                                //   ),
-                                height: 95,
-                                child: Row(
-                                    children:[
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 22.0),
-                                        child: Container(
-                                          height:82,
-                                          width: 127,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: CustColors.light_navy,
-                                                width: 00,
-                                              ),
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Column(
-                                            children:[
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('SERVICE DATE',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily: 'SamsungSharpSans-Medium',
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                  ),),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 15, left: 8),
-                                                    child: SvgPicture.asset('assets/image/ic_calender.svg',
-                                                      height: 20,
-                                                      width: 20,
-                                                      color: Colors.white,),
-                                                    // Icon(Icons.date_range,
-                                                    //   size: 30,
-                                                    //   color: Colors.white,),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text(
-                                                      //'Mar 5,',
-                                                      _mechHomeBloc.dateConverter(_BookingDetails!.bookedDate!),
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                  // Padding(
-                                                  //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                  //   child: Text('2022',
-                                                  //     style: TextStyle(
-                                                  //         fontSize: 15,
-                                                  //         color: Colors.white
-                                                  //     ),),
-                                                  // ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 22.0),
-                                        child: Container(
-                                          height:82,
-                                          width: 127,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: CustColors.light_navy,
-                                                width: 00,
-                                              ),
-                                              borderRadius: BorderRadius.circular(10)
-                                          ),
-                                          child: Column(
-                                            children:[
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('SERVICE TIME',
-                                                  textAlign: TextAlign.center,
-                                                  style:TextStyle(
-                                                    fontFamily: 'SamsungSharpSans-Medium',
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                  ),),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 15, left: 10),
-                                                    child:  Container(
-                                                        height: 20,
-                                                        width:20,
-                                                        child: Image.asset('assets/image/ic_clock.png')),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text(
-                                                      //'Mar 5,',
-                                                      _mechHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(_BookingDetails!.bookedTime)).toString(),
-                                                      //_BookingDetails!.bookedTime.toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                  // Padding(
-                                                  //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                  //   child: Text('2022',
-                                                  //     style: TextStyle(
-                                                  //         fontSize: 15,
-                                                  //         color: Colors.white
-                                                  //     ),),
-                                                  // ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          child: isLoading == true
+              ? Container(
+              width: size.width,
+              height: size.height,
+              child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+              : Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20)
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 22.0,right: 22.0,top:80),
-                    child: Container(
-                      child:Image.asset('assets/image/group_2974.png'),
+                  color: CustColors.light_navy,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: _BookingDetails!.bookService!.length,
+                          itemBuilder: (BuildContext context, int index){
+                            return listViewItems(_BookingDetails!.bookService![index]);
+                          }),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 255.0,right: 22.0,top: 60.0),
-                    child: SizedBox(
-                      width:100,
-                      height: 40,
-                      child: TextButton(
-                        onPressed: () async {
-                          if(_BookingDetails!.regularType.toString() == "1"){   //pick up and drop off
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MechPickUpTrackScreen(
-                                    bookedDate: '${_BookingDetails!.bookedDate}',
-                                    latitude: '${_BookingDetails!.latitude}',
-                                    longitude: '${_BookingDetails!.longitude}',
-                                    bookedId:  '${_BookingDetails!.id}',
-                                    mechanicAddress: '${_BookingDetails!.mechanic!.phoneNo}',
-                                    mechanicName: '${_BookingDetails!.mechanic!.firstName}',
-                                    pickingDate: '${_BookingDetails!.bookedDate}',
+                    Container(
+                      child: Column(
+                        children:[
+                          Container(
+                            height: 120,
+                            child: Row(
+                                children:[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 22.0),
+                                    child: Container(
+                                      height:82,
+                                      width: 127,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 00,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Column(
+                                        children:[
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Text('Total estimated time',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'SamsungSharpSans-Medium',
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                              ),),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 15.0,top: 15),
+                                                child:  Container(
+                                                    height: 20,
+                                                    width: 20,
+                                                    child: Image.asset('assets/image/ic_clock.png')),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                child: Text(
+                                                  _BookingDetails!.serviceTime.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.white
+                                                  ),),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                child: Text('Min',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.white
+                                                  ),),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ));
-                          }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MechMobileTrackScreen(
-                                    bookingId: _BookingDetails!.id.toString(),
+                                  Spacer(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 22.0),
+                                    child: Container(
+                                      height:82,
+                                      width: 127,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 00,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Column(
+                                        children:[
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Text('Total estimated cost',
+                                              textAlign: TextAlign.center,
+                                              style:TextStyle(
+                                                fontFamily: 'SamsungSharpSans-Medium',
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                              ),),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 25.0,top: 15),
+                                                child: Container(
+                                                    height: 20,
+                                                    width: 20,
+                                                    child: SvgPicture.asset('assets/image/ic_moneybag.svg')),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                child: Text('₦',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white
+                                                  ),),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                child: Text(
+                                                  _BookingDetails!.totalPrice.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white
+                                                  ),),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ));
-                          }
-                          else if(_BookingDetails!.regularType.toString() == "3"){       //mobile Mechanic
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MechTakeVehicleTrackScreen(
-                                    bookingId: _BookingDetails!.id.toString(),
-                                    workStartedTime: '',
-                                    reachTime: '',
-                                    bookedDate: '',
-                                  ),
-                                ));
-                          }
-                          }, child: Text('TRACK',
-                          style: TextStyle(
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            fontSize: 12,
-                            color: Colors.white,
+                                ]),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          primary: CustColors.light_navy,
-                          shape:
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 22.0,right: 22.0),
+                            child: Divider(
+                              thickness: .7,
+                              color: Colors.white,
                             ),
-                        ),
+                          ),
+                          Container(
+                            //   decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.only(
+                            //   topLeft: Radius.circular(10),
+                            //     topRight: Radius.circular(20),
+                            //     bottomLeft:Radius.circular(80),
+                            //     bottomRight:Radius.circular(80)
+                            // ),
+                            //   ),
+                            height: 95,
+                            child: Row(
+                                children:[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 22.0),
+                                    child: Container(
+                                      height:82,
+                                      width: 127,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: CustColors.light_navy,
+                                            width: 00,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Column(
+                                        children:[
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Text(
+                                              //'VEHICLE PICKING DATE',
+                                              'SERVICE DATE',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontFamily: 'SamsungSharpSans-Medium',
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                              ),),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 15, left: 8),
+                                                child: SvgPicture.asset('assets/image/ic_calender.svg',
+                                                  height: 20,
+                                                  width: 20,
+                                                  color: Colors.white,),
+                                                // Icon(Icons.date_range,
+                                                //   size: 30,
+                                                //   color: Colors.white,),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                child: Text(
+                                                  //'Mar 5,',
+                                                  _mechHomeBloc.dateMonthConverter(_BookingDetails!.bookedDate!),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white
+                                                  ),),
+                                              ),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              //   child: Text('2022',
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: Colors.white
+                                              //     ),),
+                                              // ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 22.0),
+                                    child: Container(
+                                      height:82,
+                                      width: 127,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: CustColors.light_navy,
+                                            width: 00,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      child: Column(
+                                        children:[
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: Text(
+                                              'SERVICE TIME',
+                                              //'VEHICLE PICKING TIME',
+                                              textAlign: TextAlign.center,
+                                              style:TextStyle(
+                                                fontFamily: 'SamsungSharpSans-Medium',
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                              ),),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 15, left: 10),
+                                                child:  Container(
+                                                    height: 20,
+                                                    width:20,
+                                                    child: Image.asset('assets/image/ic_clock.png')),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                child: Text(
+                                                  //'Mar 5,',
+                                                  // _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                                                  _mechHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(_BookingDetails!.bookedTime)).toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white
+                                                  ),),
+                                              ),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                              //   child: Text('2022',
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: Colors.white
+                                              //     ),),
+                                              // ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,right: 22.0,top:80),
+                child: Container(
+                  child:Image.asset('assets/image/group_2974.png'),
+                ),
+              ),
+              _BookingDetails!.reqType == 2 ?
+              Padding(
+                padding: const EdgeInsets.only(left: 255.0,right: 22.0,top: 60.0),
+                child: SizedBox(
+                  width:100,
+                  height: 40,
+                  child: TextButton(
+                    onPressed: () async {
+                      if(_BookingDetails!.regularType.toString() == "1"){   //pick up and drop off
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MechPickUpTrackScreen(
+                                bookedId: "1134",
+                                bookedDate: 'Mar 7,2022',
+                                latitude: "",
+                                longitude: "",
+                                mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
+                                mechanicName: "Minnu Kurian",
+                                pickingDate: 'Mar 8,2022',
+                              ),
+                            ));
+                      }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MechMobileTrackScreen(
+                                bookingId: _BookingDetails!.id.toString(),
+                              ),
+                            ));
+                      }
+                      else if(_BookingDetails!.regularType.toString() == "3"){       //mobile Mechanic
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MechTakeVehicleTrackScreen(
+                                bookingId: _BookingDetails!.id.toString(),
+                                reachTime: '',
+                                bookedDate: '',
+                                latitude: "",
+                                longitude: "",
+                                goTime: "",
+                                mechanicName: "",
+                              ),
+                            ));
+                      }
+                    }, child: Text('TRACK',
+                    style: TextStyle(
+                      fontFamily: 'SamsungSharpSans-Medium',
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      primary: CustColors.light_navy,
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
-                  SizedBox(height: 50)
-                ],
-              ),
-            ),
+                ),
+              )
+                  :
+              Container(),
+              SizedBox(height: 50)
+            ],
+          ),
         ),
-      );
+      ),
+    );
   }
 
   Widget listViewItems([BookService? bookService]){

@@ -54,6 +54,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
   String isStartedFromLocationForDropOff = "-1";
   String isDropOff = "-1";
   String isPaymentFinished = "-1";
+  String customerLatitude = "", customerLongitude = "";
 
 
 
@@ -74,6 +75,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     });
     await _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
+
         isStartedFromLocation = event.get("isStartedFromLocation");
         isArrived = event.get("isArrived");
         isPickedUpVehicle = event.get("isPickedUpVehicle");
@@ -83,6 +85,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
         isDropOff = event.get("isDropOff");
         isPaymentFinished = event.get("isPaymentFinished");
+        customerLatitude = event.get("customerLatitude");
+        customerLongitude = event.get("customerLongitude");
 
       });
     });
@@ -443,8 +447,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FindYourCustomerRegularScreen(
-                                    latitude: widget.latitude/*"10.0159"*/,
-                                    longitude: widget.longitude/*"76.3419"*/,
+                                    latitude: '${customerLatitude}' /*"10.0159"*/,
+                                    longitude: "${customerLongitude}" /*"76.3419"*/,
                                     //notificationPayloadMdl: widget.notificationPayloadMdl,
                                   )));
                         });

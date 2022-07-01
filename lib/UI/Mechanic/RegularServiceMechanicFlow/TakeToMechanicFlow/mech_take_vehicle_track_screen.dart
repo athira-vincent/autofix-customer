@@ -8,16 +8,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class MechTakeVehicleTrackScreen extends StatefulWidget{
 
-  final String bookingId;
   final String bookedDate;
-  final String workStartedTime;
+  final String latitude;
+  final String bookingId;
+  final String longitude;
+  final String goTime;
   final String reachTime;
+  final String mechanicName;
 
   MechTakeVehicleTrackScreen({
     required this.bookingId,
     required this.bookedDate,
-    required this.workStartedTime,
-    required this.reachTime
+    required this.latitude,
+    required this.reachTime,
+    required this.longitude,
+    required this.goTime,
+    required this.mechanicName,
   });
 
   @override
