@@ -112,8 +112,8 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
-                    home: CustMobileTrackScreen(bookingId: "1305",),
-                     //home: MechMobileTrackScreen(bookingId: "1305"),
+                    //home: CustMobileTrackScreen(bookingId: "1305",),
+                     home: MechMobileTrackScreen(bookingId: "1305"),
 
                     //home:SplashScreen(),
                   );
