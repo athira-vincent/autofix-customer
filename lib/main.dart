@@ -103,17 +103,17 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                    /*home: MechPickUpTrackScreen(
+                    /*home: CustPickUpTrackScreen(
                       bookedDate: 'Mar 7,2022',
                       latitude: "9.90874",
-                      bookedId: "1134",
+                      bookedId: "1304",
                       longitude: "76.28271",
                       mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
                     //home: CustMobileTrackScreen(bookingId: "1141",),
-                    //home: MechMobileTrackScreen(bookingId: "1141"),
+                    // home: MechMobileTrackScreen(bookingId: "1305"),
 
                     home:SplashScreen(),
                   );
