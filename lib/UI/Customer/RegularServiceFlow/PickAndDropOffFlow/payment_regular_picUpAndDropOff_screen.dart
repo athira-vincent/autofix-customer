@@ -13,7 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentRegularScreen extends StatefulWidget {
 
-  PaymentRegularScreen();
+  String bookingId;
+
+  PaymentRegularScreen({
+    required this.bookingId,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -59,7 +63,7 @@ class _PaymentRegularScreenState extends State<PaymentRegularScreen> {
 
     _firestore
         .collection("Regular-PickUp")
-        .doc('1138')
+        .doc('${widget.bookingId}')
         .update({
           'paymentStatus': "0",
         })
@@ -268,7 +272,7 @@ class _PaymentRegularScreenState extends State<PaymentRegularScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,)));
+                builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,bookingId: widget.bookingId,)));
       }
     else if( selectedOptionValue == -1)
     {

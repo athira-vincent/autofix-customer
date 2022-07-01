@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DirectPaymentRegularScreen extends StatefulWidget {
 
   bool isMechanicApp;
+  String bookingId;
   bool isPaymentFailed;   // ------ change the variable as isDirectPaymentRegular for screen 106
                             // isMechanicApp - true && isPaymentFailed - true  ==> screen 080,
                             // isMechanicApp - true && isPaymentFailed - false  ==> screen 106,
@@ -24,7 +25,8 @@ class DirectPaymentRegularScreen extends StatefulWidget {
 
   DirectPaymentRegularScreen({
     required this.isMechanicApp,
-    required this.isPaymentFailed
+    required this.isPaymentFailed,
+    required this.bookingId,
   });
 
   @override
@@ -71,11 +73,10 @@ class _DirectPaymentRegularScreenState extends State<DirectPaymentRegularScreen>
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
 
     });
-    await _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
+    await _firestore.collection("Regular-PickUp").doc('${widget.bookingId}').snapshots().listen((event) {
       setState(() {
         paymentStatus = event.get("paymentStatus");
         isPaymentFinished = event.get("isPaymentFinished");
@@ -89,7 +90,7 @@ class _DirectPaymentRegularScreenState extends State<DirectPaymentRegularScreen>
 
     _firestore
         .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
+        .doc('${widget.bookingId}')
         .update({
         'isPaymentAccepted': "1",
         "customerFromPage" : "MechanicWaitingPaymentScreen",

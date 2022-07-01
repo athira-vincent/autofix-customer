@@ -449,6 +449,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   builder: (context) => FindYourCustomerRegularScreen(
                                     latitude: '${customerLatitude}' /*"10.0159"*/,
                                     longitude: "${customerLongitude}" /*"76.3419"*/,
+                                    bookedId: '${widget.bookedId}',
                                     //notificationPayloadMdl: widget.notificationPayloadMdl,
                                   )));
                         });
@@ -2083,7 +2084,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
 
     _firestore
         .collection("Regular-PickUp")
-        .doc('1138')
+        .doc('${widget.bookedId}')
         .update({
             'isStartedFromLocation': "$isStartedFromLocation",
             'isArrived': "$isArrived",

@@ -268,7 +268,7 @@ class _PaymentRegularScreenState extends State<PaymentRegularScreen4> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,)));
+                builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,bookingId: '',)));
       }
     else if( selectedOptionValue == -1)
     {
