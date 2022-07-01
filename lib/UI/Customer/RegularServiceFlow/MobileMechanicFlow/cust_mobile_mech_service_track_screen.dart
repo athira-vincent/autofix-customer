@@ -414,7 +414,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                           height: 25,
                           width: 25,
                           //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_car1.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),

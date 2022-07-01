@@ -233,7 +233,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       print("latLng 001 ${latLng.latitude}");
       mechanicMarker (latLng);
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
-        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 500)
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 900)
           {
             isArrived = true;
           }

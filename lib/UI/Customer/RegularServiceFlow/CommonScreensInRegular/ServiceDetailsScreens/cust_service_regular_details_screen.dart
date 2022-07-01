@@ -422,6 +422,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustPickUpTrackScreen(
+                                        bookedId: "1134",
                                         bookedDate: 'Mar 7,2022',
                                         latitude: "",
                                         longitude: "",
