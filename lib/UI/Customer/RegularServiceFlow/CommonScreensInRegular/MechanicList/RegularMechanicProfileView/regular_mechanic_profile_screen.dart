@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
+import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as json;
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart' as category;
@@ -40,7 +42,7 @@ class RegularMechanicProfileViewScreen extends StatefulWidget {
   final String serviceTime;
   final String regularServiceType;
   final List<category.Service> selectedService;
- // final String serviceType;
+  final String serviceType;
 
 
   RegularMechanicProfileViewScreen({
@@ -56,8 +58,8 @@ class RegularMechanicProfileViewScreen extends StatefulWidget {
     required this.serviceDate,
     required this.serviceTime,
     required this.regularServiceType,
-    required this.selectedService
-    //required this.serviceType
+    required this.selectedService,
+    required this.serviceType,
   });
 
   @override
@@ -207,7 +209,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           if(widget.regularServiceType == TextStrings.txt_pick_up){
             updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
           }else if(widget.regularServiceType == TextStrings.txt_mobile_mechanic){
-            updateToCloudFirestoreDBMobileMech(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
+            updateToCloudFirestoreDBMobileMech(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }else{
             updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
           }
@@ -216,7 +218,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
               context,
               MaterialPageRoute(
                   builder: (context) => BookingSuccessScreen(
-                    bookingDate: _homeCustomerBloc.dateConvert(value.data!.mechanicBooking!.bookedDate!).toString(),
+                    bookingDate: _homeCustomerBloc.dateMonthConverter(value.data!.mechanicBooking!.bookedDate!).toString(),
                   )));
 
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -283,7 +285,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   }
 
-  Future<void> updateToCloudFirestoreDBMobileMech(int bookingId, int vehicleId) async {
+  Future<void> updateToCloudFirestoreDBMobileMech(int bookingId, [MechanicBooking? mechanicBooking]) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
 
     String? token;
@@ -296,17 +298,19 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
     });
 
     _firestore
-        .collection("Regular-MobileMech")
+        .collection("${TextStrings.firebase_mobile_mech}")
         .doc('${bookingId}')
         .set({
       "bookingId" : "${bookingId}",
-      "bookingDate": "${widget.serviceDate}",
-      "bookingTime": "${widget.serviceTime}",
+      "bookingDate": "${DateFormat("yyyy-MM-dd").format(DateTime.now())}",
+      "bookingTime": "${DateFormat("hh:mm a").format(DateTime.now())}",
+      "scheduledDate": "${widget.serviceDate}",
+      "scheduledTime" : "${widget.serviceTime}",
       "customerId": "${userId}",
       "customerName" : "${userName}",
       "customerLatitude" : "${widget.latitude}",
       "customerLongitude": "${widget.longitude}",
-      "customerAddress" : "",
+      "customerAddress" : "${widget.customerAddress}",
       "customerFcmToken" : "${token}",
       "mechanicId": "${widget.mechanicId}",
       "mechanicName": "${widget.mechanicListData!.firstName}",
@@ -316,17 +320,22 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
       "serviceList" : FieldValue.arrayUnion(yourItemList),
       "serviceTotalAmount" : '${totalAmount}',
-      "vehicleId": "${vehicleId}",
-      "vehicleName": "",
-      "vehiclePlateNumber" : "",
+      "vehicleId": "${mechanicBooking!.vehicle!.id}",
+      "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
+      "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
       "latitude" : "",
       "longitude" : "",
       "isBookedDate" : "-1",
       "isDriveStarted" : "-1",
+      "isDriveStartedTime" : "",
       "isArrived": "-1",
+      "isArrivedTime": "",
       "isWorkStarted" : "-1",
+      "isWorkStartedTime" : "",
       "isWorkFinished" : "-1",
-      "isPayment": "-1"
+      "isWorkFinishedTime" : "",
+      "isPayment": "-1",
+      "isPaymentTime": "",
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
@@ -917,6 +926,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
             '${widget.longitude}',
             '['+'${widget.serviceIds}'+']',
             '${widget.mechanicListData?.id}',
+            "2",
             widget.regularServiceType == TextStrings.txt_pick_up
                 ? '1'
                 : widget.regularServiceType == TextStrings.txt_mobile_mechanic

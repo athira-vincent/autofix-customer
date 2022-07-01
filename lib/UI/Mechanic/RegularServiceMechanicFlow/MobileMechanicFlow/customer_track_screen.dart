@@ -18,6 +18,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -248,7 +249,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
           {
             isArrived = true;
           }
-
+        print("isArrived >>> " + isArrived.toString());
     });
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
@@ -404,6 +405,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
         .update({
         "isDriveStarted" : "1",
         'isArrived': "0",
+        'isArrivedTime': "${DateFormat("hh:mm a").format(DateTime.now())}",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>

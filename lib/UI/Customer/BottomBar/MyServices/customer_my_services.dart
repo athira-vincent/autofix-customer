@@ -2,7 +2,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
-import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -114,7 +113,6 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
           isLoadingAllServices = false;
           CustomerAllServicesList = value.data;
         });
-
       }
 
     });
@@ -130,13 +128,9 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-
                 appBarCustomUi(size),
                 tabTitleBarCustomUi(size),
                 tabBodyCustomUi(size),
-
-
-
               ],
             ),
           ),
@@ -315,7 +309,6 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     ? CustomerCompletedServices(size)
     : CustomerAllServices(size);
 
-
   }
 
 
@@ -369,64 +362,43 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                           ),
                         )
                       : ListView.builder(
-                    itemCount:CustomerUpcomingServicesList?.custCompletedOrders?.length,
-                    shrinkWrap: true,
-                    // physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context,index,) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                        child: InkWell(
-                          onTap: (){
-                            setState(() {
+                        itemCount:CustomerUpcomingServicesList?.custCompletedOrders?.length,
+                        shrinkWrap: true,
+                        // physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context,index,) {
+                          return InkWell(
+                            onTap: (){
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => CustServiceRegularDetailsScreen(
-                                      bookingId: CustomerUpcomingServicesList!.custCompletedOrders![index].id.toString(),
+                                      bookingId: '${CustomerUpcomingServicesList?.custCompletedOrders?[index].id}',
                                     ),
                                   ));
-                            });
-
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(11.0)
-                            ),
-                            child:Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          child: Text('Mechanic',
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            overflow: TextOverflow.visible,
-                                            style: Styles.textLabelTitle_12,
-                                          ),
-                                        ),
-                                        SizedBox(height: 5,),
-                                        Container(
-                                          child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].mechanic?.firstName} ${CustomerUpcomingServicesList?.custCompletedOrders?[index].mechanic?.lastName}',
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            overflow: TextOverflow.visible,
-                                            style: Styles.textLabelSubTitlegrey11,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10,),
-                                        /*Container(
-                                              child: Text('Address',
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(11.0)
+                                ),
+                                child:Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child:
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: Text('Mechanic',
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -435,50 +407,170 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                             ),
                                             SizedBox(height: 5,),
                                             Container(
-                                              width: 150,
-                                              child: Text('Elenjikkal House '
-                                                  'Empyreal Garden '
-                                                  'Opposite of Ceevees International Auditorium Anchery'
-                                                  'Anchery P.O'
-                                                  'Thrissur - 680006',
-                                                maxLines: 4,
+                                              child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].mechanic?.firstName} ${CustomerUpcomingServicesList?.custCompletedOrders?[index].mechanic?.lastName}',
+                                                maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
                                                 style: Styles.textLabelSubTitlegrey11,
                                               ),
-                                            ),*/
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          color: CustColors.greyText1,
-                                          width: 1,
-                                          height: 150,
+                                            ),
+                                            SizedBox(height: 10,),
+                                            /*Container(
+                                                  child: Text('Address',
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.start,
+                                                    overflow: TextOverflow.visible,
+                                                    style: Styles.textLabelTitle_12,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5,),
+                                                Container(
+                                                  width: 150,
+                                                  child: Text('Elenjikkal House '
+                                                      'Empyreal Garden '
+                                                      'Opposite of Ceevees International Auditorium Anchery'
+                                                      'Anchery P.O'
+                                                      'Thrissur - 680006',
+                                                    maxLines: 4,
+                                                    textAlign: TextAlign.start,
+                                                    overflow: TextOverflow.visible,
+                                                    style: Styles.textLabelSubTitlegrey11,
+                                                  ),
+                                                ),*/
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 4,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Row(
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 8.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              color: CustColors.greyText1,
+                                              width: 1,
+                                              height: 150,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      child: Text('Car',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelTitle_12,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].vehicle?.brand}',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelSubTitlegrey11,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                    Container(
+                                                      child: Text('Cost',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelTitle_12,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                    Container(
+                                                      child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].totalPrice}',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelSubTitlegrey11,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Spacer(),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left:15),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(0),
+                                                    child: Column(
+                                                      children: [
+                                                        CustomerUpcomingServicesList?.custCompletedOrders?[index].reqType == 1 ?
+                                                        Container(
+                                                          height: 25,
+                                                          width: 50,
+                                                          alignment: Alignment.center,
+                                                          color: CustColors.blue,
+                                                          child: Text('Emergency Service',
+                                                            textAlign: TextAlign.center,
+                                                            style: Styles.badgeTextStyle2,
+                                                          ),
+                                                        )
+                                                            :
+                                                        Container(
+                                                          height: 25,
+                                                          width: 50,
+                                                          alignment: Alignment.center,
+                                                          color: CustColors.blue,
+                                                          child: Text('Regular Service',
+                                                            textAlign: TextAlign.center,
+                                                            style: Styles.badgeTextStyle2,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 5,),
+                                                        Stack(
+                                                          alignment: Alignment.topCenter,
+                                                          children: [
+                                                            Container(
+                                                              height: 50,
+                                                              width: 50,
+                                                              color: Colors.white,
+                                                              child: CustomPaint(
+                                                                painter: CurvePainter(),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Text(
+                                                                '${_homeCustomerBloc.dateMonthConverter02(CustomerUpcomingServicesList?.custCompletedOrders?[index].bookedDate).toString()}',
+                                                                //'22/03/22',
+                                                                textAlign: TextAlign.center,
+                                                                style: Styles.badgeTextStyle1,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5,),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  child: Text('Car',
+                                                  width: double.infinity,
+                                                  child: Text('Service',
                                                     maxLines: 2,
                                                     textAlign: TextAlign.start,
                                                     overflow: TextOverflow.visible,
@@ -486,125 +578,33 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 5,),
-                                                Container(
-                                                  width: 100,
-                                                  child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].vehicle?.brand}',
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.start,
-                                                    overflow: TextOverflow.visible,
-                                                    style: Styles.textLabelSubTitlegrey11,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5,),
-                                                Container(
-                                                  child: Text('Cost',
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.start,
-                                                    overflow: TextOverflow.visible,
-                                                    style: Styles.textLabelTitle_12,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5,),
-                                                Container(
-                                                  child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].totalPrice}',
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.start,
-                                                    overflow: TextOverflow.visible,
-                                                    style: Styles.textLabelSubTitlegrey11,
-                                                  ),
+                                                ListView.builder(
+                                                  itemCount:CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?.length !=0?1:0,
+                                                  shrinkWrap: true,
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  itemBuilder: (context,index,) {
+                                                    return Container(
+                                                      child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: Styles.textLabelSubTitlegrey11,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ],
                                             ),
-                                            Spacer(),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left:15),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(0),
-                                                child: Column(
-                                                  children: [
-                                                    Container(
-                                                      height: 25,
-                                                      width: 50,
-                                                      alignment: Alignment.center,
-                                                      color: CustColors.blue,
-                                                      child: Text('Emergency Service',
-                                                        textAlign: TextAlign.center,
-                                                        style: Styles.badgeTextStyle2,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 5,),
-                                                    Stack(
-                                                      alignment: Alignment.topCenter,
-                                                      children: [
-
-                                                        Container(
-                                                          height: 50,
-                                                          width: 50,
-                                                          color: Colors.white,
-                                                          child: CustomPaint(
-                                                            painter: CurvePainter(),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: Text(
-                                                            '22/03/22',
-                                                            textAlign: TextAlign.center,
-                                                            style: Styles.badgeTextStyle1,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
-                                        SizedBox(height: 5,),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: double.infinity,
-                                              child: Text('Service',
-                                                maxLines: 2,
-                                                textAlign: TextAlign.start,
-                                                overflow: TextOverflow.visible,
-                                                style: Styles.textLabelTitle_12,
-                                              ),
-                                            ),
-                                            SizedBox(height: 5,),
-                                            ListView.builder(
-                                              itemCount:CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?.length !=0?1:0,
-                                              shrinkWrap: true,
-                                              physics: NeverScrollableScrollPhysics(),
-                                              itemBuilder: (context,index,) {
-                                                return Container(
-                                                  child: Text('${CustomerUpcomingServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.start,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: Styles.textLabelSubTitlegrey11,
-                                                  ),
-                                                );
-                                              },
-                                            ),
-
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    },
+                          );
+                        },
                   ),
                 ),
         ),
@@ -663,103 +663,43 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                           ),
                         )
                       : ListView.builder(
-                    itemCount:CustomerCompletedServicesList?.custCompletedOrders?.length,
-                    shrinkWrap: true,
-                    // physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context,index,) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(11.0)
-                          ),
-                          child:Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        child: Text('Mechanic',
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelTitle_12,
+                          itemCount:CustomerCompletedServicesList?.custCompletedOrders?.length,
+                          shrinkWrap: true,
+                          // physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context,index,) {
+                            return InkWell(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CustServiceRegularDetailsScreen(
+                                          bookingId: '${CustomerCompletedServicesList?.custCompletedOrders?[index].id}',
                                         ),
-                                      ),
-                                      SizedBox(height: 5,),
-                                      Container(
-                                        child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].mechanic?.firstName.toString()}}',
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelSubTitlegrey11,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10,),
-                                      /*Container(
-                                            child: Text('Address',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,
-                                              style: Styles.textLabelTitle_12,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5,),
-                                          Container(
-                                            width: 150,
-                                            child: Text('Elenjikkal House '
-                                                'Empyreal Garden '
-                                                'Opposite of Ceevees International Auditorium Anchery'
-                                                'Anchery P.O'
-                                                'Thrissur - 680006',
-                                              maxLines: 4,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,
-                                              style: Styles.textLabelSubTitlegrey11,
-                                            ),
-                                          ),*/
-                                    ],
+                                      ));
+                                },
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(11.0)
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        color: CustColors.greyText1,
-                                        width: 1,
-                                        height: 150,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Column(
+                                  child:Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Container(
-                                                child: Text('Car',
+                                                child: Text('Mechanic',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
@@ -768,123 +708,207 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                               ),
                                               SizedBox(height: 5,),
                                               Container(
-                                                width: 100,
-                                                child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].vehicle?.brand}',
+                                                child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].mechanic?.firstName.toString()}}',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.start,
                                                   overflow: TextOverflow.visible,
                                                   style: Styles.textLabelSubTitlegrey11,
                                                 ),
                                               ),
-                                              SizedBox(height: 5,),
-                                              Container(
-                                                child: Text('Cost',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,
-                                                  style: Styles.textLabelTitle_12,
-                                                ),
-                                              ),
-                                              SizedBox(height: 5,),
-                                              Container(
-                                                child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].totalPrice}',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,
-                                                  style: Styles.textLabelSubTitlegrey11,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left:15),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 25,
-                                                    width: 50,
-                                                    alignment: Alignment.center,
-                                                    color: CustColors.blue,
-                                                    child: Text('Emergency Service',
-                                                      textAlign: TextAlign.center,
-                                                      style: Styles.badgeTextStyle2,
+                                              SizedBox(height: 10,),
+                                              /*Container(
+                                                    child: Text('Address',
+                                                      maxLines: 2,
+                                                      textAlign: TextAlign.start,
+                                                      overflow: TextOverflow.visible,
+                                                      style: Styles.textLabelTitle_12,
                                                     ),
                                                   ),
                                                   SizedBox(height: 5,),
-                                                  Stack(
-                                                    alignment: Alignment.topCenter,
+                                                  Container(
+                                                    width: 150,
+                                                    child: Text('Elenjikkal House '
+                                                        'Empyreal Garden '
+                                                        'Opposite of Ceevees International Auditorium Anchery'
+                                                        'Anchery P.O'
+                                                        'Thrissur - 680006',
+                                                      maxLines: 4,
+                                                      textAlign: TextAlign.start,
+                                                      overflow: TextOverflow.visible,
+                                                      style: Styles.textLabelSubTitlegrey11,
+                                                    ),
+                                                  ),*/
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 8.0),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                color: CustColors.greyText1,
+                                                width: 1,
+                                                height: 150,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
-
                                                       Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        color: Colors.white,
-                                                        child: CustomPaint(
-                                                          painter: CurvePainter(),
+                                                        child: Text('Car',
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,
+                                                          style: Styles.textLabelTitle_12,
                                                         ),
                                                       ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Text(
-                                                          '22/03/22',
-                                                          textAlign: TextAlign.center,
-                                                          style: Styles.badgeTextStyle1,
+                                                      SizedBox(height: 5,),
+                                                      Container(
+                                                        width: 100,
+                                                        child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].vehicle?.brand}',
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,
+                                                          style: Styles.textLabelSubTitlegrey11,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 5,),
+                                                      Container(
+                                                        child: Text('Cost',
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,
+                                                          style: Styles.textLabelTitle_12,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 5,),
+                                                      Container(
+                                                        child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].totalPrice}',
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,
+                                                          style: Styles.textLabelSubTitlegrey11,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
+                                                  Spacer(),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left:15),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(0),
+                                                      child: Column(
+                                                        children: [
+                                                          CustomerAllServicesList?.custCompletedOrders?[index].reqType == 1 ?
+                                                          Container(
+                                                            height: 25,
+                                                            width: 50,
+                                                            alignment: Alignment.center,
+                                                            color: CustColors.blue,
+                                                            child: Text('Emergency Service',
+                                                              textAlign: TextAlign.center,
+                                                              style: Styles.badgeTextStyle2,
+                                                            ),
+                                                          )
+                                                              :
+                                                          Container(
+                                                            height: 25,
+                                                            width: 50,
+                                                            alignment: Alignment.center,
+                                                            color: CustColors.blue,
+                                                            child: Text('Regular Service',
+                                                              textAlign: TextAlign.center,
+                                                              style: Styles.badgeTextStyle2,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 5,),
+                                                          Stack(
+                                                            alignment: Alignment.topCenter,
+                                                            children: [
+
+                                                              Container(
+                                                                height: 50,
+                                                                width: 50,
+                                                                color: Colors.white,
+                                                                child: CustomPaint(
+                                                                  painter: CurvePainter(),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets.all(8.0),
+                                                                child: Text(
+                                                                  '${_homeCustomerBloc.dateMonthConverter02(CustomerAllServicesList?.custCompletedOrders?[index].bookedDate).toString()}',
+                                                                 // '22/03/22',
+                                                                  textAlign: TextAlign.center,
+                                                                  style: Styles.badgeTextStyle1,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5,),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: double.infinity,
-                                            child: Text('Service',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,
-                                              style: Styles.textLabelTitle_12,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5,),
-                                          ListView.builder(
-                                            itemCount:CustomerCompletedServicesList?.custCompletedOrders?[index].bookService?.length !=0?1:0,
-                                            shrinkWrap: true,
-                                            physics: NeverScrollableScrollPhysics(),
-                                            itemBuilder: (context,index,) {
-                                              return Container(
-                                                child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: Styles.textLabelSubTitlegrey11,
-                                                ),
-                                              );
-                                            },
-                                          ),
+                                              SizedBox(height: 5,),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width: double.infinity,
+                                                    child: Text('Service',
+                                                      maxLines: 2,
+                                                      textAlign: TextAlign.start,
+                                                      overflow: TextOverflow.visible,
+                                                      style: Styles.textLabelTitle_12,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 5,),
+                                                  ListView.builder(
+                                                    itemCount:CustomerCompletedServicesList?.custCompletedOrders?[index].bookService?.length !=0?1:0,
+                                                    shrinkWrap: true,
+                                                    physics: NeverScrollableScrollPhysics(),
+                                                    itemBuilder: (context,index,) {
+                                                      return Container(
+                                                        child: Text('${CustomerCompletedServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: Styles.textLabelSubTitlegrey11,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
 
-                                        ],
-                                      ),
-                                    ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
                                   ),
                                 ),
-
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                              ),
+                            );
+                          },
                   ),
                 ),
         ),
@@ -910,83 +934,248 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
               : Container(
                   child: CustomerAllServicesList?.custCompletedOrders?.length == 0 || CustomerAllServicesList?.custCompletedOrders?.length == null
                       ? Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                                color:CustColors.materialBlue, spreadRadius: 1),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 220,
-                              height: 170,
-                              child: SvgPicture.asset(
-                                "assets/image/NoSerivice.svg",
-                                fit: BoxFit.contain,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              width: double.infinity,
+                              height: 200,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color:CustColors.materialBlue, spreadRadius: 1),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 220,
+                                    height: 170,
+                                    child: SvgPicture.asset(
+                                      "assets/image/NoSerivice.svg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                   )
                       : ListView.builder(
-                    itemCount:CustomerAllServicesList?.custCompletedOrders?.length,
-                    shrinkWrap: true,
-                    // physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context,index,) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(0,10,0,10),
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(11.0)
-                          ),
-                          child:Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Column(
+                        itemCount:CustomerAllServicesList?.custCompletedOrders?.length,
+                        shrinkWrap: true,
+                        // physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context,index01,) {
+                          return InkWell(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustServiceRegularDetailsScreen(
+                                        bookingId: '${CustomerAllServicesList?.custCompletedOrders?[index01].id}',
+                                      ),
+                                    ));
+                              },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(11.0)
+                                ),
+                                child:Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child:
+                                  Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        child: Text('Mechanic',
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelTitle_12,
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: Text('Mechanic',
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.visible,
+                                                style: Styles.textLabelTitle_12,
+                                              ),
+                                            ),
+                                            SizedBox(height: 5,),
+                                            Container(
+                                              child: Text('${CustomerAllServicesList?.custCompletedOrders?[index01].mechanic?.firstName} ${CustomerAllServicesList?.custCompletedOrders?[index01].mechanic?.lastName}',
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.visible,
+                                                style: Styles.textLabelSubTitlegrey11,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10,),
+                                            /*Container(
+                                                        child: Text('Address',
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,
+                                                          style: Styles.textLabelTitle_12,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 5,),
+                                                      Container(
+                                                        width: 150,
+                                                        child: Text('Elenjikkal House '
+                                                            'Empyreal Garden '
+                                                            'Opposite of Ceevees International Auditorium Anchery'
+                                                            'Anchery P.O'
+                                                            'Thrissur - 680006',
+                                                          maxLines: 4,
+                                                          textAlign: TextAlign.start,
+                                                          overflow: TextOverflow.visible,
+                                                          style: Styles.textLabelSubTitlegrey11,
+                                                        ),
+                                                      ),*/
+                                          ],
                                         ),
                                       ),
-                                      SizedBox(height: 5,),
-                                      Container(
-                                        child: Text('${CustomerAllServicesList?.custCompletedOrders?[index].mechanic?.firstName} ${CustomerAllServicesList?.custCompletedOrders?[index].mechanic?.lastName}',
-                                          maxLines: 2,
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.visible,
-                                          style: Styles.textLabelSubTitlegrey11,
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 8.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              color: CustColors.greyText1,
+                                              width: 1,
+                                              height: 150,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      SizedBox(height: 10,),
-                                      /*Container(
-                                                  child: Text('Address',
+                                      Expanded(
+                                        flex: 4,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      child: Text('Car',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelTitle_12,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text('${CustomerAllServicesList?.custCompletedOrders?[index01].vehicle?.brand}',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelSubTitlegrey11,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                    Container(
+                                                      child: Text('Cost',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelTitle_12,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5,),
+                                                    Container(
+                                                      child: Text('${CustomerAllServicesList?.custCompletedOrders?[index01].totalPrice}',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.visible,
+                                                        style: Styles.textLabelSubTitlegrey11,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Spacer(),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left:15),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(0),
+                                                    child: Column(
+                                                      children: [
+                                                        CustomerAllServicesList?.custCompletedOrders?[index01].reqType == 1 ?
+                                                        Container(
+                                                          height: 25,
+                                                          width: 50,
+                                                          alignment: Alignment.center,
+                                                          color: CustColors.blue,
+                                                          child: Text('Emergency Service',
+                                                            textAlign: TextAlign.center,
+                                                            style: Styles.badgeTextStyle2,
+                                                          ),
+                                                        )
+                                                            :
+                                                        Container(
+                                                          height: 25,
+                                                          width: 50,
+                                                          alignment: Alignment.center,
+                                                          color: CustColors.blue,
+                                                          child: Text('Regular Service',
+                                                            textAlign: TextAlign.center,
+                                                            style: Styles.badgeTextStyle2,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 5,),
+                                                        Stack(
+                                                          alignment: Alignment.topCenter,
+                                                          children: [
+
+                                                            Container(
+                                                              height: 50,
+                                                              width: 50,
+                                                              color: Colors.white,
+                                                              child: CustomPaint(
+                                                                painter: CurvePainter(),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Text(
+                                                                '${_homeCustomerBloc.dateMonthConverter02(CustomerAllServicesList?.custCompletedOrders?[index01].bookedDate).toString()}',
+                                                               // '22/03/22',
+                                                                textAlign: TextAlign.center,
+                                                                style: Styles.badgeTextStyle1,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5,),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: double.infinity,
+                                                  child: Text('Service',
                                                     maxLines: 2,
                                                     textAlign: TextAlign.start,
                                                     overflow: TextOverflow.visible,
@@ -994,176 +1183,35 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 5,),
-                                                Container(
-                                                  width: 150,
-                                                  child: Text('Elenjikkal House '
-                                                      'Empyreal Garden '
-                                                      'Opposite of Ceevees International Auditorium Anchery'
-                                                      'Anchery P.O'
-                                                      'Thrissur - 680006',
-                                                    maxLines: 4,
-                                                    textAlign: TextAlign.start,
-                                                    overflow: TextOverflow.visible,
-                                                    style: Styles.textLabelSubTitlegrey11,
-                                                  ),
-                                                ),*/
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        color: CustColors.greyText1,
-                                        width: 1,
-                                        height: 150,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                child: Text('Car',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,
-                                                  style: Styles.textLabelTitle_12,
-                                                ),
-                                              ),
-                                              SizedBox(height: 5,),
-                                              Container(
-                                                width: 100,
-                                                child: Text('${CustomerAllServicesList?.custCompletedOrders?[index].vehicle?.brand}',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,
-                                                  style: Styles.textLabelSubTitlegrey11,
-                                                ),
-                                              ),
-                                              SizedBox(height: 5,),
-                                              Container(
-                                                child: Text('Cost',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,
-                                                  style: Styles.textLabelTitle_12,
-                                                ),
-                                              ),
-                                              SizedBox(height: 5,),
-                                              Container(
-                                                child: Text('${CustomerAllServicesList?.custCompletedOrders?[index].totalPrice}',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.visible,
-                                                  style: Styles.textLabelSubTitlegrey11,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left:15),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 25,
-                                                    width: 50,
-                                                    alignment: Alignment.center,
-                                                    color: CustColors.blue,
-                                                    child: Text('Emergency Service',
-                                                      textAlign: TextAlign.center,
-                                                      style: Styles.badgeTextStyle2,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 5,),
-                                                  Stack(
-                                                    alignment: Alignment.topCenter,
-                                                    children: [
-
-                                                      Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        color: Colors.white,
-                                                        child: CustomPaint(
-                                                          painter: CurvePainter(),
-                                                        ),
+                                                ListView.builder(
+                                                  itemCount:CustomerAllServicesList?.custCompletedOrders?[index01].bookService?.length !=0?1:0,
+                                                  shrinkWrap: true,
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  itemBuilder: (context,index,) {
+                                                    return Container(
+                                                      child: Text('${CustomerAllServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.start,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: Styles.textLabelSubTitlegrey11,
                                                       ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Text(
-                                                          '22/03/22',
-                                                          textAlign: TextAlign.center,
-                                                          style: Styles.badgeTextStyle1,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5,),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: double.infinity,
-                                            child: Text('Service',
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.visible,
-                                              style: Styles.textLabelTitle_12,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5,),
-                                          ListView.builder(
-                                            itemCount:CustomerAllServicesList?.custCompletedOrders?[index].bookService?.length !=0?1:0,
-                                            shrinkWrap: true,
-                                            physics: NeverScrollableScrollPhysics(),
-                                            itemBuilder: (context,index,) {
-                                              return Container(
-                                                child: Text('${CustomerAllServicesList?.custCompletedOrders?[index].bookService?[0].service?.serviceName}',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: Styles.textLabelSubTitlegrey11,
+                                                    );
+                                                  },
                                                 ),
-                                              );
-                                            },
-                                          ),
 
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
+
                                     ],
                                   ),
                                 ),
-
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    },
+                          );
+                        },
                   ),
                 ),
         ),
@@ -1176,7 +1224,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
       height: 60.0,
       child: new Center(
           child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.blue),
+            valueColor: new AlwaysStoppedAnimation<Color>(CustColors.light_navy),
           )),
     );
   }

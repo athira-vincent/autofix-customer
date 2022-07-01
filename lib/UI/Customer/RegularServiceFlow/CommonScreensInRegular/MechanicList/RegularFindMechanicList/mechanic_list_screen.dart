@@ -5,7 +5,6 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/MechanicList/RegularMechanicProfileView/regular_mechanic_profile_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +25,14 @@ class MechanicListScreen extends StatefulWidget {
   final String serviceTime;
   final String regularServiceType;
   final List<category.Service>? selectedService;
-  //final String serviceType;
+  final String serviceType;
   final String latitude;
   final String longitude;
   final String address;
 
   MechanicListScreen({
     required this.serviceIds,
-    //required this.serviceType,
+    required this.serviceType,
     required this.latitude,
     required this.selectedService,
     required this.serviceDate,
@@ -362,7 +361,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                                                     serviceIds: widget.serviceIds,
                                                                     longitude: widget.longitude,
                                                                     latitude: widget.latitude,
-                                                                    //serviceType : widget.serviceType,
+                                                                    serviceType : widget.serviceType,
                                                                     serviceDate : widget.serviceDate,
                                                                     serviceTime : widget.serviceTime,
                                                                     regularServiceType : widget.regularServiceType,
@@ -781,7 +780,7 @@ class _MechanicListScreenState extends State<MechanicListScreen> {
                                             serviceIds: widget.serviceIds,
                                             longitude: widget.longitude,
                                             latitude: widget.latitude,
-                                            //serviceType : widget.serviceType,
+                                            serviceType : widget.serviceType,
                                             serviceDate : widget.serviceDate,
                                             serviceTime : widget.serviceTime,
                                             regularServiceType : widget.regularServiceType,

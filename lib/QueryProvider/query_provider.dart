@@ -600,37 +600,51 @@ class QueryProvider {
                   mechanicDetails(
                      mechanicId: ${int.parse(mechanicId)}
                      serviceId: "${serviceId.toString()}"
-                    latitude: "$latitude"
-                    longitude: "$longitude"
+                     latitude: "$latitude"
+                     longitude: "$longitude"
                   ) {
-                    id
-                    userCode
-                    firstName
-                    lastName
-                    emailId
-                    phoneNo
-                    userTypeId
-                    status
-                    jwtToken
-                    fcmToken
-                    otpCode
-                    isProfile
-                    otpVerified
-                    mechanic {
-                        id
-                        address
-                        profilePic
-                        yearExp
-                         noMech
-                        status
-                      }
-                    mechanicStatus {
-                      distance
-                    }
-                    mechanicService {
                       id
-                      fee
-                       service {
+                      userCode
+                      firstName
+                      lastName
+                      emailId
+                      phoneNo
+                      userTypeId
+                      status
+                      jwtToken
+                      fcmToken
+                      otpCode
+                      isProfile
+                      otpVerified
+                      mechanic {
+                        id
+                        usersId
+                        yearExp
+                        profilePic
+                        mechType
+                        workType
+                        noMech
+                        state
+                        rcNumber
+                        brands
+                        address
+                        certificate1
+                        certificate2
+                        status
+                        rate
+                        reviewCount
+                      }
+                      mechanicStatus {
+                        distance
+                        latitude
+                        longitude
+                        workStatus
+                      }
+                      mechanicService {
+                        id
+                        fee
+                        time
+                        service{
                           id
                           serviceName
                           description
@@ -640,40 +654,51 @@ class QueryProvider {
                           categoryId
                           status
                         }
-                      status
-                      userId
-                    }
-                    totalAmount
-                    distance
-                    duration
-                    reviewCount
-                    mechanicReviewsData {
-                      id
-                      transType
-                      rating
-                      feedback
-                      bookingId
-                    bookings{
-                      customer
-                      {
-                        fcmToken
-                        firstName
-                        phoneNo
-                        lastName
-                      
-                        customer
-                        {
-                          profilePic
+                        status
+                        userId
+                        serviceId
+                      }
+                      totalAmount
+                      distance
+                      duration
+                      reviewCount
+                      mechanicReviewsData {
+                        id
+                        transType
+                        rating
+                        feedback
+                        bookingId
+                        orderId
+                        status
+                        order{
+                          id
+                          oderCode
+                        }
+                        orderId
+                        status
+                        bookings{
+                          id
+                          bookingCode
+                          customer{
+                            fcmToken
+                            firstName
+                            phoneNo
+                            lastName
+                            customer{
+                              profilePic
+                            }
+                          }
+                        }
+                        productData{
+                          id
+                          productCode
+                          productName
                         }
                       }
+                      mechanicReview
+                      bookingsCount
                     }
-                      orderId
-                      status
-                    }
-                    mechanicReview
-                  }
                 }
-        
              """;
         log(_query);
         return await GqlClient.I.query01(
@@ -690,35 +715,122 @@ class QueryProvider {
   postMechanicsRegularServiceBookingIDRequest(
       token, date, time,
       latitude, longitude,
-      serviceId, mechanicId, reqType,
+      serviceId, mechanicId, reqType, regularServiceType,
       totalPrice, paymentType, travelTime) async {
     String _query = """  
     mutation {
-      mechanicBooking(
-        bookedDate: "$date"
-        bookedTime: "$time"
-        latitude: ${double.parse(latitude.toString())}
-        longitude: ${double.parse(longitude.toString())}
-        serviceId: $serviceId
-        mechanicId:${int.parse(mechanicId.toString())}
-        reqType: ${int.parse(reqType.toString())}
-        totalPrice: ${int.parse(totalPrice.toString())}
-        paymentType: ${int.parse(paymentType.toString())}
-        travelTime:  ""
-        ) {
+        mechanicBooking(
+            bookedDate: "$date"
+            bookedTime: "$time"
+            latitude: ${double.parse(latitude.toString())}
+            longitude: ${double.parse(longitude.toString())}
+            serviceId: $serviceId
+            mechanicId: ${int.parse(mechanicId.toString())}
+            reqType: ${int.parse(reqType.toString())}
+            regularType: ${int.parse(regularServiceType.toString())}
+            paymentType: 1
+            travelTime: "" )
+            {
             id
-            bookedDate
-            latitude
-            longitude
-            customerId
-            mechanicId
-            status
-            vehicleId
+            bookingCode
+            reqType
+            bookStatus
             totalPrice
             tax
             commission
             serviceCharge
             totalTime
+            serviceTime
+            latitude
+            longitude
+            mechLatitude
+            mechLongitude
+            extend
+            totalExt
+            extendTime
+            bookedDate
+            bookedTime
+            isRated
+            status
+            customerId
+            mechanicId
+            vehicleId
+            regularType
+            mechanic {
+              id
+              userCode
+              firstName
+              lastName
+              emailId
+              phoneNo
+              status
+              userTypeId
+              jwtToken
+              fcmToken
+              otpCode
+              isProfile
+              otpVerified
+              customer{
+                id
+              }
+              mechanic{
+                id
+              }
+              vendor{
+                id
+              }
+            }
+            customer {
+              id
+              userCode
+              firstName
+              lastName
+              emailId
+              phoneNo
+              status
+              userTypeId
+              jwtToken
+              fcmToken
+              otpCode
+              isProfile
+              otpVerified
+              customer{
+                id
+              }
+              mechanic{
+                id
+              }
+              vendor{
+                id
+              }
+            }
+            vehicle {
+              id
+              brand
+              model
+              engine
+              year
+              plateNo
+              lastMaintenance
+              milege
+              vehiclePic
+              latitude
+              longitude
+              defaultVehicle
+              status
+              userId
+            }
+            bookService {
+              id
+              mechanicId
+              customerId
+              status
+              serviceId
+              bookMechanicId
+              service{
+                id
+              }
+            }
           }
         }
     """;

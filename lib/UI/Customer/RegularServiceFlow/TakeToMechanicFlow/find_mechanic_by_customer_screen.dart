@@ -82,7 +82,8 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
-  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
+  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "",isReachedServiceCenter = "";
+
   bool isArrived = false;
 
   @override
@@ -181,6 +182,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         carName = event.get('carName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
+        isReachedServiceCenter = event.get("isReachedServiceCenter");
       });
     });
   }
