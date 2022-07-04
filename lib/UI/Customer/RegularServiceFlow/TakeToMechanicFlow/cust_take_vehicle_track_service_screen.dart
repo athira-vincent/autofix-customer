@@ -10,35 +10,43 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'find_mechanic_by_customer_screen.dart';
 
-class CustTakeVehicleTrackScreen extends StatefulWidget{
+class CustTakeVehicleTrackScreen extends StatefulWidget {
+
   final String bookedDate;
   final String latitude;
-  final String bookingId;
   final String longitude;
   final String goTime;
   final String reachTime;
   final String mechanicName;
+  final String mechanicAddress;
+  final String pickingDate;
+  final String bookedId;
 
   CustTakeVehicleTrackScreen({
-    required this.bookingId,
     required this.bookedDate,
     required this.latitude,
     required this.reachTime,
     required this.longitude,
     required this.goTime,
     required this.mechanicName,
+    required this.pickingDate,
+    required this.bookedId,
+    required this.mechanicAddress,
   });
+
   @override
   State<StatefulWidget> createState() {
     return _CustTakeVehicleTrackScreen();
   }
 
 }
+
 class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String bookingDate = "";
   String isDriveStarted = "-1";
+  String isArrived = "-1";
   String isReachedServiceCenter = "-1";
   String isWorkStarted = "-1";
   String isWorkFinished = "-1";
@@ -54,11 +62,11 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
   }
 
   void listenToCloudFirestoreDB() {
-    //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
-    _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
+    _firestore.collection("Regular-TakeVehicle").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
         bookingDate = event.get("bookingDate");
         isDriveStarted = event.get("isDriveStarted");
+        isArrived = event.get("isArrived");
         isReachedServiceCenter = event.get("isReachedServiceCenter");
         isWorkStarted = event.get("isWorkStarted");
         isWorkFinished = event.get("isWorkFinished");
@@ -67,16 +75,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
         completed = event.get("completed");
       });
 
-      /*customerDiagonsisApproval = event.get("customerDiagonsisApproval");
-      mechanicName = event.get('mechanicName');
-      totalEstimatedCost = event.get("updatedServiceCost");
-      totalEstimatedTime = event.get('updatedServiceTime');
-      totalTimeTakenByMechanic = event.get('totalTimeTakenByMechanic');
-      String extendedTime = event.get('extendedTime');
-      int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
-      totalExtendedTime = time.toString();
-      print('_firestoreData>>>>>>>>> ' + event.get('serviceName'));
-      print('_firestoreData>>>>>>>>> ' + totalEstimatedCost);*/
     });
   }
 
@@ -89,7 +87,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
       paymentRecieved  ) {
     _firestore
         .collection("Regular-TakeVehicle")
-        .doc('${widget.bookingId}')
+        .doc('${widget.bookedId}')
         .update({
       'isDriveStarted' : "$isDriveStarted",
       'isReachedServiceCenter' : "$isReachedServiceCenter",
@@ -132,6 +130,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
 
     );
   }
+
   Widget appBarCustomui(Size size){
     return Container(
       margin: EdgeInsets.only(
@@ -194,13 +193,12 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
       //),
     );
   }
+
   Widget serviceBookedUi(Size size){
-    print(bookingDate + "++++abc");
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // MainAxisSize.min,
         children:[
           Row(
           children: [
@@ -230,7 +228,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
               ),
             ),
             Expanded(
-              flex: 200,
               child: Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 30),
                 child: Column(
@@ -258,8 +255,9 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 130.0,right: 22.0,top: 15),
-              child: Container(
+              padding: const EdgeInsets.only(right: 22.0,top: 15),
+              child: isDriveStarted == '-1'
+              ? Container(
                 height: 23,
                 width: 55,
                 decoration: BoxDecoration(
@@ -284,22 +282,20 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     child: Text('START',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: CustColors.white_02,
-                        //const Color(0xff919191),
+                        color: isDriveStarted == '-1' ? CustColors.white_02 : CustColors.light_navy,
                         fontSize: 08,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: CustColors.light_navy,
-                      //const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
+                      primary: isDriveStarted == '-1' ? CustColors.light_navy : CustColors.light_navy05,
+                      shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)
                       ),
                     ),
                   ),
                 ),
-              ),
+              )
+              : Container(),
             ),
           ],
         ),
@@ -314,10 +310,11 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
       ),
     );
   }
-Widget vehicleStartedFromUi(Size size){
+
+  Widget vehicleStartedFromUi(Size size){
   return Container(
     child: isDriveStarted == "-1"
-    ?Column(
+    ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
         Row(
@@ -352,11 +349,9 @@ Widget vehicleStartedFromUi(Size size){
                     ],
                   ),
                 ),
-                //Expanded(child: child)
               ],
             ),
             Expanded(
-              flex: 200,
               child: Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 00),
                 child: Column(
@@ -431,7 +426,7 @@ Widget vehicleStartedFromUi(Size size){
         ),
       ],
     )
-    :Column(
+    : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
         Row(
@@ -466,11 +461,9 @@ Widget vehicleStartedFromUi(Size size){
                     ],
                   ),
                 ),
-                //Expanded(child: child)
               ],
             ),
             Expanded(
-              flex: 200,
               child: Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 00),
                 child: Column(
@@ -504,8 +497,9 @@ Widget vehicleStartedFromUi(Size size){
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              child: Container(
+              padding: const EdgeInsets.only(right: 22.0,top: 05),
+              child: isArrived == '-1'
+              ? Container(
                 height: 23,
                 width: 55,
                 decoration: BoxDecoration(
@@ -517,21 +511,20 @@ Widget vehicleStartedFromUi(Size size){
                   child: TextButton(
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context)
-                          => FindMechanicByCustomerScreen(
+                          MaterialPageRoute(builder: (context) => FindMechanicByCustomerScreen(
                             bookingId: '1142',
                             longitude: '${widget.longitude}',
                             latitude: '${widget.latitude}',)));
-                      setState(() {
-                        updateToCloudFirestoreDB(
-                            '0',
-                            '0',
-                            '-1',
-                            '-1',
-                            '-1',
-                            '-1'
-                        );
-                      });
+                            setState(() {
+                              updateToCloudFirestoreDB(
+                                  '0',
+                                  '0',
+                                  '-1',
+                                  '-1',
+                                  '-1',
+                                  '-1'
+                              );
+                            });
                     },
                     child: Text('TRACK',
                       textAlign: TextAlign.center,
@@ -550,7 +543,8 @@ Widget vehicleStartedFromUi(Size size){
                     ),
                   ),
                 ),
-              ),
+              )
+              : Container(),
             ),
           ],
         ),
@@ -568,398 +562,278 @@ Widget vehicleStartedFromUi(Size size){
 
   Widget reachedWorkShopUi(Size size){
     return Container(
-      child: isReachedServiceCenter == "-1"
-      ?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
+      child: isArrived == "-1"
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          //color: CustColors.light_navy,
+                          child: SvgPicture.asset('assets/image/ic_car2.svg',
+                            fit: BoxFit.contain,),
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_car2.svg',
-                      fit: BoxFit.contain,),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Reached at Mechanic Shop',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'SamsungSharpSans-Medium',
+                            ),),
+                          SizedBox(height: 05),
+                          Text(
+                            //'Mar 5,2022',
+                            '${widget.reachTime}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              flex:200,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Reached at Mechanic Shop',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text(
-                      //'Mar 5,2022',
-                      '${widget.reachTime}',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
-                  ],
-                ),
-              ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            //   child: Container(
-            //     height: 23,
-            //     width: 55,
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(top: 00.0),
-            //       child: TextButton(
-            //         onPressed: () {  },
-            //         child: Text('TRACK',
-            //           textAlign: TextAlign.center,
-            //           style: TextStyle(
-            //             color: const Color(0xff919191),
-            //             fontSize: 08,
-            //           ),
-            //         ),
-            //       style: ElevatedButton.styleFrom(
-            //               primary: const Color(0xffc9d6f2),
-            //               shape:
-            //               RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10)
-            //       ),
-            //       ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy05,
-              height: 50.0,
-            ),
-          ),
-    ],
-      )
-          :Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
-                      ),
-                    ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_car2.svg',
-                        fit: BoxFit.contain,
-                      color: Colors.white,),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex:200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Reached at Mechanic Shop',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                      Text(
-                        //'Mar 5,2022',
-                        '${widget.reachTime}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)
-                    ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(45,5,5,5),
+                  child: FDottedLine(
+                    color: CustColors.light_navy05,
+                    height: 50.0,
                   ),
                 ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              //   child: Container(
-              //     height: 23,
-              //     width: 55,
-              //     child: Padding(
-              //       padding: const EdgeInsets.only(top: 00.0),
-              //       child: TextButton(
-              //         onPressed: () {  },
-              //         child: Text('TRACK',
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //            // color: const Color(0xff919191),
-              //             color: Colors.white,
-              //             fontSize: 08,
-              //           ),
-              //         ),
-              //         style: ElevatedButton.styleFrom(
-              //           primary: CustColors.light_navy,
-              //           shape:
-              //           RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(10)
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy,
-              height: 50.0,
+          ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children:[
+                          Container(
+                            height:50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: CustColors.light_navy,
+                                borderRadius: BorderRadius.circular(25)
+                              //more than 50% of width makes circle
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            //color: CustColors.light_navy,
+                            child: SvgPicture.asset('assets/image/ic_car2.svg',
+                              fit: BoxFit.contain,
+                            color: Colors.white,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 22.0,top: 00),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Reached at Mechanic Shop',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 05),
+                            Text(
+                              //'Mar 5,2022',
+                              '${widget.reachTime}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Medium',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(45,5,5,5),
+                  child: FDottedLine(
+                    color: CustColors.light_navy,
+                    height: 50.0,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
+
   Widget startedWorkUi(Size size){
     return Container(
       child: isWorkStarted == "-1"
-      ?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
+         ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          //color: CustColors.light_navy,
+                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                            fit: BoxFit.contain,),
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                      fit: BoxFit.contain,),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Work Started',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'SamsungSharpSans-Medium',
+                            ),),
+                          SizedBox(height: 05),
+                          Text(
+                            //'Mar 5,2022',
+                            '${widget.bookedDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              flex:200,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Work Started',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text(
-                      //'Mar 5,2022',
-                      '${widget.bookedDate}',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
-                  ],
-                ),
-              ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            //   child: Container(
-            //     height: 23,
-            //     width: 55,
-            //     decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10),
-            //         color: const Color(0xffc9d6f2)
-            //     ),
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(top: 00.0),
-            //       child: TextButton(
-            //         onPressed: () {  },
-            //         child: Text('TRACK',
-            //           textAlign: TextAlign.center,
-            //           style: TextStyle(
-            //             color: const Color(0xff919191),
-            //             fontSize: 08,
-            //           ),
-            //         ),
-            //         style: ElevatedButton.styleFrom(
-            //           primary: const Color(0xffc9d6f2),
-            //           shape:
-            //           RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10)
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy05,
-              height: 50.0,
-            ),
-          ),
-    ],
-      )
-          :Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
-                      ),
-                    ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                        fit: BoxFit.contain,
-                      color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex:200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Work Started',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                      Text(
-                        //'Mar 5,2022',
-                        '${widget.bookedDate}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)
-                    ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(45,5,5,5),
+                  child: FDottedLine(
+                    color: CustColors.light_navy05,
+                    height: 50.0,
                   ),
                 ),
+          ],
+            )
+          : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:[
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          //color: CustColors.light_navy,
+                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                            fit: BoxFit.contain,
+                          color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Work Started',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'SamsungSharpSans-Medium',
+                            ),),
+                          SizedBox(height: 05),
+                          Text(
+                            //'Mar 5,2022',
+                            '${widget.bookedDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              //   child: Container(
-              //     height: 23,
-              //     width: 55,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: const Color(0xffc9d6f2)
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.only(top: 00.0),
-              //       child: TextButton(
-              //         onPressed: () {  },
-              //         child: Text('TRACK',
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //             //color: const Color(0xff919191),
-              //             color: Colors.white,
-              //             fontSize: 08,
-              //           ),
-              //         ),
-              //         style: ElevatedButton.styleFrom(
-              //           primary: CustColors.light_navy,
-              //           shape:
-              //           RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(10)
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(45,5,5,5),
+                child: FDottedLine(
+                  color: CustColors.light_navy,
+                  height: 50.0,
+                ),
+              ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,5),
-            child: FDottedLine(
-              color: CustColors.light_navy,
-              height: 50.0,
-            ),
-          ),
-        ],
-      ),
     );
   }
+
   Widget finishedWorkUi(Size size){
     return Container(
       child:isWorkFinished == "-1"
@@ -993,7 +867,6 @@ Widget vehicleStartedFromUi(Size size){
               ),
             ),
             Expanded(
-              flex:200,
               child: Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 00),
                 child: Column(
@@ -1018,37 +891,6 @@ Widget vehicleStartedFromUi(Size size){
                 ),
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-            //   child: Container(
-            //     height: 23,
-            //     width: 55,
-            //     decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(10),
-            //         color: const Color(0xffc9d6f2)
-            //     ),
-            //     child: Padding(
-            //       padding: const EdgeInsets.only(top: 00.0),
-            //       child: TextButton(
-            //         onPressed: () {  },
-            //         child: Text('TRACK',
-            //           textAlign: TextAlign.center,
-            //           style: TextStyle(
-            //             color: const Color(0xff919191),
-            //             fontSize: 08,
-            //           ),
-            //         ),
-            //         style: ElevatedButton.styleFrom(
-            //           primary: const Color(0xffc9d6f2),
-            //           shape:
-            //           RoundedRectangleBorder(
-            //               borderRadius: BorderRadius.circular(10)
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
           Padding(
@@ -1091,7 +933,6 @@ Widget vehicleStartedFromUi(Size size){
                 ),
               ),
               Expanded(
-                flex:200,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 22.0,top: 00),
                   child: Column(
@@ -1116,37 +957,6 @@ Widget vehicleStartedFromUi(Size size){
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-              //   child: Container(
-              //     height: 23,
-              //     width: 55,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(10),
-              //         color: const Color(0xffc9d6f2)
-              //     ),
-              //     child: Padding(
-              //       padding: const EdgeInsets.only(top: 00.0),
-              //       child: TextButton(
-              //         onPressed: () {  },
-              //         child: Text('TRACK',
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(
-              //             color: Colors.white,
-              //             fontSize: 08,
-              //           ),
-              //         ),
-              //         style: ElevatedButton.styleFrom(
-              //           primary: CustColors.light_navy,
-              //           shape:
-              //           RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(10)
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           Padding(
@@ -1160,330 +970,326 @@ Widget vehicleStartedFromUi(Size size){
       ),
     );
   }
+
   Widget paymentRequestUi(Size size){
     return Container(
       child:paymentStatus == "-1"
-          ?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy05,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children:[
+                          Container(
+                            height:50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: CustColors.light_navy05,
+                                borderRadius: BorderRadius.circular(25)
+                              //more than 50% of width makes circle
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            //color: CustColors.light_navy,
+                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                              fit: BoxFit.contain,),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                        fit: BoxFit.contain,),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex:200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Payment To Mechanic',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                      Text(
-                        //'Mar 5,2022',
-                        '${widget.bookedDate}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-                child: Container(
-                  height: 23,
-                  width: 55,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xffc9d6f2)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 00.0),
-                    child: TextButton(
-                      onPressed: () {  },
-                      child: Text('payment',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff919191),
-                          fontSize: 08,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffc9d6f2),
-                        shape:
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 22.0,top: 00),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Payment To Mechanic',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 05),
+                            Text(
+                              //'Mar 5,2022',
+                              '${widget.bookedDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Medium',
+                                  color: const Color(0xff9b9b9b)
+                              ),)
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,0),
-            child: FDottedLine(
-              color: CustColors.light_navy05,
-              height: 50.0,
-            ),
-          ),
-        ],
-      )
-          :Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
+                    Padding(
+                      padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                      child: Container(
+                        height: 23,
+                        width: 55,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xffc9d6f2)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 00.0),
+                          child: TextButton(
+                            onPressed: () {  },
+                            child: Text('payment',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color(0xff919191),
+                                fontSize: 08,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(0xffc9d6f2),
+                              shape:
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                          fit: BoxFit.contain,
-                          color: Colors.white),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                flex:200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Payment To Mechanic',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                      Text(
-                        //'Mar 5,2022',
-                        '${widget.bookedDate}',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'SamsungSharpSans-Medium',
-                            color: const Color(0xff9b9b9b)
-                        ),)
-                    ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(45,5,5,0),
+                  child: FDottedLine(
+                    color: CustColors.light_navy05,
+                    height: 50.0,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
-                child: Container(
-                  height: 23,
-                  width: 55,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xffc9d6f2)
+              ],
+            )
+          : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:[
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 22.0,top: 00),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          //color: CustColors.light_navy,
+                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                              fit: BoxFit.contain,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 00.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (context) => PaymentRegularScreen4()));
-                        setState(() {
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Payment To Mechanic',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'SamsungSharpSans-Medium',
+                            ),),
+                          SizedBox(height: 05),
+                          Text(
+                            //'Mar 5,2022',
+                            '${widget.bookedDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                                color: const Color(0xff9b9b9b)
+                            ),)
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                    child: Container(
+                      height: 23,
+                      width: 55,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xffc9d6f2)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 00.0),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(
+                                    builder: (context) => PaymentRegularScreen4()));
+                            setState(() {
 
-                          updateToCloudFirestoreDB(
-                              '0',
-                              '0',
-                              '0',
-                              '0',
-                              '0',
-                              '-1'
-                          );
-                        });
-                      },
-                      child: Text('payment',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 08,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: CustColors.light_navy,
-                        shape:
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
+                              updateToCloudFirestoreDB(
+                                  '0',
+                                  '0',
+                                  '0',
+                                  '0',
+                                  '0',
+                                  '-1'
+                              );
+                            });
+                          },
+                          child: Text('payment',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 08,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: CustColors.light_navy,
+                            shape:
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(45,5,5,0),
+                child: FDottedLine(
+                  color: CustColors.light_navy,
+                  height: 50.0,
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(45,5,5,0),
-            child: FDottedLine(
-              color: CustColors.light_navy,
-              height: 50.0,
-            ),
-          ),
-        ],
-      ),
     );
   }
+
   Widget completedUi(Size size){
     return Container(
       child:completed == "-1"
-          ?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy05,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children:[
+                          Container(
+                            height:50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: CustColors.light_navy05,
+                                borderRadius: BorderRadius.circular(25)
+                              //more than 50% of width makes circle
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            //color: CustColors.light_navy,
+                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                              fit: BoxFit.contain,),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                        fit: BoxFit.contain,),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 22.0,top: 00),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Completed',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 05),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                flex:200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Completed',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                    ],
-                  ),
-                ),
-              ),
-
-
-
-            ],
-          ),
-        ],
-      )
-          :Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children:[
-                    Container(
-                      height:50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: CustColors.light_navy,
-                          borderRadius: BorderRadius.circular(25)
-                        //more than 50% of width makes circle
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 00),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children:[
+                          Container(
+                            height:50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: CustColors.light_navy,
+                                borderRadius: BorderRadius.circular(25)
+                              //more than 50% of width makes circle
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            //color: CustColors.light_navy,
+                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                                fit: BoxFit.contain,
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 25,
-                      width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                          fit: BoxFit.contain,
-                          color: Colors.white),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 22.0,top: 00),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Completed',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            SizedBox(height: 05),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                flex:200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Completed',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                        ),),
-                      SizedBox(height: 05),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
     );
   }
+
   Widget textButtonUi (Size size){
     return Container(
       child: Row(
