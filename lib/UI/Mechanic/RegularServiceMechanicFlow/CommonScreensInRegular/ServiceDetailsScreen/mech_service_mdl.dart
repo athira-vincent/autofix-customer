@@ -89,7 +89,7 @@ class BookingDetails {
   int bookStatus;
   String totalPrice;
   dynamic tax;
-  int commission;
+  var commission;
   dynamic serviceCharge;
   String totalTime;
   dynamic serviceTime;
