@@ -406,7 +406,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         .doc('${widget.bookingId}')
         .update({
         'isArrived': "0",
-    })
+          })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
@@ -577,10 +577,6 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                                               onPressed: () {
                                                 updateToCloudFirestoreDB();
                                                 Navigator.pop(context);
-                                                // _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                                //     authToken, bookingId, "3"
-                                                // );
-
                                               },
                                               child: Container(
                                                 height: 30,
