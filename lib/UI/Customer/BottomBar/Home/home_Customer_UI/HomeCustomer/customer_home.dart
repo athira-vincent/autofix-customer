@@ -91,7 +91,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     super.initState();
     getSharedPrefData();
 
-
     _getCurrentCustomerLocation();
     _listenServiceListResponse();
 
