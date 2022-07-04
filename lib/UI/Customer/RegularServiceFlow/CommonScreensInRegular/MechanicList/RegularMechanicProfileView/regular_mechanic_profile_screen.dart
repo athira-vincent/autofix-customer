@@ -379,6 +379,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "vehicleName": "",
       "vehiclePlateNumber" : "",
       "isDriveStarted" : "-1",
+      "isArrived" : "-1",
       "isReachedServiceCenter": "-1",
       "isReceivedVehicle" : "-1",
       "isWorkStarted" : "-1",
