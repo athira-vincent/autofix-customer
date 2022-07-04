@@ -443,7 +443,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechMobileTrackScreen(
-                                bookingId: _BookingDetails!.id.toString(),
+                                //bookingId: _BookingDetails!.id.toString(),
+                                bookingId: widget.bookingId,
+                                bookingDate: _BookingDetails!.bookedDate!
                               ),
                             ));
                       }

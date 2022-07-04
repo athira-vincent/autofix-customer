@@ -11,9 +11,10 @@ import 'package:intl/intl.dart';
 
 class MechMobileTrackScreen extends StatefulWidget{
   final String bookingId;
-
+  final DateTime bookingDate;
   MechMobileTrackScreen({
-    required this.bookingId
+    required this.bookingId,
+    required this.bookingDate
   });
 
   @override
@@ -44,12 +45,12 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
 
+      bookingDate = event.get("bookingDate");
       customerName = event.get("customerName");
       customerAddress = event.get("customerAddress");
       mechanicName = event.get("mechanicName");
       customerLatitude = event.get("customerLatitude");
       customerLongitude = event.get("customerLongitude");
-      bookingDate = event.get("bookingDate");
       scheduledDate = event.get("scheduledDate");
       isBookedDate = event.get("isBookedDate");
       isDriveStarted = event.get("isDriveStarted");
@@ -76,8 +77,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
 
       //String date = _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate));
 
-      print(" >>>> Date : >>>>>" + dateToday.toString());
-      print(" >>>> Date : >>>>>" + tempDate.toString());
+      print(" >>>> Date : dateToday >>>>>" + dateToday.toString());
+      print(" >>>> Date : tempDate >>>>>" + tempDate.toString());
 
     });
   }
@@ -248,8 +249,9 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
+                      _mechanicHomeBloc.dateMonthConverter(widget.bookingDate),
                       //bookingDate,
-                       _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                       //_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       // 'Mar 5,2022',
                     textAlign: TextAlign.start,
                     style: TextStyle(
