@@ -519,7 +519,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,
                                       right: size.width * 2 / 100,
-                                      top: size.height * 4 / 100,
+                                      top: size.height * 2 / 100,
                                       //bottom: size.height * 2.5 / 100,
                                     ),
                                     child: Row(
