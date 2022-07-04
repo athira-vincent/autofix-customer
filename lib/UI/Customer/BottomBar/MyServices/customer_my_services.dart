@@ -48,6 +48,14 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    getSharedPrefData();
+    super.didChangeDependencies();
+    getSharedPrefData();
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
