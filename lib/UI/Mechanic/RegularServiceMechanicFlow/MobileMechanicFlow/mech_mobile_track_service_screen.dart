@@ -29,7 +29,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   String bookingDate = "", scheduledDate = "";
   String isBookedDate = "-1",  isDriveStarted = "", isArrived = "-1", isWorkStarted = "", isWorkFinished = "", isPayment = "";
-  String customerName = "", mechanicName = "", customerLatitude = "", customerLongitude = "";
+  String customerName = "",customerAddress = "", mechanicName = "", mechanicAddress = "", customerLatitude = "", customerLongitude = "";
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
   DateTime dateToday = DateTime.now() ;
 
@@ -45,6 +45,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
 
       customerName = event.get("customerName");
+      customerAddress = event.get("customerAddress");
       mechanicName = event.get("mechanicName");
       customerLatitude = event.get("customerLatitude");
       customerLongitude = event.get("customerLongitude");
@@ -208,7 +209,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // MainAxisSize.min,
         children:[
           Row(
             children: [
@@ -229,7 +229,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
                       child: SvgPicture.asset('assets/image/ic_calender.svg',
                         fit: BoxFit.contain,
                       color: Colors.white,),
@@ -249,8 +248,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
-                      bookingDate,
-                      // _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                      //bookingDate,
+                       _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       // 'Mar 5,2022',
                     textAlign: TextAlign.start,
                     style: TextStyle(
@@ -302,8 +301,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_car1.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
                           fit: BoxFit.contain,
                           //color: Colors.white,
                              ),
@@ -326,7 +324,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('Savannah estate, plot 176',
+                      Text('$customerAddress',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -386,7 +384,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
@@ -398,35 +396,33 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                 ],
               ),
               Expanded(
-                flex: 200,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 22.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('JayCust is waiting for service',
+                      Text('$customerName is waiting for service',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('at Savannah estate, plot 176',
+                      Text('at $customerAddress',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
                         ),),
-                      SizedBox(height: 02),
                     ],
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                padding: const EdgeInsets.only(right: 10),
                 child: Container(
                   height: 23,
-                  width: 55,
+                  width: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: const Color(0xffc9d6f2)
@@ -439,7 +435,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                         //updateToCloudFirestoreDB("isDriveStartedTime","${DateFormat("hh:mm a").format(DateTime.now())}");
                         //------------------ take the current date and time & Update Firebase, change the status to
                       },
-                      child: Text('Ready for service',
+                      child: Text('Start Drive',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xff919191),
@@ -498,8 +494,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: Image.asset('assets/image/ServiceTrackScreen/active_start_from_mech.png',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
                             fit: BoxFit.contain,
                             //color: Colors.white,
                           ),
