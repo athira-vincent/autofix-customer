@@ -93,8 +93,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     Provider.of<ProfileDataProvider>(context, listen: false).setProfile(userId, localProfileName, localProfileUrl);
   }
 
-
-
   Future<void> _getCurrentMechanicLocation() async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
