@@ -51,25 +51,28 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
    // _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
       //bookingDate = _mechanicHomeBloc.dateMonthConverter(event.get("bookingDate"));
-      bookingDate = event.get("bookingDate");
-      customerName = event.get("customerName");
-      customerAddress = event.get("customerAddress");
-      scheduledTime = event.get("scheduledTime");
-      mechanicName = event.get("mechanicName");
-      mechanicAddress = event.get("mechanicAddress");
-      isBookedDate = event.get("isBookedDate");
-      scheduledDate = event.get("scheduledDate");
-      scheduledDate = event.get("scheduledDate");
-      isDriveStarted = event.get("isDriveStarted");
-      isDriveStartedTime = event.get("isDriveStartedTime");
-      isArrived = event.get("isArrived");
-      isArrivedTime = event.get("isArrivedTime");
-      isWorkStarted = event.get("isWorkStarted");
-      isWorkStartedTime = event.get("isWorkStartedTime");
-      isWorkFinished = event.get("isWorkFinished");
-      isWorkFinishedTime = event.get("isWorkFinishedTime");
-      isPayment = event.get("isPayment");
-      isPaymentTime = event.get("isPaymentTime");
+
+      setState(() {
+        bookingDate = event.get("bookingDate");
+        customerName = event.get("customerName");
+        customerAddress = event.get("customerAddress");
+        scheduledTime = event.get("scheduledTime");
+        mechanicName = event.get("mechanicName");
+        mechanicAddress = event.get("mechanicAddress");
+        isBookedDate = event.get("isBookedDate");
+        scheduledDate = event.get("scheduledDate");
+        scheduledDate = event.get("scheduledDate");
+        isDriveStarted = event.get("isDriveStarted");
+        isDriveStartedTime = event.get("isDriveStartedTime");
+        isArrived = event.get("isArrived");
+        isArrivedTime = event.get("isArrivedTime");
+        isWorkStarted = event.get("isWorkStarted");
+        isWorkStartedTime = event.get("isWorkStartedTime");
+        isWorkFinished = event.get("isWorkFinished");
+        isWorkFinishedTime = event.get("isWorkFinishedTime");
+        isPayment = event.get("isPayment");
+        isPaymentTime = event.get("isPaymentTime");
+      });
 
       DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
 
