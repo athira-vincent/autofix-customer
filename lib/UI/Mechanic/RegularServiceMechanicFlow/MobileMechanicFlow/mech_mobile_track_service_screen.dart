@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 class MechMobileTrackScreen extends StatefulWidget{
   final String bookingId;
-  final DateTime bookingDate;
+  final String bookingDate;
   MechMobileTrackScreen({
     required this.bookingId,
     required this.bookingDate
@@ -39,6 +39,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     // TODO: implement initState
     super.initState();
     listenToCloudFirestoreDB();
+    bookingDate = widget.bookingDate;
   }
 
   void listenToCloudFirestoreDB() {
@@ -66,7 +67,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         isPayment = event.get("isPayment");
         isPaymentTime = event.get("isPaymentTime");
       });
-
 
       DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
 
@@ -253,9 +253,9 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
-                      _mechanicHomeBloc.dateMonthConverter(widget.bookingDate),
+                      //_mechanicHomeBloc.dateMonthConverter(bookingDate),
                       //bookingDate,
-                       //_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
+                       _mechanicHomeBloc.dateMonthConverter(DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       // 'Mar 5,2022',
                     textAlign: TextAlign.start,
                     style: TextStyle(

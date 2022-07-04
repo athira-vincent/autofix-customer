@@ -14,9 +14,11 @@ import 'package:intl/intl.dart';
 class CustMobileTrackScreen extends StatefulWidget{
 
   final String bookingId;
+  final String bookingDate;
 
   CustMobileTrackScreen({
-    required this.bookingId
+    required this.bookingId,
+    required this.bookingDate
   });
 
   @override
@@ -45,12 +47,12 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     // TODO: implement initState
     super.initState();
     listenToCloudFirestoreDB();
+    bookingDate = widget.bookingDate;
   }
 
   void listenToCloudFirestoreDB() {
    // _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
-      //bookingDate = _mechanicHomeBloc.dateMonthConverter(event.get("bookingDate"));
 
       setState(() {
         bookingDate = event.get("bookingDate");
@@ -256,6 +258,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
+                      //_mechanicHomeBloc.dateMonthConverter(DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       //bookingDate.toString(),
                     textAlign: TextAlign.start,
