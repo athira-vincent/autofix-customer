@@ -4,6 +4,7 @@ import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInR
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/mech_pick_up_track_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,13 +33,13 @@ class MechServiceRegularDetailsScreen extends StatefulWidget {
 }
 
 class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsScreen> {
-  String authToken = "", type = "",bookingId = "", userId = "";
+  String authToken = "", type = "",bookingId = "", userId = "", bookingDate = "";
 
   MechServiceDetailsReviewBloc _mechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
   HomeMechanicBloc _mechHomeBloc = HomeMechanicBloc();
 
   BookingDetails? _BookingDetails;
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   DateTime selectedDate = DateTime.now();
 
@@ -52,6 +53,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     getSharedPrefData();
     _listenApiResponse();
     super.initState();
+    listenToCloudFirestoreDB();
   }
 
   Future<void> getSharedPrefData()async{
@@ -59,7 +61,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-
       _mechServiceDetailsReviewBloc.postGetMechServiceDetailsReviewRequest(
         authToken, bookingId
       );
@@ -86,6 +87,14 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
          // print('${_BookingDetails?.serviceCharge}');
         });
       }
+    });
+  }
+
+  void listenToCloudFirestoreDB() {
+    _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
+      setState(() {
+        bookingDate = event.get("bookingDate");
+      });
     });
   }
 
@@ -443,7 +452,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechMobileTrackScreen(
-                                bookingId: _BookingDetails!.id.toString(),
+                                //bookingId: _BookingDetails!.id.toString(),
+                                bookingId: widget.bookingId,
+                                bookingDate: bookingDate,
                               ),
                             ));
                       }

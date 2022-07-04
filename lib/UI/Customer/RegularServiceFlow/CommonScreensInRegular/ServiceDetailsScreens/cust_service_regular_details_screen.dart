@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,10 +32,10 @@ class CustServiceRegularDetailsScreen extends StatefulWidget {
 
 class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsScreen> {
 
-  String authToken = "", type = "",bookingId = "", userId = "";
+  String authToken = "", type = "",bookingId = "", userId = "", bookingDate = "";
   MechServiceDetailsReviewBloc _mechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   DateTime selectedDate = DateTime.now();
 
   bool isLoading = true;
@@ -46,6 +47,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
     bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
+    listenToCloudFirestoreDB();
   }
 
   Future<void> getSharedPrefData()async{
@@ -81,6 +83,15 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
     });
   }
 
+  void listenToCloudFirestoreDB() {
+    //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+    _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
+
+      setState(() {
+        bookingDate = event.get("bookingDate");
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -437,6 +448,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     MaterialPageRoute(
                                       builder: (context) => CustMobileTrackScreen(
                                         bookingId: _BookingDetails!.id.toString(),
+                                        bookingDate: bookingDate,
                                       ),
                                     ));
                               }
