@@ -1770,7 +1770,7 @@ class QueryProvider {
       {
         _query = """
       {
-      UpcomingCompletedServices(mechanicId: $mechanicId) {
+      UpcomingCompletedServices(type: null, mechanicId: $mechanicId) {
         id
         bookingCode
         reqType
