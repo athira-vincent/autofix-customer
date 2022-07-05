@@ -1,9 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/direct_payment_regular_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,10 +19,6 @@ class CustPickUpTrackScreen extends StatefulWidget{
   final String mechanicName;
   final String bookedId;
 
-
-
-
-
   CustPickUpTrackScreen({
     required this.latitude,
     required this.bookedDate,
@@ -35,8 +27,6 @@ class CustPickUpTrackScreen extends StatefulWidget{
     required this.longitude,
     required this.mechanicAddress,
     required this.mechanicName,
-
-
   });
 
   @override
@@ -65,13 +55,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
   String isDropOff = "-1";
   String isPaymentFinished = "-1";
   String paymentStatus = "-1";
-
-
-
-
-
-
-
 
 
   @override
@@ -153,8 +136,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () {  },
-                //onPressed: () => Navigator.pop(context),
+                //onPressed: () {  },
+                onPressed: () => Navigator.pop(context),
               )
             ],
           )
@@ -223,7 +206,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
                       child: SvgPicture.asset('assets/image/ic_calender.svg',
                         fit: BoxFit.contain,
                       color: Colors.white,),
@@ -241,7 +223,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                       fontFamily: 'SamsungSharpSans-Medium',
                     ),),
                     SizedBox(height: 05),
-                    Text('${widget.bookedDate}',
+                    Text(
+                      '${widget.bookedDate}',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 12,

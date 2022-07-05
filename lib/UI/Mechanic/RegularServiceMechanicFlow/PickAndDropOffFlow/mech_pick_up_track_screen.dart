@@ -139,8 +139,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () {  },
-                //onPressed: () => Navigator.pop(context),
+                //onPressed: () {  },
+                onPressed: () => Navigator.pop(context),
               )
             ],
           )
@@ -153,7 +153,6 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
