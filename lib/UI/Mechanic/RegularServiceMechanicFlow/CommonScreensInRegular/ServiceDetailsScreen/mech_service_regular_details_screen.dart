@@ -57,7 +57,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     getSharedPrefData();
     _listenApiResponse();
     super.initState();
-    listenToCloudFirestoreDB();
     _getLocation();
   }
 
@@ -96,6 +95,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
           }else if(_BookingDetails!.regularType.toString() == "3"){
             firebaseCollection = TextStrings.firebase_take_vehicle;
           }
+          listenToCloudFirestoreDB();
          // print('${_BookingDetails?.serviceCharge}');
         });
       }
@@ -103,7 +103,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
   }
 
   void listenToCloudFirestoreDB() {
-    _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
+    _firestore.collection('$firebaseCollection').doc('${widget.bookingId}').snapshots().listen((event) {
       setState(() {
         bookingDate = event.get("bookingDate");
       });
@@ -321,14 +321,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             ),
                           ),
                           Container(
-                            //   decoration: BoxDecoration(
-                            //     borderRadius: BorderRadius.only(
-                            //   topLeft: Radius.circular(10),
-                            //     topRight: Radius.circular(20),
-                            //     bottomLeft:Radius.circular(80),
-                            //     bottomRight:Radius.circular(80)
-                            // ),
-                            //   ),
                             height: 95,
                             child: Row(
                                 children:[
@@ -380,14 +372,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                                       color: Colors.white
                                                   ),),
                                               ),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                              //   child: Text('2022',
-                                              //     style: TextStyle(
-                                              //         fontSize: 15,
-                                              //         color: Colors.white
-                                              //     ),),
-                                              // ),
                                             ],
                                           )
                                         ],
@@ -483,12 +467,14 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             MaterialPageRoute(
                               builder: (context) => MechPickUpTrackScreen(
                                 bookedId: "${widget.bookingId}",
-                                bookedDate: '${_BookingDetails!.bookedDate}',
+                                //bookedDate: '${_BookingDetails!.bookedDate}',
+                                //bookedDate: _mechHomeBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
+                                bookedDate: bookingDate,
                                 latitude: '${_BookingDetails!.latitude}',
                                 longitude:'${_BookingDetails!.longitude}',
                                 mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
                                 mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                pickingDate: '${_BookingDetails!.bookedDate}',
+                                pickingDate: bookingDate,
                               ),
                             ));
                       }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
