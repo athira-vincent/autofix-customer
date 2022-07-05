@@ -613,20 +613,20 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Drive not started',
+                      Text( isDriveStarted == "-1" ? 'Drive not started' : "Expected to reach",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('Expected to reach',
+                      isDriveStarted != "-1" ? Text('Expected to reach',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),),
-                      SizedBox(height: 02),
+                        ),) : Container(),
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
                       Text('at $scheduledTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
@@ -1104,7 +1104,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 padding: const EdgeInsets.only(top: 00.0),
                 child: TextButton(
                   onPressed: () {
-                    //updateToCloudFirestoreDB("isPayment","0");
+                    updateToCloudFirestoreDB("isPayment","0");
                     Navigator.push(
                         context,
                         MaterialPageRoute(

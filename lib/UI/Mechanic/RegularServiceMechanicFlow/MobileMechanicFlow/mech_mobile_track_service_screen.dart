@@ -1092,7 +1092,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: Image.asset('assets/image/ServiceTrackScreen/ic_work_started_w.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_w.svg',
                         fit: BoxFit.contain,
                         //color: Colors.white,
                       ),
@@ -1107,7 +1107,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech started work',
+                      Text('$mechanicName started work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1300,7 +1300,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                         updateToCloudFirestoreDB("isWorkStarted","1");
                         updateToCloudFirestoreDB("isWorkFinished","0");
                       },
-                      child: Text('Work Finished',
+                      child: Text('Finished',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xff919191),
@@ -1356,7 +1356,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: Image.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
                         fit: BoxFit.contain,
                         //color: Colors.white,
                       ),
@@ -1371,7 +1371,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Jaymech finished work',
+                      Text('$mechanicName finished work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -1651,7 +1651,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  child: Image.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
                     fit: BoxFit.contain,
                     //color: Colors.white,
                   ),
