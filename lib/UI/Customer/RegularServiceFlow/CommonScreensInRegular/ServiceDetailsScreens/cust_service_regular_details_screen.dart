@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
@@ -40,6 +41,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
 
   bool isLoading = true;
   BookingDetails? _BookingDetails;
+  String firebaseCollection = "";
 
   @override
   void initState() {
@@ -47,7 +49,6 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
     bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
-    listenToCloudFirestoreDB();
   }
 
   Future<void> getSharedPrefData()async{
@@ -78,6 +79,14 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
         setState(() {
           isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
+          if(_BookingDetails!.regularType.toString() == "1"){
+            firebaseCollection = TextStrings.firebase_pick_up;
+          }else if(_BookingDetails!.regularType.toString() == "2"){
+            firebaseCollection = TextStrings.firebase_mobile_mech;
+          }else if(_BookingDetails!.regularType.toString() == "3"){
+            firebaseCollection = TextStrings.firebase_take_vehicle;
+          }
+          listenToCloudFirestoreDB();
         });
       }
     });
@@ -85,7 +94,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
 
   void listenToCloudFirestoreDB() {
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
-    _firestore.collection("Regular-MobileMech").doc('${widget.bookingId}').snapshots().listen((event) {
+    _firestore.collection("${firebaseCollection}").doc('${widget.bookingId}').snapshots().listen((event) {
 
       setState(() {
         bookingDate = event.get("bookingDate");
@@ -434,12 +443,14 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     MaterialPageRoute(
                                       builder: (context) => CustPickUpTrackScreen(
                                         bookedId: "${widget.bookingId}",
-                                        bookedDate: '${_BookingDetails!.bookedDate}',
+                                        //bookedDate: '${_BookingDetails!.bookedDate}',
+                                        //bookedDate: _homeCustomerBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
+                                        bookedDate: bookingDate,
                                         latitude: '${_BookingDetails!.latitude}',
                                         longitude:'${_BookingDetails!.longitude}',
                                         mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
                                         mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                        pickingDate: '${_BookingDetails!.bookedDate}',
+                                        pickingDate: bookingDate,
                                       ),
                                     ));
                               }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic

@@ -17,7 +17,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -157,14 +156,9 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
 
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-
       print('authToken>>>>>>>>>_RegularMechanicProfileViewScreenState ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>>_RegularMechanicProfileViewScreenState ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>>_RegularMechanicProfileViewScreenState ' + mechanicIdEmergency.toString());
-      //print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
       totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService[0].fee.toString()}');
       _homeCustomerBloc.fetchMechanicProfileDetails(
@@ -207,11 +201,11 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           print("mechanicsRegularBookingIDResponse success booking id >>> " + '${value.data!.mechanicBooking!.id.toString()}' );
 
           if(widget.regularServiceType == TextStrings.txt_pick_up){
-            updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
+            updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }else if(widget.regularServiceType == TextStrings.txt_mobile_mechanic){
             updateToCloudFirestoreDBMobileMech(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }else{
-            updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
+            updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }
 
           Navigator.pushReplacement(
@@ -230,7 +224,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   }
 
 
-  Future<void> updateToCloudFirestoreDBPickUp(int bookingId, int vehicleId) async {
+  Future<void> updateToCloudFirestoreDBPickUp(int bookingId, [MechanicBooking? mechanicBooking]) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
 
     String? token;
@@ -263,7 +257,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
         "serviceList" : FieldValue.arrayUnion(yourItemList),
         "serviceTotalAmount" : '${totalAmount}',
-        "vehicleId": "${vehicleId}",
+        "vehicleId": "${mechanicBooking!.vehicle!.id}",
         "vehicleName": "",
         "vehiclePlateNumber" : "",
         'isStartedFromLocation': "-1",
@@ -342,7 +336,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         print("Failed to add row: $error"));
   }
 
-  Future<void> updateToCloudFirestoreDBTakeVehicle(int bookingId, int vehicleId) async {
+  Future<void> updateToCloudFirestoreDBTakeVehicle(int bookingId, [MechanicBooking? mechanicBooking]) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
 
     String? token;
@@ -375,7 +369,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
       "serviceList" : FieldValue.arrayUnion(yourItemList),
       "serviceTotalAmount" : '${totalAmount}',
-      "vehicleId": "${vehicleId}",
+      "vehicleId": "${mechanicBooking!.vehicle!.id}",
       "vehicleName": "",
       "vehiclePlateNumber" : "",
       "isDriveStarted" : "-1",
@@ -550,7 +544,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                                       :
                                     SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
-
                       ),
                     ),
                   ),
