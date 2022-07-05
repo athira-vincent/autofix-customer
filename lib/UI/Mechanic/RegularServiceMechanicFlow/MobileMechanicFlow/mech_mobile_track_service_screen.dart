@@ -51,6 +51,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         customerName = event.get("customerName");
         customerAddress = event.get("customerAddress");
         mechanicName = event.get("mechanicName");
+        mechanicAddress = event.get("mechanicAddress");
         customerLatitude = event.get("customerLatitude");
         customerLongitude = event.get("customerLongitude");
         scheduledDate = event.get("scheduledDate");
@@ -518,7 +519,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName started ',
+                      Text('You started driving',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',

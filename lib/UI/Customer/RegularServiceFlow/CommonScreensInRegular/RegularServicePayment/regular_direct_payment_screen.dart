@@ -54,9 +54,8 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
   String userId = "";
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-
+  String buttonText = "";
   String paymentSendStatus="0";
-  bool didClicked = false;
 
 
   @override
@@ -78,12 +77,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
       print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      //print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-      /*if(!widget.isMechanicApp){
-        listenToCloudFirestoreDB();
-      }
-      else
-        {}*/
+      listenToCloudFirestoreDB();
     });
   }
 
@@ -92,11 +86,11 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
     DocumentReference reference = FirebaseFirestore.instance.collection("${widget.firebaseCollection}").doc("${widget.bookingId}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
-
         isPaymentAccepted = querySnapshot.get("isPayment");
         print('isPaymentAccepted ++++ $isPaymentAccepted');
-        //if(isPaymentAccepted == "1")
-        //{
+        if(isPaymentAccepted == "1")
+        {
+          buttonText = "Waiting";
           if(paymentSendStatus=="5")
             {
               Navigator.pushReplacement(
@@ -104,7 +98,10 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
                   MaterialPageRoute(
                       builder: (context) => DirectPaymentSuccessScreen()));
             }
-       // }
+       }
+        else if(isPaymentAccepted == "0"){
+          buttonText = "Continue";
+        }
       });
     });
   }
@@ -129,7 +126,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
                         InfoTextWidget(size),
                         customerTitleImageWidget(size),
                         warningTextWidget(size),
-                        didClicked ? Container() : paymentReceivedButton(size)
+                        paymentReceivedButton(size)
                       ]
                   ),
                ),
@@ -288,7 +285,6 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
       child: InkWell(
         onTap: (){
           setState(() {
-            didClicked = true;
             changeScreen();
           });
         },
@@ -310,7 +306,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-             "Continue",
+             buttonText,
             style: TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,

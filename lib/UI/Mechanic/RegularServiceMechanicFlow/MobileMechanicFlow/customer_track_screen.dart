@@ -393,7 +393,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
     print(placemarks);
     Placemark place = placemarks[0];
-    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}';
 
   }
 
@@ -411,22 +411,6 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-
-  /*void updateToCloudFirestoreMechanicCurrentScreenDB() {
-
-    _firestore
-        .collection("Regular-MobileMech")
-        .doc('${widget.bookingId}')
-        .update({
-          "mechanicFromPage" : "M1",
-        })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }*/
-
-
-
 
   @override
   Widget build(BuildContext context) {

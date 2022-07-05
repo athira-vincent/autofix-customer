@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +26,7 @@ class MechServiceRegularDetailsScreen extends StatefulWidget {
 
   final String bookingId;
   MechServiceRegularDetailsScreen({
-    required this.bookingId
+    required this.bookingId,
   });
 
   @override
@@ -44,6 +47,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
   DateTime selectedDate = DateTime.now();
 
   bool isLoading = true;
+  String firebaseCollection = "";
 
 
 
@@ -54,6 +58,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     _listenApiResponse();
     super.initState();
     listenToCloudFirestoreDB();
+    _getLocation();
   }
 
   Future<void> getSharedPrefData()async{
@@ -84,6 +89,13 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         setState(() {
           isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
+          if(_BookingDetails!.regularType.toString() == "1"){
+            firebaseCollection = TextStrings.firebase_pick_up;
+          }else if(_BookingDetails!.regularType.toString() == "2"){
+            firebaseCollection = TextStrings.firebase_mobile_mech;
+          }else if(_BookingDetails!.regularType.toString() == "3"){
+            firebaseCollection = TextStrings.firebase_take_vehicle;
+          }
          // print('${_BookingDetails?.serviceCharge}');
         });
       }
@@ -96,6 +108,38 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         bookingDate = event.get("bookingDate");
       });
     });
+  }
+
+  _getLocation() async {
+    Position position = await
+    Geolocator.getCurrentPosition(desiredAccuracy:
+    LocationAccuracy.high);
+    debugPrint('location: ${position.latitude}');
+    List<Placemark> addresses = await
+    placemarkFromCoordinates(position.latitude,position.longitude);
+
+    var first = addresses.first;
+    print("${first.name} : ${first..administrativeArea}");
+
+    String address = '${first.street}, ${first.subLocality}, ${first.locality}';
+
+    if(addresses.isNotEmpty){
+      updateToCloudFirestoreDB(address);
+    }
+
+  }
+
+  void updateToCloudFirestoreDB(String address) {
+
+    _firestore
+        .collection("${firebaseCollection}")
+        .doc('${widget.bookingId}')
+        .update({
+        "mechanicAddress" : "$address",
+      })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
   }
 
   @override

@@ -175,17 +175,11 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: CustColors.light_navy,
         ),
-        // child: Container(
-        //
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10)
-        //   ),
           child: Row(
             children: [
               Padding(
@@ -238,7 +232,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
                       child: SvgPicture.asset('assets/image/ic_calender.svg',
                         fit: BoxFit.contain,
                       color: Colors.white,),
@@ -618,22 +611,22 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 02),
+                      /*SizedBox(height: 02),
                       isDriveStarted != "-1" ? Text('Expected to reach',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),) : Container(),
+                        ),) : Container(),*/
                       isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
-                      Text('at $scheduledTime',
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),) : Container()
                     ],
                   ),
                 ),
