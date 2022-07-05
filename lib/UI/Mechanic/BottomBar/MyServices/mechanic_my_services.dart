@@ -50,20 +50,19 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    getSharedPrefData();
-    super.didChangeDependencies();
-    getSharedPrefData();
-  }
-
-  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
     _listenServiceListResponse();
+  }
+
+  @override
+  void didUpdateWidget(covariant MechanicMyServicesScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print("xkkhhnbb 001");
+    getSharedPrefData();
   }
 
   Future<void> getSharedPrefData() async {
