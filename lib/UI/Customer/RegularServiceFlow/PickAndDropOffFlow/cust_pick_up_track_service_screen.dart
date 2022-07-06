@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/direct_payment_regular_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +9,6 @@ import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustPickUpTrackScreen extends StatefulWidget{
@@ -1735,7 +1735,11 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               width: 130,
               child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      //Navigator.of(context).pop();
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomerMainLandingScreen()));
                     },
                     child: Text('Back to home',
                     style: TextStyle(

@@ -100,7 +100,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 startedWorkUi(size),
                 finishedWorkUi(size),
                 paymentRequestUi(size),
-               paymentAcceptUi(size),
+                paymentAcceptUi(size),
                 completedUi(size),
                 textButtonUi(size),
               ],
@@ -137,7 +137,6 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -174,7 +173,6 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // MainAxisSize.min,
         children:[
           Row(
           children: [
@@ -878,7 +876,6 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   Container(
                     height: 25,
                     width: 25,
-                    //color: CustColors.light_navy,
                     child: SvgPicture.asset('assets/image/ic_car1.svg',
                       fit: BoxFit.contain,),
                   ),
