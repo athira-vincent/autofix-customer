@@ -1257,67 +1257,85 @@ class QueryProvider {
 
   postMechanicMyJobReviewRequest(String token, mechanicId) async {
     String _query = """
-    {
-  mechanicReviewList(mechanicId: $mechanicId)  {
-        id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-        mechanic {
-          id
-          address
-          state
-          profilePic
-          status
-          rate
-          reviewCount
+{
+  mechanicReviewList(mechanicId: $mechanicId) {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    status
+    jwtToken
+    fcmToken
+    otpCode
+    isProfile
+    otpVerified
+    mechanic {
+      id
+      usersId
+      yearExp
+      profilePic
+      mechType
+      workType
+      noMech
+      state
+      rcNumber
+      brands
+      address
+      certificate1
+      certificate2
+      status
+      rate
+      reviewCount
+    }
+    mechanicStatus {
+      distance
+      latitude
+      longitude
+      workStatus
+    }
+    mechanicService {
+      id
+      fee
+      time
+      service
+      {id 
+        serviceName}
+      status
+      userId
+      serviceId
+    }
+    totalAmount
+    distance
+    duration
+    reviewCount
+    mechanicReviewsData {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+      order{id}
+      bookings{id 
+        customer{id
+          firstName
+        customer{profilePic
         }
-        mechanicStatus {
-          distance
         }
-        mechanicService {
-          id
-          fee
-          service{
-            id
-          }
-          status
-          userId
-        }
-        totalAmount
-        distance
-        duration
-        reviewCount
-        mechanicReviewsData {
-          id
-          transType
-          rating
-          feedback
-          bookingId
-          orderId
-          status
-          order{
-            id
-          }
-          bookings{
-            id
-          }
-          productData{
-            id
-          }
-        }
-        mechanicReview
-        bookingsCount
+        bookService{
+          service{id 
+            serviceName
+          }}
       }
+      productData{id}
+    }
+    mechanicReview
+    bookingsCount
+  }
 }
      """;
     log(_query);
