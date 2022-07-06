@@ -107,9 +107,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
             ),
           ),
         ),
-
       ),
-
     );
   }
 
