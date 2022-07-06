@@ -121,9 +121,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
             ),
           ),
         ),
-
       ),
-
     );
   }
 
@@ -149,7 +147,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -350,7 +347,6 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                             ),
                           ],
                         ),
-                        //Expanded(child: child)
                       ],
                     ),
                     SizedBox(width: 5),
