@@ -1127,9 +1127,9 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                    padding: const EdgeInsets.only(right: 22.0,),
                     child: Container(
-                      height: 23,
+                      height: 25,
                       width: 55,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -1141,7 +1141,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (context) => PaymentRegularScreen4()));
+                                    builder: (context) => PaymentRegularScreen4(bookedId: widget.bookedId,)));
                             setState(() {
 
                               updateToCloudFirestoreDB(
