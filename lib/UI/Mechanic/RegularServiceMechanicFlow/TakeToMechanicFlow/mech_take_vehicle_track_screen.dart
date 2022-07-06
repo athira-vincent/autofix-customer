@@ -96,6 +96,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 appBarCustomui(size),
                 trackServiceBoxui(size),
                 bookingRecievedUi(size),
+
                 vehicleReachedUi(size),
                 startedWorkUi(size),
                 finishedWorkUi(size),
@@ -175,56 +176,56 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children:[
           Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 30),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 30),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_calender.svg',
-                      fit: BoxFit.contain,
-                    color: Colors.white,),
-                  ),
-                ],
+                    Container(
+                      height: 25,
+                      width: 25,
+                      //color: CustColors.light_navy,
+                      child: SvgPicture.asset('assets/image/ic_calender.svg',
+                        fit: BoxFit.contain,
+                      color: Colors.white,),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Service booked on',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'SamsungSharpSans-Medium',
-                  ),),
-                  SizedBox(height: 05),
-                  Text(
-                    //'Mar 5,2022',
-                  '${widget.bookedDate}',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'SamsungSharpSans-Medium',
-                    color: const Color(0xff9b9b9b)
-                  ),)
-                ],
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Service booked on',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                    ),),
+                    SizedBox(height: 05),
+                    Text(
+                      //'Mar 5,2022',
+                    '${widget.bookedDate}',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                      color: const Color(0xff9b9b9b)
+                    ),)
+                  ],
+                ),
+              )
+            ],
         ),
           Padding(
             padding: const EdgeInsets.fromLTRB(45,3,5,0),
@@ -233,7 +234,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
               height: 50.0,
             ),
           ),
-              ],
+        ],
       ),
     );
   }
@@ -265,8 +266,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_car2.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_b.svg',
                         fit: BoxFit.contain,
                         color: CustColors.light_navy),
                     ),
@@ -362,8 +362,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_car2.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
                           fit: BoxFit.contain,
                           color: CustColors.white_02),
                     ),
@@ -474,8 +473,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_b.svg',
                         fit: BoxFit.contain,),
                     ),
                   ],
@@ -568,8 +566,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_w.svg',
                         fit: BoxFit.contain,
                         color: Colors.white),
                     ),
@@ -657,86 +654,85 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
         crossAxisAlignment: CrossAxisAlignment.start,
         children:[
           Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 22.0,top: 00),
-              child: Stack(
-                alignment: Alignment.center,
-                children:[
-                  Container(
-                    height:50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: CustColors.light_navy05,
-                        borderRadius: BorderRadius.circular(25)
-                      //more than 50% of width makes circle
-                    ),
-                  ),
-                  Container(
-                    height: 25,
-                    width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                      fit: BoxFit.contain,),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
+            children: [
+              Padding(
                 padding: const EdgeInsets.only(left: 22.0,top: 00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Service finished.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'SamsungSharpSans-Medium',
-                      ),),
-                    SizedBox(height: 05),
-                    Text('Mar 5,2022',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
-                          color: const Color(0xff9b9b9b)
-                      ),)
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 22.0,),
-              child: Container(
-                height: 23,
-                width: 55,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xffc9d6f2)
-                ),
+              Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 00.0),
-                  child: TextButton(
-                    onPressed: () {  },
-                    child: Text('FINISH',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xff919191),
-                        fontSize: 08,
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Service finished.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 22.0,),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('FINISH',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffc9d6f2),
-                      shape:
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
         ),
           Padding(
             padding: const EdgeInsets.fromLTRB(45,5,5,0),
@@ -769,8 +765,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
                         fit: BoxFit.contain,
                       color: CustColors.white_02),
                     ),
@@ -876,7 +871,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   Container(
                     height: 25,
                     width: 25,
-                    child: SvgPicture.asset('assets/image/ic_car1.svg',
+                    child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
                       fit: BoxFit.contain,),
                   ),
                 ],
@@ -938,8 +933,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_car1.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
                         fit: BoxFit.contain,
                         color: CustColors.white_02),
                     ),
@@ -1075,8 +1069,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           Container(
                             height: 25,
                             width: 25,
-                            //color: CustColors.light_navy,
-                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_payment_b.svg',
                               fit: BoxFit.contain,),
                           ),
                         ],
@@ -1120,7 +1113,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                             onPressed: () {
 
                             },
-                            child: Text('Recieved',
+                            child: Text('Received',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color:  CustColors.light_navy,
@@ -1171,8 +1164,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_payment_w.svg',
                               fit: BoxFit.contain,
                               color: CustColors.white_02),
                         ),
@@ -1220,7 +1212,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                                   updateToCloudFirestoreDB('0', '0', '0', '1', '0', '0');
                                 });
                               },
-                              child: Text('Recieved',
+                              child: Text('Received',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -1275,8 +1267,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  //color: CustColors.light_navy,
-                  child: SvgPicture.asset('assets/image/ic_car1.svg',
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
                     fit: BoxFit.contain,),
                 ),
               ],
@@ -1319,8 +1310,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  //color: CustColors.light_navy,
-                  child: SvgPicture.asset('assets/image/ic_car1.svg',
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
                     fit: BoxFit.contain,
                   color: CustColors.white_02),
                 ),
