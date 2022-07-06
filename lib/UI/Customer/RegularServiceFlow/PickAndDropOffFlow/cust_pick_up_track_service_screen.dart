@@ -15,7 +15,6 @@ class CustPickUpTrackScreen extends StatefulWidget{
 
   final String latitude;
   final String longitude;
-  final String mechanicAddress;
   final String bookedDate;
   final String pickingDate;
   final String mechanicName;
@@ -27,7 +26,6 @@ class CustPickUpTrackScreen extends StatefulWidget{
     required this.pickingDate,
     required this.bookedId,
     required this.longitude,
-    required this.mechanicAddress,
     required this.mechanicName,
   });
 

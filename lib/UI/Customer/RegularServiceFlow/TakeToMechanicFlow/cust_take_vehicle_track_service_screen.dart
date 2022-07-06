@@ -16,22 +16,16 @@ class CustTakeVehicleTrackScreen extends StatefulWidget {
   final String latitude;
   final String longitude;
   final String goTime;
-  final String reachTime;
-  final String mechanicName;
-  final String mechanicAddress;
-  final String pickingDate;
+  //final String reachTime;
   final String bookedId;
 
   CustTakeVehicleTrackScreen({
     required this.bookedDate,
     required this.latitude,
-    required this.reachTime,
+    //required this.reachTime,
     required this.longitude,
     required this.goTime,
-    required this.mechanicName,
-    required this.pickingDate,
     required this.bookedId,
-    required this.mechanicAddress,
   });
 
   @override
@@ -604,7 +598,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 05),
+                         /* SizedBox(height: 05),
                           Text(
                             //'Mar 5,2022',
                             '${widget.reachTime}',
@@ -613,7 +607,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -670,7 +664,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 05),
+                            /*SizedBox(height: 05),
                             Text(
                               //'Mar 5,2022',
                               '${widget.reachTime}',
@@ -679,7 +673,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Medium',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),

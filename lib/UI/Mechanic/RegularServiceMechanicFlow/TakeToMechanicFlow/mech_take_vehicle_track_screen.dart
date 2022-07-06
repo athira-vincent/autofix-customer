@@ -9,25 +9,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class MechTakeVehicleTrackScreen extends StatefulWidget{
 
   final String bookedDate;
-  final String latitude;
-  final String longitude;
-  final String goTime;
-  final String reachTime;
-  final String mechanicName;
-  final String mechanicAddress;
-  final String pickingDate;
+  //final String reachTime;
   final String bookedId;
 
   MechTakeVehicleTrackScreen({
     required this.bookedDate,
-    required this.latitude,
-    required this.reachTime,
-    required this.longitude,
-    required this.goTime,
-    required this.mechanicName,
-    required this.pickingDate,
+    //required this.reachTime,
     required this.bookedId,
-    required this.mechanicAddress,
   });
 
   @override
@@ -397,14 +385,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('${widget.reachTime}',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),

@@ -13,6 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,6 +51,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
     bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
+    _getLocation();
   }
 
   Future<void> getSharedPrefData()async{
@@ -101,6 +104,38 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
       });
     });
   }
+
+  _getLocation() async {
+    Position position = await
+    Geolocator.getCurrentPosition(desiredAccuracy:
+    LocationAccuracy.high);
+    debugPrint('location: ${position.latitude}');
+    List<Placemark> addresses = await
+    placemarkFromCoordinates(position.latitude,position.longitude);
+
+    var first = addresses.first;
+    print("${first.name} : ${first..administrativeArea}");
+
+    String address = '${first.street}, ${first.subLocality}, ${first.locality}';
+
+    if(addresses.isNotEmpty){
+      updateToCloudFirestoreDB(address);
+    }
+
+  }
+
+  void updateToCloudFirestoreDB(String address) {
+    _firestore
+        .collection("${firebaseCollection}")
+        .doc('${widget.bookingId}')
+        .update({
+      "customerAddress" : "$address",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -281,14 +316,6 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                 ),
                               ),
                               Container(
-                                //   decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.only(
-                                //   topLeft: Radius.circular(10),
-                                //     topRight: Radius.circular(20),
-                                //     bottomLeft:Radius.circular(80),
-                                //     bottomRight:Radius.circular(80)
-                                // ),
-                                //   ),
                                 height: 95,
                                 child: Row(
                                     children:[
@@ -448,7 +475,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                         bookedDate: bookingDate,
                                         latitude: '${_BookingDetails!.latitude}',
                                         longitude:'${_BookingDetails!.longitude}',
-                                        mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
+                                        //mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
                                         mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
                                         pickingDate: bookingDate,
                                       ),
@@ -468,15 +495,15 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustTakeVehicleTrackScreen(
-                                        reachTime: '12:00',
-                                        bookedDate: 'Mar 7,2022',
-                                        latitude: "9.90874",
-                                        longitude: "76.28271",
-                                        goTime: '12:00',
-                                        mechanicAddress: "${_BookingDetails!.mechanic!.firstName.toString()}",
-                                        mechanicName: "${_BookingDetails!.mechanic!.firstName.toString()}",
-                                        pickingDate: 'Mar 8,2022',
+                                        //reachTime: '${_BookingDetails!.bookedTime}',
+                                        bookedDate: bookingDate,
+                                        latitude: '${_BookingDetails!.latitude}',
+                                        longitude: '${_BookingDetails!.longitude}',
+                                        goTime: '${_BookingDetails!.bookedTime}',
                                         bookedId: '${_BookingDetails!.id.toString()}',
+                                        //mechanicAddress: "${_BookingDetails!.mechanic!.firstName.toString()}",
+                                        //mechanicName: "${_BookingDetails!.mechanic!.firstName.toString()}",
+                                        //pickingDate: 'Mar 8,2022',
                                       ),
                                     ));
                               }
