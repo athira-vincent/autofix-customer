@@ -12,17 +12,25 @@ String mechanicMyJobReviewMdlToJson(MechanicMyJobReviewMdl data) => json.encode(
 class MechanicMyJobReviewMdl {
   MechanicMyJobReviewMdl({
     required this.data,
-    String? status, message,
+    required this.status,
+    required this.message,
+
   });
 
   Data? data;
+  String? status;
+   String? message;
 
   factory MechanicMyJobReviewMdl.fromJson(Map<String, dynamic> json) => MechanicMyJobReviewMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    status: json["status"] == null ? null : (json["status"]),
+    message: json["data"] == null ? null : (json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
     "data": data == null ? null : data!.toJson(),
+    "status": status == null ? null : status,
+    "message": message == null ? null : message,
   };
 }
 
