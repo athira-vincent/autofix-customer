@@ -144,8 +144,8 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () {  },
-                //onPressed: () => Navigator.pop(context),
+                //onPressed: () {  },
+                onPressed: () => Navigator.pop(context),
               )
             ],
           )
@@ -513,7 +513,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => FindMechanicByCustomerScreen(
-                            bookingId: '1142',
+                            bookingId: '${widget.bookedId}',
                             longitude: '${widget.longitude}',
                             latitude: '${widget.latitude}',)));
                             setState(() {

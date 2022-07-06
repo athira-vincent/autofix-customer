@@ -1989,7 +1989,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Completed',
+                          Text('Service Completed',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
@@ -2034,22 +2034,22 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               child: Container(
                 width: 130,
                 child: TextButton(
-                onPressed: () {  },
-                child: Text('Back to home',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'SamsungSharpSans-Medium',
-                  color: Colors.white
-                ),),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  primary: CustColors.light_navy,
-                  shape:
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  onPressed: () {  },
+                  child: Text('Back to home',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'SamsungSharpSans-Medium',
+                    color: Colors.white
+                  ),),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    primary: CustColors.light_navy,
+                    shape:
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-        ),
               ),
             ),
           ),

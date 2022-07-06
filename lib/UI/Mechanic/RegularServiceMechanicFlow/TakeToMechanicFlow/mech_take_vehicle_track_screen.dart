@@ -137,8 +137,8 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () {  },
-                //onPressed: () => Navigator.pop(context),
+                //onPressed: () {  },
+                onPressed: () => Navigator.pop(context),
               )
             ],
           )
@@ -157,11 +157,6 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
           borderRadius: BorderRadius.circular(10),
           color: CustColors.light_navy,
         ),
-        // child: Container(
-        //
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10)
-        //   ),
           child: Row(
             children: [
               Padding(
