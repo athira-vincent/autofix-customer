@@ -795,7 +795,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                       width: 25,
                       child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
                         fit: BoxFit.contain,
-                        //color: Colors.white,
                       ),
                     ),
                   ],
