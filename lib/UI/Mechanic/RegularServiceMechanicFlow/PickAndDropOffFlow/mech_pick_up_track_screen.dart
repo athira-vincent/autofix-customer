@@ -3,6 +3,7 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/find_your_cust_regular_pickup__screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -120,14 +121,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                 mechanicReachedDropOffUi(size),
                 addPaymentUi(size),
                 finishTrackUi(size),
+
                 textButtonUi(size),
               ],
             ),
           ),
         ),
-
       ),
-
     );
   }
 
@@ -1737,7 +1737,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(isPaymentFinished == "-1"?'Payment recieved.':'Payment initiated.',
+                            Text(isPaymentFinished == "-1"?'Payment received.':'Payment initiated.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
@@ -2029,7 +2029,11 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
             padding: const EdgeInsets.only(right: 22.0,top:15,bottom: 20),
             child: InkWell(
               onTap: (){
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MechanicHomeScreen()));
               },
               child: Container(
                 width: 130,

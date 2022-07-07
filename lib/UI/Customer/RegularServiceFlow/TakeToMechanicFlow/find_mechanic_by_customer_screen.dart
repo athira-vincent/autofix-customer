@@ -178,7 +178,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
-      _firestore.collection("Regular-TakeVehicle").doc('1142').snapshots().listen((event) {
+      _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
         carName = event.get('carName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
@@ -231,7 +231,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       setState(() {
         _firestore
             .collection("Regular-TakeVehicle")
-            .doc('${bookingId}')
+            .doc('${widget.bookingId}')
             .update({
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
