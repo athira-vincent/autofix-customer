@@ -1,13 +1,17 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/mech_pick_up_track_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +26,7 @@ class MechServiceRegularDetailsScreen extends StatefulWidget {
 
   final String bookingId;
   MechServiceRegularDetailsScreen({
-    required this.bookingId
+    required this.bookingId,
   });
 
   @override
@@ -32,17 +36,18 @@ class MechServiceRegularDetailsScreen extends StatefulWidget {
 }
 
 class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsScreen> {
-  String authToken = "", type = "",bookingId = "", userId = "";
+  String authToken = "", type = "",bookingId = "", userId = "", bookingDate = "";
 
   MechServiceDetailsReviewBloc _mechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
   HomeMechanicBloc _mechHomeBloc = HomeMechanicBloc();
 
   BookingDetails? _BookingDetails;
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   DateTime selectedDate = DateTime.now();
 
   bool isLoading = true;
+  String firebaseCollection = "";
 
 
 
@@ -52,6 +57,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     getSharedPrefData();
     _listenApiResponse();
     super.initState();
+    _getLocation();
   }
 
   Future<void> getSharedPrefData()async{
@@ -59,7 +65,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-
       _mechServiceDetailsReviewBloc.postGetMechServiceDetailsReviewRequest(
         authToken, bookingId
       );
@@ -83,10 +88,58 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
         setState(() {
           isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
+          if(_BookingDetails!.regularType.toString() == "1"){
+            firebaseCollection = TextStrings.firebase_pick_up;
+          }else if(_BookingDetails!.regularType.toString() == "2"){
+            firebaseCollection = TextStrings.firebase_mobile_mech;
+          }else if(_BookingDetails!.regularType.toString() == "3"){
+            firebaseCollection = TextStrings.firebase_take_vehicle;
+          }
+          listenToCloudFirestoreDB();
          // print('${_BookingDetails?.serviceCharge}');
         });
       }
     });
+  }
+
+  void listenToCloudFirestoreDB() {
+    _firestore.collection('$firebaseCollection').doc('${widget.bookingId}').snapshots().listen((event) {
+      setState(() {
+        bookingDate = event.get("bookingDate");
+      });
+    });
+  }
+
+  _getLocation() async {
+    Position position = await
+    Geolocator.getCurrentPosition(desiredAccuracy:
+    LocationAccuracy.high);
+    debugPrint('location: ${position.latitude}');
+    List<Placemark> addresses = await
+    placemarkFromCoordinates(position.latitude,position.longitude);
+
+    var first = addresses.first;
+    print("${first.name} : ${first..administrativeArea}");
+
+    String address = '${first.street}, ${first.subLocality}, ${first.locality}';
+
+    if(addresses.isNotEmpty){
+      updateToCloudFirestoreDB(address);
+    }
+
+  }
+
+  void updateToCloudFirestoreDB(String address) {
+
+    _firestore
+        .collection("${firebaseCollection}")
+        .doc('${widget.bookingId}')
+        .update({
+        "mechanicAddress" : "$address",
+      })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
   }
 
   @override
@@ -268,14 +321,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             ),
                           ),
                           Container(
-                            //   decoration: BoxDecoration(
-                            //     borderRadius: BorderRadius.only(
-                            //   topLeft: Radius.circular(10),
-                            //     topRight: Radius.circular(20),
-                            //     bottomLeft:Radius.circular(80),
-                            //     bottomRight:Radius.circular(80)
-                            // ),
-                            //   ),
                             height: 95,
                             child: Row(
                                 children:[
@@ -327,14 +372,6 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                                       color: Colors.white
                                                   ),),
                                               ),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                              //   child: Text('2022',
-                                              //     style: TextStyle(
-                                              //         fontSize: 15,
-                                              //         color: Colors.white
-                                              //     ),),
-                                              // ),
                                             ],
                                           )
                                         ],
@@ -430,12 +467,14 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             MaterialPageRoute(
                               builder: (context) => MechPickUpTrackScreen(
                                 bookedId: "${widget.bookingId}",
-                                bookedDate: '${_BookingDetails!.bookedDate}',
+                                //bookedDate: '${_BookingDetails!.bookedDate}',
+                                //bookedDate: _mechHomeBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
+                                bookedDate: bookingDate,
                                 latitude: '${_BookingDetails!.latitude}',
                                 longitude:'${_BookingDetails!.longitude}',
                                 mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
                                 mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                pickingDate: '${_BookingDetails!.bookedDate}',
+                                pickingDate: bookingDate,
                               ),
                             ));
                       }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
@@ -443,7 +482,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                             context,
                             MaterialPageRoute(
                               builder: (context) => MechMobileTrackScreen(
-                                bookingId: _BookingDetails!.id.toString(),
+                                //bookingId: _BookingDetails!.id.toString(),
+                                bookingId: widget.bookingId,
+                                bookingDate: bookingDate,
                               ),
                             ));
                       }
@@ -451,14 +492,16 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MechTakeVehicleTrackScreen(
-                                bookingId: _BookingDetails!.id.toString(),
+                              builder: (context) =>  MechTakeVehicleTrackScreen(
                                 reachTime: '',
                                 bookedDate: '',
                                 latitude: "",
                                 longitude: "",
                                 goTime: "",
                                 mechanicName: "",
+                                pickingDate: "",
+                                mechanicAddress: "",
+                                bookedId: '${_BookingDetails!.id.toString()}',
                               ),
                             ));
                       }

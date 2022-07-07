@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicHomeUIScreen extends StatefulWidget {
@@ -110,7 +111,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
-
     });
   }
 
@@ -430,7 +430,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                             ),
                           ));
                     });
-
                   },
                   child: Column(
                     children: [
@@ -469,7 +468,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               fontSize: 15
                                           ),),
                                         Text(
-                                          snapshot.data!.data!.upcomingCompletedServices![i].serviceTime.toString(),
+                                          _mechanicHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.upcomingCompletedServices![i].bookedTime)).toString(),
                                           //"09:30 AM",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -509,7 +508,41 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
-                                              fontSize: 12
+                                              fontSize: 11
+                                          ),)
+                                      ],
+                                    ),
+                                  ),
+
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      left: size.width * 2 / 100,
+                                      right: size.width * 2 / 100,
+                                      top: size.height * 2 / 100,
+                                      //bottom: size.height * 2.5 / 100,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Regular Service" ,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 10
+                                          ),),
+
+                                        Text(
+                                          snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
+                                              ? "Pick Up & Drop Off" :
+                                          snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
+                                              ? "Mobile Mechanic" : "Take Vehicle to Mechanic",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 10
                                           ),)
                                       ],
                                     ),

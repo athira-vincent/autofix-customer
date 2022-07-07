@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ScheduleRegularServiceScreen extends StatefulWidget {
@@ -57,20 +56,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-  String? _setTime, _setDate;
-
-  String? _hour, _minute, _time;
-
   String? dateTime;
-
 
   List<Service>? selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
   int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
   String selectedServiceIds = "";
   List<String> selectedListServiceIds =[];
-
 
   List<String> serviceModelList = [
     TextStrings.txt_mobile_mechanic,

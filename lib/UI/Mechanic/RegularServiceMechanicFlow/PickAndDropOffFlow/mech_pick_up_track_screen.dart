@@ -1,12 +1,14 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/find_your_cust_regular_pickup__screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechPickUpTrackScreen extends StatefulWidget{
@@ -42,6 +44,7 @@ class MechPickUpTrackScreen extends StatefulWidget{
 class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
   String authToken="";
   String userName="";
 
@@ -106,6 +109,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                 appBarCustomui(size),
                 trackServiceBoxUi(size),
                 serviceBookedDateUi(size),
+
                 mechanicStartedToCustomerLoationUi(size),
                 mechanicReachedNearCustomerForPickUpUi(size),
                 mechanicPickedYourVehicleUi(size),
@@ -139,8 +143,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back, color: const Color(0xff707070)),
-                onPressed: () {  },
-                //onPressed: () => Navigator.pop(context),
+                //onPressed: () {  },
+                onPressed: () => Navigator.pop(context),
               )
             ],
           )
@@ -153,7 +157,6 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -209,7 +212,6 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
                       child: SvgPicture.asset('assets/image/ic_calender.svg',
                         fit: BoxFit.contain,
                         color: Colors.white,),
@@ -228,7 +230,9 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 05),
-                      Text('${widget.bookedDate}',
+                      Text(
+                        '${widget.bookedDate}',
+                        //_mechanicHomeBloc.dateMonthConverter(DateFormat().parse(widget.bookedDate)),
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -317,7 +321,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
                                   fit: BoxFit.contain,
                                   //color: Colors.white,
                                 ),
@@ -406,7 +410,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -427,7 +431,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -435,7 +439,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -515,8 +519,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              //color: CustColors.light_navy,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_b.svg',
                                 fit: BoxFit.contain,
                                 //color: Colors.white,
                               ),
@@ -537,14 +540,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -582,7 +585,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -604,7 +607,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -612,7 +615,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -659,8 +662,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                //color: CustColors.light_navy,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_vehicle_picked_b.svg',
                                   fit: BoxFit.contain,
                                   //color: Colors.white,
                                 ),
@@ -681,14 +683,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 02),
+                           /* SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -726,7 +728,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_vehicle_picked_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -748,7 +750,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -756,7 +758,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -837,15 +839,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              //color: CustColors.light_navy,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_reached_work_shop_b.svg',
                                 fit: BoxFit.contain,
                                 //color: Colors.white,
                               ),
                             ),
                           ],
                         ),
-                        //Expanded(child: child)
                       ],
                     ),
                     SizedBox(width: 5),
@@ -859,14 +859,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -904,7 +904,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_reached_work_shop_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -926,7 +926,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -934,7 +934,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1015,15 +1015,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              //color: CustColors.light_navy,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_b.svg',
                                 fit: BoxFit.contain,
                                 //color: Colors.white,
                               ),
                             ),
                           ],
                         ),
-                        //Expanded(child: child)
                       ],
                     ),
                     SizedBox(width: 5),
@@ -1037,14 +1035,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1082,7 +1080,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -1104,7 +1102,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                         /* SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -1112,7 +1110,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1193,15 +1191,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                //color: CustColors.light_navy,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_b.svg',
                                   fit: BoxFit.contain,
                                   //color: Colors.white,
                                 ),
                               ),
                             ],
                           ),
-                          //Expanded(child: child)
                         ],
                       ),
                       SizedBox(width: 5),
@@ -1215,14 +1211,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 02),
+                            /*SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1260,7 +1256,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -1282,7 +1278,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -1290,7 +1286,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1372,8 +1368,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                //color: CustColors.light_navy,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
                                   fit: BoxFit.contain,
                                   //color: Colors.white,
                                 ),
@@ -1394,14 +1389,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 02),
+                            /*SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1439,7 +1434,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -1461,7 +1456,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -1469,7 +1464,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1522,7 +1517,6 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     );
   }
 
-
   Widget mechanicReachedDropOffUi(Size size){
     return Container(
       child: Padding(
@@ -1551,8 +1545,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              //color: CustColors.light_navy,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drop_off_b.svg',
                                 fit: BoxFit.contain,
                                 //color: Colors.white,
                               ),
@@ -1573,14 +1566,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1618,14 +1611,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drop_off_w.svg',
                                   fit: BoxFit.contain,
                                   color: Colors.white,
                                 ),
                               ),
                             ],
                           ),
-                          //Expanded(child: child)
                         ],
                       ),
                       SizedBox(width: 5),
@@ -1640,7 +1632,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                               ),),
-                            SizedBox(height: 02),
+                           /* SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
@@ -1648,7 +1640,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   fontWeight: FontWeight.w800,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1729,8 +1721,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                //color: CustColors.light_navy,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
                                   fit: BoxFit.contain,
                                   //color: Colors.white,
                                 ),
@@ -1751,14 +1742,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 02),
+                            /*SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1812,7 +1803,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                               Container(
                                 height: 25,
                                 width: 25,
-                                child: SvgPicture.asset('assets/image/ic_car1.svg',
+                                child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
                                   fit: BoxFit.contain,
                                   color: Colors.white,
                                 ),
@@ -1834,7 +1825,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                               ),),
-                            SizedBox(height: 02),
+                            /*SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
@@ -1842,7 +1833,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   fontWeight: FontWeight.w800,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1923,8 +1914,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              //color: CustColors.light_navy,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
                                 fit: BoxFit.contain,
                                 //color: Colors.white,
                               ),
@@ -1940,19 +1930,19 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Completed',
+                          Text('Service Completed',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1983,7 +1973,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             Container(
                               height: 25,
                               width: 25,
-                              child: SvgPicture.asset('assets/image/ic_car1.svg',
+                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white,
                               ),
@@ -1999,13 +1989,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Completed',
+                          Text('Service Completed',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
                               fontFamily: 'SamsungSharpSans-Bold',
                             ),),
-                          SizedBox(height: 02),
+                          /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -2013,7 +2003,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -2044,22 +2034,22 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               child: Container(
                 width: 130,
                 child: TextButton(
-                onPressed: () {  },
-                child: Text('Back to home',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'SamsungSharpSans-Medium',
-                  color: Colors.white
-                ),),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  primary: CustColors.light_navy,
-                  shape:
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  onPressed: () {  },
+                  child: Text('Back to home',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'SamsungSharpSans-Medium',
+                    color: Colors.white
+                  ),),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    primary: CustColors.light_navy,
+                    shape:
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-        ),
               ),
             ),
           ),

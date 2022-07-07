@@ -17,8 +17,8 @@ class RegularDirectPaymentScreen extends StatefulWidget {
 
   String firebaseCollection;
   String bookingId;
-  bool isMechanicApp;
-  bool isPaymentFailed;   // ------ change the variable as isDirectPayment for screen 106
+  //bool isMechanicApp;
+  //bool isPaymentFailed;   // ------ change the variable as isDirectPayment for screen 106
                             // isMechanicApp - true && isPaymentFailed - true  ==> screen 080,
                             // isMechanicApp - true && isPaymentFailed - false  ==> screen 106,
                             // isMechanicApp - false && isPaymentFailed - false  ==> screen 080 a,
@@ -27,8 +27,8 @@ class RegularDirectPaymentScreen extends StatefulWidget {
   RegularDirectPaymentScreen({
     required this.firebaseCollection,
     required this.bookingId,
-    required this.isMechanicApp,
-    required this.isPaymentFailed
+    //required this.isMechanicApp,
+    //required this.isPaymentFailed
   });
 
   @override
@@ -54,7 +54,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
   String userId = "";
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-
+  String buttonText = "";
   String paymentSendStatus="0";
 
 
@@ -73,19 +73,11 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
 
       print('DirectPaymentScreen authToken>>>>>>>>> ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
-      //print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-      if(!widget.isMechanicApp){
-        listenToCloudFirestoreDB();
-      }
-      else
-        {}
+      listenToCloudFirestoreDB();
     });
   }
 
@@ -94,35 +86,24 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
     DocumentReference reference = FirebaseFirestore.instance.collection("${widget.firebaseCollection}").doc("${widget.bookingId}");
     reference.snapshots().listen((querySnapshot) {
       setState(() {
-
         isPaymentAccepted = querySnapshot.get("isPayment");
         print('isPaymentAccepted ++++ $isPaymentAccepted');
         if(isPaymentAccepted == "1")
         {
-          if(paymentSendStatus=="1")
+          buttonText = "Waiting";
+          if(paymentSendStatus=="5")
             {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => DirectPaymentSuccessScreen()));
             }
+       }
+        else if(isPaymentAccepted == "0"){
+          buttonText = "Continue";
         }
       });
     });
-  }
-
-  void updateToCloudFirestoreDB() {
-
-    _firestore
-        .collection("${widget.firebaseCollection}")
-        .doc('${widget.bookingId}')
-        .update({
-        'isPayment': "5",
-    })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-
   }
 
   @override
@@ -138,18 +119,12 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
                child: Container(
                  width: size.width,
                  height: size.height,
-                  //color: Colors.green,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         titleWidget(size),
                         InfoTextWidget(size),
-                        widget.isMechanicApp
-                            ?
-                        isDirectPayment
-                            ? MechanicDirectPaymentTitleImageWidget(size)
-                            : MechanicOtherPaymentTitleImageWidget(size)
-                            : customerTitleImageWidget(size),
+                        customerTitleImageWidget(size),
                         warningTextWidget(size),
                         paymentReceivedButton(size)
                       ]
@@ -162,34 +137,15 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
   }
 
   void changeScreen(){
-    if(widget.isMechanicApp){
-      updateToCloudFirestoreDB();
-      _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-          authToken, widget.bookingId, "8");
-      _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "1", userId );
+    if(isPaymentAccepted == "5")
+    {
+      setState(() {
+        paymentSendStatus = "1";
+      });
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MechanicHomeScreen()));
-    }
-    if(!widget.isMechanicApp && widget.isPaymentFailed){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PaymentFailedScreen()));
-    }
-    else if(!widget.isMechanicApp && !widget.isPaymentFailed){
-
-      if(isPaymentAccepted == "1")
-      {
-        setState(() {
-          paymentSendStatus = "1";
-        });
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DirectPaymentSuccessScreen()));
-      }
+              builder: (context) => DirectPaymentSuccessScreen()));
     }
   }
 
@@ -201,9 +157,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
         top: size.height * 3.4 / 100,
       ),
       child: Text(
-        widget.isMechanicApp && !isDirectPayment
-            ? "payment received "
-            : "Direct payment ",
+             "Direct payment ",
         style: TextStyle(
           fontSize: 16,
           fontFamily: "Samsung_SharpSans_Medium",
@@ -241,15 +195,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
           ),
           Expanded(
             child: Text(
-              widget.isMechanicApp
-                  ?
-                  isDirectPayment
-                      ?
-                  "Your customer chooses direct payment method! Receive the payment and click the “payment received” button"
-                      :
-                  "Hi..George you received a payment of rupees ₦ 1500 from customer Afamefuna "
-                  :
-              "You choosed the direct payment method! So this transaction process completed only after, when mechanic confirm as  he received ",
+              "You choosed the direct payment method! So this transaction process completed only after, when mechanic confirm as he received ",
               style: warningTextStyle01,
             ),
           )
@@ -324,11 +270,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
           ),
           Expanded(
             child: Text(
-              widget.isMechanicApp
-                  ? isDirectPayment
-                  ? "If you clicked the payment received button This service cycle will completed from your side "
-                  : "You received the payment. So this service cycle ending here. Go home and complete the pending services."
-                  : "Continue with direct payment. It will send a notification to your mechanic and then you can give the payment.",
+              "Continue with direct payment. It will send a notification to your mechanic and then you can give the payment.",
               style: warningTextStyle01,
             ),
           )
@@ -342,8 +284,9 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
       alignment: Alignment.centerRight,
       child: InkWell(
         onTap: (){
-
-          changeScreen();
+          setState(() {
+            changeScreen();
+          });
         },
         child: Container(
           margin: EdgeInsets.only(
@@ -363,11 +306,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
             bottom: size.height * 1 / 100,
           ),
           child: Text(
-           widget.isMechanicApp
-               ? isDirectPayment
-               ? "Payment received "
-               : "Go home"
-            : "Continue",
+             buttonText,
             style: TextStyle(
               fontSize: 14.3,
               fontWeight: FontWeight.w600,

@@ -64,6 +64,13 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
     _listenServiceListResponse();
   }
 
+  @override
+  void didUpdateWidget(covariant CustomerMyServicesScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    getSharedPrefData();
+    super.didUpdateWidget(oldWidget);
+  }
+
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();

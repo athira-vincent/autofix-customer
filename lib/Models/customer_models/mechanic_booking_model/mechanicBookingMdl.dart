@@ -82,9 +82,9 @@ class MechanicBooking {
   String bookingCode;
   int reqType;
   int bookStatus;
-  int totalPrice;
+  var totalPrice;
   double tax;
-  int commission;
+  var commission;
   double serviceCharge;
   dynamic totalTime;
   String serviceTime;

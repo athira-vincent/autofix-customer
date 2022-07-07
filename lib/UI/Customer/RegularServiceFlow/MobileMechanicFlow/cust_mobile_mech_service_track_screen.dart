@@ -14,9 +14,11 @@ import 'package:intl/intl.dart';
 class CustMobileTrackScreen extends StatefulWidget{
 
   final String bookingId;
+  final String bookingDate;
 
   CustMobileTrackScreen({
-    required this.bookingId
+    required this.bookingId,
+    required this.bookingDate
   });
 
   @override
@@ -45,31 +47,34 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     // TODO: implement initState
     super.initState();
     listenToCloudFirestoreDB();
+    bookingDate = widget.bookingDate;
   }
 
   void listenToCloudFirestoreDB() {
    // _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
     _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
-      //bookingDate = _mechanicHomeBloc.dateMonthConverter(event.get("bookingDate"));
-      bookingDate = event.get("bookingDate");
-      customerName = event.get("customerName");
-      customerAddress = event.get("customerAddress");
-      scheduledTime = event.get("scheduledTime");
-      mechanicName = event.get("mechanicName");
-      mechanicAddress = event.get("mechanicAddress");
-      isBookedDate = event.get("isBookedDate");
-      scheduledDate = event.get("scheduledDate");
-      scheduledDate = event.get("scheduledDate");
-      isDriveStarted = event.get("isDriveStarted");
-      isDriveStartedTime = event.get("isDriveStartedTime");
-      isArrived = event.get("isArrived");
-      isArrivedTime = event.get("isArrivedTime");
-      isWorkStarted = event.get("isWorkStarted");
-      isWorkStartedTime = event.get("isWorkStartedTime");
-      isWorkFinished = event.get("isWorkFinished");
-      isWorkFinishedTime = event.get("isWorkFinishedTime");
-      isPayment = event.get("isPayment");
-      isPaymentTime = event.get("isPaymentTime");
+
+      setState(() {
+        bookingDate = event.get("bookingDate");
+        customerName = event.get("customerName");
+        customerAddress = event.get("customerAddress");
+        scheduledTime = event.get("scheduledTime");
+        mechanicName = event.get("mechanicName");
+        mechanicAddress = event.get("mechanicAddress");
+        isBookedDate = event.get("isBookedDate");
+        scheduledDate = event.get("scheduledDate");
+        scheduledDate = event.get("scheduledDate");
+        isDriveStarted = event.get("isDriveStarted");
+        isDriveStartedTime = event.get("isDriveStartedTime");
+        isArrived = event.get("isArrived");
+        isArrivedTime = event.get("isArrivedTime");
+        isWorkStarted = event.get("isWorkStarted");
+        isWorkStartedTime = event.get("isWorkStartedTime");
+        isWorkFinished = event.get("isWorkFinished");
+        isWorkFinishedTime = event.get("isWorkFinishedTime");
+        isPayment = event.get("isPayment");
+        isPaymentTime = event.get("isPaymentTime");
+      });
 
       DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
 
@@ -170,17 +175,11 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     return Padding(
       padding: const EdgeInsets.only(left: 22.0,right: 22.0),
       child: Container(
-        //color: CustColors.light_navy,
         height: 83,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: CustColors.light_navy,
         ),
-        // child: Container(
-        //
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10)
-        //   ),
           child: Row(
             children: [
               Padding(
@@ -233,7 +232,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
                       child: SvgPicture.asset('assets/image/ic_calender.svg',
                         fit: BoxFit.contain,
                       color: Colors.white,),
@@ -253,6 +251,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     ),),
                     SizedBox(height: 05),
                     Text(
+                      //_mechanicHomeBloc.dateMonthConverter(DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate)),
                       //bookingDate.toString(),
                     textAlign: TextAlign.start,
@@ -607,27 +606,27 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Drive not started',
+                      Text( isDriveStarted == "-1" ? 'Drive not started' : "Expected to reach",
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 02),
-                      Text('Expected to reach',
+                      /*SizedBox(height: 02),
+                      isDriveStarted != "-1" ? Text('Expected to reach',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),),
-                      SizedBox(height: 02),
-                      Text('at $scheduledTime',
+                        ),) : Container(),*/
+                      isDriveStarted != "-1" ? SizedBox(height: 02) : Container(),
+                      isDriveStarted != "-1" ? Text('before $scheduledTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),) : Container()
                     ],
                   ),
                 ),
@@ -1098,7 +1097,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                 padding: const EdgeInsets.only(top: 00.0),
                 child: TextButton(
                   onPressed: () {
-                    //updateToCloudFirestoreDB("isPayment","0");
+                    updateToCloudFirestoreDB("isPayment","0");
                     Navigator.push(
                         context,
                         MaterialPageRoute(

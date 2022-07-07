@@ -1788,74 +1788,111 @@ class QueryProvider {
       {
         _query = """
       {
-      UpcomingCompletedServices(mechanicId: $mechanicId) {
-        id
-        bookingCode
-        reqType
-        bookStatus
-        totalPrice
-        tax
-        commission
-        serviceCharge
-        totalTime
-        serviceTime
-        latitude
-        longitude
-        extend
-        totalExt
-        extendTime
-        bookedDate
-        isRated
-        status
-        customerId
-        mechanicId
-        vehicleId
-        mechanic {
+      UpcomingCompletedServices(type: null, mechanicId: $mechanicId) 
+        {
           id
-          userCode
-          firstName
-          lastName
-          emailId
-          phoneNo
-          status
-          userTypeId
-          jwtToken
-          fcmToken
-          otpCode
-          isProfile
-          otpVerified
-        }
-        customer {
-          id
-          userCode
-          firstName
-          lastName
-          emailId
-          phoneNo
-          status
-          userTypeId
-          jwtToken
-          fcmToken
-          otpCode
-          isProfile
-          otpVerified
-        }
-        vehicle {
-          id
-          brand
-          model
-          engine
-          year
-          plateNo
-          lastMaintenance
-          milege
-          vehiclePic
+          bookingCode
+          reqType
+          bookStatus
+          totalPrice
+          tax
+          commission
+          serviceCharge
+          totalTime
+          serviceTime
           latitude
           longitude
-          defaultVehicle
+          mechLatitude
+          mechLongitude
+          extend
+          totalExt
+          extendTime
+          bookedDate
+          bookedTime
+          isRated
           status
+          customerId
+          mechanicId
+          vehicleId
+          regularType
+          mechanic {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            status
+            userTypeId
+            jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
+            customer{
+              id
+            }
+            mechanic{
+              id
+            }
+            vendor{
+              id
+            }
+          }
+          customer {
+            id
+            userCode
+            firstName
+            lastName
+            emailId
+            phoneNo
+            status
+            userTypeId
+            jwtToken
+            fcmToken
+            otpCode
+            isProfile
+            otpVerified
+            customer{
+              id
+            }
+            mechanic{
+              id
+            }
+            vendor{
+              id
+            }
+          }
+          vehicle {
+            id
+            brand
+            model
+            engine
+            year
+            plateNo
+            lastMaintenance
+            milege
+            vehiclePic
+            latitude
+            longitude
+            defaultVehicle
+            status
+            userId
+          }
+          bookService {
+            id
+            mechanicId
+            customerId
+            status
+            serviceId
+            bookMechanicId
+            service{
+              id
+              serviceName
+              minPrice
+            }
+          }
         }
-      }
     }
     """;
       }
@@ -1875,15 +1912,19 @@ class QueryProvider {
         serviceTime
         latitude
         longitude
+        mechLatitude
+        mechLongitude
         extend
         totalExt
         extendTime
         bookedDate
+        bookedTime
         isRated
         status
         customerId
         mechanicId
         vehicleId
+        regularType
         mechanic {
           id
           userCode
@@ -1898,6 +1939,15 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
         }
         customer {
           id
@@ -1913,6 +1963,15 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
         }
         vehicle {
           id
@@ -1928,6 +1987,20 @@ class QueryProvider {
           longitude
           defaultVehicle
           status
+          userId
+        }
+        bookService {
+          id
+          mechanicId
+          customerId
+          status
+          serviceId
+          bookMechanicId
+          service{
+            id
+            serviceName
+            minPrice
+          }
         }
       }
     }

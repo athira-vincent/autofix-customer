@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
@@ -7,6 +8,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_bloc.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,14 +33,15 @@ class CustServiceRegularDetailsScreen extends StatefulWidget {
 
 class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsScreen> {
 
-  String authToken = "", type = "",bookingId = "", userId = "";
+  String authToken = "", type = "",bookingId = "", userId = "", bookingDate = "";
   MechServiceDetailsReviewBloc _mechServiceDetailsReviewBloc = MechServiceDetailsReviewBloc();
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   DateTime selectedDate = DateTime.now();
 
   bool isLoading = true;
   BookingDetails? _BookingDetails;
+  String firebaseCollection = "";
 
   @override
   void initState() {
@@ -76,11 +79,28 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
         setState(() {
           isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
+          if(_BookingDetails!.regularType.toString() == "1"){
+            firebaseCollection = TextStrings.firebase_pick_up;
+          }else if(_BookingDetails!.regularType.toString() == "2"){
+            firebaseCollection = TextStrings.firebase_mobile_mech;
+          }else if(_BookingDetails!.regularType.toString() == "3"){
+            firebaseCollection = TextStrings.firebase_take_vehicle;
+          }
+          listenToCloudFirestoreDB();
         });
       }
     });
   }
 
+  void listenToCloudFirestoreDB() {
+    //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
+    _firestore.collection("${firebaseCollection}").doc('${widget.bookingId}').snapshots().listen((event) {
+
+      setState(() {
+        bookingDate = event.get("bookingDate");
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -423,12 +443,14 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     MaterialPageRoute(
                                       builder: (context) => CustPickUpTrackScreen(
                                         bookedId: "${widget.bookingId}",
-                                        bookedDate: '${_BookingDetails!.bookedDate}',
+                                        //bookedDate: '${_BookingDetails!.bookedDate}',
+                                        //bookedDate: _homeCustomerBloc.dateMonthConverter(DateFormat().parse('${_BookingDetails!.bookedDate}')),
+                                        bookedDate: bookingDate,
                                         latitude: '${_BookingDetails!.latitude}',
                                         longitude:'${_BookingDetails!.longitude}',
                                         mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
                                         mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
-                                        pickingDate: '${_BookingDetails!.bookedDate}',
+                                        pickingDate: bookingDate,
                                       ),
                                     ));
                               }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
@@ -437,6 +459,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     MaterialPageRoute(
                                       builder: (context) => CustMobileTrackScreen(
                                         bookingId: _BookingDetails!.id.toString(),
+                                        bookingDate: bookingDate,
                                       ),
                                     ));
                               }
@@ -445,13 +468,15 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CustTakeVehicleTrackScreen(
-                                        bookingId: _BookingDetails!.id.toString(),
                                         reachTime: '',
                                         bookedDate: '',
                                         latitude: "",
                                         longitude: "",
                                         goTime: "",
                                         mechanicName: "",
+                                        pickingDate: "",
+                                        mechanicAddress: "",
+                                        bookedId: '${_BookingDetails!.id.toString()}',
                                       ),
                                     ));
                               }
