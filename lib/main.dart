@@ -25,6 +25,7 @@ import 'package:provider/provider.dart';
 import 'UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
 import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
+import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 
 
 
@@ -126,8 +127,8 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                       bookedId: '1142',
                     ),*/
                     // home: MechMobileTrackScreen(bookingId: "1305"),
-                    home:SplashScreen(),
-                 //  home: MechanicMyJobReviewScreen(),
+                    //home:SplashScreen(),
+                   home: MechanicMyWalletScreen(),
                   );
                 },
               ),

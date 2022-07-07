@@ -54,12 +54,12 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
 
   _listenApiResponse() {
     _mechanicJobReviewBloc.postMechanicMyJobReview.listen((value) {
-      if(value.data == "error"){
+      if(value.status == "error"){
         setState(() {
           _isLoadingPage = true;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.data.toString(),
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),

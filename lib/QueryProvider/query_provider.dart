@@ -1223,27 +1223,66 @@ class QueryProvider {
 
   postMechanicMyWalletRequest(String token, ) async {
     String _query = """
-    mutation {
-      myWallet(
-    #   dayStart: "2022-05-03"
-    #   dayEnd: "2022-05-03"
-       monthStart: "2022-05-03"
-       monthEnd: "2022-05-31"
-    #   weekStart: "string"
-    #   weekEnd: "string"
-        mechanicId: 8
-      ) {
-        jobCount
-        sum
-        bookingData {
-          id
-          bookingCode
-          mechanic{
-            id
-          }
-        }
+      mutation {
+   myWallet(
+    dayStart: "2022-07-07"
+    dayEnd: "2022-07-07"
+    monthStart: "2022-07-01"
+    monthEnd: "2022-07-31"
+    mechanicId: 8
+  ) {
+    jobCount
+    monthlySum
+    totalPayment
+    bookingData {
+      id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
+      status
+      regularType
+      mechLatitude
+      mechLongitude
+      demoMechanicId
+      customerId
+      vehicleId
+      serviceId
+      mechanic{
+        id
+      }
+      customer{
+        id
       }
     }
+    payArr {
+      id
+      transType
+      amount
+      paymentType
+      transId
+      status
+      createdAt
+      updatedAt
+      bookingId
+      orderId
+    }
+  }
+}
+
      """;
     log(_query);
     print("Token >>>>>>> $token");
