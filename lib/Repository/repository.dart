@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_p
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
@@ -51,6 +52,7 @@ class Repository {
   final _categoryListApiProvider = CategoryListApiProvider();
   final _AddPriceFaultApiProvider = AddPriceFaultApiProvider();
   final _MechServiceDetailsApiProvider = MechServiceDetailsApiProvider1();
+  final _serviceStatusUpdateApiProvider = ServiceStatusUpdateApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId) =>
@@ -355,6 +357,12 @@ class Repository {
   Future<dynamic>  postMechanicOrderStatusUpdate(
       token,  bookingId, bookStatus)  =>
       _mechanicApiProvider.postMechanicOrderStatusUpdate(
+          token,  bookingId, bookStatus);
+
+  // Fetch Regular Service Status Update
+  Future<dynamic>  postServiceStatusUpdateRequest(
+      token,  bookingId, bookStatus)  =>
+      _serviceStatusUpdateApiProvider.postRegularServiceStatusUpdate(
           token,  bookingId, bookStatus);
 
 

@@ -330,20 +330,22 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$mechanicName started from ',
+                      Text('$mechanicName drive started',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('$mechanicAddress',
+                      mechanicAddress.isEmpty ? Container():
+                      Text(
+                        'from - $mechanicAddress',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
                         ),),
-                      SizedBox(height: 02),
+                      mechanicAddress.isEmpty ? Container(): SizedBox(height: 02),
                       Text('on ${_mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(scheduledDate))}'
                           + '\nat ${isDriveStartedTime}',
                         textAlign: TextAlign.start,
@@ -1077,7 +1079,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                       height:50,
                       width: 50,
                       decoration: BoxDecoration(
-                          color: CustColors.light_navy05,
+                          color: CustColors.light_navy,
                           borderRadius: BorderRadius.circular(25)
                         //more than 50% of width makes circle
                       ),
@@ -1085,7 +1087,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
                         fit: BoxFit.contain,),
                     ),
                   ],
@@ -1132,15 +1134,14 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                       },
                       child: Text('Pay Now',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff919191),
-                          fontSize: 08,
-                        ),
+                          style: TextStyle(
+                            color: CustColors.white_02,
+                            fontSize: 08,
+                          )
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: CustColors.light_navy,
-                        shape:
-                        RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
                       ),
@@ -1154,7 +1155,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
           Padding(
             padding: const EdgeInsets.fromLTRB(45,5,5,0),
             child: FDottedLine(
-              color: CustColors.light_navy,
+              color: CustColors.light_navy05,
               height: 50.0,
             ),
           ),
@@ -1200,13 +1201,13 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Received Payment',
+                      Text('Payment Completed',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 05),
-                      Text('at 11:30 Am',
+                      Text('at $isPaymentTime',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
@@ -1297,7 +1298,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Completed',
+                  Text('Service Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',
@@ -1341,7 +1342,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Completed',
+                  Text('Service Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',

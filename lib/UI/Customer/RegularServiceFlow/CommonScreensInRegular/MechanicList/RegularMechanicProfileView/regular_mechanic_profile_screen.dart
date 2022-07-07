@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
 
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/listeners/NotificationListener.dart';
@@ -79,9 +80,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-
-
-  final NotificationListenerCall _notificationListener = NotificationListenerCall();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -89,9 +88,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   int? reviewLength = 0;
 
-
-  double per = .10;
-  double perfont = .10;
   double height = 0;
   String selectedState = "";
   double totalFees = 0.0;
@@ -100,10 +96,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   String authToken="";
   String userName="", userId = "";
 
-
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-  //String bookingIdEmergency="";
 
   String carNameBrand="";
   String carNameModel="";
@@ -112,15 +106,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   int totalAmount = 0;
 
   late StateSetter mechanicAcceptance;
-
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
@@ -199,6 +184,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
           print("mechanicsRegularBookingIDResponse success >>>");
           print("mechanicsRegularBookingIDResponse success booking id >>> " + '${value.data!.mechanicBooking!.id.toString()}' );
+
+          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, value.data!.mechanicBooking!.id, "0");
 
           if(widget.regularServiceType == TextStrings.txt_pick_up){
             updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
@@ -547,7 +534,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                       ),
                     ),
                   ),
-
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -587,7 +573,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                       )
                     ],
                   ),
-
                 ],
               ),
             ),

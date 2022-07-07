@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,6 +73,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
   double totalDistance = 0.0;
   double speedOfMechanic = 0.0;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   double _setValue(double value) {
     return value * per + value;
   }
@@ -576,6 +578,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
                                                 if(isArrived){
                                                   /*  _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                                                     authToken, bookingId, "3");*/
+                                                  _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "10");
                                                   updateToCloudFirestoreDB();
                                                   Navigator.pop(context);
                                                 }

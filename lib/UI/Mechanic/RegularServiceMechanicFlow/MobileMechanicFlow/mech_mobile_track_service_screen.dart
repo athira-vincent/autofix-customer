@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/customer_track_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechMobileTrackScreen extends StatefulWidget{
   final String bookingId;
@@ -28,20 +31,35 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   String bookingDate = "", scheduledDate = "", scheduledTime = "";
   String isBookedDate = "-1",  isDriveStarted = "", isArrived = "-1", isWorkStarted = "", isWorkFinished = "", isPayment = "";
   String customerName = "",customerAddress = "", mechanicName = "", mechanicAddress = "", customerLatitude = "", customerLongitude = "";
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
   DateTime dateToday = DateTime.now() ;
   String isCompleted = "-1";
+  String authToken="";
+  String userName="", userId = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
     listenToCloudFirestoreDB();
     bookingDate = widget.bookingDate;
   }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userName = shdPre.getString(SharedPrefKeys.userName).toString();
+      userId = shdPre.getString(SharedPrefKeys.userID).toString();
+    });
+  }
+
 
   void listenToCloudFirestoreDB() {
     //_firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
@@ -84,6 +102,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       if(isPayment == "5"){
         setState(() {
           isCompleted = "0";
+          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "8");
         });
       }
 
@@ -447,6 +466,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         updateToCloudFirestoreDB("isDriveStarted","0");
+                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "9");
                         //updateToCloudFirestoreDB("isDriveStartedTime","${DateFormat("hh:mm a").format(DateTime.now())}");
                         //------------------ take the current date and time & Update Firebase, change the status to
                       },
@@ -532,14 +552,14 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
                       SizedBox(height: 02),
-                      Text('from - $mechanicAddress',
+                      mechanicAddress.isEmpty ? Container() : Text('from - $mechanicAddress',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
                         ),),
-                      SizedBox(height: 02),
+                      mechanicAddress.isEmpty ? Container() : SizedBox(height: 02),
                       Text('at ' + isDriveStartedTime.toString(),
                         textAlign: TextAlign.start,
                         style: TextStyle(
@@ -1041,6 +1061,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         updateToCloudFirestoreDB("isWorkStarted","0");
+                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "5");
                       },
                       child: Text(' Start ',
                         textAlign: TextAlign.center,
@@ -1303,6 +1324,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                       onPressed: () {
                         updateToCloudFirestoreDB("isWorkStarted","1");
                         updateToCloudFirestoreDB("isWorkFinished","0");
+                        _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "6");
                       },
                       child: Text('Finished',
                         textAlign: TextAlign.center,
@@ -1521,7 +1543,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                       height:50,
                       width: 50,
                       decoration: BoxDecoration(
-                          color: CustColors.light_navy05,
+                          color: CustColors.light_navy,
                           borderRadius: BorderRadius.circular(25)
                         //more than 50% of width makes circle
                       ),
@@ -1529,7 +1551,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
                         fit: BoxFit.contain,),
                     ),
                   ],
@@ -1576,13 +1598,13 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                       },
                       child: Text('Received',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff919191),
-                          fontSize: 08,
-                        ),
+                          style: TextStyle(
+                            color: CustColors.white_02,
+                            fontSize: 08,
+                          )
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffc9d6f2),
+                        primary: CustColors.light_navy,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
@@ -1804,7 +1826,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Completed',
+                  Text('Service Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',
@@ -1848,7 +1870,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Completed',
+                  Text('Service Completed',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'SamsungSharpSans-Medium',
