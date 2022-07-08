@@ -41,6 +41,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   DateTime dateToday = DateTime.now();
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
   String customerAddress = "", mechanicAddress = "";
+  String isCompleted = "-1";
 
   @override
   void initState() {
@@ -84,6 +85,12 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
           //isBookedDate = "0";
           updateToCloudFirestoreDB("isBookedDate","0");
           print(" >>>>> isBookedDate >>>" + isBookedDate);
+        });
+      }
+
+      if(isPayment == "5"){
+        setState(() {
+          isCompleted = "0";
         });
       }
 
@@ -140,6 +147,8 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     : paymentOptionActiveUi(size),
 
                 // one more widget on processing payment or waiting payment
+
+                completedUi(size),
 
                 textButtonUi(size),
               ],
@@ -1213,6 +1222,99 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
             ),
           ),*/
           SizedBox(height: 20)
+        ],
+      ),
+    );
+  }
+
+  Widget completedUi(Size size){
+    return Container(
+      child: isCompleted == '-1'
+          ? Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 22.0,top: 00),
+            child: Stack(
+              alignment: Alignment.center,
+              children:[
+                Container(
+                  height:50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: CustColors.light_navy05,
+                      borderRadius: BorderRadius.circular(25)
+                    //more than 50% of width makes circle
+                  ),
+                ),
+                Container(
+                  height: 25,
+                  width: 25,
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
+                    fit: BoxFit.contain,),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0,top: 00),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Completed',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                    ),),
+                  SizedBox(height: 05),
+                ],
+              ),
+            ),
+          ),
+        ],
+      )
+          : Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 22.0,top: 00),
+            child: Stack(
+              alignment: Alignment.center,
+              children:[
+                Container(
+                  height:50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: CustColors.light_navy,
+                      borderRadius: BorderRadius.circular(25)
+                    //more than 50% of width makes circle
+                  ),
+                ),
+                Container(
+                  height: 25,
+                  width: 25,
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
+                      fit: BoxFit.contain,
+                      color: CustColors.white_02),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0,top: 00),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Completed',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'SamsungSharpSans-Medium',
+                    ),),
+                  SizedBox(height: 05),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

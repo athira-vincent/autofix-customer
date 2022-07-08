@@ -116,7 +116,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       if(serviceIdEmergency.toString() != 'null'  && serviceIdEmergency.toString() != "" )
         {
           print('serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
-
         }
       else
         {
