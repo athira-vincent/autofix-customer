@@ -18,12 +18,12 @@ class MechanicMyWalletMdl {
 
   Data? data;
   String status;
-  String? message;
+  String message;
 
   factory MechanicMyWalletMdl.fromJson(Map<String, dynamic> json) => MechanicMyWalletMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
-    status: json["status"] == null ? null : json['status'],
-    message: json["message"] == null ? null : json['message'],
+    status: json["status"] == null ? null : json["status"],
+    message: json["message"] == null ? null : json["message"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -139,7 +139,7 @@ class BookingDatum {
   int customerId;
   int vehicleId;
   dynamic serviceId;
-  Customer? mechanic;
+  Mechanic? mechanic;
   Customer? customer;
 
   factory BookingDatum.fromJson(Map<String, dynamic> json) => BookingDatum(
@@ -169,7 +169,7 @@ class BookingDatum {
     customerId: json["customerId"] == null ? null : json["customerId"],
     vehicleId: json["vehicleId"] == null ? null : json["vehicleId"],
     serviceId: json["serviceId"],
-    mechanic: json["mechanic"] == null ? null : Customer.fromJson(json["mechanic"]),
+    mechanic: json["mechanic"] == null ? null : Mechanic.fromJson(json["mechanic"]),
     customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
   );
 
@@ -208,11 +208,31 @@ class BookingDatum {
 class Customer {
   Customer({
     required this.id,
+    required this.firstName,
+  });
+
+  int id;
+  String firstName;
+
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+    id: json["id"] == null ? null : json["id"],
+    firstName: json["firstName"] == null ? null : json["firstName"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "firstName": firstName == null ? null : firstName,
+  };
+}
+
+class Mechanic {
+  Mechanic({
+    required this.id,
   });
 
   int id;
 
-  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+  factory Mechanic.fromJson(Map<String, dynamic> json) => Mechanic(
     id: json["id"] == null ? null : json["id"],
   );
 

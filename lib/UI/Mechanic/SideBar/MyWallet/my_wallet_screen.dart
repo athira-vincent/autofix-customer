@@ -25,6 +25,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MechanicMyWalletMdl mechanicMyWalletMdl;
+  //BookingDatum? _BookingDatum;
+  List<BookingDatum>? _BookingDatum=[];
+  MyWallet? _MyWallet;
 
   @override
   void initState() {
@@ -54,7 +57,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
         });
       }else{
         setState(() {
-          mechanicMyWalletMdl = value;
+          _BookingDatum = value.data!.myWallet!.bookingData;
+          _MyWallet = value.data!.myWallet;
+          //mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
@@ -98,9 +103,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SubTitleTextRound(size,"Total job done","135"),
-                                SubTitleTextRound(size,"All payments","5000"),
-                                SubTitleTextRound(size,"Monthly collection","2000"),
+                                SubTitleTextRound(size,"Total job done",_MyWallet!.jobCount.toString()),
+                                SubTitleTextRound(size,"All payments",_MyWallet!.totalPayment.toString()),
+                                SubTitleTextRound(size,"Monthly collection",_MyWallet!.monthlySum.toString()),
                               ],
                             ),
                           ),
@@ -134,7 +139,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                      //left: size.width * 9 / 100,
                                       right: size.width * 10.5 / 100,
                                     ),
-                                    child: Text("- ₦ 15000",
+                                    child: Text(
+                                      _MyWallet!.totalPayment.toString(),
+                                      //"- ₦ 15000",
                                       style: Styles.myWalletTitleText04,)
                                 ),
                               ),
@@ -249,8 +256,18 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child:Container(
-                            child:Container(
-                                child: Text("₦ 5000",style: Styles.myWalletCardText01,)
+                            child:Padding(
+                              padding: const EdgeInsets.only(left: 100.0),
+                              child: Container(
+                                  child: Row(
+                                    children:[
+                                      Text("₦ ",
+                                        style: Styles.myWalletCardText01,),
+                                      Text(_MyWallet!.totalPayment.toString(),
+                                        style: Styles.myWalletCardText01,)
+                           ]
+                              ),
+                              ),
                             ),
                           ),
                         ),

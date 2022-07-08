@@ -1266,6 +1266,7 @@ class QueryProvider {
       }
       customer{
         id
+        firstName
       }
     }
     payArr {
