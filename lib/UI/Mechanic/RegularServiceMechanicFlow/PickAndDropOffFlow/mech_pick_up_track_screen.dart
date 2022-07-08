@@ -2,7 +2,9 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/find_your_cust_regular_pickup__screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,6 +47,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
+
   String authToken="";
   String userName="";
 
@@ -110,24 +114,23 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                 trackServiceBoxUi(size),
                 serviceBookedDateUi(size),
 
-                mechanicStartedToCustomerLoationUi(size),
+                mechanicStartedToCustomerLoationUi(size),     // - 9
                 mechanicReachedNearCustomerForPickUpUi(size),
-                mechanicPickedYourVehicleUi(size),
-                vehicleReachedTheServiceLocationUi(size),
-                mechanicStartedServiceWorkUi(size),
-                workCompletedUi(size),
-                mechanicStartedToCustomerLoationForDropOffUi(size),
+                mechanicPickedYourVehicleUi(size),              // - 10 // - 11
+                vehicleReachedTheServiceLocationUi(size),       // - 12
+                mechanicStartedServiceWorkUi(size),             // - 5
+                workCompletedUi(size),                          // - 6
+                mechanicStartedToCustomerLoationForDropOffUi(size), // - 13
                 mechanicReachedDropOffUi(size),
-                addPaymentUi(size),
+                addPaymentUi(size),               // - 7, 8
                 finishTrackUi(size),
+
                 textButtonUi(size),
               ],
             ),
           ),
         ),
-
       ),
-
     );
   }
 
@@ -256,6 +259,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           '-1' ,
                           '-1' ,
                          '-1' ,);
+                      _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "9");
                     });
                   },
                   child:
@@ -776,6 +780,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   '-1' ,
                                   '-1' ,
                                   '-1' ,);
+                                _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "11");
                               });
                             },
                             child: Container(
@@ -952,7 +957,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   '-1' ,
                                   '-1' ,
                                   '-1' ,);
-                              });
+                                _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "12");
+                                });
                             },
                             child: Container(
                               height: 25,
@@ -1128,6 +1134,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   '-1' ,
                                   '-1' ,
                                   '-1' ,);
+                                _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "5");
                               });
                             },
                             child: Container(
@@ -1304,6 +1311,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 '-1' ,
                                 '-1' ,
                                 '-1' ,);
+                              _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "6");
                             });
                           },
                           child: Container(
@@ -1482,6 +1490,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                             '-1' ,
                             '-1' ,
                             '-1' ,);
+                          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "13");
                         });
                       },
                       child: Container(
@@ -1658,6 +1667,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                     '0' ,
                                     '0' ,
                                     '-1' ,);
+                                  _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "7");
                                 });
                               },
                               child: Container(
@@ -1737,7 +1747,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(isPaymentFinished == "-1"?'Payment recieved.':'Payment initiated.',
+                            Text(isPaymentFinished == "-1"?'Payment received.':'Payment initiated.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
@@ -1819,7 +1829,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Payment recieved.',
+                            Text('Payment received.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
@@ -1851,6 +1861,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                     '0' ,
                                     '0' ,
                                     '0' ,);
+                                  _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "8");
                                 });
                               },
                               child: Container(
@@ -1861,7 +1872,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   borderRadius: BorderRadius.circular(10),
                                   color:  CustColors.light_navy,
                                 ),
-                                child: Text('Recieved',
+                                child: Text('Received',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.white,
@@ -2029,7 +2040,11 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
             padding: const EdgeInsets.only(right: 22.0,top:15,bottom: 20),
             child: InkWell(
               onTap: (){
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MechanicHomeScreen()));
               },
               child: Container(
                 width: 130,

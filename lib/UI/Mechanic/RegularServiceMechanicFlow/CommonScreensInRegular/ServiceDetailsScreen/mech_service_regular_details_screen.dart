@@ -492,15 +492,9 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>  MechTakeVehicleTrackScreen(
-                                reachTime: '',
-                                bookedDate: '',
-                                latitude: "",
-                                longitude: "",
-                                goTime: "",
-                                mechanicName: "",
-                                pickingDate: "",
-                                mechanicAddress: "",
+                              builder: (context) => MechTakeVehicleTrackScreen(
+                                //reachTime: '',
+                                bookedDate: bookingDate,
                                 bookedId: '${_BookingDetails!.id.toString()}',
                               ),
                             ));

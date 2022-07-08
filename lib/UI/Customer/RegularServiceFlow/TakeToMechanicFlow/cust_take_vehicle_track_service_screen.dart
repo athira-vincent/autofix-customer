@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/payment_regular_takeVehicleToMechanic_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -16,22 +17,16 @@ class CustTakeVehicleTrackScreen extends StatefulWidget {
   final String latitude;
   final String longitude;
   final String goTime;
-  final String reachTime;
-  final String mechanicName;
-  final String mechanicAddress;
-  final String pickingDate;
+  //final String reachTime;
   final String bookedId;
 
   CustTakeVehicleTrackScreen({
     required this.bookedDate,
     required this.latitude,
-    required this.reachTime,
+    //required this.reachTime,
     required this.longitude,
     required this.goTime,
-    required this.mechanicName,
-    required this.pickingDate,
     required this.bookedId,
-    required this.mechanicAddress,
   });
 
   @override
@@ -75,7 +70,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
         paymentRecieved = event.get("paymentRecieved");
         completed = event.get("completed");
       });
-
     });
   }
 
@@ -126,9 +120,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
             ),
           ),
         ),
-
       ),
-
     );
   }
 
@@ -244,13 +236,12 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                       //'Mar 5,2022',
                       //bookingDate.toString(),
                       '${widget.bookedDate}',
-
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'SamsungSharpSans-Medium',
-                      color: const Color(0xff9b9b9b)
-                    ),)
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'SamsungSharpSans-Medium',
+                        color: const Color(0xff9b9b9b)
+                      ),)
                   ],
                 ),
               ),
@@ -341,8 +332,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                       Container(
                         height: 25,
                         width: 25,
-                        //color: CustColors.light_navy,
-                        child: SvgPicture.asset('assets/image/ic_car1.svg',
+                        child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_b.svg',
                           fit: BoxFit.contain,
                           //color: Colors.white,
                         ),
@@ -436,7 +426,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
             Column(
               children: [
                 Padding(
-
                   padding: const EdgeInsets.only(left: 22.0,top: 00),
                   child: Stack(
                     alignment: Alignment.center,
@@ -453,8 +442,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                       Container(
                         height: 25,
                         width: 25,
-                        //color: CustColors.light_navy,
-                        child: SvgPicture.asset('assets/image/ic_car1.svg',
+                        child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_drive_started_w.svg',
                           fit: BoxFit.contain,
                           color: Colors.white,
                         ),
@@ -586,8 +574,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_car2.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_b.svg',
                             fit: BoxFit.contain,),
                         ),
                       ],
@@ -604,7 +591,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 05),
+                         /* SizedBox(height: 05),
                           Text(
                             //'Mar 5,2022',
                             '${widget.reachTime}',
@@ -613,7 +600,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -651,8 +638,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           Container(
                             height: 25,
                             width: 25,
-                            //color: CustColors.light_navy,
-                            child: SvgPicture.asset('assets/image/ic_car2.svg',
+                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_arrived_w.svg',
                               fit: BoxFit.contain,
                             color: Colors.white,),
                           ),
@@ -670,7 +656,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 05),
+                            /*SizedBox(height: 05),
                             Text(
                               //'Mar 5,2022',
                               '${widget.reachTime}',
@@ -679,7 +665,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Medium',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -705,57 +691,56 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
                 Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 22.0,top: 00),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children:[
-                        Container(
-                          height:50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                              color: CustColors.light_navy05,
-                              borderRadius: BorderRadius.circular(25)
-                            //more than 50% of width makes circle
-                          ),
-                        ),
-                        Container(
-                          height: 25,
-                          width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
-                            fit: BoxFit.contain,),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
+                  children: [
+                    Padding(
                       padding: const EdgeInsets.only(left: 22.0,top: 00),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Work Started',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'SamsungSharpSans-Medium',
-                            ),),
-                          SizedBox(height: 05),
-                          Text(
-                            //'Mar 5,2022',
-                            '${widget.bookedDate}',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'SamsungSharpSans-Medium',
-                                color: const Color(0xff9b9b9b)
-                            ),)
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children:[
+                          Container(
+                            height:50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: CustColors.light_navy05,
+                                borderRadius: BorderRadius.circular(25)
+                              //more than 50% of width makes circle
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            width: 25,
+                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_b.svg',
+                              fit: BoxFit.contain,),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 22.0,top: 00),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Work Started',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Medium',
+                              ),),
+                            /*SizedBox(height: 05),
+                            Text(
+                              //'Mar 5,2022',
+                              '${widget.bookedDate}',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'SamsungSharpSans-Medium',
+                                  color: const Color(0xff9b9b9b)
+                              ),)*/
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
               ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(45,5,5,5),
@@ -788,8 +773,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_started_w.svg',
                             fit: BoxFit.contain,
                           color: Colors.white),
                         ),
@@ -807,7 +791,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 05),
+                          /*SizedBox(height: 05),
                           Text(
                             //'Mar 5,2022',
                             '${widget.bookedDate}',
@@ -816,7 +800,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -860,8 +844,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                   Container(
                     height: 25,
                     width: 25,
-                    //color: CustColors.light_navy,
-                    child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                    child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_b.svg',
                       fit: BoxFit.contain,),
                   ),
                 ],
@@ -878,7 +861,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                         fontSize: 12,
                         fontFamily: 'SamsungSharpSans-Medium',
                       ),),
-                    SizedBox(height: 05),
+                    /*SizedBox(height: 05),
                     Text(
                       //'Mar 5,2022',
                       '${widget.bookedDate}',
@@ -887,7 +870,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                           color: const Color(0xff9b9b9b)
-                      ),)
+                      ),)*/
                   ],
                 ),
               ),
@@ -925,8 +908,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     Container(
                       height: 25,
                       width: 25,
-                      //color: CustColors.light_navy,
-                      child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_work_finished_w.svg',
                         fit: BoxFit.contain,
                       color: Colors.white),
                     ),
@@ -944,7 +926,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text(
                         //'Mar 5,2022',
                         '${widget.bookedDate}',
@@ -953,7 +935,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -997,8 +979,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           Container(
                             height: 25,
                             width: 25,
-                            //color: CustColors.light_navy,
-                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
                               fit: BoxFit.contain,),
                           ),
                         ],
@@ -1015,7 +996,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 05),
+                            /*SizedBox(height: 05),
                             Text(
                               //'Mar 5,2022',
                               '${widget.bookedDate}',
@@ -1024,7 +1005,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Medium',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1093,8 +1074,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                         Container(
                           height: 25,
                           width: 25,
-                          //color: CustColors.light_navy,
-                          child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
                               fit: BoxFit.contain,
                               color: Colors.white),
                         ),
@@ -1112,7 +1092,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 05),
+                          /*SizedBox(height: 05),
                           Text(
                             //'Mar 5,2022',
                             '${widget.bookedDate}',
@@ -1121,15 +1101,15 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                    padding: const EdgeInsets.only(right: 22.0,),
                     child: Container(
-                      height: 23,
+                      height: 25,
                       width: 55,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -1141,7 +1121,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (context) => PaymentRegularScreen4()));
+                                    builder: (context) => PaymentRegularScreen4(bookedId: widget.bookedId,)));
                             setState(() {
 
                               updateToCloudFirestoreDB(
@@ -1211,8 +1191,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           Container(
                             height: 25,
                             width: 25,
-                            //color: CustColors.light_navy,
-                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
                               fit: BoxFit.contain,),
                           ),
                         ],
@@ -1260,8 +1239,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           Container(
                             height: 25,
                             width: 25,
-                            //color: CustColors.light_navy,
-                            child: SvgPicture.asset('assets/image/ic_carservice.svg',
+                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
                                 fit: BoxFit.contain,
                                 color: Colors.white),
                           ),
@@ -1306,20 +1284,25 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
             child: Container(
               width: 130,
               child: TextButton(
-              onPressed: () {  },
-              child: Text('Back to home',
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'SamsungSharpSans-Medium',
-                color: Colors.white
-              ),),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                primary: CustColors.light_navy,
-                shape:
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CustomerMainLandingScreen()));
+                },
+                child: Text('Back to home',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'SamsungSharpSans-Medium',
+                  color: Colors.white
+                ),),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  primary: CustColors.light_navy,
+                  shape:
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
               ),
         ),
             ),

@@ -13,7 +13,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentRegularScreen4 extends StatefulWidget {
 
-  PaymentRegularScreen4();
+  final String bookedId;
+
+  PaymentRegularScreen4({    required this.bookedId,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -58,10 +61,10 @@ class _PaymentRegularScreenState extends State<PaymentRegularScreen4> {
   void updateToCloudFirestoreDB() {
 
     _firestore
-        .collection("Regular-PickUp")
-        .doc('1138')
+        .collection("Regular-TakeVehicle")
+        .doc('${widget.bookedId}')
         .update({
-          'paymentStatus': "0",
+          'paymentStatus': "1",
         })
         .then((value) => print("Data Added"))
         .catchError((error) =>
