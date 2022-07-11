@@ -1138,8 +1138,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                             ),
                             style: ElevatedButton.styleFrom(
                               primary: CustColors.light_navy05,
-                              shape:
-                              RoundedRectangleBorder(
+                              shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)
                               ),
                             ),
@@ -1193,7 +1192,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(paymentRecieved=='-1'?'Waiting for payment.':'Payment received.',
+                          Text(paymentRecieved=='-1' ? 'Waiting for payment.':'Payment received.',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
