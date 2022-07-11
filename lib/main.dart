@@ -109,6 +109,7 @@ import 'package:provider/provider.dart';
                       bookedId: '1142',
                     ),*/
                     // home: MechMobileTrackScreen(bookingId: "1305"),
+
                     home:SplashScreen(),
                   );
                 },
