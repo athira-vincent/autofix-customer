@@ -119,13 +119,16 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
     placemarkFromCoordinates(position.latitude,position.longitude);
 
     var first = addresses.first;
-    print("${first.name} : ${first..administrativeArea}");
+    print("${first.name} : ${first.administrativeArea}");
 
     String address = '${first.street}, ${first.subLocality}, ${first.locality}';
+    updateToCloudFirestoreDB(address);
+    print("MechServiceRegularDetailsScreen - Address >>> " + address);
 
-    if(addresses.isNotEmpty){
-      updateToCloudFirestoreDB(address);
-    }
+    /*if(address.isNotEmpty){
+    }else{
+      print("MechServiceRegularDetailsScreen - Address >>> not fount" );
+    }*/
 
   }
 

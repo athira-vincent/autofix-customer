@@ -212,7 +212,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                   Container(
                     height: 25,
                     width: 25,
-                    //color: CustColors.light_navy,
                     child: SvgPicture.asset('assets/image/ic_calender.svg',
                       fit: BoxFit.contain,
                     color: Colors.white,),
