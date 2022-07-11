@@ -1,10 +1,13 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MechTakeVehicleTrackScreen extends StatefulWidget{
 
@@ -27,6 +30,8 @@ class MechTakeVehicleTrackScreen extends StatefulWidget{
 
 class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
 
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
+
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String bookingDate = "";
   String isReachedServiceCenter = "-1";
@@ -35,10 +40,12 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   String paymentStatus = "-1"; // -1 = no payment ; 0 = requested for payment ; 1 = customer paid ;
   String paymentRecieved = "-1";
   String completed = "-1";
+  String authToken = "";
 
   @override
   void initState(){
     listenToCloudFirestoreDB();
+    getSharedPrefData();
     super.initState();
 
   }
@@ -55,6 +62,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
         paymentRecieved = event.get("paymentRecieved");
         completed = event.get("completed");
       });
+    });
+  }
+
+  Future<void> getSharedPrefData() async {
+    print('getSharedPrefData MechTakeVehicleTrackScreen');
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    setState(() {
+      authToken = shdPre.getString(SharedPrefKeys.token).toString();
     });
   }
 
@@ -284,14 +299,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('00:00',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -490,14 +505,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -584,14 +599,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -612,6 +627,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       onPressed: () {
                         setState(() {
                           updateToCloudFirestoreDB('0', '0', '-1', '-1', '-1', '-1');
+                          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "5");
                         });
                       },
                       child: Text('START',
@@ -689,14 +705,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -723,8 +739,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: const Color(0xffc9d6f2),
-                        shape:
-                        RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
                       ),
@@ -783,14 +798,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 05),
+                      /*SizedBox(height: 05),
                       Text('Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -811,6 +826,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       onPressed: () {
                         setState(() {
                           updateToCloudFirestoreDB('0', '0', '0', '-1', '-1', '-1');
+                          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "6");
                         });
                       },
                       child: Text('FINISH',
@@ -822,8 +838,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: CustColors.light_navy,
-                        shape:
-                        RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                         ),
                       ),
@@ -888,14 +903,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                         fontSize: 12,
                         fontFamily: 'SamsungSharpSans-Medium',
                       ),),
-                    SizedBox(height: 02),
+                    /*SizedBox(height: 02),
                     Text('Mar 5,2022',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                           color: const Color(0xff9b9b9b)
-                      ),)
+                      ),)*/
                   ],
                 ),
               ),
@@ -951,14 +966,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
                         ),),
-                      SizedBox(height: 02),
+                     /* SizedBox(height: 02),
                       Text('Mar 5,2022',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'SamsungSharpSans-Medium',
                             color: const Color(0xff9b9b9b)
-                        ),)
+                        ),)*/
                     ],
                   ),
                 ),
@@ -979,6 +994,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       onPressed: () {
                         setState(() {
                           updateToCloudFirestoreDB('0', '0', '0', '0', '-1', '-1');
+                          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "7");
                         });
                       },
                       child: Text('REQUEST',
@@ -1086,14 +1102,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            SizedBox(height: 05),
+                            /*SizedBox(height: 05),
                             Text('Mar 5,2022',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Medium',
                                   color: const Color(0xff9b9b9b)
-                              ),)
+                              ),)*/
                           ],
                         ),
                       ),
@@ -1182,14 +1198,14 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          SizedBox(height: 05),
+                          /*SizedBox(height: 05),
                           Text('Mar 5,2022',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                                 color: const Color(0xff9b9b9b)
-                            ),)
+                            ),)*/
                         ],
                       ),
                     ),
@@ -1210,6 +1226,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                               onPressed: () {
                                 setState(() {
                                   updateToCloudFirestoreDB('0', '0', '0', '1', '0', '0');
+                                  _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "8");
                                 });
                               },
                               child: Text('Received',
@@ -1221,8 +1238,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                               ),
                               style: ElevatedButton.styleFrom(
                                 primary: CustColors.light_navy,
-                                shape:
-                                RoundedRectangleBorder(
+                                shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)
                                 ),
                               ),

@@ -81,7 +81,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
-  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
+  String authToken="", carName = "", customerAddress = "", plateNumber = "";
   bool isArrived = false;
 
   @override
@@ -173,9 +173,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
-      print('bookingId FindYourCustomerScreen '+bookingId.toString());
       _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
         carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
