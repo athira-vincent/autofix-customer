@@ -2883,6 +2883,7 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
   postTimePriceServiceDetailsRequest(
       token,services,fee,time) async {
     String _query = """ 
@@ -2905,5 +2906,22 @@ class QueryProvider {
     );
   }
 
+  postRegularServiceStatusUpdateRequest(
+      token, bookingId, bookStatus,) async {
+    String _query = """
+         mutation {
+      regularMechStatusUpdate(state: $bookStatus, bookId: $bookingId) {
+        message
+      }
+    }
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
+  }
 
 }

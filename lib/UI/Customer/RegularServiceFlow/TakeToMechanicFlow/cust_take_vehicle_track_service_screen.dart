@@ -70,7 +70,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
         paymentRecieved = event.get("paymentRecieved");
         completed = event.get("completed");
       });
-
     });
   }
 
@@ -121,9 +120,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
             ),
           ),
         ),
-
       ),
-
     );
   }
 
