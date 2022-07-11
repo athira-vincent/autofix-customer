@@ -143,8 +143,10 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                    radius: 28,
                                    child: ClipOval(
                                      child: Image.network(
-                                       'https://i.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
+                                       _mechanicReviewsData![index].bookings!.customer!.customer![0].profilePic,
+                                       //'https://i.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
                                        //_mechanicReviewsData![index].bookings!.customer!.customer[0].profilePic;
+                                       fit: BoxFit.fill,
                                      ),
                                    ),
                                  ),
@@ -164,8 +166,9 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                  children: [
                                    //Text(_mechanicReviewsData[index].,
                                    Text(
-                                     //'Lucko',
                                      _mechanicReviewsData![index].bookings!.customer!.firstName,
+                                     //'Lucko',
+                                     //_mechanicReviewsData![index].bookings!.customer!.firstName,
                                      style: TextStyle(
                                        fontFamily: 'Samsung_SharpSans_Medium',
                                        fontSize: 10.0,
@@ -180,8 +183,9 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                      ),),
                                    SizedBox(height: 05),
                                    Text(
+                                     _mechanicReviewsData![index].bookings!.bookService![0].service!.serviceName,
                                      //'Steering wheel',
-                                     _mechanicReviewsData![index].bookings!.bookService![0].service!.serviceName!,
+                                     //_mechanicReviewsData![index].bookings!.service!.serviceName!,
                                      //_mechanicReviewsData![index].bookings!.bookService![0].service!.serviceName,
 
                                      style: TextStyle(

@@ -1223,27 +1223,67 @@ class QueryProvider {
 
   postMechanicMyWalletRequest(String token, ) async {
     String _query = """
-    mutation {
-      myWallet(
-    #   dayStart: "2022-05-03"
-    #   dayEnd: "2022-05-03"
-       monthStart: "2022-05-03"
-       monthEnd: "2022-05-31"
-    #   weekStart: "string"
-    #   weekEnd: "string"
-        mechanicId: 8
-      ) {
-        jobCount
-        sum
-        bookingData {
-          id
-          bookingCode
-          mechanic{
-            id
-          }
-        }
+      mutation {
+   myWallet(
+    dayStart: "2022-07-07"
+    dayEnd: "2022-07-07"
+    monthStart: "2022-07-01"
+    monthEnd: "2022-07-31"
+    mechanicId: 8
+  ) {
+    jobCount
+    monthlySum
+    totalPayment
+    bookingData {
+      id
+      bookingCode
+      reqType
+      bookStatus
+      totalPrice
+      tax
+      commission
+      serviceCharge
+      totalTime
+      serviceTime
+      latitude
+      longitude
+      extend
+      totalExt
+      extendTime
+      bookedDate
+      bookedTime
+      isRated
+      status
+      regularType
+      mechLatitude
+      mechLongitude
+      demoMechanicId
+      customerId
+      vehicleId
+      serviceId
+      mechanic{
+        id
+      }
+      customer{
+        id
+        firstName
       }
     }
+    payArr {
+      id
+      transType
+      amount
+      paymentType
+      transId
+      status
+      createdAt
+      updatedAt
+      bookingId
+      orderId
+    }
+  }
+}
+
      """;
     log(_query);
     print("Token >>>>>>> $token");
@@ -1257,67 +1297,85 @@ class QueryProvider {
 
   postMechanicMyJobReviewRequest(String token, mechanicId) async {
     String _query = """
-    {
-  mechanicReviewList(mechanicId: $mechanicId)  {
-        id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
-        mechanic {
-          id
-          address
-          state
-          profilePic
-          status
-          rate
-          reviewCount
+{
+  mechanicReviewList(mechanicId: $mechanicId) {
+    id
+    userCode
+    firstName
+    lastName
+    emailId
+    phoneNo
+    userTypeId
+    status
+    jwtToken
+    fcmToken
+    otpCode
+    isProfile
+    otpVerified
+    mechanic {
+      id
+      usersId
+      yearExp
+      profilePic
+      mechType
+      workType
+      noMech
+      state
+      rcNumber
+      brands
+      address
+      certificate1
+      certificate2
+      status
+      rate
+      reviewCount
+    }
+    mechanicStatus {
+      distance
+      latitude
+      longitude
+      workStatus
+    }
+    mechanicService {
+      id
+      fee
+      time
+      service
+      {id 
+        serviceName}
+      status
+      userId
+      serviceId
+    }
+    totalAmount
+    distance
+    duration
+    reviewCount
+    mechanicReviewsData {
+      id
+      transType
+      rating
+      feedback
+      bookingId
+      orderId
+      status
+      order{id}
+      bookings{id 
+        customer{id
+          firstName
+        customer{profilePic
         }
-        mechanicStatus {
-          distance
         }
-        mechanicService {
-          id
-          fee
-          service{
-            id
-          }
-          status
-          userId
-        }
-        totalAmount
-        distance
-        duration
-        reviewCount
-        mechanicReviewsData {
-          id
-          transType
-          rating
-          feedback
-          bookingId
-          orderId
-          status
-          order{
-            id
-          }
-          bookings{
-            id
-          }
-          productData{
-            id
-          }
-        }
-        mechanicReview
-        bookingsCount
+        bookService{
+          service{id 
+            serviceName
+          }}
       }
+      productData{id}
+    }
+    mechanicReview
+    bookingsCount
+  }
 }
      """;
     log(_query);
