@@ -553,22 +553,21 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         //     "${_timeListEmergency}",
                         //     "${_priceListEmergency}",
                         //     "${_serviceIdEmergency}",
-                        String s="[";
+                        String time = "[";
                         for(int i=0;i<_timeListEmergency!.length;i++){
-                          s=s+"""\"${_timeListEmergency![i]}\", """;
+                          time = time + """\"${_timeListEmergency![i]}\", """;
                         }
-                        s=s+"]";
-                        String v="[";
+                        time = time + "]";
+                        String fee = "[";
                         for(int i=0;i<_priceListEmergency!.length;i++){
-                          v=v+"""\"${_priceListEmergency![i]}\", """;
+                          fee = fee + """\"${_priceListEmergency![i]}\", """;
                         }
-                        v=v+"]";
-                        print("hdgjdv 001 $s");
+                        fee = fee + "]";
+                        //print("hdgjdv 001 $s");
                          _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
                            authToken,
                            _serviceIdEmergency.toString().replaceAll("[", "").replaceAll("]", ""),
-                           s,
-                           v,
+                             fee,time
                         );
                       });
                     },

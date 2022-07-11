@@ -1,9 +1,13 @@
+import 'dart:core';
+import 'dart:core';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ScheduleRegularService/schedule_regular_service_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,7 +39,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
   bool isEmergencyService = true;
   bool isRegularService = false;
 
-
+  //List<Service>?
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   String serviceIds = "";
@@ -410,6 +414,18 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                               return  GestureDetector(
                                 onTap:(){
 
+                                  /* Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>  ScheduleRegularServiceScreen(
+                                            selectedService: selectedCategoryList,
+                                            categoryList: widget.categoryList,
+                                            latitude: CurrentLatitude,
+                                            longitude: CurrentLongitude,
+                                            address: widget.address,
+                                          )));
+                                  */
+
                                   setState(() {
                                     print(">>>>>>>>>> Latitude  $CurrentLatitude");
                                     print(">>>>>>>>>> Longitude  $CurrentLongitude");
@@ -417,6 +433,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                     print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
                                     serviceIds = '${snapshot.data?.data?.serviceListAll?[index].id}';
                                     print(">>>>>>>>>> ServiceId  $serviceIds");
+                                    //print(">>>>>>>>>> ServiceId  " + '${snapshot.data?.data?.serviceListAll![index]}');
 
                                   });
 
