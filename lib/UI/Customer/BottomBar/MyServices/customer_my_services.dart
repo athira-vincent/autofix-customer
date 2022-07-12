@@ -338,7 +338,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
         ),
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,5,5),
+          padding: const EdgeInsets.fromLTRB(5,5,5,50),
           child:
           isLoadingUpcomingServices == true
               ? progressBarDarkBlue()
@@ -639,7 +639,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
         ),
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,5,5),
+          padding: const EdgeInsets.fromLTRB(5,5,5,50),
           child:
           isLoadingCompletedServices == true
               ? progressBarDarkBlue()
@@ -829,7 +829,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                       padding: const EdgeInsets.all(0),
                                                       child: Column(
                                                         children: [
-                                                          CustomerAllServicesList?.custCompletedOrders?[index].reqType == 1 ?
+                                                          CustomerCompletedServicesList?.custCompletedOrders?[index].reqType == 1 ?
                                                           Container(
                                                             height: 25,
                                                             width: 50,
@@ -867,7 +867,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                               Padding(
                                                                 padding: const EdgeInsets.all(8.0),
                                                                 child: Text(
-                                                                  '${_homeCustomerBloc.dateMonthConverter02(CustomerAllServicesList?.custCompletedOrders?[index].bookedDate).toString()}',
+                                                                  '${_homeCustomerBloc.dateMonthConverter02(CustomerCompletedServicesList?.custCompletedOrders?[index].bookedDate).toString()}',
                                                                  // '22/03/22',
                                                                   textAlign: TextAlign.center,
                                                                   style: Styles.badgeTextStyle1,
@@ -1214,13 +1214,11 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                     );
                                                   },
                                                 ),
-
                                               ],
                                             ),
                                           ],
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),

@@ -277,6 +277,10 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    for(int i=0;i<widget.categoryList!.service!.length;i++)
+    {
+        widget.categoryList!.service![i].isChecked = false;
+    }
   }
 
 }
