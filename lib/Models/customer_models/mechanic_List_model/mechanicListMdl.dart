@@ -199,7 +199,7 @@ class Mechanic {
 
   String id;
   dynamic usersId;
-  int yearExp;
+  String yearExp;
   String profilePic;
   String mechType;
   String workType;

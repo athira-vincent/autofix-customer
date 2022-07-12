@@ -453,6 +453,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     //_notificationListener.listenNotification(context);
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -590,7 +591,18 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                   radius: 50,
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
-                                    child:  SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
+                                      child:
+                                      widget.mechanicListData?.mechanic[0].profilePic != null
+                                          && widget.mechanicListData?.mechanic[0].profilePic != ""
+                                          ?
+                                      Image.network(
+                                        '${widget.mechanicListData?.mechanic[0].profilePic.toString()}',
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      )
+                                          :
+                                      SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
 
                       ),
@@ -617,7 +629,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(155,110,10,0),
                         child: RatingBar.builder(
-                          initialRating: 0,
+                          ignoreGestures: true,
+                          initialRating: double.parse('${widget.mechanicListData!.mechanicReview}'),
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -678,7 +691,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                   width: 70,
                   child: Column(
                     children: [
-                      Text('${widget.mechanicListData?.mechanic?[0].address}',
+                      Text('${widget.mechanicListData?.mechanic[0].address}',
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
@@ -751,7 +764,19 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                                 radius: 50,
                                                 backgroundColor: Colors.white,
                                                 child: ClipOval(
-                                                  child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                  child:
+                                                  _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic != null
+                                                      &&
+                                                      _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic != ""
+                                                      ?
+                                                  Image.network(
+                                                    '${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic.toString()}',
+                                                    width: 100,
+                                                    height: 100,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                      :
+                                                  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                                 )))
 
                                     ),
@@ -780,7 +805,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                             textAlign: TextAlign.start,
                                             overflow: TextOverflow.visible,),
                                         ),
-
                                       ],
                                     ),
                                   ),
@@ -827,8 +851,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     width: 110,
                     color: CustColors.greyText,
                   ),
-
-
                 ],
               ),
             )
@@ -968,15 +990,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             '${widget.longitude}',
             '${widget.serviceIds}',
             '${widget.mechanicListData?.id}',
-            '2',
+            '1',
             '${widget.mechanicListData?.totalAmount}',
             '1',
             '${_homeCustomerBloc.timeConvertWithoutAmPm(DateTime.now())}',);
-
         }
-
-
-
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),

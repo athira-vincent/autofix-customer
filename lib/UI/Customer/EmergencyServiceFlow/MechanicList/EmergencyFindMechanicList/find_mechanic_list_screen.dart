@@ -152,7 +152,6 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
       } else {
 
         setState(() {
-
           if(value.data?.mechanicList?.data?.length==0)
             {
               waitingMechanic = "0";
@@ -161,14 +160,11 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
             {
               waitingMechanic = "1";
             }
-
           print("message postServiceList >>>>>>>  ${value.message}");
           print("success postServiceList >>>>>>>  ${value.status}");
-
         });
       }
     });
-
   }
 
 
@@ -176,6 +172,7 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
@@ -390,7 +387,18 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                               radius: 50,
                                                                                               backgroundColor: Colors.white,
                                                                                               child: ClipOval(
-                                                                                                child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                                                                                child:
+                                                                                                snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != null
+                                                                                                    && snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic != ""
+                                                                                                    ?
+                                                                                                Image.network(
+                                                                                                  '${snapshot.data?.data?.mechanicList?.data?[index].mechanic[0].profilePic.toString()}',
+                                                                                                  width: 150,
+                                                                                                  height: 150,
+                                                                                                  fit: BoxFit.cover,
+                                                                                                )
+                                                                                                    :
+                                                                                                SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                                                                               )))
 
                                                                                   ),
@@ -416,12 +424,14 @@ class _FindMechanicListScreenState extends State<FindMechanicListScreen> {
                                                                                         child: Column(
                                                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                                                           children: [
-
                                                                                             Padding(
                                                                                               padding: const EdgeInsets.fromLTRB(0,0,0,0),
                                                                                               child: RatingBar.builder(
-                                                                                                initialRating: 0,
-                                                                                                minRating: 1,
+                                                                                                updateOnDrag: false,
+                                                                                                ignoreGestures: true,
+                                                                                                initialRating: double.parse('${snapshot.data?.data?.mechanicList?.data?[index].mechanicReview}'),
+                                                                                                //initialRating: 3.075,
+                                                                                                //minRating: 1,
                                                                                                 direction: Axis.horizontal,
                                                                                                 allowHalfRating: true,
                                                                                                 itemCount: 5,
