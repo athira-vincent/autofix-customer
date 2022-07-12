@@ -108,7 +108,6 @@ import 'package:provider/provider.dart';
                       goTime: '12:00',
                       bookedId: '1142',
                     ),*/
-                    // home: MechMobileTrackScreen(bookingId: "1305"),
                     home:SplashScreen(),
 
                   );
