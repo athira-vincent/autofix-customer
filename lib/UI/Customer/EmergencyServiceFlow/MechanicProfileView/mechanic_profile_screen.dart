@@ -185,24 +185,20 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _homeCustomerBloc.mechanicsEmergencyBookingIDResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print("message mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.message}");
+          print("errrrorr mechanicsEmergencyBookingIDResponse  >>>>>>>  ${value.status}");
         });
       } else {
 
         SharedPreferences shdPre = await SharedPreferences.getInstance();
-
         setState(() {
-
           shdPre.setString(SharedPrefKeys.serviceIdEmergency, "${widget.serviceIds}");
           shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "${widget.mechanicId}");
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, "${value.data?.emergencyBooking?.id}");
-
           bookingIdEmergency = "${value.data?.emergencyBooking?.id}";
           _homeCustomerBloc.postBookingDetailsRequest(authToken, "${value.data?.emergencyBooking?.id}",);
-
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("success postServiceList >>>>>>>  ${value.status}");
+          print("message mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.message}");
+          print("success mechanicsEmergencyBookingIDResponse >>>>>>>  ${value.status}");
 
         });
       }
@@ -210,20 +206,17 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     _homeCustomerBloc.mechanicsUpdateBookingIDResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+          print("message mechanicsUpdateBookingIDResponse >>>>>>>  ${value.message}");
+          print("errrrorr mechanicsUpdateBookingIDResponse >>>>>>>  ${value.status}");
         });
       } else {
 
         SharedPreferences shdPre = await SharedPreferences.getInstance();
 
         setState(() {
-
           _homeCustomerBloc.postBookingDetailsRequest(authToken, "$bookingIdEmergency",);
-
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("success postServiceList >>>>>>>  ${value.status}");
-
+          print("message mechanicsUpdateBookingIDResponse >>>>>>>  ${value.message}");
+          print("success mechanicsUpdateBookingIDResponse >>>>>>>  ${value.status}");
         });
       }
     });

@@ -849,17 +849,15 @@ class QueryProvider {
     String _query = """  
     mutation {
         emergencyBooking(
-           bookedDate: "$date"
+              bookedDate: "$date"
               bookedTime: "$time"
               latitude: ${double.parse(latitude.toString())}
               longitude: ${double.parse(longitude.toString())}
               serviceId: ${int.parse(serviceId.toString())}
               mechanicId:${int.parse(mechanicId.toString())}
               reqType: ${int.parse(reqType.toString())}
-              totalPrice: ${int.parse(totalPrice.toString())}
               paymentType: ${int.parse(paymentType.toString())}
               travelTime:  ""
-        
           ) {
             id
             bookingCode
@@ -981,11 +979,9 @@ class QueryProvider {
           bookedTime
           latitude
           longitude
-          paymentMethod
           demoMechanicId
           customerId
           status
-          isAccepted
           vehicleId
           serviceId
           bookService {
@@ -1039,7 +1035,6 @@ class QueryProvider {
           }
         }
       }
-
     """;
     log(_query);
     return await GqlClient.I.query01(
