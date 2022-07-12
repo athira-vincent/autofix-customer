@@ -2038,31 +2038,26 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
           Spacer(),
           Padding(
             padding: const EdgeInsets.only(right: 22.0,top:15,bottom: 20),
-            child: InkWell(
-              onTap: (){
-                //Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MechanicHomeScreen()));
-              },
-              child: Container(
-                width: 130,
-                child: TextButton(
-                  onPressed: () {  },
-                  child: Text('Back to home',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'SamsungSharpSans-Medium',
-                    color: Colors.white
-                  ),),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    primary: CustColors.light_navy,
-                    shape:
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+            child: Container(
+              width: 130,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MechanicHomeScreen()));
+                },
+                child: Text('Back to home',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'SamsungSharpSans-Medium',
+                  color: Colors.white
+                ),),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  primary: CustColors.light_navy,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
