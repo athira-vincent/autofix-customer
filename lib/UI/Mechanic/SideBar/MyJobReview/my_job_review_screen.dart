@@ -117,7 +117,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                            itemBuilder: (BuildContext context, int index) {
                                print(" _mechanicReviewsData!.length >>>> " + _mechanicReviewsData!.length.toString());
                                return Container(
-                                   margin: EdgeInsets.only(top:08.0,left: 23.0,right: 23.0,bottom: 08.0),
+                                   margin: EdgeInsets.only(top:06.0,left: 22.0,right: 22.0,bottom: 06.0),
                                    decoration: BoxDecoration(
                                      borderRadius: BorderRadius.circular(10),
                                      color: Colors.white,
@@ -137,18 +137,24 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                          flex:69,
                                          child: Container(
                                            child: Padding(
-                                             padding: const EdgeInsets.only(
-                                                 left: 18
-                                             ),
+                                             padding: EdgeInsets.all(6),
                                              child: CircleAvatar(
-                                               radius: 28,
+                                               radius: 30,
                                                child: ClipOval(
-                                                 child: Image.network(
-                                                   _mechanicReviewsData![index].bookings!.customer!.customer![0].profilePic,
-                                                   //'https://i.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
-                                                   //_mechanicReviewsData![index].bookings!.customer!.customer[0].profilePic;
-                                                   fit: BoxFit.fill,
-                                                 ),
+                                                 child: _mechanicReviewsData![index].bookings!.customer!.customer![0].profilePic != null &&
+                                                     _mechanicReviewsData![index].bookings!.customer!.customer![0].profilePic != ""
+                                                     ?
+                                                   Image.network(
+                                                     _mechanicReviewsData![index].bookings!.customer!.customer![0].profilePic,
+                                                     width: 75,
+                                                     height: 75,
+                                                     fit: BoxFit.cover,
+                                                   )
+                                                     :
+                                                 SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg',
+                                                     width:75,
+                                                     height:75,
+                                                     fit:BoxFit.cover),
                                                ),
                                              ),
                                            ),
@@ -158,7 +164,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                          child: Container(
                                            //color: Colors.red,
                                            padding: const EdgeInsets.only(
-                                               left:28.0,
+                                               left:15.0,
                                                //right:20,
                                                top: 20),
                                            child: Column(
@@ -185,8 +191,6 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                  _mechanicReviewsData![index].bookings!.bookService![0].service!.serviceName,
                                                  //'Steering wheel',
                                                  //_mechanicReviewsData![index].bookings!.service!.serviceName!,
-                                                 //_mechanicReviewsData![index].bookings!.bookService![0].service!.serviceName,
-
                                                  style: TextStyle(
                                                      fontFamily: 'Samsung_SharpSans_Medium',
                                                      fontSize: 10.0,
@@ -197,35 +201,35 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                          ),
                                        ),
                                        Expanded(
-                                       flex: 93,
-                                       child: Align(
-                                         alignment:Alignment.center,
-                                         child: Container(
-                                           //scolor: Colors.yellow,s
-                                           child: Padding(
-                                             padding: const EdgeInsets.only(
-                                               //right: 12,
-                                               // left:64,
-                                                 top: 20),
-                                             child: Column(
-                                               children: [
-                                                 RatingBar.builder(
-                                                   initialRating: _mechanicReviewsData![index].rating,
-                                                   minRating: 1,
-                                                   direction: Axis.horizontal,
-                                                   allowHalfRating: true,
-                                                   itemCount: 5,
-                                                   itemSize: 10,
-                                                   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                                   itemBuilder: (context, _) => Icon(
-                                                     Icons.star,
-                                                     color: const Color(0xff173a8d),
+                                         flex: 93,
+                                         child: Align(
+                                           alignment:Alignment.center,
+                                           child: Container(
+                                             child: Padding(
+                                               padding: const EdgeInsets.only(
+                                                 //right: 12,
+                                                 // left:64,
+                                                   top: 20),
+                                               child: Column(
+                                                 children: [
+                                                   RatingBar.builder(
+                                                     ignoreGestures: true,
+                                                     initialRating: _mechanicReviewsData![index].rating,
+                                                     minRating: 1,
+                                                     direction: Axis.horizontal,
+                                                     allowHalfRating: true,
+                                                     itemCount: 5,
+                                                     itemSize: 10,
+                                                     itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                                                     itemBuilder: (context, _) => Icon(
+                                                       Icons.star,
+                                                         color: CustColors.blue,
+                                                     ),
+                                                     onRatingUpdate: (rating) {
+                                                       print(rating);
+                                                     },
                                                    ),
-                                                   onRatingUpdate: (rating) {
-                                                     print(rating);
-                                                   },
-                                                 ),
-                                                 SizedBox(height: 5),
+                                                 /*SizedBox(height: 5),
                                                  Padding(
                                                    padding: const EdgeInsets.only(top: 13.0),
                                                    child: RichText(
@@ -238,7 +242,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                          recognizer: TapGestureRecognizer()
                                                      ),
                                                    ),
-                                                 )
+                                                 )*/
                                                ],
                                              ),
                                            ),
