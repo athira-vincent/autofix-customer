@@ -293,8 +293,9 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                      children:[
                                        Padding(
                                          padding: const EdgeInsets.only(left: 22.0),
-                                         child: SvgPicture.asset('assets/image/ic_review.svg',
-                                         height: 30),
+                                         child: SvgPicture.asset("assets/images/Group 3460.svg",
+                                             width: 30,
+                                             height: 30),
                                        ),
                                    Padding(
                                      padding: const EdgeInsets.only(left: 18.0),
