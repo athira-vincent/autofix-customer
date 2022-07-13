@@ -131,19 +131,16 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                tabTitleBarCustomUi(size),
-                tabBodyCustomUi(size),
-              ],
-            ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              tabTitleBarCustomUi(size),
+              tabBodyCustomUi(size),
+            ],
           ),
         ),
       ),

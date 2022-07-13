@@ -45,9 +45,9 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
       print('userFamilyId ' + authToken.toString());
       //print('userId ' + userId.toString());
       _mechanicJobReviewBloc.postMechanicFetchMyJobReviewRequest
-        (
+        (authToken, mechanicId
           // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsInVzZXJUeXBlSWQiOjIsImlhdCI6MTY1MzI4MTc4OSwiZXhwIjoxNjUzMzY4MTg5fQ.enH-wp0ibqAPeaE9cGkSLSTUV5pOFe2MiuUMumcYBok",
-      authToken, "8"/*mechanicId*/ );
+      /*mechanicId*/ );
     });
   }
 
@@ -168,7 +168,6 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                Text(
                                                  _mechanicReviewsData![index].bookings!.customer!.firstName,
                                                  //'Lucko',
-                                                 //_mechanicReviewsData![index].bookings!.customer!.firstName,
                                                  style: TextStyle(
                                                    fontFamily: 'Samsung_SharpSans_Medium',
                                                    fontSize: 10.0,
