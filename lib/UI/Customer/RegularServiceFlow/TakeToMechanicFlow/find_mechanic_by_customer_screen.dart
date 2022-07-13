@@ -707,7 +707,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Find your customer",
+                                            "Find your mechanic",
                                             textAlign: TextAlign.start,
                                             style: Styles.waitingTextBlack17,
                                           ),
