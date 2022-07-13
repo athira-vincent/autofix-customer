@@ -5,6 +5,7 @@ import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'my_job_review_mdl.dart';
@@ -253,27 +254,70 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                           )
                            :
                          Container(
-                          margin: EdgeInsets.only(top:08.0,left: 23.0,right: 23.0,bottom: 08.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blueGrey,
-                            border: Border.all(
-                              color: const Color(0xff35375b),
-                              width: 1,
-                            ),
-                          ),
-                          height: 100,
-                          width: double.infinity,
+                          margin: EdgeInsets.only(top:08.0,left: 23.0,right: 23.0,bottom: 00.0),
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(10),
+                          //   color: Colors.blueGrey,
+                          //   border: Border.all(
+                          //     color: const Color(0xff35375b),
+                          //     width: 1,
+                          //   ),
+                          // ),
+                          //height: 60,
+                          //width: double.infinity,
                           alignment: Alignment.center,
                           //color: Colors.blueGrey,
-                          child: Text("text here"),
+                          //child: Text("text here"),
+                           child: Column(
+                             children: [
+                           Padding(
+                             padding: const EdgeInsets.only(top: 200.0),
+                             child: SvgPicture.asset('assets/image/bg_review.svg',
+                               height: 200,
+                             ),
+                           ),
+                               Padding(
+                                 padding: const EdgeInsets.only(top: 50.0),
+                                 child: Container(
+                                   height: 50,
+                                   width: 350,
+                                   decoration: BoxDecoration(
+                                       borderRadius: BorderRadius.circular(10),
+                                       color: CustColors.white_02,
+                                       border: Border.all(
+                                           color: const Color(0xff35375b),
+                                           width: 0
+                                       )
+                                   ),
+                                   child: Row(
+                                     children:[
+                                       Padding(
+                                         padding: const EdgeInsets.only(left: 22.0),
+                                         child: SvgPicture.asset("assets/images/Group 3460.svg",
+                                             width: 30,
+                                             height: 30),
+                                       ),
+                                   Padding(
+                                     padding: const EdgeInsets.only(left: 18.0),
+                                     child: Text("Sorry you have no reviews to show.",
+                                     style: TextStyle(
+                                       fontSize: 10,
+                                       fontFamily: 'Samsung_SharpSans_Regular'
+                                     ),),
+                                   ),
+                                   ]
+                                   )
+                                 ),
+                               ),
+                           ]
+                           )
                         ),
                      ),
-               ]
+              ]
            ),
          ),
-       ),
-     ),
+      ),
+    ),
    );
   }
 }

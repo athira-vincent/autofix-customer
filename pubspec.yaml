@@ -165,6 +165,7 @@ flutter:
     - assets/image/group_2974.png
     - assets/image/ic_calender.svg
     - assets/image/ServiceTrackScreen/
+    - assets/image/bg_review.svg
 
   fonts:
     - family: Montserrat_SemiBold
