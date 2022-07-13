@@ -1263,10 +1263,16 @@ class QueryProvider {
       serviceId
       mechanic{
         id
+        mechanic{
+          profilePic
+        }
       }
       customer{
         id
         firstName
+        customer{
+          profilePic
+        }
       }
     }
     payArr {
