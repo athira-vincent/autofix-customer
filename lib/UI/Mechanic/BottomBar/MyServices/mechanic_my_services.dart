@@ -793,7 +793,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                   padding: const EdgeInsets.all(0),
                                                   child: Column(
                                                     children: [
-                                                      CustomerUpcomingServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
+                                                      CustomerCompletedServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
                                                       Container(
                                                         height: 25,
                                                         width: 50,
@@ -831,7 +831,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                           Padding(
                                                             padding: const EdgeInsets.all(8.0),
                                                             child: Text(
-                                                              '${_mechanicHomeBloc.dateMonthConverter02(CustomerUpcomingServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
+                                                              '${_mechanicHomeBloc.dateMonthConverter02(CustomerCompletedServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle1,
                                                             ),

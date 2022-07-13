@@ -107,10 +107,9 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                children: [
                  _isLoadingPage == true
                      ? Center(
-                     child: CircularProgressIndicator(color: CustColors.light_navy,),
-                 )
+                      child: CircularProgressIndicator(color: CustColors.light_navy,),)
                      : Container(
-                        child: _mechanicReviewsData!.length == 0 || _mechanicReviewsData!.length == null ?
+                        child: _mechanicReviewsData!.length != 0 || _mechanicReviewsData!.length != null ?
                          ListView.builder(
                            shrinkWrap: true,
                            itemCount: _mechanicReviewsData!.length,

@@ -710,7 +710,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget dashBoardItemsWidget(Size size,) {
     return Container(
       color: CustColors.pale_grey,
-      //color: CustColors.green,
       padding: EdgeInsets.only(
           left: size.width * 4.5 / 100,
           right: size.width * 4.5 / 100,
@@ -761,11 +760,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
             onTap: ()
             {
               setState(() {
-                /*Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MechanicMyJobReviewScreen(),
-                    ));*/
+                    ));
               });
             },
             child: Container(
