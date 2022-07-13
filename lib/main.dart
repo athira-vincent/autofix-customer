@@ -14,6 +14,9 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
+import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
+
 
 
   void main() async {
@@ -108,7 +111,13 @@ import 'package:provider/provider.dart';
                       goTime: '12:00',
                       bookedId: '1142',
                     ),*/
+                    // home: MechMobileTrackScreen(bookingId: "1305"),
+
                     home:SplashScreen(),
+
+                   // home: MechanicMyWalletScreen(),
+
+                    //home: MechanicMyJobReviewScreen(),
 
                   );
                 },

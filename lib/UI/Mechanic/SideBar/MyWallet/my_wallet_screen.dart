@@ -53,11 +53,12 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+         // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
         setState(() {
           _BookingDatum = value.data!.myWallet!.bookingData;
+          //_MyWallet = value.data!.myWallet;
           _MyWallet = value.data!.myWallet;
           //mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
@@ -149,11 +150,34 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                           ),
                         ),
 
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-                        //Spacer(),
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
+                        // listTileItem(size,
+                        //     _BookingDatum![0].customer!.firstName,
+                        //     _BookingDatum![0].bookedTime,
+                        //     _BookingDatum![0].serviceCharge.toString()),
+                        // //Spacer(),
+                        // listTileItem(size,
+                        //     _BookingDatum![0].customer!.firstName,
+                        //     _BookingDatum![0].bookedTime,
+                        //     _BookingDatum![0].serviceCharge.toString()),
+                        //
+                        // listTileItem(size,
+                        //     _BookingDatum![0].customer!.firstName,
+                        //     _BookingDatum![0].bookedTime,
+                        //     _BookingDatum![0].serviceCharge.toString()),
+                        // listTileItem(size,
+                        //     "John Carlo","11:30","₦ 5000"),
+                        ListView.builder(
+                          shrinkWrap: true,
+                        itemCount: _BookingDatum!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              child: listTileItem(size,
+                                  '${_BookingDatum![0].customer!.firstName}',
+                                   '${_BookingDatum![0].bookedTime}',
+                                  '${_BookingDatum![0].serviceCharge.toString()}'),
+                            );
+                        }
+                        ),
 
                       ],
                     ),
@@ -199,7 +223,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                   child: ClipRRect(
                     //borderRadius: BorderRadius.circular(20.0),
                     child:Container(
-                        child:Image.asset('assets/image/bg_wallet.png')),
+                        child:
+                        // Image.network(
+                        //     _BookingDatum![0].mechanic!.mechanic![0].profilePic)
+                        Image.asset('assets/image/bg_wallet.png')
+                    ),
                   ),
                 ),
               ),
@@ -221,7 +249,12 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       radius: 75,
                                       backgroundColor: Colors.white,
                                       child: ClipOval(
-                                        child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        child:
+                                        //SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        Image.network(
+                                            _BookingDatum![0].mechanic!.mechanic![0].profilePic,
+                                        fit: BoxFit.fill,
+                                        )
                                       )))
                           ),
                         ),
@@ -263,7 +296,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                     children:[
                                       Text("₦ ",
                                         style: Styles.myWalletCardText01,),
-                                      Text(_MyWallet!.totalPayment.toString(),
+                                      Text('${_MyWallet!.totalPayment}',
                                         style: Styles.myWalletCardText01,)
                            ]
                               ),
