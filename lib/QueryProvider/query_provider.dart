@@ -1216,7 +1216,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postMechanicMyWalletRequest(String token, ) async {
+  postMechanicMyWalletRequest(String token, mechanicId) async {
     String _query = """
       mutation {
    myWallet(
@@ -1224,7 +1224,7 @@ class QueryProvider {
     dayEnd: "2022-07-07"
     monthStart: "2022-07-01"
     monthEnd: "2022-07-31"
-    mechanicId: 8
+    mechanicId: $mechanicId
   ) {
     jobCount
     monthlySum

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
@@ -428,6 +429,10 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           MaterialPageRoute(
                             builder: (context) => MechServiceRegularDetailsScreen(
                               bookingId: snapshot.data!.data!.upcomingCompletedServices![i].id.toString(),
+                              firebaseCollection: snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
+                                  ? TextStrings.firebase_pick_up :
+                              snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
+                                  ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                             ),
                           ));
                     });
@@ -723,11 +728,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           InkWell(
             onTap: (){
               setState(() {
-                /*Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MechanicMyWalletScreen(),
-                    ));*/
+                    ));
               });
             },
             child: Container(
