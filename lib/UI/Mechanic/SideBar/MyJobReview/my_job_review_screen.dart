@@ -44,11 +44,8 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId ' + authToken.toString());
-      //print('userId ' + userId.toString());
       _mechanicJobReviewBloc.postMechanicFetchMyJobReviewRequest
-        (authToken, mechanicId
-          // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsInVzZXJUeXBlSWQiOjIsImlhdCI6MTY1MzI4MTc4OSwiZXhwIjoxNjUzMzY4MTg5fQ.enH-wp0ibqAPeaE9cGkSLSTUV5pOFe2MiuUMumcYBok",
-      /*mechanicId*/ );
+        (authToken, mechanicId);
     });
   }
 
@@ -71,6 +68,8 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
           _isLoadingPage = false;
           _mechanicReviewsData = value.data!.mechanicReviewList!.mechanicReviewsData;
           print(">>>>>>>>>> Review data" + _mechanicReviewsData.toString());
+          print(">>>>>>>>>> Review data" + _mechanicReviewsData!.length.toString());
+
         });
       }
     });
@@ -110,7 +109,7 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                      ? Center(
                       child: CircularProgressIndicator(color: CustColors.light_navy,),)
                      : Container(
-                        child: _mechanicReviewsData!.length != 0 || _mechanicReviewsData!.length != null ?
+                        child: _mechanicReviewsData!.length != 0 && _mechanicReviewsData!.length != null ?
                          ListView.builder(
                            shrinkWrap: true,
                            itemCount: _mechanicReviewsData!.length,
@@ -253,28 +252,18 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                           )
                            :
                          Container(
-                          margin: EdgeInsets.only(top:08.0,left: 23.0,right: 23.0,bottom: 00.0),
-                          // decoration: BoxDecoration(
-                          //   borderRadius: BorderRadius.circular(10),
-                          //   color: Colors.blueGrey,
-                          //   border: Border.all(
-                          //     color: const Color(0xff35375b),
-                          //     width: 1,
-                          //   ),
-                          // ),
-                          //height: 60,
-                          //width: double.infinity,
-                          alignment: Alignment.center,
-                          //color: Colors.blueGrey,
-                          //child: Text("text here"),
+                           width: size.width,
+                           height: size.height,
+                           margin: EdgeInsets.only(top:08.0,left: 23.0,right: 23.0,bottom: 00.0),
+                           alignment: Alignment.center,
                            child: Column(
                              children: [
-                           Padding(
-                             padding: const EdgeInsets.only(top: 200.0),
-                             child: SvgPicture.asset('assets/image/bg_review.svg',
-                               height: 200,
-                             ),
-                           ),
+                               Padding(
+                                 padding: const EdgeInsets.only(top: 150.0),
+                                 child: SvgPicture.asset('assets/image/bg_review.svg',
+                                   height: 200,
+                                 ),
+                              ),
                                Padding(
                                  padding: const EdgeInsets.only(top: 50.0),
                                  child: Container(
@@ -292,12 +281,12 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                      children:[
                                        Padding(
                                          padding: const EdgeInsets.only(left: 22.0),
-                                         child: SvgPicture.asset("assets/images/Group 3460.svg",
+                                         child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
                                              width: 30,
                                              height: 30),
                                        ),
                                    Padding(
-                                     padding: const EdgeInsets.only(left: 18.0),
+                                     padding: const EdgeInsets.only(left: 16.0),
                                      child: Text("Sorry you have no reviews to show.",
                                      style: TextStyle(
                                        fontSize: 10,
