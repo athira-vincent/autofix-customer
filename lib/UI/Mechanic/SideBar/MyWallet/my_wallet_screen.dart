@@ -21,11 +21,10 @@ class MechanicMyWalletScreen extends StatefulWidget {
 
 class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
-  String authToken = "" ;
+  String authToken = "", mechanicId = "", profileUrl = "" ;
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MechanicMyWalletMdl mechanicMyWalletMdl;
-  //BookingDatum? _BookingDatum;
   List<BookingDatum>? _BookingDatum=[];
   MyWallet? _MyWallet;
 
@@ -42,9 +41,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
+      profileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('userFamilyId ' + authToken.toString());
-     //print('userId ' + userId.toString());
-      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, "");
+      print('userId ' + mechanicId.toString());
+      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, mechanicId /*"8"*/);
     });
   }
 
@@ -58,7 +59,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
       }else{
         setState(() {
           _BookingDatum = value.data!.myWallet!.bookingData;
-          //_MyWallet = value.data!.myWallet;
+
           _MyWallet = value.data!.myWallet;
           //mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
@@ -73,7 +74,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -104,9 +104,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SubTitleTextRound(size,"Total job done",_MyWallet!.jobCount.toString()),
-                                SubTitleTextRound(size,"All payments",_MyWallet!.totalPayment.toString()),
-                                SubTitleTextRound(size,"Monthly collection",_MyWallet!.monthlySum.toString()),
+                                SubTitleTextRound(size,"Total job done",_MyWallet!.jobCount > 0 ? _MyWallet!.jobCount.toString() : "0"),
+                                SubTitleTextRound(size,"All payments", _MyWallet!.totalPayment! > 0 ? _MyWallet!.totalPayment.toString() : "0"),
+                                SubTitleTextRound(size,"Monthly collection", _MyWallet!.monthlySum > 0 ? _MyWallet!.monthlySum.toString() : "0"),
                               ],
                             ),
                           ),
@@ -168,8 +168,8 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                         //     "John Carlo","11:30","₦ 5000"),
                         ListView.builder(
                           shrinkWrap: true,
-                        itemCount: _BookingDatum!.length,
-                        itemBuilder: (BuildContext context, int index) {
+                          itemCount: _BookingDatum!.length,
+                          itemBuilder: (BuildContext context, int index) {
                             return Container(
                               child: listTileItem(size,
                                   '${_BookingDatum![0].customer!.firstName}',
@@ -178,7 +178,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                             );
                         }
                         ),
-
                       ],
                     ),
                   ],
@@ -250,11 +249,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       backgroundColor: Colors.white,
                                       child: ClipOval(
                                         child:
-                                        //SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                        Image.network(
+                                        SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        /*Image.network(
                                             _BookingDatum![0].mechanic!.mechanic![0].profilePic,
                                         fit: BoxFit.fill,
-                                        )
+                                        )*/
                                       )))
                           ),
                         ),

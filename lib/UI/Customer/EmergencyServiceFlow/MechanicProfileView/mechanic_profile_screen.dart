@@ -758,12 +758,12 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                                                 backgroundColor: Colors.white,
                                                 child: ClipOval(
                                                   child:
-                                                  _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic != null
+                                                  _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic != null
                                                       &&
-                                                      _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic != ""
+                                                      _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic != ""
                                                       ?
                                                   Image.network(
-                                                    '${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic.toString()}',
+                                                    '${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic.toString()}',
                                                     width: 100,
                                                     height: 100,
                                                     fit: BoxFit.cover,

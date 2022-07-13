@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
@@ -131,19 +132,16 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(size),
-                tabTitleBarCustomUi(size),
-                tabBodyCustomUi(size),
-              ],
-            ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              appBarCustomUi(size),
+              tabTitleBarCustomUi(size),
+              tabBodyCustomUi(size),
+            ],
           ),
         ),
       ),
@@ -382,6 +380,10 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                             MaterialPageRoute(
                               builder: (context) => MechServiceRegularDetailsScreen(
                                 bookingId: '${CustomerUpcomingServicesList?.upcomingCompletedServices?[index].id}',
+                                firebaseCollection: CustomerUpcomingServicesList?.upcomingCompletedServices?[index].regularType.toString() == "1"
+                                    ? TextStrings.firebase_pick_up :
+                                CustomerUpcomingServicesList?.upcomingCompletedServices?[index].regularType.toString() == "2"
+                                    ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                               ),
                             ));
                       },
@@ -654,6 +656,10 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => MechServiceRegularDetailsScreen(
                                     bookingId: '${CustomerCompletedServicesList?.upcomingCompletedServices?[index].id}',
+                                    firebaseCollection: CustomerCompletedServicesList?.upcomingCompletedServices?[index].regularType.toString() == "1"
+                                        ? TextStrings.firebase_pick_up :
+                                    CustomerCompletedServicesList?.upcomingCompletedServices?[index].regularType.toString() == "2"
+                                        ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                   ),
                                 ));
                           },
@@ -924,6 +930,10 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                               MaterialPageRoute(
                                 builder: (context) => MechServiceRegularDetailsScreen(
                                   bookingId: '${CustomerAllServicesList?.upcomingCompletedServices?[index].id}',
+                                  firebaseCollection: CustomerAllServicesList?.upcomingCompletedServices?[index].regularType.toString() == "1"
+                                      ? TextStrings.firebase_pick_up :
+                                  CustomerAllServicesList?.upcomingCompletedServices?[index].regularType.toString() == "2"
+                                      ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                 ),
                               ));
                         },
