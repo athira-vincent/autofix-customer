@@ -21,7 +21,7 @@ class MechanicMyWalletScreen extends StatefulWidget {
 
 class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
-  String authToken = "", mechanicId = "" ;
+  String authToken = "", mechanicId = "", profileUrl = "" ;
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MechanicMyWalletMdl mechanicMyWalletMdl;
@@ -42,6 +42,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
+      profileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('userFamilyId ' + authToken.toString());
       print('userId ' + mechanicId.toString());
       _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, mechanicId /*"8"*/);
@@ -248,11 +249,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       backgroundColor: Colors.white,
                                       child: ClipOval(
                                         child:
-                                        //SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                        Image.network(
+                                        SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        /*Image.network(
                                             _BookingDatum![0].mechanic!.mechanic![0].profilePic,
                                         fit: BoxFit.fill,
-                                        )
+                                        )*/
                                       )))
                           ),
                         ),
