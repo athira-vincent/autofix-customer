@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -1368,20 +1369,25 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
             child: Container(
               width: 130,
               child: TextButton(
-              onPressed: () {  },
-              child: Text('Back to home',
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'SamsungSharpSans-Medium',
-                color: Colors.white
-              ),),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.zero,
-                primary: CustColors.light_navy,
-                shape:
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MechanicHomeScreen()));
+                },
+                child: Text('Back to home',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'SamsungSharpSans-Medium',
+                  color: Colors.white
+                ),),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  primary: CustColors.light_navy,
+                  shape:
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
               ),
         ),
             ),

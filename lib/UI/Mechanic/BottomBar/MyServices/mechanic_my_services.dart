@@ -332,7 +332,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
         ),
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,5,5),
+          padding: const EdgeInsets.fromLTRB(5,5,5,50),
           child:
           isLoadingUpcomingServices == true
               ? progressBarDarkBlue()
@@ -603,7 +603,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
         ),
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,5,5),
+          padding: const EdgeInsets.fromLTRB(5,5,5,50),
           child:
           isLoadingCompletedServices == true
               ? progressBarDarkBlue()
@@ -793,7 +793,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                   padding: const EdgeInsets.all(0),
                                                   child: Column(
                                                     children: [
-                                                      CustomerUpcomingServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
+                                                      CustomerCompletedServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
                                                       Container(
                                                         height: 25,
                                                         width: 50,
@@ -831,7 +831,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                           Padding(
                                                             padding: const EdgeInsets.all(8.0),
                                                             child: Text(
-                                                              '${_mechanicHomeBloc.dateMonthConverter02(CustomerUpcomingServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
+                                                              '${_mechanicHomeBloc.dateMonthConverter02(CustomerCompletedServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
                                                               textAlign: TextAlign.center,
                                                               style: Styles.badgeTextStyle1,
                                                             ),
@@ -874,7 +874,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
         ),
         height: MediaQuery.of(context).size.height * 0.80,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(5,5,5,5),
+          padding: const EdgeInsets.fromLTRB(5,5,5,50),
           child:
           isLoadingAllServices == true
               ? progressBarDarkBlue()
@@ -1063,7 +1063,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                     padding: const EdgeInsets.all(0),
                                                     child: Column(
                                                       children: [
-                                                        CustomerUpcomingServicesList?.upcomingCompletedServices?[index].reqType == 1 ?
+                                                        CustomerAllServicesList?.upcomingCompletedServices![index].reqType == 1 ?
                                                         Container(
                                                           height: 25,
                                                           width: 50,
@@ -1101,7 +1101,7 @@ class _MechanicMyServicesScreenState extends State<MechanicMyServicesScreen> {
                                                             Padding(
                                                               padding: const EdgeInsets.all(8.0),
                                                               child: Text(
-                                                                '${_mechanicHomeBloc.dateMonthConverter02(CustomerUpcomingServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
+                                                                '${_mechanicHomeBloc.dateMonthConverter02(CustomerAllServicesList?.upcomingCompletedServices?[index].bookedDate).toString()}',
                                                                 //'22/03/22',
                                                                 textAlign: TextAlign.center,
                                                                 style: Styles.badgeTextStyle1,

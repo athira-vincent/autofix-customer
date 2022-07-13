@@ -14,23 +14,22 @@ class MechanicMyJobReviewMdl {
     required this.data,
     required this.status,
     required this.message,
-
   });
 
   Data? data;
   String? status;
-   String? message;
+  String? message;
 
   factory MechanicMyJobReviewMdl.fromJson(Map<String, dynamic> json) => MechanicMyJobReviewMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
-    status: json["status"] == null ? null : (json["status"]),
-    message: json["data"] == null ? null : (json["data"]),
+    message: json["message"] == null ? null : json["message"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "data": data == null ? null : data!.toJson(),
-    "status": status == null ? null : status,
     "message": message == null ? null : message,
+    "status": status == null ? null : status,
   };
 }
 
@@ -176,7 +175,7 @@ class Mechanic {
 
   String id;
   dynamic usersId;
-  int yearExp;
+  String yearExp;
   String profilePic;
   String mechType;
   String workType;

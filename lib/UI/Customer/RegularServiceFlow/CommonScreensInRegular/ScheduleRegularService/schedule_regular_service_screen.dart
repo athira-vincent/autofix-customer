@@ -394,6 +394,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                     if(selectedCategoryList![index].id == widget.categoryList!.service![i].id)
                       {
                         this.widget.categoryList!.service![i].isChecked = false;
+                        selectedListServiceIds.remove(widget.categoryList!.service![i].id);
+                        totalEstimatedPrice = totalEstimatedPrice - int.parse('${this.widget.categoryList!.service![i].maxPrice}');
+
                       }
                   }
                 selectedCategoryList!.removeAt(index);
