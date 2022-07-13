@@ -728,11 +728,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           InkWell(
             onTap: (){
               setState(() {
-                /*Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MechanicMyWalletScreen(),
-                    ));*/
+                    ));
               });
             },
             child: Container(
