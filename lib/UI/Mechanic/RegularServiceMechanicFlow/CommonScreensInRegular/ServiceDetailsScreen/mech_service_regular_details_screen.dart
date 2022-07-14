@@ -104,7 +104,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
   }
 
   void listenToCloudFirestoreDB() {
-    _firestore.collection('$firebaseCollection').doc('${widget.bookingId}').snapshots().listen((event) {
+    _firestore.collection('${widget.firebaseCollection}').doc('${widget.bookingId}').snapshots().listen((event) {
       setState(() {
         bookingDate = event.get("bookingDate");
       });
