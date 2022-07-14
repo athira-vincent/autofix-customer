@@ -80,9 +80,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               for(int x = 0; x < allList[i].service!.length; x++){
                 emergencyServiceList.add(allList[i].service![x]);
                 emergencyServiceMdlList.add(
-                    SelectedServicesMdl(i,x,allList[i].service![x].id.toString(),
+                    SelectedServicesMdl(i,x,
+                        allList[i].service![x].id.toString(),
                         allList[i].service![x].minPrice,
-                        allList[i].service![x].maxPrice, "10:00", false));
+                        allList[i].service![x].maxPrice,
+                        "10:00", false));
               }
             }
             else{
@@ -90,9 +92,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               for( int x = 0; x < allList[i].service!.length; x++){
                 regularServiceList.add(allList[i].service![x]);
                 regularServiceMdlList.add(
-                    SelectedServicesMdl(i,x,allList[i].service![x].id.toString(),
+                    SelectedServicesMdl(i,x,
+                        allList[i].service![x].id.toString(),
                         allList[i].service![x].minPrice,
-                        allList[i].service![x].maxPrice, "10:00", false));
+                        allList[i].service![x].maxPrice,
+                        "10:00", false));
               }
             }
           }
@@ -104,11 +108,13 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("regularCategoryList.length >>> "+ regularCategoryList.length.toString());
           print("regularServiceList.length >>> "+ regularServiceList.length.toString());
           print("regularServiceMdlList.length >>> "+ regularServiceMdlList.length.toString());
+
           _emergencyIsChecked = List<bool>.filled(emergencyServiceMdlList.length, false);
           _regularIsChecked = List<bool>.filled(regularServiceMdlList.length, false);
 
+          print("_regularIsChecked!.length >>> " + _regularIsChecked!.length.toString());
+
           print(_emergencyIsChecked!.length);
-          print(_regularIsChecked!.length);
 
         });
       }
@@ -151,8 +157,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     _listenServiceListResponse();
     _listenAddServiceListResponse();
 
-    _regularIsChecked = List<bool>.filled(regularServiceList.length, false);
-    _emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
+    //_regularIsChecked = List<bool>.filled(regularServiceList.length, false);
+    //_emergencyIsChecked = List<bool>.filled(emergencyServiceList.length, false);
   }
 
   Future<void> getSharedPrefData() async {
@@ -161,7 +167,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, null, null, null );
+      _serviceListBloc.postServiceListRequest(authToken, "", null, null );
     });
   }
 
@@ -278,6 +284,16 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                      child: TextFormField(
                        keyboardType: TextInputType.text,
                        textAlignVertical: TextAlignVertical.center,
+                       onChanged: (text) {
+                         setState(() {
+                           if(text.isNotEmpty){
+                             _serviceListBloc.postServiceListRequest(authToken, text, null, "2" );
+                           }else{
+                             _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+                           }
+                         });
+                         //_allMakeBloc.searchMake(text);
+                       },
                        textAlign: TextAlign.left,
                        style: Styles.searchTextStyle01,
                        decoration: InputDecoration(
@@ -390,6 +406,16 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         textAlignVertical: TextAlignVertical.center,
+                        onChanged: (text) {
+                          setState(() {
+                            if(text.isNotEmpty){
+                              _serviceListBloc.postServiceListRequest(authToken, text, null, "1" );
+                            }else{
+                              _serviceListBloc.postServiceListRequest(authToken, "", null, "1" );
+                            }
+                          });
+                          //_allMakeBloc.searchMake(text);
+                        },
                         textAlign: TextAlign.left,
                         style: Styles.searchTextStyle01,
                         decoration: InputDecoration(
@@ -575,7 +601,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                           },
                         )
                             : Center(
-                          child: Text('No Results found.'),
+                              child: Text('No Results found.'),
                         ),
                       ),
                     ),
@@ -593,10 +619,12 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   Widget _buildTiles(CategoryList root, Size size,int parentIndex) {
     print('parentIndex >>>>>>>>>>>>>>>>>>root.service!.length. $parentIndex');
 
-    print('root >>>>>>>>>>>>>>>>>>root.service!.length. $root');
+    //print('root >>>>>>>>>>>>>>>>>>root.service!.length. $root');
     if (root.service!.isEmpty) return ListTile(title: Text(root.catName));
     return ExpansionTile(
       key: PageStorageKey<CategoryList>(root),
+      iconColor: CustColors.light_navy,
+      textColor: CustColors.light_navy,
       title: Text(
         root.catName,
       ),
@@ -806,8 +834,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
   int getItemIndex(int parentIndex, int childIndex){
     int itemIndex = regularServiceMdlList.indexWhere((item) => item.parentIndex == parentIndex && item.childIndex == childIndex);
-    print("itemIndex >>>>>>>> " + itemIndex.toString());
-    return childIndex;
+    print("itemIndex >>>>>>>>111 " + itemIndex.toString());
+    return itemIndex;
   }
 
   Widget nextButtons(Size size) {

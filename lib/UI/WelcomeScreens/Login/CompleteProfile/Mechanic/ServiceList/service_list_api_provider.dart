@@ -7,8 +7,8 @@ class ServiceListApiProvider {
   final QueryProvider _queryProvider = QueryProvider();
 
   Future<CategoryServiceListMdl> getServiceListRequest(
-      String token, categoryId) async {
-    Map<String, dynamic> _resp = await _queryProvider.serviceListWithCategory(token, categoryId);
+      String token, categoryId, search) async {
+    Map<String, dynamic> _resp = await _queryProvider.serviceListWithCategory(token, categoryId, search);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
