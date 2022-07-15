@@ -73,7 +73,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           allList = value.data!.categoryList!;
 
           print("allList.length.toString() >>> " + allList.length.toString());
-
+             int count=0;
           for(int i = 0; i < allList.length; i++){
             if(allList[i].catType.toString() == "1"){
               emergencyCategoryList.add(allList[i]);
@@ -89,15 +89,17 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
             }
             else{
               regularCategoryList.add(allList[i]);
-              for( int x = 0; x < allList[i].service!.length; x++){
-                regularServiceList.add(allList[i].service![x]);
+              for( int y = 0; y < allList[i].service!.length; y++){
+                regularServiceList.add(allList[i].service![y]);
                 regularServiceMdlList.add(
-                    SelectedServicesMdl(i,x,
-                        allList[i].service![x].id.toString(),
-                        allList[i].service![x].minPrice,
-                        allList[i].service![x].maxPrice,
+                    SelectedServicesMdl(count,y,
+                        allList[i].service![y].id.toString(),
+                        allList[i].service![y].minPrice,
+                        allList[i].service![y].maxPrice,
                         "10:00", false));
+                print("jggshsh #$i *** count $count $y name ${ allList[i].service![y].serviceName}");
               }
+              count = count + 1;
             }
           }
 
@@ -313,15 +315,15 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
          Expanded(
            child: Container(
              margin: EdgeInsets.only(
-                 top: size.height * 0.023,
+                 top: size.height * 0.020,
                  bottom: size.height * 0.019
              ),
              color: CustColors.pale_grey,
              height: size.height * 0.82, //0.764
              child: Container(
                margin: EdgeInsets.only(
-                   left: size.width * 0.049,
-                   right: size.width * 0.049,
+                   left: size.width * 0.045,
+                   right: size.width * 0.045,
                    //top: size.height * 0.03,
                    bottom: size.height * 0.032
                ),
@@ -331,8 +333,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                      child: Container(
                        child:  regularCategoryList.length != 0
                            ? ListView.builder(
-                               itemBuilder: (BuildContext context, int index) =>
-                                   _buildTiles(regularCategoryList[index],size, index),
+                               itemBuilder: (BuildContext context, int i) =>
+                                   _buildTiles(regularCategoryList[i],size, i),
                                itemCount: regularCategoryList.length,
                              )
                            : Center(
@@ -490,7 +492,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                   child: Row(
                                     children: [
                                       Transform.scale(
-                                        scale: .8,
+                                        scale: .6,
                                         child: Checkbox(
                                           activeColor: CustColors.light_navy,
                                           value: _emergencyIsChecked![index],
@@ -617,9 +619,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
 
   Widget _buildTiles(CategoryList root, Size size,int parentIndex) {
-    print('parentIndex >>>>>>>>>>>>>>>>>>root.service!.length. $parentIndex');
+    print('parentIndex >>>>>>>>>>>>>>>>>>_buildTiles  $parentIndex');
 
-    //print('root >>>>>>>>>>>>>>>>>>root.service!.length. $root');
+    print('root >>>>>>>>>>>>>>>>>>root.service!.length. $root');
     if (root.service!.isEmpty) return ListTile(title: Text(root.catName));
     return ExpansionTile(
       key: PageStorageKey<CategoryList>(root),
@@ -640,14 +642,15 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //scrollDirection: Axis.vertical,
           itemCount:  root.service!.length,
           itemBuilder: (context, index) {
-            print('index >>>>>>>>>>>>>>>>>>root.service!.length. $index');
+            print('index >>>>>>>>>xxxxxxx>>>>>> parentIndex  $parentIndex');
+            print('index >>>>>>>>>xxxxxxx>>>>>> child index. $index');
 
             TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
             _rateController.text = root.service![index].minPrice.toString();
             _timeController.text = "10:00";
             _rateController.addListener(() {
-              int itemIndex = getItemIndex(parentIndex,index);
+              int itemIndex = getItemIndex(parentIndex, index);
               var temp =   SelectedServicesMdl(parentIndex, index,
                   regularServiceMdlList[itemIndex].serviceId,_rateController.text,
                   regularServiceMdlList[itemIndex].maxAmount,
@@ -671,7 +674,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               child: Row(
                 children: [
                   Transform.scale(
-                    scale: .4,
+                    scale: .5,
                     child: Checkbox(
                       activeColor: CustColors.light_navy,
                       value: _regularIsChecked![getItemIndex(parentIndex,index)],

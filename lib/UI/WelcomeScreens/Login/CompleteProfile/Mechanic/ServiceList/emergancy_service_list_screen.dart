@@ -56,7 +56,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _homeCustomerBloc.postSearchServiceRequest("$authToken", "", null, "1");
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
       //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
