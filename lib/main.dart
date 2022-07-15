@@ -118,9 +118,9 @@ import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
                     ),*/
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
-                   // home:SplashScreen(),
+                    home:SplashScreen(),
 
-                    home: MechanicMyWalletScreen(),
+                  //  home: MechanicMyWalletScreen(),
 
 
                   );
