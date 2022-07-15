@@ -874,8 +874,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //print("time 001 ${selectedServiceMdlList[i].isEnable}");
         }
 
-
-
         String serviceId="";
         String feeList = "[";
         String timeList = "[";
@@ -900,7 +898,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
         _addServiceListBloc.postMechanicAddServicesRequest(
             authToken,
             serviceId,  feeList, timeList);
-
       },
       child: Container(
         height: size.height * 0.045,
