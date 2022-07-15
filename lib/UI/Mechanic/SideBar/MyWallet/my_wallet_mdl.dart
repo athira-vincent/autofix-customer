@@ -59,7 +59,7 @@ class MyWallet {
   });
 
   int jobCount;
-  int monthlySum;
+  double monthlySum;
   int? totalPayment;
   List<BookingDatum>? bookingData;
   List<PayArr>? payArr;

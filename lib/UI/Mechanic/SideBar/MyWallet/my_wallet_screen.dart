@@ -172,9 +172,9 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               child: listTileItem(size,
-                                  '${_BookingDatum![0].customer!.firstName}',
-                                   '${_BookingDatum![0].bookedTime}',
-                                  '${_BookingDatum![0].serviceCharge.toString()}'),
+                                  '${_BookingDatum![index].customer!.firstName}',
+                                   '${_BookingDatum![index].bookedTime}',
+                                  '${_BookingDatum![index].serviceCharge.toString()}'),
                             );
                         }
                         ),
