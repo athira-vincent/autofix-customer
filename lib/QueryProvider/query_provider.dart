@@ -1440,10 +1440,12 @@ class QueryProvider {
   }
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
 
-  serviceListWithCategory(String token, categoryType ) async {
-    String _query = """
-    {
-      category_list(catType: $categoryType) {
+  serviceListWithCategory(String token, categoryType, String search ) async {
+    String _query;
+    if(search.isEmpty){
+      _query = """
+        {
+      category_list(catType: $categoryType, search: null) {
         id
         catType
         catName
@@ -1452,6 +1454,7 @@ class QueryProvider {
         service {
           id
           serviceName
+          serviceCode
           description
           icon
           minPrice
@@ -1462,6 +1465,31 @@ class QueryProvider {
       }
     }
      """;
+    }else{
+      _query = """
+        {
+      category_list(catType: $categoryType, search: "$search") {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          serviceCode
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }
+
     log(_query);
     print("Token >>>>>>> $token");
     return await GqlClient.I.query01(
@@ -2469,33 +2497,6 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
-
-
-  postCatListBothRequest(
-      token,type) async {
-    String _query = """ 
-     query
-     {
-        category_list(catType: $type) {
-          id
-          catType
-          catName
-          icon
-          status
-        }
-      }
-
-
-    """;
-    log(_query);
-    return await GqlClient.I.query01(
-      _query,
-      token,
-      enableDebug: true,
-      isTokenThere: true,
-    );
-  }
-
 
   postserviceListAllBothRequest(
       token,type) async {
