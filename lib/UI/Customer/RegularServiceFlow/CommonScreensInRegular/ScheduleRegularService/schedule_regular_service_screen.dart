@@ -287,7 +287,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("$totalEstimatedPrice",
+                    Text("₦ $totalEstimatedPrice",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -454,7 +454,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 ),
               ),
               SizedBox(
-                height: 1,
+                height: 3,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +462,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                 children: [
                   Text("Estimated price",
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                       fontFamily: "Samsung_SharpSans_Medium",
                       fontWeight: FontWeight.w200,
                       color: Colors.black,
