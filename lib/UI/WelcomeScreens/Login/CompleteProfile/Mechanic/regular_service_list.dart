@@ -234,15 +234,15 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.only(
-                          top: size.height * 0.023,
+                          top: size.height * 0.020,
                           bottom: size.height * 0.019
                       ),
                       color: CustColors.pale_grey,
                       height: size.height * 0.80, //0.764
                       child: Container(
                         margin: EdgeInsets.only(
-                          left: size.width * 0.049,
-                          right: size.width * 0.049,
+                          left: size.width * 0.045,
+                          right: size.width * 0.045,
                           //top: size.height * 0.03,
                           bottom: size.height * 0.030
                         ),
@@ -418,7 +418,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       child: Row(
                         children: [
                           Transform.scale(
-                            scale: .4,
+                            scale: .6,
                             child: Checkbox(
                               activeColor: CustColors.light_navy,
                               value: _regularIsChecked![getItemIndex(parentIndex,index)],

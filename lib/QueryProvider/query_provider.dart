@@ -1089,7 +1089,7 @@ class QueryProvider {
       _query = """ 
     query
     {
-        serviceListAll(search: $search, count: $count, categoryId: $categoryId) {
+        serviceListAll(search: null, count: $count, categoryId: $categoryId) {
           id
           serviceName
           description
