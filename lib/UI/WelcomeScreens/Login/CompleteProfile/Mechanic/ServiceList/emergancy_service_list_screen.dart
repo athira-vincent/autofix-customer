@@ -56,7 +56,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", "", null, "1");
       //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
@@ -146,7 +146,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
-                      6.0,14.0,6.0,6.0
+                      6.0,6.0,6.0,6.0
                   ),
                   child: Container(
                       alignment: Alignment.centerLeft,
@@ -199,7 +199,11 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                               textAlignVertical: TextAlignVertical.center,
                               onChanged: (val){
                                 print(val);
-                                _homeCustomerBloc.postSearchServiceRequest("$authToken", val,"25","1");
+                                if(val.isNotEmpty){
+                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", val, "25","1");
+                                }else{
+                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+                                }
                               },
                               textAlign: TextAlign.left,
                               style: Styles.searchTextStyle01,

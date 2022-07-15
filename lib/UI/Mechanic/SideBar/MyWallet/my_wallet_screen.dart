@@ -251,18 +251,17 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       //     fit: BoxFit.fill,
                                       //     ),
                                       backgroundColor: Colors.white,
-                                      child:
-                                      ClipOval(
-                                        child:
-                                       // SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                      Image.network(
-                                            _BookingDatum![0].mechanic!.mechanic![0].profilePic,
-                                        fit: BoxFit.fill,
-                                        height: 115,
-                                        width: 115,
-                                        )
+                                      child: ClipOval(
+                                        child: profileUrl != null && profileUrl != "" ?
+                                          Image.network(
+                                            profileUrl,
+                                            fit: BoxFit.fill,
+                                          )
+                                            :
+                                          SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
                                       )
-                                  ))
+                                  )
+                              )
                           ),
                         ),
                       ),
@@ -303,7 +302,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                     children:[
                                       Text("₦ ",
                                         style: Styles.myWalletCardText01,),
-                                      Text('${_MyWallet!.totalPayment}',
+                                      Text( _MyWallet!.totalPayment! > 0 ? '${_MyWallet!.totalPayment}' : "0",
                                         style: Styles.myWalletCardText01,)
                            ]
                               ),
