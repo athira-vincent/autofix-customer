@@ -246,15 +246,23 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                               child:Container(
                                   child:CircleAvatar(
                                       radius: 75,
+                                      // child:Image.network(
+                                      //         _BookingDatum![0].mechanic!.mechanic![0].profilePic,
+                                      //     fit: BoxFit.fill,
+                                      //     ),
                                       backgroundColor: Colors.white,
-                                      child: ClipOval(
+                                      child:
+                                      ClipOval(
                                         child:
-                                        SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                        /*Image.network(
+                                       // SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                      Image.network(
                                             _BookingDatum![0].mechanic!.mechanic![0].profilePic,
                                         fit: BoxFit.fill,
-                                        )*/
-                                      )))
+                                        height: 115,
+                                        width: 115,
+                                        )
+                                      )
+                                  ))
                           ),
                         ),
                       ),
