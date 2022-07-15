@@ -118,12 +118,10 @@ import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
                     ),*/
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
-                    home:SplashScreen(),
+                   // home:SplashScreen(),
 
-                    //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual, userType: TextStrings.user_mechanic),
-                    //home: RegularServiceListScreen(),
-                    //home: EmergencyServiceListScreen(),
-                    //home: BothServiceListScreen(),
+                    home: MechanicMyWalletScreen(),
+
 
                   );
                 },
