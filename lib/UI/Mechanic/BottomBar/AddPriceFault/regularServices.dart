@@ -218,7 +218,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                     ),
                     child: TextField(
                       onChanged: (value){
-                        if(value.length!=0)
+                        if(value.length!=0){
                           _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
                               authToken,
                               page,
@@ -226,6 +226,16 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               value,
                               mechanicId,
                               1);
+                        }else{
+                          _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              authToken,
+                              page,
+                              size,
+                              search,
+                              mechanicId,
+                              2);
+                        }
+
                       },
                       decoration:
                       InputDecoration(

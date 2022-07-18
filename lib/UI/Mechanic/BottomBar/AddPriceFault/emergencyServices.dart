@@ -219,14 +219,24 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                     ),
                     child: TextField(
                       onChanged: (value){
-                        if(value.length!=0)
-                        _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
-                            authToken,
-                            page,
-                            size,
-                            value,
-                            mechanicId,
-                            1);
+                        if(value.length!=0){
+                          _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              authToken,
+                              page,
+                              size,
+                              value,
+                              mechanicId,
+                              1);
+                        }else{
+                          _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
+                              authToken,
+                              page,
+                              size,
+                              search,
+                              mechanicId,
+                              1);
+                        }
+
                       },
                       decoration:
                       InputDecoration(
