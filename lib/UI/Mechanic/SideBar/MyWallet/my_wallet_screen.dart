@@ -94,7 +94,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                 child: Stack(
                 children: [
                   BottomLightBackground(size),
-
                   Column(
                     children: [
                       appBarCustomUi(size),
