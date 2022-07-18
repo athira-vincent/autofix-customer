@@ -59,8 +59,8 @@ class MyWallet {
   });
 
   int jobCount;
-  int monthlySum;
-  int? totalPayment;
+  var monthlySum;
+  var totalPayment;
   List<BookingDatum>? bookingData;
   List<PayArr>? payArr;
 
