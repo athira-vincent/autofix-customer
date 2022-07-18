@@ -27,6 +27,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   late MechanicMyWalletMdl mechanicMyWalletMdl;
   List<BookingDatum>? _BookingDatum=[];
   MyWallet? _MyWallet;
+  bool _isLoadingPage = true;
 
   @override
   void initState() {
@@ -53,13 +54,13 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     _mechanicWalletBloc.postMechanicMyWallet.listen((value) {
       if(value.status == "error"){
         setState(() {
-          //_isLoading = false;
+          _isLoadingPage = false;
          // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
         setState(() {
+          _isLoadingPage = false;
           _BookingDatum = value.data!.myWallet!.bookingData;
-
           _MyWallet = value.data!.myWallet;
           //mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
@@ -79,74 +80,108 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Container(
-            height: size.height,
-            width: size.width,
-            //color: Colors.blue,
-            child: SingleChildScrollView(
-              child: Container(
-                child: Stack(
-                  children: [
-                    BottomLightBackground(size),
-                    
-                    Column(
-                      children: [
-                        appBarCustomUi(size),
-                        profileImageAndWalletTotal(),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,12,0,0),
-                          child: Container(
-                            height: 120,
+          child:
+          _isLoadingPage == true ?
+            Center(
+              child: CircularProgressIndicator(color: CustColors.light_navy,),)
+            :
+            Container(
+              height: size.height,
+              width: size.width,
+              //color: Colors.blue,
+              child: SingleChildScrollView(
+                child: Container(
+                  child: Stack(
+                    children: [
+                      BottomLightBackground(size),
+                      Column(
+                        children: [
+                          appBarCustomUi(size),
+                          profileImageAndWalletTotal(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0,12,0,0),
+                            child: Container(
+                              height: 120,
+                              margin: EdgeInsets.only(
+                                left: size.width * 9 / 100,
+                                right: size.width * 9 / 100,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SubTitleTextRound(size,"Total job done",_MyWallet!.jobCount > 0 ? _MyWallet!.jobCount.toString() : "0"),
+                                  SubTitleTextRound(size,"All payments", _MyWallet!.totalPayment! > 0 ? _MyWallet!.totalPayment.toString() : "0"),
+                                  SubTitleTextRound(size,"Monthly collection", _MyWallet!.monthlySum > 0 ? _MyWallet!.monthlySum.toString() : "0"),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Container(
                             margin: EdgeInsets.only(
-                              left: size.width * 9 / 100,
-                              right: size.width * 9 / 100,
+                             //top: size.height * .2 / 100,
+                              bottom: size.width * .2 / 100,
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SubTitleTextRound(size,"Total job done",_MyWallet!.jobCount > 0 ? _MyWallet!.jobCount.toString() : "0"),
-                                SubTitleTextRound(size,"All payments", _MyWallet!.totalPayment! > 0 ? _MyWallet!.totalPayment.toString() : "0"),
-                                SubTitleTextRound(size,"Monthly collection", _MyWallet!.monthlySum > 0 ? _MyWallet!.monthlySum.toString() : "0"),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                        top: size.height * 1.5 / 100,
+                                        left: size.width * 9 / 100,
+                                        right: size.width * 9 / 100,
+                                      ),
+                                      child: Text("Todays payments",
+                                        style: Styles.myWalletTitleText03,)
+                                  ),
+                                ),
+                                Spacer(),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                        top: size.height * 1.5 / 100,
+                                       //left: size.width * 9 / 100,
+                                        right: size.width * 10.5 / 100,
+                                      ),
+                                      child: Text(
+                                        _MyWallet!.totalPayment.toString(),
+                                        //"- ₦ 15000",
+                                        style: Styles.myWalletTitleText04,)
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ),
 
-                        Container(
-                          margin: EdgeInsets.only(
-                           //top: size.height * .2 / 100,
-                            bottom: size.width * .2 / 100,
-                          ),
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                      top: size.height * 1.5 / 100,
-                                      left: size.width * 9 / 100,
-                                      right: size.width * 9 / 100,
-                                    ),
-                                    child: Text("Todays payments",
-                                      style: Styles.myWalletTitleText03,)
-                                ),
-                              ),
-                              Spacer(),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                      top: size.height * 1.5 / 100,
-                                     //left: size.width * 9 / 100,
-                                      right: size.width * 10.5 / 100,
-                                    ),
-                                    child: Text(
-                                      _MyWallet!.totalPayment.toString(),
-                                      //"- ₦ 15000",
-                                      style: Styles.myWalletTitleText04,)
-                                ),
-                              ),
-                            ],
+                          // listTileItem(size,
+                          //     _BookingDatum![0].customer!.firstName,
+                          //     _BookingDatum![0].bookedTime,
+                          //     _BookingDatum![0].serviceCharge.toString()),
+                          // //Spacer(),
+                          // listTileItem(size,
+                          //     _BookingDatum![0].customer!.firstName,
+                          //     _BookingDatum![0].bookedTime,
+                          //     _BookingDatum![0].serviceCharge.toString()),
+                          //
+                          // listTileItem(size,
+                          //     _BookingDatum![0].customer!.firstName,
+                          //     _BookingDatum![0].bookedTime,
+                          //     _BookingDatum![0].serviceCharge.toString()),
+                          // listTileItem(size,
+                          //     "John Carlo","11:30","₦ 5000"),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _BookingDatum!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                child: listTileItem(size,
+                                    '${_BookingDatum![0].customer!.firstName}',
+                                     '${_BookingDatum![0].bookedTime}',
+                                    '${_BookingDatum![0].serviceCharge.toString()}'),
+                              );
+                          }
                           ),
                         ),
 
