@@ -302,7 +302,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                     children:[
                                       Text("₦ ",
                                         style: Styles.myWalletCardText01,),
-                                      Text( _MyWallet!.totalPayment! > 0 ? '${_MyWallet!.totalPayment}' : "0",
+                                      Text( _MyWallet!.totalPayment > 0 ? '${_MyWallet!.totalPayment}' : "0",
                                         style: Styles.myWalletCardText01,)
                            ]
                               ),
