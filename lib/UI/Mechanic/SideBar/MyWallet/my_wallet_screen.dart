@@ -183,9 +183,39 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                               );
                           }
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+
+                        // listTileItem(size,
+                        //     _BookingDatum![0].customer!.firstName,
+                        //     _BookingDatum![0].bookedTime,
+                        //     _BookingDatum![0].serviceCharge.toString()),
+                        // //Spacer(),
+                        // listTileItem(size,
+                        //     _BookingDatum![0].customer!.firstName,
+                        //     _BookingDatum![0].bookedTime,
+                        //     _BookingDatum![0].serviceCharge.toString()),
+                        //
+                        // listTileItem(size,
+                        //     _BookingDatum![0].customer!.firstName,
+                        //     _BookingDatum![0].bookedTime,
+                        //     _BookingDatum![0].serviceCharge.toString()),
+                        // listTileItem(size,
+                        //     "John Carlo","11:30","₦ 5000"),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _BookingDatum!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              child: listTileItem(size,
+                                  '${_BookingDatum![index].customer!.firstName}',
+                                   '${_BookingDatum![index].bookedTime}',
+                                  '${_BookingDatum![index].serviceCharge.toString()}'),
+                            );
+                        }
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -307,7 +337,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                     children:[
                                       Text("₦ ",
                                         style: Styles.myWalletCardText01,),
-                                      Text( _MyWallet!.totalPayment! > 0 ? '${_MyWallet!.totalPayment}' : "0",
+                                      Text( _MyWallet!.totalPayment > 0 ? '${_MyWallet!.totalPayment}' : "0",
                                         style: Styles.myWalletCardText01,)
 
                            ]

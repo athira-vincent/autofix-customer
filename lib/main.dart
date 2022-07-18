@@ -120,7 +120,7 @@ import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 
                     home:SplashScreen(),
 
-                   // home: MechanicMyWalletScreen(),
+                  //  home: MechanicMyWalletScreen(),
 
 
                   );
