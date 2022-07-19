@@ -171,18 +171,21 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                       //     _BookingDatum![0].serviceCharge.toString()),
                       // listTileItem(size,
                       //     "John Carlo","11:30","₦ 5000"),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _BookingDatum!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              child: listTileItem(size,
-                                  '${_BookingDatum![index].customer!.firstName}',
-                                  '${_BookingDatum![index].bookedTime}',
-                                  '${_BookingDatum![index].serviceCharge.toString()}'),
-                            );
-                          }
-                      ),
+                      _BookingDatum!.length != 0 ?
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _BookingDatum!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                child: listTileItem(size,
+                                    '${_BookingDatum![index].customer!.firstName}',
+                                    '${_BookingDatum![index].bookedTime}',
+                                    '${_BookingDatum![index].serviceCharge.toString()}'),
+                              );
+                            }
+                        )
+                          :
+                        Container(),
                     ],
                   ),
                 ],
