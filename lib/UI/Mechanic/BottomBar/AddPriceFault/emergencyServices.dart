@@ -297,7 +297,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                               setState(() {
 
-
                                               });
                                             }
                                           });
@@ -335,7 +334,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
