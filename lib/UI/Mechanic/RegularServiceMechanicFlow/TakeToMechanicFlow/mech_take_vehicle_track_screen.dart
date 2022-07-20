@@ -1015,7 +1015,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     ),
                   ),
                 )
-                : paymentRecieved=='-1'
+                : paymentRecieved == '-1'
                     ? Container(
                         height: 23,
                         width: 64,

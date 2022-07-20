@@ -2,7 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/direct_payment_regular_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
@@ -1548,7 +1548,10 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DirectPaymentRegularScreen(isMechanicApp: false,isPaymentFailed: false,bookingId:widget.bookedId)));
+                                      builder: (context) => RegularDirectPaymentScreen(
+                                        firebaseCollection: ,
+                                        bookingId: ,
+                                      )));
                             }
                           else
                           {
