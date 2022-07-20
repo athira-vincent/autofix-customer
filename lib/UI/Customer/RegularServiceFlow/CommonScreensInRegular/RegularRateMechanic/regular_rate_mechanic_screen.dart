@@ -12,17 +12,22 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RateMechanicScreen extends StatefulWidget {
+class RegularRateMechanicScreen extends StatefulWidget {
+  String firebaseCollection;
+  String bookingId;
 
-  RateMechanicScreen();
+  RegularRateMechanicScreen({
+    required this.firebaseCollection,
+    required this.bookingId,
+});
 
   @override
   State<StatefulWidget> createState() {
-    return _RateMechanicScreenState();
+    return _RegularRateMechanicScreenState();
   }
 }
 
-class _RateMechanicScreenState extends State<RateMechanicScreen> {
+class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
 
   double _rating = 1.0;
   double _initialRating = 1.0;
@@ -31,9 +36,8 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String authToken="";
   String userName="";
-  String bookingIdEmergency="";
   String mechanicName="";
-  String totalEstimatedTime = "0";
+  //String totalEstimatedTime = "0";
   String totalEstimatedCost = "0";
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -55,13 +59,12 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('authToken authToken>>>>>>>>> ' + authToken.toString());
     });
-    await _firestore.collection("ResolMech").doc('$bookingIdEmergency').snapshots().listen((event) {
+    await _firestore.collection("${widget.firebaseCollection}").doc("${widget.bookingId}").snapshots().listen((event) {
       setState(() {
-        totalEstimatedTime = event.get('totalTimeTakenByMechanic');
-        totalEstimatedCost = event.get('updatedServiceCost');
+        //totalEstimatedTime = event.get('totalTimeTakenByMechanic');
+        totalEstimatedCost = event.get('serviceTotalAmount');
         mechanicName = event.get('mechanicName');
         print('mechanicName authToken>>>>>>>>> ' + mechanicName.toString());
 
@@ -87,7 +90,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                     rateMechanicScreenTitle(size),
                     rateMechanicScreenImage(size),
 
-                    Container(
+                    /*Container(
                       margin: EdgeInsets.only(
                           top: size.height * 2 / 100,
                           left: size.width * 6.5 / 100,
@@ -109,8 +112,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                           rateMechanicScreenTimeCostWidget(size,"Amount you paid","₦ ","$totalEstimatedCost",false),
                         ],
                       ),
-                    ),
-
+                    ),*/
                   ],
                 ),
               ),
@@ -254,11 +256,10 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                       onTap: (){
                         print("On Press Continue");
                         print("${_feedBackController.text}");
-                        print("${bookingIdEmergency}");
                         print("${_rating}");
 
                         _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
-                            authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
+                            authToken,_rating, _feedBackController.text, widget.bookingId, "2");
 
                         setDeactivate();
 
@@ -338,7 +339,6 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                 color: CustColors.light_navy,
                 letterSpacing: .5
             ),),
-
           ],
         ),
       ],

@@ -1459,8 +1459,8 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
                         child: Text('Make payment',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: const Color(0xff919191),
-                            fontSize: 10
+                              color: CustColors.light_navy,
+                              fontSize: 10
                           ),
                         ),
                       ),

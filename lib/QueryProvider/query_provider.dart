@@ -2450,7 +2450,7 @@ class QueryProvider {
       token,rating, feedback, bookingId, bookingType) async {
     String _query = """ 
     mutation {
-        addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
+        addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: $bookingType) {
           message
         }
       }

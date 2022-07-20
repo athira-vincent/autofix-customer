@@ -1747,7 +1747,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(isPaymentFinished == "-1"?'Payment received.':'Payment initiated.',
+                            Text(isPaymentFinished == "-1" ? 'Payment received.':'Payment initiated.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
@@ -1774,7 +1774,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                         child: Text('Add payment',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: const Color(0xff919191),
+                              color: CustColors.light_navy,
                               fontSize: 10
                           ),
                         ),

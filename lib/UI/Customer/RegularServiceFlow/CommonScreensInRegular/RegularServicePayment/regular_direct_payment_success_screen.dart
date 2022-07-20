@@ -3,22 +3,27 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DirectPaymentSuccessScreen extends StatefulWidget {
-
-  DirectPaymentSuccessScreen();
+class RegularDirectPaymentSuccessScreen extends StatefulWidget {
+  String firebaseCollection;
+  String bookingId;
+  RegularDirectPaymentSuccessScreen({
+    required this.firebaseCollection,
+    required this.bookingId,
+});
 
   @override
   State<StatefulWidget> createState() {
-    return _DirectPaymentSuccessScreenState();
+    return _RegularDirectPaymentSuccessScreenState();
   }
 }
 
-class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen> {
+class _RegularDirectPaymentSuccessScreenState extends State<RegularDirectPaymentSuccessScreen> {
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -53,15 +58,15 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
       print('serviceIdEmergency>>>>>>>> ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>> ' + mechanicIdEmergency.toString());
       print('DirectPaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-      updateToCloudFirestoreMechanicCurrentScreenDB();
+      //updateToCloudFirestoreMechanicCurrentScreenDB();
 
     });
   }
 
   void updateToCloudFirestoreMechanicCurrentScreenDB() {
     _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
+        .collection("${widget.firebaseCollection}")
+        .doc("${widget.bookingId}")
         .update({
             "customerFromPage" : "C9",
           })
@@ -186,11 +191,13 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
               child: reviewLaterButton(size)),
           InkWell(
             onTap: (){
-
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RateMechanicScreen()));
+                      builder: (context) => RegularRateMechanicScreen(
+                        bookingId: widget.bookingId,
+                        firebaseCollection: widget.firebaseCollection,
+                      )));
             },
               child: reviewNowButton(size)),
         ],
