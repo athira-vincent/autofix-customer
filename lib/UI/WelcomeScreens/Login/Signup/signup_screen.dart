@@ -231,7 +231,7 @@ class _SignupScreenState extends State<SignupScreen> {
               "${value.data!.signUp!.customer?.firstName.toString()}",
               "${value.data!.signUp!.customer?.id.toString()}"
             );
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => OtpVerificationScreen(

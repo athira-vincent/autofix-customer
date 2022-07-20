@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 
 import 'UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
+import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 
 
 
@@ -120,7 +121,7 @@ import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 
                     home:SplashScreen(),
 
-                  //  home: MechanicMyWalletScreen(),
+                    //home: OtpVerificationScreen(),
 
 
                   );
