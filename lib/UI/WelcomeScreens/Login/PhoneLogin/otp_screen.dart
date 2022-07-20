@@ -196,7 +196,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      'Enter your code',    //'Enter your code',
+                                      'Enter code send to your phone',    //'Enter your code',
                                       style: Styles.textHeadLogin,
                                     ),
                                   ),

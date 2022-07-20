@@ -283,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        Navigator.pushReplacement(
+                                                        Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
@@ -432,7 +432,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 InkWell(
                                                   onTap: (){
 
-                                                    Navigator.pushReplacement(
+                                                    Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>

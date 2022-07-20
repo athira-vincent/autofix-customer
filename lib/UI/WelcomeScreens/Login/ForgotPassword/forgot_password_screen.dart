@@ -341,6 +341,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           )),
     );
   }
+
 }
 
 class MyBehavior extends ScrollBehavior {
