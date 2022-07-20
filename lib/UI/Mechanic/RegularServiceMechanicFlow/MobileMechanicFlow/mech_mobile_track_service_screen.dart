@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/customer_track_screen.dart';
@@ -116,13 +117,13 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
 
   void updateToCloudFirestoreDB(String key, String value ) {
     _firestore
-        .collection("Regular-MobileMech")
+        .collection("${TextStrings.firebase_mobile_mech}")
         .doc('${widget.bookingId}')
         .update({
           "$key" : "$value",
           "${key}Time" : "${DateFormat("hh:mm a").format(DateTime.now())}",
         })
-        .then((value) => print("Location Added"))
+        .then((value) => print("Location Added >>> ${DateFormat("hh:mm a").format(DateTime.now())}"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
@@ -166,7 +167,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
 
                 isWorkFinished == "-1" && isPayment == "-1" ?
                     paymentOptionInActiveUi(size)
-                    : isWorkFinished == "0" && isPayment == "-1" ?
+                    : (isWorkFinished == "0" && isPayment == "-1") || (isWorkFinished == "0" && isPayment == "0") ?
                       paymentOptionWaitingActiveUi(size)
                     : isWorkFinished == "0" && isPayment == "1" ?
                       paymentOptionActiveUi(size)

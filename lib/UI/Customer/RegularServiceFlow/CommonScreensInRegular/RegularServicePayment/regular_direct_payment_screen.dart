@@ -88,7 +88,7 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
       setState(() {
         isPaymentAccepted = querySnapshot.get("isPayment");
         print('isPaymentAccepted ++++ $isPaymentAccepted');
-        if(isPaymentAccepted == "1")
+        if(isPaymentAccepted != "5")
         {
           buttonText = "Waiting";
           if(paymentSendStatus=="5")

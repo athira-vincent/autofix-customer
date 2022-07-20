@@ -23,8 +23,10 @@ import '../../../../Mechanic/mechanic_home_screen.dart';
 class CustServiceRegularDetailsScreen extends StatefulWidget {
 
   final String bookingId;
+  final String firebaseCollection;
   CustServiceRegularDetailsScreen({
     required this.bookingId,
+    required this.firebaseCollection,
 });
 
   @override
@@ -48,6 +50,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
   @override
   void initState() {
     super.initState();
+    firebaseCollection = widget.firebaseCollection;
     bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
@@ -82,13 +85,13 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
         setState(() {
           isLoading = false;
           _BookingDetails = value.data!.bookingDetails;
-          if(_BookingDetails!.regularType.toString() == "1"){
+          /*if(_BookingDetails!.regularType.toString() == "1"){
             firebaseCollection = TextStrings.firebase_pick_up;
           }else if(_BookingDetails!.regularType.toString() == "2"){
             firebaseCollection = TextStrings.firebase_mobile_mech;
           }else if(_BookingDetails!.regularType.toString() == "3"){
             firebaseCollection = TextStrings.firebase_take_vehicle;
-          }
+          }*/
           listenToCloudFirestoreDB();
         });
       }

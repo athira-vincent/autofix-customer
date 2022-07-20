@@ -2683,6 +2683,7 @@ class QueryProvider {
           id
           bookingCode
           reqType
+          regularType
           bookStatus
           totalPrice
           tax
