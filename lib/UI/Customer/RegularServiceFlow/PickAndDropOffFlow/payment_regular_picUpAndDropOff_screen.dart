@@ -232,6 +232,7 @@ class _PaymentRegularScreenState extends State<PaymentRegularScreen> {
     );
   }
 
+
   Widget paymentContinueButton(Size size){
     return Align(
       alignment: Alignment.centerRight,
