@@ -50,6 +50,7 @@ class CustCompletedOrder {
     required this.id,
     required this.bookingCode,
     required this.reqType,
+    required this.regularType,
     required this.bookStatus,
     required this.totalPrice,
     required this.tax,
@@ -79,6 +80,7 @@ class CustCompletedOrder {
   int id;
   String bookingCode;
   int reqType;
+  int regularType;
   int bookStatus;
   int totalPrice;
   var tax;
@@ -108,6 +110,7 @@ class CustCompletedOrder {
     id: json["id"] == null ? null : json["id"],
     bookingCode: json["bookingCode"] == null ? null : json["bookingCode"],
     reqType: json["reqType"] == null ? null : json["reqType"],
+    regularType: json["regularType"] == null ? null : json["regularType"],
     bookStatus: json["bookStatus"] == null ? null : json["bookStatus"],
     totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
     tax: json["tax"] == null ? null : json["tax"],
@@ -138,6 +141,7 @@ class CustCompletedOrder {
     "id": id == null ? null : id,
     "bookingCode": bookingCode == null ? null : bookingCode,
     "reqType": reqType == null ? null : reqType,
+    "regularType": regularType == null ? null : regularType,
     "bookStatus": bookStatus == null ? null : bookStatus,
     "totalPrice": totalPrice == null ? null : totalPrice,
     "tax": tax == null ? null : tax,

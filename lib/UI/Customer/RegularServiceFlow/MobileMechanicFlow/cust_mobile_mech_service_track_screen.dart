@@ -613,7 +613,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               Expanded(
                 flex: 200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 22.0,top: 01),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1123,7 +1123,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
-                        updateToCloudFirestoreDB("isPayment","0");
+                        //updateToCloudFirestoreDB("isPayment","0");
                         Navigator.push(
                             context,
                             MaterialPageRoute(

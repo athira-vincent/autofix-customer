@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
@@ -388,6 +389,10 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                   MaterialPageRoute(
                                     builder: (context) => CustServiceRegularDetailsScreen(
                                       bookingId: '${CustomerUpcomingServicesList?.custCompletedOrders?[index].id}',
+                                      firebaseCollection: CustomerUpcomingServicesList?.custCompletedOrders?[index].regularType.toString() == "1"
+                                          ? TextStrings.firebase_pick_up :
+                                      CustomerUpcomingServicesList?.custCompletedOrders?[index].regularType.toString() == "2"
+                                          ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                     ),
                                   ));
                             },
@@ -690,6 +695,10 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                       MaterialPageRoute(
                                         builder: (context) => CustServiceRegularDetailsScreen(
                                           bookingId: '${CustomerCompletedServicesList?.custCompletedOrders?[index].id}',
+                                          firebaseCollection: CustomerCompletedServicesList?.custCompletedOrders?[index].regularType.toString() == "1"
+                                              ? TextStrings.firebase_pick_up :
+                                          CustomerCompletedServicesList?.custCompletedOrders?[index].regularType.toString() == "2"
+                                              ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                         ),
                                       ));
                                 },
@@ -993,6 +1002,10 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                     MaterialPageRoute(
                                       builder: (context) => CustServiceRegularDetailsScreen(
                                         bookingId: '${CustomerAllServicesList?.custCompletedOrders?[index01].id}',
+                                        firebaseCollection: CustomerAllServicesList?.custCompletedOrders?[index01].regularType.toString() == "1"
+                                            ? TextStrings.firebase_pick_up :
+                                        CustomerAllServicesList?.custCompletedOrders?[index01].regularType.toString() == "2"
+                                            ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                       ),
                                     ));
                               },

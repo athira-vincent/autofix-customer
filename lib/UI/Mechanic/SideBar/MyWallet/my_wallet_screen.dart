@@ -290,7 +290,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       style: Styles.myWalletCardText02,)
                                 ),
                               )
-
                           ),
                         ),
                       ),
@@ -313,7 +312,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                         style: Styles.myWalletCardText01,),
                                       Text( _MyWallet!.totalPayment > 0 ? '${_MyWallet!.totalPayment}' : "0",
                                         style: Styles.myWalletCardText01,)
-
                            ]
                               ),
                               ),
@@ -454,9 +452,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
           ],
         ),
       ),
-
     );
-
   }
-
 }
