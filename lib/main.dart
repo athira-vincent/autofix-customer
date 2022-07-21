@@ -106,8 +106,6 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 
                     home:SplashScreen(),
 
-                  //  home: MechanicMyWalletScreen(),
-
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",
                       bookingId: "1442",

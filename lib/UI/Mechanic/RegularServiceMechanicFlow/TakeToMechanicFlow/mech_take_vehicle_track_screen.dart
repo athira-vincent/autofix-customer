@@ -1287,7 +1287,6 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   //   );
   // }
 
-
   Widget paymentOptionInActiveUi(Size size){
     return Container(
       child: Column(
@@ -1656,7 +1655,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
 
   Widget completedUi(Size size){
     return Container(
-      child: completed == '-1'
+      child: isPayment == '5'
       ? Row(
         children: [
           Padding(
@@ -1668,7 +1667,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   height:50,
                   width: 50,
                   decoration: BoxDecoration(
-                      color: CustColors.light_navy05,
+                      color: CustColors.light_navy,
                       borderRadius: BorderRadius.circular(25)
                     //more than 50% of width makes circle
                   ),
@@ -1676,8 +1675,9 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
-                    fit: BoxFit.contain,),
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
+                      fit: BoxFit.contain,
+                      color: CustColors.white_02),
                 ),
               ],
             ),
@@ -1711,7 +1711,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   height:50,
                   width: 50,
                   decoration: BoxDecoration(
-                      color: CustColors.light_navy,
+                      color: CustColors.light_navy05,
                       borderRadius: BorderRadius.circular(25)
                     //more than 50% of width makes circle
                   ),
@@ -1719,9 +1719,8 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                 Container(
                   height: 25,
                   width: 25,
-                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
-                    fit: BoxFit.contain,
-                  color: CustColors.white_02),
+                  child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
+                    fit: BoxFit.contain,),
                 ),
               ],
             ),
