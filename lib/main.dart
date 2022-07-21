@@ -104,7 +104,9 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
-                    home:SplashScreen(),
+                   // home:SplashScreen(),
+
+                    home: MechanicMyWalletScreen(),
 
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",
