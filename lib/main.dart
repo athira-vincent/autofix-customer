@@ -19,8 +19,7 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
-import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
+import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
@@ -103,29 +102,14 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                     theme: ThemeData(
                       primaryColor: Colors.white,
                     ),
-                   /* home: MechPickUpTrackScreen(
-                      mechanicAddress: "Address",
-                      bookedDate: 'Mar 7,2022',
-                      latitude: "10.0159",
-                      bookedId: "1363",
-                      longitude: "76.3419",7ui
-                      mechanicName: "Minnu Kurian",
-                      pickingDate: 'Mar 8,2022',
-                    ),*/
-                    /*home: CustTakeVehicleTrackScreen(
-                      bookedDate: 'Mar 7,2022',
-                      latitude: "9.90874",
-                      longitude: "76.28271",
-                      goTime: '12:00',
-                      bookedId: '1142',
-                    ),*/
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
                     home:SplashScreen(),
 
-                    //home: CustTakeVehicleTrackScreen(),
-
-
+                    /*home: RegularRateMechanicScreen(
+                      firebaseCollection: "Regular-MobileMech",
+                      bookingId: "1442",
+                    ),*/
                   );
                 },
               ),

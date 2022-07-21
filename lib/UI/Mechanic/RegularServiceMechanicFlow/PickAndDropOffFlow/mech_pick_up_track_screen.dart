@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/find_your_cust_regular_pickup__screen.dart';
@@ -32,8 +33,6 @@ class MechPickUpTrackScreen extends StatefulWidget{
     required this.longitude,
     required this.mechanicAddress,
     required this.mechanicName,
-
-
   });
 
   @override
@@ -60,7 +59,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
   String isWorkFinished = "-1";
   String isStartedFromLocationForDropOff = "-1";
   String isDropOff = "-1";
-  String isPaymentFinished = "-1";
+  String isPayment = "-1";
   String customerLatitude = "", customerLongitude = "";
 
 
@@ -91,7 +90,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         isWorkFinished = event.get("isWorkFinished");
         isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
         isDropOff = event.get("isDropOff");
-        isPaymentFinished = event.get("isPaymentFinished");
+        isPayment = event.get("isPayment");
         customerLatitude = event.get("customerLatitude");
         customerLongitude = event.get("customerLongitude");
 
@@ -122,7 +121,16 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                 workCompletedUi(size),                          // - 6
                 mechanicStartedToCustomerLoationForDropOffUi(size), // - 13
                 mechanicReachedDropOffUi(size),
-                addPaymentUi(size),               // - 7, 8
+
+                isWorkFinished == "-1" && isPayment == "-1" ?
+                paymentOptionInActiveUi(size)
+                    : (isWorkFinished == "0" && isPayment == "-1") || (isWorkFinished == "0" && isPayment == "0") ?
+                paymentOptionWaitingActiveUi(size)
+                    : isWorkFinished == "0" && isPayment == "1" ?
+                paymentOptionActiveUi(size)
+                    : paymentOptionFinishedUi(size),
+
+                //addPaymentUi(size),               // - 7, 8
                 finishTrackUi(size),
 
                 textButtonUi(size),
@@ -359,10 +367,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                       InkWell(
                         onTap: (){
 
-
                         },
                         child:
-
                         Container(
                           height: 25,
                           width: 60,
@@ -1703,7 +1709,373 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     );
   }
 
-  Widget addPaymentUi(Size size){
+  Widget paymentOptionInActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      /*Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),*/
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment ',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      /*Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        updateFirestoreDB("isPayment","5");
+                      },
+                      child: Text('Received',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: CustColors.white_02,
+                            fontSize: 08,
+                          )
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionWaitingActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment waiting...',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionFinishedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,
+                        //color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Received Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                     /* SizedBox(height: 05),
+                      Text('at ${isPaymentTime}',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),*/
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  /*Widget addPaymentUi(Size size){
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
@@ -1747,19 +2119,19 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(isPaymentFinished == "-1"?'Payment received.':'Payment initiated.',
+                            Text(isPaymentFinished == "-1" ? 'Payment received.':'Payment initiated.',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            /*SizedBox(height: 02),
+                            *//*SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)*/
+                              ),)*//*
                           ],
                         ),
                       ),
@@ -1774,7 +2146,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                         child: Text('Add payment',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: const Color(0xff919191),
+                              color: CustColors.light_navy,
                               fontSize: 10
                           ),
                         ),
@@ -1835,7 +2207,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontWeight: FontWeight.w800,
                                 fontFamily: 'SamsungSharpSans-Bold',
                               ),),
-                            /*SizedBox(height: 02),
+                            *//*SizedBox(height: 02),
                             Text('${widget.pickingDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
@@ -1843,7 +2215,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   fontWeight: FontWeight.w800,
                                   fontFamily: 'SamsungSharpSans-Bold',
                                   color: const Color(0xff9b9b9b)
-                              ),)*/
+                              ),)*//*
                           ],
                         ),
                       ),
@@ -1895,13 +2267,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               ),
             ),
     );
-  }
+  }*/
 
   Widget finishTrackUi(Size size){
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
-        child: isPaymentFinished == "-1"
+        child: isPayment == "-1"
             ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
@@ -2094,7 +2466,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
             'isWorkFinished': "$isWorkFinished",
             'isStartedFromLocationForDropOff': "$isStartedFromLocationForDropOff",
             'isDropOff': "$isDropOff",
-            'isPaymentFinished': "$isPaymentFinished",
+            'isPayment': "$isPaymentFinished",
           })
         .then((value) => print("Location Added"))
         .catchError((error) =>
@@ -2102,5 +2474,17 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
 
   }
 
+  void updateFirestoreDB(String key, String value ) {
+    _firestore
+        .collection("${TextStrings.firebase_pick_up}")
+        .doc('${widget.bookedId}')
+        .update({
+      "$key" : "$value",
+      "${key}Time" : "${DateFormat("hh:mm a").format(DateTime.now())}",
+    })
+        .then((value) => print("Location Added >>> ${DateFormat("hh:mm a").format(DateTime.now())}"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
 }

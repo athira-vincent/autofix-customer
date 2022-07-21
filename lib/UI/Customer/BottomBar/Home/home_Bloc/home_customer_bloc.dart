@@ -217,10 +217,10 @@ class HomeCustomerBloc {
   Stream<AddRatingMdl> get postAddMechanicReviewAndRatingResponse => postAddMechanicReviewAndRatingList.stream;
 
   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType) async {
+      token,rating, feedback, bookingId, ) async {
 
     AddRatingMdl _addRatingMdl = await repository. postAddMechanicReviewAndRatingRequest(
-        token,rating, feedback, bookingId, bookingType);
+        token,rating, feedback, bookingId, );
     postAddMechanicReviewAndRatingList.sink.add(_addRatingMdl);
   }
 

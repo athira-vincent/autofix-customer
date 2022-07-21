@@ -252,9 +252,9 @@ class CustomerApiProvider {
   }
 
   Future<AddRatingMdl>    postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType)async {
+      token,rating, feedback, bookingId, )async {
     Map<String, dynamic> _resp = await _queryProvider. postAddMechanicReviewAndRatingRequest(
-        token,rating, feedback, bookingId, bookingType);
+        token,rating, feedback, bookingId, );
 
     print('$_resp >>>>>>>>>>>>>>>>>>+++++++++++++++++++_resp');
     // ignore: unnecessary_null_comparison

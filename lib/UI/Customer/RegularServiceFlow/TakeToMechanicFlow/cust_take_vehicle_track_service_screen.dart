@@ -1,14 +1,13 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/TakeToMechanicFlow/payment_regular_takeVehicleToMechanic_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularServicePayment/regular_payment_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
 import 'find_mechanic_by_customer_screen.dart';
 
 class CustTakeVehicleTrackScreen extends StatefulWidget {
@@ -44,9 +43,9 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
   String isArrived = "-1";
   String isReachedServiceCenter = "-1";
   String isWorkStarted = "-1";
-  String isWorkFinished = "-1";
-  String paymentStatus = "-1";
-  String paymentRecieved = "-1";
+  String isWorkFinished = "-1", isPayment = "-1";
+  /*String paymentStatus = "-1";
+  String paymentRecieved = "-1";*/
   String completed = "-1";
 
   @override
@@ -66,8 +65,9 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
         isReachedServiceCenter = event.get("isReachedServiceCenter");
         isWorkStarted = event.get("isWorkStarted");
         isWorkFinished = event.get("isWorkFinished");
-        paymentStatus = event.get("paymentStatus");
-        paymentRecieved = event.get("paymentRecieved");
+        isPayment = event.get("isPayment");
+       // paymentStatus = event.get("paymentStatus");
+        //paymentRecieved = event.get("paymentRecieved");
         completed = event.get("completed");
       });
     });
@@ -78,8 +78,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
     isReachedServiceCenter ,
     isWorkStarted ,
     isWorkFinished ,
-    paymentStatus,
-      paymentRecieved  ) {
+    paymentStatus) {
     _firestore
         .collection("Regular-TakeVehicle")
         .doc('${widget.bookedId}')
@@ -89,7 +88,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
       'isWorkStarted' : "$isWorkStarted",
       'isWorkFinished' : "$isWorkFinished",
       'paymentStatus' : "$paymentStatus",
-      'paymentRecieved' : "$paymentRecieved"
+     // 'paymentRecieved' : "$paymentRecieved"
       //'isPaymentRequested': "1",
     })
         .then((value) => print("Location Added"))
@@ -113,7 +112,14 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                 reachedWorkShopUi(size),
                 startedWorkUi(size),
                 finishedWorkUi(size),
-                paymentRequestUi(size),
+
+                //paymentRequestUi(size),
+                isWorkFinished == "-1" && isPayment == "-1" ?
+                paymentOptionInActiveUi(size)
+                    : isWorkFinished == "0" && isPayment == "5" ?
+                paymentOptionFinishedUi(size)
+                    : paymentOptionActiveUi(size),
+
                 completedUi(size),
                 textButtonUi(size),
               ],
@@ -266,7 +272,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                             '-1',
                             '-1',
                             '-1',
-                            '-1'
                         );
                       });
                     },
@@ -510,7 +515,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                   '-1',
                                   '-1',
                                   '-1',
-                                  '-1'
                               );
                             });
                     },
@@ -953,7 +957,308 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
     );
   }
 
-  Widget paymentRequestUi(Size size){
+  Widget paymentOptionInActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_b.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                      /*Text('Mar 5,2022',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),*/
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionActiveUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment ',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {
+                        //updateToCloudFirestoreDB("isPayment","0");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegularPaymentScreen(
+                                  firebaseCollection: TextStrings.firebase_take_vehicle,
+                                  bookingId: widget.bookedId,
+                                )));
+                      },
+                      child: Text('Pay Now',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: CustColors.white_02,
+                            fontSize: 08,
+                          )
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: CustColors.light_navy,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy05,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget paymentOptionFinishedUi(Size size){
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
+                      ),
+                    ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_pay_w.svg',
+                        fit: BoxFit.contain,),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex:200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Payment Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 05),
+                      Text('at $isPaymentTime',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'SamsungSharpSans-Medium',
+                            color: const Color(0xff9b9b9b)
+                        ),)*/
+                    ],
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 80.0,right: 22.0,top: 05),
+                child: Container(
+                  height: 23,
+                  width: 55,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xffc9d6f2)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 00.0),
+                    child: TextButton(
+                      onPressed: () {  },
+                      child: Text('TRACK',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff919191),
+                          fontSize: 08,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffc9d6f2),
+                        shape:
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),*/
+              SizedBox(height: 20)
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(45,5,5,0),
+            child: FDottedLine(
+              color: CustColors.light_navy,
+              height: 50.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*Widget paymentRequestUi(Size size){
     return Container(
       child:paymentStatus == "-1"
           ? Column(
@@ -995,7 +1300,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
-                            /*SizedBox(height: 05),
+                            *//*SizedBox(height: 05),
                             Text(
                               //'Mar 5,2022',
                               '${widget.bookedDate}',
@@ -1004,7 +1309,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                   fontSize: 12,
                                   fontFamily: 'SamsungSharpSans-Medium',
                                   color: const Color(0xff9b9b9b)
-                              ),)*/
+                              ),)*//*
                           ],
                         ),
                       ),
@@ -1067,7 +1372,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                           decoration: BoxDecoration(
                               color: CustColors.light_navy,
                               borderRadius: BorderRadius.circular(25)
-                            //more than 50% of width makes circle
                           ),
                         ),
                         Container(
@@ -1091,7 +1395,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
                             ),),
-                          /*SizedBox(height: 05),
+                          *//*SizedBox(height: 05),
                           Text(
                             //'Mar 5,2022',
                             '${widget.bookedDate}',
@@ -1100,7 +1404,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                                 color: const Color(0xff9b9b9b)
-                            ),)*/
+                            ),)*//*
                         ],
                       ),
                     ),
@@ -1122,7 +1426,6 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                                 MaterialPageRoute(
                                     builder: (context) => PaymentRegularScreen4(bookedId: widget.bookedId,)));
                             setState(() {
-
                               updateToCloudFirestoreDB(
                                   '0',
                                   '0',
@@ -1163,7 +1466,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
             ],
           ),
     );
-  }
+  }*/
 
   Widget completedUi(Size size){
     return Container(
