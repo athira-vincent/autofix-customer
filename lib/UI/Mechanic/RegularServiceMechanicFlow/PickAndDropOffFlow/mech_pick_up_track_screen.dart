@@ -367,10 +367,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                       InkWell(
                         onTap: (){
 
-
                         },
                         child:
-
                         Container(
                           height: 25,
                           width: 60,
@@ -1744,7 +1742,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1844,7 +1842,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1945,7 +1943,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -2009,7 +2007,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

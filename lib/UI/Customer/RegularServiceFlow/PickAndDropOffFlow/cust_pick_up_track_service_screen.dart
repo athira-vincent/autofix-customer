@@ -1429,7 +1429,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1529,7 +1529,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1630,7 +1630,7 @@ class _CustPickUpTrackScreen extends State <CustPickUpTrackScreen>{
               Expanded(
                 flex:200,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  padding: const EdgeInsets.only(left: 5.0,top: 00),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
