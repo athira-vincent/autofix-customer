@@ -1849,7 +1849,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                       Text('Payment ',
                         style: TextStyle(
                           fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'SamsungSharpSans-Bold',
                         ),),
                       SizedBox(height: 05),
                       /*Text('Mar 5,2022',
@@ -2014,7 +2015,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                       Text('Received Payment',
                         style: TextStyle(
                           fontSize: 12,
-                          fontFamily: 'SamsungSharpSans-Medium',
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'SamsungSharpSans-Bold',
                         ),),
                      /* SizedBox(height: 05),
                       Text('at ${isPaymentTime}',
@@ -2273,112 +2275,53 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 22,top: 0,right: 22),
-        child: isPayment == "-1"
+        child: isPayment == "5"
             ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children:[
-                            Container(
-                              height:50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  color: CustColors.light_navy05,
-                                  borderRadius: BorderRadius.circular(25)
-                                //more than 50% of width makes circle
-                              ),
-                            ),
-                            Container(
-                              height: 25,
-                              width: 25,
-                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
-                                fit: BoxFit.contain,
-                                //color: Colors.white,
-                              ),
-                            ),
-                          ],
+                    Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
                         ),
-                        //Expanded(child: child)
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
+                            fit: BoxFit.contain,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Service Completed',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'SamsungSharpSans-Medium',
-                            ),),
-                          /*SizedBox(height: 02),
-                          Text('${widget.pickingDate}',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'SamsungSharpSans-Bold',
-                                color: const Color(0xff9b9b9b)
-                            ),)*/
-                        ],
-                      ),
-                    ),
+                    //Expanded(child: child)
                   ],
                 ),
-              ],
-            )
-            : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children:[
-                            Container(
-                              height:50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  color: CustColors.light_navy,
-                                  borderRadius: BorderRadius.circular(25)
-                                //more than 50% of width makes circle
-                              ),
-                            ),
-                            Container(
-                              height: 25,
-                              width: 25,
-                              child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_w.svg',
-                                fit: BoxFit.contain,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        //Expanded(child: child)
-                      ],
-                    ),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Service Completed',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              fontFamily: 'SamsungSharpSans-Bold',
-                            ),),
-                          /*SizedBox(height: 02),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Service Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'SamsungSharpSans-Bold',
+                        ),),
+                      /*SizedBox(height: 02),
                           Text('${widget.pickingDate}',
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -2387,13 +2330,72 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 fontFamily: 'SamsungSharpSans-Bold',
                                 color: const Color(0xff9b9b9b)
                             ),)*/
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
+          ],
+        )
+            : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children:[
+                        Container(
+                          height:50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color: CustColors.light_navy05,
+                              borderRadius: BorderRadius.circular(25)
+                            //more than 50% of width makes circle
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          width: 25,
+                          child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
+                            fit: BoxFit.contain,
+                            //color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    //Expanded(child: child)
+                  ],
+                ),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Service Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      /*SizedBox(height: 02),
+                          Text('${widget.pickingDate}',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SamsungSharpSans-Bold',
+                                color: const Color(0xff9b9b9b)
+                            ),)*/
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
