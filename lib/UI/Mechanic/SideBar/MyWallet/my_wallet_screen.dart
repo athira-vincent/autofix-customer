@@ -171,6 +171,7 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                       //     _BookingDatum![0].serviceCharge.toString()),
                       // listTileItem(size,
                       //     "John Carlo","11:30","₦ 5000"),
+
                       _BookingDatum!.length != 0 ?
                         ListView.builder(
                             shrinkWrap: true,
@@ -185,7 +186,40 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                             }
                         )
                           :
-                        Container(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0,right: 25.0,top: 16.0),
+                        child: Container(
+                          height: 80,
+                          width: double.infinity,
+                          //color: Colors.white,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:15.0,top: 10),
+                            child: Column(
+                              children: [
+                                SvgPicture.asset("assets/image/ic_walletnotify.svg",
+                                    width: 40,
+                                    height: 40),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12.0,top: 10),
+                                    child: Text("You have no payments to show",
+                                      style: TextStyle(
+                                        fontFamily: 'SamsungSharpSans-Regular',
+                                        color: CustColors.light_navy,
+                                        fontSize: 12,
+                                      ),),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
