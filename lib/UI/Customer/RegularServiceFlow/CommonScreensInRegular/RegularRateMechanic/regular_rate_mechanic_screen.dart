@@ -259,7 +259,7 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
                         print("${_rating}");
 
                         _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
-                            authToken,_rating, _feedBackController.text, widget.bookingId, "2");
+                            authToken,_rating, _feedBackController.text, widget.bookingId,);
 
                         setDeactivate();
 

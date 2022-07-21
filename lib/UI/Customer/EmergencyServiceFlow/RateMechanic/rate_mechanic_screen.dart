@@ -258,7 +258,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         print("${_rating}");
 
                         _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
-                            authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
+                            authToken,_rating, _feedBackController.text, bookingIdEmergency, );
 
                         setDeactivate();
 

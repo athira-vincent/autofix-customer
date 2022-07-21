@@ -406,9 +406,9 @@ class Repository {
           token);
 
   Future<dynamic>   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType) =>
+      token,rating, feedback, bookingId, ) =>
       _customerApiProvider. postAddMechanicReviewAndRatingRequest(
-          token,rating, feedback, bookingId, bookingType);
+          token,rating, feedback, bookingId, );
 
 
   /// ===============  Service List of Mechanic ================== ///

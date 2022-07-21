@@ -255,7 +255,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         'isWorkFinished': "-1",
         'isStartedFromLocationForDropOff': "-1",
         'isDropOff': "-1",
-        'isPaymentFinished': "-1",
+        'isPayment': "-1",
         "paymentStatus": "-1",
         'latitude': '${widget.latitude}',
         'longitude': '${widget.longitude}'
@@ -365,8 +365,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "isReceivedVehicle" : "-1",
       "isWorkStarted" : "-1",
       "isWorkFinished" : "-1",
-      "paymentStatus": "-1",
       "isPickedUpVehicle": "-1",
+      "isPayment": "-1",
       "paymentRecieved" : "-1",
       "completed" : "-1",
     })

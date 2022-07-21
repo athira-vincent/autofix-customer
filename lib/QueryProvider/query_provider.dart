@@ -2447,10 +2447,10 @@ class QueryProvider {
 
 
   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType) async {
+      token,rating, feedback, bookingId, ) async {
     String _query = """ 
     mutation {
-        addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: $bookingType) {
+        addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
           message
         }
       }
