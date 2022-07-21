@@ -654,7 +654,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Reached at Mechanic Shop',
+                            Text('Reached service center',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
@@ -1470,104 +1470,104 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
 
   Widget completedUi(Size size){
     return Container(
-      child:completed == "-1"
+      child:isPayment == "5"
           ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 22.0,top: 00),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children:[
-                          Container(
-                            height:50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                                color: CustColors.light_navy05,
-                                borderRadius: BorderRadius.circular(25)
-                              //more than 50% of width makes circle
-                            ),
-                          ),
-                          Container(
-                            height: 25,
-                            width: 25,
-                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
-                              fit: BoxFit.contain,),
-                          ),
-                        ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 22.0,top: 00),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Completed',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'SamsungSharpSans-Medium',
-                              ),),
-                            SizedBox(height: 05),
-                          ],
-                        ),
-                      ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
+                          fit: BoxFit.contain,
+                          color: Colors.white),
                     ),
                   ],
                 ),
-              ],
-            )
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      )
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 22.0,top: 00),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children:[
-                          Container(
-                            height:50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                                color: CustColors.light_navy,
-                                borderRadius: BorderRadius.circular(25)
-                              //more than 50% of width makes circle
-                            ),
-                          ),
-                          Container(
-                            height: 25,
-                            width: 25,
-                            child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
-                                fit: BoxFit.contain,
-                                color: Colors.white),
-                          ),
-                        ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 22.0,top: 00),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children:[
+                    Container(
+                      height:50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: CustColors.light_navy05,
+                          borderRadius: BorderRadius.circular(25)
+                        //more than 50% of width makes circle
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 22.0,top: 00),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Completed',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'SamsungSharpSans-Medium',
-                              ),),
-                            SizedBox(height: 05),
-                          ],
-                        ),
-                      ),
+                    Container(
+                      height: 25,
+                      width: 25,
+                      child: SvgPicture.asset('assets/image/ServiceTrackScreen/ic_service_completed_b.svg',
+                        fit: BoxFit.contain,),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 22.0,top: 00),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Completed',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'SamsungSharpSans-Medium',
+                        ),),
+                      SizedBox(height: 05),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
