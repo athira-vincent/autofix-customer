@@ -699,13 +699,9 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
-                                      child: InkWell(
-                                        onTap : (){
-                                          Navigator.pop(context);
-                                          },
-                                          child: Icon(Icons.arrow_back, color: Colors.black)),
-                                    ),
+                                    /*Container(
+                                      child: Icon(Icons.arrow_back, color: Colors.black),
+                                    ),*/
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(15,0,15,0),
                                       child: Column(
