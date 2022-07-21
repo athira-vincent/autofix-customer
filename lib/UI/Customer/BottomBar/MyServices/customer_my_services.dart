@@ -434,7 +434,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                 style: Styles.textLabelSubTitlegrey11,
                                               ),
                                             ),
-                                            SizedBox(height: 10,),
+                                            SizedBox(height: 10),
                                             /*Container(
                                                   child: Text('Address',
                                                     maxLines: 2,
