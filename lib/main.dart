@@ -19,6 +19,8 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
+import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
 import 'UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
@@ -106,7 +108,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                       bookedDate: 'Mar 7,2022',
                       latitude: "10.0159",
                       bookedId: "1363",
-                      longitude: "76.3419",
+                      longitude: "76.3419",7ui
                       mechanicName: "Minnu Kurian",
                       pickingDate: 'Mar 8,2022',
                     ),*/
@@ -121,7 +123,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 
                     home:SplashScreen(),
 
-                    //home: OtpVerificationScreen(),
+                    //home: CustTakeVehicleTrackScreen(),
 
 
                   );
