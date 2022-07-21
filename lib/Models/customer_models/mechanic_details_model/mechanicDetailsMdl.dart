@@ -97,7 +97,7 @@ class MechanicDetails {
   String duration;
   int reviewCount;
   List<MechanicReviewsDatum>? mechanicReviewsData;
-  int mechanicReview;
+  var mechanicReview;
   dynamic bookingsCount;
 
   factory MechanicDetails.fromJson(Map<String, dynamic> json) => MechanicDetails(
@@ -245,7 +245,7 @@ class MechanicReviewsDatum {
 
   String id;
   int transType;
-  double rating;
+  var rating;
   String feedback;
   int bookingId;
   dynamic orderId;
