@@ -89,9 +89,9 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
       setState(() {
         isPaymentAccepted = querySnapshot.get("isPayment");
         print('isPaymentAccepted ++++ $isPaymentAccepted');
-        if(isPaymentAccepted != "5")
-        {
-          buttonText = "Continue";
+          if(isPaymentAccepted != "5")
+          {
+            buttonText = "Continue";
           }else if(isPaymentAccepted == "5")
           {
             Navigator.pushReplacement(
@@ -101,6 +101,8 @@ class _RegularDirectPaymentScreenState extends State<RegularDirectPaymentScreen>
                       firebaseCollection: widget.firebaseCollection,
                       bookingId: widget.bookingId,
                     )));
+          }else{
+
           }
       });
     });

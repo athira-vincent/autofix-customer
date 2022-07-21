@@ -323,7 +323,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Customer Reached at',
+                      Text('Customer Arrival',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -385,7 +385,6 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
       : Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        // MainAxisSize.min,
         children:[
           Row(
             children: [
@@ -419,7 +418,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Customer Reached at service center',
+                      Text('customer reached service center',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -529,7 +528,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Mechanic ready to started work',
+                      Text('Start Work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',
@@ -559,7 +558,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {  },
-                      child: Text('FINISH',
+                      child: Text('START',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: const Color(0xff919191),
@@ -623,7 +622,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Mechanic ready to started work',
+                      Text('Start Work',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'SamsungSharpSans-Medium',

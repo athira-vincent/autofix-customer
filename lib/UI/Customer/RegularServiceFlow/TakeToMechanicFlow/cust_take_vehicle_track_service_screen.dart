@@ -360,7 +360,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     SizedBox(height: 02),
                     Text(
                       //'Savannah estate, plot 176',
-                      '${widget.goTime}',
+                      'time : ${widget.goTime}',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 12,
@@ -509,13 +509,13 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                             longitude: '${widget.longitude}',
                             latitude: '${widget.latitude}',)));
                             setState(() {
-                              updateToCloudFirestoreDB(
-                                  '0',
-                                  '0',
-                                  '-1',
-                                  '-1',
-                                  '-1',
-                              );
+                              // updateToCloudFirestoreDB(
+                              //     '0',
+                              //     '0',
+                              //     '-1',
+                              //     '-1',
+                              //     '-1',
+                              // );
                             });
                     },
                     child: Text('TRACK',
@@ -589,7 +589,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Reached at Mechanic Shop',
+                          Text('Reached Service Center',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'SamsungSharpSans-Medium',
