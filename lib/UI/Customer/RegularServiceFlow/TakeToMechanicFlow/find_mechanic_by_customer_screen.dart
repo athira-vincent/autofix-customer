@@ -181,9 +181,9 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
       _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
-        carName = event.get('carName');
+        carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
-        plateNumber =  event.get('carPlateNumber');
+        plateNumber =  event.get('vehiclePlateNumber');
         isReachedServiceCenter = event.get("isReachedServiceCenter");
       });
     });
@@ -249,11 +249,10 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
       print('DISTANCE getPositionStream distanceInMeter===== : ${distanceInMeters.toStringAsFixed(2)}');
       print('DISTANCE getPositionStream distanceInKillometer===== : ${distanceInMeters/1000}');
-        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 500)
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 999)
           {
             isArrived = true;
           }
-
     });
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
@@ -401,7 +400,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
   }
 
-  void updateToCloudFirestoreDB() {
+  void updateFirestoreDB() {
    print('+++abd ${widget.bookingId}');
     _firestore
         .collection("Regular-TakeVehicle")
@@ -413,7 +412,28 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-
+  void updateToCloudFirestoreDB(
+      isDriveStarted ,
+      isReachedServiceCenter ,
+      isWorkStarted ,
+      isWorkFinished ,
+      paymentStatus) {
+    _firestore
+        .collection("Regular-TakeVehicle")
+        .doc('${widget.bookingId}')
+        .update({
+      'isDriveStarted' : "$isDriveStarted",
+      'isReachedServiceCenter' : "$isReachedServiceCenter",
+      'isWorkStarted' : "$isWorkStarted",
+      'isWorkFinished' : "$isWorkFinished",
+      'paymentStatus' : "$paymentStatus",
+      // 'paymentRecieved' : "$paymentRecieved"
+      //'isPaymentRequested': "1",
+    })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
 
 
   @override
@@ -577,7 +597,14 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                updateToCloudFirestoreDB();
+                                                updateFirestoreDB();
+                                                updateToCloudFirestoreDB(
+                                                  '0',
+                                                  '0',
+                                                  '-1',
+                                                  '-1',
+                                                  '-1',
+                                                );
                                                 Navigator.pop(context);
                                                 _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "15");
                                               },

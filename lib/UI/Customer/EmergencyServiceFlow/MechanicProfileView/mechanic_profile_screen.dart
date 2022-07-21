@@ -268,7 +268,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     final data = {
       'notification': {
         'body': 'You have $length new booking',
-        'title': 'Maria',
+        'title': 'Notification',
         'sound': 'alarmw.wav',
       },
 
