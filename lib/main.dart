@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/UI/Common/Location/change_location.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
@@ -105,7 +106,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
                     home:SplashScreen(),
-
+                    //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",
                       bookingId: "1442",

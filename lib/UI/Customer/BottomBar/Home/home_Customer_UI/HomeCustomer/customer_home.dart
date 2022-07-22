@@ -2,6 +2,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
+import 'package:auto_fix/UI/Common/Location/change_location.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
@@ -310,12 +311,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget locationWidget(Size size){
     return InkWell(
-      onTap: (){
-      /*var result = await Navigator.push(
+      onTap: () async {
+      var result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => VehicleSpecializationScreen(),
-                  ));*/
+                    builder: (context) => ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
+                  ));
       },
       child: Row(
         children: [

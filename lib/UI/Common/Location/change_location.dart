@@ -1,15 +1,23 @@
-
+import 'package:auto_fix/Constants/styles.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 class ChangeLocationScreen extends StatefulWidget {
 
-  ChangeLocationScreen();
+  final String latitude;
+  final String longitude;
+
+  ChangeLocationScreen({
+    required this.latitude,required this.longitude,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -19,31 +27,72 @@ class ChangeLocationScreen extends StatefulWidget {
 
 class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
 
-  String CurrentLatitude ="10.506402";
-  String CurrentLongitude ="76.244164";
+  GoogleMapController? mapController;
+  TextEditingController _locationChangeController = new TextEditingController();
 
-  String location ='';
-  String Address = '';
-  String displayAddress = '';
+  String googleAPiKey = "AIzaSyA1s82Y0AiWYbzXwfppyvKLNzFL-u7mArg";
+  String? _mapStyle;
+  Set<Marker> markers = Set();
+  BitmapDescriptor? customerIcon;
+  CameraPosition? _kGooglePlex = CameraPosition(
+    target: LatLng(37.778259000,
+      -122.391386000,),
+    zoom: 25,
+  );
 
-  bool _isLoading = false;
+  String waitingMechanic="1";
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    getSharedPrefData();
-    super.didChangeDependencies();
-  }
+  String authToken = "";
+  String locationAddress = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getSharedPrefData();
-
-
+    //getSharedPrefData();
+    locationAddress = "Search Location";
+    mapStyling();
+    customerMarker (double.parse(widget.latitude.toString()),double.parse(widget.longitude.toString()));
+    getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
+        double.parse(widget.longitude.toString())));
   }
 
+  mapStyling() {
+    print('latlong from another screen ${widget.latitude} ${widget.longitude}');
+    rootBundle.loadString('assets/map_style/map_style.json').then((string) {
+      _mapStyle = string;
+    });
+  }
+
+  customerMarker(double lat, double long) {
+    LatLng latLng = LatLng(lat, long);
+    getBytesFromAsset('assets/image/mechanicTracking/carMapIcon.png', 150).then((onValue) {
+      customerIcon = BitmapDescriptor.fromBytes(onValue);
+      markers.add(Marker( //add start location marker
+        markerId: MarkerId('customerMarkerId'),
+        position: latLng, //position of marker
+        infoWindow: InfoWindow( //popup info
+          title: 'customer location',
+          snippet: 'customer location',
+        ),
+        icon: customerIcon!, //Icon for Marker
+      ));
+    });
+  }
+
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
+  getGoogleMapCameraPosition(LatLng latLng) {
+    _kGooglePlex = CameraPosition(
+      target:latLng,
+      zoom: 12,
+    );
+  }
 
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData');
@@ -53,47 +102,107 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
 
-            ],
+                GoogleMap( //Map widget from google_maps_flutter package
+                  zoomGesturesEnabled: true, //enable Zoom in, out on map
+                  initialCameraPosition: _kGooglePlex!,
+                  markers: markers, //markers to show on map
+                  mapType: MapType.normal, //map type
+                  onMapCreated: (controller) { //method called when map is created
+                    setState(() {
+                      controller.setMapStyle(_mapStyle);
+                      mapController = controller;
+                    });
+                  },
+                  onLongPress: (result){
+                    setState(() {
+                      print("Print Val >>> " + result.toString());
+                      customerMarker(result.latitude, result.longitude);
+                      ///----------------------- address change here
+                      //locationAddress = result
+                      mapController!.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                  target: LatLng(
+                                      result.latitude,
+                                      result.longitude,),
+                                zoom: 15.0)
+                          )
+                      );
+                      //Navigator.of(context).pop();
+                      //getGoogleMapCameraPosition(LatLng(result.latitude, result.longitude));
+                    });
+                  },
+                ),
+
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20,20,20,50),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10,10,10,10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    /*Container(
+                                      child: Icon(Icons.arrow_back, color: Colors.black),
+                                    ),*/
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          /*TextFormField(
+                                            controller: _locationChangeController,
+                                          ),*/
+                                          Text(
+                                            "${locationAddress}",
+                                            textAlign: TextAlign.start,
+                                            style: Styles.waitingTextBlack17,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-
-  TextStyle warningTextStyle01 = TextStyle(
-      fontSize: 12,
-      fontFamily: "Samsung_SharpSans_Regular",
-      fontWeight: FontWeight.w400,
-      color: Colors.black,
-      letterSpacing: .7,
-      wordSpacing: .7
-  );
-
-}
-
-class Choice {
-  const Choice({required this.title, required this.icon});
-  final String title;
-  final IconData icon;
-}
-
-
-
-class MyBehavior extends ScrollBehavior {
-
-
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
   }
 }
