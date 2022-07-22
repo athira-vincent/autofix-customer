@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
@@ -29,7 +30,12 @@ class HomeCustomerUIScreen extends StatefulWidget {
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
   TextEditingController searchController = new TextEditingController();
+  late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
+  FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+
   String? filter;
   String authToken="",profileImageUrl = "";
 
@@ -65,8 +71,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   String Address = '';
   String displayAddress = '';
 
-  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
-
   String serviceIds = "";
 
   double per = .10;
@@ -84,6 +88,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     super.didChangeDependencies();
   }
 
+  @override
+  void didUpdateWidget(covariant HomeCustomerUIScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print("xkkhhnbb 001");
+    //setFcmToken(authToken);
+    getSharedPrefData();
+  }
 
   @override
   void initState() {
@@ -94,6 +106,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     _getCurrentCustomerLocation();
     _listenServiceListResponse();
 
+  }
+
+
+  Future<void> setFcmToken(String Authtoken) async {
+    _messaging.getToken().then((value) {
+      String? token = value;
+      print("FCM Token >>>>>>>>>>  " + token.toString());
+      _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
+    });
   }
 
   Future<void> getSharedPrefData() async {
@@ -112,7 +133,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       print('serviceIdEmergency>>>>>>>>' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>>' + mechanicIdEmergency.toString());
       print('bookingIdEmergency>>>>>>>>>' + bookingIdEmergency.toString());
-
+      setFcmToken(authToken);
       if(serviceIdEmergency.toString() != 'null'  && serviceIdEmergency.toString() != "" )
         {
           print('serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
@@ -120,7 +141,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       else
         {
           print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
-
         }
 
       _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
@@ -136,25 +156,21 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
-
         });
       }
     });
+
     _homeCustomerBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
@@ -172,6 +188,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       CurrentLongitude = position.longitude.toString();
     });
     print(location);
+
     GetAddressFromLatLong(position);
   }
 
@@ -214,6 +231,11 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.currentLatitude, CurrentLatitude);
+    shdPre.setString(SharedPrefKeys.currentLongitude, CurrentLongitude);
+    shdPre.setString(SharedPrefKeys.currentAddress, Address);
+
     setState(() {
       displayAddress = '${place.locality}';//${place.name},
     });
@@ -230,7 +252,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                searchYouService(context),
+                searchYouService(context, size),
                 serviceBanners(),
                 emergencyService(size),
                 regularService(),
@@ -244,7 +266,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
 
-  Widget searchYouService(BuildContext context) {
+  Widget searchYouService(BuildContext context, Size size) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -260,7 +282,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>  SearchServiceScreen()));
-
                   },
                   child: Container(
                     height: 35,
@@ -279,25 +300,38 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               SizedBox(
                 width: 5,
               ),
-              Row(
-                children: [
-                  Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
-                  SizedBox(
-                    width: 50,
-                    child: Column(
-                      children: [
-                        Text('$displayAddress',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.visible,
-                          style: Styles.textLabelTitle_10,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              locationWidget(size),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget locationWidget(Size size){
+    return InkWell(
+      onTap: (){
+      /*var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VehicleSpecializationScreen(),
+                  ));*/
+      },
+      child: Row(
+        children: [
+          Icon(Icons.location_on, color: CustColors.light_navy,size: 35,),
+          SizedBox(
+            width: 50,
+            child: Column(
+              children: [
+                Text('$displayAddress',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.visible,
+                  style: Styles.textLabelTitle_10,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -836,7 +870,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 : MaterialButton(
                   onPressed: () async {
                     SharedPreferences shdPre = await SharedPreferences.getInstance();
-
 
                     print(">>>>>>>>>> Latitude  $CurrentLatitude");
                     print(">>>>>>>>>> Longitude  $CurrentLongitude");

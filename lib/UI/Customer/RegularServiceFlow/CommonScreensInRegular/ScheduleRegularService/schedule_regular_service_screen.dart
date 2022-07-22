@@ -54,6 +54,9 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
   TextEditingController _serviceTimeController = TextEditingController();
   FocusNode _serviceTimeFocusNode = FocusNode();
 
+  TextEditingController _locationController = TextEditingController();
+  FocusNode _locationFocusNode = FocusNode();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String? dateTime;
@@ -128,7 +131,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
     });
   }
-
 
   Widget appBarUiWidget(Size size){
     return Container(
@@ -565,7 +567,6 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     );
   }
 
-
   Widget timeTextSelection(Size size) {
     return  InkWell(
       onTap: () async {
@@ -756,14 +757,14 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
                     )));
           }
-
       },
       child: Align(
         alignment: Alignment.bottomRight,
         child: Container(
           margin: EdgeInsets.only(
               right: size.width * 6 / 100,
-              top: size.height * 2.5 / 100
+              top: size.height * 2.5 / 100,
+              bottom: size.height * .5 / 100
           ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(
