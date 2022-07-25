@@ -859,7 +859,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         //updateToCloudFirestoreDB("isArrived","1");
-                        updateToCloudFirestoreDB("isDriveStarted","0");
+                        //updateToCloudFirestoreDB("isDriveStarted","0");
                         //------------------ take the current date and time & Update Firebase, change the status to
                         // navigate to map screen
                         Navigator.push(
@@ -1323,7 +1323,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
-                        updateToCloudFirestoreDB("isWorkStarted","1");
+                        //updateToCloudFirestoreDB("isWorkStarted","1");
                         updateToCloudFirestoreDB("isWorkFinished","0");
                         _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "6");
                       },

@@ -298,13 +298,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget mechanicLocation(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          right: 8.0, left: 8.0, top: 0,bottom: 2),
+          right: 6.0, left: 6.0, top: 0,bottom: 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.location_pin, color: CustColors.light_navy,size: 35,),
+          Icon(Icons.location_on, color: CustColors.light_navy,size: 30,),
           SizedBox(
-            width: 50,
+            width: 55,
             child: Column(
               children: [
                 InkWell(
@@ -314,9 +314,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                   child: Text(
                     displayAddress,
                     //'Elenjikkal house Empyreal Garden',
-                    maxLines: 2,
+                    //maxLines: 2,
                     textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
+                    overflow: TextOverflow.ellipsis,
                     style: Styles.textLabelTitle_10,
                   ),
                 ),
