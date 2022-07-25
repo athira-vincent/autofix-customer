@@ -520,7 +520,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   width: 35,
                                                   fit: BoxFit.cover,)
                                                 : Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                            //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                           ),
                                         ),
                                         Padding(

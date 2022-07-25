@@ -67,7 +67,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   MechanicDetailsMdl? _mechanicDetailsMdl;
 
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
-  late final FirebaseMessaging    _messaging = FirebaseMessaging.instance;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid;
@@ -83,8 +82,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   List yourItemList = [];
 
   int? reviewLength = 0;
-
-
 
   double per = .10;
   double perfont = .10;
@@ -107,15 +104,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   String carPlateNumber="";
 
   late StateSetter mechanicAcceptance;
-
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
@@ -379,7 +367,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
         .collection("ResolMech")
         .doc('$bookingIdEmergency')
         .update({
-          "serviceModel" : FieldValue.arrayUnion([{
+            "serviceModel" : FieldValue.arrayUnion([{
             "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
             "serviceTime" : "${widget.mechanicListData?.mechanicService?[0].time.split(':').first}",
             "serviceCost" :"${widget.mechanicListData?.mechanicService?[0].service?.minPrice}",
@@ -387,7 +375,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             "isDefault":  '1',
           }]),
           "updatedServiceList": FieldValue.arrayUnion(yourItemList),
-         "customerFromPage": "MechanicTrackingScreen",
+          "customerAddress": "${widget.customerAddress}",
+          "customerFromPage": "MechanicTrackingScreen",
 
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
@@ -436,7 +425,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           });
         }
     });
-
   }
 
 
