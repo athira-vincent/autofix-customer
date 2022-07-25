@@ -1,3 +1,5 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:dio/dio.dart';
 
@@ -5,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:typed_data';
@@ -41,20 +45,24 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
   );
 
   String waitingMechanic="1";
+  late LatLng selectedLatLng ;
 
   String authToken = "";
   String locationAddress = "";
+  String Address = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //getSharedPrefData();
-    locationAddress = "Search Location";
+    locationAddress = "Location";
+    selectedLatLng = LatLng(double.parse(widget.latitude.toString()),double.parse(widget.longitude.toString()));
     mapStyling();
     customerMarker (double.parse(widget.latitude.toString()),double.parse(widget.longitude.toString()));
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
+    GetAddressFromLatLong(LatLng(double.parse(widget.latitude), double.parse(widget.longitude)));
   }
 
   mapStyling() {
@@ -72,8 +80,8 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
         markerId: MarkerId('customerMarkerId'),
         position: latLng, //position of marker
         infoWindow: InfoWindow( //popup info
-          title: 'customer location',
-          snippet: 'customer location',
+          title: 'vehicle location',
+          //snippet: 'customer location',
         ),
         icon: customerIcon!, //Icon for Marker
       ));
@@ -98,6 +106,19 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
     print('getSharedPrefData');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {});
+  }
+
+  Future<void> GetAddressFromLatLong(LatLng position)async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(placemarks);
+    Placemark place = placemarks[0];
+     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+
+    setState(() {
+      locationAddress = '${place.locality}';//${place.name},
+    });
+    print(" displayAddress >>>>>> " + locationAddress);
+
   }
 
   @override
@@ -125,6 +146,7 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                   },
                   onLongPress: (result){
                     setState(() {
+                      selectedLatLng = result;
                       print("Print Val >>> " + result.toString());
                       customerMarker(result.latitude, result.longitude);
                       ///----------------------- address change here
@@ -138,7 +160,8 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                                 zoom: 15.0)
                           )
                       );
-                      //Navigator.of(context).pop();
+                      GetAddressFromLatLong(result);
+
                       //getGoogleMapCameraPosition(LatLng(result.latitude, result.longitude));
                     });
                   },
@@ -158,7 +181,6 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10,10,10,10),
                             child: Column(
@@ -187,6 +209,9 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                                         ],
                                       ),
                                     ),
+                                    /*TextFormField(
+                                            controller: _locationChangeController,
+                                          ),*/
                                   ],
                                 ),
                               ],
@@ -198,8 +223,21 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                   ),
                 ),
 
+
               ],
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              //Navigator.of(context).pop();
+              SharedPreferences shdPre = await SharedPreferences.getInstance();
+              shdPre.setString(SharedPrefKeys.preferredLatitude, selectedLatLng.latitude.toString());
+              shdPre.setString(SharedPrefKeys.preferredLongitude, selectedLatLng.longitude.toString());
+              shdPre.setString(SharedPrefKeys.preferredAddress, Address);
+              Navigator.pop(context,selectedLatLng);
+            },
+            backgroundColor: CustColors.light_navy,
+            child: const Icon(Icons.done),
           ),
         ),
       ),

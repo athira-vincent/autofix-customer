@@ -311,6 +311,9 @@ class _SignupScreenState extends State<SignupScreen> {
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
+    _shdPre.setString(SharedPrefKeys.preferredAddress, "");
+    _shdPre.setString(SharedPrefKeys.preferredLongitude, "");
+    _shdPre.setString(SharedPrefKeys.preferredLatitude, "");
   }
 
   @override

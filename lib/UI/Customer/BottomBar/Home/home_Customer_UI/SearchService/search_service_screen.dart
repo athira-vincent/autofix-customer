@@ -412,22 +412,22 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                             itemCount: snapshot.data?.data?.serviceListAll?.length,
                             itemBuilder: (context, index) {
                               return  GestureDetector(
-                                onTap:(){
-
+                                onTap:() async {
+                                  SharedPreferences shdPre = await SharedPreferences.getInstance();
                                   /* Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>  ScheduleRegularServiceScreen(
                                             selectedService: selectedCategoryList,
                                             categoryList: widget.categoryList,
-                                            latitude: CurrentLatitude,
-                                            longitude: CurrentLongitude,
+                                            latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,),
+                                            longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,),
                                             address: widget.address,
                                           )));
                                   */
 
                                   setState(() {
-                                    print(">>>>>>>>>> Latitude  $CurrentLatitude");
+                                    print(">>>>>>>>>> Latitude  ${shdPre.getString(SharedPrefKeys.preferredLatitude,)}");
                                     print(">>>>>>>>>> Longitude  $CurrentLongitude");
                                     print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                                     print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
