@@ -276,10 +276,11 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
 
-    String addressLocation = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    String addressLocation = '${place.street}, ${place.subLocality}, ${place.locality}';
 
     setState(() {
       addressLocationText = addressLocation;
+      print("addressLocationText >>>>>>> " + addressLocationText);
     });
     //return addressLocation;
   }
@@ -634,7 +635,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         print(">>>>>>>>>> ServiceId  $serviceIds");
 
                                         GetAddressString(LatLng(
-                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString()),
+                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString()),
                                             double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString())));
 
                                         Navigator.push(

@@ -54,7 +54,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
     bookingId = widget.bookingId;
     getSharedPrefData();
     _listenApiResponse();
-    _getLocation();
+    //_getLocation();
   }
 
   Future<void> getSharedPrefData()async{

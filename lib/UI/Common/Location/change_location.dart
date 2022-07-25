@@ -38,11 +38,14 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
   String? _mapStyle;
   Set<Marker> markers = Set();
   BitmapDescriptor? customerIcon;
-  CameraPosition? _kGooglePlex = CameraPosition(
+  /*CameraPosition? _kGooglePlex = CameraPosition(
     target: LatLng(37.778259000,
       -122.391386000,),
     zoom: 25,
-  );
+  );*/
+
+  CameraPosition? _kGooglePlex ;
+
 
   String waitingMechanic="1";
   late LatLng selectedLatLng ;
@@ -157,7 +160,7 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                                   target: LatLng(
                                       result.latitude,
                                       result.longitude,),
-                                zoom: 15.0)
+                                zoom: 13)
                           )
                       );
                       GetAddressFromLatLong(result);
@@ -222,8 +225,6 @@ class _ChangeLocationScreenState extends State<ChangeLocationScreen> {
                     ),
                   ),
                 ),
-
-
               ],
             ),
           ),
