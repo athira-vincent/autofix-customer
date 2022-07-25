@@ -105,12 +105,14 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
+
                     home:SplashScreen(),
                     //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",
                       bookingId: "1442",
                     ),*/
+
                   );
                 },
               ),
