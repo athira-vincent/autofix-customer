@@ -4,7 +4,12 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
 import 'package:auto_fix/UI/Common/Location/change_location.dart';
+import 'package:auto_fix/UI/Common/NotificationHandler/notification_handler.dart';
+import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
@@ -12,6 +17,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_s
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -49,6 +55,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
        }
 
       FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
           runApp(MyApp());
         }, (error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
@@ -75,6 +82,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 
     @override
     Widget build(BuildContext context) {
+      //_listenNotification(context);
 
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
@@ -88,13 +96,19 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
           ChangeNotifierProvider.value(
             value: ProfileDataProvider(),
           ),
+          ChangeNotifierProvider.value(
+            value: JobRequestNotifyProvider(),
+          ),
         ],
         child:Sizer(
                 builder: (context, orientation, deviceType) {
                   return MaterialApp(
-                    /*routes: {
-                      '/CustomerMainLandingScreen': (BuildContext context) => CustomerMainLandingScreen(),
-                    },*/
+                    routes: {
+                      // '/CustomerMainLandingScreen': (BuildContext context) => CustomerMainLandingScreen(),
+                      "/CustomerMainLandingScreen": (context) => CustomerMainLandingScreen(),
+                      "/MechanicHomeScreen" : (context) => MechanicHomeScreen(),
+                      "/IncomingJobRequestScreen" : (context) => IncomingJobRequestScreen(),
+                    },
                     debugShowCheckedModeBanner: false,
                     locale: _locale,
                     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -105,8 +119,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
 
-
-                    home:SplashScreen(),
+                    home:NotificationHandler(child: SplashScreen()),
                     //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",
@@ -118,4 +131,5 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
               ),
       );
     }
+
   }

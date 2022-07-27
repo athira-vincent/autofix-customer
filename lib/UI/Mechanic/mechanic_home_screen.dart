@@ -71,7 +71,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _getCurrentMechanicLocation();
-    _listenNotification(context);
+    //_listenNotification(context);
 
   }
 
@@ -160,7 +160,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
   }
 
-  _listenNotification(BuildContext context){
+  /*_listenNotification(BuildContext context){
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
 
@@ -217,7 +217,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       });
     });
 
-    /*FirebaseMessaging.onBackgroundMessage((message) async {
+    *//*FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       setState(() {
@@ -225,9 +225,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-    });*/
+    });*//*
 
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

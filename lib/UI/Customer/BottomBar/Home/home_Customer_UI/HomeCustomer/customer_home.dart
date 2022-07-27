@@ -135,10 +135,11 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       preferredLongitude = shdPre.getString(SharedPrefKeys.preferredLongitude).toString() ;
       preferredAddress = shdPre.getString(SharedPrefKeys.preferredAddress).toString() ;
 
-      if(preferredAddress.isEmpty){
-        _getCurrentCustomerLocation(true);
-      }else{
+      if( (preferredLatitude.toString() != "" && preferredLatitude.toString() != "null")
+          && (preferredLongitude.toString() != "" && preferredLongitude.toString() != "null")){
         GetAddressFromLatLong(LatLng(double.parse(preferredLatitude), double.parse(preferredLongitude)));
+      }else{
+        _getCurrentCustomerLocation(true);
       }
 
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();

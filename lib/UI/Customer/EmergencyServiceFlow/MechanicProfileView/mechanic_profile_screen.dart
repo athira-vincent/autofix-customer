@@ -121,7 +121,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
 
 
-    _listenNotification(context);
+    //_listenNotification(context);
   }
 
 
@@ -255,11 +255,10 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
     final data = {
       'notification': {
-        'body': 'You have $length new booking',
+        'body': 'You have new Emergency booking',
         'title': 'Notification',
         'sound': 'alarmw.wav',
       },
-
       'priority': 'high',
       'data': {
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
