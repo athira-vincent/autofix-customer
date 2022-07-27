@@ -26,9 +26,9 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     super.initState();
     child = widget.child;
     if(mounted){
-      _listenNotification(context);
-    }else{
-      setState(() {});
+      setState(() {
+        _listenNotification(context);
+      });
     }
   }
 
