@@ -10,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 
 class NotificationHandler extends StatefulWidget {
   final Widget child;
+
   NotificationHandler({required this.child});
 
   @override
@@ -21,6 +22,7 @@ class NotificationHandler extends StatefulWidget {
 class _NotificationHandlerState extends State<NotificationHandler> {
   final FirebaseMessaging fm = FirebaseMessaging.instance;
   late Widget child;
+  GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -33,25 +35,24 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   }
 
 
-
   _listenNotification(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print(">>>message received onMessage");
 
       print("event.notification!.data " + event.data.toString());
-      _serialiseAndNavigate(event, context);
+      _serialiseAndNavigate(event, _scaffold.currentContext!);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print(">>>message received onMessageOpenedApp");
-      _serialiseAndNavigate(event, context);
+      _serialiseAndNavigate(event, _scaffold.currentContext!);
     });
 
     FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       print(">>>message.notification!.data " + message.data.toString());
-      _serialiseAndNavigate(message, context);
+      _serialiseAndNavigate(message, _scaffold.currentContext!);
     });
   }
 
@@ -68,7 +69,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
       String bookingId = message.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
 
-      final provider1 = Provider.of<LocaleProvider>(context1,listen: false);
+      final provider1 = Provider.of<LocaleProvider>(_scaffold.currentContext!,listen: false);
       setState(() {
 
         provider1.setPayload(notificationPayloadMdl);
@@ -107,7 +108,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    _listenNotification(context);
+   // _listenNotification(context);
     super.didChangeDependencies();
   }
 
@@ -120,9 +121,12 @@ class _NotificationHandlerState extends State<NotificationHandler> {
 
   @override
   Widget build(BuildContext context) {
-    _listenNotification(context);
+    //_listenNotification(context);
     //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    return child;
+    return Scaffold(
+      key: _scaffold,
+      body: child,)
+      ;
   }
 
 /*  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

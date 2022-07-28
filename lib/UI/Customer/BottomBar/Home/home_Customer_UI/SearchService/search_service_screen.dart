@@ -5,14 +5,17 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ScheduleRegularService/schedule_regular_service_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -50,7 +53,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
     return value * per + value;
   }
 
-
+  String addressLocationText = "";
   String CurrentLatitude ="10.506402";
   String CurrentLongitude ="76.244164";
 
@@ -76,6 +79,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postSearchServiceRequest("$authToken", null,null,null);
+      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
     });
   }
 
@@ -96,6 +100,20 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
         });
       }
     });
+    _homeCustomerBloc.regularServiceListResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+        });
+      } else {
+        setState(() {
+          print("message postServiceList >>>>>>>  ${value.message}");
+          print("errrrorr postServiceList >>>>>>>  ${value.status}");
+
+        });
+      }
+    });
   }
 
   Future<void> _getCurrentCustomerLocation() async {
@@ -106,7 +124,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
       CurrentLongitude = position.longitude.toString();
     });
     print(location);
-    //GetAddressFromLatLong(position);
+    GetAddressFromLatLong(position);
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -151,6 +169,20 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
   }
 
+  Future<void> GetAddressString(LatLng position) async {
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(placemarks);
+    Placemark place = placemarks[0];
+
+    String addressLocation = '${place.street}, ${place.subLocality}, ${place.locality}';
+
+    setState(() {
+      addressLocationText = addressLocation;
+      print("addressLocationText >>>>>>> " + addressLocationText);
+    });
+    //return addressLocation;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +266,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                     setState(() {
                       print('First text field: $text');
                       _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}",null,null);
+                      //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
                     });
                   }
 
@@ -376,8 +409,8 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
             Container(
               child: StreamBuilder(
-                  stream:  _homeCustomerBloc.postSearchServiceResponse,
-                  builder: (context, AsyncSnapshot<ServiceSearchListAllMdl> snapshot) {
+                  stream:  _homeCustomerBloc.regularServiceListResponse,
+                  builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
                     print("${snapshot.hasData}");
                     print("${snapshot.connectionState}");
                     if(snapshot.hasData)
@@ -409,36 +442,55 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data?.data?.serviceListAll?.length,
+                            itemCount:snapshot.data?.data?.categoryList?.length,
                             itemBuilder: (context, index) {
                               return  GestureDetector(
                                 onTap:() async {
                                   SharedPreferences shdPre = await SharedPreferences.getInstance();
-                                  /* Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>  ScheduleRegularServiceScreen(
-                                            selectedService: selectedCategoryList,
-                                            categoryList: widget.categoryList,
-                                            latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,),
-                                            longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,),
-                                            address: widget.address,
-                                          )));
-                                  */
 
-                                  setState(() {
-                                    print(">>>>>>>>>> Latitude  ${shdPre.getString(SharedPrefKeys.preferredLatitude,)}");
-                                    print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                                    print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                    print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                                    serviceIds = '${snapshot.data?.data?.serviceListAll?[index].id}';
-                                    print(">>>>>>>>>> ServiceId  $serviceIds");
-                                    //print(">>>>>>>>>> ServiceId  " + '${snapshot.data?.data?.serviceListAll![index]}');
+                                      print(">>>>>>>>>> Latitude  ${shdPre.getString(SharedPrefKeys.preferredLatitude,)}");
+                                      print(">>>>>>>>>> Longitude  ${shdPre.getString(SharedPrefKeys.preferredLongitude,)}");
+                                      print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
+                                      print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
 
-                                  });
+                                      serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
+                                      print(">>>>>>>>>> ServiceId  $serviceIds");
+                                      if(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString() != "null"
+                                          && shdPre.getString(SharedPrefKeys.preferredLatitude,).toString() != ""){
+                                        GetAddressString(LatLng(
+                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString()),
+                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString())));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  AddMoreRegularServicesListScreen(
+                                                  categoryList: snapshot.data?.data?.categoryList![index],
+                                                  isAddService: true,
+                                                  isReturnData: false,
+                                                  latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
+                                                  longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
+                                                  address: addressLocationText,
+                                                )));
+
+                                      }else{
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>  AddMoreRegularServicesListScreen(
+                                                  categoryList: snapshot.data?.data?.categoryList![index],
+                                                  isAddService: true,
+                                                  isReturnData: false,
+                                                  latitude: CurrentLatitude,
+                                                  longitude: CurrentLongitude,
+                                                  address: Address,
+                                                )));
+                                      }
+
+
+
 
                                 },
-                                child: snapshot.data?.data?.serviceListAll?[index].category?.catType.toString() =='2' && snapshot.data?.data?.serviceListAll?[index].category?.catType != null
+                                child: snapshot.data?.data?.categoryList?.length != 0 && snapshot.data?.data?.categoryList?.length != null
                                     ? Container(
                                           child: Padding(
                                             padding: const EdgeInsets.fromLTRB(30,0,30,0),
@@ -448,7 +500,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                               children: [
                                                 Padding(
                                                   padding: const EdgeInsets.fromLTRB(30,2,30,2),
-                                                  child: Text('${snapshot.data?.data?.serviceListAll![index].serviceName}',
+                                                  child: Text('${snapshot.data?.data?.categoryList![index].catName}',
                                                     style: Styles.textLabelTitleEmergencyServiceName,
                                                     maxLines: 2,
                                                     textAlign: TextAlign.start,

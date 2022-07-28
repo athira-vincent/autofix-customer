@@ -98,6 +98,98 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     });
   }
 
+  /*Future<void> callOnFcmApiSendPushNotifications(int length) async {
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have new Emergency booking',
+        'title': 'Notification',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "screen": "CustomerServiceDetailsScreen",
+        "bookingId" : "$bookingIdEmergency",
+        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
+        "carName" : "$carNameBrand [$carNameModel]",
+        "carPlateNumber" : "$carPlateNumber",
+        "customerName" : "$userName",
+        "customerAddress" : "${widget.customerAddress}",
+        "customerLatitude" : "${widget.latitude}",
+        "customerLongitude" : "${widget.longitude}",
+        "customerFcmToken" : "$token",
+        "mechanicName" : "${widget.mechanicListData?.firstName}",
+        "mechanicID" : "${widget.mechanicId}",
+        "mechanicLatitude" : "${widget.latitude}",
+        "mechanicLongitude" : "${widget.longitude}",
+        "latitude" : "${widget.latitude}",
+        "longitude" : "${widget.longitude}",
+        "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
+        "isWorkStarted" : "0",
+        "isWorkCompleted" : "0",
+        "message": "ACTION"
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      //'to':'$token'
+      // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
+    };
+
+    print('FcmToken data >>> ${data}');
+    print('FcmToken >>> ${FcmToken}');
+    print('FcmToken token >>> ${token}');
+
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          print('notification sending success');
+
+        });
+      } else {
+        setState(() {
+          print('notification sending failed');
+
+        });
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {

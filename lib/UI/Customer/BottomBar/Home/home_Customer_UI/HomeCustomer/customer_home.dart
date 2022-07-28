@@ -635,22 +635,36 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                         serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
                                         print(">>>>>>>>>> ServiceId  $serviceIds");
 
-                                        GetAddressString(LatLng(
-                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString()),
-                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString())));
+                                        if(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString() != "null"
+                                        && shdPre.getString(SharedPrefKeys.preferredLatitude,).toString() != ""){
+                                          GetAddressString(LatLng(
+                                              double.parse(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString()),
+                                              double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString())));
 
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>  AddMoreRegularServicesListScreen(
-                                                  categoryList: snapshot.data?.data?.categoryList![index],
-                                                  isAddService: true,
-                                                  isReturnData: false,
-                                                  latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
-                                                  longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
-                                                  address: addressLocationText,
-                                                )));
-
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>  AddMoreRegularServicesListScreen(
+                                                    categoryList: snapshot.data?.data?.categoryList![index],
+                                                    isAddService: true,
+                                                    isReturnData: false,
+                                                    latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
+                                                    longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
+                                                    address: addressLocationText,
+                                                  )));
+                                        }else{
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>  AddMoreRegularServicesListScreen(
+                                                    categoryList: snapshot.data?.data?.categoryList![index],
+                                                    isAddService: true,
+                                                    isReturnData: false,
+                                                    latitude: CurrentLatitude,
+                                                    longitude: CurrentLongitude,
+                                                    address: Address,
+                                                  )));
+                                        }
                                       },
                                       child: Container(
                                         child: Column(
