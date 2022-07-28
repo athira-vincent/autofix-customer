@@ -282,8 +282,8 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
                         child: Container(
-                          width: 120.0,
-                          height: 120.0,
+                          width: 110.0,
+                          height: 110.0,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child:Container(
@@ -294,14 +294,18 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       //     fit: BoxFit.fill,
                                       //     ),
                                       backgroundColor: Colors.white,
-                                      child: ClipOval(
-                                        child: profileUrl != null && profileUrl != "" ?
-                                          Image.network(
-                                            profileUrl,
-                                            fit: BoxFit.fill,
-                                          )
-                                            :
-                                          SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                      child: Container(
+                                        height: 106.0,
+                                        width: 106.0,
+                                        child: ClipOval(
+                                          child: profileUrl != null && profileUrl != "" ?
+                                            Image.network(
+                                              profileUrl,
+                                              fit: BoxFit.fill,
+                                            )
+                                              :
+                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        ),
                                       )
                                   )
                               )

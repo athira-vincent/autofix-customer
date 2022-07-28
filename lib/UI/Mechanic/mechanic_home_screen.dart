@@ -434,42 +434,45 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
 
                     Spacer(),
 
-                    InkWell(
-                      onTap: (){
-                        setState(() {
-                          if(isOnline == "1"){
-                            _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
-                          }else{
-                            _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
-                          }
-                        });// !isOnline
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 25 + MediaQuery.of(context).padding.top,
-                          right: 10 + MediaQuery.of(context).padding.right
-                        ),
-                        padding: EdgeInsets.only(
-                            left: 7, right: 7,
-                            top: 4, bottom: 4
-                        ),
-                        decoration: BoxDecoration(
-                            color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
-                            borderRadius: BorderRadius.circular(4),
-                            boxShadow: [new BoxShadow(
-                              color: CustColors.roseText1,
-                              blurRadius: 10.0,
-                            ),]
-                        ),
-                        //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
-                        child: Text(
-                            isOnline == "1" ? "Online" : "Offline",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: "Samsung_SharpSans_Medium",
-                              fontWeight: FontWeight.w400
-                            ),
+                    Container(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: (){
+                          setState(() {
+                            if(isOnline == "1"){
+                              _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "0", userId, );
+                            }else{
+                              _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken","1", userId, );
+                            }
+                          });// !isOnline
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            top: 25 + MediaQuery.of(context).padding.top,
+                            right: 10 + MediaQuery.of(context).padding.right
+                          ),
+                          padding: EdgeInsets.only(
+                              left: 7, right: 7,
+                              top: 4, bottom: 4
+                          ),
+                          decoration: BoxDecoration(
+                              color: isOnline == "1" ? CustColors.light_navy : CustColors.cloudy_blue,
+                              borderRadius: BorderRadius.circular(4),
+                              boxShadow: [new BoxShadow(
+                                color: CustColors.roseText1,
+                                blurRadius: 10.0,
+                              ),]
+                          ),
+                          //color: isOnline ? CustColors.light_navy : CustColors.cloudy_blue,
+                          child: Text(
+                              isOnline == "1" ? "Online" : "Offline",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: "Samsung_SharpSans_Medium",
+                                fontWeight: FontWeight.w400
+                              ),
+                          ),
                         ),
                       ),
                     ),
