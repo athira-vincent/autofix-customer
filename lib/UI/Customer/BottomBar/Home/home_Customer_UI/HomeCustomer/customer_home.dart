@@ -1,6 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
+import 'package:auto_fix/UI/Common/Location/change_location.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../SearchService/search_service_screen.dart';
 
@@ -29,13 +32,19 @@ class HomeCustomerUIScreen extends StatefulWidget {
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
+  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
+
   TextEditingController searchController = new TextEditingController();
+  late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
+  FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+
   String? filter;
   String authToken="",profileImageUrl = "";
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
   String bookingIdEmergency="";
+  String addressLocationText = "";
 
   final List<String> imageList = [
     "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
@@ -58,14 +67,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     const Choice(title: 'WiFi', icon: Icons.wifi),
   ];
 
-   String CurrentLatitude ="10.506402";
-   String CurrentLongitude ="76.244164";
+   String CurrentLatitude ="";
+   String CurrentLongitude ="";
+
+    String preferredLatitude ="10.506402";
+    String preferredLongitude ="76.244164";
+    String preferredAddress ="";
 
   String location ='';
   String Address = '';
   String displayAddress = '';
-
-  final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   String serviceIds = "";
 
@@ -84,16 +95,34 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     super.didChangeDependencies();
   }
 
+  @override
+  void didUpdateWidget(covariant HomeCustomerUIScreen oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print("xkkhhnbb 001");
+    //setFcmToken(authToken);
+    _getCurrentCustomerLocation(false);
+    getSharedPrefData();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getSharedPrefData();
 
-    _getCurrentCustomerLocation();
     _listenServiceListResponse();
 
+  }
+
+
+  Future<void> setFcmToken(String Authtoken) async {
+    _messaging.getToken().then((value) {
+      String? token = value;
+      print("FCM Token >>>>>>>>>>  " + token.toString());
+      _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
+    });
   }
 
   Future<void> getSharedPrefData() async {
@@ -102,17 +131,29 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
 
+      preferredLatitude = shdPre.getString(SharedPrefKeys.preferredLatitude).toString() ;
+      preferredLongitude = shdPre.getString(SharedPrefKeys.preferredLongitude).toString() ;
+      preferredAddress = shdPre.getString(SharedPrefKeys.preferredAddress).toString() ;
+
+      if( (preferredLatitude.toString() != "" && preferredLatitude.toString() != "null")
+          && (preferredLongitude.toString() != "" && preferredLongitude.toString() != "null")){
+        GetAddressFromLatLong(LatLng(double.parse(preferredLatitude), double.parse(preferredLongitude)));
+      }else{
+        _getCurrentCustomerLocation(true);
+      }
+
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+
       print('authToken>>>>>>>>> ' + authToken.toString());
       print('profileImageUrl>>>>>>>>> _HomeCustomerUIScreenState' + profileImageUrl.toString());
       print('authToken>>>>>>>>>' + authToken.toString());
       print('serviceIdEmergency>>>>>>>>' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>>' + mechanicIdEmergency.toString());
       print('bookingIdEmergency>>>>>>>>>' + bookingIdEmergency.toString());
-
+      setFcmToken(authToken);
       if(serviceIdEmergency.toString() != 'null'  && serviceIdEmergency.toString() != "" )
         {
           print('serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
@@ -120,7 +161,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       else
         {
           print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
-
         }
 
       _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
@@ -136,25 +176,21 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
-
         });
       }
     });
+
     _homeCustomerBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
         });
-
       } else {
-
         setState(() {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
@@ -164,7 +200,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     });
   }
 
-  Future<void> _getCurrentCustomerLocation() async {
+  Future<void> _getCurrentCustomerLocation(bool isChangeAddress) async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
     setState(() {
@@ -172,7 +208,17 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       CurrentLongitude = position.longitude.toString();
     });
     print(location);
-    GetAddressFromLatLong(position);
+
+    if(isChangeAddress){
+      GetAddressFromLatLong(LatLng(position.latitude, position.longitude));
+    }else{
+
+    }
+
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    shdPre.setString(SharedPrefKeys.currentLatitude, CurrentLatitude);
+    shdPre.setString(SharedPrefKeys.currentLongitude, CurrentLongitude);
+    //shdPre.setString(SharedPrefKeys.currentAddress, Address);
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -209,17 +255,37 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-  Future<void> GetAddressFromLatLong(Position position)async {
+  Future<void> GetAddressFromLatLong(LatLng position)async {
+    // SharedPreferences shdPre = await SharedPreferences.getInstance();
+    // shdPre.setString(SharedPrefKeys.preferredLatitude, selectedLatLng.latitude.toString());
+    // shdPre.setString(SharedPrefKeys.preferredLongitude, selectedLatLng.longitude.toString());
+    // shdPre.setString(SharedPrefKeys.preferredAddress, Address);
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
     print(placemarks);
     Placemark place = placemarks[0];
     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+
     setState(() {
       displayAddress = '${place.locality}';//${place.name},
     });
     print(" displayAddress >>>>>> " + displayAddress);
-
   }
+
+  Future<void> GetAddressString(LatLng position) async {
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(placemarks);
+    Placemark place = placemarks[0];
+
+    String addressLocation = '${place.street}, ${place.subLocality}, ${place.locality}';
+
+    setState(() {
+      addressLocationText = addressLocation;
+      print("addressLocationText >>>>>>> " + addressLocationText);
+    });
+    //return addressLocation;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +296,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                searchYouService(context),
+                searchYouService(context, size),
                 serviceBanners(),
                 emergencyService(size),
                 regularService(),
@@ -244,7 +310,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
 
-  Widget searchYouService(BuildContext context) {
+  Widget searchYouService(BuildContext context, Size size) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -260,7 +326,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>  SearchServiceScreen()));
-
                   },
                   child: Container(
                     height: 35,
@@ -277,27 +342,44 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 ),
               ),
               SizedBox(
-                width: 5,
+                width: 3,
               ),
-              Row(
-                children: [
-                  Icon(Icons.location_on_rounded, color: CustColors.light_navy,size: 35,),
-                  SizedBox(
-                    width: 50,
-                    child: Column(
-                      children: [
-                        Text('$displayAddress',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.visible,
-                          style: Styles.textLabelTitle_10,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              locationWidget(size),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget locationWidget(Size size){
+    return InkWell(
+      onTap: () async {
+      var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangeLocationScreen(latitude: CurrentLatitude,
+                        longitude: CurrentLongitude),
+                  ));
+      setState(() {
+        GetAddressFromLatLong(result);
+      });
+      },
+      child: Row(
+        children: [
+          Icon(Icons.location_on, color: CustColors.light_navy,size: 32,),
+          SizedBox(
+            width: 55,
+            child: Column(
+              children: [
+                Text('$displayAddress',
+                  //maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.ellipsis,
+                  style: Styles.textLabelTitle_10,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -440,7 +522,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   width: 35,
                                                   fit: BoxFit.cover,)
                                                 : Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                            //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                           ),
                                         ),
                                         Padding(
@@ -543,14 +624,20 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                   ),
                                   itemBuilder: (context,index,) {
                                     return GestureDetector(
-                                      onTap:(){
-                                        print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                                        print(">>>>>>>>>> Longitude  $CurrentLongitude");
+                                      onTap:() async {
+                                        SharedPreferences shdPre = await SharedPreferences.getInstance();
+
+                                        print(">>>>>>>>>> Latitude  ${shdPre.getString(SharedPrefKeys.preferredLatitude,)}");
+                                        print(">>>>>>>>>> Longitude  ${shdPre.getString(SharedPrefKeys.preferredLongitude,)}");
                                         print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
                                         print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
 
                                         serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
                                         print(">>>>>>>>>> ServiceId  $serviceIds");
+
+                                        GetAddressString(LatLng(
+                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString()),
+                                            double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString())));
 
                                         Navigator.push(
                                             context,
@@ -559,9 +646,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   categoryList: snapshot.data?.data?.categoryList![index],
                                                   isAddService: true,
                                                   isReturnData: false,
-                                                  latitude: CurrentLatitude,
-                                                  longitude: CurrentLongitude,
-                                                  address: Address,
+                                                  latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
+                                                  longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
+                                                  address: addressLocationText,
                                                 )));
 
                                       },
@@ -837,7 +924,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                   onPressed: () async {
                     SharedPreferences shdPre = await SharedPreferences.getInstance();
 
-
                     print(">>>>>>>>>> Latitude  $CurrentLatitude");
                     print(">>>>>>>>>> Longitude  $CurrentLongitude");
                     print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
@@ -859,16 +945,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
 
                     }
-
-
                     Navigator.pop(context);
+                    GetAddressString(LatLng(double.parse(CurrentLatitude), double.parse(CurrentLongitude)));
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>  FindMechanicListScreen(
                               serviceIds: serviceIds,
                               serviceType: 'emergency',
-                              customerAddress: Address,
+                              customerAddress: addressLocationText,
                               latitude: CurrentLatitude,
                               longitude: CurrentLongitude,
                               authToken: authToken,)));
