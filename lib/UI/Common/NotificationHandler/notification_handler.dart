@@ -22,25 +22,33 @@ class NotificationHandler extends StatefulWidget {
 class _NotificationHandlerState extends State<NotificationHandler> {
   final FirebaseMessaging fm = FirebaseMessaging.instance;
   late Widget child;
-  GlobalKey _scaffold = GlobalKey();
+  GlobalKey<NavigatorState> _scaffold = new GlobalKey<NavigatorState>();
+  late JobRequestNotifyProvider provider1;
+  late NavigatorState _navigator;
   @override
   void initState() {
     super.initState();
     child = widget.child;
     if(mounted){
       setState(() {
-        _listenNotification(context);
+      //  _listenNotification(context);
       });
     }
   }
-
-
+  @override
+  void didChangeDependencies() {
+     provider1 = Provider.of<JobRequestNotifyProvider>(context,listen: false);
+     _navigator = Navigator.of(context);
+    super.didChangeDependencies();
+  }
   _listenNotification(BuildContext context) {
+
+    print("jgjgsjghgh  0002 ${context}");
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print(">>>message received onMessage");
-
+      print("jgjgsjghgh  0003 ${context} ");
       print("event.notification!.data " + event.data.toString());
-      _serialiseAndNavigate(event, _scaffold.currentContext!);
+      _serialiseAndNavigate(event, context);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
@@ -68,20 +76,18 @@ class _NotificationHandlerState extends State<NotificationHandler> {
 
       String bookingId = message.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
+     print("nhjdkjhjk $context1");
 
-      final provider1 = Provider.of<LocaleProvider>(_scaffold.currentContext!,listen: false);
-      setState(() {
+      // setState(() {
 
-        provider1.setPayload(notificationPayloadMdl);
-        print("provider data >>>> "+  provider1.payloadMdl.screen);
+        provider1.setJobRequestNotifyProvider(notificationPayloadMdl);
+        print("provider data >>>> "+  provider1.getNotificationPayloadMdl.bookingId);
 
-      });
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => IncomingJobRequestScreen()),
+
+      _navigator.pushReplacement(
+          MaterialPageRoute(builder: (context) => IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)),
         );
-      });
+      // });
 
       /*Navigator.push(
           context,
@@ -106,6 +112,11 @@ class _NotificationHandlerState extends State<NotificationHandler> {
 
   @override
   Widget build(BuildContext context) {
+    print("jgjgsjghgh  0001 ");
+    if(mounted) {
+      print("jgjgsjghgh  0005 ");
+      _listenNotification(context);
+    }
     //_listenNotification(context);
     //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     return Scaffold(

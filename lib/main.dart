@@ -118,8 +118,8 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                       primaryColor: Colors.white,
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
-                    home: SplashScreen(),
-                    //home:NotificationHandler(child: SplashScreen()),
+                    //home: SplashScreen(),
+                    home:NotificationHandler(child: SplashScreen()),
                     //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",

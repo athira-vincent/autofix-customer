@@ -23,12 +23,12 @@ import 'package:slider_button/slider_button.dart';
 
 class IncomingJobRequestScreen extends StatefulWidget {
 
-  //final NotificationPayloadMdl notificationPayloadMdl;
+  final NotificationPayloadMdl notificationPayloadMdl;
 
    IncomingJobRequestScreen(
-       /*{
+       {
          required this.notificationPayloadMdl
-       }*/);
+       });
 
   @override
   State<StatefulWidget> createState() {
@@ -71,14 +71,22 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   int levelClock = 30;
   String authToken = "", userId = "";
   List yourItemList = [];
+  late JobRequestNotifyProvider _provider;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    _provider = Provider.of<JobRequestNotifyProvider>(context);
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
     super.initState();
-    notificationPayloadMdl = Provider.of<JobRequestNotifyProvider>(context).getNotificationPayloadMdl;
-    customerToken = notificationPayloadMdl.customerFcmToken;
-    bookingIdEmergency = notificationPayloadMdl.bookingId;
-    serviceName = notificationPayloadMdl.serviceName;
+    // notificationPayloadMdl = _provider.getNotificationPayloadMdl;
+    // customerToken = notificationPayloadMdl.customerFcmToken;
+    //bookingIdEmergency = notificationPayloadMdl.bookingId;
+    //serviceName = _provider.getNotificationPayloadMdl.serviceName;
     getSharedPrefData();
     _getApiResponse();
     _controller = AnimationController(
@@ -106,14 +114,13 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
       print('userFamilyId ' + authToken.toString());
       print('userId ' + userId.toString());
-
     });
   }
 
   Future<void> callOnFcmApiSendPushNotifications(int length,) async {
-
+    notificationPayloadMdl = _provider.getNotificationPayloadMdl;
     print(" callOnFcmApiSendPushNotifications > isAccepted " + isAccepted.toString());
-    print("customerToken >> " + customerToken);
+    print("customerToken >> " + _provider.getNotificationPayloadMdl.customerFcmToken);
 
     FirebaseMessaging.instance.getToken().then((value) {
       FcmToken = value;
@@ -211,7 +218,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
           if(isAccepted == 1){
 
           SharedPreferences shdPre = await SharedPreferences.getInstance();
-          shdPre.setString(SharedPrefKeys.bookingIdEmergency, notificationPayloadMdl.bookingId);
+          shdPre.setString(SharedPrefKeys.bookingIdEmergency, _provider.getNotificationPayloadMdl.bookingId);
 
            updateToCloudFirestoreDB();
 
@@ -380,6 +387,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
   @override
   Widget build(BuildContext context) {
+    notificationPayloadMdl = _provider.getNotificationPayloadMdl;
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -391,7 +399,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                 children: [
                   appBarCustomUi(),
                   Container(
-                    height: MediaQuery.of(context).size.height *0.32 ,
+                    height: MediaQuery.of(context).size.height * 0.32 ,
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Row(
@@ -443,7 +451,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                           children: [
                                             SizedBox(height: 10,),
                                             Container(
-                                              child: Text(notificationPayloadMdl.serviceName,
+                                              child: Text(widget.notificationPayloadMdl.serviceName,
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -463,7 +471,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             ),
                                             SizedBox(height: 10,),
                                             Container(
-                                              child: Text(notificationPayloadMdl.carPlateNumber,      //'YAB477AB',
+                                              child: Text(widget.notificationPayloadMdl.carPlateNumber,      //'YAB477AB',
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -474,7 +482,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             Container(
                                               width: 150,
                                               child: Text(
-                                                notificationPayloadMdl.customerName,
+                                                widget.notificationPayloadMdl.customerName,
                                                 maxLines: 4,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -484,7 +492,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             Container(
                                               width: 150,
                                               child: Text(
-                                                notificationPayloadMdl.customerAddress
+                                                widget.notificationPayloadMdl.customerAddress
                                                 /*'Elenjikkal House '
                                                     'Empyreal Garden '
                                                     'Opposite of Ceevees International Auditorium Anchery'
@@ -531,7 +539,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                       //callOnFcmApiSendPushNotifications(1, 1);
                                       _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "2", userId,);
                                       _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                          authToken, notificationPayloadMdl.bookingId, "2");
+                                          authToken, widget.notificationPayloadMdl.bookingId, "2");
                                       //--------- call notification
                                     });
                                   },
