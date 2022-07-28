@@ -385,7 +385,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-  /*_listenNotification(BuildContext context){
+  _listenNotification(BuildContext context){
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
 
       print("onMessage recieved from onMessage");
@@ -424,7 +424,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           });
         }
     });
-  }*/
+  }
 
 
   @override
@@ -493,7 +493,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     child: Stack(
                       alignment: Alignment.topCenter,
                       children: [
-
                         Container(
                           height: 60,
                           width: 60,

@@ -23,7 +23,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   final FirebaseMessaging fm = FirebaseMessaging.instance;
   late Widget child;
   GlobalKey<NavigatorState> _scaffold = new GlobalKey<NavigatorState>();
-  late JobRequestNotifyProvider provider1;
+  //late JobRequestNotifyProvider provider1;
   late NavigatorState _navigator;
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   }
   @override
   void didChangeDependencies() {
-     provider1 = Provider.of<JobRequestNotifyProvider>(context,listen: false);
+    // provider1 = Provider.of<JobRequestNotifyProvider>(context,listen: false);
      _navigator = Navigator.of(context);
     super.didChangeDependencies();
   }
@@ -76,12 +76,10 @@ class _NotificationHandlerState extends State<NotificationHandler> {
 
       String bookingId = message.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
-     print("nhjdkjhjk $context1");
+      print("nhjdkjhjk $context1");
 
-      // setState(() {
-
-        provider1.setJobRequestNotifyProvider(notificationPayloadMdl);
-        print("provider data >>>> "+  provider1.getNotificationPayloadMdl.bookingId);
+        // provider1.setJobRequestNotifyProvider(notificationPayloadMdl);
+        // print("provider data >>>> "+  provider1.getNotificationPayloadMdl.bookingId);
 
 
       _navigator.pushReplacement(
