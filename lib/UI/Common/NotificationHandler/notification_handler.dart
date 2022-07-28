@@ -22,7 +22,7 @@ class NotificationHandler extends StatefulWidget {
 class _NotificationHandlerState extends State<NotificationHandler> {
   final FirebaseMessaging fm = FirebaseMessaging.instance;
   late Widget child;
-  GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>();
+  GlobalKey _scaffold = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -91,7 +91,6 @@ class _NotificationHandlerState extends State<NotificationHandler> {
       });*/
 
       //Navigator.of(context).pushNamed("/IncomingJobRequestScreen");
-      //----------
     }
     /*Navigator.push(
       context,
@@ -104,20 +103,6 @@ class _NotificationHandlerState extends State<NotificationHandler> {
       ),
     );*/
   }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-   // _listenNotification(context);
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didUpdateWidget(covariant NotificationHandler oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
-
 
   @override
   Widget build(BuildContext context) {

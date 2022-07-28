@@ -80,6 +80,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
       print('userFamilyId'+authToken.toString());
       _homeCustomerBloc.postSearchServiceRequest("$authToken", null,null,null);
       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
+      // _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
     });
   }
 
@@ -409,7 +410,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
             Container(
               child: StreamBuilder(
-                  stream:  _homeCustomerBloc.regularServiceListResponse,
+                  stream: _homeCustomerBloc.regularServiceListResponse,
                   builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
                     print("${snapshot.hasData}");
                     print("${snapshot.connectionState}");
