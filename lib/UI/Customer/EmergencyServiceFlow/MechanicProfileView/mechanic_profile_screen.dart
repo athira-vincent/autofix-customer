@@ -1109,7 +1109,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Wait few minutes !",
+                            "Wait for few minutes !",
                             style: Styles.waitingTextBlack17,
                           ),
                           Text(
