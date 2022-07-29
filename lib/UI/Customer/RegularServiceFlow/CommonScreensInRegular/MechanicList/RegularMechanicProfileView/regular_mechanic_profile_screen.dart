@@ -12,7 +12,6 @@ import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpd
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:auto_fix/listeners/NotificationListener.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';

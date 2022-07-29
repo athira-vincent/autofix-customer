@@ -61,5 +61,7 @@ class TextStrings {
 
   static const  firebase_take_vehicle = "Regular-TakeVehicle";
 
+  static const  firebase_serverToken = "AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL";
+
 
 }

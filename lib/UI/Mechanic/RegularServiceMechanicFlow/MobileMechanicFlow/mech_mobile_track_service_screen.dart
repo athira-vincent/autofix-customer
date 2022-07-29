@@ -18,9 +18,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MechMobileTrackScreen extends StatefulWidget{
   final String bookingId;
   final String bookingDate;
+  final String customerFcmToken;
   MechMobileTrackScreen({
     required this.bookingId,
-    required this.bookingDate
+    required this.bookingDate,
+    required this.customerFcmToken
   });
 
   @override
@@ -41,8 +43,9 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
   DateTime dateToday = DateTime.now() ;
   String isCompleted = "-1";
+  String? FcmToken="";
   String authToken="";
-  String userName="", userId = "";
+  String userName="", userId = "", vehicleName = "";
 
   @override
   void initState() {
@@ -77,6 +80,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         customerLongitude = event.get("customerLongitude");
         scheduledDate = event.get("scheduledDate");
         scheduledTime = event.get("scheduledTime");
+        vehicleName = event.get("vehicleName");
         isBookedDate = event.get("isBookedDate");
         isDriveStarted = event.get("isDriveStarted");
         isDriveStartedTime = event.get("isDriveStartedTime");
@@ -108,8 +112,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         });
       }
 
-      //String date = _mechanicHomeBloc.dateMonthConverter(new DateFormat("yyyy-MM-dd").parse(bookingDate));
-
       print(" >>>> Date : dateToday >>>>>" + dateToday.toString());
       print(" >>>> Date : tempDate >>>>>" + tempDate.toString());
 
@@ -129,7 +131,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         print("Failed to add Location: $error"));
   }
 
-  /*Future<void> callOnFcmApiSendPushNotifications(int length) async {
+  Future<void> callOnFcmApiSendPushNotifications(String msg ) async {
     String? token;
     await FirebaseMessaging.instance.getToken().then((value) {
       token = value;
@@ -138,14 +140,11 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       });
       print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
     });
-
-
     final postUrl = 'https://fcm.googleapis.com/fcm/send';
     // print('userToken>>>${appData.fcmToken}'); //alp dec 28
-
     final data = {
       'notification': {
-        'body': 'You have new Emergency booking',
+        'body': '$msg',
         'title': 'Notification',
         'sound': 'alarmw.wav',
       },
@@ -154,25 +153,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "id": "1",
         "status": "done",
-        "screen": "CustomerServiceDetailsScreen",
-        "bookingId" : "$bookingIdEmergency",
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "carName" : "$carNameBrand [$carNameModel]",
-        "carPlateNumber" : "$carPlateNumber",
-        "customerName" : "$userName",
-        "customerAddress" : "${widget.customerAddress}",
-        "customerLatitude" : "${widget.latitude}",
-        "customerLongitude" : "${widget.longitude}",
-        "customerFcmToken" : "$token",
-        "mechanicName" : "${widget.mechanicListData?.firstName}",
-        "mechanicID" : "${widget.mechanicId}",
-        "mechanicLatitude" : "${widget.latitude}",
-        "mechanicLongitude" : "${widget.longitude}",
-        "latitude" : "${widget.latitude}",
-        "longitude" : "${widget.longitude}",
-        "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
-        "isWorkStarted" : "0",
-        "isWorkCompleted" : "0",
+        "screen": "customerServiceDetails",
+        "bookingId" : "${widget.bookingId}",
         "message": "ACTION"
       },
       'apns': {
@@ -181,7 +163,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${widget.customerFcmToken}'
       //'to':'$token'
       // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
     };
@@ -190,11 +172,10 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     print('FcmToken >>> ${FcmToken}');
     print('FcmToken token >>> ${token}');
 
-
     final headers = {
       'content-type': 'application/json',
       'Authorization':
-      'key=$serverToken'
+      'key=${TextStrings.firebase_serverToken}'
     };
 
     BaseOptions options = new BaseOptions(
@@ -220,7 +201,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     } catch (e) {
       print('exception $e');
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1155,6 +1136,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     padding: const EdgeInsets.only(top: 00.0),
                     child: TextButton(
                       onPressed: () {
+                        callOnFcmApiSendPushNotifications("Service for ${vehicleName} started");
                         updateToCloudFirestoreDB("isWorkStarted","0");
                         _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "5");
                       },
@@ -1418,6 +1400,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
                     child: TextButton(
                       onPressed: () {
                         //updateToCloudFirestoreDB("isWorkStarted","1");
+                        callOnFcmApiSendPushNotifications("Service for ${vehicleName} finished");
                         updateToCloudFirestoreDB("isWorkFinished","0");
                         _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "6");
                       },

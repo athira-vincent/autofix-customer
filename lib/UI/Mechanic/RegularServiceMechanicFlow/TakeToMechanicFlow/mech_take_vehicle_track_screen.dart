@@ -5,7 +5,9 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:fdottedline/fdottedline.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,11 +19,13 @@ class MechTakeVehicleTrackScreen extends StatefulWidget{
   final String bookedDate;
   //final String reachTime;
   final String bookedId;
+  final String customerFcmToken;
 
   MechTakeVehicleTrackScreen({
     required this.bookedDate,
     //required this.reachTime,
     required this.bookedId,
+    required this.customerFcmToken
   });
 
   @override
@@ -45,6 +49,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
   String isPayment = "-1";
   String completed = "-1";
   String authToken = "";
+  String? FcmToken="", vehicleName = "";
 
   @override
   void initState(){
@@ -66,6 +71,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
        // paymentRecieved = event.get("paymentRecieved");
         isPayment = event.get("isPayment");
         completed = event.get("completed");
+        vehicleName = event.get("vehicleName");
       });
     });
   }
@@ -116,6 +122,78 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
         .then((value) => print("Location Added >>> ${DateFormat("hh:mm a").format(DateTime.now())}"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
+  }
+
+  Future<void> callOnFcmApiSendPushNotifications(String msg ) async {
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+    final data = {
+      'notification': {
+        'body': '$msg',
+        'title': 'Notification',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "screen": "customerServiceDetails",
+        "bookingId" : "${widget.bookedId}",
+        "message": "ACTION"
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      'to':'${widget.customerFcmToken}'
+      //'to':'$token'
+      // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
+    };
+
+    print('FcmToken data >>> ${data}');
+    print('FcmToken >>> ${FcmToken}');
+    print('FcmToken token >>> ${token}');
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=${TextStrings.firebase_serverToken}'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          print('notification sending success');
+
+        });
+      } else {
+        setState(() {
+          print('notification sending failed');
+
+        });
+      }
+    } catch (e) {
+      print('exception $e');
+    }
   }
 
   @override
@@ -655,6 +733,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       onPressed: () {
                         setState(() {
                           updateToCloudFirestoreDB('0', '0', '-1', '-1', '-1',);
+                          callOnFcmApiSendPushNotifications("Service for ${vehicleName} started");
                           _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "5");
                         });
                       },
@@ -854,6 +933,7 @@ class _MechTakeVehicleTrackScreen extends State <MechTakeVehicleTrackScreen>{
                       onPressed: () {
                         setState(() {
                           updateToCloudFirestoreDB('0', '0', '0', '-1', '-1',);
+                          callOnFcmApiSendPushNotifications("Service for ${vehicleName} finished");
                           _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "6");
                         });
                       },

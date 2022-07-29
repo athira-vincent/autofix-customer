@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
-import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
-import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
@@ -17,18 +15,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slider_button/slider_button.dart';
 
 class IncomingJobRequestScreen extends StatefulWidget {
 
-  //final NotificationPayloadMdl notificationPayloadMdl;
+  final NotificationPayloadMdl notificationPayloadMdl;
 
-   IncomingJobRequestScreen(
-       /*{
-         required this.notificationPayloadMdl
-       }*/);
+  IncomingJobRequestScreen(
+      {
+        required this.notificationPayloadMdl
+      });
 
   @override
   State<StatefulWidget> createState() {
@@ -41,7 +38,6 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
   HomeMechanicBloc _mechanicHomeBloc = HomeMechanicBloc();
-  late NotificationPayloadMdl notificationPayloadMdl;
   String customerToken = "", bookingIdEmergency = "", serviceName = "";
   FocusNode _emailFocusNode = FocusNode();
   TextStyle _labelStyleEmail = const TextStyle();
@@ -75,10 +71,9 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   @override
   void initState() {
     super.initState();
-    notificationPayloadMdl = Provider.of<JobRequestNotifyProvider>(context).getNotificationPayloadMdl;
-    customerToken = notificationPayloadMdl.customerFcmToken;
-    bookingIdEmergency = notificationPayloadMdl.bookingId;
-    serviceName = notificationPayloadMdl.serviceName;
+    customerToken = widget.notificationPayloadMdl.customerFcmToken;
+    bookingIdEmergency = widget.notificationPayloadMdl.bookingId;
+    serviceName = widget.notificationPayloadMdl.serviceName;
     getSharedPrefData();
     _getApiResponse();
     _controller = AnimationController(
@@ -135,22 +130,22 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "id": "1",
         "status": "done",
         "screen": "MechanicTrackingScreen",
-        "bookingId" : "${notificationPayloadMdl.bookingId}",
-        "serviceName" : "${notificationPayloadMdl.serviceName}",
-        "serviceId" : "${notificationPayloadMdl.serviceId}",
-        "serviceList" : "${notificationPayloadMdl.serviceList}",
-        "carName" : "${notificationPayloadMdl.carName}",
-        "carPlateNumber" : "${notificationPayloadMdl.carPlateNumber}",
-        "customerName" : "${notificationPayloadMdl.customerName}",
-        "customerAddress" : "${notificationPayloadMdl.customerAddress}",
-        "customerLatitude" : "${notificationPayloadMdl.customerLatitude}",
-        "customerLongitude" : "${notificationPayloadMdl.customerLongitude}",
-        "customerFcmToken" : "${notificationPayloadMdl.customerFcmToken}",
-        "mechanicName" : "${notificationPayloadMdl.mechanicName}",
-        "mechanicID" : "${notificationPayloadMdl.mechanicID}",
-        "mechanicAddress" : "${notificationPayloadMdl.mechanicAddress}",
-        "mechanicLatitude" : "${notificationPayloadMdl.mechanicLatitude}",
-        "mechanicLongitude" : "${notificationPayloadMdl.mechanicLongitude}",
+        "bookingId" : "${widget.notificationPayloadMdl.bookingId}",
+        "serviceName" : "${widget.notificationPayloadMdl.serviceName}",
+        "serviceId" : "${widget.notificationPayloadMdl.serviceId}",
+        "serviceList" : "${widget.notificationPayloadMdl.serviceList}",
+        "carName" : "${widget.notificationPayloadMdl.carName}",
+        "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
+        "customerName" : "${widget.notificationPayloadMdl.customerName}",
+        "customerAddress" : "${widget.notificationPayloadMdl.customerAddress}",
+        "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
+        "customerLongitude" : "${widget.notificationPayloadMdl.customerLongitude}",
+        "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
+        "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
+        "mechanicID" : "${widget.notificationPayloadMdl.mechanicID}",
+        "mechanicAddress" : "${widget.notificationPayloadMdl.mechanicAddress}",
+        "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
+        "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
         "mechanicFcmToken" : "$FcmToken",
         "totalTimeTakenByMechanic": "0",
         "mechanicArrivalState": "0",
@@ -163,14 +158,14 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
         "extendedTime" : "0",
         "customerFromPage" : "0",
         "mechanicFromPage" : "0",
-        "updatedServiceCost" : "${notificationPayloadMdl.serviceCost}",
+        "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
         "updatedServiceList" : "",
-        "updatedServiceTime" : "${notificationPayloadMdl.serviceTime}",
+        "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
         "serviceModel" : "",
         "isWorkStarted" : "0",
         "isWorkCompleted" : "0",
-        "serviceTime" : "${notificationPayloadMdl.serviceTime}",
-        "serviceCost" : "${notificationPayloadMdl.serviceCost}",
+        "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
+        "serviceCost" : "${widget.notificationPayloadMdl.serviceCost}",
         "message": "ACTION"
       },
       'apns': {
@@ -208,19 +203,19 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
         }else*/
 
-          if(isAccepted == 1){
+        if(isAccepted == 1){
 
           SharedPreferences shdPre = await SharedPreferences.getInstance();
-          shdPre.setString(SharedPrefKeys.bookingIdEmergency, notificationPayloadMdl.bookingId);
+          shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
-           updateToCloudFirestoreDB();
+          updateToCloudFirestoreDB();
 
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => FindYourCustomerScreen(
-                    latitude: notificationPayloadMdl.customerLatitude/*"10.0159"*/,
-                    longitude: notificationPayloadMdl.customerLongitude/*"76.3419"*/,
+                    latitude: widget.notificationPayloadMdl.customerLatitude/*"10.0159"*/,
+                    longitude: widget.notificationPayloadMdl.customerLongitude/*"76.3419"*/,
                     //notificationPayloadMdl: widget.notificationPayloadMdl,
                   )));
         }
@@ -236,10 +231,10 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
   void updateToCloudFirestoreDB() async{
 
     yourItemList.add({
-      "serviceCost":  '${notificationPayloadMdl.serviceCost}',
-      "serviceId": '${notificationPayloadMdl.serviceId}',
-      "serviceName": '${notificationPayloadMdl.serviceName}',
-      "serviceTime":  '${notificationPayloadMdl.serviceTime}',
+      "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
+      "serviceId": '${widget.notificationPayloadMdl.serviceId}',
+      "serviceName": '${widget.notificationPayloadMdl.serviceName}',
+      "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
       "isDefault":  '1',
     });
 
@@ -247,24 +242,24 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
     _firestore
         .collection("ResolMech")
-        .doc('${notificationPayloadMdl.bookingId}')
+        .doc('${widget.notificationPayloadMdl.bookingId}')
         .set({
-      "bookingId" : "${notificationPayloadMdl.bookingId}",
-      "serviceName" : "${notificationPayloadMdl.serviceName}",
-      "serviceId" : "${notificationPayloadMdl.serviceId}",
-      "serviceList" : "${notificationPayloadMdl.serviceList}",
-      "carName" : "${notificationPayloadMdl.carName}",
-      "carPlateNumber" : "${notificationPayloadMdl.carPlateNumber}",
-      "customerName" : "${notificationPayloadMdl.customerName}",
-      "customerAddress" : "${notificationPayloadMdl.customerAddress}",
-      "customerLatitude" : "${notificationPayloadMdl.customerLatitude}",
-      "customerLongitude" : "${notificationPayloadMdl.customerLongitude}",
-      "customerFcmToken" : "${notificationPayloadMdl.customerFcmToken}",
-      "mechanicName" : "${notificationPayloadMdl.mechanicName}",
-      "mechanicID" : "${notificationPayloadMdl.mechanicID}",
-      "mechanicAddress" :"${notificationPayloadMdl.mechanicAddress}",
-      "mechanicLatitude" : "${notificationPayloadMdl.mechanicLatitude}",
-      "mechanicLongitude" : "${notificationPayloadMdl.mechanicLongitude}",
+      "bookingId" : "${widget.notificationPayloadMdl.bookingId}",
+      "serviceName" : "${widget.notificationPayloadMdl.serviceName}",
+      "serviceId" : "${widget.notificationPayloadMdl.serviceId}",
+      "serviceList" : "${widget.notificationPayloadMdl.serviceList}",
+      "carName" : "${widget.notificationPayloadMdl.carName}",
+      "carPlateNumber" : "${widget.notificationPayloadMdl.carPlateNumber}",
+      "customerName" : "${widget.notificationPayloadMdl.customerName}",
+      "customerAddress" : "${widget.notificationPayloadMdl.customerAddress}",
+      "customerLatitude" : "${widget.notificationPayloadMdl.customerLatitude}",
+      "customerLongitude" : "${widget.notificationPayloadMdl.customerLongitude}",
+      "customerFcmToken" : "${widget.notificationPayloadMdl.customerFcmToken}",
+      "mechanicName" : "${widget.notificationPayloadMdl.mechanicName}",
+      "mechanicID" : "${widget.notificationPayloadMdl.mechanicID}",
+      "mechanicAddress" :"${widget.notificationPayloadMdl.mechanicAddress}",
+      "mechanicLatitude" : "${widget.notificationPayloadMdl.mechanicLatitude}",
+      "mechanicLongitude" : "${widget.notificationPayloadMdl.mechanicLongitude}",
       "mechanicFcmToken" : "$FcmToken",
       "requestFromApp" : "$isAccepted",
       "paymentStatus" : "0",
@@ -272,36 +267,36 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "isPaymentAccepted" : "0",
       "extendedTime" : "0",
       "totalTimeTakenByMechanic": "0",
-      "timerCounter": "${notificationPayloadMdl.serviceTime}",
-      "currentUpdatedTime": "${notificationPayloadMdl.serviceTime}",
+      "timerCounter": "${widget.notificationPayloadMdl.serviceTime}",
+      "currentUpdatedTime": "${widget.notificationPayloadMdl.serviceTime}",
       "customerFromPage" : "MechanicTrackingScreen",
       "mechanicFromPage" : "FindYourCustomerScreen",
       "isWorkStarted" : "0",
       "isWorkCompleted" : "0",
-      "latitude": "${notificationPayloadMdl.mechanicLatitude}",
-      'longitude': "${notificationPayloadMdl.mechanicLongitude}",
-      "serviceTime" : "${notificationPayloadMdl.serviceTime}",
-      "serviceCost" :"${notificationPayloadMdl.serviceCost}",
-      "updatedServiceCost" : "${notificationPayloadMdl.serviceCost}",
+      "latitude": "${widget.notificationPayloadMdl.mechanicLatitude}",
+      'longitude': "${widget.notificationPayloadMdl.mechanicLongitude}",
+      "serviceTime" : "${widget.notificationPayloadMdl.serviceTime}",
+      "serviceCost" :"${widget.notificationPayloadMdl.serviceCost}",
+      "updatedServiceCost" : "${widget.notificationPayloadMdl.serviceCost}",
       "updatedServiceList" : FieldValue.arrayUnion([{
-        "serviceCost":  '${notificationPayloadMdl.serviceCost}',
-        "serviceId": '${notificationPayloadMdl.serviceId}',
-        "serviceName": '${notificationPayloadMdl.serviceName}',
-        "serviceTime":  '${notificationPayloadMdl.serviceTime}',
+        "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
+        "serviceId": '${widget.notificationPayloadMdl.serviceId}',
+        "serviceName": '${widget.notificationPayloadMdl.serviceName}',
+        "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
         "isDefault":  '1',
       }]),
-      "updatedServiceTime" : "${notificationPayloadMdl.serviceTime}",
+      "updatedServiceTime" : "${widget.notificationPayloadMdl.serviceTime}",
       "serviceModel" : FieldValue.arrayUnion([{
-        "serviceCost":  '${notificationPayloadMdl.serviceCost}',
-        "serviceId": '${notificationPayloadMdl.serviceId}',
-        "serviceName": '${notificationPayloadMdl.serviceName}',
-        "serviceTime":  '${notificationPayloadMdl.serviceTime}',
+        "serviceCost":  '${widget.notificationPayloadMdl.serviceCost}',
+        "serviceId": '${widget.notificationPayloadMdl.serviceId}',
+        "serviceName": '${widget.notificationPayloadMdl.serviceName}',
+        "serviceTime":  '${widget.notificationPayloadMdl.serviceTime}',
         "isDefault":  '1',
       }]),
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
-      })
+    })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
@@ -354,7 +349,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-         // Navigator.pop(context);
+          // Navigator.pop(context);
         });
       } else {
         setState(() {
@@ -443,7 +438,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                           children: [
                                             SizedBox(height: 10,),
                                             Container(
-                                              child: Text(notificationPayloadMdl.serviceName,
+                                              child: Text(widget.notificationPayloadMdl.serviceName,
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -453,7 +448,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             SizedBox(height: 5,),
                                             Container(
                                               child: Text(
-                                                notificationPayloadMdl.carName,
+                                                widget.notificationPayloadMdl.carName,
                                                 // 'Toyota Corolla   [Black]',
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
@@ -463,7 +458,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             ),
                                             SizedBox(height: 10,),
                                             Container(
-                                              child: Text(notificationPayloadMdl.carPlateNumber,      //'YAB477AB',
+                                              child: Text(widget.notificationPayloadMdl.carPlateNumber,      //'YAB477AB',
                                                 maxLines: 2,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -474,7 +469,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             Container(
                                               width: 150,
                                               child: Text(
-                                                notificationPayloadMdl.customerName,
+                                                widget.notificationPayloadMdl.customerName,
                                                 maxLines: 4,
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.visible,
@@ -484,7 +479,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                             Container(
                                               width: 150,
                                               child: Text(
-                                                notificationPayloadMdl.customerAddress
+                                                widget.notificationPayloadMdl.customerAddress
                                                 /*'Elenjikkal House '
                                                     'Empyreal Garden '
                                                     'Opposite of Ceevees International Auditorium Anchery'
@@ -531,7 +526,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
                                       //callOnFcmApiSendPushNotifications(1, 1);
                                       _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "2", userId,);
                                       _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                          authToken, notificationPayloadMdl.bookingId, "2");
+                                          authToken, widget.notificationPayloadMdl.bookingId, "2");
                                       //--------- call notification
                                     });
                                   },
