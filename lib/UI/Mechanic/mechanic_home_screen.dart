@@ -237,7 +237,6 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
                 )
             )).then((value){
         });
-
       }else if(screen.toString() == "customerServiceDetails"){
         Navigator.push(
             context,
@@ -254,7 +253,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       }
     });
 
-    /*FirebaseMessaging.onBackgroundMessage((message) async {
+    FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       setState(() {
@@ -262,7 +261,41 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-    });*/
+      print("event.notification!.data " + message.data.toString());
+      String screen = message.data['screen'];
+      if(screen.toString() == "IncomingJobOfferScreen"){
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(message.data);
+        print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
+
+        final provider = Provider.of<LocaleProvider>(context,listen: false);
+        provider.setPayload(notificationPayloadMdl);
+
+        //var data = message['data'] ?? message;
+        String bookingId = message.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
+            )).then((value){
+        });
+      }else if(screen.toString() == "mechanicServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechServiceRegularDetailsScreen(
+                  bookingId: message.data['bookingId'],
+                  firebaseCollection: message.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }
+
+    });
 
   }
 

@@ -2,11 +2,15 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/Provider/locale_provider.dart';
+import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -130,7 +134,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       }
     });
 
-    /*FirebaseMessaging.onBackgroundMessage((message) async {
+    FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       setState(() {
@@ -138,7 +142,36 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-    });*/
+      print("event.notification!.data " + message.data.toString());
+      String screen = message.data['screen'];
+      if(screen.toString() == "mechanicServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechServiceRegularDetailsScreen(
+                  bookingId: message.data['bookingId'],
+                  firebaseCollection: message.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }else if(screen.toString() == "customerServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  CustServiceRegularDetailsScreen(
+                  bookingId: message.data['bookingId'],
+                  firebaseCollection: message.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }
+    });
 
   }
 

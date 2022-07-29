@@ -7,7 +7,9 @@ import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInR
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/find_your_cust_regular_pickup__screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:fdottedline/fdottedline.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +25,7 @@ class MechPickUpTrackScreen extends StatefulWidget{
   final String pickingDate;
   final String mechanicName;
   final String bookedId;
+  final String customerFcmToken;
 
 
   MechPickUpTrackScreen({
@@ -33,6 +36,7 @@ class MechPickUpTrackScreen extends StatefulWidget{
     required this.longitude,
     required this.mechanicAddress,
     required this.mechanicName,
+    required this.customerFcmToken
   });
 
   @override
@@ -61,8 +65,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
   String isDropOff = "-1";
   String isPayment = "-1";
   String customerLatitude = "", customerLongitude = "";
-
-
+  String? FcmToken="";
+  String vehicleName = "";
 
   @override
   void initState() {
@@ -93,12 +97,12 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         isPayment = event.get("isPayment");
         customerLatitude = event.get("customerLatitude");
         customerLongitude = event.get("customerLongitude");
-
+        vehicleName = event.get("vehicleName");
       });
     });
   }
 
-  /*Future<void> callOnFcmApiSendPushNotifications(int length) async {
+  Future<void> callOnFcmApiSendPushNotifications(String msg) async {
     String? token;
     await FirebaseMessaging.instance.getToken().then((value) {
       token = value;
@@ -114,7 +118,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
 
     final data = {
       'notification': {
-        'body': 'You have new Emergency booking',
+        'body': '$msg',
         'title': 'Notification',
         'sound': 'alarmw.wav',
       },
@@ -123,25 +127,8 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         "click_action": "FLUTTER_NOTIFICATION_CLICK",
         "id": "1",
         "status": "done",
-        "screen": "CustomerServiceDetailsScreen",
-        "bookingId" : "$bookingIdEmergency",
-        "serviceName" : "${widget.mechanicListData?.mechanicService?[0].service?.serviceName}",
-        "carName" : "$carNameBrand [$carNameModel]",
-        "carPlateNumber" : "$carPlateNumber",
-        "customerName" : "$userName",
-        "customerAddress" : "${widget.customerAddress}",
-        "customerLatitude" : "${widget.latitude}",
-        "customerLongitude" : "${widget.longitude}",
-        "customerFcmToken" : "$token",
-        "mechanicName" : "${widget.mechanicListData?.firstName}",
-        "mechanicID" : "${widget.mechanicId}",
-        "mechanicLatitude" : "${widget.latitude}",
-        "mechanicLongitude" : "${widget.longitude}",
-        "latitude" : "${widget.latitude}",
-        "longitude" : "${widget.longitude}",
-        "mechanicFcmToken" :  "${widget.mechanicListData?.fcmToken}",
-        "isWorkStarted" : "0",
-        "isWorkCompleted" : "0",
+        "screen": "customerServiceDetails",
+        "bookingId" : "${widget.bookedId}",
         "message": "ACTION"
       },
       'apns': {
@@ -150,7 +137,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-      'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${widget.customerFcmToken}'
       //'to':'$token'
       // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
     };
@@ -163,7 +150,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     final headers = {
       'content-type': 'application/json',
       'Authorization':
-      'key=$serverToken'
+      'key=${TextStrings.firebase_serverToken}'
     };
 
     BaseOptions options = new BaseOptions(
@@ -189,7 +176,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     } catch (e) {
       print('exception $e');
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1232,6 +1219,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                   '-1' ,
                                   '-1' ,
                                   '-1' ,);
+                                callOnFcmApiSendPushNotifications("Service for ${vehicleName} started");
                                 _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "5");
                               });
                             },
@@ -1409,6 +1397,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                                 '-1' ,
                                 '-1' ,
                                 '-1' ,);
+                              callOnFcmApiSendPushNotifications("Service for ${vehicleName} finished");
                               _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "6");
                             });
                           },
