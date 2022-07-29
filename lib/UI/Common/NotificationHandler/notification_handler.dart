@@ -1,8 +1,11 @@
 
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,13 +46,13 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   }
   _listenNotification(BuildContext context) {
 
-    print("jgjgsjghgh  0002 ${context}");
+    /*print("jgjgsjghgh  0002 ${context}");
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print(">>>message received onMessage");
       print("jgjgsjghgh  0003 ${context} ");
       print("event.notification!.data " + event.data.toString());
       _serialiseAndNavigate(event, context);
-    });
+    });*/
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       print(">>>message received onMessageOpenedApp");
@@ -71,41 +74,39 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     print(">>>> Screen " + screen);
     if(screen.toString() == "IncomingJobOfferScreen"){
       NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(message.data);
-      // final provider = Provider.of<JobRequestNotifyProvider>(context1, listen: false);
-      // provider.setJobRequestNotifyProvider(notificationPayloadMdl);
 
       String bookingId = message.data['bookingId'];
       print("bookingId >>>>> " + bookingId );
       print("nhjdkjhjk $context1");
 
-        // provider1.setJobRequestNotifyProvider(notificationPayloadMdl);
-        // print("provider data >>>> "+  provider1.getNotificationPayloadMdl.bookingId);
-
-
       _navigator.pushReplacement(
           MaterialPageRoute(builder: (context) => IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)),
         );
-      // });
 
-      /*Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context1) =>  IncomingJobRequestScreen()
-          )).then((value){
-      });*/
-
-      //Navigator.of(context).pushNamed("/IncomingJobRequestScreen");
+    }else if(screen.toString() == "mechanicServiceDetails"){
+      print( " >>> onBackgroundMessage mechanicServiceDetails");
+      _navigator.pushReplacement(
+        MaterialPageRoute(builder: (context) => MechServiceRegularDetailsScreen(
+          bookingId: message.data['bookingId'],
+          firebaseCollection: message.data['regularType'].toString()  == "1"
+              ?
+          TextStrings.firebase_pick_up
+          : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+        )),
+      );
+    }else if(screen.toString() == "customerServiceDetails"){
+      print( " >>> onBackgroundMessage customerServiceDetails");
+      _navigator.pushReplacement(
+        MaterialPageRoute(builder: (context) => CustServiceRegularDetailsScreen(
+          bookingId: message.data['bookingId'],
+          firebaseCollection: message.data['regularType'].toString()  == "1"
+              ?
+          TextStrings.firebase_pick_up
+              : message.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+        )),
+      );
     }
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (newcontext) =>
-          ChangeNotifierProvider<YourModel>.value(
-            value: Provider.of<YourModel>(context),
-            child: newView,
-          )
-      ),
-    );*/
+
   }
 
   @override

@@ -3,15 +3,18 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
 import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_screen_ui.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Ui/mechanic_my_profile.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyServices/mechanic_my_services.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/mechanic_side_bar.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
@@ -71,7 +74,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _getCurrentMechanicLocation();
-    //_listenNotification(context);
+    _listenNotification(context);
 
   }
 
@@ -160,7 +163,7 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
     });
   }
 
-  /*_listenNotification(BuildContext context){
+  _listenNotification(BuildContext context){
 
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
 
@@ -174,50 +177,84 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
       });
       print("event.notification!.data " + event.data.toString());
 
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+      String screen = event.data['screen'];
+      if(screen.toString() == "IncomingJobOfferScreen"){
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
 
-      //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId'];
-      print("bookingId >>>>> " + bookingId );
+        //var data = message['data'] ?? message;
+        String bookingId = event.data['bookingId'];
+        print("bookingId >>>>> " + bookingId );
 
-      final provider = Provider.of<LocaleProvider>(context,listen: false);
-      provider.setPayload(notificationPayloadMdl);
+        final provider = Provider.of<LocaleProvider>(context,listen: false);
+        provider.setPayload(notificationPayloadMdl);
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-          )).then((value){
-      });
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
+            )).then((value){
+        });
+      }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
 
       print("message received onMessageOpenedApp");
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-      print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
 
-      final provider = Provider.of<LocaleProvider>(context,listen: false);
-      provider.setPayload(notificationPayloadMdl);
       setState(() {
         _counter += 1;
       });
 
       print("event.notification!.data " + event.data.toString());
+      String screen = event.data['screen'];
+      if(screen.toString() == "IncomingJobOfferScreen"){
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+        print("_notificationPayloadMdl >>>>> " + notificationPayloadMdl.toString());
 
-      //var data = message['data'] ?? message;
-      String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
-      print("bookingId >>>>> " + bookingId );
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
-          )).then((value){
-      });
+        final provider = Provider.of<LocaleProvider>(context,listen: false);
+        provider.setPayload(notificationPayloadMdl);
+
+        //var data = message['data'] ?? message;
+        String bookingId = event.data['bookingId']; // here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        //String notificationMessage = message.data['YOUR_KEY'];// here you need to replace YOUR_KEY with the actual key that you are sending in notification  **`"data"`** -field of the message.
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  IncomingJobRequestScreen(notificationPayloadMdl: notificationPayloadMdl,)
+            )).then((value){
+        });
+      }else if(screen.toString() == "mechanicServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  MechServiceRegularDetailsScreen(
+                  bookingId: event.data['bookingId'],
+                  firebaseCollection: event.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : event.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+
+      }else if(screen.toString() == "customerServiceDetails"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  CustServiceRegularDetailsScreen(
+                  bookingId: event.data['bookingId'],
+                  firebaseCollection: event.data['regularType'].toString()  == "1"
+                      ?
+                  TextStrings.firebase_pick_up
+                      : event.data['regularType'].toString()  == "2" ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle ,
+                )
+            )).then((value){
+        });
+      }
     });
 
-    *//*FirebaseMessaging.onBackgroundMessage((message) async {
+    /*FirebaseMessaging.onBackgroundMessage((message) async {
       print("onBackgroundMessage " + message.data.toString());
 
       setState(() {
@@ -225,9 +262,9 @@ class _MechanicHomeScreenState extends State<MechanicHomeScreen> {
         //_notificationPayloadMdl = event.data;
       });
       print("message.notification!.data " + message.data.toString());
-    });*//*
+    });*/
 
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
