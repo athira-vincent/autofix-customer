@@ -1017,7 +1017,7 @@ class QueryProvider {
             accountType
             status
             jwtToken
-            fcmToke
+            fcmToken
             otpCode
           }
           customer {
@@ -1030,7 +1030,7 @@ class QueryProvider {
             accountType
             status
             jwtToken
-            fcmToke
+            fcmToken
             otpCode
           }
         }
@@ -1762,7 +1762,7 @@ class QueryProvider {
             accountType
             status
             jwtToken
-            fcmToke
+            fcmToken
             otpCode
             customer 
                     {
@@ -2853,7 +2853,7 @@ class QueryProvider {
         accountType
         status
         jwtToken
-        fcmToke
+        fcmToken
         otpCode
         customer{
           id
@@ -2869,7 +2869,7 @@ class QueryProvider {
         accountType
         status
         jwtToken
-        fcmToke
+        fcmToken
         otpCode
         customer{
           id
