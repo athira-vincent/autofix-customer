@@ -168,7 +168,7 @@ class Customer {
     required this.accountType,
     required this.status,
     required this.jwtToken,
-    required this.fcmToke,
+    required this.fcmToken,
     required this.otpCode,
   });
 
@@ -181,7 +181,7 @@ class Customer {
   dynamic accountType;
   int status;
   String jwtToken;
-  dynamic fcmToke;
+  dynamic fcmToken;
   String otpCode;
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -194,7 +194,7 @@ class Customer {
     accountType: json["accountType"],
     status: json["status"] == null ? null : json["status"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
-    fcmToke: json["fcmToke"],
+    fcmToken: json["fcmToken"],
     otpCode: json["otpCode"] == null ? null : json["otpCode"],
   );
 
@@ -208,7 +208,7 @@ class Customer {
     "accountType": accountType,
     "status": status == null ? null : status,
     "jwtToken": jwtToken == null ? null : jwtToken,
-    "fcmToke": fcmToke,
+    "fcmToken": fcmToken,
     "otpCode": otpCode == null ? null : otpCode,
   };
 }

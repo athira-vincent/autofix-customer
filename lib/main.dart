@@ -5,15 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
-import 'package:auto_fix/UI/Common/Location/change_location.dart';
-import 'package:auto_fix/UI/Common/NotificationHandler/notification_handler.dart';
-import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
-import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
+
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -25,19 +17,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'UI/Common/direct_payment_screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_success_screen.dart';
-import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
-import 'UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
-import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
-import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
-
 
 
   void main() async {

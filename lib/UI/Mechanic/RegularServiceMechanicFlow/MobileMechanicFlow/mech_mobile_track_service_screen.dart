@@ -171,6 +171,7 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     print('FcmToken data >>> ${data}');
     print('FcmToken >>> ${FcmToken}');
     print('FcmToken token >>> ${token}');
+    print("widget.customerFcmToke >>> " +'${widget.customerFcmToken}');
 
     final headers = {
       'content-type': 'application/json',

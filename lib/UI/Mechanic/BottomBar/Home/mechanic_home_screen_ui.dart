@@ -5,11 +5,16 @@ import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
@@ -46,6 +51,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String CurrentLongitude ="76.244164";
   String Address = '';
   String displayAddress = '';
+  String firebaseCustomerLatitude = "", firebaseScreen = "", firebaseCustomerLongitude = "" ;
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
@@ -69,7 +75,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _hasActiveService = false;
-    Timer.periodic(Duration(seconds: 120), (Timer t) {
+    Timer.periodic(Duration(seconds: 90), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
       _getCurrentMechanicLocation();
     });
@@ -170,28 +176,27 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           //_isLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
           setState(() {
-            if(value.data?.currentlyWorkingService.toString() == 'null')
-              {
-                _hasActiveService = false;
-              }
-            else
-              {
-                _hasActiveService = true;
-
-              }
-
+            _hasActiveService = false;
           });
         });
       }else{
-          setState(()  {
-            setReminderData();
+        if(value.data?.currentlyWorkingService.toString() == 'null' || value.data?.currentlyWorkingService.toString() == null)
+        {
+          setState(() {
+            _hasActiveService = false;
           });
+        }
+        else {
+          setState(()  {
+              _hasActiveService = true;
+              setReminderData();
+          });
+        }
       }
     });
   }
 
   Future<void> setReminderData() async {
-    _hasActiveService = true;
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
@@ -201,6 +206,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       setState(() {
         vehicleName = event.get('carName');
         customerName = event.get('customerName');
+        firebaseScreen = event.get('mechanicFromPage');
+
+        firebaseCustomerLatitude = event.get('customerLatitude');
+        firebaseCustomerLongitude = event.get('customerLongitude');
+
       });
     });
   }
@@ -806,34 +816,76 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget emergencyServiceReminder(Size size){
     return Positioned(
       bottom: size.height * 1.70 / 100,
-      child: Container(
-        height: size.height * 10 / 100,
-        width: size.width,
-        color: Colors.white,
-        margin: EdgeInsets.only(
-         // left: size.width * 5 / 100,
-          //bottom: size.height * .5 / 100
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 5 / 100,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("You have one Emergency service ",
-                  style: TextStyle(color: CustColors.light_navy),),
-                Text("Service from $customerName.   $vehicleName", )
-              ],
-            ),
-            SvgPicture.asset(
-                "assets/image/img_mech_home_car_bg.svg",
-              height: size.height * 10 / 100,
-            )
-          ],
+      child: InkWell(
+        onTap: (){
+          if(firebaseScreen == "M1"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FindYourCustomerScreen(
+                      latitude: firebaseCustomerLatitude/*"10.0159"*/,
+                      longitude: firebaseCustomerLongitude/*"76.3419"*/,
+                      //notificationPayloadMdl: widget.notificationPayloadMdl,
+                    )));
+          }else if(firebaseScreen == "M2"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicStartServiceScreen()));
+          }else if(firebaseScreen == "M3"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  CustomerApprovedScreen()
+                )).then((value){
+            });
+          }else if(firebaseScreen == "M4"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkCompletedScreen()));
+          }else if(firebaseScreen == "M5"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
+                )).then((value){
+
+            });
+          }else if(firebaseScreen == "M6"){
+            print("Service Completed");
+          }
+        },
+        child: Container(
+          height: size.height * 10 / 100,
+          width: size.width,
+          color: Colors.white,
+          margin: EdgeInsets.only(
+           // left: size.width * 5 / 100,
+            //bottom: size.height * .5 / 100
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5 / 100,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("You have one Emergency service ",
+                    style: TextStyle(color: CustColors.light_navy),),
+                  Text("Service from $customerName ", ),
+                  Text("$vehicleName", )
+                ],
+              ),
+              SvgPicture.asset(
+                  "assets/image/img_mech_home_car_bg.svg",
+                height: size.height * 10 / 100,
+              )
+            ],
+          ),
         ),
       ),
     );

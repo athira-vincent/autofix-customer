@@ -479,7 +479,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                 mechanicAddress: '${_BookingDetails!.mechanic!.firstName}',
                                 mechanicName:  '${_BookingDetails!.mechanic!.firstName}',
                                 pickingDate: bookingDate,
-                                customerFcmToken: '${_BookingDetails!.customer!.fcmToke}',
+                                customerFcmToken: '${_BookingDetails!.customer!.fcmToken}',
                               ),
                             ));
                       }else if(_BookingDetails!.regularType.toString() == "2"){       //mobile Mechanic
@@ -490,7 +490,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                 //bookingId: _BookingDetails!.id.toString(),
                                 bookingId: widget.bookingId,
                                 bookingDate: bookingDate,
-                                customerFcmToken: _BookingDetails!.customer!.fcmToke,
+                                customerFcmToken: _BookingDetails!.customer!.fcmToken,
                               ),
                             ));
                       }
@@ -502,7 +502,7 @@ class _MechServiceRegularDetailsScreen extends State<MechServiceRegularDetailsSc
                                 //reachTime: '',
                                 bookedDate: bookingDate,
                                 bookedId: '${_BookingDetails!.id.toString()}',
-                                customerFcmToken: '${_BookingDetails!.customer!.fcmToke}',
+                                customerFcmToken: '${_BookingDetails!.customer!.fcmToken}',
                               ),
                             ));
                       }
