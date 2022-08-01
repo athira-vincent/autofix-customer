@@ -95,25 +95,20 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
           _selectionList=[];
           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
             //if(_AddPriceServiceList!.data![i].status==1) {
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0){
+            if(_AddPriceServiceList!.data![i].mechanicService!.length > 0){
+
               _selectionList.add(true);
-            }
-            else{
-              _selectionList.add(false);
-            }
-            print("fddfds ${_timeList}");
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
               _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time.toString());
-            }else{
-              _timeList!.add("12:00");
-            }
-            print("ewqr ${_priceList}");
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
               _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee.toString());
             }
             else{
+              _selectionList.add(false);
+              _timeList!.add("12:00");
               _priceList!.add(_AddPriceServiceList!.data![i].minPrice);
             }
+            print("fddfds ${_timeList}");
+            print("ewqr ${_priceList}");
+
           };
           print("vhvhfhjfh 01 ${_AddPriceServiceList!.data!.length}");
         });

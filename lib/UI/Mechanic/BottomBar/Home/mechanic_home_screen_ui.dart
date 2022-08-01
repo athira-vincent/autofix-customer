@@ -75,7 +75,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _hasActiveService = false;
-    Timer.periodic(Duration(seconds: 60), (Timer t) {
+    Timer.periodic(Duration(seconds: 90), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
       _getCurrentMechanicLocation();
     });
