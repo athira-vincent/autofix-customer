@@ -58,6 +58,7 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
        }
      else
        {
+         //WidgetsFlutterBinding.ensureInitialized();
          await Firebase.initializeApp();
        }
 
@@ -110,12 +111,6 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
         child:Sizer(
                 builder: (context, orientation, deviceType) {
                   return MaterialApp(
-                    routes: {
-                      // '/CustomerMainLandingScreen': (BuildContext context) => CustomerMainLandingScreen(),
-                      "/CustomerMainLandingScreen": (context) => CustomerMainLandingScreen(),
-                      "/MechanicHomeScreen" : (context) => MechanicHomeScreen(),
-                      "/IncomingJobRequestScreen" : (context) => IncomingJobRequestScreen(),
-                    },
                     debugShowCheckedModeBanner: false,
                     locale: _locale,
                     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -125,9 +120,8 @@ import 'UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
                       primaryColor: Colors.white,
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
-
-                    home:NotificationHandler(child: SplashScreen()),
-                   // home: MechanicWorkProgressScreen(),
+                    //home: SplashScreen(),
+                    home:SplashScreen(),
                     //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",

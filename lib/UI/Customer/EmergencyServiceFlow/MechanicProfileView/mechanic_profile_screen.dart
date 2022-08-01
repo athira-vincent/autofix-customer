@@ -1,6 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Provider/locale_provider.dart';
@@ -12,7 +13,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/Mobil
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:auto_fix/listeners/NotificationListener.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,8 +28,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as json;
 
-import '../../../Common/NotificationPayload/mechanicServicesListMdl.dart';
-
 
 class MechanicProfileViewScreen extends StatefulWidget {
 
@@ -41,9 +40,6 @@ class MechanicProfileViewScreen extends StatefulWidget {
   final String longitude;
   final String serviceIds;
   final String customerAddress;
-
-
-
 
   MechanicProfileViewScreen({
     required this.mechanicId,
@@ -66,7 +62,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
 
   MechanicDetailsMdl? _mechanicDetailsMdl;
 
-  String serverToken = 'AAAADMxJq7A:APA91bHrfSmm2qgmwuPI5D6de5AZXYibDCSMr2_qP9l3HvS0z9xVxNru5VgIA2jRn1NsXaITtaAs01vlV8B6VjbAH00XltINc32__EDaf_gdlgD718rluWtUzPwH-_uUbQ5XfOYczpFL';
+  String serverToken = TextStrings.firebase_serverToken;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid;
@@ -74,8 +70,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
 
-
-  final NotificationListenerCall _notificationListener = NotificationListenerCall();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -119,9 +113,7 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
     getSharedPrefData();
     _listen();
 
-
-
-    //_listenNotification(context);
+    _listenNotification(context);
   }
 
 
@@ -385,22 +377,24 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
   }
 
 
-  /*_listenNotification(BuildContext context){
+  _listenNotification(BuildContext context){
     FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
-
       print("onMessage recieved from onMessage");
       print("onMessage event.notification!.data " + event.data.toString());
 
-      NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
-      print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
+      String screen = event.data['screen'];
+      if(screen.toString() == "MechanicTrackingScreen"){
 
-      //final provider = Provider.of<LocaleProvider>(context,listen: false);
+        NotificationPayloadMdl notificationPayloadMdl = NotificationPayloadMdl.fromJson(event.data);
+        print('${notificationPayloadMdl.id.toString()} >>>>>>>>onMessage');
 
-      //provider.setPayload(notificationPayloadMdl);
+        //final provider = Provider.of<LocaleProvider>(context,listen: false);
 
-      //Navigator.pop(context);
+        //provider.setPayload(notificationPayloadMdl);
 
-      if(notificationPayloadMdl.requestFromApp == "0")
+        //Navigator.pop(context);
+
+        if(notificationPayloadMdl.requestFromApp == "0")
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
           setState(() {
@@ -408,12 +402,12 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             Navigator.of(context).pop();
           });
         }
-      else
+        else
         {
           print("requestFromApp ${notificationPayloadMdl.requestFromApp}");
           await updateToCloudFirestoreDB();
           setState(() {
-             updateToCloudFirestoreDB();
+            updateToCloudFirestoreDB();
             Navigator.of(context, rootNavigator: true).pop();
             Navigator.pushReplacement(
                 context,
@@ -423,8 +417,11 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
             });
           });
         }
+      }else{
+        print("Notification onMessage catch at MechanicProfileViewScreen");
+      }
     });
-  }*/
+  }
 
 
   @override
@@ -493,7 +490,6 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
                     child: Stack(
                       alignment: Alignment.topCenter,
                       children: [
-
                         Container(
                           height: 60,
                           width: 60,
