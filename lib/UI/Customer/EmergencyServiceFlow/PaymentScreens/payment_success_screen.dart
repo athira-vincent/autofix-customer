@@ -74,18 +74,19 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         children: [
           Container(
             padding: EdgeInsets.only(
-                top: size.width * 5 / 100,
-                bottom: size.width * 5 / 100
+                top: size.width * 6 / 100,
+                bottom: size.width * 6 / 100
             ),
             margin: EdgeInsets.only(
-              left: size.width * 5 / 100,
-              right: size.width * 2 / 100,
+              left: size.width * 6 / 100,
+              right: size.width * 3 / 100,
             ),
             child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Text(
-            "Congratulations your payment was successful \nPlease review your mechanic!",
+            //"Congratulations your payment was successful \nPlease review your mechanic!"
+            "Your Mechanic has received the\n payment of the service rendered.\n The service cycle is completed from\n the mechanic’s end. Thank you for\n choosing Resol mech.",
             style: warningTextStyle01,
           )
         ],
@@ -138,7 +139,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SvgPicture.asset("assets/image/ic_star_blue.svg",
-              height: size.height * 5 / 100, width: size.width * 5 / 100),
+              height: size.height * 4 / 100, width: size.width * 4 / 100),
           Text("Review later", style: buttonTextStyle,)
         ],
       ),
@@ -159,7 +160,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SvgPicture.asset("assets/image/ic_star_yellow.svg",
-              height: size.height * 5 / 100, width: size.width * 5 / 100),
+              height: size.height * 4 / 100, width: size.width * 4 / 100),
           Text("Review Now", style: buttonTextStyle,)
         ],
       ),

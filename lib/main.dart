@@ -26,6 +26,13 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Common/direct_payment_screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/direct_payment_success_screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_success_screen.dart';
 import 'UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
 import 'UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
