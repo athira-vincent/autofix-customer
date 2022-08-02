@@ -18,6 +18,10 @@ import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
+import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_failed_screen.dart';
+
 
   void main() async {
     await initHiveForFlutter();
@@ -99,7 +103,7 @@ import 'package:provider/provider.dart';
                       primaryColor: Colors.white,
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
-                    //home: SplashScreen(),
+                    //home: ExtraServiceDiagonsisScreen(),
                     home:SplashScreen(),
                     //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(

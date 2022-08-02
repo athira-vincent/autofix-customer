@@ -315,7 +315,7 @@ class _ExtraServiceDiagonsisScreenState extends State<ExtraServiceDiagonsisScree
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Your mechanic added some additional services after his diagnostic test , it may cause additional cost than you expected.",
+                    "Your mechanic has added some additional services after his diagnostic test , it may cause additional cost than you expected.",
                     style: Styles.infoTextLabelTitle,
                     textAlign: TextAlign.justify,
                   ),
