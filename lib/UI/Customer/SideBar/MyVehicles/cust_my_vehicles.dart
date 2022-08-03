@@ -372,7 +372,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                   if(snapshot.data?.data?.custVehicleList?[i].defaultVehicle == 1)
                                     {
                                       SnackBarWidget().setMaterialSnackBar( "Default vehicle can't be deleted", _scaffoldKey);
-
+                                      print("Default vehicle can't be deleted");
                                     }
                                   else
                                     {
@@ -383,7 +383,6 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                                             return deleteVehicleDialog(i,snapshot.data?.data?.custVehicleList);
                                           });
                                     }
-
                                 }
                               else
                                 {

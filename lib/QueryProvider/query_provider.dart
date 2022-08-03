@@ -2640,8 +2640,6 @@ class QueryProvider {
   }
 }
 
-
-
     """;
     log(_query);
     return await GqlClient.I.query01(

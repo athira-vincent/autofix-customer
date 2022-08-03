@@ -230,7 +230,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               mechanicId,
                               2);
                         }
-
                       },
                       decoration:
                       InputDecoration(
@@ -291,7 +290,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                               setState(() {
 
-
                                               });
                                             }
                                           });
@@ -329,7 +327,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
