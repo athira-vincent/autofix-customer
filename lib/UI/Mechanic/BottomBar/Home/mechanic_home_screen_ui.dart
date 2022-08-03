@@ -180,7 +180,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           });
         });
       }else{
-        if(value.data?.currentlyWorkingService.toString() == 'null' || value.data?.currentlyWorkingService.toString() == null)
+        print(value.data?.currentlyWorkingService.toString());
+        if(value.data?.currentlyWorkingService.toString() == 'null'
+            || value.data?.currentlyWorkingService.toString() == null
+          || value.data?.currentlyWorkingService.toString() == []
+        )
         {
           setState(() {
             _hasActiveService = false;
@@ -189,19 +193,19 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         else {
           setState(()  {
               _hasActiveService = true;
-              setReminderData();
+              setReminderData(value.data?.currentlyWorkingService![0].id.toString());
           });
         }
       }
     });
   }
 
-  Future<void> setReminderData() async {
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
+  Future<void> setReminderData(String? bookedId) async {
+    /*SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-    });
-    await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+    });*/
+    await  _firestore.collection("ResolMech").doc('$bookedId').snapshots().listen((event) {
       print('_firestore');
       setState(() {
         vehicleName = event.get('carName');

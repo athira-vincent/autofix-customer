@@ -111,7 +111,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     super.initState();
 
     getSharedPrefData();
-
+    _getCurrentCustomerLocation(false);
     _listenServiceListResponse();
 
   }
@@ -936,6 +936,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                   )
                 : MaterialButton(
                   onPressed: () async {
+                    //_getCurrentCustomerLocation(false);
+
                     SharedPreferences shdPre = await SharedPreferences.getInstance();
 
                     print(">>>>>>>>>> Latitude  $CurrentLatitude");
@@ -957,10 +959,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       shdPre.setString(SharedPrefKeys.bookingIdEmergency, "");
 
                       print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
-
                     }
-                    Navigator.pop(context);
                     GetAddressString(LatLng(double.parse(CurrentLatitude), double.parse(CurrentLongitude)));
+
+                    Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
