@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
 
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -99,8 +100,8 @@ import 'package:provider/provider.dart';
                       primaryColor: Colors.white,
                     ),
                     // home: MechMobileTrackScreen(bookingId: "1305"),
-                    //home: SplashScreen(),
-                    home:SplashScreen(),
+                    home: SplashScreen(),
+                    //home:RateMechanicScreen(),
                     //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
                     /*home: RegularRateMechanicScreen(
                       firebaseCollection: "Regular-MobileMech",

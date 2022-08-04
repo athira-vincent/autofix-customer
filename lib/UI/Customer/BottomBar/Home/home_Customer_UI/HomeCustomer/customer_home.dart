@@ -109,7 +109,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     getSharedPrefData();
     _getCurrentCustomerLocation(false);
     _listenServiceListResponse();
@@ -203,9 +202,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Future<void> _getCurrentCustomerLocation(bool isChangeAddress) async {
     Position position = await _getGeoLocationPosition();
     location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       CurrentLatitude = position.latitude.toString();
       CurrentLongitude = position.longitude.toString();
+      shdPre.setString(SharedPrefKeys.currentLatitude, CurrentLatitude);
+      shdPre.setString(SharedPrefKeys.currentLongitude, CurrentLongitude);
     });
     print(location);
 
@@ -215,9 +217,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
     }
 
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
-    shdPre.setString(SharedPrefKeys.currentLatitude, CurrentLatitude);
-    shdPre.setString(SharedPrefKeys.currentLongitude, CurrentLongitude);
     //shdPre.setString(SharedPrefKeys.currentAddress, Address);
   }
 
@@ -355,6 +354,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Widget locationWidget(Size size){
     return InkWell(
       onTap: () async {
+        _getCurrentCustomerLocation(false);
       var result = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -487,6 +487,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                                     setState(() {
 
+                                      _getCurrentCustomerLocation(false);
+
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -521,7 +523,11 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                 ? Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
                                                   width: 35,
                                                   fit: BoxFit.cover,)
-                                                : Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+                                                : Image.network('https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/RelexProductImagesDummy%2Fservice.png?alt=media&token=2cd2becd-04c9-488a-9bdc-6082bc11ce36',
+                                                    width: 35,
+                                                    fit: BoxFit.cover,)
+                                                //: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
+
                                           ),
                                         ),
                                         Padding(

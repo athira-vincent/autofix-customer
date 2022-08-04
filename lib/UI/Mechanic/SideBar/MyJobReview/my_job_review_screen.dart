@@ -178,19 +178,22 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                    fontFamily: 'Samsung_SharpSans_Medium',
                                                    fontSize: 10.0,
                                                  ),),
-                                               SizedBox(height: 05),
+                                               SizedBox(height: 06),
                                                Text(
                                                  //'Good service…and good..',
                                                  _mechanicReviewsData![index].feedback,
+                                                 overflow: TextOverflow.ellipsis,
+                                                 maxLines: 1,
                                                  style: TextStyle(
                                                    fontFamily: 'Samsung_SharpSans_Medium',
                                                    fontSize: 10.0,
                                                  ),),
-                                               SizedBox(height: 05),
+                                               SizedBox(height: 06),
                                                Text(
                                                  _mechanicReviewsData![index].bookings!.bookService![0].service!.serviceName,
                                                  //'Steering wheel',
                                                  //_mechanicReviewsData![index].bookings!.service!.serviceName!,
+                                                 overflow: TextOverflow.ellipsis,
                                                  style: TextStyle(
                                                      fontFamily: 'Samsung_SharpSans_Medium',
                                                      fontSize: 10.0,
@@ -229,20 +232,28 @@ class _MechanicMyJobReviewScreenState extends State<MechanicMyJobReviewScreen> {
                                                        print(rating);
                                                      },
                                                    ),
-                                                 /*SizedBox(height: 5),
-                                                 Padding(
-                                                   padding: const EdgeInsets.only(top: 13.0),
-                                                   child: RichText(
-                                                     text:TextSpan(text: 'Read More',
-                                                         style:TextStyle(
-                                                           fontFamily: 'SamsungSharpSans-Regular',
-                                                           fontSize: 10,
-                                                           color: const Color(0xff173a8d),
+                                                   _mechanicReviewsData![index].feedback.length > 20
+                                                       ? SizedBox(height: 2.5) : Container(),
+                                                   _mechanicReviewsData![index].feedback.length > 20
+                                                       ? InkWell(
+                                                          onTap: (){
+
+                                                          },
+                                                         child: Padding(
+                                                           padding: const EdgeInsets.only(top: 8.0),
+                                                           child: RichText(
+                                                             text:TextSpan(text: 'Read More',
+                                                                 style:TextStyle(
+                                                                   fontFamily: 'SamsungSharpSans-Regular',
+                                                                   fontSize: 10,
+                                                                   color: const Color(0xff173a8d),
+                                                                 ),
+                                                                 recognizer: TapGestureRecognizer()
+                                                             ),
+                                                           ),
                                                          ),
-                                                         recognizer: TapGestureRecognizer()
-                                                     ),
-                                                   ),
-                                                 )*/
+                                                       )
+                                                       : Container()
                                                ],
                                              ),
                                            ),

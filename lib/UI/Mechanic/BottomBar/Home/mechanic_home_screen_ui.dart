@@ -344,7 +344,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   Widget upcomingServices(Size size,BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,2,0,0),
+      padding: const EdgeInsets.fromLTRB(10,0,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -360,7 +360,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           ),
 
           Container(
-            height: 185,
+            height: 160,
             margin: EdgeInsets.all(0),
             child: Stack(
               children: [
@@ -454,7 +454,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                   child: Column(
                     children: [
                       Container(
-                        height: 180,
+                        height: 160,
                         width: 250,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
@@ -472,7 +472,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,
                                       right: size.width * 2 / 100,
-                                      top: size.height * 4 / 100,
+                                      top: size.height * 3 / 100,
                                       //bottom: size.height * 2 / 100,
                                     ),
                                     child: Row(
@@ -502,7 +502,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,
                                       right: size.width * 2 / 100,
-                                      top: size.height * 4 / 100,
+                                      top: size.height * 3 / 100,
                                       //bottom: size.height * 2.5 / 100,
                                     ),
                                     child: Row(
@@ -533,12 +533,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       ],
                                     ),
                                   ),
-
                                   Container(
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,
                                       right: size.width * 2 / 100,
-                                      top: size.height * 2 / 100,
+                                      top: size.height * 3 / 100,
                                       //bottom: size.height * 2.5 / 100,
                                     ),
                                     child: Row(
