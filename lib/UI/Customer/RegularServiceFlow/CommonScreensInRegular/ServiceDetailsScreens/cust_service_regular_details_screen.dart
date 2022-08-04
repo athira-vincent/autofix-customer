@@ -212,7 +212,7 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                             children:[
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text('Total estimated time',
+                                                child: Text('Service Type',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontFamily: 'SamsungSharpSans-Medium',
@@ -222,30 +222,38 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                               ),
                                               Row(
                                                 children: [
-                                                  Padding(
+                                                  /*Padding(
                                                     padding: const EdgeInsets.only(left: 15.0,top: 15),
                                                     child:  Container(
                                                         height: 20,
                                                         width: 20,
                                                         child: Image.asset('assets/image/ic_clock.png')),
+                                                  ),*/
+                                                  Center(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 05.0,top: 15.0),
+                                                      child: Text(
+                                                        //_BookingDetails!.serviceTime.toString(),
+                                                        _BookingDetails!.regularType.toString() == "1"
+                                                            ? "Pick Up & Drop Off"
+                                                            : _BookingDetails!.regularType.toString() == "2"
+                                                            ? "Mobile Mechanic"
+                                                            : "Take My Vehicle",
+                                                        maxLines: 2,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.white
+                                                        ),),
+                                                    ),
                                                   ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 05.0,top: 15.0),
-                                                    child: Text(
-                                                      _BookingDetails!.serviceTime.toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.white
-                                                      ),),
-                                                  ),
-                                                  Padding(
+                                                  /*Padding(
                                                     padding: const EdgeInsets.only(left: 05.0,top: 15.0),
                                                     child: Text('Min',
                                                       style: TextStyle(
                                                           fontSize: 14,
                                                           color: Colors.white
                                                       ),),
-                                                  ),
+                                                  ),*/
                                                 ],
                                               )
                                             ],

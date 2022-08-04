@@ -370,6 +370,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
+                                          cursorColor: CustColors.light_navy,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
@@ -422,7 +423,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                           //   }
                                           // },
                                           keyboardType: TextInputType.number,
-
+                                          cursorColor: CustColors.light_navy,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
                                           ),

@@ -363,6 +363,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
+                                          cursorColor: CustColors.light_navy,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
@@ -415,7 +416,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                           //   }
                                           // },
                                           keyboardType: TextInputType.number,
-
+                                          cursorColor: CustColors.light_navy,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
                                           ),
