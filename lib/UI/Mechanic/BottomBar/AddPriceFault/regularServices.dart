@@ -220,7 +220,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               size,
                               value,
                               mechanicId,
-                              1);
+                              2);
                         }else{
                           _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
                               authToken,
@@ -231,6 +231,8 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               2);
                         }
                       },
+                      cursorColor: CustColors.light_navy,
+                      //style: TextStyle(),
                       decoration:
                       InputDecoration(
                         // border: OutlineInputBorder(
@@ -240,7 +242,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white,
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: Icon(Icons.search, color: CustColors.light_navy),
                         hintText: 'Search Your  Service',
                         contentPadding: EdgeInsets.only(top: 1),
                       ),

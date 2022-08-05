@@ -238,6 +238,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         }
 
                       },
+                      cursorColor: CustColors.light_navy,
                       decoration:
                       InputDecoration(
                         // border: OutlineInputBorder(
@@ -247,7 +248,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white,
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: Icon(Icons.search, color: CustColors.light_navy),
                         hintText: 'Search Your  Service',
                         contentPadding: EdgeInsets.only(top: 1),
                       ),
