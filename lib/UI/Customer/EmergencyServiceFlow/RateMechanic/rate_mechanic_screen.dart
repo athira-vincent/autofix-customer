@@ -73,11 +73,11 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
   _listenApiResponse(){
     _homeCustomerBloc.postAddMechanicReviewAndRatingResponse.listen((value) {
       print("pieuiey 001 ${value.data}");
-      if(value.data == "error"){
+      if(value.data == "error" || value.status == "error"){
         setState(() {
           //_isLoadingPage = true;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.data.toString(),
+            content: Text(value.message.toString(),
                 style: const TextStyle(
                     fontFamily: 'Roboto_Regular', fontSize: 14)),
             duration: const Duration(seconds: 2),
