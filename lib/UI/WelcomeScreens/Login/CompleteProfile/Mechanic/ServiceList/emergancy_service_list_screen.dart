@@ -56,7 +56,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, null, "1");
       //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
@@ -200,9 +200,9 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                               onChanged: (val){
                                 print(val);
                                 if(val.isNotEmpty){
-                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", val, "25","1");
+                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", val, null, "25","1");
                                 }else{
-                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", null,null, null, "1");
                                 }
                               },
                               textAlign: TextAlign.left,

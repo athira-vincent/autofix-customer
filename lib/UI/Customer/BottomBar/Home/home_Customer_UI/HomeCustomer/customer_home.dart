@@ -162,8 +162,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
         }
 
-      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1");
-      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
+      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1", null, null);
+      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
 
     });
   }

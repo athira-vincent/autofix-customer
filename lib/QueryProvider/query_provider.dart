@@ -1048,16 +1048,17 @@ class QueryProvider {
 
   postSearchServiceRequest(
       token,
-      search,
+      serviceSearch,
+      catSearch,
       count,
       categoryId) async {
     String _query ;
 
-    if(search != null){
+    if(catSearch != null && serviceSearch != null){
       _query = """ 
     query
     {
-        serviceListAll(search: "$search", count: $count, categoryId: $categoryId) {
+        serviceListAll(serviceSearch: "$serviceSearch", catSearch: "$catSearch", count: $count, categoryId: $categoryId) {
           id
           serviceName
           description
@@ -1085,11 +1086,78 @@ class QueryProvider {
         }
       }
     """;
-    }else{
+    }
+    else if(serviceSearch != null){
       _query = """ 
     query
     {
-        serviceListAll(search: null, count: $count, categoryId: $categoryId) {
+        serviceListAll(serviceSearch: "$serviceSearch", catSearch: null, count: $count, categoryId: $categoryId) {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+          category {
+            id
+            catType
+            catName
+            icon
+            status
+            service{
+              serviceName
+              status
+              description
+              id
+              icon
+              minPrice
+              maxPrice
+            }
+          }
+        }
+      }
+    """;
+    }
+    else if(catSearch != null){
+      _query = """ 
+    query
+    {
+        serviceListAll(serviceSearch: null, catSearch: "$catSearch", count: $count, categoryId: $categoryId) {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+          category {
+            id
+            catType
+            catName
+            icon
+            status
+            service{
+              serviceName
+              status
+              description
+              id
+              icon
+              minPrice
+              maxPrice
+            }
+          }
+        }
+      }
+    """;
+    }
+    else{
+      _query = """ 
+    query
+    {
+        serviceListAll(serviceSearch: null, catSearch: null, count: $count, categoryId: $categoryId) {
           id
           serviceName
           description
@@ -1715,10 +1783,13 @@ class QueryProvider {
     );
   }
 
-  categoryListHome(String token,  categoryId ) async {
-    String _query = """
+  categoryListHome(String token, categoryId, serviceSearch, catSearch ) async {
+    String _query ;
+
+    if(/*catSearch != null &&*/ serviceSearch != null){
+      _query = """
       {
-      category_list(catType: $categoryId) {
+      category_list(search: $serviceSearch, catType: $categoryId) {
         id
         catType
         catName
@@ -1737,6 +1808,31 @@ class QueryProvider {
       }
     }
      """;
+    }else /*if(catSearch != null)*/{
+      _query = """
+      {
+      category_list(search: null, catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }
+
+
     log(_query);
     print("Token >>>>>>> $token");
     return await GqlClient.I.query01(

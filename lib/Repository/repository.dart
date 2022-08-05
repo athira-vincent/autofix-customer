@@ -67,8 +67,8 @@ class Repository {
       _categoryListApiProvider.getCategoryListRequest(token,searchText, count, categoryId);
 
   //  Category List Home Request
-  Future<dynamic> getCategoryListHomeRequest(String token,categoryId) =>
-      _customerApiProvider.getCategoryListHomeRequest(token,categoryId);
+  Future<dynamic> getCategoryListHomeRequest(String token,categoryId, serviceSearch, catSearch) =>
+      _customerApiProvider.getCategoryListHomeRequest(token,categoryId, serviceSearch, catSearch);
 
 
   // SignUp
@@ -196,12 +196,14 @@ class Repository {
   // Search Service Request
   Future<dynamic>  postSearchServiceRequest(
       token,
-      search,
+      serviceSearch,
+      catSearch,
       count,
       categoryId)  =>
       _customerApiProvider. postSearchServiceRequest(
           token,
-          search,
+          serviceSearch,
+          catSearch,
           count,
           categoryId) ;
 

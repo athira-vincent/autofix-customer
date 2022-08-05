@@ -29,8 +29,8 @@ class HomeCustomerBloc {
   Stream<CategoryListHomeMdl> get regularServiceListResponse => postRegularServiceList.stream;
   List<CategoryListHomeMdl> _serviceDataList = [];
 
-  postRegularServiceListRequest(String token, String categoryId,) async {
-    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId);
+  postRegularServiceListRequest(String token, String categoryId, serviceSearch, catSearch,) async {
+    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId, serviceSearch, catSearch);
     _serviceDataList.clear();
     _serviceDataList.add(_serviceListMdl);
     postRegularServiceList.sink.add(_serviceListMdl);
@@ -71,9 +71,9 @@ class HomeCustomerBloc {
   final postEmergencyServiceList = BehaviorSubject<CategoryListHomeMdl>();
   Stream<CategoryListHomeMdl> get emergencyServiceListResponse => postEmergencyServiceList.stream;
 
-  postEmergencyServiceListRequest(String token, String categoryId) async {
+  postEmergencyServiceListRequest(String token, String categoryId, serviceSearch, catSearch) async {
 
-    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId);
+    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId, serviceSearch, catSearch);
     postEmergencyServiceList.sink.add(_serviceListMdl);
   }
 
@@ -214,13 +214,15 @@ class HomeCustomerBloc {
 
   postSearchServiceRequest(
       token,
-      search,
+      serviceSearch,
+      catSearch,
       count,
       categoryId) async {
 
     ServiceSearchListAllMdl _serviceSearchListAllMdl = await repository.postSearchServiceRequest(
         token,
-        search,
+        serviceSearch,
+        catSearch,
         count,
         categoryId);
     postSearchService.sink.add(_serviceSearchListAllMdl);
