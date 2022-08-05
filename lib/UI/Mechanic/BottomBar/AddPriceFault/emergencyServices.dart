@@ -29,13 +29,10 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
   bool _isLoadingPage = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
-  MechanicDetails? _mechanicDetails;
   MechanicServiceAdd? _MechanicServiceAdd;
-  UpdateTimeFees? _updateTimeFees;
    AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
-  List<String>? _serviceIdList=[];
 
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   int checkID=0;
@@ -51,7 +48,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
     super.initState();
     getSharedPrefData();
     _listenApiResponse();
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -65,6 +61,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
       /*_addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
           authToken,
           mechanicId);*/
+      _selectionList.clear();
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
           page,
@@ -98,23 +95,17 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             //if(_AddPriceServiceList!.data![i].status==1) {
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0){
               _selectionList.add(true);
-            }
-            else{
-              _selectionList.add(false);
-            }
-            print("fddfds ${_timeList}");
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
               _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time.toString());
-            }else{
-              _timeList!.add("12:00");
-            }
-            print("ewqr ${_priceList}");
-            if(_AddPriceServiceList!.data![i].mechanicService!.length>0) {
               _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee.toString());
             }
             else{
+              _selectionList.add(false);
+              _timeList!.add("12:00");
               _priceList!.add(_AddPriceServiceList!.data![i].minPrice);
+
             }
+            print("fddfds ${_timeList}");
+            print("ewqr ${_priceList}");
           };
           print("vhvhfhjfh 01 ${_AddPriceServiceList!.data!.length}");
         });
@@ -179,11 +170,14 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
       }else{
         setState(() {
           print('abcdefg01');
-          getSharedPrefData();
-
+          _isLoadingPage = false;
           saveloading = false;
           tempCounter = 0;
           _lodingIdList = [];
+          _serviceIdEmergency = [];
+          _timeListEmergency = [] ;
+          _priceListEmergency = [];
+          getSharedPrefData();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Service Added',
                 style: const TextStyle(
@@ -191,7 +185,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
           ));
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           _MechanicServiceAdd = value.data!.mechanicServiceAdd as MechanicServiceAdd?;
         });
       }
@@ -290,9 +284,10 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                       InkWell(
                                         onTap:(){
                                           setState(() {
-                                            bool s=!_selectionList[index];
+                                            bool s = _selectionList[index];
                                             _selectionList.removeAt(index);
-                                            _selectionList.insert(index,s );
+                                            _selectionList.insert(index,!s );
+                                            print(_selectionList[index].toString());
                                             if(!_selectionList[index]){
                                               _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"12:00";
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
@@ -531,7 +526,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                       SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
 
-                        int temp=0;
                         for(int i =0;i<_selectionList.length;i++)
                         {
                           if(_selectionList[i])

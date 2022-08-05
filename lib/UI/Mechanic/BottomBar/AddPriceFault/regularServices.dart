@@ -28,13 +28,10 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
   bool _isLoadingPage = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
-  MechanicDetails? _mechanicDetails;
   MechanicServiceAdd? _MechanicServiceAdd;
-  UpdateTimeFees? _updateTimeFees;
   AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
-  List<String>? _serviceIdList=[];
 
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   int checkID=0;
@@ -50,7 +47,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
     super.initState();
     getSharedPrefData();
     _listenApiResponse();
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -64,6 +60,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
       /*_addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
           authToken,
           mechanicId);*/
+      _selectionList.clear();
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
           page,
@@ -157,7 +154,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
         setState(() {
           saveloading = false;
           print('abcdefg02');
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           if(checkID!=0) {
             if(checkID==value)
@@ -172,12 +169,17 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
         });
       }else{
         setState(() {
+          //_selectionList.clear();
           print('abcdefg01');
-          getSharedPrefData();
-
+          _isLoadingPage = false;
           saveloading = false;
           tempCounter = 0;
           _lodingIdList = [];
+          _serviceIdEmergency = [];
+          _timeListEmergency = [] ;
+          _priceListEmergency = [];
+          getSharedPrefData();
+
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Service Added',
                 style: const TextStyle(
@@ -185,7 +187,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
           ));
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           _MechanicServiceAdd = value.data!.mechanicServiceAdd as MechanicServiceAdd?;
         });
       }
@@ -284,9 +286,11 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                       InkWell(
                                         onTap:(){
                                           setState(() {
-                                            bool s=!_selectionList[index];
+                                            bool s = _selectionList[index];
+                                            print(_selectionList[index].toString());
                                             _selectionList.removeAt(index);
-                                            _selectionList.insert(index,s );
+                                            _selectionList.insert(index,!s );
+                                            print(_selectionList[index].toString());
                                             if(!_selectionList[index]){
                                               _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"12:00";
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
@@ -525,11 +529,11 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                       SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
 
-                        int temp=0;
                         for(int i =0;i<_selectionList.length;i++)
                         {
                           if(_selectionList[i])
                           {
+                            print(" >>>> _lodingIdList.add(_selectionList[i].toString()); >>> ${_lodingIdList.toString()}" );
                             _lodingIdList.add(_selectionList[i].toString());
                             _timeListEmergency?.add('${_timeList![i]}');
                             _priceListEmergency?.add('${_priceList![i]}');

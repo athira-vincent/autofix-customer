@@ -270,7 +270,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                       //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
                     });
                   }
-
                 },
               ),
             ),
