@@ -473,6 +473,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                   latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
                                                   longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
                                                   address: addressLocationText,
+                                                  isFromScheduleServicePage: false,
                                                 )));
 
                                       }else{
@@ -486,6 +487,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                   latitude: CurrentLatitude,
                                                   longitude: CurrentLongitude,
                                                   address: Address,
+                                                  isFromScheduleServicePage: false,
                                                 )));
                                       }
 

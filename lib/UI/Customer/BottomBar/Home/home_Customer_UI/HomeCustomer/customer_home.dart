@@ -657,6 +657,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                     latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
                                                     longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
                                                     address: addressLocationText,
+                                                    isFromScheduleServicePage: false,
                                                   )));
                                         }else{
                                           Navigator.push(
@@ -669,6 +670,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                     latitude: CurrentLatitude,
                                                     longitude: CurrentLongitude,
                                                     address: Address,
+                                                    isFromScheduleServicePage: false,
                                                   )));
                                         }
                                       },
