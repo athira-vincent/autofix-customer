@@ -127,7 +127,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "", null, "2", null );
+      _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
     });
   }
 
@@ -459,6 +459,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                             flex: 3,
                             child: Text(
                               '${root.service![index].serviceName.toString()}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Container(
