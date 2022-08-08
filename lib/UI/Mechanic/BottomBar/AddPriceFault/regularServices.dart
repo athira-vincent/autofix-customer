@@ -377,9 +377,10 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller,
                                           inputFormatters: [
-                                            LengthLimitingTextInputFormatter(4),
                                             FilteringTextInputFormatter.allow(
-                                                RegExp('[0-9 :]')),
+                                                RegExp('^[0-9][0-9][0-9]:00')),
+                                            //LengthLimitingTextInputFormatter(4),
+                                                //RegExp('[0-9 :00]')),
                                           ],
                                           maxLines: 1,
                                           style: TextStyle(
@@ -545,8 +546,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                         print('$_priceListEmergency >>>>_priceListEmergency ');
                         print('$_serviceIdEmergency >>>>_serviceIdEmergency ');
 
-
-
                         if(_lodingIdList.length == 0)
                         {
                           saveloading = false;
@@ -610,7 +609,35 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
   @override
   bool get wantKeepAlive => true;
 
+  /*void onTap() {
+    Picker(
+      adapter: NumberPickerAdapter(data: <NumberPickerColumn>[
+        const NumberPickerColumn(begin: 0, end: 999, suffix: Text(' hours')),
+        const NumberPickerColumn(begin: 0, end: 60, suffix: Text(' minutes'), jump: 15),
+      ]),
+      delimiter: <PickerDelimiter>[
+        PickerDelimiter(
+          child: Container(
+            width: 30.0,
+            alignment: Alignment.center,
+            child: Icon(Icons.more_vert),
+          ),
+        )
+      ],
+      hideHeader: true,
+      confirmText: 'OK',
+      confirmTextStyle: TextStyle(inherit: false, color: Colors.red, fontSize: 22),
+      title: const Text('Select duration'),
+      selectedTextStyle: TextStyle(color: Colors.blue),
+      onConfirm: (Picker picker, List<int> value) {
+        // You get your duration here
+        Duration _duration = Duration(hours: picker.getSelectedValues()[0], minutes: picker.getSelectedValues()[1]);
+      },
+    ).showDialog(context);
+  }*/
+
 }
+
 
 
 

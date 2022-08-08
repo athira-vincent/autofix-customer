@@ -27,6 +27,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   final ServiceListBloc _serviceListBloc = ServiceListBloc();
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
 
+
   List<CategoryList> regularServiceList = [];
   List<Service> selectedServiceList = [];
   List<bool>? _regularIsChecked;
@@ -543,23 +544,31 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     horizontal: 6.0,
                                   ),
                                 ),
+
                                 validator: (value){
                                   if(value!.isEmpty){
                                     return "Fill field";
                                   }
-                                  /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                              return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                            }*/
+                                  /*else if(value.length >= 3){
+                                    _timeController.text = value.toString() + ":00";
+                                  }*/
                                   else{
                                     return null;
                                   }
                                 },
+                                inputFormatters: <TextInputFormatter>[
+                                  //FilteringTextInputFormatter.digitsOnly,
+                                  //FilteringTextInputFormatter.allow(),
+                                  /*FilteringTextInputFormatter.deny(
+                                      RegExp('[A-Z][a-z]')
+                                  )*/
+                                  /*FilteringTextInputFormatter.allow(
+                                      RegExp(r'\d{2,3}:00')),*/
+                                  LengthLimitingTextInputFormatter(5),
+                                ],
                                 cursorColor: CustColors.light_navy,
-                                /*inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],*/
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                                keyboardType: TextInputType.datetime,
+                                keyboardType: TextInputType.number,
                                 //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                 controller: _timeController,
                                 style: Styles.searchTextStyle02,
