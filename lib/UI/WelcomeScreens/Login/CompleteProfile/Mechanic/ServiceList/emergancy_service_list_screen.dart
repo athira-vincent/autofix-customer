@@ -484,7 +484,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
                         authToken,
-                        serviceId,  feeList, timeList);
+                        serviceId,  feeList, timeList, 1);
 
                   },
                   child: Align(

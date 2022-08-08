@@ -268,7 +268,6 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                       print('First text field: $text');
                       _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}", null, null,null);
                       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, "${searchController.text}");
-
                     });
                   }else{
                     _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null,null,null);

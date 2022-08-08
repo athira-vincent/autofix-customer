@@ -541,8 +541,6 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                         print('$_priceListEmergency >>>>_priceListEmergency ');
                         print('$_serviceIdEmergency >>>>_serviceIdEmergency ');
 
-
-
                         if(_lodingIdList.length == 0)
                           {
                             saveloading = false;
@@ -571,7 +569,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                          _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
                            authToken,
                            _serviceIdEmergency.toString().replaceAll("[", "").replaceAll("]", ""),
-                             fee,time
+                             fee, time, 1
                         );
                       });
                     },

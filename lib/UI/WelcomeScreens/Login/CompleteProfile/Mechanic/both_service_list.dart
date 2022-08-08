@@ -900,7 +900,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
         _addServiceListBloc.postMechanicAddServicesRequest(
             authToken,
-            serviceId,  feeList, timeList);
+            serviceId,  feeList, timeList, null); // catType - 1/2 - doubt
       },
       child: Container(
         height: size.height * 0.045,

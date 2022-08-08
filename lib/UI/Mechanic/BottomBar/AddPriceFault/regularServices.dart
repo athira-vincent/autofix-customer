@@ -576,7 +576,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                         _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
                           authToken,
                           _serviceIdEmergency.toString().replaceAll("[", "").replaceAll("]", ""),
-                          fee, time
+                          fee, time, "2"
                         );
                       });
                     },

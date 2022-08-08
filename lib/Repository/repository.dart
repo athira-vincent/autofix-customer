@@ -59,8 +59,8 @@ class Repository {
       _serviceListApiProvider.getServiceListRequest(token, categoryId, search);
 
   // Service List
-  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList) =>
-      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
+  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList, catType) =>
+      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList, catType);
 
   //  Category List
   Future<dynamic> getCategoryList(String token, searchText, count, categoryId) =>
@@ -455,9 +455,9 @@ class Repository {
           token,bookingId
       );
   Future<dynamic> postTimeServicePriceAddReviewRequest(
-      token,services,fee,time) =>
+      token,services,fee,time, catType) =>
       _AddPriceFaultApiProvider.postTimePriceServiceDetailsRequest(
-          token,services,fee,time
+          token,services,fee,time, catType
       );
 
 

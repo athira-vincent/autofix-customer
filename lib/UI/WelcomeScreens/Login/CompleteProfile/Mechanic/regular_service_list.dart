@@ -327,7 +327,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                       _addServiceListBloc.postMechanicAddServicesRequest(
                           authToken,
-                          serviceId,  feeList, timeList);
+                          serviceId,  feeList, timeList, 2);
                     },
                     child: Align(
                       alignment: Alignment.centerRight,

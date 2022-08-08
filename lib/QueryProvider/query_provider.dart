@@ -1766,10 +1766,10 @@ class QueryProvider {
     );
   }
 
-  mechanicAddServiceList(String token,String serviceList, String costList, String timeList) async {
+  mechanicAddServiceList(String token,String serviceList, String costList, String timeList, catType) async {
     String _query = """ 
     mutation {
-      mechanic_service_add(services: "$serviceList", fee: $costList, time: $timeList) {
+      mechanic_service_add(catType: $catType, services: "$serviceList", fee: $costList, time: $timeList) {
         message
       }
     }
@@ -1786,10 +1786,10 @@ class QueryProvider {
   categoryListHome(String token, categoryId, serviceSearch, catSearch ) async {
     String _query ;
 
-    if(/*catSearch != null &&*/ serviceSearch != null){
+    if(catSearch != null && serviceSearch != null){
       _query = """
       {
-      category_list(search: $serviceSearch, catType: $categoryId) {
+      category_list(serviceSearch: "$serviceSearch", catSearch: "$catSearch", catType: $categoryId) {
         id
         catType
         catName
@@ -1808,10 +1808,54 @@ class QueryProvider {
       }
     }
      """;
-    }else /*if(catSearch != null)*/{
+    }else if(catSearch != null){
       _query = """
       {
-      category_list(search: null, catType: $categoryId) {
+      category_list(serviceSearch: null, catSearch: "$catSearch", catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }else if(serviceSearch != null){
+      _query = """
+      {
+      category_list(serviceSearch: "$serviceSearch", catSearch: null, catType: $categoryId) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }else{
+      _query = """
+      {
+      category_list(serviceSearch: null, catSearch: null, catType: $categoryId) {
         id
         catType
         catName
@@ -1831,7 +1875,6 @@ class QueryProvider {
     }
      """;
     }
-
 
     log(_query);
     print("Token >>>>>>> $token");
@@ -2982,10 +3025,11 @@ class QueryProvider {
   }
 
   postTimePriceServiceDetailsRequest(
-      token,services,fee,time) async {
+      token,services,fee,time, catType) async {
     String _query = """ 
      mutation {
   mechanic_service_add(
+  catType: $catType,
   services: "$services",
    fee: $fee,
     time: $time)
