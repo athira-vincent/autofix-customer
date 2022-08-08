@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -552,9 +553,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                           },
                                           cursorColor: CustColors.light_navy,
                                           keyboardType: TextInputType.number,
-                                          inputFormatters: <TextInputFormatter>[
+                                          /*inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter.digitsOnly,
-                                          ],
+                                          ],*/
                                           autovalidateMode: AutovalidateMode.onUserInteraction,
                                           //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                           controller: _rateController,
@@ -590,6 +591,24 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                           controller: _timeController,
                                           style: Styles.searchTextStyle02,
                                           enabled: _emergencyIsChecked![index],
+                                          onChanged: (val) async{
+                                            Duration? _durationResult = await showDurationPicker(
+                                                snapToMins: 5.0,
+                                                context: context,
+                                                initialTime: Duration(
+                                                  //hours: 2,
+                                                    minutes: 10,
+                                                    seconds: 00,
+                                                    milliseconds: 0)
+                                            );
+                                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                            if(_durationResult != null){
+                                              setState(() {
+                                                _timeController.text = "";
+                                                _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                              });
+                                            }
+                                          },
                                           //readOnly: _regularIsChecked![index],
                                         ),
                                       ),
@@ -826,6 +845,24 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         controller: _timeController,
                         style: Styles.searchTextStyle02,
                         enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                        onChanged: (val) async{
+                          Duration? _durationResult = await showDurationPicker(
+                              snapToMins: 5.0,
+                              context: context,
+                              initialTime: Duration(
+                                //hours: 2,
+                                  minutes: 10,
+                                  seconds: 00,
+                                  milliseconds: 0)
+                          );
+                          print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                          if(_durationResult != null){
+                            setState(() {
+                              _timeController.text = "";
+                              _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                            });
+                          }
+                        },
                         //readOnly: _regularIsChecked![index],
                       ),
                     ),

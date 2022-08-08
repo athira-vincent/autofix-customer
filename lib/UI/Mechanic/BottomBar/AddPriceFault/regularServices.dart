@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -356,7 +357,9 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                       //   width: 1),
                                       //   borderRadius: BorderRadius.circular(05)
                                       // ),
-                                      onPressed: () {  },
+                                      onPressed: () {
+
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.zero,
                                         //primary: Color(0xffd3dcf2),
@@ -370,18 +373,39 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                         child:
                                         TextFormField(
                                           cursorColor: CustColors.light_navy,
-                                          keyboardType: TextInputType.number,
+                                          keyboardType: TextInputType.datetime,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller,
-                                          inputFormatters: [
+                                          /*inputFormatters: [
                                             FilteringTextInputFormatter.allow(
                                                 RegExp('^[0-9][0-9][0-9]:00')),
-                                            //LengthLimitingTextInputFormatter(4),
+                                            LengthLimitingTextInputFormatter(4),
                                                 //RegExp('[0-9 :00]')),
-                                          ],
+                                          ],*/
+                                          onChanged: (val) async {
+                                            print(" _timeController.text >>> ${_textEditContoller.text}" );
+                                            Duration? _durationResult = await showDurationPicker(
+                                                snapToMins: 5.0,
+                                                context: context,
+                                                initialTime: Duration(
+                                                  //hours: 2,
+                                                    minutes: 10,
+                                                    seconds: 00,
+                                                    milliseconds: 0)
+                                            );
+                                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                            print(" _timeController.text02 >>> ${_textEditContoller.text}" );
+                                            if(_durationResult != null){
+                                              setState(() {
+                                                _textEditContoller.text = "";
+                                                _textEditContoller.text = _durationResult.inMinutes.toString() + ":00";
+                                                print(" _timeController.text03 >>> ${_textEditContoller.text}" );
+                                              });
+                                            }
+                                          },
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: 12,
@@ -425,7 +449,10 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                           keyboardType: TextInputType.number,
                                           cursorColor: CustColors.light_navy,
                                           decoration: InputDecoration(
-                                              border: InputBorder.none
+                                              border: InputBorder.none,
+                                            errorStyle: TextStyle(
+                                              color: Colors.red
+                                            )
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller01,
