@@ -278,7 +278,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             Text(
-              'My Vechicles',
+              'My Vehicles',
               textAlign: TextAlign.center,
               style: Styles.appBarTextWhite,
             ),
