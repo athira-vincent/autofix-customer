@@ -1508,12 +1508,58 @@ class QueryProvider {
   }
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
 
-  serviceListWithCategory(String token, categoryType, String search ) async {
+  serviceListWithCategory(String token, categoryType, String search,String catSearch ) async {
     String _query;
-    if(search.isEmpty){
+    if(search.isEmpty && catSearch.isEmpty){
       _query = """
         {
-      category_list(catType: $categoryType, search: null) {
+      category_list(catType: $categoryType, serviceSearch: null, catSearch: null) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          serviceCode
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }else if(search.isEmpty){
+      _query = """
+        {
+      category_list(catType: $categoryType, catSearch: "$catSearch", serviceSearch: null) {
+        id
+        catType
+        catName
+        icon
+        status
+        service {
+          id
+          serviceName
+          serviceCode
+          description
+          icon
+          minPrice
+          maxPrice
+          categoryId
+          status
+        }
+      }
+    }
+     """;
+    }else if(catSearch.isEmpty){
+      _query = """
+        {
+      category_list(catType: $categoryType, catSearch: null, serviceSearch: "$search") {
         id
         catType
         catName
@@ -1536,7 +1582,7 @@ class QueryProvider {
     }else{
       _query = """
         {
-      category_list(catType: $categoryType, search: "$search") {
+      category_list(catType: $categoryType, catSearch: "$catSearch", serviceSearch: "$search") {
         id
         catType
         catName

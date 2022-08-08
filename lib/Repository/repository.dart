@@ -55,8 +55,8 @@ class Repository {
   final _serviceStatusUpdateApiProvider = ServiceStatusUpdateApiProvider();
 
   // Add Mechanic Service List
-  Future<dynamic> getServiceList(String token, categoryId, search) =>
-      _serviceListApiProvider.getServiceListRequest(token, categoryId, search);
+  Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
+      _serviceListApiProvider.getServiceListRequest(token, categoryId, search, catSearch);
 
   // Service List
   Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList, catType) =>

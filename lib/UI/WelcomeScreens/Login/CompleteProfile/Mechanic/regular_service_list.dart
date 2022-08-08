@@ -127,7 +127,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+      _serviceListBloc.postServiceListRequest(authToken, "", null, "2", null );
     });
   }
 
@@ -208,9 +208,9 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                 onChanged: (text) {
                                              setState(() {
                                                if(text.isNotEmpty){
-                                                 _serviceListBloc.postServiceListRequest(authToken, text, null, "2" );
+                                                 _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
                                                }else{
-                                                 _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+                                                 _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
                                                }
                                              });
                                              //_allMakeBloc.searchMake(text);

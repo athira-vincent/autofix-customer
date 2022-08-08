@@ -412,15 +412,15 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
-                                          // validator: (value){
-                                          //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
-                                          //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
-                                          //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
-                                          //   }
-                                          //   else {
-                                          //     return null;
-                                          //   }
-                                          // },
+                                          /*validator: (value){
+                                            if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![index].minPrice) ||
+                                                int.parse(value) > int.parse(_AddPriceServiceList!.data![index].maxPrice)){
+                                              return _AddPriceServiceList!.data![index].minPrice +"-" + _AddPriceServiceList!.data![index].maxPrice;
+                                            }
+                                            else {
+                                              return null;
+                                            }
+                                          },*/
                                           keyboardType: TextInputType.number,
                                           cursorColor: CustColors.light_navy,
                                           decoration: InputDecoration(

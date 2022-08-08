@@ -52,7 +52,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   }
 
   _listenServiceListResponse() {
-    _serviceListBloc.postServiceList.listen((value) {
+    _serviceListBloc.serviceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
@@ -69,6 +69,14 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //_isLoading = false;
           //print(value.data!.serviceListAll!.length);
           //allServiceList = value.data!.serviceListAll!;
+
+          allList = [];
+          emergencyCategoryList = [];
+          emergencyServiceList = [];
+          emergencyServiceMdlList = [];
+          regularCategoryList = [];
+          regularServiceList = [];
+          regularServiceMdlList = [];
 
           allList = value.data!.categoryList!;
 
@@ -169,7 +177,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "", null, null );
+      _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
     });
   }
 
@@ -289,9 +297,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                        onChanged: (text) {
                          setState(() {
                            if(text.isNotEmpty){
-                             _serviceListBloc.postServiceListRequest(authToken, text, null, "2" );
+                             _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
                            }else{
-                             _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+                             _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
                            }
                          });
                          //_allMakeBloc.searchMake(text);
@@ -411,9 +419,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         onChanged: (text) {
                           setState(() {
                             if(text.isNotEmpty){
-                              _serviceListBloc.postServiceListRequest(authToken, text, null, "1" );
+                              _serviceListBloc.postServiceListRequest(authToken, text, null, "1","" );
                             }else{
-                              _serviceListBloc.postServiceListRequest(authToken, "", null, "1" );
+                              _serviceListBloc.postServiceListRequest(authToken, "", null, "1", "" );
                             }
                           });
                           //_allMakeBloc.searchMake(text);
@@ -900,7 +908,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
         _addServiceListBloc.postMechanicAddServicesRequest(
             authToken,
-            serviceId,  feeList, timeList, null); // catType - 1/2 - doubt
+            serviceId,  feeList, timeList, null);     // catType - 1/2 - doubt
       },
       child: Container(
         height: size.height * 0.045,
