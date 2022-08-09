@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Common/NotificationPayload/notification_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_UI/HomeCustomer/customer_home.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_my_profile.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyServices/customer_my_services.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/PaymentScreens/mechanic_waiting_payment.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
@@ -108,6 +109,28 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       }
     });*/
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+
+      print("message received onMessage");
+
+      /*setState(() {
+        _counter += 1;
+        //_notificationPayloadMdl = event.data;
+      });*/
+      print("event.notification!.data " + event.data.toString());
+
+      String screen = event.data['screen'];
+      if(screen.toString() == "MechanicWaitingPaymentScreen"){
+
+        String bookingId = event.data['bookingId'];
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MechanicWaitingPaymentScreen()));
+      }
+    });
+
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
 
       print("message received onMessageOpenedApp");
@@ -118,7 +141,16 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
 
       print("event.notification!.data " + event.data.toString());
       String screen = event.data['screen'];
-      if(screen.toString() == "customerServiceDetails"){
+      if(screen.toString() == "MechanicWaitingPaymentScreen"){
+
+        String bookingId = event.data['bookingId'];
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MechanicWaitingPaymentScreen()));
+      }
+      else if(screen.toString() == "customerServiceDetails"){
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -144,7 +176,16 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       print("message.notification!.data " + message.data.toString());
       print("event.notification!.data " + message.data.toString());
       String screen = message.data['screen'];
-      if(screen.toString() == "mechanicServiceDetails"){
+      if(screen.toString() == "MechanicWaitingPaymentScreen"){
+
+        String bookingId = message.data['bookingId'];
+        print("bookingId >>>>> " + bookingId );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MechanicWaitingPaymentScreen()));
+      }
+     else if(screen.toString() == "mechanicServiceDetails"){
         Navigator.push(
             context,
             MaterialPageRoute(

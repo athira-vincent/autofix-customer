@@ -393,22 +393,19 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                           return InkWell(
                             onTap: (){
 
-                              if(CustomerUpcomingServicesList?.custCompletedOrders?[index].reqType == 1 ){
+                              /*if(CustomerUpcomingServicesList?.custCompletedOrders?[index].reqType == 1 ){
                                 _firestore.collection("ResolMech").doc('${CustomerUpcomingServicesList?.custCompletedOrders?[index].id}').snapshots().listen((event) {
                                   print('_firestore');
                                   setState(() {
-
                                     firebaseScreen = event.get('mechanicFromPage');
                                     firebaseCustomerLatitude = event.get('customerLatitude');
                                     firebaseCustomerLongitude = event.get('customerLongitude');
                                     changeScreen(firebaseScreen);
-
                                   });
                                 });
+                              }*/
 
-                              }
-
-                              /*Navigator.push(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => CustServiceRegularDetailsScreen(
@@ -418,7 +415,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                       CustomerUpcomingServicesList?.custCompletedOrders?[index].regularType.toString() == "2"
                                           ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                     ),
-                                  ));*/
+                                  ));
                             },
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0,10,0,10),
