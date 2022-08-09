@@ -373,12 +373,12 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
               Text(
                 workStatus == "1"
                     ? //"Hi.. $userName congratulations! Your mechanic reached near you. He fix your vehicle faults."
-                      "Hi $userName Your Mechanic is close to your location. He will fix your vehicle."
+                      "Hi, $userName, Your Mechanic is close to your location. He will fix your vehicle."
                     : workStatus == "2"
-                    ? "Hi.. $userName,Your mechanic has started the repairs of your vehicle. Kindly wait for the countdown stop."
+                    ? "Hi, $userName,Your mechanic has started the repairs of your vehicle. Kindly wait for the countdown stop."
                     : workStatus == "3"
-                    ? "Hi.. $userName congratulations!  Your mechanic completed his Work wait for the payment process"
-                    : "Hi.. $userName congratulations!  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
+                    ? "Hi, $userName, congratulations!,  Your mechanic completed his Work wait for the payment process"
+                    : "Hi, $userName, congratulations!,  Your mechanic reached near you. He list your vehicle faults.Then read the estimate. if you can afford the service charge  then agree. ",
 
                 style: TextStyle(
                   fontSize: 13,
