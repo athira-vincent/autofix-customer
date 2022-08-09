@@ -284,7 +284,7 @@ class QueryProvider {
   postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
-      vehiclePic, latitude, longitude,
+      vehiclePic, color, latitude, longitude,
       ) async {
           String _query = """ 
          mutation {
@@ -297,6 +297,7 @@ class QueryProvider {
               lastMaintenance: "$lastMaintenance"
               milege: "$milege"
               vehiclePic: "$vehiclePic"
+              color: "$color"
               latitude: ${double.parse(latitude.toString())}
               longitude: ${double.parse(longitude.toString())}
             ) {
@@ -309,10 +310,12 @@ class QueryProvider {
               lastMaintenance
               milege
               vehiclePic
+              color
               latitude
               longitude
               defaultVehicle
               status
+              userId
             }
           }
   

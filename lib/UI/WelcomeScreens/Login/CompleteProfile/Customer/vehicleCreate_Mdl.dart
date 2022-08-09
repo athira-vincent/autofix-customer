@@ -60,10 +60,12 @@ class VehicleCreate {
     required this.lastMaintenance,
     required this.milege,
     required this.vehiclePic,
+    required this.color,
     required this.latitude,
     required this.longitude,
     required this.defaultVehicle,
     required this.status,
+    required this.userId,
   });
 
   String id;
@@ -75,10 +77,12 @@ class VehicleCreate {
   String lastMaintenance;
   String milege;
   String vehiclePic;
+  String color;
   double latitude;
   double longitude;
   int defaultVehicle;
   int status;
+  int userId;
 
   factory VehicleCreate.fromJson(Map<String, dynamic> json) => VehicleCreate(
     id: json["id"] == null ? null : json["id"],
@@ -90,10 +94,12 @@ class VehicleCreate {
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     milege: json["milege"] == null ? null : json["milege"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
+    color: json["color"] == null ? null : json["color"],
     latitude: json["latitude"] == null ? null : json["latitude"].toDouble(),
     longitude: json["longitude"] == null ? null : json["longitude"].toDouble(),
     defaultVehicle: json["defaultVehicle"] == null ? null : json["defaultVehicle"],
     status: json["status"] == null ? null : json["status"],
+    userId: json["userId"] == null ? null : json["userId"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -106,9 +112,12 @@ class VehicleCreate {
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
     "milege": milege == null ? null : milege,
     "vehiclePic": vehiclePic == null ? null : vehiclePic,
+    "color": color == null ? null : color,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
     "defaultVehicle": defaultVehicle == null ? null : defaultVehicle,
     "status": status == null ? null : status,
+    "userId": userId == null ? null : userId,
   };
 }
+
