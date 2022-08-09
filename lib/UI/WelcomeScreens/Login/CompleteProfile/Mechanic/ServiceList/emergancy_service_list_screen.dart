@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +57,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, null, "1");
       //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
     });
   }
@@ -200,9 +201,9 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                               onChanged: (val){
                                 print(val);
                                 if(val.isNotEmpty){
-                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", val, "25","1");
+                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", val, null, "25","1");
                                 }else{
-                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, "1");
+                                  _homeCustomerBloc.postSearchServiceRequest("$authToken", null,null, null, "1");
                                 }
                               },
                               textAlign: TextAlign.left,
@@ -252,12 +253,15 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                   _rateController.text = emergencyServiceList[index].minPrice.toString();
                                   _timeController.text = "10:00";
                                   _rateController.addListener(() {
-                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,_rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
+                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,
+                                        _rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
                                     selectedServiceMdlList.removeAt(index);
                                     selectedServiceMdlList.insert(index,temp);
                                   });
                                   _timeController.addListener(() {
-                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,selectedServiceMdlList[index].amount, _timeController.text, selectedServiceMdlList[index].isEnable);
+                                    var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,
+                                        selectedServiceMdlList[index].amount, _timeController.text,
+                                        selectedServiceMdlList[index].isEnable);
                                     selectedServiceMdlList.removeAt(index);
                                     selectedServiceMdlList.insert(index,temp);
                                   });
@@ -268,7 +272,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                     child: Row(
                                       children: [
                                         Transform.scale(
-                                          scale: .4,
+                                          scale: .5,
                                           child: Checkbox(
                                             activeColor: CustColors.light_navy,
                                             value: _emergencyIsChecked![index],
@@ -400,15 +404,33 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                                 }
                                               },
                                               cursorColor: CustColors.light_navy,
-                                              inputFormatters: <TextInputFormatter>[
+                                              /*inputFormatters: <TextInputFormatter>[
                                                 FilteringTextInputFormatter.digitsOnly,
-                                              ],
+                                              ],*/
                                               autovalidateMode: AutovalidateMode.onUserInteraction,
                                               keyboardType: TextInputType.datetime,
                                               //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                               controller: _timeController,
                                               style: Styles.searchTextStyle02,
                                               enabled: _emergencyIsChecked![index],
+                                              onChanged: (val) async{
+                                                Duration? _durationResult = await showDurationPicker(
+                                                    snapToMins: 5.0,
+                                                    context: context,
+                                                    initialTime: Duration(
+                                                      //hours: 2,
+                                                        minutes: 10,
+                                                        seconds: 00,
+                                                        milliseconds: 0)
+                                                );
+                                                print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                                if(_durationResult != null){
+                                                  setState(() {
+                                                    _timeController.text = "";
+                                                    _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                                  });
+                                                }
+                                              },
                                               //readOnly: _regularIsChecked![index],
                                             ),
                                           ),
@@ -484,7 +506,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
 
                     _addServiceListBloc.postMechanicAddServicesRequest(
                         authToken,
-                        serviceId,  feeList, timeList);
+                        serviceId,  feeList, timeList, 1);
 
                   },
                   child: Align(

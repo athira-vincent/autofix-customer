@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:duration_picker/duration_picker.dart';
 
 
 class RegularServiceListScreen extends StatefulWidget {
@@ -26,6 +27,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
   final ServiceListBloc _serviceListBloc = ServiceListBloc();
   final MechanicAddServiceListBloc _addServiceListBloc = MechanicAddServiceListBloc();
+
 
   List<CategoryList> regularServiceList = [];
   List<Service> selectedServiceList = [];
@@ -127,7 +129,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+      _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
     });
   }
 
@@ -136,6 +138,9 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: CustColors.materialBlue,
+      ),
       home: SafeArea(
         child: Scaffold(
           body: Container(
@@ -208,9 +213,9 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                 onChanged: (text) {
                                              setState(() {
                                                if(text.isNotEmpty){
-                                                 _serviceListBloc.postServiceListRequest(authToken, text, null, "2" );
+                                                 _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
                                                }else{
-                                                 _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+                                                 _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
                                                }
                                              });
                                              //_allMakeBloc.searchMake(text);
@@ -327,7 +332,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                       _addServiceListBloc.postMechanicAddServicesRequest(
                           authToken,
-                          serviceId,  feeList, timeList);
+                          serviceId,  feeList, timeList, 2);
                     },
                     child: Align(
                       alignment: Alignment.centerRight,
@@ -409,7 +414,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     });
                     _timeController.addListener(() {
                       int itemIndex = getItemIndex(parentIndex,index);
-                      var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,selectedServiceMdlList[itemIndex].minAmount, selectedServiceMdlList[itemIndex].maxAmount, _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
+                      var temp =   SelectedServicesMdl(parentIndex, index,
+                          selectedServiceMdlList[itemIndex].serviceId,
+                          selectedServiceMdlList[itemIndex].minAmount,
+                          selectedServiceMdlList[itemIndex].maxAmount,
+                          _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
                       selectedServiceMdlList.removeAt(itemIndex);
                       selectedServiceMdlList.insert(itemIndex,temp);
                     });
@@ -459,6 +468,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                             flex: 3,
                             child: Text(
                               '${root.service![index].serviceName.toString()}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Container(
@@ -545,23 +556,75 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                   if(value!.isEmpty){
                                     return "Fill field";
                                   }
-                                  /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                              return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                            }*/
+                                  /*else if(value.length >= 3){
+                                    _timeController.text = value.toString() + ":00";
+                                  }*/
                                   else{
                                     return null;
                                   }
                                 },
+                                inputFormatters: <TextInputFormatter>[
+                                  LengthLimitingTextInputFormatter(5),
+                                ],
                                 cursorColor: CustColors.light_navy,
-                                /*inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],*/
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.datetime,
-                                //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                 controller: _timeController,
                                 style: Styles.searchTextStyle02,
                                 enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                                //readOnly: true,
+                                //initialValue: '${selectedServiceMdlList[getItemIndex(parentIndex,index)].time}',
+                                onChanged: (val) async{
+                                  Duration? _durationResult = await showDurationPicker(
+                                      snapToMins: 5.0,
+                                      context: context,
+                                      initialTime: Duration(
+                                        //hours: 2,
+                                          minutes: 10,
+                                          seconds: 00,
+                                          milliseconds: 0)
+                                  );
+                                  print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                  if(_durationResult != null){
+                                    setState(() {
+                                      _timeController.text = "";
+                                      _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                    });
+                                  }
+                                },
+                               /* onTap: () async {
+                                  print(" _timeController.text >>> ${_timeController.text}" );
+                                  Duration? _durationResult = await showDurationPicker(
+                                    snapToMins: 5.0,
+                                    context: context,
+                                    initialTime: Duration(
+                                        //hours: 2,
+                                        minutes: 10,
+                                        seconds: 00,
+                                        milliseconds: 0)
+                                  );
+                                  print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                  print(" _timeController.text02 >>> ${_timeController.text}" );
+                                  if(_durationResult != null){
+                                    setState(() {
+                                      _timeController.text = "";
+                                      _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                      print(" _timeController.text03 >>> ${_timeController.text}" );
+                                    });
+                                  }
+
+                                  print(" _timeController.text04 >>> ${_timeController.text}" );
+
+                                  int itemIndex = getItemIndex(parentIndex,index);
+                                  var temp =   SelectedServicesMdl(parentIndex, index,
+                                      selectedServiceMdlList[itemIndex].serviceId,
+                                      selectedServiceMdlList[itemIndex].minAmount,
+                                      selectedServiceMdlList[itemIndex].maxAmount,
+                                      _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
+                                  selectedServiceMdlList.removeAt(itemIndex);
+                                  selectedServiceMdlList.insert(itemIndex,temp);
+
+                                },*/
                                 //readOnly: _regularIsChecked![index],
                               ),
                             ),

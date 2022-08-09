@@ -78,8 +78,8 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('userFamilyId'+authToken.toString());
-      _homeCustomerBloc.postSearchServiceRequest("$authToken", null,null,null);
-      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
+      _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null,null,null);
+      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
       // _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
     });
   }
@@ -266,11 +266,13 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                   if (text != null && text.isNotEmpty && text != "" ) {
                     setState(() {
                       print('First text field: $text');
-                      _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}",null,null);
-                      //_homeCustomerBloc.postRegularServiceListRequest("$authToken", "2");
+                      _homeCustomerBloc.postSearchServiceRequest("$authToken", "${searchController.text}", null, null,null);
+                      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, "${searchController.text}");
                     });
+                  }else{
+                    _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null,null,null);
+                    _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
                   }
-
                 },
               ),
             ),
@@ -471,6 +473,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                   latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
                                                   longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
                                                   address: addressLocationText,
+                                                  isFromScheduleServicePage: false,
                                                 )));
 
                                       }else{
@@ -484,6 +487,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
                                                   latitude: CurrentLatitude,
                                                   longitude: CurrentLongitude,
                                                   address: Address,
+                                                  isFromScheduleServicePage: false,
                                                 )));
                                       }
 

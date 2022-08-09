@@ -5,6 +5,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddSer
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/service_list_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/wait_admin_approval_screen.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +53,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   }
 
   _listenServiceListResponse() {
-    _serviceListBloc.postServiceList.listen((value) {
+    _serviceListBloc.serviceListResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
           //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
@@ -69,6 +70,14 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //_isLoading = false;
           //print(value.data!.serviceListAll!.length);
           //allServiceList = value.data!.serviceListAll!;
+
+          allList = [];
+          emergencyCategoryList = [];
+          emergencyServiceList = [];
+          emergencyServiceMdlList = [];
+          regularCategoryList = [];
+          regularServiceList = [];
+          regularServiceMdlList = [];
 
           allList = value.data!.categoryList!;
 
@@ -169,7 +178,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       print('authToken >>>>>>> '+authToken.toString());
-      _serviceListBloc.postServiceListRequest(authToken, "", null, null );
+      _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
     });
   }
 
@@ -289,9 +298,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                        onChanged: (text) {
                          setState(() {
                            if(text.isNotEmpty){
-                             _serviceListBloc.postServiceListRequest(authToken, text, null, "2" );
+                             _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
                            }else{
-                             _serviceListBloc.postServiceListRequest(authToken, "", null, "2" );
+                             _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
                            }
                          });
                          //_allMakeBloc.searchMake(text);
@@ -411,9 +420,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         onChanged: (text) {
                           setState(() {
                             if(text.isNotEmpty){
-                              _serviceListBloc.postServiceListRequest(authToken, text, null, "1" );
+                              _serviceListBloc.postServiceListRequest(authToken, text, null, "1","" );
                             }else{
-                              _serviceListBloc.postServiceListRequest(authToken, "", null, "1" );
+                              _serviceListBloc.postServiceListRequest(authToken, "", null, "1", "" );
                             }
                           });
                           //_allMakeBloc.searchMake(text);
@@ -544,9 +553,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                           },
                                           cursorColor: CustColors.light_navy,
                                           keyboardType: TextInputType.number,
-                                          inputFormatters: <TextInputFormatter>[
+                                          /*inputFormatters: <TextInputFormatter>[
                                             FilteringTextInputFormatter.digitsOnly,
-                                          ],
+                                          ],*/
                                           autovalidateMode: AutovalidateMode.onUserInteraction,
                                           //initialValue: '${regularServiceList[index].serviceName.toString()}',
                                           controller: _rateController,
@@ -582,6 +591,24 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                           controller: _timeController,
                                           style: Styles.searchTextStyle02,
                                           enabled: _emergencyIsChecked![index],
+                                          onChanged: (val) async{
+                                            Duration? _durationResult = await showDurationPicker(
+                                                snapToMins: 5.0,
+                                                context: context,
+                                                initialTime: Duration(
+                                                  //hours: 2,
+                                                    minutes: 10,
+                                                    seconds: 00,
+                                                    milliseconds: 0)
+                                            );
+                                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                            if(_durationResult != null){
+                                              setState(() {
+                                                _timeController.text = "";
+                                                _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                              });
+                                            }
+                                          },
                                           //readOnly: _regularIsChecked![index],
                                         ),
                                       ),
@@ -818,6 +845,24 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         controller: _timeController,
                         style: Styles.searchTextStyle02,
                         enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                        onChanged: (val) async{
+                          Duration? _durationResult = await showDurationPicker(
+                              snapToMins: 5.0,
+                              context: context,
+                              initialTime: Duration(
+                                //hours: 2,
+                                  minutes: 10,
+                                  seconds: 00,
+                                  milliseconds: 0)
+                          );
+                          print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                          if(_durationResult != null){
+                            setState(() {
+                              _timeController.text = "";
+                              _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                            });
+                          }
+                        },
                         //readOnly: _regularIsChecked![index],
                       ),
                     ),
@@ -900,7 +945,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
         _addServiceListBloc.postMechanicAddServicesRequest(
             authToken,
-            serviceId,  feeList, timeList);
+            serviceId,  feeList, timeList, null);     // catType - 1/2 - doubt
       },
       child: Container(
         height: size.height * 0.045,

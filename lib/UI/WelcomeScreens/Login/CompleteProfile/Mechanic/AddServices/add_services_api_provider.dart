@@ -10,8 +10,8 @@ class AddServicesApiProvider {
 // ------------ Complete Profile Mechanic - Individual--------------
 
   Future<AddServicesMdl> getMechanicAddServiceListRequest(
-      String token,String serviceList, String rateList,String timeList) async {
-    Map<String, dynamic> _resp = await _queryProvider.mechanicAddServiceList(token, serviceList,rateList,timeList);
+      String token,String serviceList, String rateList,String timeList, catType) async {
+    Map<String, dynamic> _resp = await _queryProvider.mechanicAddServiceList(token, serviceList,rateList,timeList, catType);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

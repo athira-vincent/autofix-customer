@@ -51,6 +51,7 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
+    _listenApiResponse();
   }
 
   Future<void> getSharedPrefData() async {
@@ -72,6 +73,32 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
     });
   }
 
+  _listenApiResponse(){
+    _homeCustomerBloc.postAddMechanicReviewAndRatingResponse.listen((value) {
+      print("pieuiey 001 ${value.data}");
+      if(value.data == "error" || value.status == "error"){
+        setState(() {
+          //_isLoadingPage = true;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+        });
+      }else{
+        setState(() {
+          //_isLoadingPage = true;
+          setDeactivate();
+
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+        });
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,14 +284,15 @@ class _RegularRateMechanicScreenState extends State<RegularRateMechanicScreen> {
                         print("On Press Continue");
                         print("${_feedBackController.text}");
                         print("${_rating}");
+                        print("${widget.bookingId}");
 
                         _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
                             authToken,_rating, _feedBackController.text, widget.bookingId,);
 
-                        setDeactivate();
+                        /*setDeactivate();
 
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+                            CustomerMainLandingScreen()), (Route<dynamic> route) => false);*/
                       },
                     ),
                     SizedBox(height: 20,)

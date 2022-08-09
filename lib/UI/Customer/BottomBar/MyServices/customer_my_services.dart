@@ -1,8 +1,11 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -39,6 +42,8 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String firebaseCustomerLatitude = "", firebaseScreen = "", firebaseCustomerLongitude = "" ;
 
   double _setValue(double value) {
     return value * per + value;
@@ -384,7 +389,23 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                         itemBuilder: (context,index,) {
                           return InkWell(
                             onTap: (){
-                              Navigator.push(
+
+                              if(CustomerUpcomingServicesList?.custCompletedOrders?[index].reqType == 1 ){
+                                _firestore.collection("ResolMech").doc('${CustomerUpcomingServicesList?.custCompletedOrders?[index].id}').snapshots().listen((event) {
+                                  print('_firestore');
+                                  setState(() {
+
+                                    firebaseScreen = event.get('mechanicFromPage');
+                                    firebaseCustomerLatitude = event.get('customerLatitude');
+                                    firebaseCustomerLongitude = event.get('customerLongitude');
+                                    //changeScreen(firebaseScreen);
+
+                                  });
+                                });
+
+                              }
+
+                              /*Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => CustServiceRegularDetailsScreen(
@@ -394,7 +415,7 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                       CustomerUpcomingServicesList?.custCompletedOrders?[index].regularType.toString() == "2"
                                           ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                                     ),
-                                  ));
+                                  ));*/
                             },
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(0,10,0,10),
@@ -920,13 +941,11 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
                                                       );
                                                     },
                                                   ),
-
                                                 ],
                                               ),
                                             ],
                                           ),
                                         ),
-
                                       ],
                                     ),
                                   ),
@@ -1255,5 +1274,45 @@ class _CustomerMyServicesScreenState extends State<CustomerMyServicesScreen> {
           )),
     );
   }
+
+  /*void changeScreen(String firebaseScreen){
+    if(firebaseScreen == "C1"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>   MechanicTrackingScreen(latitude: "${firebaseCustomerLatitude}", longitude:  "${firebaseCustomerLongitude}",)
+          )).then((value){
+      });
+    }else if(firebaseScreen == "C2" || firebaseScreen == "C4" || firebaseScreen == "C5" ){     //firebaseScreen == "C3"
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  MechanicWorkProgressScreen(workStatus: "1")
+          )).then((value){
+      });
+    }else if(firebaseScreen == "C3"){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  CustomerApprovedScreen()
+          )).then((value){
+      });
+    }else if(firebaseScreen == "C4"){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MechanicWorkCompletedScreen()));
+    }else if(firebaseScreen == "C5"){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
+          )).then((value){
+
+      });
+    }else if(firebaseScreen == "C6"){
+      print("Service Completed");
+    }
+  }*/
 
 }
