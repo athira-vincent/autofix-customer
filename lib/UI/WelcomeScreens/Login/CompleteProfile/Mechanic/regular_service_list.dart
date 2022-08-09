@@ -407,10 +407,15 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     TextEditingController _rateController = TextEditingController();
                     TextEditingController _timeController = TextEditingController();
                     _rateController.text = root.service![index].minPrice.toString();
-                    _timeController.text = "10:00";
+                    _timeController.text = selectedServiceMdlList[getItemIndex(parentIndex,index)].time;
                     _rateController.addListener(() {
                       int itemIndex = getItemIndex(parentIndex,index);
-                      var temp =   SelectedServicesMdl(parentIndex, index, selectedServiceMdlList[itemIndex].serviceId,_rateController.text, selectedServiceMdlList[itemIndex].maxAmount, selectedServiceMdlList[itemIndex].time, selectedServiceMdlList[itemIndex].isEnable);
+                      var temp =   SelectedServicesMdl(parentIndex, index,
+                          selectedServiceMdlList[itemIndex].serviceId,
+                          _rateController.text,
+                          selectedServiceMdlList[itemIndex].maxAmount,
+                          selectedServiceMdlList[itemIndex].time,
+                          selectedServiceMdlList[itemIndex].isEnable);
                       selectedServiceMdlList.removeAt(itemIndex);
                       selectedServiceMdlList.insert(itemIndex,temp);
                     });
@@ -497,15 +502,22 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                   border: InputBorder.none,
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 12.5,
-                                    horizontal: 6.0,
+                                    horizontal: 5.0,
                                   ),
+                                    errorStyle: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 7,
+                                    )
                                 ),
                                 validator: (value){
                                   if(value!.isEmpty){
                                     return "Fill field";
                                   }
-                                  else if(int.parse(value) < int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount) || int.parse(value) > int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
-                                    return selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount + " - " + selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
+                                  else if(int.parse(value) < int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount) ){
+                                    return selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount + "-" + selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
+                                  }
+                                  else if(int.parse(value) > int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
+                                    return selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount + "-" + selectedServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
                                   }
                                   else{
                                     return null;
@@ -554,22 +566,22 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     horizontal: 6.0,
                                   ),
                                 ),
-                                validator: (value){
+                                /*validator: (value){
                                   if(value!.isEmpty){
                                     return "Fill field";
                                   }
-                                  /*else if(value.length >= 3){
+                                  *//*else if(value.length >= 3){
                                     _timeController.text = value.toString() + ":00";
-                                  }*/
+                                  }*//*
                                   else{
                                     return null;
                                   }
-                                },
-                                inputFormatters: <TextInputFormatter>[
+                                },*/
+                                /*inputFormatters: <TextInputFormatter>[
                                   LengthLimitingTextInputFormatter(5),
-                                ],
+                                ],*/
                                 cursorColor: CustColors.light_navy,
-                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                //autovalidateMode: AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.datetime,
                                 controller: _timeController,
                                 style: Styles.searchTextStyle02,

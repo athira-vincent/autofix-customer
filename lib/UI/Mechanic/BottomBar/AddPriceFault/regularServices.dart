@@ -441,8 +441,10 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                             if(value!.isEmpty){
                                               return "Fill field";
                                             }
-                                            if(int.parse(value) < int.parse(_AddPriceServiceList!.data![index].minPrice) ||
-                                                int.parse(value) > int.parse(_AddPriceServiceList!.data![index].maxPrice)){
+                                            if(int.parse(value) < int.parse(_AddPriceServiceList!.data![index].minPrice) ){
+                                              return _AddPriceServiceList!.data![index].minPrice +"-" + _AddPriceServiceList!.data![index].maxPrice;
+                                            }
+                                            if(int.parse(value) > int.parse(_AddPriceServiceList!.data![index].maxPrice)){
                                               return _AddPriceServiceList!.data![index].minPrice +"-" + _AddPriceServiceList!.data![index].maxPrice;
                                             }
                                             else {

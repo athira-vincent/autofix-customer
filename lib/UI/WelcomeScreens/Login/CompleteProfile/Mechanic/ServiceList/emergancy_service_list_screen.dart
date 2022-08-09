@@ -253,16 +253,19 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                   TextEditingController _rateController=TextEditingController();
                                   TextEditingController _timeController = TextEditingController();
                                   _rateController.text = emergencyServiceList[index].minPrice.toString();
-                                  _timeController.text = "10:00";
+                                  _timeController.text = selectedServiceMdlList[index].time;
                                   _rateController.addListener(() {
                                     var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,
-                                        _rateController.text,  selectedServiceMdlList[index].time, selectedServiceMdlList[index].isEnable);
+                                        _rateController.text,
+                                        selectedServiceMdlList[index].time,
+                                        selectedServiceMdlList[index].isEnable);
                                     selectedServiceMdlList.removeAt(index);
                                     selectedServiceMdlList.insert(index,temp);
                                   });
                                   _timeController.addListener(() {
                                     var temp =   SelectedServicesMdl(selectedServiceMdlList[index].serviceId,
-                                        selectedServiceMdlList[index].amount, _timeController.text,
+                                        selectedServiceMdlList[index].amount,
+                                        _timeController.text,
                                         selectedServiceMdlList[index].isEnable);
                                     selectedServiceMdlList.removeAt(index);
                                     selectedServiceMdlList.insert(index,temp);
