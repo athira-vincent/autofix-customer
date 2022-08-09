@@ -2669,6 +2669,7 @@ class QueryProvider {
           lastMaintenance
           latitude
           longitude
+          color
           vehiclePic
           userId
           status
