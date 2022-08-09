@@ -180,20 +180,22 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           });
         });
       }else{
+        print("hasActiveService>>>> ${value.data?.currentlyWorkingService.toString()}");
         print(value.data?.currentlyWorkingService.toString());
-        if(value.data?.currentlyWorkingService.toString() == 'null'
+        if(value.data?.currentlyWorkingService.toString() == []
             || value.data?.currentlyWorkingService.toString() == null
-          || value.data?.currentlyWorkingService.toString() == []
-        )
+          || value.data?.currentlyWorkingService.toString() == 'null')
         {
           setState(() {
             _hasActiveService = false;
+            print("hasActiveService>>>> false");
           });
         }
         else {
           setState(()  {
-              _hasActiveService = true;
               setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+              _hasActiveService = true;
+              print("hasActiveService>>>> true");
           });
         }
       }
