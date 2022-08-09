@@ -193,9 +193,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         }
         else {
           setState(()  {
-              setReminderData(value.data?.currentlyWorkingService![0].id.toString());
-              _hasActiveService = true;
-              print("hasActiveService>>>> true");
+            _hasActiveService = true;
+            setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            print("hasActiveService>>>> true");
           });
         }
       }
