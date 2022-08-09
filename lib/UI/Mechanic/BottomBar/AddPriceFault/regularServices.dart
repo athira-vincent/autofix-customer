@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,13 +29,10 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
   bool _isLoadingPage = false;
   List<bool> _selectionList=[];
   AddPriceFaultReviewBloc _addPriceFaultReviewBloc=AddPriceFaultReviewBloc();
-  MechanicDetails? _mechanicDetails;
   MechanicServiceAdd? _MechanicServiceAdd;
-  UpdateTimeFees? _updateTimeFees;
   AddPriceServiceList? _AddPriceServiceList;
   List<String>? _timeList=[];
   List<String>? _priceList=[];
-  List<String>? _serviceIdList=[];
 
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   int checkID=0;
@@ -50,7 +48,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
     super.initState();
     getSharedPrefData();
     _listenApiResponse();
-
   }
 
   Future<void> getSharedPrefData() async {
@@ -64,6 +61,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
       /*_addPriceFaultReviewBloc.postAddFetchPriceFaultReviewRequest(
           authToken,
           mechanicId);*/
+      _selectionList.clear();
       _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
           authToken,
           page,
@@ -157,7 +155,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
         setState(() {
           saveloading = false;
           print('abcdefg02');
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           //SnackBarWidget().setMaterialSnackBar("Error",_scaffoldKey);
           if(checkID!=0) {
             if(checkID==value)
@@ -172,12 +170,17 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
         });
       }else{
         setState(() {
+          //_selectionList.clear();
           print('abcdefg01');
-          getSharedPrefData();
-
+          _isLoadingPage = false;
           saveloading = false;
           tempCounter = 0;
           _lodingIdList = [];
+          _serviceIdEmergency = [];
+          _timeListEmergency = [] ;
+          _priceListEmergency = [];
+          getSharedPrefData();
+
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Service Added',
                 style: const TextStyle(
@@ -185,7 +188,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.light_navy,
           ));
-          _isLoadingPage = true;
+          //_isLoadingPage = true;
           _MechanicServiceAdd = value.data!.mechanicServiceAdd as MechanicServiceAdd?;
         });
       }
@@ -220,7 +223,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               size,
                               value,
                               mechanicId,
-                              1);
+                              2);
                         }else{
                           _addPriceFaultReviewBloc.postEnrgRegAddPriceReviewRequest(
                               authToken,
@@ -230,8 +233,9 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                               mechanicId,
                               2);
                         }
-
                       },
+                      cursorColor: CustColors.light_navy,
+                      //style: TextStyle(),
                       decoration:
                       InputDecoration(
                         // border: OutlineInputBorder(
@@ -241,7 +245,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                         border: InputBorder.none,
                         filled: true,
                         fillColor: Colors.white,
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: Icon(Icons.search, color: CustColors.light_navy),
                         hintText: 'Search Your  Service',
                         contentPadding: EdgeInsets.only(top: 1),
                       ),
@@ -283,14 +287,15 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                       InkWell(
                                         onTap:(){
                                           setState(() {
-                                            bool s=!_selectionList[index];
+                                            bool s = _selectionList[index];
+                                            print(_selectionList[index].toString());
                                             _selectionList.removeAt(index);
-                                            _selectionList.insert(index,s );
+                                            _selectionList.insert(index,!s );
+                                            print(_selectionList[index].toString());
                                             if(!_selectionList[index]){
                                               _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"12:00";
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                               setState(() {
-
 
                                               });
                                             }
@@ -329,7 +334,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                           ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ),
@@ -353,7 +357,9 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                       //   width: 1),
                                       //   borderRadius: BorderRadius.circular(05)
                                       // ),
-                                      onPressed: () {  },
+                                      onPressed: () {
+
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.zero,
                                         //primary: Color(0xffd3dcf2),
@@ -366,17 +372,40 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
-                                          keyboardType: TextInputType.number,
+                                          cursorColor: CustColors.light_navy,
+                                          keyboardType: TextInputType.datetime,
                                           decoration: InputDecoration(
                                               border: InputBorder.none
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller,
-                                          inputFormatters: [
-                                            LengthLimitingTextInputFormatter(4),
+                                          /*inputFormatters: [
                                             FilteringTextInputFormatter.allow(
-                                                RegExp('[0-9 :]')),
-                                          ],
+                                                RegExp('^[0-9][0-9][0-9]:00')),
+                                            LengthLimitingTextInputFormatter(4),
+                                                //RegExp('[0-9 :00]')),
+                                          ],*/
+                                          onChanged: (val) async {
+                                            print(" _timeController.text >>> ${_textEditContoller.text}" );
+                                            Duration? _durationResult = await showDurationPicker(
+                                                snapToMins: 5.0,
+                                                context: context,
+                                                initialTime: Duration(
+                                                  //hours: 2,
+                                                    minutes: 10,
+                                                    seconds: 00,
+                                                    milliseconds: 0)
+                                            );
+                                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                            print(" _timeController.text02 >>> ${_textEditContoller.text}" );
+                                            if(_durationResult != null){
+                                              setState(() {
+                                                _textEditContoller.text = "";
+                                                _textEditContoller.text = _durationResult.inMinutes.toString() + ":00";
+                                                print(" _timeController.text03 >>> ${_textEditContoller.text}" );
+                                              });
+                                            }
+                                          },
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: 12,
@@ -408,19 +437,22 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
-                                          // validator: (value){
-                                          //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
-                                          //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
-                                          //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
-                                          //   }
-                                          //   else {
-                                          //     return null;
-                                          //   }
-                                          // },
+                                          /*validator: (value){
+                                            if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![index].minPrice) ||
+                                                int.parse(value) > int.parse(_AddPriceServiceList!.data![index].maxPrice)){
+                                              return _AddPriceServiceList!.data![index].minPrice +"-" + _AddPriceServiceList!.data![index].maxPrice;
+                                            }
+                                            else {
+                                              return null;
+                                            }
+                                          },*/
                                           keyboardType: TextInputType.number,
-
+                                          cursorColor: CustColors.light_navy,
                                           decoration: InputDecoration(
-                                              border: InputBorder.none
+                                              border: InputBorder.none,
+                                            errorStyle: TextStyle(
+                                              color: Colors.red
+                                            )
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller01,
@@ -525,11 +557,11 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                       SharedPreferences shdPre = await SharedPreferences.getInstance();
                       setState(() {
 
-                        int temp=0;
                         for(int i =0;i<_selectionList.length;i++)
                         {
                           if(_selectionList[i])
                           {
+                            print(" >>>> _lodingIdList.add(_selectionList[i].toString()); >>> ${_lodingIdList.toString()}" );
                             _lodingIdList.add(_selectionList[i].toString());
                             _timeListEmergency?.add('${_timeList![i]}');
                             _priceListEmergency?.add('${_priceList![i]}');
@@ -540,8 +572,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                         print('$_timeListEmergency >>>>_timeListEmergency ');
                         print('$_priceListEmergency >>>>_priceListEmergency ');
                         print('$_serviceIdEmergency >>>>_serviceIdEmergency ');
-
-
 
                         if(_lodingIdList.length == 0)
                         {
@@ -572,7 +602,7 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                         _addPriceFaultReviewBloc.postTimeServicePriceAddReviewRequest(
                           authToken,
                           _serviceIdEmergency.toString().replaceAll("[", "").replaceAll("]", ""),
-                          fee, time
+                          fee, time, "2"
                         );
                       });
                     },
@@ -606,7 +636,35 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
   @override
   bool get wantKeepAlive => true;
 
+  /*void onTap() {
+    Picker(
+      adapter: NumberPickerAdapter(data: <NumberPickerColumn>[
+        const NumberPickerColumn(begin: 0, end: 999, suffix: Text(' hours')),
+        const NumberPickerColumn(begin: 0, end: 60, suffix: Text(' minutes'), jump: 15),
+      ]),
+      delimiter: <PickerDelimiter>[
+        PickerDelimiter(
+          child: Container(
+            width: 30.0,
+            alignment: Alignment.center,
+            child: Icon(Icons.more_vert),
+          ),
+        )
+      ],
+      hideHeader: true,
+      confirmText: 'OK',
+      confirmTextStyle: TextStyle(inherit: false, color: Colors.red, fontSize: 22),
+      title: const Text('Select duration'),
+      selectedTextStyle: TextStyle(color: Colors.blue),
+      onConfirm: (Picker picker, List<int> value) {
+        // You get your duration here
+        Duration _duration = Duration(hours: picker.getSelectedValues()[0], minutes: picker.getSelectedValues()[1]);
+      },
+    ).showDialog(context);
+  }*/
+
 }
+
 
 
 

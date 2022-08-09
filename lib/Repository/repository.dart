@@ -55,20 +55,20 @@ class Repository {
   final _serviceStatusUpdateApiProvider = ServiceStatusUpdateApiProvider();
 
   // Add Mechanic Service List
-  Future<dynamic> getServiceList(String token, categoryId, search) =>
-      _serviceListApiProvider.getServiceListRequest(token, categoryId, search);
+  Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
+      _serviceListApiProvider.getServiceListRequest(token, categoryId, search, catSearch);
 
   // Service List
-  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList) =>
-      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
+  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList, catType) =>
+      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList, catType);
 
   //  Category List
   Future<dynamic> getCategoryList(String token, searchText, count, categoryId) =>
       _categoryListApiProvider.getCategoryListRequest(token,searchText, count, categoryId);
 
   //  Category List Home Request
-  Future<dynamic> getCategoryListHomeRequest(String token,categoryId) =>
-      _customerApiProvider.getCategoryListHomeRequest(token,categoryId);
+  Future<dynamic> getCategoryListHomeRequest(String token,categoryId, serviceSearch, catSearch) =>
+      _customerApiProvider.getCategoryListHomeRequest(token,categoryId, serviceSearch, catSearch);
 
 
   // SignUp
@@ -196,12 +196,14 @@ class Repository {
   // Search Service Request
   Future<dynamic>  postSearchServiceRequest(
       token,
-      search,
+      serviceSearch,
+      catSearch,
       count,
       categoryId)  =>
       _customerApiProvider. postSearchServiceRequest(
           token,
-          search,
+          serviceSearch,
+          catSearch,
           count,
           categoryId) ;
 
@@ -453,9 +455,9 @@ class Repository {
           token,bookingId
       );
   Future<dynamic> postTimeServicePriceAddReviewRequest(
-      token,services,fee,time) =>
+      token,services,fee,time, catType) =>
       _AddPriceFaultApiProvider.postTimePriceServiceDetailsRequest(
-          token,services,fee,time
+          token,services,fee,time, catType
       );
 
 

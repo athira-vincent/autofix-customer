@@ -807,6 +807,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
             longitude: widget.longitude,
             latitude: widget.latitude,
             address: widget.address,
+            isFromScheduleServicePage: true,
           ),
         ));
 
