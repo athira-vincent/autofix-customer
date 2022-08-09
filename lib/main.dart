@@ -5,6 +5,7 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/regularServices.dart';
 
 
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
