@@ -39,7 +39,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
   List<Service> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
 
-  String authToken="";
+  String authToken="", userCode = "";
 
   @override
   void initState() {
@@ -56,6 +56,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userCode = shdPre.getString(SharedPrefKeys.userCode).toString();
       print('authToken >>>>>>> '+authToken.toString());
       _homeCustomerBloc.postSearchServiceRequest("$authToken", null, null, null, "1");
       //_serviceListBloc.postServiceListRequest(authToken, null, null, "1" );
@@ -113,10 +114,11 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
+          print("success refNumber: userCode, >>>>>>>  ${userCode}");
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => WaitAdminApprovalScreen(refNumber: '123456',) ));
+                  builder: (context) => WaitAdminApprovalScreen(refNumber: '$userCode',) ));
           FocusScope.of(context).unfocus();
           //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
           //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);

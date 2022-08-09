@@ -739,7 +739,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: (){
+            /*onTap: (){
               setState(() {
                 Navigator.push(
                     context,
@@ -747,7 +747,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       builder: (context) => MechanicMyWalletScreen(),
                     ));
               });
-            },
+            },*/
             child: Container(
               height: size.height * 18 / 100,
               width: size.width * 40 / 100,

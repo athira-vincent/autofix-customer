@@ -45,7 +45,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   String title = "";
   late bool isRegularSelected;
 
-  String authToken="";
+  String authToken="", userCode = "";
   bool _isLoading = false;
   double per = .10;
   double _setValue(double value) {
@@ -149,10 +149,12 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
+          print("success refNumber: userCode, >>>>>>>  ${userCode}");
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => WaitAdminApprovalScreen(refNumber: '123456',) ));
+                  builder: (context) => WaitAdminApprovalScreen(refNumber: '$userCode',) ));
           FocusScope.of(context).unfocus();
         });
       }
@@ -177,6 +179,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userCode = shdPre.getString(SharedPrefKeys.userCode).toString();
       print('authToken >>>>>>> '+authToken.toString());
       _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
     });

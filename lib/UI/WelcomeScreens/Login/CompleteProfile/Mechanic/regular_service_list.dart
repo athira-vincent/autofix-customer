@@ -38,7 +38,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   //List<ServiceListAll> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
 
-  String authToken="";
+  String authToken="", userCode = "";
 
   _listenServiceListResponse() {
     _serviceListBloc.postServiceList.listen((value) {
@@ -100,10 +100,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
+          print("success refNumber: userCode, >>>>>>>  ${userCode}");
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => WaitAdminApprovalScreen(refNumber: '123456',) ));
+                  builder: (context) => WaitAdminApprovalScreen(refNumber: userCode,) ));
           FocusScope.of(context).unfocus();
           //_serviceListBloc.userDefault(value.data!.customersSignUpIndividual!.token.toString());
           //SnackBarWidget().setMaterialSnackBar( "Successfully Registered", _scaffoldKey);
@@ -128,6 +129,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userCode = shdPre.getString(SharedPrefKeys.userCode).toString();
       print('authToken >>>>>>> '+authToken.toString());
       _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
     });

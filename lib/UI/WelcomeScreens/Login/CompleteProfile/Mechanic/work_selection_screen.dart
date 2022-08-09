@@ -240,8 +240,8 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
                                             workSelectionTextSelection() ,
                                             vehicleSpecializedTextSelection(),
                                             uploadApprenticeCertificateSelection() ,
-                                            addressTextSelection(),
                                             meansOfIdentificationSelection(),
+                                            addressTextSelection(),
                                             NextButtonMechanicIndividual(),
 
                                           ],
