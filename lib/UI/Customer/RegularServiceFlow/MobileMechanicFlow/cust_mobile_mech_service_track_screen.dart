@@ -398,7 +398,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
               height: 50.0,
             ),
           ),
-    ],
+        ],
       ),
     );
   }

@@ -147,7 +147,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString();
+          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toString()/*.toLowerCase()*/;
           brandName = brandName.replaceAll(" ", "");
           print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + brandName);
           _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",brandName);
