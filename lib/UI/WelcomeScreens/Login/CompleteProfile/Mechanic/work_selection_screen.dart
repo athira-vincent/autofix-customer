@@ -730,10 +730,10 @@ class _WorkSelectionScreenState extends State<WorkSelectionScreen> {
             keyboardType: TextInputType.name,
             inputFormatters: [
               FilteringTextInputFormatter.allow(
-                  RegExp('[a-zA-Z0-9 ]')),
+                  RegExp('[a-zA-Z0-9 .,:()-]')),
             ],
             validator: InputValidator(
-                ch :'Address').nameCheckingWithNumeric,
+                ch :'Address').emptyChecking,
             controller: _addressController,
             cursorColor: CustColors.light_navy,
             decoration: InputDecoration(

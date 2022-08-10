@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInR
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +194,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           }else{
             updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }
-
+          callOnFcmApiSendPushNotifications(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -206,9 +207,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         });
       }
     });
-
   }
-
 
   Future<void> updateToCloudFirestoreDBPickUp(int bookingId, [MechanicBooking? mechanicBooking]) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
@@ -372,6 +371,81 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         .catchError((error) =>
         print("Failed to add row: $error"));
 
+  }
+
+  Future<void> callOnFcmApiSendPushNotifications(int bookingId, [MechanicBooking? mechanicBooking]) async {
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have new Regular Service booking',
+        'title': 'Notification',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "bookingId" : "$bookingId",
+        "message": "ACTION"
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      //'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${widget.mechanicListData?.fcmToken}'
+      //'to':'$token'
+    };
+
+    print('FcmToken data >>> ${data}');
+    print('FcmToken >>> ${FcmToken}');
+    print('FcmToken token >>> ${token}');
+
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          print('notification sending success');
+
+        });
+      } else {
+        setState(() {
+          print('notification sending failed');
+
+        });
+      }
+    } catch (e) {
+      print('exception $e');
+    }
   }
 
   @override

@@ -218,10 +218,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     addPolyLine(polylineCoordinates);
 
-
-
-
-
   }
 
   addPolyLine(List<LatLng> polylineCoordinates) {

@@ -302,7 +302,8 @@ class _MechanicProfileViewScreenState extends State<MechanicProfileViewScreen> {
           'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
         }
       },
-     'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+     //'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${widget.mechanicListData?.fcmToken}'
       //'to':'$token'
       // 'to': 'ctsKmrE-QDmMJKTC_3w9IJ:APA91bEiYGvfKDstMKwYh927f76Gy0w88LY7E1K2vszl2Cg7XkBIaGOXZeSkhYpx8Oqh4ws2AvAVfdif89YvDZNFUondjMEj48bvQE3jXmZFy1ioHauybD6qJPeo7VRcJdUzHfMHCiij',
     };

@@ -207,14 +207,16 @@ class CustomerApiProvider {
 
   Future<ServiceSearchListAllMdl>  postSearchServiceRequest(
       token,
-      bookMechanicId,
-      serviceId,
-      serviceType)async {
+      serviceSearch,
+      catSearch,
+      count,
+      categoryId)async {
     Map<String, dynamic> _resp = await _queryProvider. postSearchServiceRequest(
         token,
-        bookMechanicId,
-        serviceId,
-        serviceType);
+        serviceSearch,
+        catSearch,
+        count,
+        categoryId);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -274,8 +276,8 @@ class CustomerApiProvider {
 
 
   Future<CategoryListHomeMdl> getCategoryListHomeRequest(
-      String token, categoryId) async {
-    Map<String, dynamic> _resp = await _queryProvider.categoryListHome(token,  categoryId);
+      String token, categoryId, serviceSearch, catSearch) async {
+    Map<String, dynamic> _resp = await _queryProvider.categoryListHome(token, categoryId, serviceSearch, catSearch);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
