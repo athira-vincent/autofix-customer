@@ -60,7 +60,7 @@ class CustomerDetails {
     required this.accountType,
     required this.status,
     required this.jwtToken,
-    required this.fcmToke,
+    required this.fcmToken,
     required this.otpCode,
     required this.customer,
   });
@@ -74,7 +74,7 @@ class CustomerDetails {
   dynamic accountType;
   int status;
   String jwtToken;
-  dynamic fcmToke;
+  dynamic fcmToken;
   dynamic otpCode;
   List<Customer>? customer;
 
@@ -88,7 +88,7 @@ class CustomerDetails {
     accountType: json["accountType"],
     status: json["status"] == null ? null : json["status"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
-    fcmToke: json["fcmToke"],
+    fcmToken: json["fcmToken"],
     otpCode: json["otpCode"],
     customer: json["customer"] == null ? null : List<Customer>.from(json["customer"].map((x) => Customer.fromJson(x))),
   );
@@ -103,7 +103,7 @@ class CustomerDetails {
     "accountType": accountType,
     "status": status == null ? null : status,
     "jwtToken": jwtToken == null ? null : jwtToken,
-    "fcmToke": fcmToke,
+    "fcmToken": fcmToken,
     "otpCode": otpCode,
     "customer": customer == null ? null : List<dynamic>.from(customer!.map((x) => x.toJson())),
   };

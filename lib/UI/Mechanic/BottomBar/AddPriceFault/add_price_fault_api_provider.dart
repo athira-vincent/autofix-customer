@@ -64,9 +64,9 @@ class AddPriceFaultApiProvider{
     }
  }
  Future<TimePriceServiceDetailsMdl> postTimePriceServiceDetailsRequest(
-     token,services,fee,time)async{
+     token,services,fee,time, catType)async{
     Map<String, dynamic> _resp = await _queryProvider.postTimePriceServiceDetailsRequest(
-        token,services,fee,time);
+        token,services,fee,time, catType);
     if(_resp != null){
       if(_resp['status']=="error"){
         final errormsg = TimePriceServiceDetailsMdl(data: null);

@@ -20,6 +20,7 @@ class AddMoreRegularServicesListScreen extends StatefulWidget {
   final String latitude;
   final String longitude;
   final String address;
+  final bool isFromScheduleServicePage;
 
 
 
@@ -29,7 +30,9 @@ class AddMoreRegularServicesListScreen extends StatefulWidget {
     required this.isAddService,
     required this.isReturnData,
     required this.address,
-    required this.categoryList});
+    required this.categoryList,
+    required this.isFromScheduleServicePage
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -98,7 +101,8 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Add additional service",
+                child: Text(
+                  widget.isFromScheduleServicePage == true ? "Add additional services" : "Add Service",
                   style: TextStyle(
                     fontSize: 15.3,
                     fontFamily: "Samsung_SharpSans_Medium",
@@ -277,6 +281,15 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    if(widget.isFromScheduleServicePage == true){
+      for(int i=0;i<widget.categoryList!.service!.length;i++)
+      {
+        widget.categoryList!.service![i].isChecked = false;
+      }
+    }else{
+
+    }
+
   }
 
 }

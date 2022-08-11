@@ -38,14 +38,14 @@ class Data {
     required this.currentlyWorkingService,
   });
 
-  CurrentlyWorkingService? currentlyWorkingService;
+  List<CurrentlyWorkingService>? currentlyWorkingService;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    currentlyWorkingService: json["currentlyWorkingService"] == null ? null : CurrentlyWorkingService.fromJson(json["currentlyWorkingService"]),
+    currentlyWorkingService: json["currentlyWorkingService"] == null ? null : List<CurrentlyWorkingService>.from(json["currentlyWorkingService"].map((x) => CurrentlyWorkingService.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "currentlyWorkingService": currentlyWorkingService == null ? null : currentlyWorkingService!.toJson(),
+    "currentlyWorkingService": currentlyWorkingService == null ? null : List<dynamic>.from(currentlyWorkingService!.map((x) => x.toJson())),
   };
 }
 

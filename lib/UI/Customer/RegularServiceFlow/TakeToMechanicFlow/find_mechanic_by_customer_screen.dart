@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -75,6 +76,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
   double totalDistance = 0.0;
   double speedOfMechanic = 0.0;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   double _setValue(double value) {
     return value * per + value;
   }
@@ -178,10 +180,10 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
-      _firestore.collection("Regular-TakeVehicle").doc('1142').snapshots().listen((event) {
-        carName = event.get('carName');
+      _firestore.collection("Regular-TakeVehicle").doc('${widget.bookingId}').snapshots().listen((event) {
+        carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
-        plateNumber =  event.get('carPlateNumber');
+        plateNumber =  event.get('vehiclePlateNumber');
         isReachedServiceCenter = event.get("isReachedServiceCenter");
       });
     });
@@ -231,7 +233,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
       setState(() {
         _firestore
             .collection("Regular-TakeVehicle")
-            .doc('${bookingId}')
+            .doc('${widget.bookingId}')
             .update({
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
@@ -247,11 +249,10 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
       print('DISTANCE getPositionStream distanceInMeter===== : ${distanceInMeters.toStringAsFixed(2)}');
       print('DISTANCE getPositionStream distanceInKillometer===== : ${distanceInMeters/1000}');
-        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 500)
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 999)
           {
             isArrived = true;
           }
-
     });
     //return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
@@ -399,19 +400,40 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
   }
 
-  void updateToCloudFirestoreDB() {
+  void updateFirestoreDB() {
    print('+++abd ${widget.bookingId}');
     _firestore
         .collection("Regular-TakeVehicle")
         .doc('${widget.bookingId}')
         .update({
         'isArrived': "0",
+          })
+        .then((value) => print("Location Added"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
+  }
+  void updateToCloudFirestoreDB(
+      isDriveStarted ,
+      isReachedServiceCenter ,
+      isWorkStarted ,
+      isWorkFinished ,
+      paymentStatus) {
+    _firestore
+        .collection("Regular-TakeVehicle")
+        .doc('${widget.bookingId}')
+        .update({
+      'isDriveStarted' : "$isDriveStarted",
+      'isReachedServiceCenter' : "$isReachedServiceCenter",
+      'isWorkStarted' : "$isWorkStarted",
+      'isWorkFinished' : "$isWorkFinished",
+      'paymentStatus' : "$paymentStatus",
+      // 'paymentRecieved' : "$paymentRecieved"
+      //'isPaymentRequested': "1",
     })
         .then((value) => print("Location Added"))
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-
 
 
   @override
@@ -575,12 +597,16 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
 
                                             child: MaterialButton(
                                               onPressed: () {
-                                                updateToCloudFirestoreDB();
+                                                updateFirestoreDB();
+                                                updateToCloudFirestoreDB(
+                                                  '0',
+                                                  '0',
+                                                  '-1',
+                                                  '-1',
+                                                  '-1',
+                                                );
                                                 Navigator.pop(context);
-                                                // _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
-                                                //     authToken, bookingId, "3"
-                                                // );
-
+                                                _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "15");
                                               },
                                               child: Container(
                                                 height: 30,
@@ -708,7 +734,7 @@ class _FindMechanicByCustomerScreen extends State<FindMechanicByCustomerScreen> 
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Find your customer",
+                                            "Find your mechanic",
                                             textAlign: TextAlign.start,
                                             style: Styles.waitingTextBlack17,
                                           ),

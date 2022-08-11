@@ -207,14 +207,16 @@ class CustomerApiProvider {
 
   Future<ServiceSearchListAllMdl>  postSearchServiceRequest(
       token,
-      bookMechanicId,
-      serviceId,
-      serviceType)async {
+      serviceSearch,
+      catSearch,
+      count,
+      categoryId)async {
     Map<String, dynamic> _resp = await _queryProvider. postSearchServiceRequest(
         token,
-        bookMechanicId,
-        serviceId,
-        serviceType);
+        serviceSearch,
+        catSearch,
+        count,
+        categoryId);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {
@@ -252,9 +254,9 @@ class CustomerApiProvider {
   }
 
   Future<AddRatingMdl>    postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType)async {
+      token,rating, feedback, bookingId, )async {
     Map<String, dynamic> _resp = await _queryProvider. postAddMechanicReviewAndRatingRequest(
-        token,rating, feedback, bookingId, bookingType);
+        token,rating, feedback, bookingId, );
 
     print('$_resp >>>>>>>>>>>>>>>>>>+++++++++++++++++++_resp');
     // ignore: unnecessary_null_comparison
@@ -274,8 +276,8 @@ class CustomerApiProvider {
 
 
   Future<CategoryListHomeMdl> getCategoryListHomeRequest(
-      String token, categoryId) async {
-    Map<String, dynamic> _resp = await _queryProvider.categoryListHome(token,  categoryId);
+      String token, categoryId, serviceSearch, catSearch) async {
+    Map<String, dynamic> _resp = await _queryProvider.categoryListHome(token, categoryId, serviceSearch, catSearch);
     // ignore: unnecessary_null_comparison
     if (_resp != null) {
       if (_resp['status'] == "error") {

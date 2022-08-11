@@ -89,7 +89,7 @@ class BookingDetails {
   int bookStatus;
   String totalPrice;
   dynamic tax;
-  int commission;
+  var commission;
   dynamic serviceCharge;
   String totalTime;
   dynamic serviceTime;
@@ -256,7 +256,7 @@ class Customer {
     required this.accountType,
     required this.status,
     required this.jwtToken,
-    required this.fcmToke,
+    required this.fcmToken,
     required this.otpCode,
     required this.customer,
   });
@@ -270,7 +270,7 @@ class Customer {
   dynamic accountType;
   int status;
   String jwtToken;
-  dynamic fcmToke;
+  dynamic fcmToken;
   String otpCode;
   dynamic customer;
 
@@ -284,7 +284,7 @@ class Customer {
     accountType: json["accountType"],
     status: json["status"] == null ? null : json["status"],
     jwtToken: json["jwtToken"] == null ? null : json["jwtToken"],
-    fcmToke: json["fcmToke"],
+    fcmToken: json["fcmToken"],
     otpCode: json["otpCode"] == null ? null : json["otpCode"],
     customer: json["customer"],
   );
@@ -299,7 +299,7 @@ class Customer {
     "accountType": accountType,
     "status": status == null ? null : status,
     "jwtToken": jwtToken == null ? null : jwtToken,
-    "fcmToke": fcmToke,
+    "fcmToken": fcmToken,
     "otpCode": otpCode == null ? null : otpCode,
     "customer": customer,
   };

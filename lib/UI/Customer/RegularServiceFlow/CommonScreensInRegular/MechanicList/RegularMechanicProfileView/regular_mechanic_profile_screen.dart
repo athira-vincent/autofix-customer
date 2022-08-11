@@ -9,15 +9,15 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/BookingSuccessScreen/booking_success_screen.dart';
 
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/CurvePainter.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
-import 'package:auto_fix/listeners/NotificationListener.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -80,9 +80,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
-
-
-  final NotificationListenerCall _notificationListener = NotificationListenerCall();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -90,9 +88,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
 
   int? reviewLength = 0;
 
-
-  double per = .10;
-  double perfont = .10;
   double height = 0;
   String selectedState = "";
   double totalFees = 0.0;
@@ -101,10 +96,8 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   String authToken="";
   String userName="", userId = "";
 
-
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
-  //String bookingIdEmergency="";
 
   String carNameBrand="";
   String carNameModel="";
@@ -113,15 +106,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
   int totalAmount = 0;
 
   late StateSetter mechanicAcceptance;
-
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
 
   @override
   void initState() {
@@ -157,14 +141,9 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
       userId = shdPre.getString(SharedPrefKeys.userID).toString();
 
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      //bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-
       print('authToken>>>>>>>>>_RegularMechanicProfileViewScreenState ' + authToken.toString());
       print('serviceIdEmergency>>>>>>>>_RegularMechanicProfileViewScreenState ' + serviceIdEmergency.toString());
       print('mechanicIdEmergency>>>>>>>_RegularMechanicProfileViewScreenState ' + mechanicIdEmergency.toString());
-      //print('bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
 
       totalFees = totalFees + double.parse('${widget.mechanicListData?.mechanicService[0].fee.toString()}');
       _homeCustomerBloc.fetchMechanicProfileDetails(
@@ -206,14 +185,16 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
           print("mechanicsRegularBookingIDResponse success >>>");
           print("mechanicsRegularBookingIDResponse success booking id >>> " + '${value.data!.mechanicBooking!.id.toString()}' );
 
+          _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, value.data!.mechanicBooking!.id, "0");
+
           if(widget.regularServiceType == TextStrings.txt_pick_up){
-            updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
+            updateToCloudFirestoreDBPickUp(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }else if(widget.regularServiceType == TextStrings.txt_mobile_mechanic){
             updateToCloudFirestoreDBMobileMech(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }else{
-            updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking!.vehicleId);
+            updateToCloudFirestoreDBTakeVehicle(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           }
-
+          callOnFcmApiSendPushNotifications(value.data!.mechanicBooking!.id, value.data!.mechanicBooking);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -226,11 +207,9 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         });
       }
     });
-
   }
 
-
-  Future<void> updateToCloudFirestoreDBPickUp(int bookingId, int vehicleId) async {
+  Future<void> updateToCloudFirestoreDBPickUp(int bookingId, [MechanicBooking? mechanicBooking]) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
 
     String? token;
@@ -253,7 +232,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "customerName" : "${userName}",
         "customerLatitude" : "${widget.latitude}",
         "customerLongitude": "${widget.longitude}",
-        "customerAddress" : "",
+        "customerAddress" : "${widget.customerAddress}",
         "customerFcmToken" : "${token}",
         "mechanicId": "${widget.mechanicId}",
         "mechanicName": "${widget.mechanicListData!.firstName}",
@@ -263,21 +242,21 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
         "serviceList" : FieldValue.arrayUnion(yourItemList),
         "serviceTotalAmount" : '${totalAmount}',
-        "vehicleId": "${vehicleId}",
-        "vehicleName": "",
-        "vehiclePlateNumber" : "",
+        "vehicleId": "${mechanicBooking!.vehicle!.id}",
+        "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
+        "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
         'isStartedFromLocation': "-1",
         'isArrived': "-1",
+        "isBookedDate" : "-1",
         'isPickedUpVehicle': "-1",
         'isReachedServiceCenter': "-1",
         'isWorkStarted': "-1",
         'isWorkFinished': "-1",
         'isStartedFromLocationForDropOff': "-1",
         'isDropOff': "-1",
-        'isPaymentFinished': "-1",
-        "paymentStatus": "-1",
+        'isPayment': "-1",
         'latitude': '${widget.latitude}',
-        'longitude': '${widget.latitude}'
+        'longitude': '${widget.longitude}'
       })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
@@ -342,7 +321,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
         print("Failed to add row: $error"));
   }
 
-  Future<void> updateToCloudFirestoreDBTakeVehicle(int bookingId, int vehicleId) async {
+  Future<void> updateToCloudFirestoreDBTakeVehicle(int bookingId, [MechanicBooking? mechanicBooking]) async {
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. $yourItemList');
 
     String? token;
@@ -365,7 +344,7 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "customerName" : "${userName}",
       "customerLatitude" : "${widget.latitude}",
       "customerLongitude": "${widget.longitude}",
-      "customerAddress" : "",
+      "customerAddress" : "${widget.customerAddress}",
       "customerFcmToken" : "${token}",
       "mechanicId": "${widget.mechanicId}",
       "mechanicName": "${widget.mechanicListData!.firstName}",
@@ -375,21 +354,100 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
       "mechanicFcmToken" : "${widget.mechanicListData!.fcmToken}",
       "serviceList" : FieldValue.arrayUnion(yourItemList),
       "serviceTotalAmount" : '${totalAmount}',
-      "vehicleId": "${vehicleId}",
-      "vehicleName": "",
-      "vehiclePlateNumber" : "",
+      "vehicleId": "${mechanicBooking!.vehicle!.id}",
+      "vehicleName": "${mechanicBooking.vehicle!.brand} [ ${mechanicBooking.vehicle!.model} ]",
+      "vehiclePlateNumber" : "${mechanicBooking.vehicle!.plateNo}",
       "isDriveStarted" : "-1",
+      "isArrived" : "-1",
+      "isBookedDate" : "-1",
       "isReachedServiceCenter": "-1",
       "isReceivedVehicle" : "-1",
       "isWorkStarted" : "-1",
       "isWorkFinished" : "-1",
-      "paymentStatus": "-1",
       "isPickedUpVehicle": "-1",
+      "isPayment": "-1",
+      "paymentRecieved" : "-1",
+      "completed" : "-1",
     })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
 
+  }
+
+  Future<void> callOnFcmApiSendPushNotifications(int bookingId, [MechanicBooking? mechanicBooking]) async {
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'You have new Regular Service booking',
+        'title': 'Notification',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "bookingId" : "$bookingId",
+        "message": "ACTION"
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      //'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${widget.mechanicListData?.fcmToken}'
+      //'to':'$token'
+    };
+
+    print('FcmToken data >>> ${data}');
+    print('FcmToken >>> ${FcmToken}');
+    print('FcmToken token >>> ${token}');
+
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=$serverToken'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          print('notification sending success');
+
+        });
+      } else {
+        setState(() {
+          print('notification sending failed');
+
+        });
+      }
+    } catch (e) {
+      print('exception $e');
+    }
   }
 
   @override
@@ -547,11 +605,9 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                                       :
                                     SvgPicture.asset('assets/image/CustomerType/profileAvathar.svg')
                                   )))
-
                       ),
                     ),
                   ),
-
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -591,7 +647,6 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                       )
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -708,12 +763,12 @@ class _RegularMechanicProfileViewScreenState extends State<RegularMechanicProfil
                                                 backgroundColor: Colors.white,
                                                 child: ClipOval(
                                                   child:
-                                                    _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic != null
+                                                    _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic != null
                                                       &&
-                                                    _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic != ""
+                                                    _mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic != ""
                                                         ?
                                                     Image.network(
-                                                      '${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer![0].profilePic.toString()}',
+                                                      '${_mechanicDetailsMdl?.data?.mechanicDetails?.mechanicReviewsData?[index].bookings!.customer!.customer?[0].profilePic.toString()}',
                                                       width: 100,
                                                       height: 100,
                                                       fit: BoxFit.cover,

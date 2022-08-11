@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,9 +32,11 @@ class FindYourCustomerRegularScreen extends StatefulWidget {
 
   final String latitude;
   final String longitude;
+  final String bookedId;
+
 
   FindYourCustomerRegularScreen({
-    required this.latitude,required this.longitude,
+    required this.latitude,required this.longitude,required this.bookedId,
 
   });
 
@@ -70,6 +73,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   double totalDistance = 0.0;
   double speedOfMechanic = 0.0;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   double _setValue(double value) {
     return value * per + value;
   }
@@ -77,7 +81,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
-  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
+  String authToken="", carName = "", customerAddress = "", plateNumber = "";
   bool isArrived = false;
 
   @override
@@ -169,10 +173,8 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
-      print('bookingId FindYourCustomerScreen '+bookingId.toString());
-      _firestore.collection("Regular-PickUp").doc('1138').snapshots().listen((event) {
+      _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
         carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('vehiclePlateNumber');
@@ -219,7 +221,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       var value1 = event;
       setState(() {
         _firestore
-        .collection("Regular-PickUp").doc('1138')
+        .collection("Regular-PickUp").doc('${widget.bookedId}')
             .update({
             'latitude': value1.latitude.toString(),
             'longitude': value1.longitude.toString()
@@ -233,7 +235,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
       print("latLng 001 ${latLng.latitude}");
       mechanicMarker (latLng);
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
-        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 900)
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 999)
           {
             isArrived = true;
           }
@@ -386,7 +388,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   void updateToCloudFirestoreDB() {
 
     _firestore
-        .collection("Regular-PickUp").doc('1138')
+        .collection("Regular-PickUp").doc('${widget.bookedId}')
         .update({
           'isArrived': "0",
         })
@@ -553,6 +555,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
                                               onPressed: () {
                                                 updateToCloudFirestoreDB();
                                                 Navigator.of(context).pop();
+                                                _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "10");
                                               },
                                               child: Container(
                                                 height: 30,

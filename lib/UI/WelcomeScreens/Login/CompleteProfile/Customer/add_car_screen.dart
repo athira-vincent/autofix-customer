@@ -70,6 +70,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
   TextEditingController _plateNumberController = TextEditingController();
   FocusNode _plateNumberFocusNode = FocusNode();
+
+  TextEditingController _vehicleColorController = TextEditingController();
+  FocusNode _vehicleColorFocusNode = FocusNode();
   File? _images;
   bool isloading = false;
   String? countryCode;
@@ -98,13 +101,16 @@ class _AddCarScreenState extends State<AddCarScreen> {
   DateTime? selectedYear;
   DateTime selectedDate = DateTime.now();
 
+  DateTime now = DateTime.now();
+
   StateSetter? monthYear1;
   int? selectedyearIndex = 0 ;
   int? selectedmonthIndex = 0 ;
-  String? selectedMonthText= 'Jan' ;
-  String? selectedYearText= '2018';
-  List<String> monthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  List<String> yearList = [for(int i=2018; i<2023; i+=1) i.toString()];
+  String? selectedMonthText = 'Jan' ;
+  String? selectedYearText = '2018';
+  List<String> allMonthList = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  List<String> monthList = [];
+  List<String> yearList = [];
 
   List<String> brandList = [];
   String? selectedBrand = '' ;
@@ -136,10 +142,18 @@ class _AddCarScreenState extends State<AddCarScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getCurrentCustomerLocation();
-    getSharedPrefData();
-    _listenAddCarResponse();
+    for(int i = 0; i <= 11; i++ ){
+      monthList.add(allMonthList[i]);
+    }
+    for(int i = now.year-12; i <= now.year; i+=1){
+      yearList.add(i.toString());
+      i.toString();
+    }
+      _getCurrentCustomerLocation();
+      getSharedPrefData();
+      _listenAddCarResponse();
   }
+
 
   Future<void> _getCurrentCustomerLocation() async {
     Position position = await _getGeoLocationPosition();
@@ -315,6 +329,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                         modelTextSelection(),
                                         engineTypeTextSelection(),
                                         yearTypeTextSelection(),
+                                        vehicleColorText(),
                                         plateNumberTextSelection(),
                                         lastMaintenanceTextSelection(),
                                         approximateMilageSelection(),
@@ -839,6 +854,72 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
+  Widget vehicleColorText() {
+    return   Container(
+      margin: EdgeInsets.only(top: _setValue(15.5)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+
+            "Color",
+            style: Styles.textLabelTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _vehicleColorFocusNode,
+            keyboardType: TextInputType.name,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z0-9 ]')),
+            ],
+            validator: InputValidator(
+                ch :'Vehicle color').emptyChecking,
+            controller: _vehicleColorController,
+            onChanged: (value){
+              setState(() {
+                if (_formKey.currentState!.validate()) {
+                } else {
+                }
+              });
+            },
+            cursorColor: CustColors.light_navy,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "Enter your Vehicle color",
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget plateNumberTextSelection() {
     return   Container(
       margin: EdgeInsets.only(top: _setValue(15.5)),
@@ -1145,6 +1226,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                                   _lastMaintenanceController.text,
                                   _lowerValue.toString(),
                                   imageFirebaseUrl,
+                                  _vehicleColorController.text,
                                   latitude,
                                   longitude
                               );
@@ -1237,6 +1319,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               _lastMaintenanceController.text,
                               _lowerValue.toString(),
                               imageFirebaseUrl,
+                              _vehicleColorController.text,
                               latitude,
                               longitude
                             );
@@ -1274,10 +1357,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
       ),
     ) ;
   }
-
-
-
-
 
   _showDialogSelectPhoto() async {
     showModalBottomSheet(
@@ -1366,7 +1445,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
       print(">>>>>>>>>>>>>>>> imageFirebaseUrl "+imageFirebaseUrl.toString());
     });
   }
-
 
   _showDialogForBrands() async {
     showModalBottomSheet(
@@ -1646,9 +1724,24 @@ class _AddCarScreenState extends State<AddCarScreen> {
                             useMagnifier: true,
                             onSelectedItemChanged: (index) {
                               print(index);
+                              print(">>>selectedYearText + $selectedYearText" );
                               monthYear1!(() {
                                 selectedyearIndex = index;
                                 selectedYearText = yearList[index];
+                                //if(selectedYearText == now.year){
+                                  if(index == 12){
+                                  print(">>>selectedYearText true + $selectedYearText" );
+                                  monthList.clear();
+                                  for(int i = 0; i <= now.month-1; i++ ){
+                                    monthList.add(allMonthList[i]);
+                                  }
+                                }else{
+                                  print(">>>selectedYearText false + $selectedYearText" );
+                                  monthList.clear();
+                                  for(int i = 0; i <= 11; i++ ){
+                                    monthList.add(allMonthList[i]);
+                                  }
+                                }
                               });
                             },
                             childDelegate: ListWheelChildBuilderDelegate(
@@ -1733,7 +1826,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
       ),
     );
   }
-
 
   Widget progressBarDarkBlue() {
     return Container(

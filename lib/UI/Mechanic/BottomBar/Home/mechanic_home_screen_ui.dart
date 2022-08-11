@@ -3,14 +3,21 @@ import 'dart:async';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
+import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/brand_specialization_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/upcoming_services_mdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_Bloc/mechanic_profile_bloc.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/CustomerApproved/customer_approved_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicWorkComleted/mechanic_work_completed_screen.dart';
+import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/TrackingScreens/FindYourCustomer/find_your_customer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_screen.dart';
+import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_screen.dart';
 import 'package:auto_fix/Widgets/snackbar_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -19,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MechanicHomeUIScreen extends StatefulWidget {
@@ -43,6 +51,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   String CurrentLongitude ="76.244164";
   String Address = '';
   String displayAddress = '';
+  String firebaseCustomerLatitude = "", firebaseScreen = "", firebaseCustomerLongitude = "" ;
   List<BrandDetail>? brandDetails;
   bool _isLoadingPage = false;
   MechanicProfileBloc _mechanicProfileBloc = MechanicProfileBloc();
@@ -66,7 +75,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _hasActiveService = false;
-    Timer.periodic(Duration(seconds: 120), (Timer t) {
+    Timer.periodic(Duration(seconds: 90), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
       _getCurrentMechanicLocation();
     });
@@ -110,7 +119,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       _getCurrentMechanicLocation();
       _mechanicProfileBloc.postMechanicFetchProfileRequest(authToken, mechanicId);
       _mechanicHomeBloc.postMechanicUpComingServiceRequest("$authToken", "2", mechanicId);
-
     });
   }
 
@@ -139,7 +147,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString();
+          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toString()/*.toLowerCase()*/;
           brandName = brandName.replaceAll(" ", "");
           print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + brandName);
           _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",brandName);
@@ -168,37 +176,47 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           //_isLoading = false;
           SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
           setState(() {
-            if(value.data?.currentlyWorkingService.toString() == 'null')
-              {
-                _hasActiveService = false;
-              }
-            else
-              {
-                _hasActiveService = true;
-
-              }
-
+            _hasActiveService = false;
           });
         });
       }else{
-          setState(()  {
-            setReminderData();
+        print("hasActiveService>>>> ${value.data?.currentlyWorkingService.toString()}");
+        print(value.data?.currentlyWorkingService.toString());
+        if(value.data?.currentlyWorkingService.toString() == []
+            || value.data?.currentlyWorkingService.toString() == null
+          || value.data?.currentlyWorkingService.toString() == 'null')
+        {
+          setState(() {
+            _hasActiveService = false;
+            print("hasActiveService>>>> false");
           });
+        }
+        else {
+          setState(()  {
+            _hasActiveService = true;
+            setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            print("hasActiveService>>>> true");
+          });
+        }
       }
     });
   }
 
-  Future<void> setReminderData() async {
-    _hasActiveService = true;
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
+  Future<void> setReminderData(String? bookedId) async {
+    /*SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-    });
-    await  _firestore.collection("ResolMech").doc('$bookingId').snapshots().listen((event) {
+    });*/
+    await  _firestore.collection("ResolMech").doc('$bookedId').snapshots().listen((event) {
       print('_firestore');
       setState(() {
         vehicleName = event.get('carName');
         customerName = event.get('customerName');
+        firebaseScreen = event.get('mechanicFromPage');
+
+        firebaseCustomerLatitude = event.get('customerLatitude');
+        firebaseCustomerLongitude = event.get('customerLongitude');
+
       });
     });
   }
@@ -296,13 +314,13 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget mechanicLocation(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          right: 8.0, left: 8.0, top: 0,bottom: 2),
+          right: 6.0, left: 6.0, top: 0,bottom: 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.location_pin, color: CustColors.light_navy,size: 35,),
+          Icon(Icons.location_on, color: CustColors.light_navy,size: 30,),
           SizedBox(
-            width: 50,
+            width: 55,
             child: Column(
               children: [
                 InkWell(
@@ -312,9 +330,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                   child: Text(
                     displayAddress,
                     //'Elenjikkal house Empyreal Garden',
-                    maxLines: 2,
+                    //maxLines: 2,
                     textAlign: TextAlign.start,
-                    overflow: TextOverflow.visible,
+                    overflow: TextOverflow.ellipsis,
                     style: Styles.textLabelTitle_10,
                   ),
                 ),
@@ -328,7 +346,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
   Widget upcomingServices(Size size,BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,2,0,0),
+      padding: const EdgeInsets.fromLTRB(10,0,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -344,7 +362,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           ),
 
           Container(
-            height: 185,
+            height: 160,
             margin: EdgeInsets.all(0),
             child: Stack(
               children: [
@@ -427,15 +445,18 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                           MaterialPageRoute(
                             builder: (context) => MechServiceRegularDetailsScreen(
                               bookingId: snapshot.data!.data!.upcomingCompletedServices![i].id.toString(),
+                              firebaseCollection: snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
+                                  ? TextStrings.firebase_pick_up :
+                              snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
+                                  ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
                             ),
                           ));
                     });
-
                   },
                   child: Column(
                     children: [
                       Container(
-                        height: 180,
+                        height: 160,
                         width: 250,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
@@ -453,7 +474,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,
                                       right: size.width * 2 / 100,
-                                      top: size.height * 4 / 100,
+                                      top: size.height * 3 / 100,
                                       //bottom: size.height * 2 / 100,
                                     ),
                                     child: Row(
@@ -469,7 +490,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               fontSize: 15
                                           ),),
                                         Text(
-                                          snapshot.data!.data!.upcomingCompletedServices![i].serviceTime.toString(),
+                                          _mechanicHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.upcomingCompletedServices![i].bookedTime)).toString(),
                                           //"09:30 AM",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -483,7 +504,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,
                                       right: size.width * 2 / 100,
-                                      top: size.height * 4 / 100,
+                                      top: size.height * 3 / 100,
                                       //bottom: size.height * 2.5 / 100,
                                     ),
                                     child: Row(
@@ -509,7 +530,40 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
-                                              fontSize: 12
+                                              fontSize: 11
+                                          ),)
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      left: size.width * 2 / 100,
+                                      right: size.width * 2 / 100,
+                                      top: size.height * 3 / 100,
+                                      //bottom: size.height * 2.5 / 100,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Regular Service" ,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 10
+                                          ),),
+
+                                        Text(
+                                          snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
+                                              ? "Pick Up & Drop Off" :
+                                          snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
+                                              ? "Mobile Mechanic" : "Take Vehicle to Mechanic",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 10
                                           ),)
                                       ],
                                     ),
@@ -676,7 +730,6 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget dashBoardItemsWidget(Size size,) {
     return Container(
       color: CustColors.pale_grey,
-      //color: CustColors.green,
       padding: EdgeInsets.only(
           left: size.width * 4.5 / 100,
           right: size.width * 4.5 / 100,
@@ -687,28 +740,39 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            height: size.height * 18 / 100,
-            width: size.width * 40 / 100,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
+          InkWell(
+            /*onTap: (){
+              setState(() {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MechanicMyWalletScreen(),
+                    ));
+              });
+            },*/
+            child: Container(
+              height: size.height * 18 / 100,
+              width: size.width * 40 / 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.white,
+                  ),
                   color: Colors.white,
+              ),
+              padding: EdgeInsets.only(
+                  left: size.width * 10 / 100,
+                  right: size.width * 10 / 100,
+                  top: size.height * 5 / 100,
+                  bottom: size.height * 5 / 100
+              ),
+              //ClipRRect for image border radius
+              child: ClipRRect(
+                //borderRadius: BorderRadius.circular(5),
+                child: SvgPicture.asset(
+                 "assets/image/ic_home_wallet.svg",
+                  //fit: BoxFit.cover,
                 ),
-                color: Colors.white,
-            ),
-            padding: EdgeInsets.only(
-                left: size.width * 10 / 100,
-                right: size.width * 10 / 100,
-                top: size.height * 5 / 100,
-                bottom: size.height * 5 / 100
-            ),
-            //ClipRRect for image border radius
-            child: ClipRRect(
-              //borderRadius: BorderRadius.circular(5),
-              child: SvgPicture.asset(
-               "assets/image/ic_home_wallet.svg",
-                //fit: BoxFit.cover,
               ),
             ),
           ),
@@ -757,34 +821,76 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
   Widget emergencyServiceReminder(Size size){
     return Positioned(
       bottom: size.height * 1.70 / 100,
-      child: Container(
-        height: size.height * 10 / 100,
-        width: size.width,
-        color: Colors.white,
-        margin: EdgeInsets.only(
-         // left: size.width * 5 / 100,
-          //bottom: size.height * .5 / 100
-        ),
-        padding: EdgeInsets.only(
-          left: size.width * 5 / 100,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("You have one Emergency service ",
-                  style: TextStyle(color: CustColors.light_navy),),
-                Text("Service from $customerName.   $vehicleName", )
-              ],
-            ),
-            SvgPicture.asset(
-                "assets/image/img_mech_home_car_bg.svg",
-              height: size.height * 10 / 100,
-            )
-          ],
+      child: InkWell(
+        onTap: (){
+          if(firebaseScreen == "M1"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FindYourCustomerScreen(
+                      latitude: firebaseCustomerLatitude/*"10.0159"*/,
+                      longitude: firebaseCustomerLongitude/*"76.3419"*/,
+                      //notificationPayloadMdl: widget.notificationPayloadMdl,
+                    )));
+          }else if(firebaseScreen == "M2"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicStartServiceScreen()));
+          }else if(firebaseScreen == "M3"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  CustomerApprovedScreen()
+                )).then((value){
+            });
+          }else if(firebaseScreen == "M4"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MechanicWorkCompletedScreen()));
+          }else if(firebaseScreen == "M5"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  DirectPaymentScreen(isMechanicApp: true, isPaymentFailed: true,)
+                )).then((value){
+
+            });
+          }else if(firebaseScreen == "M6"){
+            print("Service Completed");
+          }
+        },
+        child: Container(
+          height: size.height * 10 / 100,
+          width: size.width,
+          color: Colors.white,
+          margin: EdgeInsets.only(
+           // left: size.width * 5 / 100,
+            //bottom: size.height * .5 / 100
+          ),
+          padding: EdgeInsets.only(
+            left: size.width * 5 / 100,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("You have one Emergency service ",
+                    style: TextStyle(color: CustColors.light_navy),),
+                  Text("Service from $customerName ", ),
+                  Text("$vehicleName", )
+                ],
+              ),
+              SvgPicture.asset(
+                  "assets/image/img_mech_home_car_bg.svg",
+                height: size.height * 10 / 100,
+              )
+            ],
+          ),
         ),
       ),
     );

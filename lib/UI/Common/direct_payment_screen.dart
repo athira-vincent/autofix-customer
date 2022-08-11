@@ -273,11 +273,13 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
                   ?
                   isDirectPayment
                       ?
-                  "Your customer chooses direct payment method! Receive the payment and click the “payment received” button"
+                  //"Your customer chooses direct payment method! Receive the payment and click the “payment received” button"
+                  "Your customer has chosen direct payment method. Click the ‘payment received button’ upon payment. "
                       :
                   "Hi..George you received a payment of rupees ₦ 1500 from customer Afamefuna "
                   :
-              "You choosed the direct payment method! So this transaction process completed only after, when mechanic confirm as  he received ",
+              // "You choosed the direct payment method! So this transaction process completed only after, when mechanic confirm as  he received "
+                 "You choose the Direct payment method! This transaction will be completed when the mechanic confirms he has received the payment for the service rendered.",
               style: warningTextStyle01,
             ),
           )
@@ -354,7 +356,7 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
             child: Text(
               widget.isMechanicApp
                   ? isDirectPayment
-                  ? "If you clicked the payment received button This service cycle will completed from your side "
+                  ? "If you clicked the payment received button, the service cycle will be completed from your end."
                   : "You received the payment. So this service cycle ending here. Go home and complete the pending services."
                   : "Continue with direct payment. It will send a notification to your mechanic and then you can give the payment.",
               style: warningTextStyle01,

@@ -22,10 +22,10 @@ class IncomingJobRequestScreen extends StatefulWidget {
 
   final NotificationPayloadMdl notificationPayloadMdl;
 
-   IncomingJobRequestScreen(
-       {
-         required this.notificationPayloadMdl
-       });
+  IncomingJobRequestScreen(
+      {
+        required this.notificationPayloadMdl
+      });
 
   @override
   State<StatefulWidget> createState() {
@@ -203,12 +203,12 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
 
         }else*/
 
-          if(isAccepted == 1){
+        if(isAccepted == 1){
 
           SharedPreferences shdPre = await SharedPreferences.getInstance();
           shdPre.setString(SharedPrefKeys.bookingIdEmergency, widget.notificationPayloadMdl.bookingId);
 
-           updateToCloudFirestoreDB();
+          updateToCloudFirestoreDB();
 
           Navigator.pushReplacement(
               context,
@@ -296,7 +296,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
       "mechanicArrivalState": "0",
       "mechanicDiagonsisState": "0",
       "customerDiagonsisApproval": "0",
-      })
+    })
         .then((value) => print("ToCloudFirestoreDB - row - created"))
         .catchError((error) =>
         print("Failed to add row: $error"));
@@ -349,7 +349,7 @@ class _IncomingJobRequestScreenState extends State<IncomingJobRequestScreen> wit
             duration: const Duration(seconds: 2),
             backgroundColor: CustColors.peaGreen,
           ));
-         // Navigator.pop(context);
+          // Navigator.pop(context);
         });
       } else {
         setState(() {

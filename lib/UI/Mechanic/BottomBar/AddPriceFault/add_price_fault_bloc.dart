@@ -48,9 +48,9 @@ class AddPriceFaultReviewBloc{
   Stream<TimePriceServiceDetailsMdl> get TimePriceServiceDetailsMdlResponse => postTimeServicePriceAddReview.stream;
 
   postTimeServicePriceAddReviewRequest(
-      String token,services,fee,time
+      String token,services,fee,time, catType
       )async{
-    TimePriceServiceDetailsMdl _TimePriceServiceDetailsMdl = await repository.postTimeServicePriceAddReviewRequest(token,services,fee,time);
+    TimePriceServiceDetailsMdl _TimePriceServiceDetailsMdl = await repository.postTimeServicePriceAddReviewRequest(token,services,fee,time, catType);
     postTimeServicePriceAddReview.sink.add(_TimePriceServiceDetailsMdl);
   }
 

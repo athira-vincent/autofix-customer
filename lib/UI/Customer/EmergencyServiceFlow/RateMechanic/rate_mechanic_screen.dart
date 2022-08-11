@@ -47,6 +47,7 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
     // TODO: implement initState
     super.initState();
     getSharedPrefData();
+    _listenApiResponse();
   }
 
   Future<void> getSharedPrefData() async {
@@ -69,6 +70,32 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
     });
   }
 
+  _listenApiResponse(){
+    _homeCustomerBloc.postAddMechanicReviewAndRatingResponse.listen((value) {
+      print("pieuiey 001 ${value.data}");
+      if(value.data == "error" || value.status == "error"){
+        setState(() {
+          //_isLoadingPage = true;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
+        });
+      }else{
+        setState(() {
+          //_isLoadingPage = true;
+          setDeactivate();
+
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+        });
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,17 +284,8 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
                         print("${bookingIdEmergency}");
                         print("${_rating}");
 
-
-
-
-
-                        _homeCustomerBloc. postAddMechanicReviewAndRatingRequest(
-                            authToken,_rating, _feedBackController.text, bookingIdEmergency, "1");
-
-                        setDeactivate();
-
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            CustomerMainLandingScreen()), (Route<dynamic> route) => false);
+                        _homeCustomerBloc.postAddMechanicReviewAndRatingRequest(
+                            authToken,_rating, _feedBackController.text, bookingIdEmergency, );
                       },
                     ),
                     SizedBox(height: 20,)

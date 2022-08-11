@@ -27,13 +27,43 @@ class HomeCustomerBloc {
 
   final postRegularServiceList = BehaviorSubject<CategoryListHomeMdl>();
   Stream<CategoryListHomeMdl> get regularServiceListResponse => postRegularServiceList.stream;
+  List<CategoryListHomeMdl> _serviceDataList = [];
 
-  postRegularServiceListRequest(String token, String categoryId) async {
-
-    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId);
+  postRegularServiceListRequest(String token, String categoryId, serviceSearch, catSearch,) async {
+    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId, serviceSearch, catSearch);
+    _serviceDataList.clear();
+    _serviceDataList.add(_serviceListMdl);
     postRegularServiceList.sink.add(_serviceListMdl);
+
+    /*if(searchText != '' || searchText != ' '){
+      print("searchText >>> " + searchText);
+      _serviceDataList.forEach((element) {
+        if (element.data!.categoryList![0].catName.toLowerCase().startsWith(searchText.toLowerCase())) {
+          postRegularServiceList.sink.add(element);
+        }
+      });
+    }else{
+      postRegularServiceList.sink.add(_serviceListMdl);
+    }*/
   }
 
+  void searchService(String searchText) {
+    print("searchText >>> " + searchText);
+    List<CategoryListHomeMdl> _searchList = [];
+    _searchList.clear();
+    if (searchText != '' || searchText != ' ') {
+      _serviceDataList.forEach((element) {
+        if (element.data!.categoryList![0].catName.toLowerCase().startsWith(searchText.toLowerCase())) {
+          _searchList.add(element);
+        }
+      });
+      _searchList.forEach((element) {postRegularServiceList.sink.add(element); });
+
+    } else {
+      _serviceDataList.forEach((element) {  postRegularServiceList.sink.add(element);});
+
+    }
+  }
 
   /// =============== Emergency services list ================== ///
 
@@ -41,9 +71,9 @@ class HomeCustomerBloc {
   final postEmergencyServiceList = BehaviorSubject<CategoryListHomeMdl>();
   Stream<CategoryListHomeMdl> get emergencyServiceListResponse => postEmergencyServiceList.stream;
 
-  postEmergencyServiceListRequest(String token, String categoryId) async {
+  postEmergencyServiceListRequest(String token, String categoryId, serviceSearch, catSearch) async {
 
-    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId);
+    CategoryListHomeMdl _serviceListMdl = await repository.getCategoryListHomeRequest(token, categoryId, serviceSearch, catSearch);
     postEmergencyServiceList.sink.add(_serviceListMdl);
   }
 
@@ -184,13 +214,15 @@ class HomeCustomerBloc {
 
   postSearchServiceRequest(
       token,
-      search,
+      serviceSearch,
+      catSearch,
       count,
       categoryId) async {
 
     ServiceSearchListAllMdl _serviceSearchListAllMdl = await repository.postSearchServiceRequest(
         token,
-        search,
+        serviceSearch,
+        catSearch,
         count,
         categoryId);
     postSearchService.sink.add(_serviceSearchListAllMdl);
@@ -217,10 +249,10 @@ class HomeCustomerBloc {
   Stream<AddRatingMdl> get postAddMechanicReviewAndRatingResponse => postAddMechanicReviewAndRatingList.stream;
 
   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType) async {
+      token,rating, feedback, bookingId, ) async {
 
     AddRatingMdl _addRatingMdl = await repository. postAddMechanicReviewAndRatingRequest(
-        token,rating, feedback, bookingId, bookingType);
+        token,rating, feedback, bookingId, );
     postAddMechanicReviewAndRatingList.sink.add(_addRatingMdl);
   }
 

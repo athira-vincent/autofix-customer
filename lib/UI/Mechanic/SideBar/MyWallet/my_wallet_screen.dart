@@ -21,10 +21,13 @@ class MechanicMyWalletScreen extends StatefulWidget {
 
 class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
 
-  String authToken = "" ;
+  String authToken = "", mechanicId = "", profileUrl = "" ;
   MechanicMyWalletBloc _mechanicWalletBloc = MechanicMyWalletBloc();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late MechanicMyWalletMdl mechanicMyWalletMdl;
+  List<BookingDatum>? _BookingDatum=[];
+  MyWallet? _MyWallet;
+  bool _isLoadingPage = true;
 
   @override
   void initState() {
@@ -39,9 +42,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      mechanicId = shdPre.getString(SharedPrefKeys.userID).toString();
+      profileUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
       print('userFamilyId ' + authToken.toString());
-     //print('userId ' + userId.toString());
-      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, "");
+      print('userId ' + mechanicId.toString());
+      _mechanicWalletBloc.postMechanicFetchMyWalletRequest(authToken, mechanicId /*"8"*/);
     });
   }
 
@@ -49,12 +54,15 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
     _mechanicWalletBloc.postMechanicMyWallet.listen((value) {
       if(value.status == "error"){
         setState(() {
-          //_isLoading = false;
-          SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
+          _isLoadingPage = false;
+         // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
         setState(() {
-          mechanicMyWalletMdl = value;
+          _isLoadingPage = false;
+          _BookingDatum = value.data!.myWallet!.bookingData;
+          _MyWallet = value.data!.myWallet;
+          //mechanicMyWalletMdl = value;
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
@@ -67,98 +75,163 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Container(
+          child:
+          _isLoadingPage == true ?
+            Center(
+              child: CircularProgressIndicator(color: CustColors.light_navy,),)
+            :
+          Container(
             height: size.height,
             width: size.width,
             //color: Colors.blue,
             child: SingleChildScrollView(
               child: Container(
                 child: Stack(
-                  children: [
-                    BottomLightBackground(size),
-                    
-                    Column(
-                      children: [
-                        appBarCustomUi(size),
-                        profileImageAndWalletTotal(),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,12,0,0),
-                          child: Container(
-                            height: 120,
-                            margin: EdgeInsets.only(
-                              left: size.width * 9 / 100,
-                              right: size.width * 9 / 100,
+                children: [
+                  BottomLightBackground(size),
+                  Column(
+                    children: [
+                      appBarCustomUi(size),
+                      profileImageAndWalletTotal(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,12,0,0),
+                        child: Container(
+                          height: 120,
+                          margin: EdgeInsets.only(
+                            left: size.width * 9 / 100,
+                            right: size.width * 9 / 100,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SubTitleTextRound(size,"Total job done",_MyWallet!.jobCount > 0 ? _MyWallet!.jobCount.toString() : "0"),
+                              SubTitleTextRound(size,"All payments", _MyWallet!.totalPayment! > 0 ? _MyWallet!.totalPayment.toString() : "0"),
+                              SubTitleTextRound(size,"Monthly collection", _MyWallet!.monthlySum > 0 ? _MyWallet!.monthlySum.toString() : "0"),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(
+                          //top: size.height * .2 / 100,
+                          bottom: size.width * .2 / 100,
+                        ),
+                        child: Row(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: size.height * 1.5 / 100,
+                                    left: size.width * 9 / 100,
+                                    right: size.width * 9 / 100,
+                                  ),
+                                  child: Text("Todays payments",
+                                    style: Styles.myWalletTitleText03,)
+                              ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: size.height * 1.5 / 100,
+                                    //left: size.width * 9 / 100,
+                                    right: size.width * 10.5 / 100,
+                                  ),
+                                  child: Text(
+                                    _MyWallet!.totalPayment.toString(),
+                                    //"- ₦ 15000",
+                                    style: Styles.myWalletTitleText04,)
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // listTileItem(size,
+                      //     _BookingDatum![0].customer!.firstName,
+                      //     _BookingDatum![0].bookedTime,
+                      //     _BookingDatum![0].serviceCharge.toString()),
+                      // //Spacer(),
+                      // listTileItem(size,
+                      //     _BookingDatum![0].customer!.firstName,
+                      //     _BookingDatum![0].bookedTime,
+                      //     _BookingDatum![0].serviceCharge.toString()),
+                      //
+                      // listTileItem(size,
+                      //     _BookingDatum![0].customer!.firstName,
+                      //     _BookingDatum![0].bookedTime,
+                      //     _BookingDatum![0].serviceCharge.toString()),
+                      // listTileItem(size,
+                      //     "John Carlo","11:30","₦ 5000"),
+
+                      _BookingDatum!.length != 0 ?
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _BookingDatum!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                child: listTileItem(size,
+                                    '${_BookingDatum![index].customer!.firstName}',
+                                    '${_BookingDatum![index].bookedTime}',
+                                    '${_BookingDatum![index].serviceCharge.toString()}'),
+                              );
+                            }
+                        )
+                          :
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0,right: 25.0,top: 16.0),
+                        child: Container(
+                          height: 80,
+                          width: double.infinity,
+                          //color: Colors.white,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left:15.0,top: 10),
+                            child: Column(
                               children: [
-                                SubTitleTextRound(size,"Total job done","135"),
-                                SubTitleTextRound(size,"All payments","5000"),
-                                SubTitleTextRound(size,"Monthly collection","2000"),
+                                SvgPicture.asset("assets/image/ic_walletnotify.svg",
+                                    width: 40,
+                                    height: 40),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12.0,top: 10),
+                                    child: Text("You have no payments to show",
+                                      style: TextStyle(
+                                        fontFamily: 'SamsungSharpSans-Regular',
+                                        color: CustColors.light_navy,
+                                        fontSize: 12,
+                                      ),),
+                                  ),
+                                )
                               ],
                             ),
                           ),
                         ),
-
-                        Container(
-                          margin: EdgeInsets.only(
-                           //top: size.height * .2 / 100,
-                            bottom: size.width * .2 / 100,
-                          ),
-                          child: Row(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                      top: size.height * 1.5 / 100,
-                                      left: size.width * 9 / 100,
-                                      right: size.width * 9 / 100,
-                                    ),
-                                    child: Text("Todays payments",
-                                      style: Styles.myWalletTitleText03,)
-                                ),
-                              ),
-                              Spacer(),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                      top: size.height * 1.5 / 100,
-                                     //left: size.width * 9 / 100,
-                                      right: size.width * 10.5 / 100,
-                                    ),
-                                    child: Text("- ₦ 15000",
-                                      style: Styles.myWalletTitleText04,)
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-                        //Spacer(),
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-
-                        listTileItem(size,"John Carlo","11:30","₦ 5000"),
-
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
         ),
       ),
+    ),
     );
   }
+
 
   Widget appBarCustomUi(Size size) {
     return Row(
@@ -192,7 +265,11 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                   child: ClipRRect(
                     //borderRadius: BorderRadius.circular(20.0),
                     child:Container(
-                        child:Image.asset('assets/image/bg_wallet.png')),
+                        child:
+                        // Image.network(
+                        //     _BookingDatum![0].mechanic!.mechanic![0].profilePic)
+                        Image.asset('assets/image/bg_wallet.png')
+                    ),
                   ),
                 ),
               ),
@@ -205,17 +282,33 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0,0,0,0),
                         child: Container(
-                          width: 120.0,
-                          height: 120.0,
+                          width: 110.0,
+                          height: 110.0,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child:Container(
                                   child:CircleAvatar(
                                       radius: 75,
+                                      // child:Image.network(
+                                      //         _BookingDatum![0].mechanic!.mechanic![0].profilePic,
+                                      //     fit: BoxFit.fill,
+                                      //     ),
                                       backgroundColor: Colors.white,
-                                      child: ClipOval(
-                                        child:  SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
-                                      )))
+                                      child: Container(
+                                        height: 106.0,
+                                        width: 106.0,
+                                        child: ClipOval(
+                                          child: profileUrl != null && profileUrl != "" ?
+                                            Image.network(
+                                              profileUrl,
+                                              fit: BoxFit.fill,
+                                            )
+                                              :
+                                            SvgPicture.asset('assets/image/MechanicType/work_selection_avathar.svg'),
+                                        ),
+                                      )
+                                  )
+                              )
                           ),
                         ),
                       ),
@@ -235,7 +328,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                                       style: Styles.myWalletCardText02,)
                                 ),
                               )
-
                           ),
                         ),
                       ),
@@ -249,8 +341,18 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child:Container(
-                            child:Container(
-                                child: Text("₦ 5000",style: Styles.myWalletCardText01,)
+                            child:Padding(
+                              padding: const EdgeInsets.only(left: 100.0),
+                              child: Container(
+                                  child: Row(
+                                    children:[
+                                      Text("₦ ",
+                                        style: Styles.myWalletCardText01,),
+                                      Text( _MyWallet!.totalPayment > 0 ? '${_MyWallet!.totalPayment}' : "0",
+                                        style: Styles.myWalletCardText01,)
+                           ]
+                              ),
+                              ),
                             ),
                           ),
                         ),
@@ -388,9 +490,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
           ],
         ),
       ),
-
     );
-
   }
-
 }

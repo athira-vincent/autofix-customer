@@ -8,11 +8,20 @@ class SharedPrefKeys {
   static const userLanguageCode = "userLanguageCode";
   static const profileImageUrl = "profileImageUrl";
 
+  static const currentLatitude = "currentLatitude";
+  static const currentLongitude = "currentLongitude";
+  static const currentAddress = "currentAddress";
+  static const preferredLatitude = "preferredLatitude";
+  static const preferredLongitude = "preferredLongitude";
+  static const preferredAddress = "preferredAddress";
+
+
   //---------------------Customer
   static const isUserLoggedIn = "is_Logged_In";
   static const userName = "userName";
   static const userEmail = "userEmail";
   static const userID = "userID";
+  static const userCode = "userCode";
   static const userProfilePic = "userProfilePic";
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
   static const isCustomerSignUp = "isCustomerSignUp";

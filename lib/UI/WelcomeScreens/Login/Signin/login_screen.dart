@@ -283,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        Navigator.pushReplacement(
+                                                        Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
@@ -432,7 +432,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 InkWell(
                                                   onTap: (){
 
-                                                    Navigator.pushReplacement(
+                                                    Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
@@ -601,6 +601,9 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? _isDefaultVehicleAvailable =
     prefs.getBool(SharedPrefKeys.isUserLoggedIn);
+    prefs.setString(SharedPrefKeys.preferredAddress, "");
+    prefs.setString(SharedPrefKeys.preferredLongitude, "");
+    prefs.setString(SharedPrefKeys.preferredLatitude, "");
     // prefs.setBool(SharedPrefKeys.isWalked, true);
     return _isDefaultVehicleAvailable;
   }

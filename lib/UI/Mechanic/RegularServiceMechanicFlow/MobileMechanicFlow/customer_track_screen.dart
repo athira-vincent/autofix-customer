@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/MechanicStartService/mechanic_start_service_screen.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,6 +73,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
   double totalDistance = 0.0;
   double speedOfMechanic = 0.0;
   final MechanicOrderStatusUpdateBloc _mechanicOrderStatusUpdateBloc = MechanicOrderStatusUpdateBloc();
+  final ServiceStatusUpdateBloc _serviceStatusUpdateBloc = ServiceStatusUpdateBloc();
   double _setValue(double value) {
     return value * per + value;
   }
@@ -245,7 +247,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
         distanceInMeters = Geolocator.distanceBetween(double.parse('${widget.latitude}'), double.parse('${widget.longitude}'), double.parse('${latLng.latitude}'), double.parse('${latLng.longitude}'));
       print('DISTANCE getPositionStream distanceInMeter===== : ${distanceInMeters.toStringAsFixed(2)}');
       print('DISTANCE getPositionStream distanceInKilometer===== : ${distanceInMeters/1000}');
-        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 500)
+        if(int.parse('${(distanceInMeters).toString().split('.').first}') <= 999)
           {
             isArrived = true;
           }
@@ -393,7 +395,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
     print(placemarks);
     Placemark place = placemarks[0];
-    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}';
 
   }
 
@@ -411,22 +413,6 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
         .catchError((error) =>
         print("Failed to add Location: $error"));
   }
-
-  /*void updateToCloudFirestoreMechanicCurrentScreenDB() {
-
-    _firestore
-        .collection("Regular-MobileMech")
-        .doc('${widget.bookingId}')
-        .update({
-          "mechanicFromPage" : "M1",
-        })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }*/
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -592,6 +578,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
                                                 if(isArrived){
                                                   /*  _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
                                                     authToken, bookingId, "3");*/
+                                                  _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookingId}', "10");
                                                   updateToCloudFirestoreDB();
                                                   Navigator.pop(context);
                                                 }

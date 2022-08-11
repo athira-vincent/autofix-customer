@@ -7,6 +7,7 @@ import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_p
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
+import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyJobReview/my_job_review_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/SideBar/MyWallet/my_wallet_api_provider.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/AddServices/add_services_api_provider.dart';
@@ -51,22 +52,23 @@ class Repository {
   final _categoryListApiProvider = CategoryListApiProvider();
   final _AddPriceFaultApiProvider = AddPriceFaultApiProvider();
   final _MechServiceDetailsApiProvider = MechServiceDetailsApiProvider1();
+  final _serviceStatusUpdateApiProvider = ServiceStatusUpdateApiProvider();
 
   // Add Mechanic Service List
-  Future<dynamic> getServiceList(String token, categoryId) =>
-      _serviceListApiProvider.getServiceListRequest(token, categoryId);
+  Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
+      _serviceListApiProvider.getServiceListRequest(token, categoryId, search, catSearch);
 
   // Service List
-  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList) =>
-      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList);
+  Future<dynamic> getAddMechanicServiceList(String token, String serviceList, String timeList,String costList, catType) =>
+      _addServiceListApiProvider.getMechanicAddServiceListRequest(token,serviceList, timeList, costList, catType);
 
   //  Category List
   Future<dynamic> getCategoryList(String token, searchText, count, categoryId) =>
       _categoryListApiProvider.getCategoryListRequest(token,searchText, count, categoryId);
 
   //  Category List Home Request
-  Future<dynamic> getCategoryListHomeRequest(String token,categoryId) =>
-      _customerApiProvider.getCategoryListHomeRequest(token,categoryId);
+  Future<dynamic> getCategoryListHomeRequest(String token,categoryId, serviceSearch, catSearch) =>
+      _customerApiProvider.getCategoryListHomeRequest(token,categoryId, serviceSearch, catSearch);
 
 
   // SignUp
@@ -81,11 +83,11 @@ class Repository {
   Future<dynamic> postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
-      vehiclePic, latitude, longitude,) =>
+      vehiclePic,color, latitude, longitude,) =>
       _addCarApiProvider.postAddCarRequest(
         token, brand, model, engine, year,
         plateNo, lastMaintenance, milege,
-        vehiclePic, latitude, longitude,);
+        vehiclePic,color, latitude, longitude,);
 
   //Update Default Vehicle
   Future<dynamic> postUpdateDefaultVehicle(
@@ -194,12 +196,14 @@ class Repository {
   // Search Service Request
   Future<dynamic>  postSearchServiceRequest(
       token,
-      search,
+      serviceSearch,
+      catSearch,
       count,
       categoryId)  =>
       _customerApiProvider. postSearchServiceRequest(
           token,
-          search,
+          serviceSearch,
+          catSearch,
           count,
           categoryId) ;
 
@@ -357,6 +361,12 @@ class Repository {
       _mechanicApiProvider.postMechanicOrderStatusUpdate(
           token,  bookingId, bookStatus);
 
+  // Fetch Regular Service Status Update
+  Future<dynamic>  postServiceStatusUpdateRequest(
+      token,  bookingId, bookStatus)  =>
+      _serviceStatusUpdateApiProvider.postRegularServiceStatusUpdate(
+          token,  bookingId, bookStatus);
+
 
   // Fetch Profile Mechanic Request
   Future<dynamic>  postMechanicFetchProfileRequest(token, userId)  =>
@@ -398,9 +408,9 @@ class Repository {
           token);
 
   Future<dynamic>   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, bookingType) =>
+      token,rating, feedback, bookingId, ) =>
       _customerApiProvider. postAddMechanicReviewAndRatingRequest(
-          token,rating, feedback, bookingId, bookingType);
+          token,rating, feedback, bookingId, );
 
 
   /// ===============  Service List of Mechanic ================== ///
@@ -445,9 +455,9 @@ class Repository {
           token,bookingId
       );
   Future<dynamic> postTimeServicePriceAddReviewRequest(
-      token,services,fee,time) =>
+      token,services,fee,time, catType) =>
       _AddPriceFaultApiProvider.postTimePriceServiceDetailsRequest(
-          token,services,fee,time
+          token,services,fee,time, catType
       );
 
 

@@ -68,26 +68,27 @@ class _PaymentFailedScreenState extends State<PaymentFailedScreen> {
     return Container(
       decoration: Styles.boxDecorationStyle,
       margin: EdgeInsets.only(
-          left: size.width * 6 / 100,
-          right: size.width * 6 / 100,
-          top: size.height * 8.2 / 100
+          left: size.width * 3 / 100,
+          right: size.width * 3 / 100,
+          top: size.height * 7.2 / 100
       ),
       child: Row(
         children: [
           Container(
             padding: EdgeInsets.only(
-                top: size.width * 5 / 100,
-                bottom: size.width * 5 / 100
+                top: size.width * 6 / 100,
+                bottom: size.width * 6 / 100
             ),
             margin: EdgeInsets.only(
-              left: size.width * 5 / 100,
-              right: size.width * 2 / 100,
+              left: size.width * 6 / 100,
+              right: size.width * 3 / 100,
             ),
             child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
               height: size.height * 3 / 100,width: size.width * 3 / 100,),
           ),
           Text(
-            "Something went wrong! Payment failed! \nTry another method like direct payment etc.. \nOr you can try after some time",
+            //"Something went wrong! Payment failed! \nTry another method like direct payment etc.. \nOr you can try after some time",
+            "Something went wrong! Payment failed! \nTry again or choose another payment\n method ",
             style: warningTextStyle01,
           )
         ],

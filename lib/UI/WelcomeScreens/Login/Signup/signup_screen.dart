@@ -208,7 +208,8 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.signUp!.token.toString(),
               TextStrings.user_mechanic,
               "${value.data!.signUp!.mechanic?.firstName.toString()}",
-              "${value.data!.signUp!.mechanic?.id.toString()}"
+              "${value.data!.signUp!.mechanic?.id.toString()}",
+              "${value.data!.signUp!.mechanic?.userCode.toString()}",
             );
             Navigator.pushReplacement(
                 context,
@@ -229,9 +230,10 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.signUp!.token.toString(),
               TextStrings.user_customer,
               "${value.data!.signUp!.customer?.firstName.toString()}",
-              "${value.data!.signUp!.customer?.id.toString()}"
+              "${value.data!.signUp!.customer?.id.toString()}",
+              "${value.data!.signUp!.customer?.userCode.toString()}",
             );
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => OtpVerificationScreen(
@@ -311,6 +313,9 @@ class _SignupScreenState extends State<SignupScreen> {
   _setSignUpVisitFlag() async {
     SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _shdPre.setBool(SharedPrefKeys.isCustomerSignUp, true);
+    _shdPre.setString(SharedPrefKeys.preferredAddress, "");
+    _shdPre.setString(SharedPrefKeys.preferredLongitude, "");
+    _shdPre.setString(SharedPrefKeys.preferredLatitude, "");
   }
 
   @override

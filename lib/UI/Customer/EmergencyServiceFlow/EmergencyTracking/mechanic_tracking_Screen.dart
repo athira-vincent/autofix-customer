@@ -218,10 +218,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
 
     addPolyLine(polylineCoordinates);
 
-
-
-
-
   }
 
   addPolyLine(List<LatLng> polylineCoordinates) {
@@ -488,7 +484,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Mechanic on the way",
+                                          "Mechanic is on his way",
                                           textAlign: TextAlign.start,
                                           style: Styles.waitingTextBlack17,
                                         ),

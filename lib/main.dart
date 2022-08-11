@@ -2,17 +2,14 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
-import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/cust_mobile_mech_service_track_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/cust_pick_up_track_service_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/PickAndDropOffFlow/direct_payment_regular_screen.dart';
-import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/cust_my_vehicles.dart';
-import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/MobileMechanicFlow/mech_mobile_track_service_screen.dart';
-import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/PickAndDropOffFlow/mech_pick_up_track_screen.dart';
+import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
+
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -20,11 +17,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'UI/Customer/RegularServiceFlow/PickAndDropOffFlow/payment_regular_picUpAndDropOff_screen.dart';
-import 'UI/Customer/RegularServiceFlow/TakeToMechanicFlow/cust_take_vehicle_track_service_screen.dart';
-import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehicle_track_screen.dart';
-
 
 
   void main() async {
@@ -45,10 +37,12 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
        }
      else
        {
+         //WidgetsFlutterBinding.ensureInitialized();
          await Firebase.initializeApp();
        }
 
       FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
           runApp(MyApp());
         }, (error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
@@ -75,6 +69,7 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
 
     @override
     Widget build(BuildContext context) {
+      //_listenNotification(context);
 
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
@@ -88,13 +83,13 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
           ChangeNotifierProvider.value(
             value: ProfileDataProvider(),
           ),
+          ChangeNotifierProvider.value(
+            value: JobRequestNotifyProvider(),
+          ),
         ],
         child:Sizer(
                 builder: (context, orientation, deviceType) {
                   return MaterialApp(
-                    /*routes: {
-                      '/CustomerMainLandingScreen': (BuildContext context) => CustomerMainLandingScreen(),
-                    },*/
                     debugShowCheckedModeBanner: false,
                     locale: _locale,
                     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -102,23 +97,13 @@ import 'UI/Mechanic/RegularServiceMechanicFlow/TakeToMechanicFlow/mech_take_vehi
                     title: 'ResolMech',
                     theme: ThemeData(
                       primaryColor: Colors.white,
+                      primarySwatch: CustColors.materialBlue,
                     ),
-                    /*home: MechPickUpTrackScreen(
-                      bookedDate: 'Mar 7,2022',
-                      latitude: "9.90874",
-                      bookedId: "1304",
-                      longitude: "76.28271",
-                      mechanicAddress: "Elenjikkal House,Empyreal Garden Anchery p.o, Thrissur",
-                      mechanicName: "Minnu Kurian",
-                      pickingDate: 'Mar 8,2022',
-                    ),*/
-
-                    //home: CustMobileTrackScreen(bookingId: "1305",),
-                   // home: MechMobileTrackScreen(bookingId: "1141"),
-                    home:SplashScreen(),
+                    home: SplashScreen(),
                   );
                 },
               ),
       );
     }
+
   }
