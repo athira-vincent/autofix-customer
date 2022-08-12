@@ -83,11 +83,11 @@ class Repository {
   Future<dynamic> postAddCarRequest(
       token, brand, model, engine, year,
       plateNo, lastMaintenance, milege,
-      vehiclePic, latitude, longitude,) =>
+      vehiclePic,color, latitude, longitude,) =>
       _addCarApiProvider.postAddCarRequest(
         token, brand, model, engine, year,
         plateNo, lastMaintenance, milege,
-        vehiclePic, latitude, longitude,);
+        vehiclePic,color, latitude, longitude,);
 
   //Update Default Vehicle
   Future<dynamic> postUpdateDefaultVehicle(

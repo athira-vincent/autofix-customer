@@ -520,9 +520,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                             padding: const EdgeInsets.all(15),
                                             child:
                                             snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != "" || snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != "null"
-                                                ? Image.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
+                                                ? SvgPicture.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
                                                   width: 35,
-                                                  fit: BoxFit.cover,)
+                                                  height: 20,
+                                                  fit: BoxFit.contain,)
                                                 : Image.network('https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/RelexProductImagesDummy%2Fservice.png?alt=media&token=2cd2becd-04c9-488a-9bdc-6082bc11ce36',
                                                     width: 35,
                                                     fit: BoxFit.cover,)

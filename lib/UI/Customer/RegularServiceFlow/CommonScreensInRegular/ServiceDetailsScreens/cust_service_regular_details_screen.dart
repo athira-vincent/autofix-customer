@@ -238,7 +238,8 @@ class _CustServiceRegularDetailsScreen extends State<CustServiceRegularDetailsSc
                                                             ? "Pick Up & Drop Off"
                                                             : _BookingDetails!.regularType.toString() == "2"
                                                             ? "Mobile Mechanic"
-                                                            : "Take My Vehicle",
+                                                            : _BookingDetails!.regularType.toString() == "3"
+                                                            ? "Take My Vehicle" : "Emergency Service",
                                                         maxLines: 2,
                                                         style: TextStyle(
                                                             fontSize: 14,

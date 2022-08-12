@@ -62,7 +62,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
   String isWorkStarted = "-1";
   String isWorkFinished = "-1";
   String isStartedFromLocationForDropOff = "-1";
-  String isDropOff = "-1";
+  String isDropOff = "-1", isBookedDate = "";
   String isPayment = "-1";
   String customerLatitude = "", customerLongitude = "";
   String? FcmToken="";
@@ -95,6 +95,7 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
         isDropOff = event.get("isDropOff");
         isPayment = event.get("isPayment");
+        isBookedDate = event.get("isBookedDate");
         customerLatitude = event.get("customerLatitude");
         customerLongitude = event.get("customerLongitude");
         vehicleName = event.get("vehicleName");

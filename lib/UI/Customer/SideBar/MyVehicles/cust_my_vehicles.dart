@@ -65,6 +65,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
   TextEditingController _yearController = TextEditingController();
   FocusNode _yearControllerFocusNode = FocusNode();
 
+  TextEditingController _colorController = TextEditingController();
+  FocusNode _colorControllerFocusNode = FocusNode();
+
   TextEditingController _lastMaintenanceController = TextEditingController();
   FocusNode _lastMaintenanceFocusNode = FocusNode();
 
@@ -124,6 +127,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
           _modelController.text = '${custVehicleListDefaultValue?.model.toString()}';
           _engineTypeController.text = '${custVehicleListDefaultValue?.engine.toString()}';
           _yearController.text = '${custVehicleListDefaultValue?.year.toString()}';
+          _colorController.text = '${custVehicleListDefaultValue?.color.toString()}';
           _lastMaintenanceController.text = '${custVehicleListDefaultValue?.lastMaintenance.toString()}';
 
           print("message postServiceList >>>>>>>  ${value.message}");
@@ -413,6 +417,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                       _modelController.text = '${snapshot.data?.data?.custVehicleList?[i].model.toString()}';
                       _engineTypeController.text = '${snapshot.data?.data?.custVehicleList?[i].engine.toString()}';
                       _yearController.text = '${snapshot.data?.data?.custVehicleList?[i].year.toString()}';
+                      _colorController.text = '${snapshot.data?.data?.custVehicleList?[i].color.toString()}';
                       _lastMaintenanceController.text = '${snapshot.data?.data?.custVehicleList?[i].lastMaintenance.toString()}';
                       _isDefaultVehicle = snapshot.data?.data?.custVehicleList?[i].defaultVehicle == 1 ? true : false;
                     });
@@ -603,6 +608,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                               modelTextSelection(snapshot),
                               engineTypeTextSelection(snapshot),
                               yearTypeTextSelection(snapshot),
+                              vehicleColorTextSelection(snapshot),
                               lastMaintenanceTextSelection(snapshot),
 
                             ],
@@ -767,7 +773,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         children: [
           Text(
 
-            "Select Engine Type",
+            "Engine Type",
             style: Styles.MyVechiclesSubTitle,
           ),
           TextFormField(
@@ -828,7 +834,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         children: [
           Text(
 
-            "Select Year",
+            "Year",
             style: Styles.MyVechiclesSubTitle,
           ),
           TextFormField(
@@ -846,6 +852,67 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                 ch :
                 'Year' ).nameCheckingWithNumeric,
             controller: _yearController,
+            cursorColor: CustColors.whiteBlueish,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText:
+              "",
+              border: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: CustColors.greyish,
+                  width: .5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.8,
+                horizontal: 0.0,
+              ),
+              errorStyle: Styles.textLabelSubTitleRed,
+              hintStyle: Styles.textLabelSubTitle,),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget vehicleColorTextSelection(AsyncSnapshot<CustVehicleListMdl> snapshot) {
+    return  Container(
+      margin: EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+
+            "Color",
+            style: Styles.MyVechiclesSubTitle,
+          ),
+          TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 1,
+            style: Styles.textLabelSubTitle,
+            focusNode: _colorControllerFocusNode,
+            keyboardType: TextInputType.name,
+            enabled: false,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-Z ]')),
+            ],
+            validator: InputValidator(
+                ch :
+                'Color' ).nameCheckingWithNumeric,
+            controller: _colorController,
             cursorColor: CustColors.whiteBlueish,
             decoration: InputDecoration(
               isDense: true,

@@ -147,7 +147,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString();
+          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toString()/*.toLowerCase()*/;
           brandName = brandName.replaceAll(" ", "");
           print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + brandName);
           _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",brandName);
@@ -180,20 +180,22 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           });
         });
       }else{
+        print("hasActiveService>>>> ${value.data?.currentlyWorkingService.toString()}");
         print(value.data?.currentlyWorkingService.toString());
-        if(value.data?.currentlyWorkingService.toString() == 'null'
+        if(value.data?.currentlyWorkingService.toString() == []
             || value.data?.currentlyWorkingService.toString() == null
-          || value.data?.currentlyWorkingService.toString() == []
-        )
+          || value.data?.currentlyWorkingService.toString() == 'null')
         {
           setState(() {
             _hasActiveService = false;
+            print("hasActiveService>>>> false");
           });
         }
         else {
           setState(()  {
-              _hasActiveService = true;
-              setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            _hasActiveService = true;
+            setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            print("hasActiveService>>>> true");
           });
         }
       }
@@ -739,7 +741,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: (){
+            /*onTap: (){
               setState(() {
                 Navigator.push(
                     context,
@@ -747,7 +749,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       builder: (context) => MechanicMyWalletScreen(),
                     ));
               });
-            },
+            },*/
             child: Container(
               height: size.height * 18 / 100,
               width: size.width * 40 / 100,
