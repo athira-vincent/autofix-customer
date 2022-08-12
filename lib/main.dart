@@ -100,7 +100,6 @@ import 'package:provider/provider.dart';
                       primarySwatch: CustColors.materialBlue,
                     ),
                     home: SplashScreen(),
-                    //////////////
                   );
                 },
               ),
