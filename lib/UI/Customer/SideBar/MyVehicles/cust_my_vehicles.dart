@@ -136,7 +136,7 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         });
       }
     });
-    _addCarBloc.updateDefaultVehicleResponse.listen((value) {
+    _addCarBloc.updateDefaultVehicleResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
           _isDefaultLoading = false;
@@ -146,9 +146,10 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
         });
 
       } else {
-
-        setState(() {
+        SharedPreferences _shdPre = await SharedPreferences.getInstance();
+        setState(() async {
           _isDefaultLoading = false;
+          _shdPre.setString(SharedPrefKeys.defaultBrandID, custVehicleListDefaultValue!.brand.toString());
           SnackBarWidget().setMaterialSnackBar( "Vehicle set as default", _scaffoldKey);
           print("message postServiceList >>>>>>>  ${value.message}");
           print("sucess postServiceList >>>>>>>  ${value.status}");

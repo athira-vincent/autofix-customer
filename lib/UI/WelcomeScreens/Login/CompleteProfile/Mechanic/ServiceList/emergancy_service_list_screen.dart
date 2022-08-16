@@ -109,12 +109,14 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
 
       } else {
 
-        setState(() {
+        setState(() async {
           print("success postServiceList >>>>>>>  ${value.status}");
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
           print("success refNumber: userCode, >>>>>>>  ${userCode}");
+          SharedPreferences _shdPre = await SharedPreferences.getInstance();
+          _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

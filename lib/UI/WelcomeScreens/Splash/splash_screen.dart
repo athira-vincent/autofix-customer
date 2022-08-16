@@ -6,6 +6,8 @@ import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +38,17 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? _isLoggedin = _shdPre.getBool(SharedPrefKeys.isUserLoggedIn);
     bool? isWalked = _shdPre.getBool(SharedPrefKeys.isWalked);
     String? userType = _shdPre.getString(SharedPrefKeys.userType);
+    String? userCategory = _shdPre.getString(SharedPrefKeys.userCategory);
+    int? _isDefaultVehicleAvailable = _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
+    int? _isWorkProfileCompleted = _shdPre.getInt(SharedPrefKeys.isWorkProfileCompleted);
+    String? defaultVehicle = _shdPre.getString(SharedPrefKeys.defaultBrandID);
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
+    print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
+    print("_isWorkProfileCompleted ============ $_isWorkProfileCompleted");
+    print("defaultVehicleBrand ============ $defaultVehicle");
     print("User Type ============ $userType");
+
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
     if (_token == null || _token == "") {
@@ -49,18 +59,35 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_isLoggedin != null && _isLoggedin == true) {
       print("chechingggg 01 $userType");
 
-
       if (userType == TextStrings.user_customer) {
-        Navigator.pushReplacement(
+        if(_isDefaultVehicleAvailable == null || _isDefaultVehicleAvailable == 1){
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-                builder: (context) =>  CustomerMainLandingScreen()));
+            new MaterialPageRoute(
+                builder: (context) =>
+                    AddCarScreen(userCategory:userCategory! ,userType: userType!,fromPage: "1",)),
+          );
+        }else{
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  CustomerMainLandingScreen()));
+        }
       }
       else{
-        Navigator.pushReplacement(
+        if(_isWorkProfileCompleted == null || _isWorkProfileCompleted == 1){
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-                builder: (context) =>  MechanicHomeScreen()));
+            new MaterialPageRoute(
+                builder: (context) =>
+                    WorkSelectionScreen(userCategory:userCategory! ,userType: userType!,)),
+          );
+        }else{
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  MechanicHomeScreen()));
+        }
       }
     } else {
       if (isWalked == null || isWalked == false) {

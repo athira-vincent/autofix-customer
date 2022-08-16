@@ -26,6 +26,7 @@ class SharedPrefKeys {
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
   static const isCustomerSignUp = "isCustomerSignUp";
   static const defaultVehicleID = "defaultVehicleID";
+  static const defaultBrandID = "defaultBrandID";
 
   //------------------------Mechanic
 
@@ -35,6 +36,7 @@ class SharedPrefKeys {
   static const mechanicCode = "mechanicCode";
   static const mechanicID = "mechanicID";
   static const mechanicIsOnline = "mechanicIsOnline";
+  static const isWorkProfileCompleted = "isWorkProfileCompleted";
 
   ///========= Customer Tracking Variables ==============///
 
