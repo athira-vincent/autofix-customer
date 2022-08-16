@@ -8,11 +8,8 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/categor
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
-import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,8 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../SearchService/search_service_screen.dart';
 
 class HomeCustomerUIScreen extends StatefulWidget {
-
-  HomeCustomerUIScreen();
+   HomeCustomerUIScreen();
 
   @override
   State<StatefulWidget> createState() {
@@ -31,19 +27,18 @@ class HomeCustomerUIScreen extends StatefulWidget {
 }
 
 class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
-
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
-  TextEditingController searchController = new TextEditingController();
-  late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
-  FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+  TextEditingController searchController = TextEditingController();
+  late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
 
   String? filter;
-  String authToken="",profileImageUrl = "";
+  String authToken = "", profileImageUrl = "";
 
-  String serviceIdEmergency="";
-  String mechanicIdEmergency="";
-  String bookingIdEmergency="";
+  String serviceIdEmergency = "";
+  String mechanicIdEmergency = "";
+  String bookingIdEmergency = "";
   String addressLocationText = "";
 
   final List<String> imageList = [
@@ -56,25 +51,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   bool isEmergencyService = false;
   bool isRegularService = true;
 
-   List<Choice> choices = const <Choice>[
-    const Choice(title: 'Home', icon: Icons.home),
-    const Choice(title: 'relay of urgent mechanic', icon: Icons.contacts),
-    const Choice(title: 'Map', icon: Icons.map),
-    const Choice(title: 'Phone', icon: Icons.phone),
-    const Choice(title: 'Camera', icon: Icons.camera_alt),
-    const Choice(title: 'Setting', icon: Icons.settings),
-    const Choice(title: 'Album', icon: Icons.photo_album),
-    const Choice(title: 'WiFi', icon: Icons.wifi),
-  ];
+  String CurrentLatitude = "";
+  String CurrentLongitude = "";
 
-   String CurrentLatitude ="";
-   String CurrentLongitude ="";
+  String preferredLatitude = "10.506402";
+  String preferredLongitude = "76.244164";
+  String preferredAddress = "";
 
-    String preferredLatitude ="10.506402";
-    String preferredLongitude ="76.244164";
-    String preferredAddress ="";
-
-  String location ='';
+  String location = '';
   String Address = '';
   String displayAddress = '';
 
@@ -86,7 +70,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return value * per + value;
   }
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void didChangeDependencies() {
@@ -99,27 +83,22 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   void didUpdateWidget(covariant HomeCustomerUIScreen oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    print("xkkhhnbb 001");
-    //setFcmToken(authToken);
     _getCurrentCustomerLocation(false);
     getSharedPrefData();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSharedPrefData();
     _getCurrentCustomerLocation(false);
     _listenServiceListResponse();
   }
 
-
   Future<void> setFcmToken(String Authtoken) async {
     _messaging.getToken().then((value) {
       String? token = value;
-      print("FCM Token >>>>>>>>>>  " + token.toString());
-      _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!,Authtoken);
+      _fcmTokenUpdateBloc.postFcmTokenUpdateRequest(token!, Authtoken);
     });
   }
 
@@ -129,78 +108,68 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
 
-      preferredLatitude = shdPre.getString(SharedPrefKeys.preferredLatitude).toString() ;
-      preferredLongitude = shdPre.getString(SharedPrefKeys.preferredLongitude).toString() ;
-      preferredAddress = shdPre.getString(SharedPrefKeys.preferredAddress).toString() ;
+      preferredLatitude =
+          shdPre.getString(SharedPrefKeys.preferredLatitude).toString();
+      preferredLongitude =
+          shdPre.getString(SharedPrefKeys.preferredLongitude).toString();
+      preferredAddress =
+          shdPre.getString(SharedPrefKeys.preferredAddress).toString();
 
-      if( (preferredLatitude.toString() != "" && preferredLatitude.toString() != "null")
-          && (preferredLongitude.toString() != "" && preferredLongitude.toString() != "null")){
-        GetAddressFromLatLong(LatLng(double.parse(preferredLatitude), double.parse(preferredLongitude)));
-      }else{
+      if ((preferredLatitude.toString() != "" &&
+              preferredLatitude.toString() != "null") &&
+          (preferredLongitude.toString() != "" &&
+              preferredLongitude.toString() != "null")) {
+        GetAddressFromLatLong(LatLng(
+            double.parse(preferredLatitude), double.parse(preferredLongitude)));
+      } else {
         _getCurrentCustomerLocation(true);
       }
 
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      profileImageUrl = shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
+      serviceIdEmergency =
+          shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
+      mechanicIdEmergency =
+          shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
+      bookingIdEmergency =
+          shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      profileImageUrl =
+          shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
 
-      print('authToken>>>>>>>>> ' + authToken.toString());
-      print('profileImageUrl>>>>>>>>> _HomeCustomerUIScreenState' + profileImageUrl.toString());
-      print('authToken>>>>>>>>>' + authToken.toString());
-      print('serviceIdEmergency>>>>>>>>' + serviceIdEmergency.toString());
-      print('mechanicIdEmergency>>>>>>>' + mechanicIdEmergency.toString());
-      print('bookingIdEmergency>>>>>>>>>' + bookingIdEmergency.toString());
       setFcmToken(authToken);
-      if(serviceIdEmergency.toString() != 'null'  && serviceIdEmergency.toString() != "" )
-        {
-          print('serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
-        }
-      else
-        {
-          print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
-        }
+      if (serviceIdEmergency.toString() != 'null' &&
+          serviceIdEmergency.toString() != "") {
 
-      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1", null, null);
-      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
+      } else {
 
+      }
+
+      _homeCustomerBloc.postEmergencyServiceListRequest(
+          authToken, "1", null, null);
+      _homeCustomerBloc.postRegularServiceListRequest(
+          authToken, "2", null, null);
     });
   }
 
   _listenServiceListResponse() {
     _homeCustomerBloc.emergencyServiceListResponse.listen((value) {
       if (value.status == "error") {
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
-        });
+        setState(() {});
       } else {
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
-        });
+        setState(() {});
       }
     });
 
     _homeCustomerBloc.regularServiceListResponse.listen((value) {
       if (value.status == "error") {
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
-        });
+        setState(() {});
       } else {
-        setState(() {
-          print("message postServiceList >>>>>>>  ${value.message}");
-          print("errrrorr postServiceList >>>>>>>  ${value.status}");
-
-        });
+        setState(() {});
       }
     });
   }
 
   Future<void> _getCurrentCustomerLocation(bool isChangeAddress) async {
     Position position = await _getGeoLocationPosition();
-    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+    location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       CurrentLatitude = position.latitude.toString();
@@ -208,27 +177,20 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       shdPre.setString(SharedPrefKeys.currentLatitude, CurrentLatitude);
       shdPre.setString(SharedPrefKeys.currentLongitude, CurrentLongitude);
     });
-    print(location);
 
-    if(isChangeAddress){
+    if (isChangeAddress) {
       GetAddressFromLatLong(LatLng(position.latitude, position.longitude));
-    }else{
+    } else {}
 
-    }
-
-    //shdPre.setString(SharedPrefKeys.currentAddress, Address);
   }
 
   Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
+
       await Geolocator.openLocationSettings();
       return Future.error('Location services are disabled.');
     }
@@ -237,76 +199,70 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 
-  Future<void> GetAddressFromLatLong(LatLng position)async {
-    // SharedPreferences shdPre = await SharedPreferences.getInstance();
-    // shdPre.setString(SharedPrefKeys.preferredLatitude, selectedLatLng.latitude.toString());
-    // shdPre.setString(SharedPrefKeys.preferredLongitude, selectedLatLng.longitude.toString());
-    // shdPre.setString(SharedPrefKeys.preferredAddress, Address);
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
-    print(placemarks);
+  Future<void> GetAddressFromLatLong(LatLng position) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
     Placemark place = placemarks[0];
-    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    Address =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
 
     setState(() {
-      displayAddress = '${place.locality}';//${place.name},
+      displayAddress = '${place.locality}';
     });
-    print(" displayAddress >>>>>> " + displayAddress);
   }
 
   Future<void> GetAddressString(LatLng position) async {
-
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,);
-    print(placemarks);
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
     Placemark place = placemarks[0];
 
-    String addressLocation = '${place.street}, ${place.subLocality}, ${place.locality}';
+    String addressLocation =
+        '${place.street}, ${place.subLocality}, ${place.locality}';
 
     setState(() {
       addressLocationText = addressLocation;
-      print("addressLocationText >>>>>>> " + addressLocationText);
     });
-    //return addressLocation;
   }
-
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                searchYouService(context, size),
-                serviceBanners(),
-                emergencyService(size),
-                regularService(),
-                //upcomingServices(),
-                //sparePartsServices()
-              ],
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              searchYouService(context, size),
+              serviceBanners(),
+              emergencyService(size),
+              regularService(),
+              //upcomingServices(),
+              sparePartsServices()
+            ],
           ),
         ),
+      ),
     );
   }
-
 
   Widget searchYouService(BuildContext context, Size size) {
     return Padding(
@@ -316,24 +272,25 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           Row(
             children: [
               Expanded(
-                flex:1,
+                flex: 1,
                 child: InkWell(
                   onTap: () {
-                      print("clicked");
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>  SearchServiceScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchServiceScreen()));
                   },
                   child: Container(
                     height: 35,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(11),
-                        border: Border.all(width: 1,color: CustColors.light_navy)),
+                        border:
+                            Border.all(width: 1, color: CustColors.light_navy)),
                     child: Row(
-                      children: [
-                        const Icon(Icons.search_rounded, color: CustColors.light_navy),
-                        const Text('Search your Services'),
+                      children: const [
+                         Icon(Icons.search_rounded,
+                            color: CustColors.light_navy),
+                         Text('Search your Services'),
                       ],
                     ),
                   ),
@@ -350,28 +307,33 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
-  Widget locationWidget(Size size){
+  Widget locationWidget(Size size) {
     return InkWell(
       onTap: () async {
         _getCurrentCustomerLocation(false);
-      var result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChangeLocationScreen(latitude: CurrentLatitude,
-                        longitude: CurrentLongitude),
-                  ));
-      setState(() {
-        GetAddressFromLatLong(result);
-      });
+        var result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChangeLocationScreen(
+                  latitude: CurrentLatitude, longitude: CurrentLongitude),
+            ));
+        setState(() {
+          GetAddressFromLatLong(result);
+        });
       },
       child: Row(
         children: [
-          const Icon(Icons.location_on, color: CustColors.light_navy,size: 32,),
+          const Icon(
+            Icons.location_on,
+            color: CustColors.light_navy,
+            size: 32,
+          ),
           SizedBox(
             width: 55,
             child: Column(
               children: [
-                Text('$displayAddress',
+                Text(
+                  displayAddress,
                   //maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.ellipsis,
@@ -394,8 +356,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           Container(
             decoration: BoxDecoration(
                 color: CustColors.whiteBlueish,
-                borderRadius: BorderRadius.circular(11.0)
-            ),
+                borderRadius: BorderRadius.circular(11.0)),
             child: Image.asset('assets/image/bannerPngDummy1.png'),
           ),
           Padding(
@@ -411,34 +372,34 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Container(
             height: 35.0,
-            margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
+            margin: const EdgeInsets.only(
+              top: 10.0,
+              bottom: 10.0,
+            ),
             decoration: BoxDecoration(
                 border: Border.all(
                   color: CustColors.light_navy,
                 ),
-                borderRadius: BorderRadius.circular(11.0)
-            ),
+                borderRadius: BorderRadius.circular(11.0)),
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 setState(() {
-                  if(isEmergencyService==true)
-                    {
-                      isEmergencyService=false;
-                    }
-                  else
-                    {
-                      isEmergencyService=true;
-                    }
+                  if (isEmergencyService == true) {
+                    isEmergencyService = false;
+                  } else {
+                    isEmergencyService = true;
+                  }
                 });
               },
               child: Row(
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: const Text('Emergency Services',
+                    child: Text(
+                      'Emergency Services',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
@@ -446,110 +407,152 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     ),
                   ),
                   const Spacer(),
-                  Icon(isEmergencyService==true?Icons.keyboard_arrow_down_rounded:Icons.keyboard_arrow_right, color: CustColors.light_navy,size: 30,),
+                  Icon(
+                    isEmergencyService == true
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.keyboard_arrow_right,
+                    color: CustColors.light_navy,
+                    size: 30,
+                  ),
                 ],
               ),
             ),
           ),
         ),
-        isEmergencyService==true
-        ? Container(
-          child: StreamBuilder(
-              stream:  _homeCustomerBloc.emergencyServiceListResponse,
-              builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
-                print("${snapshot.hasData}");
-                print("${snapshot.connectionState}");
-                print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
-
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator(
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                          CustColors.light_navy),
-                    );
-                  default:
-                    return
-                      snapshot.data?.data?.categoryList?[0].service?.length != 0 && snapshot.data?.data?.categoryList?[0].service?.length != null
+        isEmergencyService == true
+            ? StreamBuilder(
+                stream: _homeCustomerBloc.emergencyServiceListResponse,
+                builder:
+                    (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.light_navy),
+                      );
+                    default:
+                      return
+                              snapshot.data?.data?.categoryList?[0].service
+                                      ?.length !=
+                                  null
                           ? GridView.builder(
-                              itemCount:snapshot.data?.data?.categoryList?[0].service?.length,
+                              itemCount: snapshot.data?.data
+                                  ?.categoryList?[0].service?.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
                                 childAspectRatio: .9,
                                 crossAxisSpacing: .08,
                                 mainAxisSpacing: .05,
                               ),
-                              itemBuilder: (context,index,) {
+                              itemBuilder: (
+                                context,
+                                index,
+                              ) {
                                 return GestureDetector(
-                                  onTap:(){
-
+                                  onTap: () {
                                     setState(() {
-
                                       _getCurrentCustomerLocation(false);
 
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return AlertDialog(
-                                              contentPadding: const EdgeInsets.all(0.0),
+                                              contentPadding:
+                                                  const EdgeInsets.all(0.0),
                                               content: StatefulBuilder(
-                                                  builder: (BuildContext context, StateSetter monthYear) {
-                                                    return  setupAlertDialogMonthAndYear(
-                                                      snapshot.data?.data?.categoryList?[0].service?[index],
-                                                       snapshot.data?.data?.categoryList![0],
-                                                      size,
-                                                    );
-                                                  }
-                                              ),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          StateSetter
+                                                              monthYear) {
+                                                return setupAlertDialogMonthAndYear(
+                                                  snapshot
+                                                      .data
+                                                      ?.data
+                                                      ?.categoryList?[0]
+                                                      .service?[index],
+                                                  snapshot.data?.data
+                                                      ?.categoryList![0],
+                                                  size,
+                                                );
+                                              }),
                                             );
                                           });
                                     });
                                   },
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment:MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: CustColors.whiteBlueish,
-                                              borderRadius: BorderRadius.circular(11.0)
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(15),
-                                            child:
-                                            snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != "" || snapshot.data?.data?.categoryList?[0].service?[index].icon.toString() != "null"
-                                                ? SvgPicture.network(snapshot.data?.data?.categoryList?[0].service?[index].icon,
-                                                  width: 35,
-                                                  height: 20,
-                                                  fit: BoxFit.contain,)
-                                                : Image.network('https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/RelexProductImagesDummy%2Fservice.png?alt=media&token=2cd2becd-04c9-488a-9bdc-6082bc11ce36',
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                CustColors.whiteBlueish,
+                                            borderRadius:
+                                                BorderRadius.circular(
+                                                    11.0)),
+                                        child: Padding(
+                                            padding:
+                                                const EdgeInsets.all(15),
+                                            child: snapshot
+                                                            .data
+                                                            ?.data
+                                                            ?.categoryList?[
+                                                                0]
+                                                            .service?[
+                                                                index]
+                                                            .icon
+                                                            .toString() !=
+                                                        "" ||
+                                                    snapshot
+                                                            .data
+                                                            ?.data
+                                                            ?.categoryList?[
+                                                                0]
+                                                            .service?[
+                                                                index]
+                                                            .icon
+                                                            .toString() !=
+                                                        "null"
+                                                ? SvgPicture.network(
+                                                    snapshot
+                                                        .data
+                                                        ?.data
+                                                        ?.categoryList?[0]
+                                                        .service?[index]
+                                                        .icon,
                                                     width: 35,
-                                                    fit: BoxFit.cover,)
-                                                //: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-
-                                          ),
+                                                    height: 20,
+                                                    fit: BoxFit.contain,
+                                                  )
+                                                : Image.network(
+                                                    'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/RelexProductImagesDummy%2Fservice.png?alt=media&token=2cd2becd-04c9-488a-9bdc-6082bc11ce36',
+                                                    width: 35,
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(2),
+                                        child: Text(
+                                          '${snapshot.data?.data?.categoryList?[0].service?[index].serviceName}',
+                                          style: Styles
+                                              .textLabelTitleEmergencyServiceName,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.visible,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(2),
-                                          child: Text('${snapshot.data?.data?.categoryList?[0].service?[index].serviceName}',
-                                            style: Styles.textLabelTitleEmergencyServiceName,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.visible,),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
                             )
                           : Container();
-                }
-              }
-              ),
-        )
-        : Container()
+                  }
+                })
+            : Container()
       ],
     );
   }
@@ -558,27 +561,25 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(10,5,10,5),
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           child: Container(
             height: 35.0,
-            margin: const EdgeInsets.only(top:10.0,bottom: 10.0,),
+            margin: const EdgeInsets.only(
+              top: 10.0,
+              bottom: 10.0,
+            ),
             decoration: BoxDecoration(
                 border: Border.all(
                   color: CustColors.light_navy,
                 ),
-                borderRadius: BorderRadius.circular(11.0)
-            ),
+                borderRadius: BorderRadius.circular(11.0)),
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 setState(() {
-
-                  if(isRegularService==true)
-                  {
-                    isRegularService=false;
-                  }
-                  else
-                  {
-                    isRegularService=true;
+                  if (isRegularService == true) {
+                    isRegularService = false;
+                  } else {
+                    isRegularService = true;
                   }
                 });
               },
@@ -586,7 +587,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: const Text('Regular Services',
+                    child: Text(
+                      'Regular Services',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
@@ -594,124 +596,196 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     ),
                   ),
                   const Spacer(),
-                  Icon(isRegularService==true?Icons.keyboard_arrow_down_rounded:Icons.keyboard_arrow_right, color: CustColors.light_navy,size: 30,),
+                  Icon(
+                    isRegularService == true
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.keyboard_arrow_right,
+                    color: CustColors.light_navy,
+                    size: 30,
+                  ),
                 ],
               ),
             ),
           ),
         ),
-        isRegularService==true
-            ? Container(
-                child: StreamBuilder(
-                    stream:  _homeCustomerBloc.regularServiceListResponse,
-                    builder: (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
-                      print("${snapshot.hasData}");
-                      print("${snapshot.connectionState}");
-                      print("+++++++++++++++${snapshot.data?.data?.categoryList?.length}++++++++++++++++");
+        isRegularService == true
+            ? StreamBuilder(
+                stream: _homeCustomerBloc.regularServiceListResponse,
+                builder:
+                    (context, AsyncSnapshot<CategoryListHomeMdl> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.light_navy),
+                      );
+                    default:
+                      return
+                              snapshot.data?.data?.categoryList?.length != null
+                          ? GridView.builder(
+                              itemCount:
+                                  snapshot.data?.data?.categoryList?.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4,
+                                childAspectRatio: .9,
+                                crossAxisSpacing: .05,
+                                mainAxisSpacing: .05,
+                              ),
+                              itemBuilder: (
+                                context,
+                                index,
+                              ) {
+                                return GestureDetector(
+                                  onTap: () async {
+                                    SharedPreferences shdPre =
+                                        await SharedPreferences.getInstance();
 
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return const CircularProgressIndicator(
-                            valueColor:  AlwaysStoppedAnimation<Color>(
-                                CustColors.light_navy),
-                          );
-                        default:
-                          return
-                            snapshot.data?.data?.categoryList?.length != 0 && snapshot.data?.data?.categoryList?.length != null
-                                ? GridView.builder(
-                                  itemCount:snapshot.data?.data?.categoryList?.length,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    childAspectRatio: .9,
-                                    crossAxisSpacing: .05,
-                                    mainAxisSpacing: .05,
-                                  ),
-                                  itemBuilder: (context,index,) {
-                                    return GestureDetector(
-                                      onTap:() async {
-                                        SharedPreferences shdPre = await SharedPreferences.getInstance();
+                                    serviceIds =
+                                        '${snapshot.data?.data?.categoryList![index].id}';
 
-                                        print(">>>>>>>>>> Latitude  ${shdPre.getString(SharedPrefKeys.preferredLatitude,)}");
-                                        print(">>>>>>>>>> Longitude  ${shdPre.getString(SharedPrefKeys.preferredLongitude,)}");
-                                        print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                                        print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
+                                    if (shdPre
+                                                .getString(
+                                                  SharedPrefKeys
+                                                      .preferredLatitude,
+                                                )
+                                                .toString() !=
+                                            "null" &&
+                                        shdPre
+                                                .getString(
+                                                  SharedPrefKeys
+                                                      .preferredLatitude,
+                                                )
+                                                .toString() !=
+                                            "") {
+                                      GetAddressString(LatLng(
+                                          double.parse(shdPre
+                                              .getString(
+                                                SharedPrefKeys
+                                                    .preferredLatitude,
+                                              )
+                                              .toString()),
+                                          double.parse(shdPre
+                                              .getString(
+                                                SharedPrefKeys
+                                                    .preferredLongitude,
+                                              )
+                                              .toString())));
 
-                                        serviceIds = '${snapshot.data?.data?.categoryList![index].id}';
-                                        print(">>>>>>>>>> ServiceId  $serviceIds");
-
-                                        if(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString() != "null"
-                                        && shdPre.getString(SharedPrefKeys.preferredLatitude,).toString() != ""){
-                                          GetAddressString(LatLng(
-                                              double.parse(shdPre.getString(SharedPrefKeys.preferredLatitude,).toString()),
-                                              double.parse(shdPre.getString(SharedPrefKeys.preferredLongitude,).toString())));
-
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>  AddMoreRegularServicesListScreen(
-                                                    categoryList: snapshot.data?.data?.categoryList![index],
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddMoreRegularServicesListScreen(
+                                                    categoryList: snapshot
+                                                        .data
+                                                        ?.data
+                                                        ?.categoryList![index],
                                                     isAddService: true,
                                                     isReturnData: false,
-                                                    latitude: shdPre.getString(SharedPrefKeys.preferredLatitude,).toString(),
-                                                    longitude: shdPre.getString(SharedPrefKeys.preferredLongitude,).toString(),
-                                                    address: addressLocationText,
-                                                    isFromScheduleServicePage: false,
+                                                    latitude: shdPre
+                                                        .getString(
+                                                          SharedPrefKeys
+                                                              .preferredLatitude,
+                                                        )
+                                                        .toString(),
+                                                    longitude: shdPre
+                                                        .getString(
+                                                          SharedPrefKeys
+                                                              .preferredLongitude,
+                                                        )
+                                                        .toString(),
+                                                    address:
+                                                        addressLocationText,
+                                                    isFromScheduleServicePage:
+                                                        false,
                                                   )));
-                                        }else{
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>  AddMoreRegularServicesListScreen(
-                                                    categoryList: snapshot.data?.data?.categoryList![index],
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddMoreRegularServicesListScreen(
+                                                    categoryList: snapshot
+                                                        .data
+                                                        ?.data
+                                                        ?.categoryList![index],
                                                     isAddService: true,
                                                     isReturnData: false,
                                                     latitude: CurrentLatitude,
                                                     longitude: CurrentLongitude,
                                                     address: Address,
-                                                    isFromScheduleServicePage: false,
+                                                    isFromScheduleServicePage:
+                                                        false,
                                                   )));
-                                        }
-                                      },
-                                      child: Container(
-                                        child: Column(
-                                          mainAxisAlignment:MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  color: CustColors.whiteBlueish,
-                                                  borderRadius: BorderRadius.circular(11.0)
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(15),
-                                                child: snapshot.data?.data?.categoryList?[index].icon.toString() != "" && snapshot.data?.data?.categoryList?[index].icon.toString() != "null"
-                                                    ? Image.network(snapshot.data?.data?.categoryList?[index].icon,
-                                                    width: 35,
-                                                    fit: BoxFit.cover,)
-                                                    : const Icon(Icons.miscellaneous_services_outlined,size: 35,color: CustColors.light_navy,),
-                                                //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.all(2),
-                                              child: Text('${snapshot.data?.data?.categoryList![index].catName}',
-                                                style: Styles.textLabelTitleEmergencyServiceName,
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                overflow: TextOverflow.visible,),
-                                            ),
-                                          ],
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: CustColors.whiteBlueish,
+                                            borderRadius:
+                                                BorderRadius.circular(11.0)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: snapshot
+                                                          .data
+                                                          ?.data
+                                                          ?.categoryList?[
+                                                              index]
+                                                          .icon
+                                                          .toString() !=
+                                                      "" &&
+                                                  snapshot
+                                                          .data
+                                                          ?.data
+                                                          ?.categoryList?[
+                                                              index]
+                                                          .icon
+                                                          .toString() !=
+                                                      "null"
+                                              ? Image.network(
+                                                  snapshot
+                                                      .data
+                                                      ?.data
+                                                      ?.categoryList?[index]
+                                                      .icon,
+                                                  width: 35,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : const Icon(
+                                                  Icons
+                                                      .miscellaneous_services_outlined,
+                                                  size: 35,
+                                                  color:
+                                                      CustColors.light_navy,
+                                                ),
                                         ),
                                       ),
-                                    );
-                                  },
+                                      Padding(
+                                        padding: const EdgeInsets.all(2),
+                                        child: Text(
+                                          '${snapshot.data?.data?.categoryList![index].catName}',
+                                          style: Styles
+                                              .textLabelTitleEmergencyServiceName,
+                                          maxLines: 2,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.visible,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             )
-                                : Container();
-                      }
-                    }
-                ),
-              )
+                          : Container();
+                  }
+                })
             : Container()
       ],
     );
@@ -719,14 +793,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget upcomingServices() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,20,0,0),
+      padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text('Upcoming Services',
+            child: Text(
+              'Upcoming Services',
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
@@ -739,7 +814,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             child: ListView.builder(
               itemCount: imageList.length,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, i, ){
+              itemBuilder: (
+                context,
+                i,
+              ) {
                 //for onTap to redirect to another screen
                 return Padding(
                   padding: const EdgeInsets.all(5),
@@ -751,8 +829,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           width: 250,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.white,)
-                          ),
+                              border: Border.all(
+                                color: Colors.white,
+                              )),
                           //ClipRRect for image border radius
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
@@ -764,11 +843,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                         ),
                       ],
                     ),
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  const SparePartsListScreen()));
+                              builder: (context) =>
+                                  const SparePartsListScreen()));
                     },
                   ),
                 );
@@ -782,14 +862,15 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget sparePartsServices() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,0,0),
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text('Spareparts for your models ',
+            child: Text(
+              'Spare parts for your models ',
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
@@ -802,8 +883,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             child: ListView.builder(
               itemCount: imageList.length,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, i, ){
-                //for onTap to redirect to another screen
+              itemBuilder: (
+                context,
+                i,
+              ) {
                 return Padding(
                   padding: const EdgeInsets.all(5),
                   child: InkWell(
@@ -814,9 +897,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           width: 150,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.white,)
-                          ),
-                          //ClipRRect for image border radius
+                              border: Border.all(
+                                color: Colors.white,
+                              )),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: Image.network(
@@ -828,11 +911,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                         const Text('Gear'),
                       ],
                     ),
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  const SparePartsListScreen()));
+                              builder: (context) =>
+                                  const SparePartsListScreen()));
                     },
                   ),
                 );
@@ -844,6 +928,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
+
+
+
+
+
+
+
+
   Widget circleBar(bool isActive) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
@@ -852,12 +944,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       width: isActive ? 30 : 25,
       decoration: BoxDecoration(
           color: isActive ? Colors.white : CustColors.whiteBlueish,
-          borderRadius: const BorderRadius.all(const Radius.circular(12))),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
     );
   }
 
-  Widget setupAlertDialogMonthAndYear(Service? service,CategoryList? categoryList, Size size ) {
-    return Container(
+  Widget setupAlertDialogMonthAndYear(
+      Service? service, CategoryList? categoryList, Size size) {
+    return SizedBox(
       height: 335, // Change as per your requirement
       child: Column(
         children: [
@@ -866,161 +959,132 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               height: 50,
               color: CustColors.light_navy,
               alignment: Alignment.center,
-              child: Text(service!.serviceName,
-                style: Styles.textButtonLabelSubTitle,)
-          ),
+              child: Text(
+                service!.serviceName,
+                style: Styles.textButtonLabelSubTitle,
+              )),
           Container(
             padding: EdgeInsets.only(
-              top: size.height * 2.5 / 100,
-              bottom: size.height * 2.5 / 100,
-              left: size.width * 4 / 100,
-              right: size.width * 4 / 100
-            ),
+                top: size.height * 2.5 / 100,
+                bottom: size.height * 2.5 / 100,
+                left: size.width * 4 / 100,
+                right: size.width * 4 / 100),
             child: Row(
-             children: [
-               Container(
-                 padding: EdgeInsets.only(
-                   top: size.height * 1.5 / 100,
-                   bottom: size.height * 1.5 / 100,
-                   left: size.width * 2 / 100,
-                   right: size.width * 2 / 100
-                 ),
-                 decoration: Styles.serviceIconBoxDecorationStyle,
-                 child: Icon(choices[0].icon, size: 35, color: CustColors.light_navy,),
-               ),
-               SizedBox(
-                 width: size.width * 8 / 100,
-               ),
-               Container(
-                 child: Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     const Text("Estimated cost",
-                       style: TextStyle(
-                         fontSize: 18,
-                         color: Colors.black,
-                         fontFamily: "Samsung_SharpSans_Medium",
-                         fontWeight: FontWeight.w600,
-                         letterSpacing: .6,
-                         height: 1.7
-                       ),
-                     ),
-                     Text("₦ "+ service.minPrice,
-                       style: const TextStyle(
-                           fontSize: 22,
-                           color: Colors.black,
-                           fontFamily: "SharpSans_Bold",
-                           fontWeight: FontWeight.w600,
-                           letterSpacing: .6,
-                           height: 1.7
-                       ),
-                     )
-                   ],
-                 ),
-               )
-             ],
+              children: [
+                SizedBox(
+                  width: size.width * 8 / 100,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Estimated cost",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontFamily: "Samsung_SharpSans_Medium",
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: .6,
+                          height: 1.7),
+                    ),
+                    Text(
+                      "₦ " + service.minPrice,
+                      style: const TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                          fontFamily: "SharpSans_Bold",
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: .6,
+                          height: 1.7),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
-          
           InfoTextWidget(size),
-
           Container(
-            margin: EdgeInsets.only(
-                //left: size.width * 4 / 100,
-                //right: size.width * 4 / 100,
-                top: size.height * 1.5 / 100
-            ),
+            margin: EdgeInsets.only(top: size.height * 1.5 / 100),
             child: _isLoading
                 ? Center(
-                    child: Container(
+                    child: SizedBox(
                       height: _setValue(28),
                       width: _setValue(28),
                       child: const CircularProgressIndicator(
-                        valueColor: const AlwaysStoppedAnimation<Color>(
+                        valueColor: AlwaysStoppedAnimation<Color>(
                             CustColors.light_navy),
                       ),
                     ),
                   )
                 : MaterialButton(
-                  onPressed: () async {
-                    //_getCurrentCustomerLocation(false);
+                    onPressed: () async {
+                      //_getCurrentCustomerLocation(false);
 
-                    SharedPreferences shdPre = await SharedPreferences.getInstance();
+                      SharedPreferences shdPre =
+                          await SharedPreferences.getInstance();
 
-                    print(">>>>>>>>>> Latitude  $CurrentLatitude");
-                    print(">>>>>>>>>> Longitude  $CurrentLongitude");
-                    print(">>>>>>>>>> Date  ${_homeCustomerBloc.dateConvert(DateTime.now())}");
-                    print(">>>>>>>>>> Time  ${_homeCustomerBloc.timeConvert(DateTime.now())}");
-                    serviceIds = '${service.id}';
-                    print(">>>>>>>>>> ServiceId  $serviceIds");
+                      serviceIds = service.id;
 
-                    if(serviceIdEmergency.toString() == '$serviceIds' )
-                    {
-                      print('serviceIdEmergency>>>>>>>>==11111' + serviceIdEmergency.toString());
+                      if (serviceIdEmergency.toString() == serviceIds) {
+                      } else {
+                        shdPre.setString(SharedPrefKeys.serviceIdEmergency, "");
+                        shdPre.setString(
+                            SharedPrefKeys.mechanicIdEmergency, "");
+                        shdPre.setString(SharedPrefKeys.bookingIdEmergency, "");
+                      }
+                      GetAddressString(LatLng(double.parse(CurrentLatitude),
+                          double.parse(CurrentLongitude)));
 
-                    }
-                    else
-                    {
-                      shdPre.setString(SharedPrefKeys.serviceIdEmergency, "");
-                      shdPre.setString(SharedPrefKeys.mechanicIdEmergency, "");
-                      shdPre.setString(SharedPrefKeys.bookingIdEmergency, "");
-
-                      print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
-                    }
-                    GetAddressString(LatLng(double.parse(CurrentLatitude), double.parse(CurrentLongitude)));
-
-                    Navigator.pop(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  FindMechanicListScreen(
-                              serviceIds: serviceIds,
-                              serviceType: 'emergency',
-                              customerAddress: addressLocationText,
-                              latitude: CurrentLatitude,
-                              longitude: CurrentLongitude,
-                              authToken: authToken,)));
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(
-                      left: size.width * 2.5 / 100,
-                      right: size.width * 2.5 / 100,
-                      top: size.height * 1 / 100,
-                      bottom: size.height * 1 / 100
-                    ),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FindMechanicListScreen(
+                                    serviceIds: serviceIds,
+                                    serviceType: 'emergency',
+                                    customerAddress: addressLocationText,
+                                    latitude: CurrentLatitude,
+                                    longitude: CurrentLongitude,
+                                    authToken: authToken,
+                                  )));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                          left: size.width * 2.5 / 100,
+                          right: size.width * 2.5 / 100,
+                          top: size.height * 1 / 100,
+                          bottom: size.height * 1 / 100),
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(6),
+                          ),
+                          color: CustColors.light_navy),
+                      child: const Text(
+                        'Find available mechanics ',
+                        textAlign: TextAlign.center,
+                        style: Styles.textButtonLabelSubTitle,
                       ),
-                        color: CustColors.light_navy
-                    ),
-                    child: const Text(
-                      'Find available mechanics ',
-                      textAlign: TextAlign.center,
-                      style: Styles.textButtonLabelSubTitle,
                     ),
                   ),
-                ),
           ),
         ],
       ),
     );
   }
 
-  Widget InfoTextWidget(Size size){
+  Widget InfoTextWidget(Size size) {
     return Container(
       decoration: Styles.boxDecorationStyle,
       margin: EdgeInsets.only(
           left: size.width * 4 / 100,
           right: size.width * 4 / 100,
-          top: size.height * .2 / 100
-      ),
+          top: size.height * .2 / 100),
       padding: EdgeInsets.only(
-          top: size.height * 1 / 100,
-          bottom: size.height * 1 / 100,
-          right: size.width * 2.3 / 100,
+        top: size.height * 1 / 100,
+        bottom: size.height * 1 / 100,
+        right: size.width * 2.3 / 100,
       ),
       child: Row(
         children: [
@@ -1029,8 +1093,11 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               left: size.width * 2 / 100,
               right: size.width * 2.5 / 100,
             ),
-            child: SvgPicture.asset("assets/image/ic_info_blue_white.svg",
-              height: size.height * 2.5 / 100,width: size.width * 2.5 / 100,),
+            child: SvgPicture.asset(
+              "assets/image/ic_info_blue_white.svg",
+              height: size.height * 2.5 / 100,
+              width: size.width * 2.5 / 100,
+            ),
           ),
           Expanded(
             child: Text(
@@ -1045,27 +1112,17 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
   TextStyle warningTextStyle01 = const TextStyle(
-    fontSize: 12,
-    fontFamily: "Samsung_SharpSans_Regular",
-    fontWeight: FontWeight.w400,
-    color: Colors.black,
-    letterSpacing: .7,
-    wordSpacing: .7
-  );
-
-}
-
-class Choice {
-  const Choice({required this.title, required this.icon});
-  final String title;
-  final IconData icon;
+      fontSize: 12,
+      fontFamily: "Samsung_SharpSans_Regular",
+      fontWeight: FontWeight.w400,
+      color: Colors.black,
+      letterSpacing: .7,
+      wordSpacing: .7);
 }
 
 
 
 class MyBehavior extends ScrollBehavior {
-
-
   @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
