@@ -87,6 +87,8 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   will_tabbar: ^1.0.4
   duration_picker: ^1.1.0+1
+  flutter_bloc: ^8.1.1
+  equatable: ^2.0.3
 
 
 
