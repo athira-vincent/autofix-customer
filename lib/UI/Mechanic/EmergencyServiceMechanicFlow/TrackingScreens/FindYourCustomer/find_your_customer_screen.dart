@@ -62,7 +62,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   LatLng startLocation = LatLng(10.0159, 76.3419);
   LatLng endLocation = LatLng(10.0443, 10.0443);
   late BitmapDescriptor mechanicIcon;
-  CameraPosition? _kGooglePlex = CameraPosition(
+  CameraPosition? _kGooglePlex = const  CameraPosition(
     target: LatLng(37.778259000,
       -122.391386000,),
     zoom: 25,
@@ -73,7 +73,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   double _setValue(double value) {
     return value * per + value;
   }
-  static const LatLng _center = const LatLng(10.0159, 76.3419);
+  static const LatLng _center =  LatLng(10.0159, 76.3419);
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
@@ -90,9 +90,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     getGoogleMapCameraPosition(LatLng(double.parse(widget.latitude.toString()),
         double.parse(widget.longitude.toString())));
     _getCurrentLocation();
-    Timer.periodic(Duration(seconds: 20), (Timer t) {
-      _getCurrentLocation();
-    });
+
     getSharedPrefData();
     _listenServiceListResponse();
   }
@@ -170,6 +168,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId="1685";
       print('userFamilyId FindYourCustomerScreen '+authToken.toString());
       print('bookingId FindYourCustomerScreen '+bookingId.toString());
       updateToCloudFirestoreMechanicCurrentScreenDB();
@@ -220,7 +219,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
 
-    Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.lowest, distanceFilter: 6)).listen((event) {
+    Geolocator.getPositionStream(locationSettings:const LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 6)).listen((event) {
       var value1 = event;
       setState(() {
         _firestore
@@ -424,6 +423,9 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Timer.periodic(Duration(seconds: 20), (Timer t) {
+      _getCurrentLocation();
+    });
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
