@@ -1,12 +1,14 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Common/Location/change_location.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -17,8 +19,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../SearchService/search_service_screen.dart';
+//import '../../../../../../Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart' as customerCompletedOrdersListMdl ;
+import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart' as customerCompletedOrdersListMdl ;
 
 class HomeCustomerUIScreen extends StatefulWidget {
 
@@ -37,9 +42,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   TextEditingController searchController = new TextEditingController();
   late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
+  customerCompletedOrdersListMdl.Data? CustomerUpcomingServicesList;
 
   String? filter;
-  String authToken="",profileImageUrl = "";
+  String authToken="",profileImageUrl = "", userID="";
 
   String serviceIdEmergency="";
   String mechanicIdEmergency="";
@@ -87,6 +93,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   }
 
   bool _isLoading = false;
+  bool isLoadingUpcomingServices = true;
 
   @override
   void didChangeDependencies() {
@@ -128,7 +135,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-
+      userID = shdPre.getString(SharedPrefKeys.userID).toString();
       preferredLatitude = shdPre.getString(SharedPrefKeys.preferredLatitude).toString() ;
       preferredLongitude = shdPre.getString(SharedPrefKeys.preferredLongitude).toString() ;
       preferredAddress = shdPre.getString(SharedPrefKeys.preferredAddress).toString() ;
@@ -163,6 +170,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
       _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1", null, null);
       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
+      _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "1", "$userID");
 
     });
   }
@@ -195,6 +203,22 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
         });
       }
+    });
+
+    _homeCustomerBloc.postCustomerUpcomingOrdersResponse.listen((value) {
+      if (value.status == "error") {
+        setState(() {
+          isLoadingUpcomingServices = false;
+        });
+
+      } else {
+
+        setState(() {
+          isLoadingUpcomingServices = false;
+          CustomerUpcomingServicesList = value.data;
+        });
+      }
+
     });
   }
 
@@ -298,7 +322,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 serviceBanners(),
                 emergencyService(size),
                 regularService(),
-                //upcomingServices(),
+                upcomingServices(size),
                 //sparePartsServices()
               ],
             ),
@@ -717,9 +741,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
-  Widget upcomingServices() {
+  Widget upcomingServices(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10,20,0,0),
+      padding: const EdgeInsets.fromLTRB(9,1,0,0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -734,45 +758,65 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             ),
           ),
           Container(
-            height: 200,
+            height: 160,
             margin: const EdgeInsets.all(0),
-            child: ListView.builder(
-              itemCount: imageList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, i, ){
-                //for onTap to redirect to another screen
-                return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: InkWell(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 180,
-                          width: 250,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.white,)
-                          ),
-                          //ClipRRect for image border radius
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.network(
-                              imageList[i],
-                              fit: BoxFit.cover,
+            child: Stack(
+              children: [
+                StreamBuilder(
+                    stream:  _homeCustomerBloc.postCustomerUpcomingOrdersResponse,
+                    builder: (context, AsyncSnapshot<customerCompletedOrdersListMdl.CustomerCompletedOrdersListMdl> snapshot) {
+                      print("${snapshot.hasData}");
+                      print("${snapshot.connectionState}");
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height,
+                              alignment: Alignment.center,
+                              child: const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustColors.light_navy),
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
+                          );
+                        default:
+                          return
+                            snapshot.data?.data?.custCompletedOrders?.length != 0 && snapshot.data?.data?.custCompletedOrders?.length != null
+                                ? upcomingServicesList(size,snapshot,context)
+                                : Container(
+                              margin: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(25),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                  ),
+                                  color: CustColors.white_04
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/image/img_empty_service_list.svg",
+                                //fit: BoxFit.contain,
+                              ),
+                            );
+                      }
+                    }
+                ),
+                Visibility(
+                  visible: isLoadingUpcomingServices,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            CustColors.light_navy),
+                      ),
                     ),
-                    onTap: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>  const SparePartsListScreen()));
-                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ],
@@ -840,6 +884,196 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget upcomingServicesList(Size size, AsyncSnapshot<customerCompletedOrdersListMdl.CustomerCompletedOrdersListMdl> snapshot,BuildContext context){
+    return  Container(
+      child: ListView.builder(
+          itemCount: snapshot.data?.data?.custCompletedOrders?.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context1, i, ){
+            return Padding(
+              padding: const EdgeInsets.only(
+                left: 5,),
+              child: InkWell(
+                onTap: (){
+                  setState(() {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CustServiceRegularDetailsScreen(
+                            bookingId: '${CustomerUpcomingServicesList?.custCompletedOrders?[i].id}',
+                            firebaseCollection: CustomerUpcomingServicesList?.custCompletedOrders?[i].regularType.toString() == "1"
+                                ? TextStrings.firebase_pick_up :
+                            CustomerUpcomingServicesList?.custCompletedOrders?[i].regularType.toString() == "2"
+                                ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
+                          ),
+                        ));
+                   /* Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MechServiceRegularDetailsScreen(
+                            bookingId: snapshot.data!.data!.upcomingCompletedServices![i].id.toString(),
+                            firebaseCollection: snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "1"
+                                ? TextStrings.firebase_pick_up :
+                            snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
+                                ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
+                          ),
+                        ));*/
+                  });
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      height: 160,
+                      width: 250,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.white,)
+                      ),
+                      //ClipRRect for image border radius
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Stack(
+                          children: [
+                            Image.asset("assets/image/img_mech_home_service_bg.png"),
+                            Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: size.width * 2 / 100,
+                                    right: size.width * 2 / 100,
+                                    top: size.height * 3 / 100,
+                                    //bottom: size.height * 2 / 100,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        _homeCustomerBloc.dateConverter(snapshot.data!.data!.custCompletedOrders![i].bookedDate!),
+                                        // "02-12-2021",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 15
+                                        ),),
+                                      Text(
+                                        _homeCustomerBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.custCompletedOrders![i].bookedTime)).toString(),
+                                        //"09:30 AM",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 15),)
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: size.width * 2 / 100,
+                                    right: size.width * 2 / 100,
+                                    top: size.height * 3 / 100,
+                                    //bottom: size.height * 2.5 / 100,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Service from " +
+                                            snapshot.data!.data!.custCompletedOrders![i].mechanic!.firstName.toString(),
+                                        //"Service from Eric John. ",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 12
+                                        ),),
+
+                                      Text(
+                                        " [ " +
+                                            snapshot.data!.data!.custCompletedOrders![i].vehicle!.brand.toString()
+                                            + " ] ",
+                                        //" [ HONDA CITY ]",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 11
+                                        ),)
+                                    ],
+                                  ),
+                                ),
+                                snapshot.data!.data!.custCompletedOrders![i].reqType.toString() == "1"
+                                 ?
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: size.width * 2 / 100,
+                                    right: size.width * 2 / 100,
+                                    top: size.height * 3 / 100,
+                                    //bottom: size.height * 2.5 / 100,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: const [
+                                      Text(
+                                        "Emergency Service" ,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 10
+                                        ),),
+                                    ],
+                                  ),
+                                )
+                                :
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    left: size.width * 2 / 100,
+                                    right: size.width * 2 / 100,
+                                    top: size.height * 3 / 100,
+                                    //bottom: size.height * 2.5 / 100,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        "Regular Service" ,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 10
+                                        ),),
+
+                                      Text(
+                                        snapshot.data!.data!.custCompletedOrders![i].regularType.toString() == "1"
+                                            ? "Pick Up & Drop Off" :
+                                        snapshot.data!.data!.custCompletedOrders![i].regularType.toString() == "2"
+                                            ? "Mobile Mechanic" : "Take Vehicle to Mechanic",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "SharpSans_Bold",
+                                            color: Colors.white,
+                                            fontSize: 10
+                                        ),)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
       ),
     );
   }
