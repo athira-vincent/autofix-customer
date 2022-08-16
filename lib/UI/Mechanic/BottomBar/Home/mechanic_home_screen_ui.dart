@@ -533,6 +533,30 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                       ],
                                     ),
                                   ),
+                                  snapshot.data!.data!.upcomingCompletedServices![i].reqType.toString() == "1"
+                                      ?
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      left: size.width * 2 / 100,
+                                      right: size.width * 2 / 100,
+                                      top: size.height * 3 / 100,
+                                      //bottom: size.height * 2.5 / 100,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: const [
+                                        Text(
+                                          "Emergency Service" ,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "SharpSans_Bold",
+                                              color: Colors.white,
+                                              fontSize: 10
+                                          ),),
+                                      ],
+                                    ),
+                                  )
+                                      :
                                   Container(
                                     margin: EdgeInsets.only(
                                       left: size.width * 2 / 100,

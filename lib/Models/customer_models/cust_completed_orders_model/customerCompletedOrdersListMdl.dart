@@ -66,6 +66,7 @@ class CustCompletedOrder {
     required this.totalExt,
     required this.extendTime,
     required this.bookedDate,
+    required this.bookedTime,
     required this.isRated,
     required this.status,
     required this.customerId,
@@ -96,6 +97,7 @@ class CustCompletedOrder {
   dynamic totalExt;
   dynamic extendTime;
   DateTime? bookedDate;
+  String bookedTime;
   int isRated;
   int status;
   int customerId;
@@ -126,6 +128,7 @@ class CustCompletedOrder {
     totalExt: json["totalExt"],
     extendTime: json["extendTime"],
     bookedDate: json["bookedDate"] == null ? null : DateTime.parse(json["bookedDate"]),
+    bookedTime: json["bookedTime"] == null ? null : json["bookedTime"],
     isRated: json["isRated"] == null ? null : json["isRated"],
     status: json["status"] == null ? null : json["status"],
     customerId: json["customerId"] == null ? null : json["customerId"],
@@ -157,6 +160,7 @@ class CustCompletedOrder {
     "totalExt": totalExt,
     "extendTime": extendTime,
     "bookedDate": bookedDate == null ? null : bookedDate?.toIso8601String(),
+    "bookedTime": bookedTime == null ? null : bookedTime,
     "isRated": isRated == null ? null : isRated,
     "status": status == null ? null : status,
     "customerId": customerId == null ? null : customerId,
