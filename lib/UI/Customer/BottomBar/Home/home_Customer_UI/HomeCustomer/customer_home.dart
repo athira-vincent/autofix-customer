@@ -6,12 +6,16 @@ import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_bloc.dart';
 import 'package:auto_fix/UI/Common/Location/change_location.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Bloc/home_customer_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_event.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_state.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicList/EmergencyFindMechanicList/find_mechanic_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/AddRegularMoreServices/add_more_regular_service_list_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/ServiceDetailsScreens/cust_service_regular_details_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,11 +23,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../SearchService/search_service_screen.dart';
+
 //import '../../../../../../Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart' as customerCompletedOrdersListMdl ;
-import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart' as customerCompletedOrdersListMdl ;
+import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart'
+    as customerCompletedOrdersListMdl;
 
 class HomeCustomerUIScreen extends StatefulWidget {
-   HomeCustomerUIScreen();
+  HomeCustomerUIScreen();
 
   @override
   State<StatefulWidget> createState() {
@@ -35,12 +41,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   final HomeCustomerBloc _homeCustomerBloc = HomeCustomerBloc();
 
   TextEditingController searchController = new TextEditingController();
-  late final FirebaseMessaging  _messaging = FirebaseMessaging.instance;
+  late final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   FcmTokenUpdateBloc _fcmTokenUpdateBloc = FcmTokenUpdateBloc();
   customerCompletedOrdersListMdl.Data? CustomerUpcomingServicesList;
 
+  final SparePartBloc _sparepartbloc = SparePartBloc();
+
   String? filter;
-  String authToken="",profileImageUrl = "", userID="";
+  String authToken = "", profileImageUrl = "", userID = "";
 
   String serviceIdEmergency = "";
   String mechanicIdEmergency = "";
@@ -115,14 +123,20 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userID = shdPre.getString(SharedPrefKeys.userID).toString();
-      preferredLatitude = shdPre.getString(SharedPrefKeys.preferredLatitude).toString() ;
-      preferredLongitude = shdPre.getString(SharedPrefKeys.preferredLongitude).toString() ;
-      preferredAddress = shdPre.getString(SharedPrefKeys.preferredAddress).toString() ;
+      preferredLatitude =
+          shdPre.getString(SharedPrefKeys.preferredLatitude).toString();
+      preferredLongitude =
+          shdPre.getString(SharedPrefKeys.preferredLongitude).toString();
+      preferredAddress =
+          shdPre.getString(SharedPrefKeys.preferredAddress).toString();
 
-      if( (preferredLatitude.toString() != "" && preferredLatitude.toString() != "null")
-          && (preferredLongitude.toString() != "" && preferredLongitude.toString() != "null")){
-        GetAddressFromLatLong(LatLng(double.parse(preferredLatitude), double.parse(preferredLongitude)));
-      }else{
+      if ((preferredLatitude.toString() != "" &&
+              preferredLatitude.toString() != "null") &&
+          (preferredLongitude.toString() != "" &&
+              preferredLongitude.toString() != "null")) {
+        GetAddressFromLatLong(LatLng(
+            double.parse(preferredLatitude), double.parse(preferredLongitude)));
+      } else {
         _getCurrentCustomerLocation(true);
       }
 
@@ -136,21 +150,22 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           shdPre.getString(SharedPrefKeys.profileImageUrl).toString();
 
       setFcmToken(authToken);
-      if(serviceIdEmergency.toString() != 'null'  && serviceIdEmergency.toString() != "" )
-        {
-          print('serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
-        }
-      else
-        {
-          print('serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
-        }
+      if (serviceIdEmergency.toString() != 'null' &&
+          serviceIdEmergency.toString() != "") {
+        print(
+            'serviceIdEmergency>>>>>>>>11111' + serviceIdEmergency.toString());
+      } else {
+        print(
+            'serviceIdEmergency>>>>>>>>000000' + serviceIdEmergency.toString());
+      }
 
-      _homeCustomerBloc.postEmergencyServiceListRequest("$authToken", "1", null, null);
-      _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
-      _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "1", "$userID");
-
-
-
+      _homeCustomerBloc.postEmergencyServiceListRequest(
+          "$authToken", "1", null, null);
+      _homeCustomerBloc.postRegularServiceListRequest(
+          "$authToken", "2", null, null);
+      _homeCustomerBloc.postCustomerUpcomingOrdersRequest(
+          authToken, 300, "1", "$userID");
+      //_sparepartbloc.
     });
   }
 
@@ -176,15 +191,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         setState(() {
           isLoadingUpcomingServices = false;
         });
-
       } else {
-
         setState(() {
           isLoadingUpcomingServices = false;
           CustomerUpcomingServicesList = value.data;
         });
       }
-
     });
   }
 
@@ -202,7 +214,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     if (isChangeAddress) {
       GetAddressFromLatLong(LatLng(position.latitude, position.longitude));
     } else {}
-
   }
 
   Future<Position> _getGeoLocationPosition() async {
@@ -211,7 +222,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-
       await Geolocator.openLocationSettings();
       return Future.error('Location services are disabled.');
     }
@@ -228,7 +238,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-
 
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -267,6 +276,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => SparePartBloc()..add(FetchSparePartEvent("null")),
+          ),
+        ],
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
@@ -282,8 +297,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             ),
           ),
         ),
-      );
-
+      ),
+    );
   }
 
   Widget searchYouService(BuildContext context, Size size) {
@@ -310,9 +325,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             Border.all(width: 1, color: CustColors.light_navy)),
                     child: Row(
                       children: const [
-                         Icon(Icons.search_rounded,
+                        Icon(Icons.search_rounded,
                             color: CustColors.light_navy),
-                         Text('Search your Services'),
+                        Text('Search your Services'),
                       ],
                     ),
                   ),
@@ -453,13 +468,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             CustColors.light_navy),
                       );
                     default:
-                      return
-                              snapshot.data?.data?.categoryList?[0].service
-                                      ?.length !=
-                                  null
+                      return snapshot.data?.data?.categoryList?[0].service
+                                  ?.length !=
+                              null
                           ? GridView.builder(
-                              itemCount: snapshot.data?.data
-                                  ?.categoryList?[0].service?.length,
+                              itemCount: snapshot
+                                  .data?.data?.categoryList?[0].service?.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
@@ -484,11 +498,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                             return AlertDialog(
                                               contentPadding:
                                                   const EdgeInsets.all(0.0),
-                                              content: StatefulBuilder(
-                                                  builder:
-                                                      (BuildContext context,
-                                                          StateSetter
-                                                              monthYear) {
+                                              content: StatefulBuilder(builder:
+                                                  (BuildContext context,
+                                                      StateSetter monthYear) {
                                                 return setupAlertDialogMonthAndYear(
                                                   snapshot
                                                       .data
@@ -505,36 +517,28 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     });
                                   },
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                            color:
-                                                CustColors.whiteBlueish,
+                                            color: CustColors.whiteBlueish,
                                             borderRadius:
-                                                BorderRadius.circular(
-                                                    11.0)),
+                                                BorderRadius.circular(11.0)),
                                         child: Padding(
-                                            padding:
-                                                const EdgeInsets.all(15),
+                                            padding: const EdgeInsets.all(15),
                                             child: snapshot
                                                             .data
                                                             ?.data
-                                                            ?.categoryList?[
-                                                                0]
-                                                            .service?[
-                                                                index]
+                                                            ?.categoryList?[0]
+                                                            .service?[index]
                                                             .icon
                                                             .toString() !=
                                                         "" ||
                                                     snapshot
                                                             .data
                                                             ?.data
-                                                            ?.categoryList?[
-                                                                0]
-                                                            .service?[
-                                                                index]
+                                                            ?.categoryList?[0]
+                                                            .service?[index]
                                                             .icon
                                                             .toString() !=
                                                         "null"
@@ -642,8 +646,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             CustColors.light_navy),
                       );
                     default:
-                      return
-                              snapshot.data?.data?.categoryList?.length != null
+                      return snapshot.data?.data?.categoryList?.length != null
                           ? GridView.builder(
                               itemCount:
                                   snapshot.data?.data?.categoryList?.length,
@@ -745,8 +748,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     }
                                   },
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
@@ -758,16 +760,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                           child: snapshot
                                                           .data
                                                           ?.data
-                                                          ?.categoryList?[
-                                                              index]
+                                                          ?.categoryList?[index]
                                                           .icon
                                                           .toString() !=
                                                       "" &&
                                                   snapshot
                                                           .data
                                                           ?.data
-                                                          ?.categoryList?[
-                                                              index]
+                                                          ?.categoryList?[index]
                                                           .icon
                                                           .toString() !=
                                                       "null"
@@ -784,8 +784,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                   Icons
                                                       .miscellaneous_services_outlined,
                                                   size: 35,
-                                                  color:
-                                                      CustColors.light_navy,
+                                                  color: CustColors.light_navy,
                                                 ),
                                         ),
                                       ),
@@ -815,7 +814,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget upcomingServices(Size size) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(9,1,0,0),
+      padding: const EdgeInsets.fromLTRB(9, 1, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -836,8 +835,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
             child: Stack(
               children: [
                 StreamBuilder(
-                    stream:  _homeCustomerBloc.postCustomerUpcomingOrdersResponse,
-                    builder: (context, AsyncSnapshot<customerCompletedOrdersListMdl.CustomerCompletedOrdersListMdl> snapshot) {
+                    stream:
+                        _homeCustomerBloc.postCustomerUpcomingOrdersResponse,
+                    builder: (context,
+                        AsyncSnapshot<
+                                customerCompletedOrdersListMdl
+                                    .CustomerCompletedOrdersListMdl>
+                            snapshot) {
                       print("${snapshot.hasData}");
                       print("${snapshot.connectionState}");
                       switch (snapshot.connectionState) {
@@ -854,27 +858,29 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             ),
                           );
                         default:
-                          return
-                            snapshot.data?.data?.custCompletedOrders?.length != 0 && snapshot.data?.data?.custCompletedOrders?.length != null
-                                ? upcomingServicesList(size,snapshot,context)
-                                : Container(
-                              margin: const EdgeInsets.all(10),
-                              padding: const EdgeInsets.all(25),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(7),
-                                  border: Border.all(
-                                    color: Colors.white,
+                          return snapshot.data?.data?.custCompletedOrders
+                                          ?.length !=
+                                      0 &&
+                                  snapshot.data?.data?.custCompletedOrders
+                                          ?.length !=
+                                      null
+                              ? upcomingServicesList(size, snapshot, context)
+                              : Container(
+                                  margin: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(25),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(7),
+                                      border: Border.all(
+                                        color: Colors.white,
+                                      ),
+                                      color: CustColors.white_04),
+                                  child: SvgPicture.asset(
+                                    "assets/image/img_empty_service_list.svg",
+                                    //fit: BoxFit.contain,
                                   ),
-                                  color: CustColors.white_04
-                              ),
-                              child: SvgPicture.asset(
-                                "assets/image/img_empty_service_list.svg",
-                                //fit: BoxFit.contain,
-                              ),
-                            );
+                                );
                       }
-                    }
-                ),
+                    }),
                 Visibility(
                   visible: isLoadingUpcomingServices,
                   child: Align(
@@ -887,7 +893,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             CustColors.light_navy),
                       ),
                     ),
-
                   ),
                 ),
               ],
@@ -915,81 +920,124 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               style: Styles.sparepartsForYourModelsStyle,
             ),
           ),
-          Container(
-            height: 200,
-            margin: const EdgeInsets.all(0),
-            child: ListView.builder(
-              itemCount: imageList.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (
-                context,
-                i,
-              ) {
-                return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: InkWell(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 160,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: Colors.white,
-                              )),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.network(
-                              imageList[i],
-                              fit: BoxFit.cover,
+          BlocBuilder<SparePartBloc, SparePartState>(builder: (context, state) {
+            if (state is SparePartLoadingState) {
+              return const CircularProgressIndicator();
+            } else if (state is SparePartLoadedState) {
+              return Container(
+                height: 200,
+                margin: const EdgeInsets.all(0),
+                child: ListView.builder(
+                  itemCount: state.sparePartsModel.data!.modelDetails.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (
+                    context,
+                    index,
+                  ) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: InkWell(
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 140,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  )),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Image.network(
+                                  state.sparePartsModel.data!
+                                      .modelDetails[index].modelIcon,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
+                            Text(state.sparePartsModel.data!.modelDetails[index]
+                                .modelName),
+                          ],
                         ),
-                        const Text('Gear'),
-                      ],
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SparePartsListScreen()));
+                        },
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else if (state is SparePartErrorState) {
+              return Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
+                  children: const [
+                    SizedBox(
+                      height: 10,
                     ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const SparePartsListScreen()));
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
+                    Text(
+                      "We couldn't connect to the page you are looking for.",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Container();
+            }
+          }),
         ],
       ),
     );
   }
 
-  Widget upcomingServicesList(Size size, AsyncSnapshot<customerCompletedOrdersListMdl.CustomerCompletedOrdersListMdl> snapshot,BuildContext context){
-    return  Container(
+  Widget upcomingServicesList(
+      Size size,
+      AsyncSnapshot<
+              customerCompletedOrdersListMdl.CustomerCompletedOrdersListMdl>
+          snapshot,
+      BuildContext context) {
+    return Container(
       child: ListView.builder(
           itemCount: snapshot.data?.data?.custCompletedOrders?.length,
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context1, i, ){
+          itemBuilder: (
+            context1,
+            i,
+          ) {
             return Padding(
               padding: const EdgeInsets.only(
-                left: 5,),
+                left: 5,
+              ),
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => CustServiceRegularDetailsScreen(
-                            bookingId: '${CustomerUpcomingServicesList?.custCompletedOrders?[i].id}',
-                            firebaseCollection: CustomerUpcomingServicesList?.custCompletedOrders?[i].regularType.toString() == "1"
-                                ? TextStrings.firebase_pick_up :
-                            CustomerUpcomingServicesList?.custCompletedOrders?[i].regularType.toString() == "2"
-                                ? TextStrings.firebase_mobile_mech : TextStrings.firebase_take_vehicle,
+                            bookingId:
+                                '${CustomerUpcomingServicesList?.custCompletedOrders?[i].id}',
+                            firebaseCollection: CustomerUpcomingServicesList
+                                        ?.custCompletedOrders?[i].regularType
+                                        .toString() ==
+                                    "1"
+                                ? TextStrings.firebase_pick_up
+                                : CustomerUpcomingServicesList
+                                            ?.custCompletedOrders?[i]
+                                            .regularType
+                                            .toString() ==
+                                        "2"
+                                    ? TextStrings.firebase_mobile_mech
+                                    : TextStrings.firebase_take_vehicle,
                           ),
                         ));
-                   /* Navigator.push(
+                    /* Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => MechServiceRegularDetailsScreen(
@@ -1009,14 +1057,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       width: 250,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.white,)
-                      ),
+                          border: Border.all(
+                            color: Colors.white,
+                          )),
                       //ClipRRect for image border radius
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Stack(
                           children: [
-                            Image.asset("assets/image/img_mech_home_service_bg.png"),
+                            Image.asset(
+                                "assets/image/img_mech_home_service_bg.png"),
                             Column(
                               children: [
                                 Container(
@@ -1027,25 +1077,39 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     //bottom: size.height * 2 / 100,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        _homeCustomerBloc.dateConverter(snapshot.data!.data!.custCompletedOrders![i].bookedDate!),
+                                        _homeCustomerBloc.dateConverter(snapshot
+                                            .data!
+                                            .data!
+                                            .custCompletedOrders![i]
+                                            .bookedDate!),
                                         // "02-12-2021",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: "SharpSans_Bold",
                                             color: Colors.white,
-                                            fontSize: 15
-                                        ),),
+                                            fontSize: 15),
+                                      ),
                                       Text(
-                                        _homeCustomerBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.custCompletedOrders![i].bookedTime)).toString(),
+                                        _homeCustomerBloc
+                                            .timeConvert(
+                                                new DateFormat("hh:mm:ss")
+                                                    .parse(snapshot
+                                                        .data!
+                                                        .data!
+                                                        .custCompletedOrders![i]
+                                                        .bookedTime))
+                                            .toString(),
                                         //"09:30 AM",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: "SharpSans_Bold",
                                             color: Colors.white,
-                                            fontSize: 15),)
+                                            fontSize: 15),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -1057,90 +1121,119 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     //bottom: size.height * 2.5 / 100,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Service from " +
-                                            snapshot.data!.data!.custCompletedOrders![i].mechanic!.firstName.toString(),
+                                            snapshot
+                                                .data!
+                                                .data!
+                                                .custCompletedOrders![i]
+                                                .mechanic!
+                                                .firstName
+                                                .toString(),
                                         //"Service from Eric John. ",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: "SharpSans_Bold",
                                             color: Colors.white,
-                                            fontSize: 12
-                                        ),),
-
+                                            fontSize: 12),
+                                      ),
                                       Text(
                                         " [ " +
-                                            snapshot.data!.data!.custCompletedOrders![i].vehicle!.brand.toString()
-                                            + " ] ",
+                                            snapshot
+                                                .data!
+                                                .data!
+                                                .custCompletedOrders![i]
+                                                .vehicle!
+                                                .brand
+                                                .toString() +
+                                            " ] ",
                                         //" [ HONDA CITY ]",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontFamily: "SharpSans_Bold",
                                             color: Colors.white,
-                                            fontSize: 11
-                                        ),)
+                                            fontSize: 11),
+                                      )
                                     ],
                                   ),
                                 ),
-                                snapshot.data!.data!.custCompletedOrders![i].reqType.toString() == "1"
-                                 ?
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: size.width * 2 / 100,
-                                    right: size.width * 2 / 100,
-                                    top: size.height * 3 / 100,
-                                    //bottom: size.height * 2.5 / 100,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Text(
-                                        "Emergency Service" ,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "SharpSans_Bold",
-                                            color: Colors.white,
-                                            fontSize: 10
-                                        ),),
-                                    ],
-                                  ),
-                                )
-                                :
-                                Container(
-                                  margin: EdgeInsets.only(
-                                    left: size.width * 2 / 100,
-                                    right: size.width * 2 / 100,
-                                    top: size.height * 3 / 100,
-                                    //bottom: size.height * 2.5 / 100,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        "Regular Service" ,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "SharpSans_Bold",
-                                            color: Colors.white,
-                                            fontSize: 10
-                                        ),),
-
-                                      Text(
-                                        snapshot.data!.data!.custCompletedOrders![i].regularType.toString() == "1"
-                                            ? "Pick Up & Drop Off" :
-                                        snapshot.data!.data!.custCompletedOrders![i].regularType.toString() == "2"
-                                            ? "Mobile Mechanic" : "Take Vehicle to Mechanic",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "SharpSans_Bold",
-                                            color: Colors.white,
-                                            fontSize: 10
-                                        ),)
-                                    ],
-                                  ),
-                                ),
+                                snapshot.data!.data!.custCompletedOrders![i]
+                                            .reqType
+                                            .toString() ==
+                                        "1"
+                                    ? Container(
+                                        margin: EdgeInsets.only(
+                                          left: size.width * 2 / 100,
+                                          right: size.width * 2 / 100,
+                                          top: size.height * 3 / 100,
+                                          //bottom: size.height * 2.5 / 100,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: const [
+                                            Text(
+                                              "Emergency Service",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: "SharpSans_Bold",
+                                                  color: Colors.white,
+                                                  fontSize: 10),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        margin: EdgeInsets.only(
+                                          left: size.width * 2 / 100,
+                                          right: size.width * 2 / 100,
+                                          top: size.height * 3 / 100,
+                                          //bottom: size.height * 2.5 / 100,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              "Regular Service",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: "SharpSans_Bold",
+                                                  color: Colors.white,
+                                                  fontSize: 10),
+                                            ),
+                                            Text(
+                                              snapshot
+                                                          .data!
+                                                          .data!
+                                                          .custCompletedOrders![
+                                                              i]
+                                                          .regularType
+                                                          .toString() ==
+                                                      "1"
+                                                  ? "Pick Up & Drop Off"
+                                                  : snapshot
+                                                              .data!
+                                                              .data!
+                                                              .custCompletedOrders![
+                                                                  i]
+                                                              .regularType
+                                                              .toString() ==
+                                                          "2"
+                                                      ? "Mobile Mechanic"
+                                                      : "Take Vehicle to Mechanic",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: "SharpSans_Bold",
+                                                  color: Colors.white,
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                               ],
                             )
                           ],
@@ -1151,8 +1244,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 ),
               ),
             );
-          }
-      ),
+          }),
     );
   }
 
@@ -1339,8 +1431,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       letterSpacing: .7,
       wordSpacing: .7);
 }
-
-
 
 class MyBehavior extends ScrollBehavior {
   @override
