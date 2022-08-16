@@ -45,7 +45,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   String title = "";
   late bool isRegularSelected;
 
-  String authToken="";
+  String authToken="", userCode = "";
   bool _isLoading = false;
   double per = .10;
   double _setValue(double value) {
@@ -149,10 +149,12 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
+          print("success refNumber: userCode, >>>>>>>  ${userCode}");
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => WaitAdminApprovalScreen(refNumber: '123456',) ));
+                  builder: (context) => WaitAdminApprovalScreen(refNumber: '$userCode',) ));
           FocusScope.of(context).unfocus();
         });
       }
@@ -177,6 +179,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
+      userCode = shdPre.getString(SharedPrefKeys.userCode).toString();
       print('authToken >>>>>>> '+authToken.toString());
       _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
     });
@@ -472,17 +475,24 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                             TextEditingController _rateController=TextEditingController();
                             TextEditingController _timeController = TextEditingController();
                             _rateController.text = emergencyServiceList[index].minPrice.toString();
-                            _timeController.text = "10:00";
+                            _timeController.text = emergencyServiceMdlList[index].time;
                             _rateController.addListener(() {
-                              var temp =   SelectedServicesMdl(0,index,emergencyServiceMdlList[index].serviceId,_rateController.text,
-                                  emergencyServiceMdlList[index].maxAmount, emergencyServiceMdlList[index].time, emergencyServiceMdlList[index].isEnable);
+                              var temp =   SelectedServicesMdl(0,index,
+                                  emergencyServiceMdlList[index].serviceId,
+                                  _rateController.text,
+                                  emergencyServiceMdlList[index].maxAmount,
+                                  emergencyServiceMdlList[index].time,
+                                  emergencyServiceMdlList[index].isEnable);
                               emergencyServiceMdlList.removeAt(index);
                               emergencyServiceMdlList.insert(index,temp);
                             });
                             _timeController.addListener(() {
-                              var temp =   SelectedServicesMdl(0,index,emergencyServiceMdlList[index].serviceId,
-                                  emergencyServiceMdlList[index].minAmount, emergencyServiceMdlList[index].maxAmount,
-                                  _timeController.text, emergencyServiceMdlList[index].isEnable);
+                              var temp =   SelectedServicesMdl(0,index,
+                                  emergencyServiceMdlList[index].serviceId,
+                                  emergencyServiceMdlList[index].minAmount,
+                                  emergencyServiceMdlList[index].maxAmount,
+                                  _timeController.text,
+                                  emergencyServiceMdlList[index].isEnable);
                               emergencyServiceMdlList.removeAt(index);
                               emergencyServiceMdlList.insert(index,temp);
                             });
@@ -675,7 +685,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
             TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
             _rateController.text = root.service![index].minPrice.toString();
-            _timeController.text = "10:00";
+            _timeController.text = regularServiceMdlList[getItemIndex(parentIndex,index)].time;
             _rateController.addListener(() {
               int itemIndex = getItemIndex(parentIndex, index);
               var temp =   SelectedServicesMdl(parentIndex, index,

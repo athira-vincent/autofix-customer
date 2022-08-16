@@ -91,10 +91,12 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
           _isLoadingPage = true;
           _AddPriceServiceList = value.data!.addPriceServiceList!;
           _selectionList=[];
+          _timeList = [];
+          _priceList = [];
+
           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
             //if(_AddPriceServiceList!.data![i].status==1) {
             if(_AddPriceServiceList!.data![i].mechanicService!.length > 0){
-
               _selectionList.add(true);
               _timeList!.add(_AddPriceServiceList!.data![i].mechanicService![0].time.toString());
               _priceList!.add(_AddPriceServiceList!.data![i].mechanicService![0].fee.toString());
@@ -420,7 +422,6 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                   padding: const EdgeInsets.only(left:10.0,bottom: 05),
                                   child: Container(
                                     decoration: BoxDecoration(
-
                                         border: Border.all(
                                             color: const Color(0xffd3dcf2)
                                         ),
@@ -435,23 +436,29 @@ class _RegularServices extends State<RegularServices>  with AutomaticKeepAliveCl
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
-                                        child:
-                                        TextFormField(
-                                          /*validator: (value){
-                                            if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![index].minPrice) ||
-                                                int.parse(value) > int.parse(_AddPriceServiceList!.data![index].maxPrice)){
+                                        child: TextFormField(
+                                          validator: (value){
+                                            if(value!.isEmpty){
+                                              return "Fill field";
+                                            }
+                                            if(int.parse(value) < int.parse(_AddPriceServiceList!.data![index].minPrice) ){
+                                              return _AddPriceServiceList!.data![index].minPrice +"-" + _AddPriceServiceList!.data![index].maxPrice;
+                                            }
+                                            if(int.parse(value) > int.parse(_AddPriceServiceList!.data![index].maxPrice)){
                                               return _AddPriceServiceList!.data![index].minPrice +"-" + _AddPriceServiceList!.data![index].maxPrice;
                                             }
                                             else {
                                               return null;
                                             }
-                                          },*/
+                                          },
                                           keyboardType: TextInputType.number,
                                           cursorColor: CustColors.light_navy,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
                                             errorStyle: TextStyle(
-                                              color: Colors.red
+                                              color: Colors.red,
+                                              fontSize: 9,
                                             )
                                           ),
                                           enabled: _selectionList[index],

@@ -208,7 +208,8 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.signUp!.token.toString(),
               TextStrings.user_mechanic,
               "${value.data!.signUp!.mechanic?.firstName.toString()}",
-              "${value.data!.signUp!.mechanic?.id.toString()}"
+              "${value.data!.signUp!.mechanic?.id.toString()}",
+              "${value.data!.signUp!.mechanic?.userCode.toString()}",
             );
             Navigator.pushReplacement(
                 context,
@@ -229,7 +230,8 @@ class _SignupScreenState extends State<SignupScreen> {
               value.data!.signUp!.token.toString(),
               TextStrings.user_customer,
               "${value.data!.signUp!.customer?.firstName.toString()}",
-              "${value.data!.signUp!.customer?.id.toString()}"
+              "${value.data!.signUp!.customer?.id.toString()}",
+              "${value.data!.signUp!.customer?.userCode.toString()}",
             );
             Navigator.push(
                 context,

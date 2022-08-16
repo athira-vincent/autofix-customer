@@ -5,13 +5,10 @@ import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
-import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
-import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
-import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/regularServices.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
-import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
+import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.dart';
 
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,10 +21,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 import 'Provider/locale_provider.dart';
 import 'package:provider/provider.dart';
-
-import 'UI/Customer/EmergencyServiceFlow/ExtraDiagnosisScreen/extra_Service_Diagnosis_Screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/MechanicWorkProgressScreen/mechanic_work_progress_screen.dart';
-import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_failed_screen.dart';
 
 
   void main() async {
@@ -110,15 +103,9 @@ import 'UI/Customer/EmergencyServiceFlow/PaymentScreens/payment_failed_screen.da
                       primaryColor: Colors.white,
                       primarySwatch: CustColors.materialBlue,
                     ),
-                    // home: MechMobileTrackScreen(bookingId: "1305"),
-                    //home: ExtraServiceDiagonsisScreen(),
-                    home:SplashScreen(),
-                    //home: ChangeLocationScreen(latitude: "10.0289341",longitude: "76.3609919"),
-                    /*home: RegularRateMechanicScreen(
-                      firebaseCollection: "Regular-MobileMech",
-                      bookingId: "1442",
-                    ),*/
-
+                    home: SplashScreen(),
+                    //home: EmergencyServices(),
+                    //home: MechanicTrackingScreen(latitude: "10.0039549",longitude: "76.3755278"),
                   );
                 },
               ),

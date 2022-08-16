@@ -83,7 +83,7 @@ class _VehicleSpecializationScreenState extends State<VehicleSpecializationScree
           _brandListData = value.data?.brandList?.data;
           print(">>>>>>>>>" + _brandListData.toString());
           print(">>>>>>>>>" + _brandListData!.length.toString());
-          print(">>>>>>>>>" + _brandListData![23].brandName);
+          //print(">>>>>>>>>" + _brandListData![23].brandName);
           isloading=false;
         });
       }

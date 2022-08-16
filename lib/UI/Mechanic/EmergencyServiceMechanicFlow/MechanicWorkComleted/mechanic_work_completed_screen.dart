@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
+import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/Home/mechanic_home_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/OrderStatusUpdateApi/order_status_update_bloc.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,6 +43,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
   double totalFees = 0.0;
   String authToken="", userId = "", bookingId = "", paymentStatus = "", text = "Request payment", customerDiagonsisApproval = "";
   String totalEstimatedTime = "", totalExtendedTime = "",totalTimeTakenByMechanic = "", mechanicName = "", totalEstimatedCost = "";
+  String? FcmToken = "", firebaseCustFcm = "";
 
   @override
   void initState() {
@@ -65,6 +69,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         totalEstimatedCost = event.get("updatedServiceCost");
         totalEstimatedTime = event.get('updatedServiceTime');
         totalTimeTakenByMechanic = event.get('totalTimeTakenByMechanic');
+        firebaseCustFcm = event.get('customerFcmToken');
         String extendedTime = event.get('extendedTime');
         int time = int.parse(totalEstimatedTime) + int.parse(extendedTime);
         totalExtendedTime = time.toString();
@@ -118,6 +123,80 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         print("Failed to add Location: $error"));
   }
 
+  Future<void> callOnFcmApiSendPushNotifications() async {
+    String? token;
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value;
+      setState(() {
+        FcmToken = value;
+      });
+      print("Instance ID Fcm Token: +++++++++ +++++ +++++ minnu " + token.toString());
+    });
+
+    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    // print('userToken>>>${appData.fcmToken}'); //alp dec 28
+
+    final data = {
+      'notification': {
+        'body': 'service completed! ${mechanicName} waiting payment',
+        'title': 'Payment request',
+        'sound': 'alarmw.wav',
+      },
+      'priority': 'high',
+      'data': {
+        "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        "id": "1",
+        "status": "done",
+        "screen": "MechanicWaitingPaymentScreen",
+        "bookingId" : "$bookingId",
+        "message": "ACTION"
+      },
+      'apns': {
+        'headers': {'apns-priority': '5', 'apns-push-type': 'background'},
+        'payload': {
+          'aps': {'content-available': 1, 'sound': 'alarmw.wav'}
+        }
+      },
+      //'to':'${_mechanicDetailsMdl?.data?.mechanicDetails?.fcmToken}'
+      'to':'${firebaseCustFcm}'
+      //'to':'$token'
+    };
+
+    print('FcmToken data >>> ${data}');
+    print('FcmToken >>> ${FcmToken}');
+    print('FcmToken token >>> ${token}');
+
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+      'key=${TextStrings.firebase_serverToken}'
+    };
+
+    BaseOptions options = new BaseOptions(
+      connectTimeout: 5000,
+      receiveTimeout: 30 * 1000,    // 30 seconds
+      headers: headers,
+    );
+
+    try {
+      final response = await Dio(options).post(postUrl, data: data);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          print('notification sending success');
+
+        });
+      } else {
+        setState(() {
+          print('notification sending failed');
+
+        });
+      }
+    } catch (e) {
+      print('exception $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -505,6 +584,7 @@ class _MechanicWorkCompletedScreenState extends State<MechanicWorkCompletedScree
         setState(() {
           text = "Waiting response";
         });
+        callOnFcmApiSendPushNotifications();
         _mechanicOrderStatusUpdateBloc.postMechanicOrderStatusUpdateRequest(
             authToken, bookingId, "7");
         _mechanicHomeBloc.postMechanicOnlineOfflineRequest("$authToken", "3", userId, );

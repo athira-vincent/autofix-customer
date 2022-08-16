@@ -92,6 +92,8 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
           _isLoadingPage = true;
           _AddPriceServiceList = value.data!.addPriceServiceList!;
           _selectionList=[];
+          _timeList = [];
+          _priceList = [];
           for(int i=0;i<_AddPriceServiceList!.data!.length;i++){
             //if(_AddPriceServiceList!.data![i].status==1) {
             if(_AddPriceServiceList!.data![i].mechanicService!.length>0){
@@ -431,19 +433,27 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
                                         TextFormField(
-                                          // validator: (value){
-                                          //   if(int.parse(value!) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
-                                          //       int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
-                                          //     return _AddPriceServiceList!.data![0].minPrice +"_" + _AddPriceServiceList!.data![0].maxPrice;
-                                          //   }
-                                          //   else {
-                                          //     return null;
-                                          //   }
-                                          // },
+                                          validator: (value){
+                                            if(value!.isEmpty){
+                                              return "Fill field";
+                                            }
+                                            else if(int.parse(value) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
+                                                int.parse(value) > int.parse(_AddPriceServiceList!.data![0].maxPrice)){
+                                              return _AddPriceServiceList!.data![0].minPrice +"-" + _AddPriceServiceList!.data![0].maxPrice;
+                                            }
+                                            else {
+                                              return null;
+                                            }
+                                          },
                                           keyboardType: TextInputType.number,
                                           cursorColor: CustColors.light_navy,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                           decoration: InputDecoration(
-                                              border: InputBorder.none
+                                              border: InputBorder.none,
+                                              errorStyle: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 9,
+                                              )
                                           ),
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller01,

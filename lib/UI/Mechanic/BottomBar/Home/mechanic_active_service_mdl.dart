@@ -85,7 +85,7 @@ class CurrentlyWorkingService {
   int totalPrice;
   double tax;
   double commission;
-  int serviceCharge;
+  dynamic serviceCharge;
   dynamic totalTime;
   dynamic serviceTime;
   double latitude;

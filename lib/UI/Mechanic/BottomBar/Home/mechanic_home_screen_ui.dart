@@ -75,7 +75,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
     getSharedPrefData();
     _listenApiResponse();
     _hasActiveService = false;
-    Timer.periodic(Duration(seconds: 90), (Timer t) {
+    Timer.periodic(const Duration(seconds: 90), (Timer t) {
       _mechanicHomeBloc.postMechanicActiveServiceRequest("$authToken",mechanicId);
       _getCurrentMechanicLocation();
     });
@@ -147,7 +147,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       } else {
         setState(() {
           _isLoadingPage = false;
-          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toLowerCase().toString();
+          String brandName = value.data!.mechanicDetails!.mechanic![0].brands.toString()/*.toLowerCase()*/;
           brandName = brandName.replaceAll(" ", "");
           print("value.data!.mechanicDetails?.mechanic![0].brands.toLowerCase()" + brandName);
           _mechanicHomeBloc.postMechanicBrandSpecializationRequest("$authToken",brandName);
@@ -161,13 +161,11 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
          // SnackBarWidget().setMaterialSnackBar(value.message.toString(),_scaffoldKey);
         });
       }else{
-        setState(() {
           //brandDetails.add(value.data.brandDetails);
           //SnackBarWidget().setMaterialSnackBar(value.data!.mechanicWorkStatusUpdate!.message.toString(),_scaffoldKey);
           /*_isLoading = false;
           socialLoginIsLoading = false;
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
-        });
       }
     });
     _mechanicHomeBloc.postMechanicActiveService.listen((value) {
@@ -180,20 +178,22 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           });
         });
       }else{
+        print("hasActiveService>>>> ${value.data?.currentlyWorkingService.toString()}");
         print(value.data?.currentlyWorkingService.toString());
-        if(value.data?.currentlyWorkingService.toString() == 'null'
+        if(value.data?.currentlyWorkingService.toString() == []
             || value.data?.currentlyWorkingService.toString() == null
-          || value.data?.currentlyWorkingService.toString() == []
-        )
+          || value.data?.currentlyWorkingService.toString() == 'null')
         {
           setState(() {
             _hasActiveService = false;
+            print("hasActiveService>>>> false");
           });
         }
         else {
           setState(()  {
-              _hasActiveService = true;
-              setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            _hasActiveService = true;
+            setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            print("hasActiveService>>>> true");
           });
         }
       }
@@ -316,7 +316,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(Icons.location_on, color: CustColors.light_navy,size: 30,),
+          const Icon(Icons.location_on, color: CustColors.light_navy,size: 30,),
           SizedBox(
             width: 55,
             child: Column(
@@ -349,9 +349,9 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-            child: Text('Upcoming Services',
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0, bottom: 8.0),
+            child:  Text('Upcoming Services',
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
@@ -361,7 +361,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
           Container(
             height: 160,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             child: Stack(
               children: [
                 StreamBuilder(
@@ -376,7 +376,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                             child: Container(
                               height: MediaQuery.of(context).size.height,
                               alignment: Alignment.center,
-                              child: CircularProgressIndicator(
+                              child: const CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                     CustColors.light_navy),
                               ),
@@ -387,8 +387,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                             snapshot.data?.data?.upcomingCompletedServices?.length != 0 && snapshot.data?.data?.upcomingCompletedServices?.length != null
                                 ? upcomingServicesList(size,snapshot,context)
                                 : Container(
-                                  margin: EdgeInsets.all(10),
-                                  padding: EdgeInsets.all(25),
+                                  margin: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(25),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(7),
                                     border: Border.all(
@@ -411,7 +411,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height,
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
                             CustColors.light_navy),
                       ),
@@ -481,7 +481,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                         Text(
                                         _mechanicHomeBloc.dateConverter(snapshot.data!.data!.upcomingCompletedServices![i].bookedDate!),
                                          // "02-12-2021",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
@@ -490,7 +490,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                         Text(
                                           _mechanicHomeBloc.timeConvert(new DateFormat("hh:mm:ss").parse(snapshot.data!.data!.upcomingCompletedServices![i].bookedTime)).toString(),
                                           //"09:30 AM",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
@@ -512,7 +512,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                           "Service from " +
                                           snapshot.data!.data!.upcomingCompletedServices![i].customer!.firstName.toString(),
                                           //"Service from Eric John. ",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
@@ -524,7 +524,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                           snapshot.data!.data!.upcomingCompletedServices![i].vehicle!.brand.toString()
                                           + " ] ",
                                           //" [ HONDA CITY ]",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
@@ -543,7 +543,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Regular Service" ,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w400,
@@ -557,7 +557,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                                               ? "Pick Up & Drop Off" :
                                           snapshot.data!.data!.upcomingCompletedServices![i].regularType.toString() == "2"
                                               ? "Mobile Mechanic" : "Take Vehicle to Mechanic",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontFamily: "SharpSans_Bold",
                                               color: Colors.white,
@@ -589,8 +589,8 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
+            child: const Padding(
+              padding: EdgeInsets.only(left: 8.0, bottom: 2.0),
               child: Text(
                 'My brand specialisation ',
                 maxLines: 2,
@@ -603,7 +603,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           Container(
             height: size.height * 15 / 100,
             alignment: Alignment.center,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             child: Stack(
               children: [
                 StreamBuilder(
@@ -618,7 +618,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                             child: Container(
                               height: MediaQuery.of(context).size.height,
                               alignment: Alignment.center,
-                              child: CircularProgressIndicator(
+                              child: const CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                     CustColors.light_navy),
                               ),
@@ -659,7 +659,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                     child: Container(
                       height: MediaQuery.of(context).size.height,
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
                             CustColors.light_navy),
                       ),
@@ -739,7 +739,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: (){
+            /*onTap: (){
               setState(() {
                 Navigator.push(
                     context,
@@ -747,7 +747,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       builder: (context) => MechanicMyWalletScreen(),
                     ));
               });
-            },
+            },*/
             child: Container(
               height: size.height * 18 / 100,
               width: size.width * 40 / 100,
@@ -863,7 +863,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           height: size.height * 10 / 100,
           width: size.width,
           color: Colors.white,
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
            // left: size.width * 5 / 100,
             //bottom: size.height * .5 / 100
           ),
@@ -877,7 +877,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("You have one Emergency service ",
+                  const Text("You have one Emergency service ",
                     style: TextStyle(color: CustColors.light_navy),),
                   Text("Service from $customerName ", ),
                   Text("$vehicleName", )
