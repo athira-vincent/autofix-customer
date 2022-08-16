@@ -56,7 +56,7 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
 
       setState(() {
-        bookingDate = event.get("bookingDate");
+        //bookingDate = event.get("bookingDate");
         customerName = event.get("customerName");
         customerAddress = event.get("customerAddress");
         scheduledTime = event.get("scheduledTime");
