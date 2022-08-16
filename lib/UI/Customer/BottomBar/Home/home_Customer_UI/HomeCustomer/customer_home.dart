@@ -149,10 +149,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       _homeCustomerBloc.postRegularServiceListRequest("$authToken", "2", null, null);
       _homeCustomerBloc.postCustomerUpcomingOrdersRequest(authToken, 300, "1", "$userID");
 
-      _homeCustomerBloc.postEmergencyServiceListRequest(
-          authToken, "1", null, null);
-      _homeCustomerBloc.postRegularServiceListRequest(
-          authToken, "2", null, null);
+
+
     });
   }
 
@@ -279,13 +277,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 emergencyService(size),
                 regularService(),
                 upcomingServices(size),
-                //sparePartsServices()
+                sparePartsServices()
               ],
             ),
           ),
         ),
-      ),
-    );
+      );
+
   }
 
   Widget searchYouService(BuildContext context, Size size) {
@@ -889,13 +887,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             CustColors.light_navy),
                       ),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const SparePartsListScreen()));
-                    },
+
                   ),
                 ),
               ],
