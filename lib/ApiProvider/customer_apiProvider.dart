@@ -8,6 +8,7 @@ import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergency
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/customer_start_service_mdl.dart';
+import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
@@ -309,6 +310,28 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CustomerCompletedOrdersListMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+
+/// spare parts api provider
+
+  Future<SparePartsModel>fetchServicespareparts(
+      modelid) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchServicespareparts(
+        modelid) ;
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = SparePartsModel(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return SparePartsModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = SparePartsModel(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

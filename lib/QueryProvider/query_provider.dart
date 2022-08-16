@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:auto_fix/Constants/grapgh_ql_client.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QueryProvider {
-
   signIn(String userName, String password) async {
     String _query = """
       mutation {
@@ -62,11 +63,10 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  socialLogin( email,  phoneNumber) async {
+  socialLogin(email, phoneNumber) async {
     String _query;
-    if(email!="")
-      {
-        _query = """  
+    if (email != "") {
+      _query = """  
         mutation {
       socialLogin(emailId: "$email") {
         token
@@ -88,10 +88,8 @@ class QueryProvider {
       }
     }      
      """;
-      }
-    else
-      {
-        _query = """  
+    } else {
+      _query = """  
              mutation {
       socialLogin(emailId: "$phoneNumber") {
         token
@@ -113,13 +111,13 @@ class QueryProvider {
       }
     } 
     """;
-      }
+    }
 
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  phoneLogin(  phoneNumber) async {
+  phoneLogin(phoneNumber) async {
     String _query = """
         mutation {
           signIn_phoneNo(phoneNo: "$phoneNumber", platformId: 1) {
@@ -142,10 +140,27 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  signUp( type, firstName, lastName, emailId, phoneNo, password, state,
-  fcmToken, userTypeId, userType, profilepic, orgName, orgType,
-  ministryName, hod, latitude, longitude, yearExp, shopName,) async
-  {
+  signUp(
+    type,
+    firstName,
+    lastName,
+    emailId,
+    phoneNo,
+    password,
+    state,
+    fcmToken,
+    userTypeId,
+    userType,
+    profilepic,
+    orgName,
+    orgType,
+    ministryName,
+    hod,
+    latitude,
+    longitude,
+    yearExp,
+    shopName,
+  ) async {
     String _query = """ 
     mutation {
         signUp(
@@ -255,8 +270,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  postBrandDetailsRequest(
-      token,search) async {
+  postBrandDetailsRequest(token, search) async {
     String _query = """ 
        {
         brandList(page: 0, size: 300, search: "$search") {
@@ -282,11 +296,20 @@ class QueryProvider {
   }
 
   postAddCarRequest(
-      token, brand, model, engine, year,
-      plateNo, lastMaintenance, milege,
-      vehiclePic, color, latitude, longitude,
-      ) async {
-          String _query = """ 
+    token,
+    brand,
+    model,
+    engine,
+    year,
+    plateNo,
+    lastMaintenance,
+    milege,
+    vehiclePic,
+    color,
+    latitude,
+    longitude,
+  ) async {
+    String _query = """ 
          mutation {
             vehicleCreate(
               brand: "$brand"
@@ -320,13 +343,12 @@ class QueryProvider {
           }
   
           """;
-          log(_query);
-          return await GqlClient.I.mutation11(_query,
-              enableDebug: true,token: token, isTokenThere: true, variables: {});
-        }
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
+  }
 
-  postUpdateDefaultVehicle(
-      token,vehicleId, customerId) async {
+  postUpdateDefaultVehicle(token, vehicleId, customerId) async {
     String _query = """ 
         mutation {
           updateDefaultVehicle(vehicleId: ${int.parse(vehicleId.toString())}, customerId: ${int.parse(customerId.toString())}) {
@@ -336,11 +358,12 @@ class QueryProvider {
           """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
   postMakeBrandRequest(
-      token,) async {
+    token,
+  ) async {
     String _query = """ 
     {
       brandDetails {
@@ -361,8 +384,7 @@ class QueryProvider {
     );
   }
 
-  postModelDetailRequest(
-      token,type) async {
+  postModelDetailRequest(token, type) async {
     String _query = """ 
    {
       modelDetails(id: null) {
@@ -384,12 +406,8 @@ class QueryProvider {
     );
   }
 
-
-  postPhoneLoginOtpVerificationRequest(
-      token,
-      otp,
-      userTypeId) async {
-      String _query = """ 
+  postPhoneLoginOtpVerificationRequest(token, otp, userTypeId) async {
+    String _query = """ 
          mutation {
             signIn_Otp(otp: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
               token
@@ -411,15 +429,12 @@ class QueryProvider {
             }
           }
       """;
-      log(_query);
-      return await GqlClient.I.mutation11(_query,
-          enableDebug: true,token: token, isTokenThere: true, variables: {});
+    log(_query);
+    return await GqlClient.I.mutation11(_query,
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
-  postOtpVerificationRequest(
-      token,
-      otp,
-      userTypeId) async {
+  postOtpVerificationRequest(token, otp, userTypeId) async {
     String _query = """ 
        mutation {
           otp_Verification(otpCode: "$otp", userTypeId: ${int.parse(userTypeId.toString())}) {
@@ -430,20 +445,13 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
-
 
   /// =============== Mechanics List Emergency ================== latitude: "9.2575"  longitude: "76.4508"///
 
   postFindMechanicsListEmergencyRequest(
-      token,
-      page,
-      size,
-      latitude,
-      longitude,
-      serviceId,
-      serviceType) async {
+      token, page, size, latitude, longitude, serviceId, serviceType) async {
     String _query = """ 
           {
             mechanicList(
@@ -582,23 +590,24 @@ class QueryProvider {
           }
     """;
     log(_query);
-   return await GqlClient.I.query01(
-    _query,
-    token,
-    enableDebug: true,
-    isTokenThere: false,
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: false,
     );
   }
 
   /// =============== Mechanics Profile Details ================== ///
 
   fetchMechanicProfileDetails(
-      token,
-      mechanicId,
-      serviceId,
-      latitude,
-      longitude,) async {
-        String _query = """
+    token,
+    mechanicId,
+    serviceId,
+    latitude,
+    longitude,
+  ) async {
+    String _query = """
                 {
                   mechanicDetails(
                      mechanicId: ${int.parse(mechanicId)}
@@ -703,23 +712,30 @@ class QueryProvider {
                     }
                 }
              """;
-        log(_query);
-        return await GqlClient.I.query01(
-          _query,
-          token,
-          enableDebug: true,
-          isTokenThere: true,
-        );
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      token,
+      enableDebug: true,
+      isTokenThere: true,
+    );
   }
-
 
   /// =============== Mechanics Regular Service Booking Id  ================== ///
 
   postMechanicsRegularServiceBookingIDRequest(
-      token, date, time,
-      latitude, longitude,
-      serviceId, mechanicId, reqType, regularServiceType,
-      totalPrice, paymentType, travelTime) async {
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId,
+      mechanicId,
+      reqType,
+      regularServiceType,
+      totalPrice,
+      paymentType,
+      travelTime) async {
     String _query = """  
     mutation {
         mechanicBooking(
@@ -839,16 +855,23 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
   /// =============== Mechanics Emergency Service Booking Id  ================== ///
 
   postMechanicsEmergencyServiceBookingIDRequest(
-      token, date, time,
-      latitude, longitude,
-      serviceId, mechanicId, reqType,
-      totalPrice, paymentType, travelTime) async {
+      token,
+      date,
+      time,
+      latitude,
+      longitude,
+      serviceId,
+      mechanicId,
+      reqType,
+      totalPrice,
+      paymentType,
+      travelTime) async {
     String _query = """  
     mutation {
         emergencyBooking(
@@ -945,14 +968,16 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
-
 
   /// =============== Update Mechanic Booking Id  ================== ///
 
   postUpdateMechanicsBookingIDRequest(
-      token, bookingId, mechanicId,) async {
+    token,
+    bookingId,
+    mechanicId,
+  ) async {
     String _query = """  
         mutation {
           updateMechanicBooking(
@@ -966,14 +991,15 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
-
 
   /// ===============  Booking Details  ================== ///
 
   postBookingDetailsRequest(
-      token, bookingId,) async {
+    token,
+    bookingId,
+  ) async {
     String _query = """        
       {
         bookingDetails(bookingId: ${int.parse(bookingId.toString())}) {
@@ -1048,16 +1074,11 @@ class QueryProvider {
     );
   }
 
-
   postSearchServiceRequest(
-      token,
-      serviceSearch,
-      catSearch,
-      count,
-      categoryId) async {
-    String _query ;
+      token, serviceSearch, catSearch, count, categoryId) async {
+    String _query;
 
-    if(catSearch != null && serviceSearch != null){
+    if (catSearch != null && serviceSearch != null) {
       _query = """ 
     query
     {
@@ -1089,8 +1110,7 @@ class QueryProvider {
         }
       }
     """;
-    }
-    else if(serviceSearch != null){
+    } else if (serviceSearch != null) {
       _query = """ 
     query
     {
@@ -1122,8 +1142,7 @@ class QueryProvider {
         }
       }
     """;
-    }
-    else if(catSearch != null){
+    } else if (catSearch != null) {
       _query = """ 
     query
     {
@@ -1155,8 +1174,7 @@ class QueryProvider {
         }
       }
     """;
-    }
-    else{
+    } else {
       _query = """ 
     query
     {
@@ -1198,15 +1216,9 @@ class QueryProvider {
     );
   }
 
-
   /// ===============  Service List of Mechanic ================== ///
 
-  fetchServiceListOfMechanic(
-      token,
-      mechanicId,
-      page,
-      size,
-      search) async {
+  fetchServiceListOfMechanic(token, mechanicId, page, size, search) async {
     String _query = """
                 {
                  mechanicServicesList(
@@ -1260,8 +1272,7 @@ class QueryProvider {
     );
   }
 
-
-  fcmTokenUpdate(String fcmToken,String Authtoken) async {
+  fcmTokenUpdate(String fcmToken, String Authtoken) async {
     String _query = """
       mutation {
         fcm_token_update(fcmToken: "$fcmToken") {
@@ -1460,10 +1471,8 @@ class QueryProvider {
     );
   }
 
-
-
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
-  serviceList(String token, searchText, count, categoryId ) async {
+  serviceList(String token, searchText, count, categoryId) async {
     String _query = """
     {
       serviceListAll(search: $searchText, count: $count, categoryId: $categoryId) {
@@ -1488,7 +1497,7 @@ class QueryProvider {
     );
   }
 
-  categoryList(String token, searchText, count, categoryId ) async {
+  categoryList(String token, searchText, count, categoryId) async {
     String _query = """
     {
     category_list(catType: $categoryId) {
@@ -1509,11 +1518,13 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
 //-------------------------- remove after merge on 11/04/2022-----------------------------------------
 
-  serviceListWithCategory(String token, categoryType, String search,String catSearch ) async {
+  serviceListWithCategory(
+      String token, categoryType, String search, String catSearch) async {
     String _query;
-    if(search.isEmpty && catSearch.isEmpty){
+    if (search.isEmpty && catSearch.isEmpty) {
       _query = """
         {
       category_list(catType: $categoryType, serviceSearch: null, catSearch: null) {
@@ -1536,7 +1547,7 @@ class QueryProvider {
       }
     }
      """;
-    }else if(search.isEmpty){
+    } else if (search.isEmpty) {
       _query = """
         {
       category_list(catType: $categoryType, catSearch: "$catSearch", serviceSearch: null) {
@@ -1559,7 +1570,7 @@ class QueryProvider {
       }
     }
      """;
-    }else if(catSearch.isEmpty){
+    } else if (catSearch.isEmpty) {
       _query = """
         {
       category_list(catType: $categoryType, catSearch: null, serviceSearch: "$search") {
@@ -1582,7 +1593,7 @@ class QueryProvider {
       }
     }
      """;
-    }else{
+    } else {
       _query = """
         {
       category_list(catType: $categoryType, catSearch: "$catSearch", serviceSearch: "$search") {
@@ -1619,10 +1630,14 @@ class QueryProvider {
 
   selectCar() {}
 
-  completeProfileMechanicIndividual(String token,
+  completeProfileMechanicIndividual(
+      String token,
       String workSelection,
       String vehicleSpecialization,
-      String address,String apprentice_cert, String identification_cert, String photoUrl) async {
+      String address,
+      String apprentice_cert,
+      String identification_cert,
+      String photoUrl) async {
     String _query = """
         mutation {
       mechanic_work_selection_Individual(
@@ -1666,9 +1681,9 @@ class QueryProvider {
       String mechanicNumber,
       String rcNumber,
       String existenceYear,
-      String photoUrl
-      ) async {
-    print('completeProfileMechanicCorporate>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
+      String photoUrl) async {
+    print(
+        'completeProfileMechanicCorporate>>>>>>  $serviceType   $vehicleSpecialization $address, $mechanicNumber, $rcNumber, $existenceYear$photoUrl');
 
     String _query = """ 
     mutation {
@@ -1753,9 +1768,6 @@ class QueryProvider {
         .query01(_query, token, enableDebug: true, isTokenThere: true);
   }
 
-
-
-
   forgotPassword(String email) async {
     String _query = """
           mutation {
@@ -1772,7 +1784,7 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  createPassword(String otp,String newPswd, String confirmPswd ) async {
+  createPassword(String otp, String newPswd, String confirmPswd) async {
     String _query = """
         mutation {
       ResetPassword(
@@ -1791,7 +1803,8 @@ class QueryProvider {
         enableDebug: true, isTokenThere: false, variables: {});
   }
 
-  changePassword(String token, String email,String oldPswd, String newPswd, String confirmPswd ) async {
+  changePassword(String token, String email, String oldPswd, String newPswd,
+      String confirmPswd) async {
     String _query = """
       mutation {
     ChangePassword(
@@ -1815,7 +1828,8 @@ class QueryProvider {
     );
   }
 
-  mechanicAddServiceList(String token,String serviceList, String costList, String timeList, catType) async {
+  mechanicAddServiceList(String token, String serviceList, String costList,
+      String timeList, catType) async {
     String _query = """ 
     mutation {
       mechanic_service_add(catType: $catType, services: "$serviceList", fee: $costList, time: $timeList) {
@@ -1832,10 +1846,10 @@ class QueryProvider {
     );
   }
 
-  categoryListHome(String token, categoryId, serviceSearch, catSearch ) async {
-    String _query ;
+  categoryListHome(String token, categoryId, serviceSearch, catSearch) async {
+    String _query;
 
-    if(catSearch != null && serviceSearch != null){
+    if (catSearch != null && serviceSearch != null) {
       _query = """
       {
       category_list(serviceSearch: "$serviceSearch", catSearch: "$catSearch", catType: $categoryId) {
@@ -1857,7 +1871,7 @@ class QueryProvider {
       }
     }
      """;
-    }else if(catSearch != null){
+    } else if (catSearch != null) {
       _query = """
       {
       category_list(serviceSearch: null, catSearch: "$catSearch", catType: $categoryId) {
@@ -1879,7 +1893,7 @@ class QueryProvider {
       }
     }
      """;
-    }else if(serviceSearch != null){
+    } else if (serviceSearch != null) {
       _query = """
       {
       category_list(serviceSearch: "$serviceSearch", catSearch: null, catType: $categoryId) {
@@ -1901,7 +1915,7 @@ class QueryProvider {
       }
     }
      """;
-    }else{
+    } else {
       _query = """
       {
       category_list(serviceSearch: null, catSearch: null, catType: $categoryId) {
@@ -1935,8 +1949,7 @@ class QueryProvider {
     );
   }
 
-  postCustFetchProfileRequest(
-      token,id) async {
+  postCustFetchProfileRequest(token, id) async {
     String _query = """ 
      query
      {
@@ -1995,8 +2008,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicLocationUpdateRequest(
-      token, mechanicId, lat, lng) async {
+  postMechanicLocationUpdateRequest(token, mechanicId, lat, lng) async {
     String _query = """
     mutation {
     mechanic_location_update(
@@ -2017,8 +2029,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicBrandSpecializationRequest(
-      token, brandName) async {
+  postMechanicBrandSpecializationRequest(token, brandName) async {
     String _query = """
       {
     brandDetails(brandName: "$brandName") {
@@ -2038,12 +2049,10 @@ class QueryProvider {
     );
   }
 
-  postMechanicUpcomingServiceRequest(
-      token, type, mechanicId) async {
+  postMechanicUpcomingServiceRequest(token, type, mechanicId) async {
     String _query;
-    if(type.toString()=="undefined")
-      {
-        _query = """
+    if (type.toString() == "undefined") {
+      _query = """
       {
       UpcomingCompletedServices(type: null, mechanicId: $mechanicId) 
         {
@@ -2152,8 +2161,7 @@ class QueryProvider {
         }
     }
     """;
-      }
-    else{
+    } else {
       _query = """
       {
       UpcomingCompletedServices(type: $type, mechanicId: $mechanicId) {
@@ -2273,8 +2281,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicActiveServiceRequest(
-      token,  mechanicId) async {
+  postMechanicActiveServiceRequest(token, mechanicId) async {
     String _query = """
      mutation {
   currentlyWorkingService(mechanicId: $mechanicId) {
@@ -2376,8 +2383,7 @@ class QueryProvider {
     );
   }
 
-  postMechanicIncomingJobUpdateRequest(
-      token,  bookingId, bookStatus) async {
+  postMechanicIncomingJobUpdateRequest(token, bookingId, bookStatus) async {
     String _query = """
      mutation {
     acceptRejectRequest(bookingId: $bookingId, bookStatus: $bookStatus) {
@@ -2397,7 +2403,10 @@ class QueryProvider {
   }
 
   postMechanicOrderStatusUpdate(
-      token, bookingId, bookStatus,) async {
+    token,
+    bookingId,
+    bookStatus,
+  ) async {
     String _query = """
      mutation {
       mechanic_status_update(state: $bookStatus, bookId: $bookingId) {
@@ -2415,7 +2424,10 @@ class QueryProvider {
   }
 
   postMechanicAddTimeUpdateRequest(
-      token, extendTime, bookingId,) async {
+    token,
+    extendTime,
+    bookingId,
+  ) async {
     String _query = """
      mutation {
     timeUpdateBooking(extendTime: "$extendTime", bookingId: $bookingId) {
@@ -2451,7 +2463,7 @@ class QueryProvider {
   }
 
   postCustIndividualEditProfileRequest(
-    String token, firstName,  lastName,  state, status, imageUrl) async {
+      String token, firstName, lastName, state, status, imageUrl) async {
     String _query = """  
       mutation {
       customer_Individual_profile_update(
@@ -2474,8 +2486,8 @@ class QueryProvider {
     );
   }
 
-  postCustCorporateEditProfileRequest(
-      String token, firstName,  lastName,  state, status, imageUrl, orgName, orgType) async {
+  postCustCorporateEditProfileRequest(String token, firstName, lastName, state,
+      status, imageUrl, orgName, orgType) async {
     String _query = """  
      mutation {
   customer_Corporate_profile_update(
@@ -2500,8 +2512,8 @@ class QueryProvider {
     );
   }
 
-  postCustGovernmentEditProfileRequest(
-      String token, firstName,  lastName,  state, status, imageUrl, ministryName) async {
+  postCustGovernmentEditProfileRequest(String token, firstName, lastName, state,
+      status, imageUrl, ministryName) async {
     String _query = """  
      mutation {
       customer_GovtBodies_profile_update(
@@ -2525,9 +2537,7 @@ class QueryProvider {
     );
   }
 
-
-  postMechanicFetchProfileRequest(
-      token, userId) async {
+  postMechanicFetchProfileRequest(token, userId) async {
     String _query = """ 
     {
   mechanic_Details(id: $userId) {
@@ -2585,8 +2595,15 @@ class QueryProvider {
     );
   }
 
-  postMechanicEditProfileIndividualRequest(token, firstName, lastName, state, profilepic,
-      status, year_of_experience,) async {
+  postMechanicEditProfileIndividualRequest(
+    token,
+    firstName,
+    lastName,
+    state,
+    profilepic,
+    status,
+    year_of_experience,
+  ) async {
     String _query = """  
       mutation {
           mechanic_signUp_Individual_Update(
@@ -2604,11 +2621,20 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
-  postMechanicEditProfileCorporateRequest(token, firstName, lastName, state, profilepic,
-      status, year_of_experience, org_Name, org_Type,) async {
+  postMechanicEditProfileCorporateRequest(
+    token,
+    firstName,
+    lastName,
+    state,
+    profilepic,
+    status,
+    year_of_experience,
+    org_Name,
+    org_Type,
+  ) async {
     String _query = """  
       mutation {
           mechanic_signUp_Corporate_Update(
@@ -2628,14 +2654,15 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
-
-
-
   postAddMechanicReviewAndRatingRequest(
-      token,rating, feedback, bookingId, ) async {
+    token,
+    rating,
+    feedback,
+    bookingId,
+  ) async {
     String _query = """ 
     mutation {
         addRating(rating: ${double.parse(rating.toString())}, feedback: "$feedback", bookingId: ${int.parse(bookingId.toString())},  bookingType: 1) {
@@ -2652,9 +2679,7 @@ class QueryProvider {
     );
   }
 
-
-  postCustVehicleListRequest(
-      token) async {
+  postCustVehicleListRequest(token) async {
     String _query = """ 
      query
      {
@@ -2687,8 +2712,7 @@ class QueryProvider {
     );
   }
 
-  postserviceListAllBothRequest(
-      token,type) async {
+  postserviceListAllBothRequest(token, type) async {
     String _query = """ 
      query
      {
@@ -2716,11 +2740,9 @@ class QueryProvider {
     );
   }
 
-
   // 23/05/2022**********add price and fault**********
 
-  postAddPriceFaultReviewRequest(
-      token,mechanicId) async {
+  postAddPriceFaultReviewRequest(token, mechanicId) async {
     String _query = """ 
      query
      {
@@ -2782,7 +2804,8 @@ class QueryProvider {
     );
   }
 
-  postUpdateAddPriceFaultReviewRequest(token,mechanicId,time,fee,serviceId) async {
+  postUpdateAddPriceFaultReviewRequest(
+      token, mechanicId, time, fee, serviceId) async {
     String _query = """  
       mutation  {
         updateTimeFees(time: "$time", fee: "$fee", mechanicId: $mechanicId, serviceId: $serviceId) {
@@ -2792,11 +2815,11 @@ class QueryProvider {
     """;
     log(_query);
     return await GqlClient.I.mutation11(_query,
-        enableDebug: true,token: token, isTokenThere: true, variables: {});
+        enableDebug: true, token: token, isTokenThere: true, variables: {});
   }
 
   postEmrgRegAddPriceReviewRequest(
-      token,page,size,search,userId,catType) async {
+      token, page, size, search, userId, catType) async {
     String _query = """ 
      query
      {
@@ -2839,9 +2862,7 @@ class QueryProvider {
     );
   }
 
-  postVechicleUpdateRequest(
-      token, id,
-      status) async {
+  postVechicleUpdateRequest(token, id, status) async {
     String _query = """ 
      mutation {
         vehicle_Update(
@@ -2861,11 +2882,10 @@ class QueryProvider {
     );
   }
 
-  postCustomerCompletedOrdersRequest(
-      token,count, recent, customerId) async {
+  postCustomerCompletedOrdersRequest(token, count, recent, customerId) async {
     String _query = """ 
      {
-        cust_completed_orders(count: 300, recent: ${recent == null?null: int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) 
+        cust_completed_orders(count: 300, recent: ${recent == null ? null : int.parse(recent.toString())}, customerId: ${int.parse(customerId.toString())}) 
         {
           id
           bookingCode
@@ -2971,8 +2991,7 @@ class QueryProvider {
     );
   }
 
-  postMechServiceDetailsRequest(
-      token,bookingId) async {
+  postMechServiceDetailsRequest(token, bookingId) async {
     String _query = """
       {
     bookingDetails(bookingId: $bookingId) {
@@ -3076,7 +3095,7 @@ class QueryProvider {
   }
 
   postTimePriceServiceDetailsRequest(
-      token,services,fee,time, catType) async {
+      token, services, fee, time, catType) async {
     String _query = """ 
      mutation {
   mechanic_service_add(
@@ -3099,7 +3118,10 @@ class QueryProvider {
   }
 
   postRegularServiceStatusUpdateRequest(
-      token, bookingId, bookStatus,) async {
+    token,
+    bookingId,
+    bookStatus,
+  ) async {
     String _query = """
          mutation {
       regularMechStatusUpdate(state: $bookStatus, bookId: $bookingId) {
@@ -3116,4 +3138,30 @@ class QueryProvider {
     );
   }
 
+  /// sparepartslist
+  fetchServicespareparts(modelid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+   {
+  modelDetails(id: $modelid) {
+    id
+    modelName
+    engineName
+    years
+    brandName
+    modelIcon
+    status
+  }
+}
+     """;
+    log(_query);
+    print("Token >>>>>>> $authToken");
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 }

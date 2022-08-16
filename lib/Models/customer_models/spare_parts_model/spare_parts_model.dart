@@ -11,17 +11,24 @@ String sparePartsModelToMap(SparePartsModel data) => json.encode(data.toMap());
 
 class SparePartsModel {
   SparePartsModel({
+    required this.status,
+    required this.message,
     required this.data,
   });
-
-  Data data;
+  String status;
+  String message;
+  Data? data;
 
   factory SparePartsModel.fromMap(Map<String, dynamic> json) => SparePartsModel(
+    status: json["status"] == null ? null : json["status"],
+    message: json["message"] == null ? null : json["message"],
     data: Data.fromMap(json["data"]),
   );
 
   Map<String, dynamic> toMap() => {
-    "data": data.toMap(),
+    "status": status == null ? null : status,
+    "message": message == null ? null : message,
+    "data": data!.toMap(),
   };
 }
 
