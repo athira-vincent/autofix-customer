@@ -2886,6 +2886,7 @@ class QueryProvider {
           totalExt
           extendTime
           bookedDate
+          bookedTime
           isRated
           status
           customerId
