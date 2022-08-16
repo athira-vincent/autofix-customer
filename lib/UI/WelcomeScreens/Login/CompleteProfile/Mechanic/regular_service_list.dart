@@ -95,11 +95,13 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
       } else {
 
-        setState(() {
+        setState(() async {
           print("success postServiceList >>>>>>>  ${value.status}");
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
           //_isLoading = false;
+          SharedPreferences _shdPre = await SharedPreferences.getInstance();
+          _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
           print("success refNumber: userCode, >>>>>>>  ${userCode}");
           Navigator.pushReplacement(
               context,

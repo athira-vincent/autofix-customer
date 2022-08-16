@@ -231,7 +231,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
             }
           }
 
-
       }
     });
     _addCarBloc.addCarResponse.listen((value) {
@@ -247,9 +246,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
       } else {
 
-        setState(() {
+        setState(() async {
           print("success postSignUpCustomerIndividual >>>>>>>  ${value.status}");
           _isLoading = false;
+          SharedPreferences _shdPre = await SharedPreferences.getInstance();
            if(_isAddMore==true)
              {
                  _formKey.currentState?.reset();
@@ -272,6 +272,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
                  }
                else
                  {
+                   _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
+                   _shdPre.setString(SharedPrefKeys.defaultBrandID, value.data!.vehicleCreate!.brand.toString());
                    Navigator.pushReplacement(
                        context,
                        MaterialPageRoute(
