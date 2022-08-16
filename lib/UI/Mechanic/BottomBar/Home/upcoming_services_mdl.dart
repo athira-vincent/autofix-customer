@@ -88,7 +88,7 @@ class UpcomingCompletedService {
   int bookStatus;
   int totalPrice;
   double tax;
-  int commission;
+  double commission;
   double serviceCharge;
   dynamic totalTime;
   String serviceTime;

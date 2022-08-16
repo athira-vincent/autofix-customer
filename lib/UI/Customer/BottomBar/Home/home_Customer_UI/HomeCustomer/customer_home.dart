@@ -332,14 +332,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                         border: Border.all(width: 1,color: CustColors.light_navy)),
                     child: Row(
                       children: [
-                        Icon(Icons.search_rounded, color: CustColors.light_navy),
-                        Text('Search your Services'),
+                        const Icon(Icons.search_rounded, color: CustColors.light_navy),
+                        const Text('Search your Services'),
                       ],
                     ),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               locationWidget(size),
@@ -366,7 +366,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       },
       child: Row(
         children: [
-          Icon(Icons.location_on, color: CustColors.light_navy,size: 32,),
+          const Icon(Icons.location_on, color: CustColors.light_navy,size: 32,),
           SizedBox(
             width: 55,
             child: Column(
@@ -436,16 +436,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               },
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Emergency Services',
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: const Text('Emergency Services',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
                       style: Styles.textLabelTitle_Regular,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Icon(isEmergencyService==true?Icons.keyboard_arrow_down_rounded:Icons.keyboard_arrow_right, color: CustColors.light_navy,size: 30,),
                 ],
               ),
@@ -463,8 +463,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
-                    return CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
+                    return const CircularProgressIndicator(
+                      valueColor: const AlwaysStoppedAnimation<Color>(
                           CustColors.light_navy),
                     );
                   default:
@@ -473,8 +473,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                           ? GridView.builder(
                               itemCount:snapshot.data?.data?.categoryList?[0].service?.length,
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 4,
                                 childAspectRatio: .9,
                                 crossAxisSpacing: .08,
@@ -492,7 +492,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return AlertDialog(
-                                              contentPadding: EdgeInsets.all(0.0),
+                                              contentPadding: const EdgeInsets.all(0.0),
                                               content: StatefulBuilder(
                                                   builder: (BuildContext context, StateSetter monthYear) {
                                                     return  setupAlertDialogMonthAndYear(
@@ -584,16 +584,16 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
               },
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Regular Services',
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: const Text('Regular Services',
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
                       style: Styles.textLabelTitle_Regular,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Icon(isRegularService==true?Icons.keyboard_arrow_down_rounded:Icons.keyboard_arrow_right, color: CustColors.light_navy,size: 30,),
                 ],
               ),
@@ -611,8 +611,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
+                          return const CircularProgressIndicator(
+                            valueColor:  AlwaysStoppedAnimation<Color>(
                                 CustColors.light_navy),
                           );
                         default:
@@ -621,8 +621,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                 ? GridView.builder(
                                   itemCount:snapshot.data?.data?.categoryList?.length,
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 4,
                                     childAspectRatio: .9,
                                     crossAxisSpacing: .05,
@@ -689,7 +689,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                     ? Image.network(snapshot.data?.data?.categoryList?[index].icon,
                                                     width: 35,
                                                     fit: BoxFit.cover,)
-                                                    : Icon(Icons.miscellaneous_services_outlined,size: 35,color: CustColors.light_navy,),
+                                                    : const Icon(Icons.miscellaneous_services_outlined,size: 35,color: CustColors.light_navy,),
                                                 //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                                               ),
                                             ),
@@ -724,8 +724,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text('Upcoming Services',
               maxLines: 2,
               textAlign: TextAlign.center,
@@ -735,7 +735,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           ),
           Container(
             height: 200,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             child: ListView.builder(
               itemCount: imageList.length,
               scrollDirection: Axis.horizontal,
@@ -768,7 +768,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  SparePartsListScreen()));
+                              builder: (context) =>  const SparePartsListScreen()));
                     },
                   ),
                 );
@@ -787,8 +787,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text('Spareparts for your models ',
               maxLines: 2,
               textAlign: TextAlign.center,
@@ -798,7 +798,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           ),
           Container(
             height: 200,
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             child: ListView.builder(
               itemCount: imageList.length,
               scrollDirection: Axis.horizontal,
@@ -825,14 +825,14 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                             ),
                           ),
                         ),
-                        Text('Gear'),
+                        const Text('Gear'),
                       ],
                     ),
                     onTap: (){
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  SparePartsListScreen()));
+                              builder: (context) =>  const SparePartsListScreen()));
                     },
                   ),
                 );
@@ -846,13 +846,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
 
   Widget circleBar(bool isActive) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 150),
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      duration: const Duration(milliseconds: 150),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       height: isActive ? 5 : 5,
       width: isActive ? 30 : 25,
       decoration: BoxDecoration(
           color: isActive ? Colors.white : CustColors.whiteBlueish,
-          borderRadius: BorderRadius.all(Radius.circular(12))),
+          borderRadius: const BorderRadius.all(const Radius.circular(12))),
     );
   }
 
@@ -896,7 +896,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                    crossAxisAlignment: CrossAxisAlignment.start,
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     Text("Estimated cost",
+                     const Text("Estimated cost",
                        style: TextStyle(
                          fontSize: 18,
                          color: Colors.black,
@@ -907,7 +907,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                        ),
                      ),
                      Text("₦ "+ service.minPrice,
-                       style: TextStyle(
+                       style: const TextStyle(
                            fontSize: 22,
                            color: Colors.black,
                            fontFamily: "SharpSans_Bold",
@@ -936,8 +936,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                     child: Container(
                       height: _setValue(28),
                       width: _setValue(28),
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
+                      child: const CircularProgressIndicator(
+                        valueColor: const AlwaysStoppedAnimation<Color>(
                             CustColors.light_navy),
                       ),
                     ),
@@ -990,13 +990,13 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                       top: size.height * 1 / 100,
                       bottom: size.height * 1 / 100
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(
                             Radius.circular(6),
                       ),
                         color: CustColors.light_navy
                     ),
-                    child: Text(
+                    child: const Text(
                       'Find available mechanics ',
                       textAlign: TextAlign.center,
                       style: Styles.textButtonLabelSubTitle,
@@ -1044,7 +1044,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     );
   }
 
-  TextStyle warningTextStyle01 = TextStyle(
+  TextStyle warningTextStyle01 = const TextStyle(
     fontSize: 12,
     fontFamily: "Samsung_SharpSans_Regular",
     fontWeight: FontWeight.w400,
