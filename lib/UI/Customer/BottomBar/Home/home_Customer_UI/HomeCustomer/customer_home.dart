@@ -112,7 +112,6 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     getSharedPrefData();
     _getCurrentCustomerLocation(false);
     _listenServiceListResponse();
-
   }
 
 

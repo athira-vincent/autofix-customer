@@ -90,6 +90,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingIdEmergency = "1685";
       _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       print('authToken>>>>>>>>>MechanicTrackingScreen Customer App ' + authToken.toString());
@@ -159,7 +160,8 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
     getBytesFromAsset('assets/image/mechanicTracking/mechanicMapIcon.png', 150).then((onValue) {
       print("getBytesFromAsset 001");
       mechanicIcon =BitmapDescriptor.fromBytes(onValue);
-      markers.add(Marker( //add start location marker
+      markers.add(Marker(
+        visible: true,//add start location marker
         markerId: MarkerId('mechanicMarkerId'),
         position: latLng, //position of marker
         infoWindow: InfoWindow( //popup info
@@ -252,6 +254,7 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                   if (snapshot.hasData) {
 
                     Timer(const Duration(seconds: 15), () {
+                      print(">>> Firebase lat " + snapshot.data?.data()!['latitude']);
                       if(updatingLat != double.parse('${snapshot.data?.data()!['latitude']}'))
                       {
                         setState(() {
@@ -263,7 +266,9 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                       }
                     });
 
-                    return GoogleMap( //Map widget from google_maps_flutter package
+                    return GoogleMap(
+
+                      //Map widget from google_maps_flutter package
 
                       zoomGesturesEnabled: true, //enable Zoom in, out on map
                       initialCameraPosition: _kGooglePlex!,

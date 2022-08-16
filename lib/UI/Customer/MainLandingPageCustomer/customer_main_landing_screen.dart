@@ -120,7 +120,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
       print("event.notification!.data " + event.data.toString());
 
       String screen = event.data['screen'];
-      if(screen.toString() == "MechanicWaitingPaymentScreen"){
+      /*if(screen.toString() == "MechanicWaitingPaymentScreen"){
 
         String bookingId = event.data['bookingId'];
         print("bookingId >>>>> " + bookingId );
@@ -128,7 +128,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => MechanicWaitingPaymentScreen()));
-      }
+      }*/
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage event) {
