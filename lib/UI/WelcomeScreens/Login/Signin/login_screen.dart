@@ -483,6 +483,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _getSignInRes() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _signinBloc.signInResponse.listen((value) async {
       if (value.status == "error") {
         setState(() {
@@ -495,6 +496,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
           //SnackBarWidget().setSnackBar("Login Successful",context);
           if(value.data!.signIn!.user!.userTypeId.toString() == "1"){
+            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
@@ -512,6 +514,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SnackBarWidget().setSnackBar("Customer Login Successful",context);
 
           }else {     //if(value.data!.signIn!.user!.userTypeId == "2"
+            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
@@ -538,8 +541,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ));*/
             //SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
           }
-
-
       }
     });
 

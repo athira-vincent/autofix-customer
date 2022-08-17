@@ -272,7 +272,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                  }
                else
                  {
-                   _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
+                   _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
                    _shdPre.setString(SharedPrefKeys.defaultBrandID, value.data!.vehicleCreate!.brand.toString());
                    Navigator.pushReplacement(
                        context,
