@@ -1,11 +1,13 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
+import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
 import 'package:auto_fix/UI/Common/GenerateAuthorization/generate_athorization_api_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/MyProfile/customer_profile_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/ChangePassword/change_password_api_provider.dart';
 import 'package:auto_fix/UI/Customer/SideBar/EditProfile/customer_edit_profile_api_provider.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/add_price_fault_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/MyProfile/profile_Mechanic_api_provider/mechanic_profile_api_provider.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceStatusUpdate/service_status_update_api_provider.dart';
@@ -54,6 +56,7 @@ class Repository {
   final _serviceStatusUpdateApiProvider = ServiceStatusUpdateApiProvider();
 
   final _sparepartsprovider = CustomerApiProvider();
+  final _sparepartslistprovider = CustomerApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
@@ -574,6 +577,10 @@ class Repository {
       _AddPriceFaultApiProvider.postTimePriceServiceDetailsRequest(
           token, services, fee, time, catType);
 
-  Future<SparePartsModel> getspareparts(modelid) =>
-      _sparepartsprovider.fetchServicespareparts(modelid);
+  Future<CustVehicleListMdl> getspareparts() =>
+      _sparepartsprovider.fetchServicespareparts();
+
+
+  Future<SparePartsListModel> getsparepartslist(modelname,search,fromcost,tocost) =>
+      _sparepartslistprovider.fetchServicesparepartslist(modelname,search,fromcost,tocost);
 }

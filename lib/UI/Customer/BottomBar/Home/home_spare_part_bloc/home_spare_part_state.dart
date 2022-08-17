@@ -1,4 +1,5 @@
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyVehicles/CustVehicleListMdl.dart';
 import 'package:equatable/equatable.dart';
 
 class SparePartState extends Equatable {
@@ -17,7 +18,7 @@ class SparePartLoadingState extends SparePartState {
 }
 
 class SparePartLoadedState extends SparePartState {
-  final SparePartsModel sparePartsModel;
+  final CustVehicleListMdl sparePartsModel;
 
   SparePartLoadedState({required this.sparePartsModel});
 

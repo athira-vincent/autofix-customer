@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_event.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_state.dart';
 import 'package:auto_fix/UI/SpareParts/FilterScreen/filter_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
@@ -11,10 +16,14 @@ import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SparePartsListScreen extends StatefulWidget {
-  const SparePartsListScreen({Key? key}) : super(key: key);
+  final String modelname;
+
+  const SparePartsListScreen({Key? key, required this.modelname})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -36,7 +45,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
 
   bool addToCart = false;
 
-  TextEditingController searchController = new TextEditingController();
+  TextEditingController searchController = TextEditingController();
   StateSetter? setStateSearch;
 
   @override
@@ -55,20 +64,29 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Column(
-                children: [
-                  appBarCustomUi(),
-                  SparePartsListUi(),
-                ],
-              ),
-              addToCart == false ? Container() : ViewCartUi(),
-            ],
-          )),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => SparePartListBloc()
+              ..add(FetchSparePartListEvent(
+                  widget.modelname.toString(), "null", "null", "null")),
+          ),
+        ],
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Column(
+                  children: [
+                    appBarCustomUi(),
+                    SparePartsListUi(),
+                  ],
+                ),
+                addToCart == false ? Container() : ViewCartUi(),
+              ],
+            )),
+      ),
     );
   }
 
@@ -79,10 +97,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.all(20),
           child: Text(
-            'Ford Fiesta',
+            widget.modelname,
             textAlign: TextAlign.center,
             style: Styles.appBarTextBlue,
           ),
@@ -115,123 +133,171 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
 
   Widget SparePartsListUi() {
     return Expanded(
-      child: GridView.builder(
-        itemCount: 8,
-        shrinkWrap: true,
-        controller: ScrollController(keepScrollOffset: false),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, childAspectRatio: 0.7),
-        itemBuilder: (
-          context,
-          index,
-        ) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: CustColors.greyText1),
-                borderRadius: BorderRadius.circular(0)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 100,
-                    width: double.infinity,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-                        fit: BoxFit.cover,
+      child: BlocBuilder<SparePartListBloc, SparePartListState>(
+          builder: (context, state) {
+        if (state is SparePartListLoadingState) {
+          return Container();
+        } else if (state is SparePartListLoadedState) {
+          return GridView.builder(
+            itemCount: state.sparePartslistModel.data!.sparePartsList.length,
+            shrinkWrap: true,
+            controller: ScrollController(keepScrollOffset: false),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 0.7),
+            itemBuilder: (
+              context,
+              index,
+            ) {
+              print("noel");
+
+              String image=state.sparePartslistModel.data!.sparePartsList[index].productImage.replaceAll("^\"|\"", "");
+
+
+
+              print("imagess");
+
+
+
+
+              return Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: CustColors.greyText1),
+                    borderRadius: BorderRadius.circular(0)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        height: 100,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: state.sparePartslistModel.data!
+                                  .sparePartsList[index].productImage.isEmpty
+                              ? Container(
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(25),
+                                    child: SvgPicture.asset(
+                                      'assets/image/CustomerType/dummyCar00.svg',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                )
+                              : Image.network(
+                                  state.sparePartslistModel.data!.sparePartsList
+                                      .first.productImage,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                        child: Text(
-                          "Clutch assembly",
-                          style: Styles.sparePartNameTextBlack17,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Text(
-                          "A2137635123. | Ford fiesta fort",
-                          style: Styles.sparePartNameSubTextBlack,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Container(
-                          height: 20,
-                          width: 50,
-                          alignment: Alignment.center,
-                          color: CustColors.light_navy,
-                          child: const Text(
-                            "5% OFF",
-                            style: Styles.badgeTextStyle1,
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Text(
-                          "\$ 3000",
-                          style: Styles.sparePartOrginalPriceSubTextBlack,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                        child: Row(
-                          children: [
-                            const Text(
-                              "\$ 3000",
-                              style: Styles.sparePartOfferPriceSubTextBlack,
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                            child: Text(
+                              state.sparePartslistModel.data!
+                                  .sparePartsList[index].productName,
+                              style: Styles.sparePartNameTextBlack17,
                             ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                              child: InkWell(
-                                onTap: () {
-                                  print('gdfh');
-                                  setState(() {
-                                    addToCart = true;
-                                  });
-                                },
-                                child: Container(
-                                  height: 20,
-                                  width: 70,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          color: CustColors.greyText3),
-                                      borderRadius: BorderRadius.circular(4)),
-                                  child: const Text(
-                                    "+ Add to cart",
-                                    style: Styles.homeActiveTextStyle,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            child: Text(
+                              state.sparePartslistModel.data!
+                                      .sparePartsList[index].productCode +
+                                  "." " |" +
+                                  state
+                                      .sparePartslistModel
+                                      .data!
+                                      .sparePartsList[index]
+                                      .vehicleModel
+                                      .modelName,
+                              style: Styles.sparePartNameSubTextBlack,
+                            ),
+                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                          //   child: Container(
+                          //     height: 20,
+                          //     width: 50,
+                          //     alignment: Alignment.center,
+                          //     color: CustColors.light_navy,
+                          //     child: const Text(
+                          //       "5% OFF",
+                          //       style: Styles.badgeTextStyle1,
+                          //     ),
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            child: Text(
+                              "\$ " +
+                                  state.sparePartslistModel.data!
+                                      .sparePartsList[index].price,
+                              style: Styles.sparePartOrginalPriceSubTextBlack,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "\$ " +
+                                      state.sparePartslistModel.data!
+                                          .sparePartsList[index].price,
+                                  style: Styles.sparePartOfferPriceSubTextBlack,
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      print('gdfh');
+                                      setState(() {
+                                        addToCart = true;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 20,
+                                      width: 70,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: CustColors.greyText3),
+                                          borderRadius:
+                                              BorderRadius.circular(4)),
+                                      child: const Text(
+                                        "+ Add to cart",
+                                        style: Styles.homeActiveTextStyle,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           );
-        },
-      ),
+        } else {
+          return Container();
+        }
+      }),
     );
   }
 

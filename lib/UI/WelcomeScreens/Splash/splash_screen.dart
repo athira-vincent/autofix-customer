@@ -54,6 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
     print("defaultVehicleBrand ============ $defaultVehicle");
     print("User Type ============ $userType");
 
+    print(userCategory);
+
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
     if (_token == null || _token == "") {
@@ -68,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if(_isDefaultVehicleAvailable != null || _isDefaultVehicleAvailable == 2){
           Navigator.pushReplacement(
             context,
-            new MaterialPageRoute(
+             MaterialPageRoute(
                 builder: (context) =>
                     AddCarScreen(userCategory:userCategory! ,userType: userType!,fromPage: "1",)),
           );
@@ -85,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     fromPage: "1",
                   )));
         }else{
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

@@ -1,4 +1,3 @@
-
 import 'package:auto_fix/Repository/repository.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_event.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_part_bloc/home_spare_part_state.dart';
@@ -10,13 +9,7 @@ class SparePartBloc extends Bloc<SparePartEvent, SparePartState> {
       emit(SparePartLoadingState());
       try {
         if (event is FetchSparePartEvent) {
-
-
-
-
-
-
-          var sparepartscreen = await Repository().getspareparts(event.modelid);
+          var sparepartscreen = await Repository().getspareparts();
           emit(SparePartLoadedState(sparePartsModel: sparepartscreen));
         }
       } catch (e) {
