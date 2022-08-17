@@ -152,11 +152,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
 
               String image=state.sparePartslistModel.data!.sparePartsList[index].productImage.replaceAll("^\"|\"", "");
 
-              List img=[];
-              img.add(state.sparePartslistModel.data!.sparePartsList[index].productImage.replaceAll("^\"|\"", ""));
+
 
               print("imagess");
-              print(img);
+
 
 
 
