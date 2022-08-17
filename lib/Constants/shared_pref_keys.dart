@@ -22,6 +22,9 @@ class SharedPrefKeys {
   static const userEmail = "userEmail";
   static const userID = "userID";
   static const userCode = "userCode";
+  static const userPhone = "userPhone";
+  static const otpCode = "otpCode";
+  static const userTypeId = "userTypeId";
   static const userProfilePic = "userProfilePic";
   static const isDefaultVehicleAvailable = "isDefaultVehicleAvailable";
   static const isCustomerSignUp = "isCustomerSignUp";
