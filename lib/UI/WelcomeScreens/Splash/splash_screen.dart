@@ -8,6 +8,7 @@ import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobReq
 import 'package:auto_fix/UI/Mechanic/mechanic_home_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Customer/add_car_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/PhoneLogin/otp_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/WalkThrough/walk_through_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
+    FocusManager.instance.primaryFocus?.unfocus();
     Timer(const Duration(seconds: 3), () {
       _changeScreen();
     });
@@ -42,6 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
     int? _isDefaultVehicleAvailable = _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
     int? _isWorkProfileCompleted = _shdPre.getInt(SharedPrefKeys.isWorkProfileCompleted);
     String? defaultVehicle = _shdPre.getString(SharedPrefKeys.defaultBrandID);
+    String? phoneNo = _shdPre.getString(SharedPrefKeys.userPhone);
+    String? otpCode = _shdPre.getString(SharedPrefKeys.otpCode);
+    String? userTypeId = _shdPre.getString(SharedPrefKeys.userTypeId);
+
     print("is logged in=======$_isLoggedin");
     print("is isWalked in=======$isWalked");
     print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
@@ -60,13 +65,25 @@ class _SplashScreenState extends State<SplashScreen> {
       print("chechingggg 01 $userType");
 
       if (userType == TextStrings.user_customer) {
-        if(_isDefaultVehicleAvailable == null || _isDefaultVehicleAvailable == 1){
+        if(_isDefaultVehicleAvailable != null || _isDefaultVehicleAvailable == 2){
           Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
                 builder: (context) =>
                     AddCarScreen(userCategory:userCategory! ,userType: userType!,fromPage: "1",)),
           );
+        }else if(_isDefaultVehicleAvailable != null || _isDefaultVehicleAvailable == 1){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OtpVerificationScreen(
+                    userType: userType!,
+                    userCategory: userCategory!,
+                    phoneNumber: phoneNo!,
+                    otpNumber:otpCode!,
+                    userTypeId: userTypeId!,
+                    fromPage: "1",
+                  )));
         }else{
           Navigator.pushReplacement(
               context,
@@ -75,14 +92,27 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       }
       else{
-        if(_isWorkProfileCompleted == null || _isWorkProfileCompleted == 1){
+        if(_isWorkProfileCompleted != null || _isWorkProfileCompleted == 2){
           Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
                 builder: (context) =>
                     WorkSelectionScreen(userCategory:userCategory! ,userType: userType!,)),
           );
-        }else{
+        }else if(_isWorkProfileCompleted != null || _isWorkProfileCompleted == 1)
+        {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OtpVerificationScreen(
+                    userType : userType!,
+                    userCategory : userCategory!,
+                    phoneNumber : phoneNo!,
+                    otpNumber : otpCode!,
+                    userTypeId : userTypeId!,
+                    fromPage : "1",
+                  )));
+        }else {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

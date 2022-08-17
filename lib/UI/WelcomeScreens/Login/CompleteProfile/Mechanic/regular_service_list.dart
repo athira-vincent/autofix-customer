@@ -101,7 +101,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
           //_isLoading = false;
           SharedPreferences _shdPre = await SharedPreferences.getInstance();
-          _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
+          _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
           print("success refNumber: userCode, >>>>>>>  ${userCode}");
           Navigator.pushReplacement(
               context,

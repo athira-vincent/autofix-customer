@@ -177,7 +177,8 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
-  _listenSignUpResponse() {
+  _listenSignUpResponse() async {
+    SharedPreferences _shdPre = await SharedPreferences.getInstance();
     _signupBloc.signUpResponse.listen((value) {
       if (value.status == "error") {
         setState(() {
@@ -204,12 +205,16 @@ class _SignupScreenState extends State<SignupScreen> {
             value.data!.signUp!.token.toString(),
           );*/
           if (value.data?.signUp?.customer == null) {
+            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
             _signupBloc.userDefault(
               value.data!.signUp!.token.toString(),
               TextStrings.user_mechanic,
               "${value.data!.signUp!.mechanic?.firstName.toString()}",
               "${value.data!.signUp!.mechanic?.id.toString()}",
               "${value.data!.signUp!.mechanic?.userCode.toString()}",
+              "${value.data!.signUp!.mechanic?.phoneNo.toString()}",
+              "${value.data!.signUp!.mechanic?.otpCode.toString()}",
+              "${value.data!.signUp!.mechanic?.userTypeId.toString()}",
             );
             Navigator.pushReplacement(
                 context,
@@ -226,12 +231,16 @@ class _SignupScreenState extends State<SignupScreen> {
                           fromPage: "1",
                         )));
           } else {
+            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 1);
             _signupBloc.userDefault(
               value.data!.signUp!.token.toString(),
               TextStrings.user_customer,
               "${value.data!.signUp!.customer?.firstName.toString()}",
               "${value.data!.signUp!.customer?.id.toString()}",
               "${value.data!.signUp!.customer?.userCode.toString()}",
+              "${value.data!.signUp!.customer?.phoneNo.toString()}",
+              "${value.data!.signUp!.customer?.otpCode.toString()}",
+              "${value.data!.signUp!.customer?.userTypeId.toString()}",
             );
             Navigator.push(
                 context,
