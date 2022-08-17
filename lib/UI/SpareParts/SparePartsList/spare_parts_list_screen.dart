@@ -48,6 +48,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   TextEditingController searchController = TextEditingController();
   StateSetter? setStateSearch;
 
+  late List<String> image;
+
   @override
   void initState() {
     super.initState();
@@ -148,16 +150,13 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               context,
               index,
             ) {
-              print("noel");
-
-              String image=state.sparePartslistModel.data!.sparePartsList[index].productImage.replaceAll("^\"|\"", "");
-
-
-
-              print("imagess");
-
-
-
+              image = state
+                  .sparePartslistModel.data!.sparePartsList[index].productImage
+                  .replaceAll("[", "")
+                  .replaceAll("]", "")
+                  .split(",");
+              print("imagesss");
+              print(image);
 
               return Container(
                 decoration: BoxDecoration(
@@ -174,8 +173,15 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                         width: double.infinity,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
-                          child: state.sparePartslistModel.data!
-                                  .sparePartsList[index].productImage.isEmpty
+                          child: state
+                                      .sparePartslistModel
+                                      .data!
+                                      .sparePartsList[index]
+                                      .productImage
+                                      .isEmpty ||
+                                  state.sparePartslistModel.data!
+                                          .sparePartsList[index].productImage ==
+                                      "null"
                               ? Container(
                                   color: Colors.white,
                                   child: Padding(
@@ -187,8 +193,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                   ),
                                 )
                               : Image.network(
-                                  state.sparePartslistModel.data!.sparePartsList
-                                      .first.productImage,
+                                  image[0],
                                   fit: BoxFit.cover,
                                 ),
                         ),
@@ -261,6 +266,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                       const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                   child: InkWell(
                                     onTap: () {
+
+
                                       print('gdfh');
                                       setState(() {
                                         addToCart = true;

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
 import 'package:auto_fix/Models/customer_models/add_rating_model/addRatingMdl.dart';
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart';
@@ -364,4 +365,26 @@ class CustomerApiProvider {
 
 
 
+
+  /// addcart api provider
+
+  Future<AddCartModel>fetchServiceaddcart(
+     productid
+      ) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchServiceaddcart(
+        productid
+    ) ;
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = AddCartModel(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return AddCartModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = AddCartModel(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
 }

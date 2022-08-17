@@ -3239,4 +3239,23 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+  /// add to cart queryprovider
+  fetchServiceaddcart(productid) async {
+    String _query = """
+        
+  mutation {
+    addCart(productId: 1, quantity: 1) {
+      status
+      code
+      message
+    }
+  }
+
+
+    """;
+
+    return await GqlClient.I.mutation(_query,
+        enableDebug: true, isTokenThere: false, variables: {});
+  }
 }
