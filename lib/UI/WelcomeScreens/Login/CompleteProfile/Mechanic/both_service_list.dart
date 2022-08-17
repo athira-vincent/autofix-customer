@@ -151,7 +151,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           //_isLoading = false;
           print("success refNumber: userCode, >>>>>>>  ${userCode}");
           SharedPreferences _shdPre = await SharedPreferences.getInstance();
-          _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
+          _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

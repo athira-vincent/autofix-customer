@@ -353,7 +353,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if( widget.userType == TextStrings.user_customer)
                                                           {
-                                                            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 1);
+                                                            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 2);
                                                             Navigator.pushReplacement(
                                                               context,
                                                               new MaterialPageRoute(
@@ -363,7 +363,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_corporate)
                                                           {
-                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
+                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
                                                             Navigator.pushReplacement(
                                                               context,
                                                               new MaterialPageRoute(
@@ -373,7 +373,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                                           }
                                                           else if(widget.userType == TextStrings.user_mechanic && widget.userCategory == TextStrings.user_category_individual)
                                                           {
-                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 1);
+                                                            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 2);
                                                             Navigator.pushReplacement(
                                                               context,
                                                               new MaterialPageRoute(
