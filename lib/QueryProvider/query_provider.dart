@@ -3138,30 +3138,105 @@ class QueryProvider {
     );
   }
 
-  /// sparepartslist
-  fetchServicespareparts(modelid) async {
+  /// sparepartsvehicle
+  fetchServicespareparts() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
-    String _query = """
-   {
-  modelDetails(id: $modelid) {
-    id
-    modelName
-    engineName
-    years
-    brandName
-    modelIcon
-    status
-  }
-}
-     """;
+    String _query = """ 
+     query
+     {
+        Cust_vehicle_list {
+          id
+          year
+          brand
+          model
+          engine
+          plateNo
+          milege
+          lastMaintenance
+          latitude
+          longitude
+          color
+          vehiclePic
+          userId
+          status
+          defaultVehicle
+        }
+      }
+
+    """;
     log(_query);
-    print("Token >>>>>>> $authToken");
     return await GqlClient.I.query01(
       _query,
       authToken,
       enableDebug: true,
-      isTokenThere: false,
+      isTokenThere: true,
+    );
+  }
+
+  /// sparepartslist
+  fetchServicesparepartslist(model, search, fromcost, tocost) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """ 
+       query
+       {
+    spare_parts_list(
+      modelName: "$model"
+      search: $search
+      sortBy: 1
+      fromCost: $fromcost
+      toCost: $tocost
+    ) {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      status
+      vehicleModelId
+      vendorId
+      vehicleModel {
+        id
+        modelName
+        engineName
+        years
+        brandName
+        status
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData {
+        id
+        transType
+        rating
+        feedback
+        bookingId
+        orderId
+        status
+        order{
+          id
+        }
+        bookings{
+          id
+        }
+        productData{
+          id
+        }
+      }
+    }
+  }
+
+    """;
+    log(_query);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: true,
     );
   }
 }

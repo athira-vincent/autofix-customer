@@ -279,7 +279,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => SparePartBloc()..add(FetchSparePartEvent("null")),
+            create: (context) => SparePartBloc()..add(FetchSparePartEvent()),
           ),
         ],
         child: Scaffold(
@@ -913,7 +913,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              'Spare parts for your models ',
+              'Spare parts for my models ',
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
@@ -928,7 +928,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 height: 200,
                 margin: const EdgeInsets.all(0),
                 child: ListView.builder(
-                  itemCount: state.sparePartsModel.data!.modelDetails.length,
+                  itemCount:
+                      state.sparePartsModel.data!.custVehicleList!.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (
                     context,
@@ -949,15 +950,34 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                   )),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
-                                child: Image.network(
-                                  state.sparePartsModel.data!
-                                      .modelDetails[index].modelIcon,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: state
+                                        .sparePartsModel
+                                        .data!
+                                        .custVehicleList![index]
+                                        .vehiclePic
+                                        .isEmpty
+                                    ? Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(25),
+                                          child: SvgPicture.asset(
+                                            'assets/image/CustomerType/dummyCar00.svg',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      )
+                                    : Image.network(
+                                        state.sparePartsModel.data!
+                                            .custVehicleList![index].vehiclePic,
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
-                            Text(state.sparePartsModel.data!.modelDetails[index]
-                                .modelName),
+                            Text(state.sparePartsModel.data!
+                                    .custVehicleList![index].brand +
+                                " " +
+                                state.sparePartsModel.data!
+                                    .custVehicleList![index].model),
                           ],
                         ),
                         onTap: () {
@@ -965,7 +985,9 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const SparePartsListScreen()));
+                                       SparePartsListScreen(
+                                          modelname: state.sparePartsModel.data!
+                                              .custVehicleList![index].model)));
                         },
                       ),
                     );

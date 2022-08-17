@@ -8,6 +8,7 @@ import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergency
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/mechanicBookingMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_details_model/mechanicDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/customer_start_service_mdl.dart';
+import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
@@ -318,20 +319,45 @@ class CustomerApiProvider {
 
 /// spare parts api provider
 
-  Future<SparePartsModel>fetchServicespareparts(
-      modelid) async {
+  Future<CustVehicleListMdl>fetchServicespareparts(
+      ) async {
     Map<String, dynamic> _resp = await _queryProvider.fetchServicespareparts(
-        modelid) ;
+        ) ;
     if (_resp != null) {
       if (_resp['status'] == "error") {
-        final errorMsg = SparePartsModel(status: "error", message: _resp['message'], data: null);
+        final errorMsg = CustVehicleListMdl(status: "error", message: _resp['message'], data: null);
         return errorMsg;
       } else {
         var data = {"data": _resp};
-        return SparePartsModel.fromMap(data);
+        return CustVehicleListMdl.fromJson(data);
       }
     } else {
-      final errorMsg = SparePartsModel(status: "error", message: "No Internet connection", data: null);
+      final errorMsg = CustVehicleListMdl(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+
+
+  /// spare partslist api provider
+
+  Future<SparePartsListModel>fetchServicesparepartslist(
+      model,search,fromcost,tocost
+      ) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchServicesparepartslist(
+      model,search,fromcost,tocost
+    ) ;
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = SparePartsListModel(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return SparePartsListModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = SparePartsListModel(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

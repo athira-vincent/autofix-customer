@@ -482,7 +482,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               index: _index,
               children: <Widget> [
                 HomeCustomerUIScreen(),
-                SparePartsListScreen(),
+                //SparePartsListScreen(),
                 CustomerMyServicesScreen(),
                 CustomerMyProfileScreen(isEnableEditing: false,),
               ],

@@ -7,8 +7,7 @@ class SparePartEvent extends Equatable {
 
 class FetchSparePartEvent extends SparePartEvent {
 
-  final String modelid;
-  FetchSparePartEvent(this.modelid);
+  FetchSparePartEvent();
 
   @override
   List<Object> get props => [];
