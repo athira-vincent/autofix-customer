@@ -37,6 +37,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
   String selectedService = "";
   //List<ServiceListAll> serviceSpecialisationList =[];
   List<SelectedServicesMdl> selectedServiceMdlList=[];
+  bool _isLoadingPage = true;
 
   String authToken="", userCode = "";
 
@@ -44,6 +45,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
     _serviceListBloc.postServiceList.listen((value) {
       if (value.status == "error") {
         setState(() {
+          _isLoadingPage = false;
           //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
@@ -51,8 +53,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
         });
 
       } else {
-
         setState(() {
+          _isLoadingPage = false;
           print("success postServiceList >>>>>>>  ${value.status}");
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
@@ -64,6 +66,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
             for(int x = 0; x < regularServiceList[i].service!.length; x++){
               selectedServiceMdlList.add(SelectedServicesMdl(i,x,
                   regularServiceList[i].service![x].id.toString(),
+                  regularServiceList[i].service![x].minPrice,
                   regularServiceList[i].service![x].minPrice,
                   regularServiceList[i].service![x].maxPrice,
                   "10:00", false));
@@ -174,7 +177,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                   Container(
                     margin: EdgeInsets.only(
                       top: size.height * 0.026,
-                     /* left: size.width * 6 / 100,
+                      /* left: size.width * 6 / 100,
                       right: size.width * 6 / 100,*/
                     ),
                     height: ScreenSize().setValue(36.3),
@@ -215,22 +218,22 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                 keyboardType: TextInputType.text,
                                 textAlignVertical: TextAlignVertical.center,
                                 onChanged: (text) {
-                                             setState(() {
-                                               if(text.isNotEmpty){
-                                                 _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
-                                               }else{
-                                                 _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
-                                               }
-                                             });
-                                             //_allMakeBloc.searchMake(text);
-                                           },
+                                  setState(() {
+                                    if(text.isNotEmpty){
+                                      _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
+                                    }else{
+                                      _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
+                                    }
+                                  });
+                                  //_allMakeBloc.searchMake(text);
+                                },
                                 textAlign: TextAlign.left,
                                 style: Styles.searchTextStyle01,
                                 decoration: InputDecoration(
-                                  hintText: "Search Your Service",
-                                  border: InputBorder.none,
-                                  contentPadding: new EdgeInsets.only(bottom: 15),
-                                  hintStyle: Styles.searchTextStyle01
+                                    hintText: "Search Your Service",
+                                    border: InputBorder.none,
+                                    contentPadding: new EdgeInsets.only(bottom: 15),
+                                    hintStyle: Styles.searchTextStyle01
                                 ),
                               ),
                             ),
@@ -240,6 +243,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     ),
                   ),
 
+                  _isLoadingPage == true
+                  ?
+                  const Center(
+                    child: CircularProgressIndicator(color: CustColors.light_navy,),)
+                  :
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.only(
@@ -250,20 +258,20 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       height: size.height * 0.80, //0.764
                       child: Container(
                         margin: EdgeInsets.only(
-                          left: size.width * 0.045,
-                          right: size.width * 0.045,
-                          //top: size.height * 0.03,
-                          bottom: size.height * 0.030
+                            left: size.width * 0.045,
+                            right: size.width * 0.045,
+                            //top: size.height * 0.03,
+                            bottom: size.height * 0.030
                         ),
                         child: Column(
                           children: [
                             Expanded(
                               child: regularServiceList.length != 0
                                   ? ListView.builder(
-                                    itemBuilder: (BuildContext context, int index) =>
-                                        _buildTiles(regularServiceList[index],size, index),
-                                    itemCount: regularServiceList.length,
-                                  )
+                                itemBuilder: (BuildContext context, int index) =>
+                                    _buildTiles(regularServiceList[index],size, index),
+                                itemCount: regularServiceList.length,
+                              )
                                   :
                               Center(
                                 child: Text('No Results found.'),
@@ -276,6 +284,10 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                     ),
                   ),
 
+                  _isLoadingPage == true
+                      ?
+                  Container()
+                      :
                   InkWell(
                     onTap: (){
                       // Map<List<AllServiceFeeData>?, String> myData = new Map();
@@ -323,7 +335,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                       //print(serviceSpecialisationList);
 
-                     /* for(int i=0;i<serviceSpecialisationList.length;i++){
+                      /* for(int i=0;i<serviceSpecialisationList.length;i++){
                         serviceId = serviceId +""" "${serviceSpecialisationList[i].id}", """;
                       }
 
@@ -345,8 +357,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                         width: size.width * 0.246,
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(
-                          right: size.width * 7 / 100,
-                          top: size.height * 1.9 / 100
+                            right: size.width * 7 / 100,
+                            top: size.height * 1.9 / 100
                         ),
                         //margin: EdgeInsets.only(top: 8, bottom: 6,left: 75,right: 75),
                         //padding: EdgeInsets.only(left: 20, right: 20),
@@ -370,6 +382,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -408,13 +421,15 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                     TextEditingController _rateController = TextEditingController();
                     TextEditingController _timeController = TextEditingController();
-                    _rateController.text = root.service![index].minPrice.toString();
+                    //_rateController.text = root.service![index].minPrice.toString();
+                    _rateController.text = selectedServiceMdlList[getItemIndex(parentIndex,index)].fee;
                     _timeController.text = selectedServiceMdlList[getItemIndex(parentIndex,index)].time;
                     _rateController.addListener(() {
                       int itemIndex = getItemIndex(parentIndex,index);
                       var temp =   SelectedServicesMdl(parentIndex, index,
                           selectedServiceMdlList[itemIndex].serviceId,
                           _rateController.text,
+                          selectedServiceMdlList[itemIndex].minAmount,
                           selectedServiceMdlList[itemIndex].maxAmount,
                           selectedServiceMdlList[itemIndex].time,
                           selectedServiceMdlList[itemIndex].isEnable);
@@ -425,6 +440,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       int itemIndex = getItemIndex(parentIndex,index);
                       var temp =   SelectedServicesMdl(parentIndex, index,
                           selectedServiceMdlList[itemIndex].serviceId,
+                          selectedServiceMdlList[itemIndex].fee,
                           selectedServiceMdlList[itemIndex].minAmount,
                           selectedServiceMdlList[itemIndex].maxAmount,
                           _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
@@ -451,6 +467,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     print("Checkbox itemIndex >>>>>>>>>> " + itemIndex.toString());
                                     var temp =   SelectedServicesMdl(parentIndex,index,
                                         selectedServiceMdlList[itemIndex].serviceId,
+                                        selectedServiceMdlList[itemIndex].fee,
                                         selectedServiceMdlList[itemIndex].minAmount,
                                         selectedServiceMdlList[itemIndex].maxAmount,
                                         selectedServiceMdlList[itemIndex].time, val);
@@ -462,6 +479,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     //serviceSpecialisationList.remove(regularServiceList[index]);
                                     var temp= SelectedServicesMdl(parentIndex,index,
                                         selectedServiceMdlList[itemIndex].serviceId,
+                                        selectedServiceMdlList[itemIndex].fee,
                                         selectedServiceMdlList[itemIndex].minAmount,
                                         selectedServiceMdlList[itemIndex].maxAmount,
                                         selectedServiceMdlList[itemIndex].time, val);
@@ -568,29 +586,16 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     horizontal: 6.0,
                                   ),
                                 ),
-                                /*validator: (value){
-                                  if(value!.isEmpty){
-                                    return "Fill field";
-                                  }
-                                  *//*else if(value.length >= 3){
-                                    _timeController.text = value.toString() + ":00";
-                                  }*//*
-                                  else{
-                                    return null;
-                                  }
-                                },*/
-                                /*inputFormatters: <TextInputFormatter>[
-                                  LengthLimitingTextInputFormatter(5),
-                                ],*/
                                 cursorColor: CustColors.light_navy,
                                 //autovalidateMode: AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.datetime,
                                 controller: _timeController,
                                 style: Styles.searchTextStyle02,
                                 enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
+                                showCursor: false,
                                 //readOnly: true,
                                 //initialValue: '${selectedServiceMdlList[getItemIndex(parentIndex,index)].time}',
-                                onChanged: (val) async{
+                                /*onChanged: (val) async{
                                   Duration? _durationResult = await showDurationPicker(
                                       snapToMins: 5.0,
                                       context: context,
@@ -607,40 +612,25 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                       _timeController.text = _durationResult.inMinutes.toString() + ":00";
                                     });
                                   }
-                                },
-                               /* onTap: () async {
-                                  print(" _timeController.text >>> ${_timeController.text}" );
-                                  Duration? _durationResult = await showDurationPicker(
-                                    snapToMins: 5.0,
-                                    context: context,
-                                    initialTime: Duration(
-                                        //hours: 2,
-                                        minutes: 10,
-                                        seconds: 00,
-                                        milliseconds: 0)
-                                  );
-                                  print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
-                                  print(" _timeController.text02 >>> ${_timeController.text}" );
-                                  if(_durationResult != null){
-                                    setState(() {
-                                      _timeController.text = "";
-                                      _timeController.text = _durationResult.inMinutes.toString() + ":00";
-                                      print(" _timeController.text03 >>> ${_timeController.text}" );
-                                    });
-                                  }
-
-                                  print(" _timeController.text04 >>> ${_timeController.text}" );
-
-                                  int itemIndex = getItemIndex(parentIndex,index);
-                                  var temp =   SelectedServicesMdl(parentIndex, index,
-                                      selectedServiceMdlList[itemIndex].serviceId,
-                                      selectedServiceMdlList[itemIndex].minAmount,
-                                      selectedServiceMdlList[itemIndex].maxAmount,
-                                      _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
-                                  selectedServiceMdlList.removeAt(itemIndex);
-                                  selectedServiceMdlList.insert(itemIndex,temp);
-
                                 },*/
+                               onTap: () async {
+                                 Duration? _durationResult = await showDurationPicker(
+                                     snapToMins: 5.0,
+                                     context: context,
+                                     initialTime: Duration(
+                                       //hours: 2,
+                                         minutes: 10,
+                                         seconds: 00,
+                                         milliseconds: 0)
+                                 );
+                                 print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                 if(_durationResult != null){
+                                   setState(() {
+                                     _timeController.text = "";
+                                     _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                   });
+                                 }
+                               },
                                 //readOnly: _regularIsChecked![index],
                               ),
                             ),
@@ -672,9 +662,13 @@ class SelectedServicesMdl{
   final String serviceId;
   final String minAmount;
   final String maxAmount;
+  final String fee;
   final String time;
   final bool isEnable;
-  SelectedServicesMdl(this.parentIndex, this.childIndex,this.serviceId, this.minAmount, this.maxAmount, this.time,this.isEnable);
+  SelectedServicesMdl(this.parentIndex,
+      this.childIndex,this.serviceId,
+      this.fee, this.minAmount,
+      this.maxAmount, this.time,this.isEnable);
 }
 
 
