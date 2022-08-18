@@ -292,6 +292,12 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                       const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                   child: InkWell(
                                     onTap: () {
+                                      print("prodid");
+                                      print(state
+                                          .sparePartslistModel
+                                          .data!
+                                          .sparePartsList[index]
+                                          .id);
                                       final addcartBloc =
                                           BlocProvider.of<AddCartBloc>(context);
                                       addcartBloc.add(FetchAddCartEvent(state
@@ -301,9 +307,11 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                           .id
                                           .toString()));
                                       print('gdfh');
-                                      // setState(() {
-                                      //   addToCart = true;
-                                      // });
+                                      setState(() {
+                                        addToCart = true;
+                                      });
+
+
                                     },
                                     child: Container(
                                       height: 20,

@@ -3242,6 +3242,8 @@ class QueryProvider {
 
   /// add to cart queryprovider
   fetchServiceaddcart(productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String _query = """
         
   mutation {
@@ -3255,7 +3257,7 @@ class QueryProvider {
 
     """;
 
-    return await GqlClient.I.mutation(_query,
-        enableDebug: true, isTokenThere: false, variables: {});
+    return await GqlClient.I.query01(_query,authToken,
+        enableDebug: true, isTokenThere: false,);
   }
 }
