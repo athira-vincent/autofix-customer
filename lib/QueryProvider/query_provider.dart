@@ -3239,4 +3239,25 @@ class QueryProvider {
       isTokenThere: true,
     );
   }
+
+  /// add to cart queryprovider
+  fetchServiceaddcart(productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String _query = """
+        
+  mutation {
+    addCart(productId: $productid, quantity: 1) {
+      status
+      code
+      message
+    }
+  }
+
+
+    """;
+
+    return await GqlClient.I.query01(_query,authToken,
+        enableDebug: true, isTokenThere: false,);
+  }
 }

@@ -6,6 +6,9 @@ import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/h
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_event.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_state.dart';
 import 'package:auto_fix/UI/SpareParts/FilterScreen/filter_screen.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
@@ -18,6 +21,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SparePartsListScreen extends StatefulWidget {
   final String modelname;
@@ -48,6 +52,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   TextEditingController searchController = TextEditingController();
   StateSetter? setStateSearch;
 
+  late List<String> image;
+
   @override
   void initState() {
     super.initState();
@@ -72,20 +78,42 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                   widget.modelname.toString(), "null", "null", "null")),
           ),
         ],
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            body: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Column(
-                  children: [
-                    appBarCustomUi(),
-                    SparePartsListUi(),
-                  ],
-                ),
-                addToCart == false ? Container() : ViewCartUi(),
-              ],
-            )),
+        child: MultiBlocListener(
+          listeners: [
+            /// addtocart
+            BlocListener<AddCartBloc, AddCartState>(
+              listener: (context, state) {
+                if (state is AddCartLoadedState) {
+                  if (state.addCartModel.data!.addCart.status == "Success") {
+
+
+                    Fluttertoast.showToast(
+                      msg: "successfully added to cart!!",
+                      timeInSecForIosWeb: 1,
+                    );
+                    setState(() {
+                      addToCart = true;
+                    });
+                  }
+                }
+              },
+            ),
+          ],
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              body: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Column(
+                    children: [
+                      appBarCustomUi(),
+                      SparePartsListUi(),
+                    ],
+                  ),
+                  addToCart == false ? Container() : ViewCartUi(),
+                ],
+              )),
+        ),
       ),
     );
   }
@@ -148,16 +176,13 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               context,
               index,
             ) {
-              print("noel");
-
-              String image=state.sparePartslistModel.data!.sparePartsList[index].productImage.replaceAll("^\"|\"", "");
-
-
-
-              print("imagess");
-
-
-
+              image = state
+                  .sparePartslistModel.data!.sparePartsList[index].productImage
+                  .replaceAll("[", "")
+                  .replaceAll("]", "")
+                  .split(",");
+              print("imagesss");
+              print(image);
 
               return Container(
                 decoration: BoxDecoration(
@@ -174,8 +199,15 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                         width: double.infinity,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
-                          child: state.sparePartslistModel.data!
-                                  .sparePartsList[index].productImage.isEmpty
+                          child: state
+                                      .sparePartslistModel
+                                      .data!
+                                      .sparePartsList[index]
+                                      .productImage
+                                      .isEmpty ||
+                                  state.sparePartslistModel.data!
+                                          .sparePartsList[index].productImage ==
+                                      "null"
                               ? Container(
                                   color: Colors.white,
                                   child: Padding(
@@ -187,8 +219,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                   ),
                                 )
                               : Image.network(
-                                  state.sparePartslistModel.data!.sparePartsList
-                                      .first.productImage,
+                                  image[0],
                                   fit: BoxFit.cover,
                                 ),
                         ),
@@ -261,10 +292,26 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                       const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                   child: InkWell(
                                     onTap: () {
+                                      print("prodid");
+                                      print(state
+                                          .sparePartslistModel
+                                          .data!
+                                          .sparePartsList[index]
+                                          .id);
+                                      final addcartBloc =
+                                          BlocProvider.of<AddCartBloc>(context);
+                                      addcartBloc.add(FetchAddCartEvent(state
+                                          .sparePartslistModel
+                                          .data!
+                                          .sparePartsList[index]
+                                          .id
+                                          .toString()));
                                       print('gdfh');
                                       setState(() {
                                         addToCart = true;
                                       });
+
+
                                     },
                                     child: Container(
                                       height: 20,
