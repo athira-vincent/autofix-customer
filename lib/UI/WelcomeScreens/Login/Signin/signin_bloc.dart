@@ -36,12 +36,13 @@ class SigninBloc {
     postPhoneLogin.sink.add(_phoneResp);
   }
 
-  void userDefault(String token,String userType, String imageUrl,
+  void userDefault(String token,String userType,String userCategory, String imageUrl,
       String userName, String userId, String isOnline) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     shdPre.setString(SharedPrefKeys.token, token);
     shdPre.setBool(SharedPrefKeys.isUserLoggedIn, true);
     shdPre.setString(SharedPrefKeys.userType, userType);
+    shdPre.setString(SharedPrefKeys.userCategory, userCategory);
     shdPre.setString(SharedPrefKeys.userName, userName);
     shdPre.setString(SharedPrefKeys.userID, userId);
     shdPre.setString(SharedPrefKeys.mechanicIsOnline,isOnline);
