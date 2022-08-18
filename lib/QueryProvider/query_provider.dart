@@ -3244,6 +3244,8 @@ class QueryProvider {
   fetchServiceaddcart(productid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
     String _query = """
         
   mutation {
@@ -3257,7 +3259,63 @@ class QueryProvider {
 
     """;
 
-    return await GqlClient.I.query01(_query,authToken,
-        enableDebug: true, isTokenThere: false,);
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  cartlist queryprovider
+  fetchServicecartlist() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custId=shdPre.getString(SharedPrefKeys.userID).toString();
+
+    String _query = """
+   query      
+  {
+  cartList(customerId: $custId, page: 0, size: 100) {
+    totalItems
+    data {
+      id
+      customerId
+      productId
+      quantity
+      status
+      customer{
+        id
+        address{
+          fullName
+          phoneNo
+          pincode
+          city
+          state
+          
+        }
+      }
+      product{
+        id
+        productName
+      }
+    }
+    totalPages
+    currentPage
+    totalPrice
+    count
+    deliveryCharge
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
   }
 }
