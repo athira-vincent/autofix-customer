@@ -1,6 +1,7 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
+import 'package:auto_fix/Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/UI/Common/FcmTokenUpdate/fcm_token_update_api_provider.dart';
@@ -59,7 +60,7 @@ class Repository {
   final _sparepartsprovider = CustomerApiProvider();
   final _sparepartslistprovider = CustomerApiProvider();
   final _addcartprovider = CustomerApiProvider();
-
+  final _cartlistprovider = CustomerApiProvider();
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -588,4 +589,7 @@ class Repository {
 
   Future<AddCartModel> addcart(productid) =>
       _addcartprovider.fetchServiceaddcart(productid);
+
+  Future<CartListModel> cartlist() =>
+      _cartlistprovider.fetchServicecartlist();
 }
