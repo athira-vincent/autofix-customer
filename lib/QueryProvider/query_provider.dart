@@ -3245,7 +3245,7 @@ class QueryProvider {
     String _query = """
         
   mutation {
-    addCart(productId: 1, quantity: 1) {
+    addCart(productId: $productid, quantity: 1) {
       status
       code
       message
