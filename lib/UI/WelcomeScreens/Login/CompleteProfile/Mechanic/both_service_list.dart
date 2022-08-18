@@ -47,10 +47,10 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
   String authToken="", userCode = "";
   bool _isLoading = false;
+  bool _isLoadingPage = true;
   double per = .10;
-  double _setValue(double value) {
-    return value * per + value;
-  }
+  String searchText = "";
+
 
   _listenServiceListResponse() {
     _serviceListBloc.serviceListResponse.listen((value) {
@@ -60,6 +60,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
           //_isLoading = false;
+          _isLoadingPage = false;
         });
 
       } else {
@@ -67,7 +68,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
         setState(() {
           print("success postServiceList >>>>>>>  ${value.status}");
           print("success postServiceList >>>>>>>  ${value.data}");
-          //_isLoading = false;
+          _isLoadingPage = false;
           //print(value.data!.serviceListAll!.length);
           //allServiceList = value.data!.serviceListAll!;
 
@@ -211,6 +212,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       setState(() {
                         isRegularSelected = !isRegularSelected ;
                         print("isRegularSelected >>>>>> " +isRegularSelected.toString());
+                        searchText = "";
                       });
                     },
                     child: Container(
@@ -228,6 +230,10 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       child: isRegularSelected ? regularServiceListUi(size) : emergencyServiceListUi(size)
                   ),
 
+                  _isLoadingPage == true
+                      ?
+                  Container()
+                      :
                   nextButtons(size),
 
                 ],
@@ -251,11 +257,12 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                  right: size.width * 30 / 100,
                  top: size.height * 4 / 100
              ),
-             child: Text("Regular",
+             child: const Text("Regular",
                 softWrap: true,
                 style: Styles.TitleTextBlack,
              )
          ),
+
          Container(
            margin: EdgeInsets.only(
              top: size.height * 3.6 / 100,
@@ -299,12 +306,15 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                      child: TextFormField(
                        keyboardType: TextInputType.text,
                        textAlignVertical: TextAlignVertical.center,
+                       cursorColor: CustColors.light_navy,
                        onChanged: (text) {
                          setState(() {
                            if(text.isNotEmpty){
-                             _serviceListBloc.postServiceListRequest(authToken, text, null, "2", text );
+                             searchText = text;
+                             _serviceListBloc.postServiceListRequest(authToken, searchText, null, null, searchText );
                            }else{
-                             _serviceListBloc.postServiceListRequest(authToken, "", null, "2", "" );
+                             searchText = text;
+                             _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
                            }
                          });
                          //_allMakeBloc.searchMake(text);
@@ -325,6 +335,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
              ],
            ),
          ),
+         _isLoadingPage == true
+             ?
+         const Center(
+           child: CircularProgressIndicator(color: CustColors.light_navy,),)
+             :
          Expanded(
            child: Container(
              margin: EdgeInsets.only(
@@ -421,12 +436,15 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         textAlignVertical: TextAlignVertical.center,
+                        cursorColor: CustColors.light_navy,
                         onChanged: (text) {
                           setState(() {
                             if(text.isNotEmpty){
-                              _serviceListBloc.postServiceListRequest(authToken, text, null, "1","" );
+                              searchText = text;
+                              _serviceListBloc.postServiceListRequest(authToken, searchText, null, null,"" );
                             }else{
-                              _serviceListBloc.postServiceListRequest(authToken, "", null, "1", "" );
+                              searchText = text;
+                              _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
                             }
                           });
                           //_allMakeBloc.searchMake(text);
@@ -447,6 +465,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
               ],
             ),
           ),
+          _isLoadingPage == true
+              ?
+          const Center(
+            child: CircularProgressIndicator(color: CustColors.light_navy,),)
+              :
           Expanded(
             child: Container(
               margin: EdgeInsets.only(

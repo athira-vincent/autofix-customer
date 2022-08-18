@@ -51,10 +51,8 @@ class _SplashScreenState extends State<SplashScreen> {
     print("is isWalked in=======$isWalked");
     print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
     print("_isWorkProfileCompleted ============ $_isWorkProfileCompleted");
-    //print("defaultVehicleBrand ============ $defaultVehicle");
     print("User Type ============ $userType");
-
-    print(userCategory);
+    print("User userCategory ============ $userCategory");
 
     var _token = _shdPre.getString(SharedPrefKeys.token);
 
@@ -67,14 +65,14 @@ class _SplashScreenState extends State<SplashScreen> {
       print("chechingggg 01 $userType");
 
       if (userType == TextStrings.user_customer) {
-        if(_isDefaultVehicleAvailable != null || _isDefaultVehicleAvailable == 2){
+        if(_isDefaultVehicleAvailable != null && _isDefaultVehicleAvailable == 2){
           Navigator.pushReplacement(
             context,
              MaterialPageRoute(
                 builder: (context) =>
                     AddCarScreen(userCategory:userCategory! ,userType: userType!,fromPage: "1",)),
           );
-        }else if(_isDefaultVehicleAvailable != null || _isDefaultVehicleAvailable == 1){
+        }else if(_isDefaultVehicleAvailable != null && _isDefaultVehicleAvailable == 1){
           Navigator.push(
               context,
               MaterialPageRoute(

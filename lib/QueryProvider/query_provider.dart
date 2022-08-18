@@ -9,10 +9,10 @@ class QueryProvider {
   signIn(String userName, String password) async {
     String _query = """
       mutation {
-    SignIn(emailId: "$userName", password: "$password", platformId: 1) {
-      token
-      user {
-        id
+  SignIn(emailId: "$userName", password: "$password", platformId: 1) {
+    token
+    user {
+     		id
         userCode
         firstName
         lastName
@@ -25,39 +25,94 @@ class QueryProvider {
         otpCode
         isProfile
         otpVerified
+      customer{
+        id
+        
       }
-      vendor {
+      mechanic{
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
       }
-      admin {
+      vendor{
         id
-        userCode
-        firstName
-        lastName
-        emailId
-        phoneNo
-        userTypeId
-        status
-        jwtToken
-        fcmToken
-        otpCode
-        isProfile
-        otpVerified
       }
     }
+    vendor {
+      id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+    }
+    admin {
+    		id
+        userCode
+        firstName
+        lastName
+        emailId
+        phoneNo
+        userTypeId
+        status
+        jwtToken
+        fcmToken
+        otpCode
+        isProfile
+        otpVerified
+    }
+    generalCustomer {
+      id
+      custType
+      orgName
+      orgType
+      userId
+      profilePic
+      state
+      ministryName
+      hod
+      status
+    }
+    genMechanic {
+      id
+      orgName
+      orgType
+      yearExp
+      mechType
+      workType
+      numMech
+      rcNumber
+      address
+      apprentice_cert
+      identification_cert
+      yearExist
+      rate
+      reviewCount
+      adminApprove
+      userId
+      profilePic
+      state
+      status
+      brands
+    }
+    genVendor {
+      id
+      userId
+      profilePic
+      state
+      shopName
+      productCount
+      orderCount
+      totalEarning
+      status
+    }
   }
+}
     """;
     return await GqlClient.I.mutation(_query,
         enableDebug: true, isTokenThere: false, variables: {});
@@ -84,6 +139,60 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+        }
+        genCustomer {
+          id
+          custType
+          orgName
+          orgType
+          userId
+          profilePic
+          state
+          ministryName
+          hod
+          status
+        }
+        genMechanic {
+          id
+          orgName
+          orgType
+          yearExp
+          mechType
+          workType
+          numMech
+          rcNumber
+          address
+          apprentice_cert
+          identification_cert
+          yearExist
+          rate
+          reviewCount
+          adminApprove
+          userId
+          profilePic
+          state
+          status
+          brands
+        }
+        genVendor {
+          id
+          userId
+          profilePic
+          state
+          shopName
+          productCount
+          orderCount
+          totalEarning
+          status
         }
       }
     }      
@@ -107,6 +216,60 @@ class QueryProvider {
           otpCode
           isProfile
           otpVerified
+          customer{
+            id
+          }
+          mechanic{
+            id
+          }
+          vendor{
+            id
+          }
+        }
+        genCustomer {
+          id
+          custType
+          orgName
+          orgType
+          userId
+          profilePic
+          state
+          ministryName
+          hod
+          status
+        }
+        genMechanic {
+          id
+          orgName
+          orgType
+          yearExp
+          mechType
+          workType
+          numMech
+          rcNumber
+          address
+          apprentice_cert
+          identification_cert
+          yearExist
+          rate
+          reviewCount
+          adminApprove
+          userId
+          profilePic
+          state
+          status
+          brands
+        }
+        genVendor {
+          id
+          userId
+          profilePic
+          state
+          shopName
+          productCount
+          orderCount
+          totalEarning
+          status
         }
       }
     } 

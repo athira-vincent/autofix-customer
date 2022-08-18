@@ -500,7 +500,11 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_customer,
-                "",           //----- profile image url should b updated
+                value.data!.signIn!.generalCustomer!.custType.toString() == "1"
+                    ? TextStrings.user_category_individual
+                    : value.data!.signIn!.generalCustomer!.custType.toString() == "2"
+                    ? TextStrings.user_category_corporate : TextStrings.user_category_government,
+                "",                      //----- profile image url should b updated
                 //value.data!.signIn!.user!.firstName.toString() + value.data!.signIn!.user!.lastName.toString(),
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString(),
@@ -518,6 +522,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _signinBloc.userDefault(
                 value.data!.signIn!.token.toString(),
                 TextStrings.user_mechanic,
+                value.data!.signIn!.genMechanic!.mechType.toString() == "1"
+                    ? TextStrings.user_category_individual
+                    : TextStrings.user_category_corporate ,
                 "",           //----- profile image url should b updated
                 value.data!.signIn!.user!.firstName.toString(),
                 value.data!.signIn!.user!.id.toString(),
@@ -561,9 +568,14 @@ class _LoginScreenState extends State<LoginScreen> {
           print('value.status succes 222222 >>>>>>>>>>>>>>>>+++${value.data!.socialLogin!.user!.userTypeId}');
           if(value.data!.socialLogin!.user!.userTypeId.toString() == "1"){
             SnackBarWidget().setSnackBar("Customer Login Successful",context);
+            _shdPre.setInt(SharedPrefKeys.isDefaultVehicleAvailable, 3);
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_customer,
+                value.data!.socialLogin!.generalCustomer!.custType.toString() == "1"
+                    ? TextStrings.user_category_individual
+                    : value.data!.socialLogin!.generalCustomer!.custType.toString() == "2"
+                    ? TextStrings.user_category_corporate : TextStrings.user_category_government,
                 "",                        //----- profile image url should b updated
                 value.data!.socialLogin!.user!.firstName.toString(),
                 value.data!.socialLogin!.user!.id.toString(),"0");
@@ -575,9 +587,13 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           else if(value.data!.socialLogin!.user!.userTypeId.toString() == "2"){
             SnackBarWidget().setSnackBar("Mechanic Login Successful",context);
+            _shdPre.setInt(SharedPrefKeys.isWorkProfileCompleted, 3);
             _signinBloc.userDefault(
                 value.data!.socialLogin!.token.toString(),
                 TextStrings.user_mechanic,
+                value.data!.socialLogin!.genMechanic!.mechType.toString() == "1"
+                    ? TextStrings.user_category_individual
+                    : TextStrings.user_category_corporate ,
                 "",           //----- profile image url should b updated
                 value.data!.socialLogin!.user!.firstName.toString(),
                 value.data!.socialLogin!.user!.id.toString(),
