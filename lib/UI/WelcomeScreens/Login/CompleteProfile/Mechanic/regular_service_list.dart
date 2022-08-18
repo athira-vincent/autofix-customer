@@ -320,11 +320,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       for(int m = 0 ; m< selectedService.length; m++){
                         if( m != selectedService.length-1){
                           serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
-                          feeList = feeList + """ "${selectedService[m].minAmount}",""";
+                          feeList = feeList + """ "${selectedService[m].fee}",""";
                           timeList = timeList + """ "${selectedService[m].time}",""";
                         }else{
                           serviceId = serviceId + "${selectedService[m].serviceId}" ;
-                          feeList = feeList + """ "${selectedService[m].minAmount}" """;
+                          feeList = feeList + """ "${selectedService[m].fee}" """;
                           timeList = timeList + """ "${selectedService[m].time}" """;
                         }
                       }
