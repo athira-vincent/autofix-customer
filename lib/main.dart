@@ -9,6 +9,7 @@ import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mech
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 
@@ -106,7 +107,7 @@ import 'package:provider/provider.dart';
                       primarySwatch: CustColors.materialBlue,
                     ),
                     //home: WorkSelectionScreen(userCategory: TextStrings.user_category_individual,userType: TextStrings.user_customer),
-                    //home: RegularServiceListScreen(),
+                    //home: EmergencyServiceListScreen(),
                     //home: MechanicTrackingScreen(latitude: "10.0039549",longitude: "76.3755278"),
                     home: SplashScreen(),
                   );
