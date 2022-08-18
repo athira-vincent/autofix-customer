@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     String? userCategory = _shdPre.getString(SharedPrefKeys.userCategory);
     int? _isDefaultVehicleAvailable = _shdPre.getInt(SharedPrefKeys.isDefaultVehicleAvailable);
     int? _isWorkProfileCompleted = _shdPre.getInt(SharedPrefKeys.isWorkProfileCompleted);
-    String? defaultVehicle = _shdPre.getString(SharedPrefKeys.defaultBrandID);
+    //String? defaultVehicle = _shdPre.getString(SharedPrefKeys.defaultBrandID);
     String? phoneNo = _shdPre.getString(SharedPrefKeys.userPhone);
     String? otpCode = _shdPre.getString(SharedPrefKeys.otpCode);
     String? userTypeId = _shdPre.getString(SharedPrefKeys.userTypeId);
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print("is isWalked in=======$isWalked");
     print("_isDefaultVehicleAvailable ============ $_isDefaultVehicleAvailable");
     print("_isWorkProfileCompleted ============ $_isWorkProfileCompleted");
-    print("defaultVehicleBrand ============ $defaultVehicle");
+    //print("defaultVehicleBrand ============ $defaultVehicle");
     print("User Type ============ $userType");
 
     print(userCategory);
