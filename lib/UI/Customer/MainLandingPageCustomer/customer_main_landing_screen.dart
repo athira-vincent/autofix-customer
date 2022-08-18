@@ -12,6 +12,7 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/S
 import 'package:auto_fix/UI/Customer/SideBar/navigation_drawer_screen.dart';
 import 'package:auto_fix/UI/Mechanic/EmergencyServiceMechanicFlow/IncomingJobRequestScreen/incoming_job_request_screen.dart';
 import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInRegular/ServiceDetailsScreen/mech_service_regular_details_screen.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -482,14 +483,14 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               index: _index,
               children: <Widget> [
                 HomeCustomerUIScreen(),
-                //SparePartsListScreen(),
+                MyCartScreen(),
                 CustomerMyServicesScreen(),
                 CustomerMyProfileScreen(isEnableEditing: false,),
               ],
             )
         ),
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.red,
             boxShadow: [
               BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),

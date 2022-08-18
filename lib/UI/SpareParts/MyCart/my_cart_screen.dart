@@ -1,5 +1,7 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
 import 'package:auto_fix/UI/SpareParts/purchase_response_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
@@ -12,7 +14,10 @@ import 'package:auto_fix/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'showcartpopbloc/show_cart_pop_event.dart';
 
 class MyCartScreen extends StatefulWidget {
   const MyCartScreen({Key? key}) : super(key: key);
@@ -95,41 +100,43 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          backgroundColor: Colors.white,
-          body: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              // ignore: avoid_unnecessary_containers
-              child: Column(
-                children: [
-                  appBarCustomUi(),
-                  productsListUi(),
-                  placeOrderUi(),
-                  Divider(),
-                  changeAddressUi(),
-                  Divider(),
-                  selectedBillDetailsUi(),
-                  Divider(),
-                  continueButtonUi(),
-                ],
+    return SafeArea(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+            ShowCartPopBloc()..add(FetchShowCartPopEvent()),
+          ),
+        ],
+        child: Scaffold(
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    appBarCustomUi(),
+                    productsListUi(),
+                    placeOrderUi(),
+                    Divider(),
+                    changeAddressUi(),
+                    Divider(),
+                    selectedBillDetailsUi(),
+                    Divider(),
+                    continueButtonUi(),
+                  ],
+                ),
               ),
-            ),
-          )),
+            )),
+      ),
     );
   }
 
   Widget appBarCustomUi() {
     return Row(
-      children: [
-        /*IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),*/
+      children: const [
+
         Padding(
-          padding: const EdgeInsets.all(15),
+          padding: EdgeInsets.all(15),
           child: Text(
             'My Cart',
             textAlign: TextAlign.center,
@@ -142,169 +149,180 @@ class _MyCartScreenState extends State<MyCartScreen> {
   }
 
   Widget productsListUi() {
-    return  ListView.builder(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount:2,
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,0,10,0),
-              child: Container(
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment:MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,8,0,8),
-                      child: Container(
-                        height: 60,
-                        width: 90,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
-                            "https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/SupportChatImages%2FsparepartImage1.png?alt=media&token=0130eb9b-662e-4c1c-b8a1-f4232cbba284",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+    return  BlocBuilder<ShowCartPopBloc,ShowCartPopState>(
+
+      builder: (context, state) {
+        if(state is ShowCartPopLoadedState){
+          return ListView.builder(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount:state.cartlistmodel.data!.cartList.data.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                    child: Container(
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment:MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                              child: Text(
-                                "Ford fiesta",
-                                style: Styles.sparePartNameSubTextBlack,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                              child: Text(
-                                "Clutch assembly",
-                                style: Styles.sparePartNameTextBlack17,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,8,0,10),
-                              child: Text(
-                                "A2137635123. | Ford fiesta fort",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Styles.sparePartNameSubTextBlack,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0,0,5,0),
-                              child: InkWell(
-                                onTap: (){
-
-                                },
-                                child: Container(
-                                  height: 20,
-                                  width: 70,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(color: CustColors.greyText3),
-                                      borderRadius: BorderRadius.circular(4)
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 20,
-                                        width: 25,
-                                        color: Colors.transparent,
-                                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        alignment: Alignment.topCenter,
-                                        child: Text(
-                                          "-",
-                                          textAlign: TextAlign.start,
-                                          style: Styles.homeNameTextStyle,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "12",
-                                            textAlign: TextAlign.center,
-                                            style: Styles.homeActiveTextStyle,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 20,
-                                        width: 25,
-                                        color: Colors.transparent,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "+",
-                                          style: Styles.homeNameTextStyle,
-                                        ),
-                                      ),
-                                    ],
+                              padding: const EdgeInsets.fromLTRB(0,8,0,8),
+                              child: Container(
+                                height: 60,
+                                width: 90,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Image.network(
+                                    "",
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                                      child: Text(
+                                        "Ford fiesta",
+                                        style: Styles.sparePartNameSubTextBlack,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                                      child: Text(
+                                        state.cartlistmodel.data!.cartList.data[index].product.productName,
+                                        style: Styles.sparePartNameTextBlack17,
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.fromLTRB(0,8,0,10),
+                                      child: Text(
+                                        "",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Styles.sparePartNameSubTextBlack,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0,0,5,0),
+                                      child: InkWell(
+                                        onTap: (){
 
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: SvgPicture.asset('assets/image/home_customer/deleteMyCart.svg',height: 20,width: 20,),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Text(
-                              "\$ 3000",
-                              style: Styles.sparePartNameTextBlack17,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0,8,0,0),
-                            child: Container(
-                              height: 20,
-                              width: 70,
-                              alignment: Alignment.center,
-                              color: CustColors.light_navy,
-                              child: Text(
-                                "Place order",
-                                style: Styles.badgeTextStyle1,
+                                        },
+                                        child: Container(
+                                          height: 20,
+                                          width: 70,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(color: CustColors.greyText3),
+                                              borderRadius: BorderRadius.circular(4)
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                height: 20,
+                                                width: 25,
+                                                color: Colors.transparent,
+                                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                alignment: Alignment.topCenter,
+                                                child: const Text(
+                                                  "-",
+                                                  textAlign: TextAlign.start,
+                                                  style: Styles.homeNameTextStyle,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    state.cartlistmodel.data!.cartList.data[index].quantity.toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: Styles.homeActiveTextStyle,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                height: 20,
+                                                width: 25,
+                                                color: Colors.transparent,
+                                                alignment: Alignment.center,
+                                                child: const Text(
+                                                  "+",
+                                                  style: Styles.homeNameTextStyle,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ),
-            ),
-            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
 
-          ],
-        );
-      },
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                                    child: SvgPicture.asset('assets/image/home_customer/deleteMyCart.svg',height: 20,width: 20,),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                                    child:Text(
+                                      "\$ "+state.cartlistmodel.data!.cartList.data[index].product.price.toString(),
+                                      style: Styles.sparePartNameTextBlack17,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0,8,0,0),
+                                    child: Container(
+                                      height: 20,
+                                      width: 70,
+                                      alignment: Alignment.center,
+                                      color: CustColors.light_navy,
+                                      child: Text(
+                                        "Place order",
+                                        style: Styles.badgeTextStyle1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ),
+                  Divider(),
+
+                ],
+              );
+            },
+          );
+        }
+        else{
+          return Container();
+        }
+
+      }
     );
   }
 

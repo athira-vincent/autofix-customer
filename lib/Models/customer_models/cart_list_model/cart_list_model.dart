@@ -184,18 +184,30 @@ class Product {
   Product({
     required this.id,
     required this.productName,
+    required this.productCode,
+    required this.price,
+    required this.productImage,
   });
 
   int id;
   String productName;
+  String productCode;
+  String price;
+  String productImage;
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        productName: json["productName"],
-      );
+    id: json["id"],
+    productName: json["productName"],
+    productCode: json["productCode"],
+    price: json["price"],
+    productImage: json["productImage"] ?? "",
+  );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "productName": productName,
-      };
+    "id": id,
+    "productName": productName,
+    "productCode": productCode,
+    "price": price,
+    "productImage": productImage == null ? null : productImage,
+  };
 }

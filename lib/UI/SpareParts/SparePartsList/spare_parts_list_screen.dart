@@ -31,7 +31,6 @@ class SparePartsListScreen extends StatefulWidget {
 class _SparePartsListScreenState extends State<SparePartsListScreen> {
   static ValueNotifier<String> incart = ValueNotifier('');
 
-
   double per = .10;
   double perfont = .10;
 
@@ -91,11 +90,11 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                     );
                     setState(() {
                       addToCart = true;
-                      //ViewCartUi();
 
+                      //ViewCartUi();
                     });
 
-                    incart.value="true";
+
                   }
                 }
               },
@@ -108,18 +107,19 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                 children: [
                   Column(
                     children: [
+
                       appBarCustomUi(),
                       SparePartsListUi(),
                     ],
                   ),
-                  addToCart == false ? Container() : MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => ShowCartPopBloc()
-                          ..add(FetchShowCartPopEvent()),
-                      ),
-                    ],
-                      child: ViewCartUi()),
+                  addToCart == false
+                      ? Container()
+                      : MultiBlocProvider(providers: [
+                          BlocProvider(
+                            create: (context) =>
+                                ShowCartPopBloc()..add(FetchShowCartPopEvent()),
+                          ),
+                        ], child: ViewCartUi()),
                 ],
               )),
         ),
@@ -358,76 +358,60 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-        child: BlocBuilder<ShowCartPopBloc,ShowCartPopState>(
-
-          builder: (context, state) {
-
-              print(state);
-            if(state is ShowCartPopLoadedState){
-
-              return Container(
-                height: 65,
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
+        child: BlocBuilder<ShowCartPopBloc, ShowCartPopState>(
+            builder: (context, state) {
+          print(state);
+          if (state is ShowCartPopLoadedState) {
+            return Container(
+              height: 65,
+              width: double.infinity,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: CustColors.light_navy,
+                  border: Border.all(
                     color: CustColors.light_navy,
-                    border: Border.all(
-                      color: CustColors.light_navy,
-                    ),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:  [
-                          ValueListenableBuilder(
-                              valueListenable: incart,
-                            builder: (BuildContext context,
-                                String newValue, _) {
-
-                                print("incart");
-                                print(state.cartlistmodel.data!.cartList.totalItems.toString());
-                                print(incart);
-                                print("newvalue");
-                                print(newValue);
-                              return Text(
-                               newValue=="true"? state.cartlistmodel.data!.cartList.totalItems.toString()+" items":"0",
-                                style: Styles.addToCartItemText02,
-                              );
-                            }
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                            child: Text(
-                              "\$"+state.cartlistmodel.data!.cartList.totalPrice.toString(),
-                              style: Styles.addToCartItemText02,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      const Text(
-                        "View Cart >",
-                        style: Styles.addToCartText02,
-                      ),
-                    ],
                   ),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          state.cartlistmodel.data!.cartList.totalItems
+                              .toString()+" items",
+                          style: Styles.addToCartItemText02,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                          child: Text(
+                            "\$" +
+                                state.cartlistmodel.data!.cartList.totalPrice
+                                    .toString(),
+                            style: Styles.addToCartItemText02,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    const Text(
+                      "View Cart >",
+                      style: Styles.addToCartText02,
+                    ),
+                  ],
                 ),
-              );
-            }
-            else{
-              print("oops");
-             return Container();
-            }
-
-
+              ),
+            );
+          } else {
+            print("oops");
+            return Container();
           }
-        ),
+        }),
       ),
     );
   }

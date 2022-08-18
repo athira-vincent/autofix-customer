@@ -110,7 +110,6 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: Colors.white,
                 primarySwatch: CustColors.materialBlue,
               ),
-              //home: SparePartsListScreen(modelname: "TIGUAN"),
               home: SplashScreen(),
             ),
           );
