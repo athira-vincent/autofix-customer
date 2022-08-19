@@ -23,7 +23,7 @@ class _TermsAndConditon extends State<TermsAndConditon>{
         toolbarHeight: 60,
         elevation: 0,
         title: Container(
-          child: Text('Legal',
+          child: Text('General Terms & Conditions',
             style: TextStyle(
               fontFamily: 'SamsungSharpSans-Medium',
               fontSize: 16.7,
