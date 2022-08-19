@@ -167,9 +167,9 @@ class _AddMoreRegularServicesListScreenState extends State<AddMoreRegularService
         child:  widget.categoryList!.service!.length != 0 && widget.categoryList!.service!.length != null
             ? ListView.builder(
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                scrollDirection: Axis.vertical,
+                //scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                //physics: NeverScrollableScrollPhysics(),
                 itemCount:widget.categoryList!.service!.length,
                 itemBuilder: (context, index) {
                   return  Column(
