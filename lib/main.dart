@@ -11,6 +11,8 @@ import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/Mobil
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/emergancy_service_list_screen.dart';
+import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/both_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regular_service_list.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 
@@ -111,6 +113,7 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: CustColors.materialBlue,
               ),
               //home: SparePartsListScreen(modelname: "TIGUAN"),
+              //home: BothServiceListScreen(),
               home: SplashScreen(),
             ),
           );

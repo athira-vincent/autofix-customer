@@ -9,6 +9,7 @@ import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/ServiceList/category_service_list_mdl.dart';
 
@@ -48,6 +49,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
   String authToken="", userCode = "";
   bool _isLoading = false;
   bool _isLoadingPage = true;
+  bool isEmergencyServiceSelected = false, isRegularServiceSelected = false;
   double per = .10;
   String searchText = "";
 
@@ -94,7 +96,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         allList[i].service![x].id.toString(),
                         allList[i].service![x].minPrice,
                         allList[i].service![x].maxPrice,
-                        "10:00", false));
+                        "10:00",
+                        allList[i].service![x].minPrice,
+                        false));
               }
             }
             else{
@@ -106,7 +110,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         allList[i].service![y].id.toString(),
                         allList[i].service![y].minPrice,
                         allList[i].service![y].maxPrice,
-                        "10:00", false));
+                        "10:00",
+                        allList[i].service![y].minPrice,
+                         false));
                 print("jggshsh #$i *** count $count $y name ${ allList[i].service![y].serviceName}");
               }
               count = count + 1;
@@ -127,7 +133,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("_regularIsChecked!.length >>> " + _regularIsChecked!.length.toString());
 
           print(_emergencyIsChecked!.length);
-
         });
       }
     });
@@ -192,6 +197,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: CustColors.materialBlue,
+      ),
       home: Scaffold(
         body: SafeArea(
           child: Container(
@@ -203,7 +211,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                 left: size.width * 6 /100,
                 right: size.width * 5.9 / 100,
                 bottom: size.height * 2.7 / 100,
-                top: size.height * 3.4 / 100,
+                top: size.height * 3.2 / 100,
               ),
               child: Column(
                 children: [
@@ -212,12 +220,12 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       setState(() {
                         isRegularSelected = !isRegularSelected ;
                         print("isRegularSelected >>>>>> " +isRegularSelected.toString());
-                        searchText = "";
+                        //searchText = "";
                       });
                     },
                     child: Container(
                       margin: EdgeInsets.only(
-                        bottom: size.height * 0.9 / 100
+                        bottom: size.height * 0.8 / 100
                       ),
                       child: Text(isRegularSelected ? "Emergency " : "Regular",
                           softWrap: true,
@@ -238,7 +246,6 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
                 ],
               ),
-
             ),
           ),
         ),
@@ -255,7 +262,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
              margin: EdgeInsets.only(
                  left: size.width * 30 / 100 ,
                  right: size.width * 30 / 100,
-                 top: size.height * 4 / 100
+                 top: size.height * 2.7 / 100
              ),
              child: const Text("Regular",
                 softWrap: true,
@@ -265,11 +272,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
          Container(
            margin: EdgeInsets.only(
-             top: size.height * 3.6 / 100,
-             left: size.width * 5.6 / 100,
-             right: size.width * 5.6 / 100,
+             top: size.height * 3 / 100,
+             left: size.width * 3 / 100,
+             right: size.width * 3 / 100,
            ),
-           height: ScreenSize().setValue(36.3),
+           height: ScreenSize().setValue(35),
            decoration: BoxDecoration(
              color: Colors.white,
              borderRadius: BorderRadius.all(
@@ -310,10 +317,10 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                        onChanged: (text) {
                          setState(() {
                            if(text.isNotEmpty){
-                             searchText = text;
-                             _serviceListBloc.postServiceListRequest(authToken, searchText, null, null, searchText );
+                             //searchText = text;
+                             _serviceListBloc.postServiceListRequest(authToken, text, null, null, text );
                            }else{
-                             searchText = text;
+                             //searchText = text;
                              _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
                            }
                          });
@@ -344,14 +351,14 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
            child: Container(
              margin: EdgeInsets.only(
                  top: size.height * 0.020,
-                 bottom: size.height * 0.019
+                 bottom: size.height * 0.018
              ),
              color: CustColors.pale_grey,
              height: size.height * 0.82, //0.764
              child: Container(
                margin: EdgeInsets.only(
-                   left: size.width * 0.045,
-                   right: size.width * 0.045,
+                   left: size.width * 0.020,
+                   right: size.width * 0.020,
                    //top: size.height * 0.03,
                    bottom: size.height * 0.032
                ),
@@ -387,7 +394,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
         children: [
           Container(
               margin: EdgeInsets.only(
-                  top: size.height * 4 / 100
+                  top: size.height * 2.7 / 100
               ),
               child: Text("Emergency",
                 softWrap: true,
@@ -395,11 +402,11 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           ),
           Container(
             margin: EdgeInsets.only(
-              top: size.height * 3.6 / 100,
-              left: size.width * 5.6 / 100,
-              right: size.width * 5.6 / 100,
+              top: size.height * 3 / 100,
+              left: size.width * 3 / 100,
+              right: size.width * 3 / 100,
             ),
-            height: ScreenSize().setValue(36.3),
+            height: ScreenSize().setValue(35),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(
@@ -440,8 +447,8 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         onChanged: (text) {
                           setState(() {
                             if(text.isNotEmpty){
-                              searchText = text;
-                              _serviceListBloc.postServiceListRequest(authToken, searchText, null, null,"" );
+                              //searchText = text;
+                              _serviceListBloc.postServiceListRequest(authToken, text, null, null,"" );
                             }else{
                               searchText = text;
                               _serviceListBloc.postServiceListRequest(authToken, "", null, null, "" );
@@ -467,21 +474,26 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           ),
           _isLoadingPage == true
               ?
-          const Center(
-            child: CircularProgressIndicator(color: CustColors.light_navy,),)
+          Container(
+            margin: EdgeInsets.only(
+              top: 10
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(color: CustColors.light_navy,),),
+          )
               :
           Expanded(
             child: Container(
               margin: EdgeInsets.only(
-                  top: size.height * 0.023,
-                  bottom: size.height * 0.019
+                  top: size.height * 0.022,
+                  bottom: size.height * 0.018
               ),
               color: CustColors.pale_grey,
               height: size.height * 0.82, //0.764
               child: Container(
                 margin: EdgeInsets.only(
-                    left: size.width * 0.049,
-                    right: size.width * 0.049,
+                    left: size.width * 0.020,
+                    right: size.width * 0.020,
                     //top: size.height * 0.03,
                     bottom: size.height * 0.032
                 ),
@@ -498,14 +510,15 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
                             TextEditingController _rateController=TextEditingController();
                             TextEditingController _timeController = TextEditingController();
-                            _rateController.text = emergencyServiceList[index].minPrice.toString();
+                            _rateController.text = emergencyServiceMdlList[index].fee;
                             _timeController.text = emergencyServiceMdlList[index].time;
                             _rateController.addListener(() {
                               var temp =   SelectedServicesMdl(0,index,
                                   emergencyServiceMdlList[index].serviceId,
-                                  _rateController.text,
+                                  emergencyServiceMdlList[index].minAmount,
                                   emergencyServiceMdlList[index].maxAmount,
                                   emergencyServiceMdlList[index].time,
+                                  _rateController.text,
                                   emergencyServiceMdlList[index].isEnable);
                               emergencyServiceMdlList.removeAt(index);
                               emergencyServiceMdlList.insert(index,temp);
@@ -516,6 +529,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                   emergencyServiceMdlList[index].minAmount,
                                   emergencyServiceMdlList[index].maxAmount,
                                   _timeController.text,
+                                  emergencyServiceMdlList[index].fee,
                                   emergencyServiceMdlList[index].isEnable);
                               emergencyServiceMdlList.removeAt(index);
                               emergencyServiceMdlList.insert(index,temp);
@@ -535,7 +549,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                   child: Row(
                                     children: [
                                       Transform.scale(
-                                        scale: .6,
+                                        scale: .5,
                                         child: Checkbox(
                                           activeColor: CustColors.light_navy,
                                           value: _emergencyIsChecked![index],
@@ -545,17 +559,25 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
                                               print("sgsjhgj 001 $val");
                                               if(val){
-                                                var temp =   SelectedServicesMdl(0,index,emergencyServiceMdlList[index].serviceId,
-                                                    emergencyServiceMdlList[index].minAmount, emergencyServiceMdlList[index].maxAmount,
-                                                    emergencyServiceMdlList[index].time, val);
+                                                var temp =   SelectedServicesMdl(0,index,
+                                                    emergencyServiceMdlList[index].serviceId,
+                                                    emergencyServiceMdlList[index].minAmount,
+                                                    emergencyServiceMdlList[index].maxAmount,
+                                                    emergencyServiceMdlList[index].time,
+                                                    emergencyServiceMdlList[index].fee,
+                                                    val);
                                                 emergencyServiceMdlList.removeAt(index);
                                                 emergencyServiceMdlList.insert(index,
                                                     temp);
                                               }else{
                                                 //serviceSpecialisationList.remove(regularServiceList[index]);
-                                                var temp= SelectedServicesMdl(0,index, emergencyServiceMdlList[index].serviceId,
-                                                    emergencyServiceMdlList[index].minAmount, emergencyServiceMdlList[index].maxAmount,
-                                                    emergencyServiceMdlList[index].time, val);
+                                                var temp= SelectedServicesMdl(0,index,
+                                                    emergencyServiceMdlList[index].serviceId,
+                                                    emergencyServiceMdlList[index].minAmount,
+                                                    emergencyServiceMdlList[index].maxAmount,
+                                                    emergencyServiceMdlList[index].time,
+                                                    emergencyServiceMdlList[index].fee,
+                                                    val);
                                                 emergencyServiceMdlList.removeAt(index);
                                                 emergencyServiceMdlList.insert(index,temp
                                                 );
@@ -578,13 +600,28 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                             if(value!.isEmpty){
                                               return "Fill field";
                                             }
-                                            else if(int.parse(value) < int.parse(emergencyServiceList[index].minPrice) || int.parse(value) > int.parse(emergencyServiceList[index].maxPrice)){
+                                            else if(int.parse(value) < int.parse(emergencyServiceList[index].minPrice) ){
+                                              return emergencyServiceList[index].minPrice + " - " + emergencyServiceList[index].maxPrice;
+                                            }
+                                            else if(int.parse(value) > int.parse(emergencyServiceList[index].maxPrice)){
                                               return emergencyServiceList[index].minPrice + " - " + emergencyServiceList[index].maxPrice;
                                             }
                                             else{
                                               return null;
                                             }
                                           },
+                                          decoration: const InputDecoration(
+                                              /*border: InputBorder.none,
+                                              contentPadding: EdgeInsets.symmetric(
+                                                vertical: 12,
+                                                horizontal: 6.0,
+                                              ),*/
+                                              errorStyle: TextStyle(
+                                                fontFamily: "Samsung_SharpSans_Medium",
+                                                fontSize: 5,
+                                                letterSpacing: .3,
+                                              )
+                                          ),
                                           cursorColor: CustColors.light_navy,
                                           keyboardType: TextInputType.number,
                                           /*inputFormatters: <TextInputFormatter>[
@@ -599,54 +636,54 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: size.width / 100 * 5,
+                                        width: size.width / 100 * 4,
                                       ),
                                       //Text("00 : 30")
                                       Flexible(
-                                        child: TextFormField(
-                                          validator: (value){
-                                            if(value!.isEmpty){
-                                              return "Fill field";
-                                            }
-                                            /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                    return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                  }*/
-                                            else{
-                                              return null;
-                                            }
-                                          },
-                                          cursorColor: CustColors.light_navy,
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.digitsOnly,
-                                          ],
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          keyboardType: TextInputType.datetime,
-                                          //initialValue: '${regularServiceList[index].serviceName.toString()}',
-                                          controller: _timeController,
-                                          style: Styles.searchTextStyle02,
-                                          enabled: _emergencyIsChecked![index],
-                                          onChanged: (val) async{
-                                            Duration? _durationResult = await showDurationPicker(
-                                                snapToMins: 5.0,
-                                                context: context,
-                                                initialTime: Duration(
-                                                  //hours: 2,
-                                                    minutes: 10,
-                                                    seconds: 00,
-                                                    milliseconds: 0)
-                                            );
-                                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
-                                            if(_durationResult != null){
-                                              setState(() {
-                                                _timeController.text = "";
-                                                _timeController.text = _durationResult.inMinutes.toString() + ":00";
-                                              });
+                                        child: InkWell(
+                                          onTap: () async{
+                                            if(_emergencyIsChecked![index]){
+                                              Duration? _durationResult = await showDurationPicker(
+                                                  snapToMins: 5.0,
+                                                  context: context,
+                                                  initialTime: Duration(
+                                                    //hours: 2,
+                                                      minutes: int.parse(_timeController.text.toString().replaceAll(":00", "")),
+                                                      seconds: 00,
+                                                      milliseconds: 0)
+                                              );
+                                              print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                              if(_durationResult != null){
+                                                setState(() {
+                                                  _timeController.text = "";
+                                                  _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                                });
+                                              }
                                             }
                                           },
-                                          //readOnly: _regularIsChecked![index],
+                                          child: TextFormField(
+                                            validator: (value){
+                                              if(value!.isEmpty){
+                                                return "Fill field";
+                                              }
+                                              else{
+                                                return null;
+                                              }
+                                            },
+                                            cursorColor: CustColors.light_navy,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter.digitsOnly,
+                                            ],
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                            keyboardType: TextInputType.datetime,
+                                            //initialValue: '${regularServiceList[index].serviceName.toString()}',
+                                            controller: _timeController,
+                                            style: Styles.searchTextStyle02,
+                                            enabled: false,
+                                            //readOnly: _regularIsChecked![index],
+                                          ),
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 ));
@@ -708,14 +745,17 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
 
             TextEditingController _rateController = TextEditingController();
             TextEditingController _timeController = TextEditingController();
-            _rateController.text = root.service![index].minPrice.toString();
+            //_rateController.text = root.service![index].minPrice.toString();
+            _rateController.text = regularServiceMdlList[getItemIndex(parentIndex,index)].fee;
             _timeController.text = regularServiceMdlList[getItemIndex(parentIndex,index)].time;
             _rateController.addListener(() {
               int itemIndex = getItemIndex(parentIndex, index);
               var temp =   SelectedServicesMdl(parentIndex, index,
-                  regularServiceMdlList[itemIndex].serviceId,_rateController.text,
+                  regularServiceMdlList[itemIndex].serviceId,
+                  regularServiceMdlList[itemIndex].minAmount,
                   regularServiceMdlList[itemIndex].maxAmount,
                   regularServiceMdlList[itemIndex].time,
+                  _rateController.text,
                   regularServiceMdlList[itemIndex].isEnable);
               regularServiceMdlList.removeAt(itemIndex);
               regularServiceMdlList.insert(itemIndex,temp);
@@ -726,7 +766,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                   regularServiceMdlList[itemIndex].serviceId,
                   regularServiceMdlList[itemIndex].minAmount,
                   regularServiceMdlList[itemIndex].maxAmount,
-                  _timeController.text, regularServiceMdlList[itemIndex].isEnable);
+                  _timeController.text,
+                  regularServiceMdlList[itemIndex].fee,
+                  regularServiceMdlList[itemIndex].isEnable);
               regularServiceMdlList.removeAt(itemIndex);
               regularServiceMdlList.insert(itemIndex,temp);
             });
@@ -752,7 +794,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                 regularServiceMdlList[itemIndex].serviceId,
                                 regularServiceMdlList[itemIndex].minAmount,
                                 regularServiceMdlList[itemIndex].maxAmount,
-                                regularServiceMdlList[itemIndex].time, val);
+                                regularServiceMdlList[itemIndex].time,
+                                regularServiceMdlList[itemIndex].fee,
+                                val);
                             regularServiceMdlList.removeAt(itemIndex);
                             regularServiceMdlList.insert(itemIndex, temp);
                           }else{
@@ -763,7 +807,9 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                 regularServiceMdlList[itemIndex].serviceId,
                                 regularServiceMdlList[itemIndex].minAmount,
                                 regularServiceMdlList[itemIndex].maxAmount,
-                                regularServiceMdlList[itemIndex].time, val);
+                                regularServiceMdlList[itemIndex].time,
+                                regularServiceMdlList[itemIndex].fee,
+                                 val);
                             regularServiceMdlList.removeAt(itemIndex);
                             regularServiceMdlList.insert(itemIndex,temp);
                           }
@@ -800,15 +846,23 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.5,
+                            vertical: 12,
                             horizontal: 6.0,
                           ),
+                            errorStyle: TextStyle(
+                              fontFamily: "Samsung_SharpSans_Medium",
+                              fontSize: 5,
+                              letterSpacing: .3,
+                            )
                         ),
                         validator: (value){
                           if(value!.isEmpty){
                             return "Fill field";
                           }
-                          else if(int.parse(value) < int.parse(regularServiceMdlList[getItemIndex(parentIndex,index)].minAmount) || int.parse(value) > int.parse(regularServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
+                          else if(int.parse(value) < int.parse(regularServiceMdlList[getItemIndex(parentIndex,index)].minAmount)){
+                            return regularServiceMdlList[getItemIndex(parentIndex,index)].minAmount + " - " + regularServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
+                          }
+                          else if(int.parse(value) > int.parse(regularServiceMdlList[getItemIndex(parentIndex,index)].maxAmount)){
                             return regularServiceMdlList[getItemIndex(parentIndex,index)].minAmount + " - " + regularServiceMdlList[getItemIndex(parentIndex,index)].maxAmount;
                           }
                           else{
@@ -830,7 +884,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: size.width / 100 * 5,
+                    width: size.width / 100 * 4,
                   ),
                   Container(
                     width: size.width * 15 / 100,
@@ -850,54 +904,50 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                       //color: Colors.redAccent,
                     ),
                     child: Center(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.5,
-                            horizontal: 6.0,
+                      child: InkWell(
+                        onTap: () async{
+                          if(_regularIsChecked![getItemIndex(parentIndex,index)]){
+                            Duration? _durationResult = await showDurationPicker(
+                                snapToMins: 5.0,
+                                context: context,
+                                initialTime: Duration(
+                                  //hours: 2,
+                                    minutes: int.parse(_timeController.text.toString().replaceAll(":00", "")),
+                                    seconds: 00,
+                                    milliseconds: 0)
+                            );
+                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                            if(_durationResult != null){
+                              setState(() {
+                                _timeController.text = "";
+                                _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                              });
+                            }
+                          }
+                        },
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 12.5,
+                              horizontal: 6.0,
+                            ),
                           ),
+                          validator: (value){
+                            if(value!.isEmpty){
+                              return "Fill field";
+                            }
+                            else{
+                              return null;
+                            }
+                          },
+                          cursorColor: CustColors.light_navy,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          keyboardType: TextInputType.datetime,
+                          controller: _timeController,
+                          style: Styles.searchTextStyle02,
+                          enabled: false,
                         ),
-                        validator: (value){
-                          if(value!.isEmpty){
-                            return "Fill field";
-                          }
-                          /*else if(int.parse(value) < int.parse(regularServiceList[index].minAmount) || int.parse(value) > int.parse(regularServiceList[index].maxAmount)){
-                                                      return regularServiceList[index].minAmount + " - " + regularServiceList[index].maxAmount;
-                                                    }*/
-                          else{
-                            return null;
-                          }
-                        },
-                        cursorColor: CustColors.light_navy,
-                        /*inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],*/
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.datetime,
-                        //initialValue: '${regularServiceList[index].serviceName.toString()}',
-                        controller: _timeController,
-                        style: Styles.searchTextStyle02,
-                        enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
-                        onChanged: (val) async{
-                          Duration? _durationResult = await showDurationPicker(
-                              snapToMins: 5.0,
-                              context: context,
-                              initialTime: Duration(
-                                //hours: 2,
-                                  minutes: 10,
-                                  seconds: 00,
-                                  milliseconds: 0)
-                          );
-                          print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
-                          if(_durationResult != null){
-                            setState(() {
-                              _timeController.text = "";
-                              _timeController.text = _durationResult.inMinutes.toString() + ":00";
-                            });
-                          }
-                        },
-                        //readOnly: _regularIsChecked![index],
                       ),
                     ),
                   ),
@@ -935,6 +985,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
         for(int i=0;i<emergencyServiceMdlList.length;i++){
           print("time 001 ${emergencyServiceMdlList[i].isEnable}");
           if(emergencyServiceMdlList[i].isEnable){
+            isEmergencyServiceSelected = true;
             selectedService.add(emergencyServiceMdlList[i]);
           }else{
             print("no data to print");
@@ -948,38 +999,58 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
           print("time 001 ${regularServiceMdlList[i].isEnable}");
           if(regularServiceMdlList[i].isEnable){
             selectedService.add(regularServiceMdlList[i]);
+            isRegularServiceSelected = true;
           }else{
             print("no data to print");
           }
-          //print("fgdhj 001 ${selectedServiceMdlList[i].amount}");
-          //print("time 001 ${selectedServiceMdlList[i].time}");
-          //print("time 001 ${selectedServiceMdlList[i].isEnable}");
         }
 
-        String serviceId="";
-        String feeList = "[";
-        String timeList = "[";
+        if(isRegularServiceSelected && isEmergencyServiceSelected){
+          String serviceId="";
+          String feeList = "[";
+          String timeList = "[";
 
-        for(int m = 0 ; m< selectedService.length; m++){
-          if( m != selectedService.length-1){
-            serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
-            feeList = feeList + """ "${selectedService[m].minAmount}",""";
-            timeList = timeList + """ "${selectedService[m].time}",""";
-          }else{
-            serviceId = serviceId + "${selectedService[m].serviceId}" ;
-            feeList = feeList + """ "${selectedService[m].minAmount}" """;
-            timeList = timeList + """ "${selectedService[m].time}" """;
+          for(int m = 0 ; m< selectedService.length; m++){
+            if( m != selectedService.length-1){
+              serviceId = serviceId + "${selectedService[m].serviceId}" + ", ";
+              feeList = feeList + """ "${selectedService[m].fee}",""";
+              timeList = timeList + """ "${selectedService[m].time}",""";
+            }else{
+              serviceId = serviceId + "${selectedService[m].serviceId}" ;
+              feeList = feeList + """ "${selectedService[m].fee}" """;
+              timeList = timeList + """ "${selectedService[m].time}" """;
+            }
           }
+          serviceId = serviceId ;
+          feeList = feeList + "]";
+          timeList = timeList + "]";
+
+          print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
+
+          _addServiceListBloc.postMechanicAddServicesRequest(
+              authToken,
+              serviceId,  feeList, timeList, null);     // catType - 1/2 - doubt
+        }else if(isRegularServiceSelected){
+          Fluttertoast.showToast(
+            msg: "select emergency services!!",
+            backgroundColor: CustColors.light_navy,
+            timeInSecForIosWeb: 1,
+          );
+        }else if(isEmergencyServiceSelected){
+          Fluttertoast.showToast(
+            msg: "select regular services!!",
+            backgroundColor: CustColors.light_navy,
+            timeInSecForIosWeb: 1,
+          );
+        }else{
+          Fluttertoast.showToast(
+            msg: "select services!!",
+            backgroundColor: CustColors.light_navy,
+            timeInSecForIosWeb: 1,
+          );
         }
-        serviceId = serviceId ;
-        feeList = feeList + "]";
-        timeList = timeList + "]";
 
-        print(" >>>> serviceId" +serviceId + " >>>> feeList " + feeList + " >>>>>>>> timeList" + timeList);
 
-        _addServiceListBloc.postMechanicAddServicesRequest(
-            authToken,
-            serviceId,  feeList, timeList, null);     // catType - 1/2 - doubt
       },
       child: Container(
         height: size.height * 0.045,
@@ -1016,7 +1087,11 @@ class SelectedServicesMdl{
   final String serviceId;
   final String minAmount;
   final String maxAmount;
+  final String fee;
   final String time;
   final bool isEnable;
-  SelectedServicesMdl(this.parentIndex, this.childIndex,this.serviceId, this.minAmount, this.maxAmount, this.time,this.isEnable);
+  SelectedServicesMdl(this.parentIndex,
+      this.childIndex,this.serviceId,
+      this.minAmount, this.maxAmount,
+      this.time,this.fee, this.isEnable);
 }

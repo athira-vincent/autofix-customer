@@ -9,6 +9,7 @@ import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:duration_picker/duration_picker.dart';
 
@@ -46,7 +47,11 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
       if (value.status == "error") {
         setState(() {
           _isLoadingPage = false;
-          //SnackBarWidget().setMaterialSnackBar( "${value.message}", _scaffoldKey);
+          Fluttertoast.showToast(
+            msg: "select preferred services!!",
+            backgroundColor: CustColors.light_navy,
+            timeInSecForIosWeb: 1,
+          );
           print("message postServiceList >>>>>>>  ${value.message}");
           print("errrrorr postServiceList >>>>>>>  ${value.status}");
           //_isLoading = false;
@@ -58,7 +63,6 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
           print("success postServiceList >>>>>>>  ${value.status}");
           //print("success Auth token >>>>>>>  ${value.data!.customersSignUpIndividual!.token.toString()}");
 
-          //_isLoading = false;
           print(value.data!.categoryList!.length);
           regularServiceList = value.data!.categoryList!;
 
@@ -166,7 +170,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(
-                        6.0,6.0,6.0,6.0
+                        6.0,6.0,6.0,4.0
                     ),
                     child: Container(
                         alignment: Alignment.centerLeft,
@@ -176,7 +180,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                   Container(
                     margin: EdgeInsets.only(
-                      top: size.height * 0.026,
+                      top: size.height * 0.025,
                       /* left: size.width * 6 / 100,
                       right: size.width * 6 / 100,*/
                     ),
@@ -245,8 +249,13 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
 
                   _isLoadingPage == true
                   ?
-                  const Center(
-                    child: CircularProgressIndicator(color: CustColors.light_navy,),)
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 20.0
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(color: CustColors.light_navy,),),
+                  )
                   :
                   Expanded(
                     child: Container(
@@ -258,9 +267,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       height: size.height * 0.80, //0.764
                       child: Container(
                         margin: EdgeInsets.only(
-                            left: size.width * 0.045,
-                            right: size.width * 0.045,
-                            //top: size.height * 0.03,
+                            //left: size.width * 0.005,
+                            //right: size.width * 0.020,
                             bottom: size.height * 0.030
                         ),
                         child: Column(
@@ -443,7 +451,8 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                           selectedServiceMdlList[itemIndex].fee,
                           selectedServiceMdlList[itemIndex].minAmount,
                           selectedServiceMdlList[itemIndex].maxAmount,
-                          _timeController.text, selectedServiceMdlList[itemIndex].isEnable);
+                          _timeController.text,
+                          selectedServiceMdlList[itemIndex].isEnable);
                       selectedServiceMdlList.removeAt(itemIndex);
                       selectedServiceMdlList.insert(itemIndex,temp);
                     });
@@ -452,7 +461,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                       child: Row(
                         children: [
                           Transform.scale(
-                            scale: .6,
+                            scale: .5,
                             child: Checkbox(
                               activeColor: CustColors.light_navy,
                               value: _regularIsChecked![getItemIndex(parentIndex,index)],
@@ -500,7 +509,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                             ),
                           ),
                           Container(
-                            width: size.width * 15 / 100,
+                            width: size.width * 18 / 100,
                             height: size.height * 4 / 100,
                             padding: EdgeInsets.only(
                                 top: size.height * 1 / 100,
@@ -518,15 +527,16 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                             ),
                             child: Center(
                               child: TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 12.5,
-                                    horizontal: 5.0,
-                                  ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12,
+                                      horizontal: 6.0,
+                                    ),
                                     errorStyle: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 7,
+                                      fontFamily: "Samsung_SharpSans_Medium",
+                                      fontSize: 6,
+                                      letterSpacing: .3,
                                     )
                                 ),
                                 validator: (value){
@@ -558,7 +568,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: size.width / 100 * 5,
+                            width: size.width / 100 * 3.5,
                           ),
                           Container(
                             width: size.width * 15 / 100,
@@ -578,60 +588,44 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                               //color: Colors.redAccent,
                             ),
                             child: Center(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 12.5,
-                                    horizontal: 6.0,
-                                  ),
-                                ),
-                                cursorColor: CustColors.light_navy,
-                                //autovalidateMode: AutovalidateMode.onUserInteraction,
-                                keyboardType: TextInputType.datetime,
-                                controller: _timeController,
-                                style: Styles.searchTextStyle02,
-                                enabled: _regularIsChecked![getItemIndex(parentIndex,index)],
-                                showCursor: false,
-                                //readOnly: true,
-                                //initialValue: '${selectedServiceMdlList[getItemIndex(parentIndex,index)].time}',
-                                /*onChanged: (val) async{
-                                  Duration? _durationResult = await showDurationPicker(
-                                      snapToMins: 5.0,
-                                      context: context,
-                                      initialTime: Duration(
-                                        //hours: 2,
-                                          minutes: 10,
-                                          seconds: 00,
-                                          milliseconds: 0)
-                                  );
-                                  print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
-                                  if(_durationResult != null){
-                                    setState(() {
-                                      _timeController.text = "";
-                                      _timeController.text = _durationResult.inMinutes.toString() + ":00";
-                                    });
+                              child: InkWell(
+                                onTap: () async {
+                                  if(_regularIsChecked![getItemIndex(parentIndex,index)]){
+                                    Duration? _durationResult = await showDurationPicker(
+                                        snapToMins: 5.0,
+                                        context: context,
+                                        initialTime: Duration(
+                                          //hours: 2,
+                                            minutes: int.parse(_timeController.text.toString().replaceAll(":00", "")),
+                                            seconds: 00,
+                                            milliseconds: 0)
+                                    );
+                                    print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                    if(_durationResult != null){
+                                      setState(() {
+                                        _timeController.text = "";
+                                        _timeController.text = _durationResult.inMinutes.toString() + ":00";
+                                      });
+                                    }
                                   }
-                                },*/
-                               onTap: () async {
-                                 Duration? _durationResult = await showDurationPicker(
-                                     snapToMins: 5.0,
-                                     context: context,
-                                     initialTime: Duration(
-                                       //hours: 2,
-                                         minutes: 10,
-                                         seconds: 00,
-                                         milliseconds: 0)
-                                 );
-                                 print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
-                                 if(_durationResult != null){
-                                   setState(() {
-                                     _timeController.text = "";
-                                     _timeController.text = _durationResult.inMinutes.toString() + ":00";
-                                   });
-                                 }
-                               },
-                                //readOnly: _regularIsChecked![index],
+                                },
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12.0,
+                                      horizontal: 6.0,
+                                    ),
+                                  ),
+                                  cursorColor: CustColors.light_navy,
+                                  //autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  keyboardType: TextInputType.datetime,
+                                  controller: _timeController,
+                                  style: Styles.searchTextStyle02,
+                                  enabled: false,
+                                  showCursor: false,
+                                  //readOnly: _regularIsChecked![index],
+                                ),
                               ),
                             ),
                           ),
