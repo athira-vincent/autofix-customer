@@ -6,8 +6,6 @@ class ShowCartPopEvent extends Equatable {
 }
 
 class FetchShowCartPopEvent extends ShowCartPopEvent {
-
-
   FetchShowCartPopEvent();
 
   @override
