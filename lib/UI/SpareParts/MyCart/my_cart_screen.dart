@@ -1,5 +1,8 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
@@ -10,12 +13,14 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
 import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
+import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
 import 'package:auto_fix/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'showcartpopbloc/show_cart_pop_event.dart';
 
@@ -62,32 +67,56 @@ class _MyCartScreenState extends State<MyCartScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          body: ScrollConfiguration(
-        behavior: MyBehavior(),
-        child: RefreshIndicator(
-          color: Colors.blue,
-          onRefresh: () async {
-            final addcartsBloc = BlocProvider.of<ShowCartPopBloc>(context);
-            addcartsBloc.add(FetchShowCartPopEvent());
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                appBarCustomUi(),
-                productsListUi(),
-                placeOrderUi(),
-                Divider(),
-                changeAddressUi(),
-                Divider(),
-                selectedBillDetailsUi(),
-                Divider(),
-                continueButtonUi(),
-              ],
-            ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                ShowCartPopBloc()..add(FetchShowCartPopEvent()),
           ),
+        ],
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<DeleteCartBloc, DeleteCartState>(
+              listener: (context, state) {
+                if (state is DeleteCartLoadedState) {
+                  if (state.deleteCartModel.data!.updateCart.status ==
+                      "Success") {
+                    final addcartsBloc =
+                        BlocProvider.of<ShowCartPopBloc>(context);
+                    addcartsBloc.add(FetchShowCartPopEvent());
+                  }
+                }
+              },
+            ),
+          ],
+          child: Scaffold(
+              body: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: RefreshIndicator(
+              color: Colors.blue,
+              onRefresh: () async {
+                final addcartsBloc = BlocProvider.of<ShowCartPopBloc>(context);
+                addcartsBloc.add(FetchShowCartPopEvent());
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    appBarCustomUi(),
+                    productsListUi(),
+                    placeOrderUi(),
+                    Divider(),
+                    changeAddressUi(),
+                    Divider(),
+                    selectedBillDetailsUi(),
+                    Divider(),
+                    continueButtonUi(),
+                  ],
+                ),
+              ),
+            ),
+          )),
         ),
-      )),
+      ),
     );
   }
 
@@ -146,10 +175,22 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               width: 90,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
-                                child: state.cartlistmodel.data!.cartList
-                                            .data[index].product.productImage ==
-                                        "null"||state.cartlistmodel.data!.cartList
-                                    .data[index].product.productImage.isEmpty
+                                child: state
+                                                .cartlistmodel
+                                                .data!
+                                                .cartList
+                                                .data[index]
+                                                .product
+                                                .productImage ==
+                                            "null" ||
+                                        state
+                                            .cartlistmodel
+                                            .data!
+                                            .cartList
+                                            .data[index]
+                                            .product
+                                            .productImage
+                                            .isEmpty
                                     ? Container(
                                         color: Colors.white,
                                         child: Padding(
@@ -161,7 +202,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                         ),
                                       )
                                     : Image.network(
-                                  state.cartlistmodel.data!.cartList.data[index].product.productImage,
+                                        state.cartlistmodel.data!.cartList
+                                            .data[index].product.productImage,
                                         fit: BoxFit.cover,
                                       ),
                               ),
@@ -174,10 +216,18 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                   Padding(
-                                    padding:const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 8, 0, 0),
                                     child: Text(
-                                      state.cartlistmodel.data!.cartList.data[index].product.vehicleModel.brandName,
+                                      state
+                                          .cartlistmodel
+                                          .data!
+                                          .cartList
+                                          .data[index]
+                                          .product
+                                          .vehicleModel
+                                          .brandName,
                                       style: Styles.sparePartNameSubTextBlack,
                                     ),
                                   ),
@@ -190,10 +240,18 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                       style: Styles.sparePartNameTextBlack17,
                                     ),
                                   ),
-                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 10),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 8, 0, 10),
                                     child: Text(
-                                      state.cartlistmodel.data!.cartList.data[index].product.vehicleModel.modelName,
+                                      state
+                                          .cartlistmodel
+                                          .data!
+                                          .cartList
+                                          .data[index]
+                                          .product
+                                          .vehicleModel
+                                          .modelName,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: Styles.sparePartNameSubTextBlack,
@@ -278,10 +336,74 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                  child: SvgPicture.asset(
-                                    'assets/image/home_customer/deleteMyCart.svg',
-                                    height: 20,
-                                    width: 20,
+                                  child: InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CupertinoAlertDialog(
+                                              title: const Text("Confirm",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Formular',
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color:
+                                                        CustColors.materialBlue,
+                                                  )),
+                                              content: const Text(
+                                                  "Are you sure you want to delete?"),
+                                              actions: <Widget>[
+                                                CupertinoDialogAction(
+                                                    textStyle: const TextStyle(
+                                                      color:
+                                                          CustColors.rusty_red,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    isDefaultAction: true,
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text("No")),
+                                                CupertinoDialogAction(
+                                                    textStyle: const TextStyle(
+                                                      color:
+                                                          CustColors.rusty_red,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    isDefaultAction: true,
+                                                    onPressed: () async {
+                                                      final deletcartBloc =
+                                                          BlocProvider.of<
+                                                                  DeleteCartBloc>(
+                                                              context);
+                                                      deletcartBloc.add(
+                                                          FetchDeleteCartEvent(
+                                                              state
+                                                                  .cartlistmodel
+                                                                  .data!
+                                                                  .cartList
+                                                                  .data[index]
+                                                                  .product
+                                                                  .id
+                                                                  .toString()));
+                                                      Navigator.pop(context);
+                                                      Fluttertoast.showToast(
+                                                        msg: "Removed from cart successfully!!",
+                                                        timeInSecForIosWeb: 1,
+                                                      );
+                                                    },
+                                                    child: const Text("Yes")),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/image/home_customer/deleteMyCart.svg',
+                                      height: 20,
+                                      width: 20,
+                                    ),
                                   ),
                                 ),
                                 Padding(

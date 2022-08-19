@@ -3499,4 +3499,31 @@ class QueryProvider {
       isTokenThere: false,
     );
   }
+
+  /// delete cart queryprovider
+  fetchServicedeletelist(productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+  mutation {
+  updateCart(productId:$productid, quantity: 1, status: 0) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
 }
