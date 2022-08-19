@@ -1254,9 +1254,7 @@ class _CustomerMyProfileScreenState extends State<CustomerMyProfileScreen> {
               _stateController.text.toString(),1,
               //selectedState, 1,
               _imageUrl);
-          setState(() {
 
-          });
         } else {
           print("individual _formKey.currentState!.validate() - else");
           setState(() => _autoValidate = AutovalidateMode.always);

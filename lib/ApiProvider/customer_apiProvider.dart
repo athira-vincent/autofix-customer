@@ -13,6 +13,7 @@ import 'package:auto_fix/Models/customer_models/mechanic_start_service_model/cus
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/customer_models/update_mechanic_booking_model/updateMechanicBookingMdl.dart';
+import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
 import 'package:auto_fix/QueryProvider/query_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/category_list_home_mdl.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_Customer_Models/serviceSearchListAll_Mdl.dart';
@@ -407,6 +408,26 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = CartListModel(status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  /// delete cart
+  Future<DeleteCartModel>fetchServicedeletelist(
+      productid) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchServicedeletelist(productid
+    ) ;
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = DeleteCartModel(status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return DeleteCartModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = DeleteCartModel(status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }
   }

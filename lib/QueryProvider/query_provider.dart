@@ -3412,12 +3412,16 @@ class QueryProvider {
     String _query = """
         
   mutation {
-    addCart(productId: $productid, quantity: 1) {
+  addCart(productId: $productid, quantity: 1) {
+    msg {
       status
       code
       message
     }
+    itemCount
+    totalAmount
   }
+}
 
 
     """;
@@ -3434,7 +3438,10 @@ class QueryProvider {
   fetchServicecartlist() async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
-    String custId=shdPre.getString(SharedPrefKeys.userID).toString();
+    String custId = shdPre.getString(SharedPrefKeys.userID).toString();
+    print("custoid");
+    print(custId);
+    print(authToken);
 
     String _query = """
    query      
@@ -3442,6 +3449,7 @@ class QueryProvider {
   cartList(customerId: $custId, page: 0, size: 100) {
     totalItems
     data {
+      
       id
       customerId
       productId
@@ -3459,8 +3467,18 @@ class QueryProvider {
         }
       }
       product{
+        vehicleModel{
+          id,
+          brandName,
+          modelName
+        }
         id
         productName
+        productCode
+        price
+        productImage
+        
+        
       }
     }
     totalPages
@@ -3468,6 +3486,33 @@ class QueryProvider {
     totalPrice
     count
     deliveryCharge
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// delete cart queryprovider
+  fetchServicedeletelist(productid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+  mutation {
+  updateCart(productId:$productid, quantity: 1, status: 0) {
+    status
+    code
+    message
   }
 }
 

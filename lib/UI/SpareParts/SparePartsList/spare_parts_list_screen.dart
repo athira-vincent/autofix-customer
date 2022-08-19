@@ -31,7 +31,6 @@ class SparePartsListScreen extends StatefulWidget {
 class _SparePartsListScreenState extends State<SparePartsListScreen> {
   static ValueNotifier<String> incart = ValueNotifier('');
 
-
   double per = .10;
   double perfont = .10;
 
@@ -49,6 +48,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
   StateSetter? setStateSearch;
 
   late List<String> image;
+  String itemcount = "";
+  String totalamount = "";
 
   @override
   void initState() {
@@ -73,10 +74,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
               ..add(FetchSparePartListEvent(
                   widget.modelname.toString(), "null", "null", "null")),
           ),
-          // BlocProvider(
-          //   create: (context) => ShowCartPopBloc()
-          //     ..add(FetchShowCartPopEvent()),
-          // ),
         ],
         child: MultiBlocListener(
           listeners: [
@@ -84,18 +81,23 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
             BlocListener<AddCartBloc, AddCartState>(
               listener: (context, state) {
                 if (state is AddCartLoadedState) {
-                  if (state.addCartModel.data!.addCart.status == "Success") {
+                  if (state.addCartModel.data!.addCart.msg.status ==
+                      "Success") {
                     Fluttertoast.showToast(
                       msg: "successfully added to cart!!",
                       timeInSecForIosWeb: 1,
                     );
+
                     setState(() {
                       addToCart = true;
-                      //ViewCartUi();
 
+                      itemcount =
+                          state.addCartModel.data!.addCart.itemCount.toString();
+                      totalamount = state.addCartModel.data!.addCart.totalAmount
+                          .toString();
+
+                      ViewCartUi();
                     });
-
-                    incart.value="true";
                   }
                 }
               },
@@ -112,14 +114,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                       SparePartsListUi(),
                     ],
                   ),
-                  addToCart == false ? Container() : MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => ShowCartPopBloc()
-                          ..add(FetchShowCartPopEvent()),
-                      ),
-                    ],
-                      child: ViewCartUi()),
+                  addToCart == true ? ViewCartUi() : Container(),
                 ],
               )),
         ),
@@ -309,10 +304,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                           .sparePartsList[index]
                                           .id
                                           .toString()));
-
-                                      // setState(() {
-                                      //   addToCart = true;
-                                      // });
                                     },
                                     child: Container(
                                       height: 20,
@@ -349,8 +340,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     );
   }
 
-  Widget ViewCartUi() {
-    print("lopez");
+  ViewCartUi() {
     return InkWell(
       onTap: () {
         Navigator.push(context,
@@ -358,75 +348,47 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-        child: BlocBuilder<ShowCartPopBloc,ShowCartPopState>(
-
-          builder: (context, state) {
-
-              print(state);
-            if(state is ShowCartPopLoadedState){
-
-              return Container(
-                height: 65,
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: CustColors.light_navy,
-                    border: Border.all(
-                      color: CustColors.light_navy,
+        child: Container(
+          height: 65,
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustColors.light_navy,
+              border: Border.all(
+                color: CustColors.light_navy,
+              ),
+              borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      itemcount + " items",
+                      style: Styles.addToCartItemText02,
                     ),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:  [
-                          ValueListenableBuilder(
-                              valueListenable: incart,
-                            builder: (BuildContext context,
-                                String newValue, _) {
-
-                                print("incart");
-                                print(state.cartlistmodel.data!.cartList.totalItems.toString());
-                                print(incart);
-                                print("newvalue");
-                                print(newValue);
-                              return Text(
-                               newValue=="true"? state.cartlistmodel.data!.cartList.totalItems.toString()+" items":"0",
-                                style: Styles.addToCartItemText02,
-                              );
-                            }
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-                            child: Text(
-                              "\$"+state.cartlistmodel.data!.cartList.totalPrice.toString(),
-                              style: Styles.addToCartItemText02,
-                            ),
-                          ),
-                        ],
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                      child: Text(
+                        "\$" + totalamount,
+                        style: Styles.addToCartItemText02,
                       ),
-                      const Spacer(),
-                      const Text(
-                        "View Cart >",
-                        style: Styles.addToCartText02,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }
-            else{
-              print("oops");
-             return Container();
-            }
-
-
-          }
+                const Spacer(),
+                const Text(
+                  "View Cart >",
+                  style: Styles.addToCartText02,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
