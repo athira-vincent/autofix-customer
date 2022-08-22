@@ -63,7 +63,7 @@ class InputValidator {
   }
 
   String? emptyChecking(String? value) {
-    if (value!.isEmpty) {
+    if (value!.trim().isEmpty) {
       return ch! + " is " + TextStrings.errRequired;
     } else {
       return null;

@@ -23,7 +23,9 @@ class IndividualMechCompleteProfileMdl {
   );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null ? null : data!.toJson(),
+    "data": data == null ? null : data?.toJson(),
+    "message": message == null ? null : message,
+    "status": status == null ? null : status,
   };
 }
 

@@ -540,7 +540,7 @@ class _RegularServiceListScreenState extends State<RegularServiceListScreen> {
                                     )
                                 ),
                                 validator: (value){
-                                  if(value!.isEmpty){
+                                  if(value!.trim().isEmpty){
                                     return "Fill field";
                                   }
                                   else if(int.parse(value) < int.parse(selectedServiceMdlList[getItemIndex(parentIndex,index)].minAmount) ){

@@ -12,16 +12,24 @@ String timePriceServiceDetailsMdlToJson(TimePriceServiceDetailsMdl data) => json
 class TimePriceServiceDetailsMdl {
   TimePriceServiceDetailsMdl({
     required this.data,
+    required this.status,
+    required this.message,
   });
 
   Data? data;
+  String? status;
+  String? message;
 
   factory TimePriceServiceDetailsMdl.fromJson(Map<String, dynamic> json) => TimePriceServiceDetailsMdl(
     data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    message: json["message"] == null ? null : json["message"],
+    status: json["status"] == null ? null : json["status"],
   );
 
   Map<String, dynamic> toJson() => {
     "data": data == null ? null : data!.toJson(),
+    "message": message == null ? null : message,
+    "status": status == null ? null : status,
   };
 }
 

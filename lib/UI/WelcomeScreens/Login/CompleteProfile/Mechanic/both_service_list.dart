@@ -597,7 +597,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                       Flexible(
                                         child: TextFormField(
                                           validator: (value){
-                                            if(value!.isEmpty){
+                                            if(value!.trim().isEmpty){
                                               return "Fill field";
                                             }
                                             else if(int.parse(value) < int.parse(emergencyServiceList[index].minPrice) ){
@@ -680,6 +680,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                             controller: _timeController,
                                             style: Styles.searchTextStyle02,
                                             enabled: false,
+                                            showCursor: false,
                                             //readOnly: _regularIsChecked![index],
                                           ),
                                         ),
@@ -914,7 +915,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                                   //hours: 2,
                                     minutes: int.parse(_timeController.text.toString().replaceAll(":00", "")),
                                     seconds: 00,
-                                    milliseconds: 0)
+                                    milliseconds: 0,)
                             );
                             print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
                             if(_durationResult != null){
@@ -947,6 +948,7 @@ class _BothServiceListScreenState extends State<BothServiceListScreen> {
                           controller: _timeController,
                           style: Styles.searchTextStyle02,
                           enabled: false,
+                          showCursor: false,
                         ),
                       ),
                     ),

@@ -7,6 +7,8 @@ import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
+import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
+import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
@@ -130,8 +132,8 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: Colors.white,
                 primarySwatch: CustColors.materialBlue,
               ),
-              //home: SparePartsListScreen(modelname: "TIGUAN"),
-              //home: BothServiceListScreen(),
+              //home: MechanicStartServiceScreen(),
+              //home: WorkSelectionScreen(userType: "mechanic", userCategory: "individual"),
               home: SplashScreen(),
             ),
           );

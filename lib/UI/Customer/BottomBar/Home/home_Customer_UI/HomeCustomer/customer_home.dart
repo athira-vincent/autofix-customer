@@ -240,7 +240,7 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
     }
 
     return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.best);
   }
 
   Future<void> GetAddressFromLatLong(LatLng position) async {
