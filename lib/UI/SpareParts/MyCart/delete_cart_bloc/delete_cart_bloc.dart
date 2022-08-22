@@ -10,7 +10,7 @@ class DeleteCartBloc extends Bloc<DeleteCartEvent, DeleteCartState> {
       emit(DeleteCartLoadingState());
       try {
         if (event is FetchDeleteCartEvent) {
-          var deletecartscreen = await Repository().deletecart(event.productid);
+          var deletecartscreen = await Repository().deletecart(event.productid,event.quantity,event.status);
           emit(DeleteCartLoadedState(deleteCartModel: deletecartscreen));
         }
       } catch (e) {

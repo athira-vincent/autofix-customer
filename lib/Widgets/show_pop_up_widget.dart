@@ -79,13 +79,7 @@ class ShowPopUpWidget {
                   ),
                   isDefaultAction: true,
                   onPressed: () async {
-                    final deletcartBloc =
-                    BlocProvider.of<DeleteCartBloc>(context);
-                    deletcartBloc.add(FetchDeleteCartEvent(productid));
-                    Navigator.pop(context);
-                    final addcartsBloc =
-                    BlocProvider.of<ShowCartPopBloc>(context);
-                    addcartsBloc.add(FetchShowCartPopEvent());
+
                   },
                   child: const Text("Yes")),
             ],

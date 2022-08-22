@@ -3501,7 +3501,7 @@ class QueryProvider {
   }
 
   /// delete cart queryprovider
-  fetchServicedeletelist(productid) async {
+  fetchServicedeletelist(productid, quantity, status) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     print("noel");
@@ -3509,7 +3509,78 @@ class QueryProvider {
     String _query = """
                 
   mutation {
-  updateCart(productId:$productid, quantity: 1, status: 0) {
+  updateCart(productId:$productid, quantity: $quantity, status: $status) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  ///  address queryprovider
+  fetchServiceaddresslist() async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    String _query = """
+   query      
+  {
+  selectAddress {
+    id
+    fullName
+    phoneNo
+    pincode
+    city
+    state
+    address
+    addressLine2
+    type
+    userId
+    isDefault
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// add address queryprovider
+  fetchaddaddresslist(fullname, phone, pincode, city, state, address,
+      addressline2, type) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+ mutation {
+  addAddress(
+    fullName: $fullname
+    phoneNo: $phone
+    pincode: $pincode
+    city: $city
+    state:$state
+    address: $address
+    addressLine2: $addressline2
+    type: $type
+  ) {
     status
     code
     message

@@ -1,7 +1,9 @@
 import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
+import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
 import 'package:auto_fix/Models/customer_models/cart_list_model/cart_list_model.dart';
+import 'package:auto_fix/Models/customer_models/get_address_model/get_address_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
@@ -63,6 +65,7 @@ class Repository {
   final _addcartprovider = CustomerApiProvider();
   final _cartlistprovider = CustomerApiProvider();
   final _deleteprovider = CustomerApiProvider();
+  final _addressprovider = CustomerApiProvider();
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -595,6 +598,25 @@ class Repository {
   Future<CartListModel> cartlist() =>
       _cartlistprovider.fetchServicecartlist();
 
-  Future<DeleteCartModel> deletecart(productid) =>
-      _deleteprovider.fetchServicedeletelist(productid);
+  Future<DeleteCartModel> deletecart(productid,quantity,status) =>
+      _deleteprovider.fetchServicedeletelist(productid,quantity,status);
+  Future<AddressModel> addresslist() =>
+      _addressprovider.fetchServiceaddresslist();
+
+  Future<AddAddressModel> addaddresslist(  fullname,
+      phone,
+      pincode,
+      city,
+      state,
+      address,
+      addressline2,
+      type,) =>
+      _addressprovider.fetchaddaddresslist(  fullname,
+        phone,
+        pincode,
+        city,
+        state,
+        address,
+        addressline2,
+        type,);
 }

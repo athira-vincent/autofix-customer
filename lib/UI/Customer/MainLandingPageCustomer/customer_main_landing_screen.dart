@@ -251,7 +251,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
           backgroundColor: Colors.white,
           icon: Column(
             children: [
-              Container(
+              SizedBox(
                 width: _setValue(25),
                 height: _setValue(25),
                 child: _index == 1
@@ -431,7 +431,7 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
               index: _index,
               children: <Widget>[
                 HomeCustomerUIScreen(),
-                MyCartScreen(),
+                 MyCartScreen(),
                 CustomerMyServicesScreen(),
                 CustomerMyProfileScreen(
                   isEnableEditing: false,
@@ -473,6 +473,8 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                       final addcartsBloc =
                       BlocProvider.of<ShowCartPopBloc>(context);
                       addcartsBloc.add(FetchShowCartPopEvent());
+                      //MyCartScreen();
+
                     }
                     //getSharedPrefData();
                   });
