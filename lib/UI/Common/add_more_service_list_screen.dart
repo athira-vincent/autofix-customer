@@ -288,7 +288,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
 
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator(color: CustColors.light_navy,));
                 default:
                   return
                     snapshot.data?.data?.mechanicServicesList?.data?.length != 0 && snapshot.data?.data?.mechanicServicesList?.data?.length != null
@@ -314,7 +314,7 @@ class _AddMoreServicesListScreenState extends State<AddMoreServicesListScreen> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                //physics: NeverScrollableScrollPhysics(),
                 itemCount:snapshot.data!.data!.mechanicServicesList?.data!.length,
                 itemBuilder: (context, index) {
                   return serviceListItems(size, index, snapshot.data!.data!.mechanicServicesList?.data![index]);
