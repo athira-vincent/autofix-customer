@@ -7,8 +7,8 @@ class DeleteCartEvent extends Equatable {
 
 class FetchDeleteCartEvent extends DeleteCartEvent {
 
-  final String productid;
-  FetchDeleteCartEvent(this.productid);
+  final String productid,quantity,status;
+  FetchDeleteCartEvent(this.productid,this.quantity,this.status);
 
   @override
   List<Object> get props => [];

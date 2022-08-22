@@ -9,6 +9,8 @@ import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mech
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
@@ -110,6 +112,12 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider<DeleteCartBloc>(
                 create: (context) => DeleteCartBloc(),
+              ),
+              BlocProvider<AddressBloc>(
+                create: (context) => AddressBloc(),
+              ),
+              BlocProvider<AddAddressBloc>(
+                create: (context) => AddAddressBloc(),
               ),
             ],
             child: MaterialApp(
