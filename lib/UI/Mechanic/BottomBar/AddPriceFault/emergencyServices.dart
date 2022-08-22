@@ -24,7 +24,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
 
   String authToken = "", mechanicId = "",
       search="" ;
-  int page=0,size=10;
+  int page=0,size=100;
   bool saveloading = false;
   bool _isLoadingPage = false;
   List<bool> _selectionList=[];
@@ -102,7 +102,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
             }
             else{
               _selectionList.add(false);
-              _timeList!.add("12:00");
+              _timeList!.add("10:00");
               _priceList!.add(_AddPriceServiceList!.data![i].minPrice);
 
             }
@@ -168,6 +168,13 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                 backgroundColor: CustColors.light_navy,
               ));
           }
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.message.toString(),
+                style: const TextStyle(
+                    fontFamily: 'Roboto_Regular', fontSize: 14)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: CustColors.light_navy,
+          ));
         });
       }else{
         setState(() {
@@ -291,7 +298,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                             _selectionList.insert(index,!s );
                                             print(_selectionList[index].toString());
                                             if(!_selectionList[index]){
-                                              _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"12:00";
+                                              _textEditContoller.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].time:"10:00";
                                               _textEditContoller01.text=(_AddPriceServiceList!.data![0].mechanicService!.length>0)?_AddPriceServiceList!.data![0].mechanicService![0].fee:"1000";
                                               setState(() {
 
@@ -367,44 +374,49 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                       child: Padding(
                                         padding: const EdgeInsets.only(left:15.0,bottom: 4),
                                         child:
-                                        TextFormField(
-                                          cursorColor: CustColors.light_navy,
-                                          keyboardType: TextInputType.datetime,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none
-                                          ),
-                                          enabled: _selectionList[index],
-                                          controller: _textEditContoller,
-                                          /*inputFormatters: [
-                                            LengthLimitingTextInputFormatter(4),
-                                            FilteringTextInputFormatter.allow(
-                                                RegExp('[0-9 :]')),
-                                          ],*/
-                                          onChanged: (val) async {
-                                            print(" _timeController.text >>> ${_textEditContoller.text}" );
-                                            Duration? _durationResult = await showDurationPicker(
-                                                snapToMins: 5.0,
-                                                context: context,
-                                                initialTime: Duration(
-                                                  //hours: 2,
-                                                    minutes: 10,
-                                                    seconds: 00,
-                                                    milliseconds: 0)
-                                            );
-                                            print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
-                                            print(" _timeController.text02 >>> ${_textEditContoller.text}" );
-                                            if(_durationResult != null){
-                                              setState(() {
-                                                _textEditContoller.text = "";
-                                                _textEditContoller.text = _durationResult.inMinutes.toString() + ":00";
-                                                print(" _timeController.text03 >>> ${_textEditContoller.text}" );
-                                              });
+                                        InkWell(
+                                          onTap: ()async {
+                                            if(_selectionList[index]){
+                                              print(" _timeController.text >>> ${_textEditContoller.text}" );
+                                              Duration? _durationResult = await showDurationPicker(
+                                                  snapToMins: 5.0,
+                                                  context: context,
+                                                  initialTime: Duration(
+                                                    //hours: 2,
+                                                      minutes: int.parse(_textEditContoller.text.toString().replaceAll(":00", "")),
+                                                      seconds: 00,
+                                                      milliseconds: 0)
+                                              );
+                                              print("_durationResult >>>" + _durationResult!.inMinutes.toString() + ":00");
+                                              print(" _timeController.text02 >>> ${_textEditContoller.text}" );
+                                              if(_durationResult != null){
+                                                setState(() {
+                                                  _textEditContoller.text = "";
+                                                  _textEditContoller.text = _durationResult.inMinutes.toString() + ":00";
+                                                  print(" _timeController.text03 >>> ${_textEditContoller.text}" );
+                                                });
+                                              }
                                             }
                                           },
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
+                                          child: TextFormField(
+                                            cursorColor: CustColors.light_navy,
+                                            keyboardType: TextInputType.datetime,
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none
+                                            ),
+                                            enabled: false,
+                                            showCursor: false,
+                                            controller: _textEditContoller,
+                                            /*inputFormatters: [
+                                              LengthLimitingTextInputFormatter(4),
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp('[0-9 :]')),
+                                            ],*/
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -433,7 +445,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                         child:
                                         TextFormField(
                                           validator: (value){
-                                            if(value!.isEmpty){
+                                            if(value!.trim().isEmpty){
                                               return "Fill field";
                                             }
                                             else if(int.parse(value) < int.parse(_AddPriceServiceList!.data![0].minPrice) ||
@@ -457,7 +469,7 @@ class _EmergencyServices extends State<EmergencyServices> with AutomaticKeepAliv
                                           enabled: _selectionList[index],
                                           controller: _textEditContoller01,
                                           inputFormatters: [
-                                            LengthLimitingTextInputFormatter(4),
+                                            LengthLimitingTextInputFormatter(10),
                                             FilteringTextInputFormatter.allow(
                                                 RegExp('[0-9]')),
                                           ],

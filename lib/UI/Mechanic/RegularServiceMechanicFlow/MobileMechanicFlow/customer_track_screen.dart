@@ -226,7 +226,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
 
-    Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.best, distanceFilter: 6)).listen((event) {
+    Geolocator.getPositionStream(locationSettings:LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 6)).listen((event) {
       var value1 = event;
       setState(() {
         _firestore

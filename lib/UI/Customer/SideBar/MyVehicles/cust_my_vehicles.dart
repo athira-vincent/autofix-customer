@@ -365,7 +365,9 @@ class _CustomerMyVehicleScreenState extends State<CustomerMyVehicleScreen> {
                           ],
                         ),
                       ),
-                      Positioned(
+                      snapshot.data?.data?.custVehicleList?[i].defaultVehicle == 1
+                          ? Container()
+                          : Positioned(
                         bottom: 65,
                         child: InkWell(
                           onTap: (){

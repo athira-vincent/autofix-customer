@@ -153,7 +153,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
             //     .replaceAll("[", "")
             //     .replaceAll("]", "")
             //     .split(",");
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
               print("WidgetsBinding");
               totalprice =
                   state.cartlistmodel.data!.cartList.totalPrice.toString();

@@ -72,7 +72,8 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
+      bookingId = "1711";
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();

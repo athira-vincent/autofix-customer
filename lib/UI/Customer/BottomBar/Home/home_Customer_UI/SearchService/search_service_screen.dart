@@ -159,7 +159,7 @@ class _SearchServiceScreenState extends State<SearchServiceScreen> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
   Future<void> GetAddressFromLatLong(Position position)async {
