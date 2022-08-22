@@ -93,14 +93,14 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       }
       else{
-        if(_isWorkProfileCompleted != null || _isWorkProfileCompleted == 2){
+        if(_isWorkProfileCompleted != null && _isWorkProfileCompleted == 2){
           Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
                 builder: (context) =>
                     WorkSelectionScreen(userCategory:userCategory! ,userType: userType!,)),
           );
-        }else if(_isWorkProfileCompleted != null || _isWorkProfileCompleted == 1)
+        }else if(_isWorkProfileCompleted != null && _isWorkProfileCompleted == 1)
         {
           Navigator.pushReplacement(
               context,

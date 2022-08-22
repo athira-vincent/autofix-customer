@@ -123,7 +123,7 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: CustColors.materialBlue,
               ),
               //home: SparePartsListScreen(modelname: "TIGUAN"),
-              //home: BothServiceListScreen(),
+              //home: WorkSelectionScreen(userType: "mechanic", userCategory: "individual"),
               home: SplashScreen(),
             ),
           );

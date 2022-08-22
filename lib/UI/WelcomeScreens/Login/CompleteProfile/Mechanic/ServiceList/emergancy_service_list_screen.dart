@@ -380,7 +380,7 @@ class _EmergencyServiceListScreenState extends State<EmergencyServiceListScreen>
                                                   )
                                                 ),
                                                 validator: (value){
-                                                  if(value!.isEmpty){
+                                                  if(value!.trim().isEmpty){
                                                     return "Fill field";
                                                   }
                                                   else if(int.parse(value) < int.parse(emergencyServiceList[index].minPrice) ){
