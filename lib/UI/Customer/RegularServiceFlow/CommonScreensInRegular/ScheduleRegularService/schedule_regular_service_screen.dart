@@ -63,7 +63,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
 
   List<Service>? selectedCategoryList =[];
   String selectedServiceSpecializatonType = "";
-  int totalEstimatedTime = 0 , totalEstimatedPrice = 0;
+  int totalEstimatedTime = 0 , totalEstimatedMinPrice = 0, totalEstimatedMaxPrice = 0;
   String selectedServiceIds = "";
   List<String> selectedListServiceIds =[];
 
@@ -86,7 +86,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     for(int i = 0; i<selectedCategoryList!.length ; i++){
       selectedListServiceIds.add(selectedCategoryList![i].id);
       selectedServiceIds = selectedCategoryList![i].id  + ',' + selectedServiceIds ;
-      totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList![i].maxPrice}');
+      totalEstimatedMinPrice = totalEstimatedMinPrice + int.parse('${selectedCategoryList![i].minPrice}');
+      totalEstimatedMaxPrice = totalEstimatedMaxPrice + int.parse('${selectedCategoryList![i].maxPrice}');
     }
   }
 
@@ -273,12 +274,13 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
               height: 10,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Estimated price",
+                    Text("Minimum price",
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: "Samsung_SharpSans_Medium",
@@ -289,7 +291,34 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                         height: 1.3,
                       ),
                     ),
-                    Text("₦ $totalEstimatedPrice",
+                    Text("₦ $totalEstimatedMinPrice",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "SharpSans_Bold",
+                        fontWeight: FontWeight.w200,
+                        color: Colors.black,
+                        wordSpacing: .5,
+                        letterSpacing: .2,
+                        height: 1.3,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Maximum price",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: "Samsung_SharpSans_Medium",
+                        fontWeight: FontWeight.w200,
+                        color: Colors.black,
+                        wordSpacing: .5,
+                        letterSpacing: .7,
+                        height: 1.3,
+                      ),
+                    ),
+                    Text("₦ $totalEstimatedMaxPrice",
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: "SharpSans_Bold",
@@ -397,8 +426,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       {
                         this.widget.categoryList!.service![i].isChecked = false;
                         selectedListServiceIds.remove(widget.categoryList!.service![i].id);
-                        totalEstimatedPrice = totalEstimatedPrice - int.parse('${this.widget.categoryList!.service![i].maxPrice}');
-
+                        totalEstimatedMinPrice = totalEstimatedMinPrice - int.parse('${this.widget.categoryList!.service![i].minPrice}');
+                        totalEstimatedMaxPrice = totalEstimatedMaxPrice - int.parse('${this.widget.categoryList!.service![i].maxPrice}');
                       }
                   }
                 selectedCategoryList!.removeAt(index);
@@ -473,7 +502,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                       height: 1.3,
                     ),
                   ),
-                  Text("₦ ${selectedCategoryList![index].maxPrice}",
+                  Text("₦ ${selectedCategoryList![index].minPrice} - ₦ ${selectedCategoryList![index].maxPrice}",
                     style: TextStyle(
                       fontSize: 15,
                       fontFamily: "SharpSans_Bold",
@@ -796,7 +825,8 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
     selectedCategoryList = [];
     selectedListServiceIds =[];
     selectedServiceIds = "";
-    totalEstimatedPrice = 0;
+    totalEstimatedMinPrice = 0;
+    totalEstimatedMaxPrice = 0;
     selectedCategoryList = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -815,9 +845,10 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
       for(int i = 0; i<selectedCategoryList!.length ; i++){
           selectedListServiceIds.add(selectedCategoryList![i].id);
           selectedServiceIds = selectedCategoryList![i].id  + ',' + selectedServiceIds ;
-          totalEstimatedPrice = totalEstimatedPrice + int.parse('${selectedCategoryList![i].maxPrice}');
+          totalEstimatedMinPrice = totalEstimatedMinPrice + int.parse('${selectedCategoryList![i].minPrice}');
+          totalEstimatedMaxPrice = totalEstimatedMaxPrice + int.parse('${selectedCategoryList![i].maxPrice}');
       }
-      print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedPrice');
+      print('totalEstimatedPrice >>>>>>>>>> $totalEstimatedMinPrice - $totalEstimatedMaxPrice');
     });
   }
 
