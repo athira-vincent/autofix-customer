@@ -5,7 +5,8 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-CartListModel cartListModelFromMap(String str) => CartListModel.fromMap(json.decode(str));
+CartListModel cartListModelFromMap(String str) =>
+    CartListModel.fromMap(json.decode(str));
 
 String cartListModelToMap(CartListModel data) => json.encode(data.toMap());
 
@@ -21,16 +22,16 @@ class CartListModel {
   Data? data;
 
   factory CartListModel.fromMap(Map<String, dynamic> json) => CartListModel(
-    status: json["status"] == null ? null : json["status"],
-    message: json["message"] == null ? null : json["message"],
-    data: Data.fromMap(json["data"]),
-  );
+        status: json["status"] == null ? null : json["status"],
+        message: json["message"] == null ? null : json["message"],
+        data: Data.fromMap(json["data"]),
+      );
 
   Map<String, dynamic> toMap() => {
-    "status": status == null ? null : status,
-    "message": message == null ? null : message,
-    "data": data!.toMap(),
-  };
+        "status": status == null ? null : status,
+        "message": message == null ? null : message,
+        "data": data!.toMap(),
+      };
 }
 
 class Data {
@@ -41,12 +42,12 @@ class Data {
   CartList cartList;
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
-    cartList: CartList.fromMap(json["cartList"]),
-  );
+        cartList: CartList.fromMap(json["cartList"]),
+      );
 
   Map<String, dynamic> toMap() => {
-    "cartList": cartList.toMap(),
-  };
+        "cartList": cartList.toMap(),
+      };
 }
 
 class CartList {
@@ -69,24 +70,24 @@ class CartList {
   int deliveryCharge;
 
   factory CartList.fromMap(Map<String, dynamic> json) => CartList(
-    totalItems: json["totalItems"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
-    totalPages: json["totalPages"],
-    currentPage: json["currentPage"],
-    totalPrice: json["totalPrice"],
-    count: json["count"],
-    deliveryCharge: json["deliveryCharge"],
-  );
+        totalItems: json["totalItems"] ?? "",
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
+        totalPages: json["totalPages"] ?? "",
+        currentPage: json["currentPage"] ?? "",
+        totalPrice: json["totalPrice"] ?? "",
+        count: json["count"] ?? "",
+        deliveryCharge: json["deliveryCharge"] ?? "",
+      );
 
   Map<String, dynamic> toMap() => {
-    "totalItems": totalItems,
-    "data": List<dynamic>.from(data.map((x) => x.toMap())),
-    "totalPages": totalPages,
-    "currentPage": currentPage,
-    "totalPrice": totalPrice,
-    "count": count,
-    "deliveryCharge": deliveryCharge,
-  };
+        "totalItems": totalItems,
+        "data": List<dynamic>.from(data.map((x) => x.toMap())),
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "totalPrice": totalPrice,
+        "count": count,
+        "deliveryCharge": deliveryCharge,
+      };
 }
 
 class Datum {
@@ -109,24 +110,24 @@ class Datum {
   Product product;
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    customerId: json["customerId"],
-    productId: json["productId"],
-    quantity: json["quantity"],
-    status: json["status"],
-    customer: Customer.fromMap(json["customer"]),
-    product: Product.fromMap(json["product"]),
-  );
+        id: json["id"],
+        customerId: json["customerId"] ?? "",
+        productId: json["productId"] ?? "",
+        quantity: json["quantity"] ?? "",
+        status: json["status"] ?? "",
+        customer: Customer.fromMap(json["customer"]),
+        product: Product.fromMap(json["product"]),
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "customerId": customerId,
-    "productId": productId,
-    "quantity": quantity,
-    "status": status,
-    "customer": customer.toMap(),
-    "product": product.toMap(),
-  };
+        "id": id,
+        "customerId": customerId,
+        "productId": productId,
+        "quantity": quantity,
+        "status": status,
+        "customer": customer.toMap(),
+        "product": product.toMap(),
+      };
 }
 
 class Customer {
@@ -139,14 +140,15 @@ class Customer {
   List<Address> address;
 
   factory Customer.fromMap(Map<String, dynamic> json) => Customer(
-    id: json["id"],
-    address: List<Address>.from(json["address"].map((x) => Address.fromMap(x))),
-  );
+        id: json["id"],
+        address:
+            List<Address>.from(json["address"].map((x) => Address.fromMap(x))),
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "address": List<dynamic>.from(address.map((x) => x.toMap())),
-  };
+        "id": id,
+        "address": List<dynamic>.from(address.map((x) => x.toMap())),
+      };
 }
 
 class Address {
@@ -165,20 +167,20 @@ class Address {
   String state;
 
   factory Address.fromMap(Map<String, dynamic> json) => Address(
-    fullName: json["fullName"],
-    phoneNo: json["phoneNo"],
-    pincode: json["pincode"],
-    city: json["city"],
-    state: json["state"],
-  );
+        fullName: json["fullName"] ?? "",
+        phoneNo: json["phoneNo"] ?? "",
+        pincode: json["pincode"] ?? "",
+        city: json["city"] ?? "",
+        state: json["state"] ?? "",
+      );
 
   Map<String, dynamic> toMap() => {
-    "fullName": fullName,
-    "phoneNo": phoneNo,
-    "pincode": pincode,
-    "city": city,
-    "state": state,
-  };
+        "fullName": fullName,
+        "phoneNo": phoneNo,
+        "pincode": pincode,
+        "city": city,
+        "state": state,
+      };
 }
 
 class Product {
@@ -199,22 +201,22 @@ class Product {
   String productImage;
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
-    vehicleModel: VehicleModel.fromMap(json["vehicleModel"]),
-    id: json["id"],
-    productName: json["productName"],
-    productCode: json["productCode"],
-    price: json["price"],
-    productImage: json["productImage"] ?? "",
-  );
+        vehicleModel: VehicleModel.fromMap(json["vehicleModel"]),
+        id: json["id"],
+        productName: json["productName"] ?? "",
+        productCode: json["productCode"] ?? "",
+        price: json["price"] ?? "",
+        productImage: json["productImage"] ?? "",
+      );
 
   Map<String, dynamic> toMap() => {
-    "vehicleModel": vehicleModel.toMap(),
-    "id": id,
-    "productName": productName,
-    "productCode": productCode,
-    "price": price,
-    "productImage": productImage == null ? null : productImage,
-  };
+        "vehicleModel": vehicleModel.toMap(),
+        "id": id,
+        "productName": productName,
+        "productCode": productCode,
+        "price": price,
+        "productImage": productImage == null ? null : productImage,
+      };
 }
 
 class VehicleModel {
@@ -229,14 +231,14 @@ class VehicleModel {
   String modelName;
 
   factory VehicleModel.fromMap(Map<String, dynamic> json) => VehicleModel(
-    id: json["id"],
-    brandName: json["brandName"],
-    modelName: json["modelName"],
-  );
+        id: json["id"],
+        brandName: json["brandName"] ?? "",
+        modelName: json["modelName"] ?? "",
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "brandName": brandName,
-    "modelName": modelName,
-  };
+        "id": id,
+        "brandName": brandName,
+        "modelName": modelName,
+      };
 }
