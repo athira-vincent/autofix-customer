@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
@@ -60,19 +62,28 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
   String isPickedUpVehicle = "-1";
   String isReachedServiceCenter = "-1";
   String isWorkStarted = "-1";
-  String isWorkFinished = "-1";
+  String isWorkFinished = "-1", isBookedDate = "-1";
   String isStartedFromLocationForDropOff = "-1";
-  String isDropOff = "-1", isBookedDate = "";
+  String isDropOff = "-1", scheduledDate = "", scheduledTime = "";
   String isPayment = "-1";
+  DateTime dateToday = DateTime.now() ;
   String customerLatitude = "", customerLongitude = "";
   String? FcmToken="";
   String vehicleName = "";
+  bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
+    listenToCloudFirestoreDB();
     getSharedPrefData();
+
   }
 
 
@@ -83,10 +94,16 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
       userName = shdPre.getString(SharedPrefKeys.userName).toString();
     });
+  }
+
+  Future<void> listenToCloudFirestoreDB() async {
     await _firestore.collection("Regular-PickUp").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
 
         isStartedFromLocation = event.get("isStartedFromLocation");
+        scheduledDate = event.get("scheduledDate");
+        scheduledTime = event.get("scheduledTime");
+        isBookedDate = event.get("isBookedDate");
         isArrived = event.get("isArrived");
         isPickedUpVehicle = event.get("isPickedUpVehicle");
         isReachedServiceCenter = event.get("isReachedServiceCenter");
@@ -95,13 +112,27 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
         isStartedFromLocationForDropOff = event.get("isStartedFromLocationForDropOff");
         isDropOff = event.get("isDropOff");
         isPayment = event.get("isPayment");
-        isBookedDate = event.get("isBookedDate");
         customerLatitude = event.get("customerLatitude");
         customerLongitude = event.get("customerLongitude");
         vehicleName = event.get("vehicleName");
       });
+      print(" >>>>> isBookedDate >>>" + scheduledDate);
+      if(scheduledDate.isNotEmpty){
+        DateTime tempDate = DateFormat("yyyy-MM-dd").parse(scheduledDate);
+
+        //print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
+        if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
+          setState(() {
+            //isBookedDate = "0";
+            updateFirestoreDB("isBookedDate","0");
+            print(" >>>>> isBookedDate >>>" + scheduledDate);
+          });
+        }
+        print(" >>>> Date : >>>>>" + dateToday.toString());
+      }
     });
   }
+
 
   Future<void> callOnFcmApiSendPushNotifications(String msg) async {
     String? token;
@@ -185,7 +216,14 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
+        child: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -334,31 +372,33 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                     ],
                   ),
                 ),
+                isBookedDate != "-1"
+                    ?
                 InkWell(
                   onTap: (){
                     setState(() {
                       updateToCloudFirestoreDB(
-                          '0' ,
-                          '-1' ,
-                          '-1' ,
-                          '-1' ,
-                          '-1' ,
-                          '-1' ,
-                          '-1' ,
-                          '-1' ,
-                         '-1' ,);
+                        '0' ,
+                        '-1' ,
+                        '-1' ,
+                        '-1' ,
+                        '-1' ,
+                        '-1' ,
+                        '-1' ,
+                        '-1' ,
+                        '-1' ,);
                       _serviceStatusUpdateBloc.postStatusUpdateRequest(authToken, '${widget.bookedId}', "9");
                     });
                   },
                   child:
                   isStartedFromLocation == "-1"
-                  ? Container(
+                      ? Container(
                     height: 25,
                     width: 60,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color:  CustColors.light_navy,
+                      borderRadius: BorderRadius.circular(10),
+                      color:  CustColors.light_navy,
                     ),
                     child: Text('Start',
                       textAlign: TextAlign.center,
@@ -368,8 +408,10 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                       ),
                     ),
                   )
-                  : Container(),
-                ),
+                      : Container(),
+                )
+                    :
+                Container(),
               ],
             ),
             Padding(
@@ -428,13 +470,13 @@ class _MechPickUpTrackScreen extends State <MechPickUpTrackScreen>{
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Started from location for pickup. ',
+                            Text('Start from location for pickup. ',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontFamily: 'SamsungSharpSans-Medium',
                               ),),
                             SizedBox(height: 02),
-                            Text('${widget.pickingDate}',
+                            Text('${scheduledDate}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 12,

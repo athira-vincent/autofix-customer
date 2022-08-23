@@ -996,6 +996,7 @@ class QueryProvider {
               lastMaintenance
               milege
               vehiclePic
+              color
               latitude
               longitude
               defaultVehicle

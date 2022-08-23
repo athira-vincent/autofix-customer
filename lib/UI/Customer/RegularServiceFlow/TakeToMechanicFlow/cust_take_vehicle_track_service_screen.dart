@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/UI/Customer/MainLandingPageCustomer/customer_main_landing_screen.dart';
@@ -7,6 +9,7 @@ import 'package:fdottedline/fdottedline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 import 'find_mechanic_by_customer_screen.dart';
 
@@ -38,19 +41,26 @@ class CustTakeVehicleTrackScreen extends StatefulWidget {
 class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String bookingDate = "";
+  String bookingDate = "", scheduledDate = "", scheduledTime = "";
   String isDriveStarted = "-1";
-  String isArrived = "-1";
+  String isArrived = "-1", isBookedDate = "-1";
   String isReachedServiceCenter = "-1";
   String isWorkStarted = "-1";
   String isWorkFinished = "-1", isPayment = "-1";
   /*String paymentStatus = "-1";
   String paymentRecieved = "-1";*/
   String completed = "-1";
+  DateTime dateToday = DateTime.now() ;
+  bool isLoading = true;
 
   @override
   void initState(){
     super.initState();
+    Timer(const Duration(seconds: 3), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
     listenToCloudFirestoreDB();
 
   }
@@ -60,6 +70,10 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
     _firestore.collection("Regular-TakeVehicle").doc('${widget.bookedId}').snapshots().listen((event) {
       setState(() {
         bookingDate = event.get("bookingDate");
+        scheduledDate = event.get("scheduledDate");
+        print("scheduledDate >>>> ${scheduledDate}");
+        scheduledTime = event.get("scheduledTime");
+        isBookedDate = event.get("isBookedDate");
         isDriveStarted = event.get("isDriveStarted");
         isArrived = event.get("isArrived");
         isReachedServiceCenter = event.get("isReachedServiceCenter");
@@ -70,7 +84,31 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
         //paymentRecieved = event.get("paymentRecieved");
         completed = event.get("completed");
       });
+      if(scheduledDate.isNotEmpty){
+        DateTime tempDate =  DateFormat("yyyy-MM-dd").parse(scheduledDate);
+
+        if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
+          setState(() {
+            //isBookedDate = "0";
+            updateBookDateToCloudFirestoreDB("isBookedDate","0");
+            print(" >>>>> isBookedDate >>>" + scheduledDate);
+          });
+        }
+      }
     });
+  }
+
+  void updateBookDateToCloudFirestoreDB(String key, String value ) {
+    _firestore
+        .collection("${TextStrings.firebase_take_vehicle}")
+        .doc('${widget.bookedId}')
+        .update({
+      "$key" : "$value",
+      "${key}Time" : "${DateFormat("hh:mm a").format(DateTime.now())}",
+    })
+        .then((value) => print("Location Added >>> ${DateFormat("hh:mm a").format(DateTime.now())}"))
+        .catchError((error) =>
+        print("Failed to add Location: $error"));
   }
 
   void updateToCloudFirestoreDB(
@@ -101,7 +139,14 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
+        child: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -240,7 +285,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     Text(
                       //'Mar 5,2022',
                       //bookingDate.toString(),
-                      '${widget.bookedDate}',
+                      '${bookingDate}',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 12,
@@ -251,6 +296,8 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                 ),
               ),
             ),
+            isBookedDate != "-1"
+                ?
             Padding(
               padding: const EdgeInsets.only(right: 22.0,top: 15),
               child: isDriveStarted == '-1'
@@ -292,7 +339,10 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                 ),
               )
               : Container(),
-            ),
+            )
+                :
+            Container()
+            ,
           ],
         ),
           Padding(
@@ -360,7 +410,7 @@ class _CustTakeVehicleTrackScreen extends State <CustTakeVehicleTrackScreen>{
                     SizedBox(height: 02),
                     Text(
                       //'Savannah estate, plot 176',
-                      'time : ${widget.goTime}',
+                      'on : ${scheduledDate}\nat : ${scheduledTime}',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontSize: 12,

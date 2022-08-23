@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -42,18 +44,24 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
   String isDriveStartedTime = "", isArrivedTime = "", isWorkStartedTime = "", isWorkFinishedTime = "", isPaymentTime = "";
   String customerAddress = "", mechanicAddress = "";
   String isCompleted = "-1";
+  bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
     listenToCloudFirestoreDB();
     bookingDate = widget.bookingDate;
   }
 
-  void listenToCloudFirestoreDB() {
+  Future<void> listenToCloudFirestoreDB() async {
    // _firestoreData = _firestore.collection("ResolMech").doc('$bookingId').snapshots();
-    _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
+   await _firestore.collection("${TextStrings.firebase_mobile_mech}").doc('${widget.bookingId}').snapshots().listen((event) {
 
       setState(() {
         //bookingDate = event.get("bookingDate");
@@ -77,15 +85,17 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
         isPaymentTime = event.get("isPaymentTime");
       });
 
-      DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
+      if(scheduledDate.isNotEmpty){
+        DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
 
-      print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
-      if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
-        setState(() {
-          //isBookedDate = "0";
-          updateToCloudFirestoreDB("isBookedDate","0");
-          print(" >>>>> isBookedDate >>>" + isBookedDate);
-        });
+        print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
+        if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
+          setState(() {
+            //isBookedDate = "0";
+            updateToCloudFirestoreDB("isBookedDate","0");
+            print(" >>>>> isBookedDate >>>" + isBookedDate);
+          });
+        }
       }
 
       if(isPayment == "5"){
@@ -96,7 +106,6 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
 
       print(" >>>> Date : >>>>>" + dateToday.toString());
 
-      print(" >>>> Date : >>>>>" + tempDate.toString());
      /* customerDiagonsisApproval = event.get("customerDiagonsisApproval");
       mechanicName = event.get('mechanicName');
       totalEstimatedCost = event.get("updatedServiceCost");
@@ -128,7 +137,14 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
+        child: isLoading == true
+            ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+            :
+        Container(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -1400,6 +1416,11 @@ class _CustMobileTrackScreen extends State <CustMobileTrackScreen>{
       ),
 
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
 }

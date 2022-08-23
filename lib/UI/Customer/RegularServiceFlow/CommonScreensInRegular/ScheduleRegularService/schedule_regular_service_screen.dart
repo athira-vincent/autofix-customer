@@ -453,7 +453,7 @@ class _ScheduleRegularServiceScreenState extends State<ScheduleRegularServiceScr
                             ? Image.network(selectedCategoryList![index].icon,
                                 fit: BoxFit.cover,
                               )
-                            : Icon(Icons.stop,size: 35,color: CustColors.light_navy,),
+                            : Icon(Icons.miscellaneous_services,size: 35,color: CustColors.light_navy,),
                         //child: Icon(choices[0].icon,size: 35,color: CustColors.light_navy,),
                       ),
                     ),
