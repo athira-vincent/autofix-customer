@@ -6,6 +6,7 @@ import 'package:auto_fix/Models/customer_models/add_rating_model/addRatingMdl.da
 import 'package:auto_fix/Models/customer_models/booking_details_model/bookingDetailsMdl.dart';
 import 'package:auto_fix/Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'package:auto_fix/Models/customer_models/cust_completed_orders_model/customerCompletedOrdersListMdl.dart';
+import 'package:auto_fix/Models/customer_models/delete_address_model/delete_address_model.dart';
 import 'package:auto_fix/Models/customer_models/get_address_model/get_address_model.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_List_model/mechanicListMdl.dart';
 import 'package:auto_fix/Models/customer_models/mechanic_booking_model/emergencyBookingMdl.dart';
@@ -525,6 +526,66 @@ class CustomerApiProvider {
       }
     } else {
       final errorMsg = AddAddressModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  /// edit address
+  Future<AddAddressModel> fetcheditaddresslist(
+      fullname,
+      phone,
+      pincode,
+      city,
+      state,
+      address,
+      addressline2,
+      type,
+      ) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchaddaddresslist(
+      fullname,
+      phone,
+      pincode,
+      city,
+      state,
+      address,
+      addressline2,
+      type,
+    );
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = AddAddressModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return AddAddressModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = AddAddressModel(
+          status: "error", message: "No Internet connection", data: null);
+      return errorMsg;
+    }
+  }
+
+
+  /// delete address
+  Future<DeleteAddressModel> fetchServicedeleteaddresslist(
+      addressid, status) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetchServicedeleteaddresslist(
+        addressid, status);
+    if (_resp != null) {
+      if (_resp['status'] == "error") {
+        final errorMsg = DeleteAddressModel(
+            status: "error", message: _resp['message'], data: null);
+        return errorMsg;
+      } else {
+        var data = {"data": _resp};
+        return DeleteAddressModel.fromMap(data);
+      }
+    } else {
+      final errorMsg = DeleteAddressModel(
           status: "error", message: "No Internet connection", data: null);
       return errorMsg;
     }

@@ -3,11 +3,16 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_state.dart';
 import 'package:auto_fix/UI/SpareParts/add_delivery_address_screen.dart';
+import 'package:auto_fix/UI/SpareParts/edit_delivery_address.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ChangeDeliveryAddressScreen extends StatefulWidget {
   ChangeDeliveryAddressScreen();
@@ -39,13 +44,25 @@ class _ChangeDeliveryAddressScreenState
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => AddressBloc()..add(FetchAddressEvent()),
+    return SafeArea(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AddressBloc()..add(FetchAddressEvent()),
+          ),
+        ],
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<DeleteAddressBloc, DeleteAddressState>(
+              listener: (context, state) {
+                if (state is DeleteAddressLoadedState) {
+                  if (state.deleteAddressModel.data!.updateAddress.status ==
+                      "Success") {
+                    final addcartsBloc = BlocProvider.of<AddressBloc>(context);
+                    addcartsBloc.add(FetchAddressEvent());
+                  }
+                }
+              },
             ),
           ],
           child: Scaffold(
@@ -110,195 +127,356 @@ class _ChangeDeliveryAddressScreenState
                                 itemCount: state
                                     .addressModel.data!.selectAddress.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.only(
-                                        top: size.height * 2.8 / 100),
-                                    padding: EdgeInsets.only(
-                                      left: size.width * 2.5 / 100,
-                                      right: size.width * 2.5 / 100,
-                                      top: size.height * 2 / 100,
-                                      bottom: size.height * 2 / 100,
-                                    ),
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(8),
-                                        ),
-                                        border: Border.all(
-                                            color: isAddressSelected
-                                                ? CustColors.light_navy
-                                                : CustColors.greyish,
-                                            width: 0.3),
-                                        color: isAddressSelected
-                                            ? CustColors.pale_blue
-                                            : Colors.transparent),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  right: size.width * 2.5 / 100,
-                                                  bottom:
-                                                      size.height * 1 / 100),
-                                              child: state
-                                                          .addressModel
-                                                          .data!
-                                                          .selectAddress[index]
-                                                          .type ==
-                                                      "Home"
-                                                  ? SvgPicture.asset(
-                                                      "assets/image/ic_home_blue.svg",
-                                                      height:
-                                                          size.height * 3 / 100,
-                                                      width:
-                                                          size.width * 3 / 100,
-                                                    )
-                                                  : state
-                                                              .addressModel
-                                                              .data!
-                                                              .selectAddress[
-                                                                  index]
-                                                              .type ==
-                                                          "Work"
-                                                      ? SvgPicture.asset(
-                                                          "assets/image/ic_work_blue.svg",
-                                                          height: size.height *
-                                                              3 /
-                                                              100,
-                                                          width: size.width *
-                                                              3 /
-                                                              100,
-                                                        )
-                                                      : SvgPicture.asset(
-                                                          "assets/image/ic_location_outline.svg",
-                                                          height: size.height *
-                                                              3 /
-                                                              100,
-                                                          width: size.width *
-                                                              3 /
-                                                              100,
-                                                        ),
-                                            ),
-                                            state
-                                                    .addressModel
-                                                    .data!
-                                                    .selectAddress[index]
-                                                    .type
-                                                    .isEmpty
-                                                ? const Text(
-                                                    "Other",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            "SharpSans_Bold",
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black),
-                                                  )
-                                                : Text(
-                                                    state
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Edit_Delivery_Address(
+                                                    fullname: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .fullName,
+                                                    phone: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .phoneNo,
+                                                    pincode: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .pincode,
+                                                    city: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .city,
+                                                    state: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .state,
+                                                    addressline1: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .address,
+                                                    addressline2: state
+                                                        .addressModel
+                                                        .data!
+                                                        .selectAddress[index]
+                                                        .addressLine2,
+                                                    type: state
                                                         .addressModel
                                                         .data!
                                                         .selectAddress[index]
                                                         .type,
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            "SharpSans_Bold",
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.black),
-                                                  ),
-                                            state
-                                                        .addressModel
-                                                        .data!
-                                                        .selectAddress[index]
-                                                        .isDefault ==
-                                                    1
-                                                ? Container(
-                                                    padding: EdgeInsets.only(
-                                                      left:
-                                                          size.width * 2 / 100,
-                                                      right:
-                                                          size.width * 2 / 100,
-                                                      top: size.height *
-                                                          .5 /
-                                                          100,
-                                                      bottom: size.height *
-                                                          .5 /
-                                                          100,
+                                                  )));
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          top: size.height * 2.8 / 100),
+                                      padding: EdgeInsets.only(
+                                        left: size.width * 2.5 / 100,
+                                        right: size.width * 2.5 / 100,
+                                        top: size.height * 2 / 100,
+                                        bottom: size.height * 2 / 100,
+                                      ),
+                                      decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                          border: Border.all(
+                                              color: isAddressSelected
+                                                  ? CustColors.light_navy
+                                                  : CustColors.greyish,
+                                              width: 0.3),
+                                          color: isAddressSelected
+                                              ? CustColors.pale_blue
+                                              : Colors.transparent),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    right:
+                                                        size.width * 2.5 / 100,
+                                                    bottom:
+                                                        size.height * 1 / 100),
+                                                child: state
+                                                            .addressModel
+                                                            .data!
+                                                            .selectAddress[
+                                                                index]
+                                                            .type ==
+                                                        "Home"
+                                                    ? SvgPicture.asset(
+                                                        "assets/image/ic_home_blue.svg",
+                                                        height: size.height *
+                                                            3 /
+                                                            100,
+                                                        width: size.width *
+                                                            3 /
+                                                            100,
+                                                      )
+                                                    : state
+                                                                .addressModel
+                                                                .data!
+                                                                .selectAddress[
+                                                                    index]
+                                                                .type ==
+                                                            "Work"
+                                                        ? SvgPicture.asset(
+                                                            "assets/image/ic_work_blue.svg",
+                                                            height:
+                                                                size.height *
+                                                                    3 /
+                                                                    100,
+                                                            width: size.width *
+                                                                3 /
+                                                                100,
+                                                          )
+                                                        : SvgPicture.asset(
+                                                            "assets/image/ic_location_outline.svg",
+                                                            height:
+                                                                size.height *
+                                                                    3 /
+                                                                    100,
+                                                            width: size.width *
+                                                                3 /
+                                                                100,
+                                                          ),
+                                              ),
+                                              state
+                                                      .addressModel
+                                                      .data!
+                                                      .selectAddress[index]
+                                                      .type
+                                                      .isEmpty
+                                                  ? const Text(
+                                                      "Other",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              "SharpSans_Bold",
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black),
+                                                    )
+                                                  : Text(
+                                                      state
+                                                          .addressModel
+                                                          .data!
+                                                          .selectAddress[index]
+                                                          .type,
+                                                      style: const TextStyle(
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              "SharpSans_Bold",
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black),
                                                     ),
-                                                    margin: EdgeInsets.only(
-                                                      left:
-                                                          size.width * 2 / 100,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .all(
-                                                          Radius.circular(4.3),
-                                                        ),
-                                                        border: Border.all(
-                                                            color: CustColors
-                                                                .greyish,
-                                                            width: 0.3),
-                                                        color: CustColors
-                                                            .very_light_blue),
-                                                    child:
-                                                        const Text("Default"),
-                                                  )
-                                                : Container(),
-                                            const Spacer(),
-                                            isAddressSelected
-                                                ? Align(
-                                                    alignment: Alignment.center,
-                                                    child: SvgPicture.asset(
-                                                      "assets/image/ic_selected_blue_white_tick.svg",
-                                                      height:
-                                                          size.height * 3 / 100,
-                                                      width:
-                                                          size.width * 3 / 100,
-                                                    ),
-                                                  )
-                                                : Container(),
-                                          ],
-                                        ),
-                                        Text(
+                                              state
+                                                          .addressModel
+                                                          .data!
+                                                          .selectAddress[index]
+                                                          .isDefault ==
+                                                      1
+                                                  ? Container(
+                                                      padding: EdgeInsets.only(
+                                                        left: size.width *
+                                                            2 /
+                                                            100,
+                                                        right: size.width *
+                                                            2 /
+                                                            100,
+                                                        top: size.height *
+                                                            .5 /
+                                                            100,
+                                                        bottom: size.height *
+                                                            .5 /
+                                                            100,
+                                                      ),
+                                                      margin: EdgeInsets.only(
+                                                        left: size.width *
+                                                            2 /
+                                                            100,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(
+                                                            Radius.circular(
+                                                                4.3),
+                                                          ),
+                                                          border: Border.all(
+                                                              color: CustColors
+                                                                  .greyish,
+                                                              width: 0.3),
+                                                          color: CustColors
+                                                              .very_light_blue),
+                                                      child:
+                                                          const Text("Default"),
+                                                    )
+                                                  : Container(),
+                                              const Spacer(),
+                                              isAddressSelected
+                                                  ? Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: SvgPicture.asset(
+                                                        "assets/image/ic_selected_blue_white_tick.svg",
+                                                        height: size.height *
+                                                            3 /
+                                                            100,
+                                                        width: size.width *
+                                                            3 /
+                                                            100,
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                              InkWell(
+                                                onTap: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return CupertinoAlertDialog(
+                                                          title: const Text(
+                                                              "Confirm",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Formular',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 18,
+                                                                color: CustColors
+                                                                    .materialBlue,
+                                                              )),
+                                                          content: const Text(
+                                                              "Are you sure you want to delete?"),
+                                                          actions: <Widget>[
+                                                            CupertinoDialogAction(
+                                                                textStyle:
+                                                                    const TextStyle(
+                                                                  color: CustColors
+                                                                      .rusty_red,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                ),
+                                                                isDefaultAction:
+                                                                    true,
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "No")),
+                                                            CupertinoDialogAction(
+                                                                textStyle:
+                                                                    const TextStyle(
+                                                                  color: CustColors
+                                                                      .rusty_red,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                ),
+                                                                isDefaultAction:
+                                                                    true,
+                                                                onPressed:
+                                                                    () async {
+                                                                  final deletcartBloc =
+                                                                      BlocProvider.of<
+                                                                              DeleteAddressBloc>(
+                                                                          context);
+                                                                  deletcartBloc.add(
+                                                                      FetchDeleteAddressEvent(
+                                                                    state
+                                                                        .addressModel
+                                                                        .data!
+                                                                        .selectAddress[
+                                                                            index]
+                                                                        .id,
+                                                                    "0",
+                                                                  ));
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  Fluttertoast
+                                                                      .showToast(
+                                                                    msg:
+                                                                        "Removed from cart successfully!!",
+                                                                    timeInSecForIosWeb:
+                                                                        1,
+                                                                  );
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "Yes")),
+                                                          ],
+                                                        );
+                                                      });
+                                                },
+                                                child: SvgPicture.asset(
+                                                  'assets/image/home_customer/deleteMyCart.svg',
+                                                  height: 20,
+                                                  width: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                              state
+                                                  .addressModel
+                                                  .data!
+                                                  .selectAddress[index]
+                                                  .fullName,
+                                              style: addressTextStyle01),
+                                          Text(
                                             state.addressModel.data!
-                                                .selectAddress[index].fullName,
-                                            style: addressTextStyle01),
-                                        Text(
-                                          state.addressModel.data!
-                                              .selectAddress[index].phoneNo,
-                                          style: addressTextStyle01,
-                                        ),
-                                        Text(
-                                          state.addressModel.data!
-                                              .selectAddress[index].address,
-                                          style: addressTextStyle02,
-                                        ),
-                                        Text(
-                                          state
-                                              .addressModel
-                                              .data!
-                                              .selectAddress[index]
-                                              .addressLine2,
-                                          style: addressTextStyle03,
-                                        ),
-                                        Text(
-                                          state.addressModel.data!
-                                                  .selectAddress[index].state +
-                                              " " +
-                                              state.addressModel.data!
-                                                  .selectAddress[index].city +
-                                              " " +
-                                              state.addressModel.data!
-                                                  .selectAddress[index].pincode,
-                                          style: addressTextStyle03,
-                                        )
-                                      ],
+                                                .selectAddress[index].phoneNo,
+                                            style: addressTextStyle01,
+                                          ),
+                                          Text(
+                                            state.addressModel.data!
+                                                .selectAddress[index].address,
+                                            style: addressTextStyle02,
+                                          ),
+                                          Text(
+                                            state
+                                                .addressModel
+                                                .data!
+                                                .selectAddress[index]
+                                                .addressLine2,
+                                            style: addressTextStyle03,
+                                          ),
+                                          Text(
+                                            state
+                                                    .addressModel
+                                                    .data!
+                                                    .selectAddress[index]
+                                                    .state +
+                                                " " +
+                                                state.addressModel.data!
+                                                    .selectAddress[index].city +
+                                                " " +
+                                                state
+                                                    .addressModel
+                                                    .data!
+                                                    .selectAddress[index]
+                                                    .pincode,
+                                            style: addressTextStyle03,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },

@@ -1,3 +1,8 @@
+import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_state.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Models/customer_models/type_address_model/type_address_model.dart';
@@ -6,24 +11,40 @@ import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_event
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_state.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AddDeliveryAddressScreen extends StatefulWidget {
-  AddDeliveryAddressScreen();
+class Edit_Delivery_Address extends StatefulWidget {
+  final String fullname,
+      phone,
+      pincode,
+      city,
+      state,
+      addressline1,
+      addressline2,
+      type;
+
+  const Edit_Delivery_Address(
+      {Key? key,
+      required this.fullname,
+      required this.phone,
+      required this.pincode,
+      required this.city,
+      required this.state,
+      required this.addressline1,
+      required this.addressline2,
+      required this.type})
+      : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _AddDeliveryAddressScreenState();
-  }
+  State<Edit_Delivery_Address> createState() => _Edit_Delivery_AddressState();
 }
 
-class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
+class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
   int selectedIndex = -1;
   final Geolocator geolocator = Geolocator();
   String location = '';
@@ -39,18 +60,30 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
   TextEditingController localitycontroller = TextEditingController();
 
   @override
+  void initState() {
+    namecontroller.text = widget.fullname;
+    phonecontroller.text = widget.phone;
+    pincontroller.text = widget.pincode;
+    if (widget.addressline1.isEmpty || widget.addressline2.isEmpty) {
+      localitycontroller.text = widget.city;
+    } else {
+      localitycontroller.text = widget.addressline1 + widget.addressline2;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: MultiBlocListener(
         listeners: [
-          BlocListener<AddAddressBloc, AddAddressState>(
+          BlocListener<EditAddressBloc, EditAddressState>(
             listener: (context, state) {
-              if (state is AddAddressLoadedState) {
+              if (state is EditAddressLoadedState) {
                 if (state.addaddressModel.data!.addAddress.status ==
                     "Success") {
-                  Navigator.pop(context);
-                  Fluttertoast.showToast(msg: "Address added successfully");
+                  Fluttertoast.showToast(msg: "Updated Address successfully");
                   // final addresslistBloc = BlocProvider.of<AddressBloc>(context);
                   // addresslistBloc.add(FetchAddressEvent());
                 }
@@ -79,11 +112,12 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                   ),
                 ),
                 InkWell(
-                    onTap: () {
+                    onTap: () async {
                       print("on tap saveAddress");
-                      final addaddressBloc =
-                          BlocProvider.of<AddAddressBloc>(context);
-                      addaddressBloc.add(FetchAddAddressEvent(
+
+                      final editaddressBloc =
+                          BlocProvider.of<EditAddressBloc>(context);
+                      editaddressBloc.add(FetchEditAddressEvent(
                           namecontroller.text,
                           phonecontroller.text,
                           pincontroller.text,
@@ -92,7 +126,6 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                           addressline1,
                           addressline2,
                           type));
-
                     },
                     child: saveAddressButton(size))
               ],

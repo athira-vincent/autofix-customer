@@ -14,7 +14,9 @@ import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.d
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
@@ -120,6 +122,12 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider<AddAddressBloc>(
                 create: (context) => AddAddressBloc(),
+              ),
+              BlocProvider<EditAddressBloc>(
+                create: (context) => EditAddressBloc(),
+              ),
+              BlocProvider<DeleteAddressBloc>(
+                create: (context) => DeleteAddressBloc(),
               ),
             ],
             child: MaterialApp(

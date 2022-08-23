@@ -3566,20 +3566,95 @@ class QueryProvider {
       addressline2, type) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    print("noel");
+    print(authToken);
+    String _query;
+
+    _query = """
+                
+ mutation {
+  addAddress(
+    fullName: "$fullname"
+    phoneNo: "$phone"
+    pincode: "$pincode"
+    city: "$city"
+    state:"$state"
+    address: "$address"
+    addressLine2: "$addressline2"
+    type: "$type"
+  ) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// edit address queryprovider
+  fetcheditaddresslist(fullname, phone, pincode, city, state, address,
+      addressline2, type) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+
+    print("noel");
+    print(authToken);
+    String _query;
+
+    _query = """
+                
+ mutation {
+  updateAddress(
+  fullName: "$fullname"
+    phoneNo: "$phone"
+    pincode: "$pincode"
+    city: "$city"
+    state:"$state"
+    address: "$address"
+    addressLine2: "$addressline2"
+    type: "$type"
+    addressId: 1
+    status: 1
+  ) {
+    status
+    code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+  /// delete address queryprovider
+  fetchServicedeleteaddresslist(addressid, status) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     print("noel");
     print(authToken);
     String _query = """
                 
  mutation {
-  addAddress(
-    fullName: $fullname
-    phoneNo: $phone
-    pincode: $pincode
-    city: $city
-    state:$state
-    address: $address
-    addressLine2: $addressline2
-    type: $type
+  updateAddress(
+    addressId: $addressid
+    status: 0
   ) {
     status
     code
