@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -46,11 +48,17 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
   String? FcmToken="";
   String authToken="";
   String userName="", userId = "", vehicleName = "";
+  bool isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Timer(const Duration(seconds: 3), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
     getSharedPrefData();
     listenToCloudFirestoreDB();
     bookingDate = widget.bookingDate;
@@ -94,15 +102,17 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
         isPaymentTime = event.get("isPaymentTime");
       });
 
-      DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
+      if(scheduledDate.isNotEmpty){
+        DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(scheduledDate);
 
-      //print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
-      if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
-        setState(() {
-          //isBookedDate = "0";
-          updateToCloudFirestoreDB("isBookedDate","0");
-          print(" >>>>> isBookedDate >>>" + scheduledDate);
-        });
+        //print(" >>>> Date : >>>>>" + tempDate.compareTo(dateToday).toString());
+        if(tempDate.compareTo(dateToday) == 0 || tempDate.compareTo(dateToday) == -1){
+          setState(() {
+            //isBookedDate = "0";
+            updateToCloudFirestoreDB("isBookedDate","0");
+            print(" >>>>> isBookedDate >>>" + scheduledDate);
+          });
+        }
       }
 
       if(isPayment == "5"){
@@ -113,7 +123,6 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
       }
 
       print(" >>>> Date : dateToday >>>>>" + dateToday.toString());
-      print(" >>>> Date : tempDate >>>>>" + tempDate.toString());
 
     });
   }
@@ -210,7 +219,14 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
+        child: isLoading == true
+          ?
+        Container(
+            width: size.width,
+            height: size.height,
+            child: Center(child: CircularProgressIndicator(color: CustColors.light_navy)))
+        :
+        Container(
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -2008,4 +2024,8 @@ class _MechMobileTrackScreen extends State <MechMobileTrackScreen>{
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

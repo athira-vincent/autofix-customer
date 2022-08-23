@@ -121,7 +121,7 @@ class Service {
     id: json["id"] == null ? null : json["id"],
     serviceName: json["serviceName"] == null ? null : json["serviceName"],
     description: json["description"],
-    icon: json["icon"],
+    icon: json["icon"]??"",
     minPrice: json["minPrice"] == null ? null : json["minPrice"],
     maxPrice: json["maxPrice"] == null ? null : json["maxPrice"],
     categoryId: json["categoryId"] == null ? null : json["categoryId"],
