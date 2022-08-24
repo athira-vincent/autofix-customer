@@ -3345,7 +3345,7 @@ class QueryProvider {
     String _query;
 
     if (ischanged == "true") {
-      print("remo");
+
 
       _query = """
        query

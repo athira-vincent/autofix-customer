@@ -470,6 +470,9 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                       onTap: () {
                         setState(() {
                           selectedIndex = index++;
+                          print("addressindex");
+                          print(selectedIndex);
+
                           if (selectedIndex == 0) {
                             type = "Home";
                           } else if (selectedIndex == 1) {
