@@ -82,14 +82,14 @@ class SparePartsList {
 
   factory SparePartsList.fromMap(Map<String, dynamic> json) => SparePartsList(
         id: json["id"],
-        productCode: json["productCode"],
-        productName: json["productName"],
-        price: json["price"],
-        shippingCharge: json["shippingCharge"],
+        productCode: json["productCode"]??"",
+        productName: json["productName"]??"",
+        price: json["price"]??"",
+        shippingCharge: json["shippingCharge"]??"",
         productImage: json["productImage"]??"",
-        description: json["description"],
-        status: json["status"],
-        vehicleModelId: json["vehicleModelId"],
+        description: json["description"]??"",
+        status: json["status"]??"",
+        vehicleModelId: json["vehicleModelId"]??"",
         vehicleModel: VehicleModel.fromMap(json["vehicleModel"]),
       );
 

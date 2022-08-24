@@ -3,167 +3,89 @@ import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_event.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_state.dart';
-import 'package:auto_fix/UI/SpareParts/FilterScreen/filter_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
-import 'package:auto_fix/UI/SpareParts/spare_parts_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class SparePartsListScreen extends StatefulWidget {
-  final String modelname;
+class Search_Spare_Parts extends StatefulWidget {
+  final changestatus, modelname, searchkey;
 
-  const SparePartsListScreen({Key? key, required this.modelname})
+  const Search_Spare_Parts(
+      {Key? key, this.changestatus, this.modelname, this.searchkey})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _SparePartsListScreenState();
-  }
+  State<Search_Spare_Parts> createState() => _Search_Spare_PartsState();
 }
 
-class _SparePartsListScreenState extends State<SparePartsListScreen> {
-  static ValueNotifier<String> incart = ValueNotifier('');
-
-  double per = .10;
-  double perfont = .10;
-
-  double _setValue(double value) {
-    return value * per + value;
-  }
-
-  double _setValueFont(double value) {
-    return value * perfont + value;
-  }
-
-  bool addToCart = false;
-
-  TextEditingController searchController = TextEditingController();
-  StateSetter? setStateSearch;
-
+class _Search_Spare_PartsState extends State<Search_Spare_Parts> {
   late List<String> image;
+  bool addToCart = false;
   String itemcount = "";
   String totalamount = "";
   bool _isSearching = false;
   bool ischanged = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => SparePartListBloc()
-              ..add(FetchSparePartListEvent(
-                  widget.modelname.toString(), "null", "null", "null")),
-          ),
-        ],
-        child: MultiBlocListener(
-          listeners: [
-            /// addtocart
-            BlocListener<AddCartBloc, AddCartState>(
-              listener: (context, state) {
-                if (state is AddCartLoadedState) {
-                  if (state.addCartModel.data!.addCart.msg.status ==
-                      "Success") {
-                    Fluttertoast.showToast(
-                      msg: "successfully added to cart!!",
-                      timeInSecForIosWeb: 1,
-                    );
-
-                    setState(() {
-                      addToCart = true;
-
-                      itemcount =
-                          state.addCartModel.data!.addCart.itemCount.toString();
-                      totalamount = state.addCartModel.data!.addCart.totalAmount
-                          .toString();
-
-                      ViewCartUi();
-                    });
-                  }
-                }
-              },
-            ),
-          ],
-          child: Scaffold(
-              backgroundColor: Colors.white,
-              body: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Column(
-                    children: [
-                      _isSearching == true
-                          ? _buildSearchField()
-                          : appBarCustomUi(),
-                      SparePartsListUi(),
-                    ],
-                  ),
-                  addToCart == true ? ViewCartUi() : Container(),
-                ],
-              )),
-        ),
-      ),
-    );
-  }
-
-  Widget appBarCustomUi() {
-    return Row(
-      children: [
-        IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        Padding(
-          padding: EdgeInsets.all(20),
-          child: Text(
-            widget.modelname,
-            textAlign: TextAlign.center,
-            style: Styles.appBarTextBlue,
-          ),
-        ),
-        const Spacer(),
-        IconButton(
-          icon: SvgPicture.asset(
-            'assets/image/home_customer/filterSearch.svg',
-            height: 20,
-            width: 20,
-          ),
-          onPressed: () {
-            // _showModal(context);
-            setState(() {
-              _isSearching = true;
-            });
-          },
-        ),
-        IconButton(
-          icon: SvgPicture.asset(
-            'assets/image/home_customer/filterIcon.svg',
-            height: 20,
-            width: 20,
-          ),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FilterScreen()));
-          },
+        child: MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SparePartListBloc()
+            ..add(FetchSparePartListEvent(
+                widget.modelname.toString(), widget.searchkey, "null", "null")),
         ),
       ],
-    );
+      child: MultiBlocListener(
+        listeners: [
+          /// addtocart
+          BlocListener<AddCartBloc, AddCartState>(
+            listener: (context, state) {
+              if (state is AddCartLoadedState) {
+                if (state.addCartModel.data!.addCart.msg.status == "Success") {
+                  Fluttertoast.showToast(
+                    msg: "successfully added to cart!!",
+                    timeInSecForIosWeb: 1,
+                  );
+
+                  setState(() {
+                    addToCart = true;
+
+                    itemcount =
+                        state.addCartModel.data!.addCart.itemCount.toString();
+                    totalamount =
+                        state.addCartModel.data!.addCart.totalAmount.toString();
+
+                    ViewCartUi();
+                  });
+                }
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Column(
+                children: [
+                  appBarCustomUi(),
+                  SparePartsListUi(),
+                ],
+              ),
+              addToCart == true ? ViewCartUi() : Container(),
+            ],
+          ),
+        ),
+      ),
+    ));
   }
 
   Widget SparePartsListUi() {
@@ -343,6 +265,25 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     );
   }
 
+  Widget appBarCustomUi() {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        Padding(
+          padding: EdgeInsets.all(20),
+          child: Text(
+            widget.modelname,
+            textAlign: TextAlign.center,
+            style: Styles.appBarTextBlue,
+          ),
+        ),
+      ],
+    );
+  }
+
   ViewCartUi() {
     return InkWell(
       onTap: () {
@@ -395,131 +336,5 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
         ),
       ),
     );
-  }
-
-  // void _showModal(context) {
-  //   showModalBottomSheet(
-  //       isScrollControlled: true,
-  //       shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.vertical(top: Radius.circular(0.0)),
-  //       ),
-  //       context: context,
-  //       builder: (context) {
-  //         //3
-  //         return StatefulBuilder(
-  //             builder: (BuildContext context, StateSetter setState) {
-  //           setStateSearch = setState;
-  //           return Container(
-  //             height: MediaQuery.of(context).size.height * .85,
-  //             alignment: Alignment.topCenter,
-  //             child: Padding(
-  //               padding: const EdgeInsets.all(8.0),
-  //               child: Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: SizedBox(
-  //                       height: 35,
-  //                       child: TextField(
-  //                         controller: searchController,
-  //                         autofocus: true,
-  //                         decoration: InputDecoration(
-  //                           hintText: 'Search spare parts for your vehicle',
-  //                           contentPadding:
-  //                               const EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
-  //                           prefixIcon: const Icon(Icons.search_rounded,
-  //                               color: CustColors.light_navy),
-  //                           border: OutlineInputBorder(
-  //                               borderSide: const BorderSide(
-  //                                   color: CustColors.whiteBlueish),
-  //                               borderRadius: BorderRadius.circular(0.0)),
-  //                           focusedBorder: OutlineInputBorder(
-  //                               borderSide: const BorderSide(
-  //                                   color: CustColors.whiteBlueish),
-  //                               borderRadius: BorderRadius.circular(0.0)),
-  //                           enabledBorder: OutlineInputBorder(
-  //                               borderSide: const BorderSide(
-  //                                   color: CustColors.whiteBlueish),
-  //                               borderRadius: BorderRadius.circular(0.0)),
-  //                           disabledBorder: OutlineInputBorder(
-  //                               borderSide: const BorderSide(
-  //                                   color: CustColors.whiteBlueish),
-  //                               borderRadius: BorderRadius.circular(0.0)),
-  //                           errorBorder: OutlineInputBorder(
-  //                               borderSide: const BorderSide(
-  //                                   color: CustColors.whiteBlueish),
-  //                               borderRadius: BorderRadius.circular(0.0)),
-  //                         ),
-  //                         onChanged: (text) {
-  //                           if (text != null &&
-  //                               text.isNotEmpty &&
-  //                               text != "") {}
-  //                         },
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           );
-  //         });
-  //       });
-  // }
-
-  Widget _buildSearchField() {
-    return TextField(
-      controller: searchController,
-      autofocus: true,
-      decoration: InputDecoration(
-        hintText: 'Search spare parts for your vehicle',
-        contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 5.0, 5.0),
-        prefixIcon: InkWell(
-          onTap: () async {
-            SharedPreferences shdPre = await SharedPreferences.getInstance();
-            setState(() {
-              ischanged = true;
-              shdPre.setString("ischanged", ischanged.toString());
-
-              final addcartsBloc = BlocProvider.of<SparePartListBloc>(context);
-              addcartsBloc.add(FetchSparePartListEvent(
-                  widget.modelname.toString(),
-                  searchController.text.toString(),
-                  "null",
-                  "null"));
-            });
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => Search_Spare_Parts(
-                        changestatus: ischanged,
-                        modelname: widget.modelname,
-                        searchkey: searchController.text)));
-          },
-          child: const Icon(Icons.search_rounded, color: CustColors.light_navy),
-        ),
-        border: OutlineInputBorder(
-            borderSide: const BorderSide(color: CustColors.whiteBlueish),
-            borderRadius: BorderRadius.circular(0.0)),
-        focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: CustColors.whiteBlueish),
-            borderRadius: BorderRadius.circular(0.0)),
-        enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: CustColors.whiteBlueish),
-            borderRadius: BorderRadius.circular(0.0)),
-        disabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: CustColors.whiteBlueish),
-            borderRadius: BorderRadius.circular(0.0)),
-        errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: CustColors.whiteBlueish),
-            borderRadius: BorderRadius.circular(0.0)),
-      ),
-    );
-  }
-}
-
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
   }
 }

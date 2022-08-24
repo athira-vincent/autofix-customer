@@ -327,21 +327,6 @@ class _ChangeDeliveryAddressScreenState
                                                     )
                                                   : Container(),
                                               const Spacer(),
-                                              isAddressSelected
-                                                  ? Align(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: SvgPicture.asset(
-                                                        "assets/image/ic_selected_blue_white_tick.svg",
-                                                        height: size.height *
-                                                            3 /
-                                                            100,
-                                                        width: size.width *
-                                                            3 /
-                                                            100,
-                                                      ),
-                                                    )
-                                                  : Container(),
                                               InkWell(
                                                 onTap: () {
                                                   showDialog(
@@ -413,7 +398,7 @@ class _ChangeDeliveryAddressScreenState
                                                                   Fluttertoast
                                                                       .showToast(
                                                                     msg:
-                                                                        "Removed from cart successfully!!",
+                                                                        "Removed  successfully!!",
                                                                     timeInSecForIosWeb:
                                                                         1,
                                                                   );
@@ -433,13 +418,39 @@ class _ChangeDeliveryAddressScreenState
                                               ),
                                             ],
                                           ),
-                                          Text(
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  state
+                                                      .addressModel
+                                                      .data!
+                                                      .selectAddress[index]
+                                                      .fullName,
+                                                  style: addressTextStyle01),
                                               state
-                                                  .addressModel
-                                                  .data!
-                                                  .selectAddress[index]
-                                                  .fullName,
-                                              style: addressTextStyle01),
+                                                          .addressModel
+                                                          .data!
+                                                          .selectAddress[index]
+                                                          .isDefault ==
+                                                      1
+                                                  ? Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: SvgPicture.asset(
+                                                        "assets/image/ic_selected_blue_white_tick.svg",
+                                                        height: size.height *
+                                                            3 /
+                                                            100,
+                                                        width: size.width *
+                                                            3 /
+                                                            100,
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                            ],
+                                          ),
                                           Text(
                                             state.addressModel.data!
                                                 .selectAddress[index].phoneNo,
