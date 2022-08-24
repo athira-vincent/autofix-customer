@@ -77,7 +77,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
-  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
+  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "", carColor = "";
   bool isArrived = false;
 
   @override
@@ -176,6 +176,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         carName = event.get('carName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('carPlateNumber');
+        carColor = event.get('carColor');
       });
     });
   }
@@ -491,6 +492,11 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
                                         Text(
                                           //"Service Id :Vien232",
                                           "Plate No : " + plateNumber,
+                                          style: Styles.SelectLanguageWalkThroughStyle,
+                                        ),
+                                        Text(
+                                          //"Service Id :Vien232",
+                                          "Vehicle Color : " + carColor,
                                           style: Styles.SelectLanguageWalkThroughStyle,
                                         ),
                                       ],

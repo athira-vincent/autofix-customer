@@ -21,6 +21,7 @@ class NotificationPayloadMdl {
     required this.serviceList,
     required this.carName,
     required this.carPlateNumber,
+    required this.carColor,
     required this.customerName,
     required this.customerAddress,
     required this.customerLatitude,
@@ -54,6 +55,7 @@ class NotificationPayloadMdl {
   String serviceList;
   String carName;
   String carPlateNumber;
+  String carColor;
   String customerName;
   String serviceTime;
   String serviceCost;
@@ -87,6 +89,7 @@ class NotificationPayloadMdl {
     serviceList: json["serviceList"] == null ? null : json["serviceList"],
     carName: json["carName"] == null ? null : json["carName"],
     carPlateNumber: json["carPlateNumber"] == null ? null : json["carPlateNumber"],
+    carColor: json["carColor"] == null ? null : json["carColor"],
     customerName: json["customerName"] == null ? null : json["customerName"],
     customerAddress: json["customerAddress"] == null ? null : json["customerAddress"],
     customerLatitude: json["customerLatitude"] == null ? null : json["customerLatitude"],
@@ -121,6 +124,7 @@ class NotificationPayloadMdl {
     "serviceList": serviceList == null ? null : serviceList,
     "carName": carName == null ? null : carName,
     "carPlateNumber": carPlateNumber == null ? null : carPlateNumber,
+    "carColor": carColor == null ? null : carColor,
     "customerName": customerName == null ? null : customerName,
     "customerAddress": customerAddress == null ? null : customerAddress,
     "customerLatitude": customerLatitude == null ? null : customerLatitude,
