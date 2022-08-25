@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/Models/sort_by_model/sort_by_filter_model.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_bloc.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/ForgotPassword/forgot_password_screen.dart';
 import 'package:auto_fix/UI/WelcomeScreens/Login/Signin/login_screen.dart';
@@ -30,6 +31,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
   double per = .10;
   double perfont = .10;
+
   double _setValue(double value) {
     return value * per + value;
   }
@@ -37,8 +39,10 @@ class _FilterScreenState extends State<FilterScreen> {
   double _setValueFont(double value) {
     return value * perfont + value;
   }
-  bool language_en_ar=true;
 
+  bool language_en_ar = true;
+  int selectedIndex = -1;
+  int selectedpriceIndex = -1;
 
   List<String> sortByVariables = [
     "Price: Low to high",
@@ -72,11 +76,11 @@ class _FilterScreenState extends State<FilterScreen> {
 
   List<String> selectedDiscountVariables = [];
 
+  int sortby=0;
 
   @override
   void initState() {
     super.initState();
-    _getForgotPwd();
   }
 
   @override
@@ -84,37 +88,6 @@ class _FilterScreenState extends State<FilterScreen> {
     super.dispose();
     _emailFocusNode.removeListener(onFocusChange);
     _forgotPasswordBloc.dispose();
-  }
-
-  _getForgotPwd() {
-    _forgotPasswordBloc.postForgotPassword.listen((value) {
-      if (value.status == "error") {
-        setState(() {
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(value.message.toString(),
-                style: const TextStyle(
-                    fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: const Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Password Reset Enabled.\nCheck Your mail",
-                style: TextStyle(fontFamily: 'Roboto_Regular', fontSize: 14)),
-            duration: Duration(seconds: 2),
-            backgroundColor: CustColors.peaGreen,
-          ));
-
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()));
-          FocusScope.of(context).unfocus();
-        });
-      }
-    });
   }
 
   void onFocusChange() {
@@ -127,49 +100,39 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            body: ScrollConfiguration(
-              behavior: MyBehavior(),
-              child: SingleChildScrollView(
-                // ignore: avoid_unnecessary_containers
-                child: Column(
-                  children: [
-                    appBarCustomUi(),
-
-                    SortByUi(),
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20,0,20,0),
-                      child: Divider(),
-                    ),
-
-                    PriceUi(),
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20,0,20,0),
-                      child: Divider(),
-                    ),
-
-                    DiscountUi(),
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20,0,20,0),
-                      child: Divider(),
-                    ),
-
-                    SizedBox(height: 35,),
-
-                    ApplyFilterButtonUi(),
-
-
-                  ],
-                ),
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              // ignore: avoid_unnecessary_containers
+              child: Column(
+                children: [
+                  appBarCustomUi(),
+                  SortByUi(),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Divider(),
+                  ),
+                  PriceUi(),
+                  // const Padding(
+                  //   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  //   child: Divider(),
+                  // ),
+                  // DiscountUi(),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Divider(),
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  ApplyFilterButtonUi(),
+                ],
               ),
-            )),
-      ),
+            ),
+          )),
     );
   }
 
@@ -177,275 +140,258 @@ class _FilterScreenState extends State<FilterScreen> {
     return Row(
       children: [
         IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20),
+        const Padding(
+          padding: EdgeInsets.all(20),
           child: Text(
             'Filter',
             textAlign: TextAlign.center,
             style: Styles.appBarTextBlue,
           ),
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
 
   Widget SortByUi() {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,2,10,2),
-        child: Column(
-          mainAxisAlignment:MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15,0,15,5),
-              child: Text(
-                'Sort by',
-                style: Styles.textFilterTitle03,
-              ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(6, 0, 15, 5),
+            child: Text(
+              'Sort by',
+              style: Styles.textFilterTitle03,
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: ScrollController(),
-                child: Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 1.0,
-                      runSpacing: 1.0,
-                      runAlignment: WrapAlignment.spaceEvenly,
-                      children:  [
-                        for(int i=0;i<sortByVariables.length;i++)
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                if(selectedSortByVariables.contains('${sortByVariables[i]}'))
-                                  {
-                                    selectedSortByVariables.remove('${sortByVariables[i]}');
-                                  }
-                                else
-                                  {
-                                    selectedSortByVariables.add('${sortByVariables[i]}');
-                                  }
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: SizedBox(
+              height: 50,
+              child: GridView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: SortByVariables.items.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 5,
+                      childAspectRatio: 1 / 6,
+                      crossAxisCount: 2),
+                  itemBuilder: (BuildContext context1, index) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index++;
+                          print("selectedindex");
+                          print(selectedIndex);
 
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              margin: EdgeInsets.only(right: 10, bottom: 5),
-                              decoration: BoxDecoration(
-                                color: selectedSortByVariables.contains('${sortByVariables[i]}')
-                                    ? CustColors.light_navy
-                                    : Colors.white,
-                                  border: Border.all(
-                                    color: selectedSortByVariables.contains('${sortByVariables[i]}')
-                                        ? CustColors.light_navy
-                                        : CustColors.greyish,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Text(
-                                '${sortByVariables[i]}',
-                                style: selectedSortByVariables.contains('${sortByVariables[i]}')
+                          if(selectedIndex==0){
+                            sortby=2;
+                          }
+                          else if(selectedIndex==1){
+                            print("type");
+                            print("High to low");
+                            sortby=1;
+                          }
+                          else{
+                            sortby=3;
+                          }
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                            color: selectedIndex == index
+                                ? CustColors.light_navy
+                                : Colors.white,
+                            border: Border.all(
+                              color: selectedIndex == index
+                                  ? CustColors.light_navy
+                                  : CustColors.greyish,
+                            ),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: Text(
+                            SortByVariables.items[index].name,
+                            style: selectedIndex == index
                                 ? Styles.textFilterIncludeTitle_12
                                 : Styles.textFilterNotIncludeTitle_12,
-                              ),
-                            ),
                           ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                        ),
+                      ),
+                    );
+                  }),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget PriceUi() {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,2,10,2),
-        child: Column(
-          mainAxisAlignment:MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15,0,15,5),
-              child: Text(
-                'Price',
-                style: Styles.textFilterTitle03,
-              ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+            child: Text(
+              'Price',
+              style: Styles.textFilterTitle03,
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: ScrollController(),
-                child: Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 1.0,
-                      runSpacing: 1.0,
-                      runAlignment: WrapAlignment.spaceEvenly,
-                      children:  [
-                        for(int i=0;i<priceVariables.length;i++)
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                if(selectedPriceVariables.contains('${priceVariables[i]}'))
-                                {
-                                  selectedPriceVariables.remove('${priceVariables[i]}');
-                                }
-                                else
-                                {
-                                  selectedPriceVariables.add('${priceVariables[i]}');
-                                }
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: SizedBox(
+              height: 60,
+              child: GridView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: SortByPriceVariables.priceitemsitems.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 6,
+                      childAspectRatio: 1 / 5,
+                      crossAxisCount: 2),
+                  itemBuilder: (BuildContext context1, index2) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedpriceIndex = index2++;
+                          print("selectedpriceindex");
 
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              margin: EdgeInsets.only(right: 10, bottom: 5),
-                              decoration: BoxDecoration(
-                                  color: selectedPriceVariables.contains('${priceVariables[i]}')
-                                      ? CustColors.light_navy
-                                      : Colors.white,
-                                  border: Border.all(
-                                    color: selectedPriceVariables.contains('${priceVariables[i]}')
-                                        ? CustColors.light_navy
-                                        : CustColors.greyish,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Text(
-                                '${priceVariables[i]}',
-                                style: selectedPriceVariables.contains('${priceVariables[i]}')
-                                    ? Styles.textFilterIncludeTitle_12
-                                    : Styles.textFilterNotIncludeTitle_12,
-                              ),
+
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 5, bottom: 5),
+                        decoration: BoxDecoration(
+                            color: selectedpriceIndex == index2
+                                ? CustColors.light_navy
+                                : Colors.white,
+                            border: Border.all(
+                              color: selectedpriceIndex == index2
+                                  ? CustColors.light_navy
+                                  : CustColors.greyish,
                             ),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: Text(
+                            SortByPriceVariables.priceitemsitems[index2].price1+"-"+SortByPriceVariables.priceitemsitems[index2].price2,
+                            style: selectedpriceIndex == index2
+                                ? Styles.textFilterIncludeTitle_12
+                                : Styles.textFilterNotIncludeTitle_12,
                           ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                        ),
+                      ),
+                    );
+                  }),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget DiscountUi() {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10,2,10,2),
-        child: Column(
-          mainAxisAlignment:MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15,0,15,5),
-              child: Text(
-                'Discount',
-                style: Styles.textFilterTitle03,
-              ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+            child: Text(
+              'Discount',
+              style: Styles.textFilterTitle03,
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                controller: ScrollController(),
-                child: Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 1.0,
-                      runSpacing: 1.0,
-                      runAlignment: WrapAlignment.spaceEvenly,
-                      children:  [
-                        for(int i=0;i<discountVariables.length;i++)
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                if(selectedDiscountVariables.contains('${discountVariables[i]}'))
-                                {
-                                  selectedDiscountVariables.remove('${discountVariables[i]}');
-                                }
-                                else
-                                {
-                                  selectedDiscountVariables.add('${discountVariables[i]}');
-                                }
-
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              margin: EdgeInsets.only(right: 10, bottom: 5),
-                              decoration: BoxDecoration(
-                                  color: selectedDiscountVariables.contains('${discountVariables[i]}')
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              controller: ScrollController(),
+              child: Padding(
+                padding: const EdgeInsets.all(1),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    spacing: 1.0,
+                    runSpacing: 1.0,
+                    runAlignment: WrapAlignment.spaceEvenly,
+                    children: [
+                      for (int i = 0; i < discountVariables.length; i++)
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (selectedDiscountVariables
+                                  .contains(discountVariables[i])) {
+                                selectedDiscountVariables
+                                    .remove(discountVariables[i]);
+                              } else {
+                                selectedDiscountVariables
+                                    .add(discountVariables[i]);
+                              }
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            margin: const EdgeInsets.only(right: 10, bottom: 5),
+                            decoration: BoxDecoration(
+                                color: selectedDiscountVariables
+                                        .contains(discountVariables[i])
+                                    ? CustColors.light_navy
+                                    : Colors.white,
+                                border: Border.all(
+                                  color: selectedDiscountVariables
+                                          .contains(discountVariables[i])
                                       ? CustColors.light_navy
-                                      : Colors.white,
-                                  border: Border.all(
-                                    color: selectedDiscountVariables.contains('${discountVariables[i]}')
-                                        ? CustColors.light_navy
-                                        : CustColors.greyish,
-                                  ),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Text(
-                                '${discountVariables[i]}',
-                                style: selectedDiscountVariables.contains('${discountVariables[i]}')
-                                    ? Styles.textFilterIncludeTitle_12
-                                    : Styles.textFilterNotIncludeTitle_12,
-                              ),
+                                      : CustColors.greyish,
+                                ),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text(
+                              discountVariables[i],
+                              style: selectedDiscountVariables
+                                      .contains(discountVariables[i])
+                                  ? Styles.textFilterIncludeTitle_12
+                                  : Styles.textFilterNotIncludeTitle_12,
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget ApplyFilterButtonUi() {
     return InkWell(
-      onTap: (){
-
-        print("$selectedSortByVariables");
-        print("$selectedPriceVariables");
-        print("$selectedDiscountVariables");
-
-      },
+      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Row(
           children: [
-            Spacer(),
+            const Spacer(),
             Container(
               height: 35,
-              width:130,
+              width: 130,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 8, bottom: 6,left: 20,right: 20),
+              margin:
+                  const EdgeInsets.only(top: 8, bottom: 6, left: 20, right: 20),
               //padding: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
                 color: CustColors.light_navy,
@@ -456,13 +402,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
                 borderRadius: BorderRadius.circular(7),
               ),
-              child:  Text(
+              child: Text(
                 "Apply filter",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Corbel_Bold',
-                    fontSize:
-                    ScreenSize().setValueFont(14.5),
+                    fontSize: ScreenSize().setValueFont(14.5),
                     fontWeight: FontWeight.w800),
               ),
             ),
@@ -471,8 +416,6 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
     );
   }
-
-
 }
 
 class MyBehavior extends ScrollBehavior {
@@ -482,4 +425,3 @@ class MyBehavior extends ScrollBehavior {
     return child;
   }
 }
-

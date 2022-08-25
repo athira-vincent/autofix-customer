@@ -980,7 +980,10 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                     .custVehicleList![index].model),
                           ],
                         ),
-                        onTap: () {
+                        onTap: ()async {
+
+                          SharedPreferences shdPre = await SharedPreferences.getInstance();
+                          shdPre.remove("ischanged");
                           Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -37,6 +37,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
   TextEditingController phonecontroller = TextEditingController();
   TextEditingController pincontroller = TextEditingController();
   TextEditingController localitycontroller = TextEditingController();
+  bool value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,6 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                           addressline1,
                           addressline2,
                           type));
-
                     },
                     child: saveAddressButton(size))
               ],
@@ -470,6 +470,9 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                       onTap: () {
                         setState(() {
                           selectedIndex = index++;
+                          print("addressindex");
+                          print(selectedIndex);
+
                           if (selectedIndex == 0) {
                             type = "Home";
                           } else if (selectedIndex == 1) {
@@ -523,6 +526,21 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                     );
                   }),
             )),
+        CheckboxListTile(
+          title: Text("Make this as default address",
+              style: TextStyle(
+                  fontSize: 10,
+                  fontFamily: "Samsung_SharpSans_Regular",
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black)), //    <-- label
+          value: value,
+          onChanged: (value) {
+            setState(() {
+              this.value = value!;
+
+            });
+          },
+        )
       ],
     );
   }
