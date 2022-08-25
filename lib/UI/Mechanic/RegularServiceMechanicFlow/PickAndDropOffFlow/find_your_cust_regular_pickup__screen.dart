@@ -81,7 +81,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
-  String authToken="", carName = "", customerAddress = "", plateNumber = "";
+  String authToken="", carName = "", customerAddress = "", plateNumber = "", vehicleColor = "";
   bool isArrived = false;
 
   @override
@@ -178,6 +178,7 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
         carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('vehiclePlateNumber');
+        vehicleColor =  event.get('vehicleColor');
       });
     });
   }
@@ -460,6 +461,10 @@ class _FindYourCustomerRegularScreenState extends State<FindYourCustomerRegularS
                                         ),
                                         Text(
                                           "Plate No : " + plateNumber,
+                                          style: Styles.SelectLanguageWalkThroughStyle,
+                                        ),
+                                        Text(
+                                          "Vehicle Color : " + vehicleColor,
                                           style: Styles.SelectLanguageWalkThroughStyle,
                                         ),
                                       ],
