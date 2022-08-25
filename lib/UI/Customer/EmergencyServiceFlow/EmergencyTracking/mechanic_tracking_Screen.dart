@@ -90,7 +90,6 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      //bookingIdEmergency = "1685";
       _firestoreData = _firestore.collection("ResolMech").doc('${bookingIdEmergency}').snapshots();
       updateToCloudFirestoreMechanicCurrentScreenDB();
       print('authToken>>>>>>>>>MechanicTrackingScreen Customer App ' + authToken.toString());

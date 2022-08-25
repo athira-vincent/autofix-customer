@@ -85,6 +85,7 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getSharedPrefData();
     mapStyling();
     customerMarker (LatLng(double.parse(
         widget.latitude.toString()), double.parse(widget.longitude.toString())));
@@ -92,7 +93,6 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         double.parse(widget.longitude.toString())));
     _getCurrentLocation();
 
-    getSharedPrefData();
     _listenServiceListResponse();
   }
 
@@ -117,10 +117,10 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         icon: customerIcon!, //Icon for Marker
       ));
     });
-    Fluttertoast.showToast(
+    /*Fluttertoast.showToast(
       msg: 'Cust latitude ${latLng.latitude}  Cust longitude ${latLng.longitude}',
       timeInSecForIosWeb: 1,
-    );
+    );*/
   }
 
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -183,10 +183,10 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
         carColor = event.get('carColor');
       });
     });
-    Fluttertoast.showToast(
+    /*Fluttertoast.showToast(
       msg: "carName : " + carName,
       timeInSecForIosWeb: 1,
-    );
+    );*/
   }
 
   _getGeoLocationPosition() async {
@@ -278,10 +278,10 @@ class _FindYourCustomerScreenState extends State<FindYourCustomerScreen> {
       });
 
     });
-    Fluttertoast.showToast(
+    /*Fluttertoast.showToast(
       msg: 'Mech latitude ${latLng.latitude}  Mech longitude ${latLng.longitude}',
       timeInSecForIosWeb: 1,
-    );
+    );*/
 
   }
 

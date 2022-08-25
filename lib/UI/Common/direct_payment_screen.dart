@@ -160,31 +160,31 @@ class _DirectPaymentScreenState extends State<DirectPaymentScreen> {
 
     Size size = MediaQuery.of(context).size;
 
-    return  Scaffold(
-        body: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                width: size.width,
-                height: size.height,
-                //color: Colors.green,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      titleWidget(size),
-                      InfoTextWidget(size),
-                      widget.isMechanicApp
-                          ?
-                      isDirectPayment
-                          ? MechanicDirectPaymentTitleImageWidget(size)
-                          : MechanicOtherPaymentTitleImageWidget(size)
-                          : customerTitleImageWidget(size),
-                      warningTextWidget(size),
-                      paymentReceivedButton(size)
-                    ]
-                ),
+    return SafeArea(
+      child: Scaffold(
+          body: SingleChildScrollView(
+            child: Container(
+              width: size.width,
+              height: size.height,
+              //color: Colors.green,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    titleWidget(size),
+                    InfoTextWidget(size),
+                    widget.isMechanicApp
+                        ?
+                    isDirectPayment
+                        ? MechanicDirectPaymentTitleImageWidget(size)
+                        : MechanicOtherPaymentTitleImageWidget(size)
+                        : customerTitleImageWidget(size),
+                    warningTextWidget(size),
+                    paymentReceivedButton(size)
+                  ]
               ),
-            )
-        )
+            ),
+          )
+      ),
     );
   }
 
