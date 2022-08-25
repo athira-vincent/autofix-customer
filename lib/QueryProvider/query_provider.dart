@@ -3340,10 +3340,11 @@ class QueryProvider {
   }
 
   /// sparepartslist
-  fetchServicesparepartslist(model, search, fromcost, tocost) async {
+  fetchServicesparepartslist(model, search, fromcost, tocost,sort) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String ischanged = shdPre.getString("ischanged").toString();
+    String isfiltered= shdPre.getString("filterstatus").toString();
     String _query;
 
     if (ischanged == "true") {
@@ -3355,7 +3356,64 @@ class QueryProvider {
     spare_parts_list(
       modelName: "$model"
       search: "$search"
-      sortBy: 1
+      sortBy: null
+      fromCost: null
+      toCost: null
+    ) {
+      id
+      productCode
+      productName
+      price
+      shippingCharge
+      productImage
+      description
+      status
+      vehicleModelId
+      vendorId
+      vehicleModel {
+        id
+        modelName
+        engineName
+        years
+        brandName
+        status
+      }
+      reviewCount
+      avgRate
+      salesCount
+      reviewData {
+        id
+        transType
+        rating
+        feedback
+        bookingId
+        orderId
+        status
+        order{
+          id
+        }
+        bookings{
+          id
+        }
+        productData{
+          id
+        }
+      }
+    }
+  }
+
+    """;
+    }
+
+    else if(isfiltered=="true"){
+
+      _query = """
+       query
+       {
+    spare_parts_list(
+      modelName: "$model"
+      search: "$search"
+      sortBy: $sort
       fromCost: $fromcost
       toCost: $tocost
     ) {
@@ -3402,16 +3460,18 @@ class QueryProvider {
   }
 
     """;
-    } else {
+
+    }
+    else {
       _query = """
        query
        {
     spare_parts_list(
       modelName: "$model"
-      search: $search
-      sortBy: 1
-      fromCost: $fromcost
-      toCost: $tocost
+      search: "string"
+      sortBy: null
+      fromCost: null
+      toCost: null
     ) {
       id
       productCode

@@ -7,9 +7,9 @@ class SparePartListEvent extends Equatable {
 
 class FetchSparePartListEvent extends SparePartListEvent {
 
-  String modelname,search,fromcost,tocost;
+  String modelname,search,fromcost,tocost,sort;
 
-  FetchSparePartListEvent(this.modelname,this.search,this.fromcost,this.tocost);
+  FetchSparePartListEvent(this.modelname,this.search,this.fromcost,this.tocost,this.sort);
 
   @override
   List<Object> get props => [];

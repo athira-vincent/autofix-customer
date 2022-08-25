@@ -592,8 +592,8 @@ class Repository {
       _sparepartsprovider.fetchServicespareparts();
 
 
-  Future<SparePartsListModel> getsparepartslist(modelname,search,fromcost,tocost) =>
-      _sparepartslistprovider.fetchServicesparepartslist(modelname,search,fromcost,tocost);
+  Future<SparePartsListModel> getsparepartslist(modelname,search,fromcost,tocost,sort) =>
+      _sparepartslistprovider.fetchServicesparepartslist(modelname,search,fromcost,tocost,sort);
 
   Future<AddCartModel> addcart(productid) =>
       _addcartprovider.fetchServiceaddcart(productid);

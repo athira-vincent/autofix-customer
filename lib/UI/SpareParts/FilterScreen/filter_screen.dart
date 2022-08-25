@@ -8,12 +8,16 @@ import 'package:auto_fix/Widgets/curved_bottomsheet_container.dart';
 import 'package:auto_fix/Widgets/input_validator.dart';
 import 'package:auto_fix/Widgets/screen_size.dart';
 import 'package:auto_fix/main.dart';
+import 'package:auto_fix/spare_parts_filter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FilterScreen extends StatefulWidget {
-  const FilterScreen({Key? key}) : super(key: key);
+  final String modelname;
+  const FilterScreen({Key? key, required this.modelname}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,6 +32,7 @@ class _FilterScreenState extends State<FilterScreen> {
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
   bool _isLoading = false;
+  bool filterstatus=false;
 
   double per = .10;
   double perfont = .10;
@@ -77,6 +82,8 @@ class _FilterScreenState extends State<FilterScreen> {
   List<String> selectedDiscountVariables = [];
 
   int sortby=0;
+  String startprice="";
+  String endprice="";
 
   @override
   void initState() {
@@ -184,7 +191,9 @@ class _FilterScreenState extends State<FilterScreen> {
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context1, index) {
                     return InkWell(
-                      onTap: () {
+                      onTap: ()async {
+                        SharedPreferences shdPre = await SharedPreferences.getInstance();
+                        shdPre.remove("filterstatus");
                         setState(() {
                           selectedIndex = index++;
                           print("selectedindex");
@@ -261,12 +270,38 @@ class _FilterScreenState extends State<FilterScreen> {
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context1, index2) {
                     return InkWell(
-                      onTap: () {
+                      onTap: () async{
+                        SharedPreferences shdPre = await SharedPreferences.getInstance();
+                        shdPre.remove("filterstatus");
                         setState(() {
                           selectedpriceIndex = index2++;
                           print("selectedpriceindex");
+                          print(selectedpriceIndex);
 
-
+                            if(selectedpriceIndex==0){
+                              startprice="300";
+                              endprice="500";
+                            }
+                            else if(selectedpriceIndex==1){
+                              startprice="300";
+                              endprice="2000";
+                            }
+                            else if(selectedpriceIndex==2){
+                              startprice="5000";
+                              endprice="7000";
+                            }
+                            else if(selectedpriceIndex==3){
+                              startprice="300";
+                              endprice="5000";
+                            }
+                            else if(selectedpriceIndex==4){
+                              startprice="3000";
+                              endprice="2000";
+                            }
+                            else if(selectedpriceIndex==5){
+                              startprice="5000";
+                              endprice="7000";
+                            }
                         });
                       },
                       child: Container(
@@ -380,7 +415,20 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget ApplyFilterButtonUi() {
     return InkWell(
-      onTap: () {},
+      onTap: () async{
+
+
+        if(selectedpriceIndex==-1&&selectedIndex==-1){
+          Fluttertoast.showToast(msg: "Select any filter option");
+        }
+        else{
+          filterstatus==true;
+          SharedPreferences shpref=await SharedPreferences.getInstance();
+          shpref.setString("filterstatus", filterstatus.toString());
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) =>  Search_Spare_Parts_Filter(modelname: widget.modelname,fromcost:startprice.toString(),tocost:endprice.toString(),sorting:sortby.toString())));
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Row(

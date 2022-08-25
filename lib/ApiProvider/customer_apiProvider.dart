@@ -394,9 +394,9 @@ class CustomerApiProvider {
   /// spare partslist api provider
 
   Future<SparePartsListModel> fetchServicesparepartslist(
-      model, search, fromcost, tocost) async {
+      model, search, fromcost, tocost,sort) async {
     Map<String, dynamic> _resp = await _queryProvider
-        .fetchServicesparepartslist(model, search, fromcost, tocost);
+        .fetchServicesparepartslist(model, search, fromcost, tocost,sort);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = SparePartsListModel(

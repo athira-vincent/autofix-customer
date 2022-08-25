@@ -12,18 +12,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Search_Spare_Parts extends StatefulWidget {
-  final changestatus, modelname, searchkey;
+class Search_Spare_Parts_Filter extends StatefulWidget {
+  final  String modelname,fromcost,tocost,sorting;
 
-  const Search_Spare_Parts(
-      {Key? key, this.changestatus, this.modelname, this.searchkey})
+  const Search_Spare_Parts_Filter(
+      {Key? key, required this.modelname, required this.fromcost, required this.tocost, required this.sorting,})
       : super(key: key);
 
   @override
-  State<Search_Spare_Parts> createState() => _Search_Spare_PartsState();
+  State<Search_Spare_Parts_Filter> createState() => _Search_Spare_Parts_FilterState();
 }
 
-class _Search_Spare_PartsState extends State<Search_Spare_Parts> {
+class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
   late List<String> image;
   bool addToCart = false;
   String itemcount = "";
@@ -39,7 +39,7 @@ class _Search_Spare_PartsState extends State<Search_Spare_Parts> {
         BlocProvider(
           create: (context) => SparePartListBloc()
             ..add(FetchSparePartListEvent(
-                widget.modelname.toString(), widget.searchkey, "null", "null","null")),
+                widget.modelname.toString(), "null", widget.fromcost, widget.tocost,widget.sorting)),
         ),
       ],
       child: MultiBlocListener(
