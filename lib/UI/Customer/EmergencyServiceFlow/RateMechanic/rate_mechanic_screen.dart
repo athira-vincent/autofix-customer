@@ -102,9 +102,9 @@ class _RateMechanicScreenState extends State<RateMechanicScreen> {
 
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Container(

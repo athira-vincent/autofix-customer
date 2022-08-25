@@ -76,9 +76,9 @@ class _DirectPaymentSuccessScreenState extends State<DirectPaymentSuccessScreen>
 
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
             child: Container(
                 width: size.width,
                 height: size.height,

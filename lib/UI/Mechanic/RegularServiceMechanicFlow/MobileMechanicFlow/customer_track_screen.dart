@@ -81,7 +81,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
   List<LatLng> latlng = [];
   String location ='';
   String Address = '';
-  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "";
+  String authToken="", bookingId = "", carName = "", customerAddress = "", plateNumber = "",vehicleColor = "";
   bool isArrived = false;
 
   @override
@@ -182,6 +182,7 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
         carName = event.get('vehicleName');
         customerAddress = event.get('customerAddress');
         plateNumber =  event.get('vehiclePlateNumber');
+        vehicleColor =  event.get('vehicleColor');
       });
     });
   }
@@ -481,6 +482,11 @@ class _CustomerTrackScreenState extends State<CustomerTrackScreen> {
                                         Text(
                                           //"Service Id :Vien232",
                                           "Plate No : " + plateNumber,
+                                          style: Styles.SelectLanguageWalkThroughStyle,
+                                        ),
+                                        Text(
+                                          //"Service Id :Vien232",
+                                          "Vehicle Color : " + vehicleColor,
                                           style: Styles.SelectLanguageWalkThroughStyle,
                                         ),
                                       ],

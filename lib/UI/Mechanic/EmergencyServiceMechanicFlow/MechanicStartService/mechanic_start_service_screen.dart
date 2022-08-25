@@ -72,8 +72,7 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     setState(() {
       authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      //bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      bookingId = "1711";
+      bookingId = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
       print('MechanicStartServiceScreen bookingId ++++ ${bookingId} ');
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
@@ -195,74 +194,72 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: size.width,
-                  height: size.height,
-                  color: Colors.white,
-                  child: Container(
-                    child: isWaiting == "0"
-                              ? waitCustomerResponseWidget(size)
-                              : isWaiting == "1"
-                              ? customerResponseAcceptRejectWidget(size)
-                              : isWaiting == "-1"
-                              ? customerResponseAcceptRejectWidget(size)
-                          : Container(
-                             child: Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 mechanicStartServiceTitle(size),
-                                 mechanicStartServiceImage(size),
-                                 mechanicEditSelectedService(size, "$selectedServiceName"),
-                                 mechanicAdditionalFaultService(size, "" ),
-                                 InkWell(
-                                   onTap: (){
-                                     print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
-                                    setState(() {
-                                      _awaitReturnValueFromSecondScreenOnAdd(context);
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: size.width,
+                height: size.height,
+                color: Colors.white,
+                child: Container(
+                  child: isWaiting == "0"
+                      ? waitCustomerResponseWidget(size)
+                      : isWaiting == "1"
+                      ? customerResponseAcceptRejectWidget(size)
+                      : isWaiting == "-1"
+                      ? customerResponseAcceptRejectWidget(size)
+                      : Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        mechanicStartServiceTitle(size),
+                        mechanicStartServiceImage(size),
+                        mechanicEditSelectedService(size, "$selectedServiceName"),
+                        mechanicAdditionalFaultService(size, "" ),
+                        InkWell(
+                          onTap: (){
+                            print(" on Tap - Add More _awaitReturnValueFromSecondScreenOnAdd");
+                            setState(() {
+                              _awaitReturnValueFromSecondScreenOnAdd(context);
 
-                                    });
-                                   },
-                                   child: Align(
-                                       alignment: Alignment.centerRight,
-                                       child: Container(
-                                           margin: EdgeInsets.only(
-                                               right: size.width * 8 / 100,
-                                               top: size.height * 1.2 / 100
-                                           ),
-                                           child: Text("Add more",
-                                             style: TextStyle(
-                                               fontSize: 20,
-                                               fontFamily: "SharpSans_Bold",
-                                               fontWeight: FontWeight.w700,
-                                               color: CustColors.light_navy,
-                                             ),
-                                           ))),
-                                 ),
+                            });
+                          },
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                  margin: EdgeInsets.only(
+                                      right: size.width * 8 / 100,
+                                      top: size.height * 1.2 / 100
+                                  ),
+                                  child: Text("Add more",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "SharpSans_Bold",
+                                      fontWeight: FontWeight.w700,
+                                      color: CustColors.light_navy,
+                                    ),
+                                  ))),
+                        ),
 
-                                 Container(
-                                   margin: EdgeInsets.only(
-                                       top: size.height * 6 / 100
-                                   ),
-                                   child: Column(
-                                     children: [
-                                       Container(
-                                         alignment: Alignment.center,
-                                         child: Row(
-                                           crossAxisAlignment: CrossAxisAlignment.center,
-                                           mainAxisAlignment: MainAxisAlignment.center,
-                                           children: [
-                                             SvgPicture.asset('assets/image/ic_alarm.svg',
-                                               width: size.width * 4 / 100,
-                                               height: size.height * 4 / 100,),
-                                             SizedBox(width: 10,),
-                                            /* Expanded(
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: size.height * 6 / 100
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset('assets/image/ic_alarm.svg',
+                                      width: size.width * 4 / 100,
+                                      height: size.height * 4 / 100,),
+                                    SizedBox(width: 10,),
+                                    /* Expanded(
                                                 child: Text("$serviceTotalTimeForFirebase:00",
                                                   style: TextStyle(
                                                       fontSize: 36,
@@ -273,42 +270,41 @@ class _MechanicStartServiceScreenState extends State<MechanicStartServiceScreen>
                                                   ),
                                                 ),
                                               ),*/
-                                             CountdownMechanicTimer(
-                                               animation: StepTween(
-                                                 begin: levelClock, // THIS IS A USER ENTERED NUMBER
-                                                 end: 0,
-                                               ).animate(_controller),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                       Container(
-                                         decoration: BoxDecoration(
-                                             borderRadius: BorderRadius.all(
-                                               Radius.circular(13),
-                                             ),
-                                             border: Border.all(
-                                                 color: CustColors.light_navy02,
-                                                 width: 0.3
-                                             )
-                                         ),
-                                         child: Padding(
-                                           padding: const EdgeInsets.all(8.0),
-                                           child: Text("Total estimated time "),
-                                         ),
-                                       )
-                                     ],
-                                   ),
-                                 ),
+                                    CountdownMechanicTimer(
+                                      animation: StepTween(
+                                        begin: levelClock, // THIS IS A USER ENTERED NUMBER
+                                        end: 0,
+                                      ).animate(_controller),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(13),
+                                    ),
+                                    border: Border.all(
+                                        color: CustColors.light_navy02,
+                                        width: 0.3
+                                    )
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Total estimated time "),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
 
-                                 mechanicStartServiceButton(size),
-                               ],
-                             ),
-                           ),
+                        mechanicStartServiceButton(size),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

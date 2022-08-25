@@ -104,7 +104,6 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
       serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
       mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
       bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      // bookingIdEmergency = "734";
       updateToCloudFirestoreMechanicCurrentScreenDB();
       listenToCloudFirestoreDB();
       print('MechanicWorkProgressScreen bookingIdEmergency ++++ ${bookingIdEmergency} ');
@@ -292,10 +291,10 @@ class _MechanicWorkProgressScreenState extends State<MechanicWorkProgressScreen>
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-    return  Scaffold(
-      key: _scaffoldKey,
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return  SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: SingleChildScrollView(
           child: Container(
             width: size.width,
             height: size.height,
