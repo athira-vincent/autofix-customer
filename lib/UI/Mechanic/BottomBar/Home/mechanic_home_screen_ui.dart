@@ -168,7 +168,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
           _signinBloc.userDefault(value.data!.socialLogin!.token.toString());*/
       }
     });
-    _mechanicHomeBloc.postMechanicActiveService.listen((value) {
+    _mechanicHomeBloc.postMechanicActiveServiceResponse.listen((value) {
       if(value.status == "error"){
         setState(() {
           //_isLoading = false;
@@ -180,20 +180,21 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
       }else{
         print("hasActiveService>>>> ${value.data?.currentlyWorkingService.toString()}");
         print(value.data?.currentlyWorkingService.toString());
-        if(value.data?.currentlyWorkingService.toString() == []
-            || value.data?.currentlyWorkingService.toString() == null
-          || value.data?.currentlyWorkingService.toString() == 'null')
+        if(value.data?.currentlyWorkingService.toString() != []
+            && value.data?.currentlyWorkingService.toString() != '[]'
+            && value.data?.currentlyWorkingService.toString() != null
+            && value.data?.currentlyWorkingService.toString() != 'null')
         {
           setState(() {
-            _hasActiveService = false;
-            print("hasActiveService>>>> false");
+            _hasActiveService = true;
+            setReminderData(value.data?.currentlyWorkingService![0].id.toString());
+            print("hasActiveService>>>> true");
           });
         }
         else {
           setState(()  {
-            _hasActiveService = true;
-            setReminderData(value.data?.currentlyWorkingService![0].id.toString());
-            print("hasActiveService>>>> true");
+            _hasActiveService = false;
+            print("hasActiveService>>>> false");
           });
         }
       }
@@ -214,6 +215,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
 
         firebaseCustomerLatitude = event.get('customerLatitude');
         firebaseCustomerLongitude = event.get('customerLongitude');
+
 
       });
     });
@@ -763,7 +765,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            /*onTap: (){
+            onTap: (){
               setState(() {
                 Navigator.push(
                     context,
@@ -771,7 +773,7 @@ class _MechanicHomeUIScreenState extends State<MechanicHomeUIScreen> {
                       builder: (context) => MechanicMyWalletScreen(),
                     ));
               });
-            },*/
+            },
             child: Container(
               height: size.height * 18 / 100,
               width: size.width * 40 / 100,

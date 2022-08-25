@@ -1192,6 +1192,7 @@ class QueryProvider {
             engine
             year
             plateNo
+            color
             lastMaintenance
             milege
             vehiclePic

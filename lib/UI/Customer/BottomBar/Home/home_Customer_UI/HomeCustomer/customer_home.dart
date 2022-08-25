@@ -526,18 +526,12 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                 BorderRadius.circular(11.0)),
                                         child: Padding(
                                             padding: const EdgeInsets.all(15),
-                                            child: snapshot
-                                                            .data
-                                                            ?.data
-                                                            ?.categoryList?[0]
+                                            child: snapshot.data?.data?.categoryList?[0]
                                                             .service?[index]
                                                             .icon
-                                                            .toString() !=
-                                                        "" ||
-                                                    snapshot
-                                                            .data
-                                                            ?.data
-                                                            ?.categoryList?[0]
+                                                            .toString() != ""
+                                                ||
+                                                    snapshot.data?.data?.categoryList?[0]
                                                             .service?[index]
                                                             .icon
                                                             .toString() !=
@@ -557,7 +551,8 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                                                     'https://firebasestorage.googleapis.com/v0/b/autofix-336509.appspot.com/o/RelexProductImagesDummy%2Fservice.png?alt=media&token=2cd2becd-04c9-488a-9bdc-6082bc11ce36',
                                                     width: 35,
                                                     fit: BoxFit.cover,
-                                                  )),
+                                                  )
+                                        ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(2),
@@ -1308,8 +1303,27 @@ class _HomeCustomerUIScreenState extends State<HomeCustomerUIScreen> {
                 right: size.width * 4 / 100),
             child: Row(
               children: [
+                Container(
+                  padding: EdgeInsets.only(
+                      top: size.height * 2 / 100,
+                      bottom: size.height * 2 / 100,
+                      left: size.width * 2.7 / 100,
+                      right: size.width * 2.7 / 100
+                  ),
+                  decoration: Styles.serviceIconBoxDecorationStyle,
+                  child: service.icon.toString() != ""
+                      || service.icon.toString() != "null"
+                      ? SvgPicture.network(
+                          service.icon,
+                          width: 40,
+                          height: 25,
+                          fit: BoxFit.contain,
+                         )
+                      : Icon(Icons.miscellaneous_services,size: 35,color: CustColors.light_navy,),
+                  //Icon(choices[0].icon, size: 35, color: CustColors.light_navy,),
+                ),
                 SizedBox(
-                  width: size.width * 8 / 100,
+                  width: size.width * 5 / 100,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

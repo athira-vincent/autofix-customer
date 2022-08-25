@@ -221,6 +221,7 @@ class Vehicle {
     required this.engine,
     required this.year,
     required this.plateNo,
+    required this.color,
     required this.lastMaintenance,
     required this.milege,
     required this.vehiclePic,
@@ -236,6 +237,7 @@ class Vehicle {
   String engine;
   String year;
   String plateNo;
+  String color;
   String lastMaintenance;
   String milege;
   String vehiclePic;
@@ -251,6 +253,7 @@ class Vehicle {
     engine: json["engine"] == null ? null : json["engine"],
     year: json["year"] == null ? null : json["year"],
     plateNo: json["plateNo"] == null ? null : json["plateNo"],
+    color: json["color"] == null ? null : json["color"],
     lastMaintenance: json["lastMaintenance"] == null ? null : json["lastMaintenance"],
     milege: json["milege"] == null ? null : json["milege"],
     vehiclePic: json["vehiclePic"] == null ? null : json["vehiclePic"],
@@ -267,6 +270,7 @@ class Vehicle {
     "engine": engine == null ? null : engine,
     "year": year == null ? null : year,
     "plateNo": plateNo == null ? null : plateNo,
+    "color": color == null ? null : color,
     "lastMaintenance": lastMaintenance == null ? null : lastMaintenance,
     "milege": milege == null ? null : milege,
     "vehiclePic": vehiclePic == null ? null : vehiclePic,

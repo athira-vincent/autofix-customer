@@ -486,7 +486,6 @@ class _MechanicMyWalletScreenState extends State<MechanicMyWalletScreen> {
                 amount,style: Styles.myWalletListTileTitle03,
               ),
             )
-
           ],
         ),
       ),
