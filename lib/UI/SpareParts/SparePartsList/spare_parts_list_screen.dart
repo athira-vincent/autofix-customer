@@ -8,6 +8,8 @@ import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_state.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
 import 'package:auto_fix/UI/SpareParts/spare_parts_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,6 +95,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                           state.addCartModel.data!.addCart.itemCount.toString();
                       totalamount = state.addCartModel.data!.addCart.totalAmount
                           .toString();
+
+                      final addcartsBloc =
+                      BlocProvider.of<ShowCartPopBloc>(context);
+                      addcartsBloc.add(FetchShowCartPopEvent());
 
                       ViewCartUi();
                     });

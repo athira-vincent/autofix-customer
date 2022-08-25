@@ -1,3 +1,4 @@
+import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
@@ -15,8 +16,10 @@ import 'package:auto_fix/UI/Mechanic/RegularServiceMechanicFlow/CommonScreensInR
 import 'package:auto_fix/UI/SpareParts/MyCart/my_cart_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
 import 'package:auto_fix/Widgets/show_pop_up_widget.dart';
+import 'package:badges/badges.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -152,14 +155,14 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => CustServiceRegularDetailsScreen(
-                  bookingId: event.data['bookingId'],
-                  firebaseCollection:
-                  event.data['regularType'].toString() == "1"
-                      ? TextStrings.firebase_pick_up
-                      : event.data['regularType'].toString() == "2"
-                      ? TextStrings.firebase_mobile_mech
-                      : TextStrings.firebase_take_vehicle,
-                ))).then((value) {});
+                      bookingId: event.data['bookingId'],
+                      firebaseCollection:
+                          event.data['regularType'].toString() == "1"
+                              ? TextStrings.firebase_pick_up
+                              : event.data['regularType'].toString() == "2"
+                                  ? TextStrings.firebase_mobile_mech
+                                  : TextStrings.firebase_take_vehicle,
+                    ))).then((value) {});
       }
     });
 
@@ -185,27 +188,27 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => MechServiceRegularDetailsScreen(
-                  bookingId: message.data['bookingId'],
-                  firebaseCollection:
-                  message.data['regularType'].toString() == "1"
-                      ? TextStrings.firebase_pick_up
-                      : message.data['regularType'].toString() == "2"
-                      ? TextStrings.firebase_mobile_mech
-                      : TextStrings.firebase_take_vehicle,
-                ))).then((value) {});
+                      bookingId: message.data['bookingId'],
+                      firebaseCollection:
+                          message.data['regularType'].toString() == "1"
+                              ? TextStrings.firebase_pick_up
+                              : message.data['regularType'].toString() == "2"
+                                  ? TextStrings.firebase_mobile_mech
+                                  : TextStrings.firebase_take_vehicle,
+                    ))).then((value) {});
       } else if (screen.toString() == "customerServiceDetails") {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => CustServiceRegularDetailsScreen(
-                  bookingId: message.data['bookingId'],
-                  firebaseCollection:
-                  message.data['regularType'].toString() == "1"
-                      ? TextStrings.firebase_pick_up
-                      : message.data['regularType'].toString() == "2"
-                      ? TextStrings.firebase_mobile_mech
-                      : TextStrings.firebase_take_vehicle,
-                ))).then((value) {});
+                      bookingId: message.data['bookingId'],
+                      firebaseCollection:
+                          message.data['regularType'].toString() == "1"
+                              ? TextStrings.firebase_pick_up
+                              : message.data['regularType'].toString() == "2"
+                                  ? TextStrings.firebase_mobile_mech
+                                  : TextStrings.firebase_take_vehicle,
+                    ))).then((value) {});
       }
     });
   }
@@ -225,15 +228,15 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                     height: _setValue(25),
                     child: _index == 0
                         ? Image.asset(
-                      'assets/image/ic_home_active.png',
-                      width: _setValue(26),
-                      height: _setValue(26),
-                    )
+                            'assets/image/ic_home_active.png',
+                            width: _setValue(26),
+                            height: _setValue(26),
+                          )
                         : SvgPicture.asset(
-                      'assets/image/ic_home_inactive.svg',
-                      width: _setValue(26),
-                      height: _setValue(26),
-                    )),
+                            'assets/image/ic_home_inactive.svg',
+                            width: _setValue(26),
+                            height: _setValue(26),
+                          )),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
                   child: Text(
@@ -256,15 +259,15 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                 height: _setValue(25),
                 child: _index == 1
                     ? SvgPicture.asset(
-                  'assets/image/ic_home_cart_active.svg',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                )
+                      'assets/image/ic_home_cart_active.svg',
+                      width: _setValue(26),
+                      height: _setValue(26),
+                    )
                     : Image.asset(
-                  'assets/image/ic_home_cart_inactive.png',
-                  width: _setValue(28),
-                  height: _setValue(28),
-                ),
+                      'assets/image/ic_home_cart_inactive.png',
+                      width: _setValue(28),
+                      height: _setValue(28),
+                    ),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
@@ -282,20 +285,20 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
           backgroundColor: Colors.white,
           icon: Column(
             children: [
-              Container(
+              SizedBox(
                 width: _setValue(25),
                 height: _setValue(25),
                 child: _index == 2
                     ? SvgPicture.asset(
-                  'assets/image/ic_home_service_active.svg',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                )
+                        'assets/image/ic_home_service_active.svg',
+                        width: _setValue(26),
+                        height: _setValue(26),
+                      )
                     : Image.asset(
-                  'assets/image/ic_home_service_inactive.png',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                ),
+                        'assets/image/ic_home_service_inactive.png',
+                        width: _setValue(26),
+                        height: _setValue(26),
+                      ),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
@@ -318,15 +321,15 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                 height: _setValue(25),
                 child: _index == 3
                     ? SvgPicture.asset(
-                  'assets/image/ic_home_profile_active.svg',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                )
+                        'assets/image/ic_home_profile_active.svg',
+                        width: _setValue(26),
+                        height: _setValue(26),
+                      )
                     : Image.asset(
-                  'assets/image/ic_home_profile_inactive.png',
-                  width: _setValue(26),
-                  height: _setValue(26),
-                ),
+                        'assets/image/ic_home_profile_inactive.png',
+                        width: _setValue(26),
+                        height: _setValue(26),
+                      ),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 4, 0, 0),
@@ -362,82 +365,82 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
         key: scaffoldKey,
         appBar: _index == 0
             ? PreferredSize(
-          preferredSize:
-          Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
-          child: AppBar(
-            actions: [],
-            automaticallyImplyLeading: false,
-            flexibleSpace: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      left: 21,
-                      top: 20 + MediaQuery.of(context).padding.top),
-                  child: GestureDetector(
-                      onTap: () {
-                        scaffoldKey.currentState?.openDrawer();
-                      },
-                      child: Image.asset(
-                        'assets/image/ic_drawer.png',
-                        width: 30,
-                        height: 30,
-                      )),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        top: 25 + MediaQuery.of(context).padding.top,
-                        left: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          //"Hi $_userName",
-                          "Welcome",
-                          style: Styles.homeWelcomeTextStyle,
-                        ),
-                        Expanded(
-                          child: RichText(
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                              text: " $userName",
-                              style: Styles.homeNameTextStyle,
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: " !",
-                                  style:
-                                  Styles.homeWelcomeSymbolTextStyle,
+                preferredSize:
+                    Size.fromHeight(40.0 + MediaQuery.of(context).padding.top),
+                child: AppBar(
+                  actions: [],
+                  automaticallyImplyLeading: false,
+                  flexibleSpace: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 21,
+                            top: 20 + MediaQuery.of(context).padding.top),
+                        child: GestureDetector(
+                            onTap: () {
+                              scaffoldKey.currentState?.openDrawer();
+                            },
+                            child: Image.asset(
+                              'assets/image/ic_drawer.png',
+                              width: 30,
+                              height: 30,
+                            )),
+                      ),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 25 + MediaQuery.of(context).padding.top,
+                              left: 20),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                //"Hi $_userName",
+                                "Welcome",
+                                style: Styles.homeWelcomeTextStyle,
+                              ),
+                              Expanded(
+                                child: RichText(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    text: " $userName",
+                                    style: Styles.homeNameTextStyle,
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: " !",
+                                        style:
+                                            Styles.homeWelcomeSymbolTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  backgroundColor: Colors.white,
+                  shadowColor: Colors.white,
                 ),
-              ],
-            ),
-            backgroundColor: Colors.white,
-            shadowColor: Colors.white,
-          ),
-        )
+              )
             : PreferredSize(
-            preferredSize: Size.fromHeight(0), child: Container()),
+                preferredSize: Size.fromHeight(0), child: Container()),
         body: Center(
             child: IndexedStack(
-              index: _index,
-              children: <Widget>[
-                HomeCustomerUIScreen(),
-                 MyCartScreen(),
-                CustomerMyServicesScreen(),
-                CustomerMyProfileScreen(
-                  isEnableEditing: false,
-                ),
-              ],
-            )),
+          index: _index,
+          children: <Widget>[
+            HomeCustomerUIScreen(),
+            MyCartScreen(),
+            CustomerMyServicesScreen(),
+            CustomerMyProfileScreen(
+              isEnableEditing: false,
+            ),
+          ],
+        )),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(
             color: Colors.red,
@@ -464,14 +467,11 @@ class _CustomerMainLandingScreenState extends State<CustomerMainLandingScreen> {
                 selectedItemColor: Colors.blue,
                 unselectedItemColor: Colors.grey,
                 onTap: (index) {
-
                   setState(() {
-
-
                     _index = index;
-                    if(_index==1){
+                    if (_index == 1) {
                       final addcartsBloc =
-                      BlocProvider.of<ShowCartPopBloc>(context);
+                          BlocProvider.of<ShowCartPopBloc>(context);
                       addcartsBloc.add(FetchShowCartPopEvent());
                       //MyCartScreen();
 

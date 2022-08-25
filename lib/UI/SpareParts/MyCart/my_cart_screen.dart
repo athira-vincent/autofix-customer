@@ -157,14 +157,17 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 //     .replaceAll("[", "")
                 //     .replaceAll("]", "")
                 //     .split(",");
-
-
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  print("WidgetsBinding");
                   states = state.cartlistmodel.data!.cartList.data[index]
                       .customer.address.first.state;
                   city = state.cartlistmodel.data!.cartList.data[index].customer
                       .address.first.city;
                   pincode = state.cartlistmodel.data!.cartList.data[index]
                       .customer.address.first.pincode;
+                });
+
+
 
 
                 print("nocunter");

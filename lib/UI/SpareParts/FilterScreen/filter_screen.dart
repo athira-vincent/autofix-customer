@@ -254,7 +254,7 @@ class _FilterScreenState extends State<FilterScreen> {
               child: GridView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: priceVariables.length,
+                  itemCount: SortByPriceVariables.priceitemsitems.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       mainAxisSpacing: 6,
                       childAspectRatio: 1 / 5,
@@ -265,11 +265,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         setState(() {
                           selectedpriceIndex = index2++;
                           print("selectedpriceindex");
-                         print(selectedpriceIndex);
-                         print(priceVariables[index2]);
-                         var price=priceVariables[index2].toString().split("\$");
-                         print("priceindex");
-                         print(price);
+
 
                         });
                       },
@@ -287,7 +283,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         child: Center(
                           child: Text(
-                            priceVariables[index2],
+                            SortByPriceVariables.priceitemsitems[index2].price1+"-"+SortByPriceVariables.priceitemsitems[index2].price2,
                             style: selectedpriceIndex == index2
                                 ? Styles.textFilterIncludeTitle_12
                                 : Styles.textFilterNotIncludeTitle_12,
