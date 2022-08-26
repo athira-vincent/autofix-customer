@@ -9,7 +9,7 @@ class SparePartListBloc extends Bloc<SparePartListEvent, SparePartListState> {
       emit(SparePartListLoadingState());
       try {
         if (event is FetchSparePartListEvent) {
-          var sparepartscreen = await Repository().getsparepartslist(event.modelname,event.search,event.fromcost,event.tocost);
+          var sparepartscreen = await Repository().getsparepartslist(event.modelname,event.search,event.fromcost,event.tocost,event.sort);
           emit(SparePartListLoadedState(sparePartslistModel: sparepartscreen));
         }
       } catch (e) {

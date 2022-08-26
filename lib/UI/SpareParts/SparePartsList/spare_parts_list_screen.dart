@@ -72,7 +72,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
           BlocProvider(
             create: (context) => SparePartListBloc()
               ..add(FetchSparePartListEvent(
-                  widget.modelname.toString(), "null", "null", "null")),
+                  widget.modelname.toString(), "null", "null", "null","null")),
           ),
         ],
         child: MultiBlocListener(
@@ -165,7 +165,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
           ),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FilterScreen()));
+                MaterialPageRoute(builder: (context) =>  FilterScreen(modelname: widget.modelname,)));
           },
         ),
       ],
@@ -490,7 +490,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                   widget.modelname.toString(),
                   searchController.text.toString(),
                   "null",
-                  "null"));
+                  "null","null"));
             });
             Navigator.pushReplacement(
                 context,
