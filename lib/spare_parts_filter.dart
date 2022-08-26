@@ -279,6 +279,7 @@ class _Search_Spare_Parts_FilterState extends State<Search_Spare_Parts_Filter> {
             textAlign: TextAlign.center,
             style: Styles.appBarTextBlue,
           ),
+
         ),
       ],
     );
