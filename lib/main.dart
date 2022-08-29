@@ -27,6 +27,7 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/regula
 import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_selection_screen.dart';
 
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
+import 'package:auto_fix/UI/chat/chat.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -147,6 +148,7 @@ class _MyAppState extends State<MyApp> {
               //home: MechanicStartServiceScreen(),
               //home: WorkSelectionScreen(userType: "mechanic", userCategory: "individual"),
               home: SplashScreen(),
+             // home: ChatScreen(peerId: "1727"),
             ),
           );
         },
