@@ -90,8 +90,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     //_listenNotification(context);
-    //  FirebaseFirestore firebaseFirestore;
-    //  FirebaseStorage firebaseStorage;
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
@@ -109,9 +107,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(
           value: JobRequestNotifyProvider(),
         ),
-        /*ChangeNotifierProvider.value(
-          value: ChatProvider(firebaseFirestore: firebaseFirestore,firebaseStorage: firebaseStorage),
-        ),*/
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) {
@@ -155,8 +150,8 @@ class _MyAppState extends State<MyApp> {
               ),
               //home: MechanicStartServiceScreen(),
               //home: WorkSelectionScreen(userType: "mechanic", userCategory: "individual"),
-              //home: SplashScreen(),
-              home: ChatScreen(peerId: "1727"),
+              home: SplashScreen(),
+              //home: ChatScreen(peerId: "1727"),
             ),
           );
         },
