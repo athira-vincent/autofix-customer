@@ -562,14 +562,14 @@ class _MyCartScreenState extends State<MyCartScreen> {
                 );
               },
             ),
-            placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
+            //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
             Divider(),
             changeAddressUi(),
             Divider(),
-            selectedBillDetailsUi(
-                state.cartlistmodel.data!.cartList.totalPrice,
-                state.cartlistmodel.data!.cartList.totalItems,
-                state.cartlistmodel.data!.cartList.deliveryCharge),
+            // selectedBillDetailsUi(
+            //     state.cartlistmodel.data!.cartList.totalPrice,
+            //     state.cartlistmodel.data!.cartList.totalItems,
+            //     state.cartlistmodel.data!.cartList.deliveryCharge),
             Divider(),
             continueButtonUi(),
           ],

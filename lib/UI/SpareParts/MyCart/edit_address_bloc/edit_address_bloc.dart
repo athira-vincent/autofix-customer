@@ -19,7 +19,7 @@ class EditAddressBloc extends Bloc<EditAddressEvent, EditAddressState> {
               event.state,
               event.address,
               event.addressline2,
-              event.type);
+              event.type,event.isdefault,event.addressid);
           emit(EditAddressLoadedState(addaddressModel: editaddresslistscreen));
         }
       } catch (e) {

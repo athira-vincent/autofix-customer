@@ -65,16 +65,16 @@ class CartList {
   List<Datum> data;
   int totalPages;
   int currentPage;
-  int totalPrice;
+  String totalPrice;
   int count;
-  int deliveryCharge;
+  String deliveryCharge;
 
   factory CartList.fromMap(Map<String, dynamic> json) => CartList(
         totalItems: json["totalItems"] ?? "",
         data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
         totalPages: json["totalPages"] ?? "",
         currentPage: json["currentPage"] ?? "",
-        totalPrice: json["totalPrice"] ?? "",
+        totalPrice: json["totalPrice"]??"",
         count: json["count"] ?? "",
         deliveryCharge: json["deliveryCharge"] ?? "",
       );
@@ -197,8 +197,8 @@ class Product {
   int id;
   String productName;
   String productCode;
-  String price;
-  String productImage;
+  int price;
+  dynamic productImage;
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
         vehicleModel: VehicleModel.fromMap(json["vehicleModel"]),

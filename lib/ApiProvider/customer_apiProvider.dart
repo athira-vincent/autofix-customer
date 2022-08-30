@@ -394,9 +394,9 @@ class CustomerApiProvider {
   /// spare partslist api provider
 
   Future<SparePartsListModel> fetchServicesparepartslist(
-      model, search, fromcost, tocost,sort) async {
+      model, search, fromcost, tocost, sort) async {
     Map<String, dynamic> _resp = await _queryProvider
-        .fetchServicesparepartslist(model, search, fromcost, tocost,sort);
+        .fetchServicesparepartslist(model, search, fromcost, tocost, sort);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = SparePartsListModel(
@@ -531,28 +531,20 @@ class CustomerApiProvider {
     }
   }
 
-
   /// edit address
-  Future<AddAddressModel> fetcheditaddresslist(
-      fullname,
-      phone,
-      pincode,
-      city,
-      state,
-      address,
-      addressline2,
-      type,
-      ) async {
-    Map<String, dynamic> _resp = await _queryProvider.fetchaddaddresslist(
-      fullname,
-      phone,
-      pincode,
-      city,
-      state,
-      address,
-      addressline2,
-      type,
-    );
+  Future<AddAddressModel> fetcheditaddresslist(fullname, phone, pincode, city,
+      state, address, addressline2, type, isdefault, addressid) async {
+    Map<String, dynamic> _resp = await _queryProvider.fetcheditaddresslist(
+        fullname,
+        phone,
+        pincode,
+        city,
+        state,
+        address,
+        addressline2,
+        type,
+        isdefault,
+        addressid);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = AddAddressModel(
@@ -569,12 +561,11 @@ class CustomerApiProvider {
     }
   }
 
-
   /// delete address
   Future<DeleteAddressModel> fetchServicedeleteaddresslist(
       addressid, status) async {
-    Map<String, dynamic> _resp = await _queryProvider.fetchServicedeleteaddresslist(
-        addressid, status);
+    Map<String, dynamic> _resp =
+        await _queryProvider.fetchServicedeleteaddresslist(addressid, status);
     if (_resp != null) {
       if (_resp['status'] == "error") {
         final errorMsg = DeleteAddressModel(
