@@ -74,8 +74,8 @@ class ChatProvider {
         .collection("messages")
         .add({
       'content': content,
-      'idFrom': '123',
-      'idTo': '321',
+      'idFrom': currentUserId,
+      'idTo': peerId,
       'type': type,
       'timestamp': DateTime.now()
           .millisecondsSinceEpoch

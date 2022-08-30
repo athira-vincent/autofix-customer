@@ -456,7 +456,7 @@ class _ChatScreenState extends State<ChatScreen> {
       textEditingController.clear();
       print(">>>>01");
       chatProvider.sendChatMessage(
-          content, type, groupChatId, currentUserId, "messages");
+          content, type, groupChatId, currentUserId, widget.peerId);
       scrollController.animateTo(0,
           duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
