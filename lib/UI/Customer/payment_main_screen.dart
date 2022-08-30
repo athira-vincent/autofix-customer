@@ -1,101 +1,22 @@
-import 'dart:async';
-import 'dart:ui';
-
 import 'package:auto_fix/Constants/cust_colors.dart';
-import 'package:auto_fix/Constants/shared_pref_keys.dart';
-import 'package:auto_fix/UI/Common/direct_payment_screen.dart';
-import 'package:auto_fix/Widgets/snackbar_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:auto_fix/demo_payment.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PaymentScreen extends StatefulWidget {
-
-  PaymentScreen();
+class Payment_Main_Screen extends StatefulWidget {
+  const Payment_Main_Screen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _PaymentScreenState();
-  }
+  State<Payment_Main_Screen> createState() => _Payment_Main_ScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _Payment_Main_ScreenState extends State<Payment_Main_Screen> {
 
   int _selectedOptionValue = -1;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  String mechanicArrivalState = "0";
-  Timer? timerObjVar;
-  Timer? timerObj;
-
-  String authToken="";
-  String userName="";
-
-
-  String serviceIdEmergency="";
-  String mechanicIdEmergency="";
-  String bookingIdEmergency="";
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getSharedPrefData();
-  }
-
-  Future<void> getSharedPrefData() async {
-    print('getSharedPrefData');
-    SharedPreferences shdPre = await SharedPreferences.getInstance();
-    setState(() {
-      authToken = shdPre.getString(SharedPrefKeys.token).toString();
-      userName = shdPre.getString(SharedPrefKeys.userName).toString();
-      serviceIdEmergency = shdPre.getString(SharedPrefKeys.serviceIdEmergency).toString();
-      mechanicIdEmergency = shdPre.getString(SharedPrefKeys.mechanicIdEmergency).toString();
-      bookingIdEmergency = shdPre.getString(SharedPrefKeys.bookingIdEmergency).toString();
-      print('PaymentScreen authToken>>>>>>>>> ' + authToken.toString());
-      print('PaymentScreen bookingIdEmergency>>>>>>>>> ' + bookingIdEmergency.toString());
-      updateToCloudFirestoreMechanicCurrentScreenDB();
-
-    });
-  }
-
-
-  void updateToCloudFirestoreMechanicCurrentScreenDB() {
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
-      "customerFromPage" : "C7",
-    })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-  }
-
-  void updateToCloudFirestoreDB() {
-
-    _firestore
-        .collection("ResolMech")
-        .doc('${bookingIdEmergency}')
-        .update({
-          'paymentStatus': "1",
-        })
-        .then((value) => print("Location Added"))
-        .catchError((error) =>
-        print("Failed to add Location: $error"));
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        key: scaffoldKey,
         body: Container(
           width: size.width,
           height: size.height,
@@ -121,17 +42,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   child: Column(
                     children: [
                       paymentOptions(size, "Direct payment", "assets/image/img_payment_cash.png",1),
-                      //  paymentOptions(size, "UPI", "assets/image/img_payment_upi.png",2),
-                      //  paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",3),
-                      // paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",4),
+                       //paymentOptions(size, "Credit/Debit /Atm cards", "assets/image/img_payment_card.png",2),
+                      //paymentOptions(size, "Netbanking", "assets/image/img_payment_netbank.png",3),
+                      paymentOptions(size, "Other", "assets/image/img_payment_netbank.png",2),
 
                       InkWell(
                         child: paymentContinueButton(size),
                         onTap: (){
                           print("On Press Continue");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      DemoPayment()));
 
-                          updateToCloudFirestoreDB();
-                          changeScreen(_selectedOptionValue);
                         },
                       )
 
@@ -275,22 +199,4 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
-
-  void changeScreen(int selectedOptionValue){
-    print(selectedOptionValue);
-    if( selectedOptionValue == 1)
-      {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DirectPaymentScreen(isMechanicApp: false,isPaymentFailed: false,)));
-      }
-    else if( selectedOptionValue == -1)
-    {
-      SnackBarWidget().setMaterialSnackBar( "Please choose a payment method", scaffoldKey);
-    }
-
-
-  }
-
 }

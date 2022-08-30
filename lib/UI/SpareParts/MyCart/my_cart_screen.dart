@@ -1,5 +1,6 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/styles.dart';
+import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
@@ -166,9 +167,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
                   pincode = state.cartlistmodel.data!.cartList.data[index]
                       .customer.address.first.pincode;
                 });
-
-
-
 
                 print("nocunter");
                 print(states);
@@ -671,7 +669,12 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                         child: Text(
-                           "Delivering to : " " "+states +" , "+ city + " ," + pincode,
+                          "Delivering to : " " " +
+                              states +
+                              " , " +
+                              city +
+                              " ," +
+                              pincode,
                           maxLines: 2,
                           style: Styles.sparePartNameTextBlack17,
                         ),
@@ -724,7 +727,9 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ChangeDeliveryAddressScreen()));
+                                      ChangeDeliveryAddressScreen()
+
+                              ));
                         },
                         child: Container(
                           height: 25,
@@ -884,12 +889,12 @@ class _MyCartScreenState extends State<MyCartScreen> {
             margin: EdgeInsets.only(top: 5, bottom: 5),
             child: _isLoading
                 ? Center(
-                    child: Container(
+                    child: SizedBox(
                       height: _setValue(28),
                       width: _setValue(28),
-                      child: CircularProgressIndicator(
+                      child: const CircularProgressIndicator(
                         valueColor:
-                            AlwaysStoppedAnimation<Color>(CustColors.peaGreen),
+                            AlwaysStoppedAnimation<Color>(CustColors.light_navy),
                       ),
                     ),
                   )
@@ -899,9 +904,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PurchaseResponseScreen(
-                                      isSuccess: false,
-                                    )));
+                                builder: (context) => Payment_Main_Screen()));
                       },
                       child: Container(
                         height: 50,

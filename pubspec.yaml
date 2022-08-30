@@ -90,6 +90,7 @@ dependencies:
   equatable: ^2.0.3
   fluttertoast: ^8.0.9
   badges: ^2.0.3
+  isw_mobile_sdk: ^1.0.8
 
 
 
