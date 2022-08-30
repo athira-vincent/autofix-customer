@@ -80,18 +80,37 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
                 ),
                 InkWell(
                     onTap: () {
-                      print("on tap saveAddress");
-                      final addaddressBloc =
-                          BlocProvider.of<AddAddressBloc>(context);
-                      addaddressBloc.add(FetchAddAddressEvent(
-                          namecontroller.text,
-                          phonecontroller.text,
-                          pincontroller.text,
-                          localitycontroller.text,
-                          states,
-                          addressline1,
-                          addressline2,
-                          type));
+                      if(namecontroller.text.isEmpty){
+                        Fluttertoast.showToast(msg: "Please enter name");
+                      }
+                      else if(phonecontroller.text.isEmpty){
+                        Fluttertoast.showToast(msg: "Please enter phone");
+                      }
+                      else if(pincontroller.text.isEmpty){
+                        Fluttertoast.showToast(msg: "Please enter pincode");
+                      }
+                      else if(localitycontroller.text.isEmpty){
+                        Fluttertoast.showToast(msg: "Please enter locality");
+                      }
+                      else if(type.isEmpty){
+                        Fluttertoast.showToast(msg: "Please enter type");
+                      }
+                      else{
+                        print("on tap saveAddress");
+                        final addaddressBloc =
+                        BlocProvider.of<AddAddressBloc>(context);
+                        addaddressBloc.add(FetchAddAddressEvent(
+                            namecontroller.text,
+                            phonecontroller.text,
+                            pincontroller.text,
+                            localitycontroller.text,
+                            states,
+                            addressline1,
+                            addressline2,
+                            type));
+                      }
+
+
                     },
                     child: saveAddressButton(size))
               ],
@@ -270,6 +289,7 @@ class _AddDeliveryAddressScreenState extends State<AddDeliveryAddressScreen> {
           ),
           decoration: boxDecorationStyle,
           child: TextFormField(
+
             controller: phonecontroller,
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
