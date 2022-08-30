@@ -13,18 +13,21 @@ class FetchEditAddressEvent extends EditAddressEvent {
       state,
       address,
       addressline2,
-      type;
+      type,
+      isdefault,
+      addressid;
 
   FetchEditAddressEvent(
-    this.fullname,
-    this.phone,
-    this.pincode,
-    this.city,
-    this.state,
-    this.address,
-    this.addressline2,
-    this.type,
-  );
+      this.fullname,
+      this.phone,
+      this.pincode,
+      this.city,
+      this.state,
+      this.address,
+      this.addressline2,
+      this.type,
+      this.isdefault,
+      this.addressid);
 
   @override
   List<Object> get props => [];

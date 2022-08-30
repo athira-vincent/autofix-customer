@@ -69,6 +69,7 @@ class Repository {
   final _addressprovider = CustomerApiProvider();
   final _editaddressprovider = CustomerApiProvider();
   final _deleteaddressprovider = CustomerApiProvider();
+
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -591,56 +592,57 @@ class Repository {
   Future<CustVehicleListMdl> getspareparts() =>
       _sparepartsprovider.fetchServicespareparts();
 
-
-  Future<SparePartsListModel> getsparepartslist(modelname,search,fromcost,tocost,sort) =>
-      _sparepartslistprovider.fetchServicesparepartslist(modelname,search,fromcost,tocost,sort);
+  Future<SparePartsListModel> getsparepartslist(
+          modelname, search, fromcost, tocost, sort) =>
+      _sparepartslistprovider.fetchServicesparepartslist(
+          modelname, search, fromcost, tocost, sort);
 
   Future<AddCartModel> addcart(productid) =>
       _addcartprovider.fetchServiceaddcart(productid);
 
-  Future<CartListModel> cartlist() =>
-      _cartlistprovider.fetchServicecartlist();
+  Future<CartListModel> cartlist() => _cartlistprovider.fetchServicecartlist();
 
-  Future<DeleteCartModel> deletecart(productid,quantity,status) =>
-      _deleteprovider.fetchServicedeletelist(productid,quantity,status);
+  Future<DeleteCartModel> deletecart(productid, quantity, status) =>
+      _deleteprovider.fetchServicedeletelist(productid, quantity, status);
+
   Future<AddressModel> addresslist() =>
       _addressprovider.fetchServiceaddresslist();
 
-  Future<AddAddressModel> addaddresslist(  fullname,
-      phone,
-      pincode,
-      city,
-      state,
-      address,
-      addressline2,
-      type,) =>
-      _addressprovider.fetchaddaddresslist(  fullname,
+  Future<AddAddressModel> addaddresslist(
+    fullname,
+    phone,
+    pincode,
+    city,
+    state,
+    address,
+    addressline2,
+    type,
+  ) =>
+      _addressprovider.fetchaddaddresslist(
+        fullname,
         phone,
         pincode,
         city,
         state,
         address,
         addressline2,
-        type,);
+        type,
+      );
 
-  Future<AddAddressModel> editaddresslist(  fullname,
-      phone,
-      pincode,
-      city,
-      state,
-      address,
-      addressline2,
-      type,) =>
-      _editaddressprovider.fetcheditaddresslist(  fullname,
-        phone,
-        pincode,
-        city,
-        state,
-        address,
-        addressline2,
-        type,);
+  Future<AddAddressModel> editaddresslist(
+    fullname,
+    phone,
+    pincode,
+    city,
+    state,
+    address,
+    addressline2,
+    type,
+      isdefault,addressid
+  ) =>
+      _editaddressprovider.fetcheditaddresslist(fullname, phone, pincode, city,
+          state, address, addressline2, type, isdefault, addressid);
 
-
-  Future<DeleteAddressModel> deleteaddress(addressid,status) =>
-      _deleteaddressprovider.fetchServicedeleteaddresslist(addressid,status);
+  Future<DeleteAddressModel> deleteaddress(addressid, status) =>
+      _deleteaddressprovider.fetchServicedeleteaddresslist(addressid, status);
 }

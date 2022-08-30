@@ -36,26 +36,24 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
+    return SafeArea(
+      child: Scaffold(
+        body: SizedBox(
+          width: size.width,
+          height: size.height,
           child: Container(
-            width: size.width,
-            height: size.height,
-            child: Container(
-              margin: EdgeInsets.only(
-                left: size.width * 2 / 100,
-                right: size.width * 2 / 100,
-                top: size.height * 2 / 100,
-                bottom: size.height * 2 / 100,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  appBarCustomUi(size),
-                  mainContent(size),
-                  InkWell(
+            margin: EdgeInsets.only(
+              left: size.width * 2 / 100,
+              right: size.width * 2 / 100,
+              top: size.height * 2 / 100,
+              bottom: size.height * 2 / 100,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                appBarCustomUi(size),
+                mainContent(size),
+                InkWell(
                     onTap: (){
                       print("on tap button");
                       Navigator.pushReplacement(
@@ -63,10 +61,9 @@ class _PurchaseResponseScreenState extends State<PurchaseResponseScreen> {
                           MaterialPageRoute(
                               builder: (context) => CustomerMainLandingScreen()));
                     },
-                      child: doneButton(size)
-                  ),
-                ],
-              ),
+                    child: doneButton(size)
+                ),
+              ],
             ),
           ),
         ),

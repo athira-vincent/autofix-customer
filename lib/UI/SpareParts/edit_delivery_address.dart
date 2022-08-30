@@ -26,7 +26,8 @@ class Edit_Delivery_Address extends StatefulWidget {
       state,
       addressline1,
       addressline2,
-      type;
+      type,
+      addressid;
 
   const Edit_Delivery_Address(
       {Key? key,
@@ -37,7 +38,8 @@ class Edit_Delivery_Address extends StatefulWidget {
       required this.state,
       required this.addressline1,
       required this.addressline2,
-      required this.type})
+      required this.type,
+      required this.addressid})
       : super(key: key);
 
   @override
@@ -58,6 +60,8 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
   TextEditingController phonecontroller = TextEditingController();
   TextEditingController pincontroller = TextEditingController();
   TextEditingController localitycontroller = TextEditingController();
+  bool value = false;
+  int isDefault = 0;
 
   @override
   void initState() {
@@ -125,7 +129,9 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
                           states,
                           addressline1,
                           addressline2,
-                          type));
+                          type,
+                          isDefault.toString(),
+                          widget.addressid));
                     },
                     child: saveAddressButton(size))
               ],
@@ -556,6 +562,23 @@ class _Edit_Delivery_AddressState extends State<Edit_Delivery_Address> {
                     );
                   }),
             )),
+        Row(
+          children: [
+            Text("Make this as default address : ", style: hintTextStyle),
+            Checkbox(
+              value: value,
+              onChanged: (value) {
+                setState(() {
+                  this.value = value!;
+
+                  if (value == true) {
+                    isDefault = 1;
+                  }
+                });
+              },
+            )
+          ],
+        ),
       ],
     );
   }

@@ -3340,16 +3340,14 @@ class QueryProvider {
   }
 
   /// sparepartslist
-  fetchServicesparepartslist(model, search, fromcost, tocost,sort) async {
+  fetchServicesparepartslist(model, search, fromcost, tocost, sort) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
     String ischanged = shdPre.getString("ischanged").toString();
-    String isfiltered= shdPre.getString("filterstatus").toString();
+    String isfiltered = shdPre.getString("filterstatus").toString();
     String _query;
 
     if (ischanged == "true") {
-
-
       _query = """
        query
        {
@@ -3403,10 +3401,7 @@ class QueryProvider {
   }
 
     """;
-    }
-
-    else if(isfiltered=="true"){
-
+    } else if (isfiltered == "true") {
       _query = """
        query
        {
@@ -3460,9 +3455,7 @@ class QueryProvider {
   }
 
     """;
-
-    }
-    else {
+    } else {
       _query = """
        query
        {
@@ -3727,7 +3720,7 @@ class QueryProvider {
 
   /// edit address queryprovider
   fetcheditaddresslist(fullname, phone, pincode, city, state, address,
-      addressline2, type) async {
+      addressline2, type, isdefault, addressid) async {
     SharedPreferences shdPre = await SharedPreferences.getInstance();
     String authToken = shdPre.getString(SharedPrefKeys.token).toString();
 
@@ -3747,7 +3740,8 @@ class QueryProvider {
     address: "$address"
     addressLine2: "$addressline2"
     type: "$type"
-    addressId: 1
+    isDefault:$isdefault
+    addressId: $addressid
     status: 1
   ) {
     status
