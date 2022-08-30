@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_fix/Constants/cust_colors.dart';
 import 'package:auto_fix/Constants/text_strings.dart';
 import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
+import 'package:auto_fix/Provider/chat_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
@@ -28,9 +29,11 @@ import 'package:auto_fix/UI/WelcomeScreens/Login/CompleteProfile/Mechanic/work_s
 
 import 'package:auto_fix/UI/WelcomeScreens/Splash/splash_screen.dart';
 import 'package:auto_fix/UI/chat/chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,6 +90,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     //_listenNotification(context);
+    //  FirebaseFirestore firebaseFirestore;
+    //  FirebaseStorage firebaseStorage;
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
@@ -104,6 +109,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(
           value: JobRequestNotifyProvider(),
         ),
+        /*ChangeNotifierProvider.value(
+          value: ChatProvider(firebaseFirestore: firebaseFirestore,firebaseStorage: firebaseStorage),
+        ),*/
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) {
@@ -147,8 +155,8 @@ class _MyAppState extends State<MyApp> {
               ),
               //home: MechanicStartServiceScreen(),
               //home: WorkSelectionScreen(userType: "mechanic", userCategory: "individual"),
-              home: SplashScreen(),
-             // home: ChatScreen(peerId: "1727"),
+              //home: SplashScreen(),
+              home: ChatScreen(peerId: "1727"),
             ),
           );
         },

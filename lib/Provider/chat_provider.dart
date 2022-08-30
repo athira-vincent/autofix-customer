@@ -8,12 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ChatProvider {
-  final SharedPreferences prefs;
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
 
   ChatProvider(
-      {required this.prefs,
+      {
       required this.firebaseStorage,
       required this.firebaseFirestore});
 
@@ -36,15 +35,15 @@ class ChatProvider {
         //.collection(FirestoreConstants.pathMessageCollection)
         .collection("ResolMech")
         //.doc(groupChatId)
-        .doc("1727")
+        .doc(groupChatId)
         //.collection(groupChatId)
-        .collection(groupChatId)
+        .collection("messages")
         .orderBy(FirestoreConstants.timestamp, descending: true)
         .limit(limit)
         .snapshots();
   }
 
-  void sendChatMessage(String content, int type, String groupChatId,
+  /*void sendChatMessage(String content, int type, String groupChatId,
       String currentUserId, String peerId) {
     print(">>>>02");
     DocumentReference documentReference = FirebaseFirestore.instance
@@ -52,6 +51,7 @@ class ChatProvider {
         .doc(groupChatId)
         .collection(groupChatId)
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
+    print(">>>>03");
     ChatMessages chatMessages = ChatMessages(
         idFrom: currentUserId,
         idTo: peerId,
@@ -61,6 +61,25 @@ class ChatProvider {
 
     FirebaseFirestore.instance.runTransaction((transaction) async {
       transaction.set(documentReference, chatMessages.toJson());
+    });
+  }*/
+
+  void sendChatMessage(String content, int type, String groupChatId,
+      String currentUserId, String peerId) {
+    print(">>>>02");
+
+    FirebaseFirestore.instance
+        .collection('ResolMech')
+        .doc("1727")
+        .collection("messages")
+        .add({
+      'content': content,
+      'idFrom': '123',
+      'idTo': '321',
+      'type': type,
+      'timestamp': DateTime.now()
+          .millisecondsSinceEpoch
+          .toString(),
     });
   }
 }

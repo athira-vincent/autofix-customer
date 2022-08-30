@@ -57,7 +57,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late String currentUserId;
+  late String currentUserId = "123";
 
   List<QueryDocumentSnapshot> listMessages = [];
 
@@ -73,8 +73,9 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController textEditingController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
-
-  late ChatProvider chatProvider;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  late ChatProvider chatProvider = ChatProvider(firebaseStorage: firebaseStorage,firebaseFirestore: firebaseFirestore);
 
   @override
   void initState() {
@@ -166,7 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Column(
             children: [
-              //buildListMessage(),
+              buildListMessage(),
               buildMessageInput(),
             ],
           ),
@@ -419,13 +420,16 @@ class _ChatScreenState extends State<ChatScreen> {
             if (snapshot.hasData) {
               listMessages = snapshot.data!.docs;
               if (listMessages.isNotEmpty) {
-                return ListView.builder(
-                    padding: const EdgeInsets.all(10),
-                    itemCount: snapshot.data?.docs.length,
-                    reverse: true,
-                    controller: scrollController,
-                    itemBuilder: (context, index) =>
-                        buildItem(index, snapshot.data?.docs[index]));
+                return Container(
+                 // height: 70,
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(10),
+                      itemCount: snapshot.data?.docs.length,
+                      reverse: true,
+                      controller: scrollController,
+                      itemBuilder: (context, index) =>
+                          buildItem(index, snapshot.data?.docs[index])),
+                );
               } else {
                 return const Center(
                   child: Text('No messages...'),
