@@ -19,6 +19,7 @@ import 'package:location/location.dart' as loc;
 import 'dart:math' show cos, sqrt, asin;
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class MechanicTrackingScreen extends StatefulWidget {
@@ -430,16 +431,27 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
                             ),
                             Expanded(
                               child:  Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.smartphone_sharp, color: Colors.white),
-                                    Text(
-                                      "Call via ResolMech",
-                                      style: Styles.popUPTextStyle,
-                                    ),
-                                  ],
+                                child: InkWell(
+                                  onTap: (){
+                                    /*ProfileProvider profileProvider;
+                                      profileProvider = context.read<ProfileProvider>();
+                                      String callPhoneNumber =
+                                          profileProvider.getPrefs(FirestoreConstants.phoneNumber) ??
+                                              "";*/
+                                    String callPhoneNumber = "90488878777";
+                                    _callPhoneNumber(callPhoneNumber);
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.smartphone_sharp, color: Colors.white),
+                                      Text(
+                                        "Call via ResolMech",
+                                        style: Styles.popUPTextStyle,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -512,6 +524,14 @@ class _MechanicTrackingScreenState extends State<MechanicTrackingScreen> {
         ),
       ),
     );
+  }
+  void _callPhoneNumber(String phoneNumber) async {
+    var url = 'tel://$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Error Occurred';
+    }
   }
 
   @override
