@@ -33,22 +33,20 @@ import '../../../../../../Constants/cust_colors.dart';
 import '../../../../../../Constants/styles.dart';
 import 'dart:ui' as ui;
 
-
-
 class ChatScreen extends StatefulWidget {
-
   final String peerId;
+
   /*final String peerAvatar;
   final String peerNickname;
   final String userAvatar;*/
 
-  ChatScreen({Key? key,
+  ChatScreen({
+    Key? key,
     // required this.peerNickname,
     // required this.peerAvatar,
     required this.peerId,
     //required this.userAvatar
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -75,7 +73,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final FocusNode focusNode = FocusNode();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  late ChatProvider chatProvider = ChatProvider(firebaseStorage: firebaseStorage,firebaseFirestore: firebaseFirestore);
+  late ChatProvider chatProvider = ChatProvider(
+      firebaseStorage: firebaseStorage, firebaseFirestore: firebaseFirestore);
 
   @override
   void initState() {
@@ -84,44 +83,15 @@ class _ChatScreenState extends State<ChatScreen> {
     getSharedPrefData();
   }
 
-
   Future<void> getSharedPrefData() async {
     print('getSharedPrefData FindYourCustomerScreen');
     SharedPreferences shdPre = await SharedPreferences.getInstance();
-
-    /*FirebaseFirestore.instance
-        .collection('ResolMech')
-        .doc("1727")
-        .collection("messages")
-        .add({
-      'message': "sample text",
-      'messageType': "sender",
-      'receiver': "receiver",
-      'sender': "sender",
-      'timestamp': DateTime.now()
-          .millisecondsSinceEpoch
-          .toString(),
-    });*/
-
-    /*Fluttertoast.showToast(
-      msg: "carName : " + carName,
-      timeInSecForIosWeb: 1,
-    );*/
-  }
-
-  void _callPhoneNumber(String phoneNumber) async {
-    var url = 'tel://$phoneNumber';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Error Occurred';
-    }
   }
 
   bool isMessageSent(int index) {
     if ((index > 0 &&
-        listMessages[index - 1].get(FirestoreConstants.idFrom) !=
-            currentUserId) ||
+            listMessages[index - 1].get(FirestoreConstants.idFrom) !=
+                currentUserId) ||
         index == 0) {
       return true;
     } else {
@@ -132,8 +102,8 @@ class _ChatScreenState extends State<ChatScreen> {
   // checking if received message
   bool isMessageReceived(int index) {
     if ((index > 0 &&
-        listMessages[index - 1].get(FirestoreConstants.idFrom) ==
-            currentUserId) ||
+            listMessages[index - 1].get(FirestoreConstants.idFrom) ==
+                currentUserId) ||
         index == 0) {
       return true;
     } else {
@@ -147,20 +117,6 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Chatting with Athira'.trim()),
-        actions: [
-          IconButton(
-            onPressed: () {
-              /*ProfileProvider profileProvider;
-              profileProvider = context.read<ProfileProvider>();
-              String callPhoneNumber =
-                  profileProvider.getPrefs(FirestoreConstants.phoneNumber) ??
-                      "";*/
-              String callPhoneNumber = "90488878777";
-              _callPhoneNumber(callPhoneNumber);
-            },
-            icon: const Icon(Icons.phone),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -183,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         children: [
           Container(
-            margin:  EdgeInsets.only(right: 4),
+            margin: EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
               color: CustColors.light_navy,
               borderRadius: BorderRadius.circular(30),
@@ -199,19 +155,19 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Flexible(
               child: TextField(
-                focusNode: focusNode,
-                textInputAction: TextInputAction.send,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                controller: textEditingController,
-                decoration:
+            focusNode: focusNode,
+            textInputAction: TextInputAction.send,
+            keyboardType: TextInputType.text,
+            textCapitalization: TextCapitalization.sentences,
+            controller: textEditingController,
+            decoration:
                 kTextInputDecoration.copyWith(hintText: 'write here...'),
-                onSubmitted: (value) {
-                  onSendMessage(textEditingController.text, MessageType.text);
-                },
-              )),
+            onSubmitted: (value) {
+              onSendMessage(textEditingController.text, MessageType.text);
+            },
+          )),
           Container(
-            margin:  EdgeInsets.only(left: 4),
+            margin: EdgeInsets.only(left: 4),
             decoration: BoxDecoration(
               color: CustColors.light_navy,
               borderRadius: BorderRadius.circular(30),
@@ -242,78 +198,74 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                  chatContent: chatMessages.content,
-                  color: CustColors.light_navy02,
-                  textColor: Colors.white,
-                  margin: const EdgeInsets.only(right: 10),
-                )
+                        chatContent: chatMessages.content,
+                        color: CustColors.light_navy02,
+                        textColor: Colors.white,
+                        margin: const EdgeInsets.only(right: 10,top:2),
+                      )
                     : chatMessages.type == MessageType.image
-                    ? Container(
-                  margin: const EdgeInsets.only(
-                      right: 10, top: 10),
-                  child: chatImage(
-                      imageSrc: chatMessages.content, onTap: () {}),
-                )
-                    : const SizedBox.shrink(),
+                        ? Container(
+                            margin: const EdgeInsets.only(right: 10, top: 10),
+                            child: chatImage(
+                                imageSrc: chatMessages.content, onTap: () {}),
+                          )
+                        : const SizedBox.shrink(),
                 isMessageSent(index)
                     ? Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg==",
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: CustColors.light_navy,
-                          value: loadingProgress.expectedTotalBytes !=
-                              null &&
-                              loadingProgress.expectedTotalBytes !=
-                                  null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      );
-                    },
-                    errorBuilder: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 35,
-                        color: CustColors.almost_black,
-                      );
-                    },
-                  ),
-                )
+                        child: Image.network(
+                          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg==",
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext ctx, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: CustColors.light_navy,
+                                value: loadingProgress.expectedTotalBytes !=
+                                            null &&
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                              color: CustColors.almost_black,
+                            );
+                          },
+                        ),
+                      )
                     : Container(
-                  width: 35,
-                ),
+                        width: 35,
+                      ),
               ],
             ),
             isMessageSent(index)
                 ? Container(
-              margin: const EdgeInsets.only(
-                  right: 50,
-                  top: 6,
-                  bottom: 8),
-              child: Text(
-                DateFormat('dd MMM yyyy, hh:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(chatMessages.timestamp),
-                  ),
-                ),
-                style: const TextStyle(
-                    color: CustColors.light_navy02,
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic),
-              ),
-            )
+                    margin: const EdgeInsets.only(right: 50, top: 6, bottom: 8),
+                    child: Text(
+                      DateFormat('dd MMM yyyy, hh:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(chatMessages.timestamp),
+                        ),
+                      ),
+                      style: const TextStyle(
+                          color: CustColors.light_navy02,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );
@@ -325,81 +277,77 @@ class _ChatScreenState extends State<ChatScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 isMessageReceived(index)
-                // left side (received message)
+                    // left side (received message)
                     ? Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg==",
-                    //widget.peerAvatar,
-                    width: 40,
-                    height:40,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: CustColors.green,
-                          value: loadingProgress.expectedTotalBytes !=
-                              null &&
-                              loadingProgress.expectedTotalBytes !=
-                                  null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      );
-                    },
-                    errorBuilder: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 35,
-                        color: CustColors.greyish,
-                      );
-                    },
-                  ),
-                )
+                        child: Image.network(
+                          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAB2CAMAAAAqeZcjAAAAMFBMVEXk5ueutLeqsLPo6era3d6xt7q4vcDq7O27wMLW2dvJzc/e4eLFycu1ur3T1tjN0dNC/DypAAACiUlEQVRoge2ZDXKsIBCEgQFFUbn/bQOb7Ctrn8qM6dmkUvQFvpo/YBpjurq6urq6urq6uv6eiMiklAyN9D6mmZYh2KoQszdvIZNfrHP2KedCTupg8sOO+UW2i27EZJZX5ic4bIpcSuGQWsGLGpemM2jlrkrcS2qVCpd8g2qDCrdFtXbAc6kJLfWd0Vw6npxXbgJjE4da0oylUmRRrcMeG80ufgo6vdxgS7gTEJu4VGsjLlzK3BwX4ZqZBj7VbTCs4VOtxV1FXoKF9bKotNaCqOVglFBhPcWf2odQkyvDwlpZMj9I7A9FK8PCaivrZI/CzqK5hR3K248cF5J7D3rzBT4V+HqU9BTyedFaQ3YKOKogy9AXumCEoA90bi+D11xuuPBthEdF717t7bYKv+FyVj6n4BTR2qSq2DXUGF78Us3hunlUodZnxnl9XdYzxE7vBLd6TfuvWo5H2IWU3U6a1hev09mob7EaGnfOrivpze8xlKt3nrZ5iTEueTJv88+Jxp20q1qBhfIIdA0lzzXT6xDn7M2oFjON5Odo//POa4WdG2aNdNOYcjwi7tnr7KEZp5Rfp+aEHOYEIhNNJbVt5nOihg0AJtpW0SpS/yvm705yPZNk0M+Qv3WEUDo+gTkRT/e5LOv6DBzvBXzx6cME5xv3/ijbpY8DFsd79ZDgc630RrzTwEdgGRfCfHAlHQ2jFi7/kSXwDHBcSDftFFhboNCFYojz9df8LpWLtaVAC/vFbZaX94UoVTPNIsONrdYKKvTn2Wqs+TrBtsLFD89Tl9VtGwW3dXVmiL63RLrauoXfWyLF86fGqNTHD11Eq3BC/dNFcRWpF39wySkqn0dLijqndnV1df06fQBDZxuwbCYKtwAAAABJRU5ErkJggg==",
+                          //widget.peerAvatar,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext ctx, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: CustColors.green,
+                                value: loadingProgress.expectedTotalBytes !=
+                                            null &&
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                              color: CustColors.greyish,
+                            );
+                          },
+                        ),
+                      )
                     : Container(
-                  width: 35,
-                ),
+                        width: 35,
+                      ),
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                  color: CustColors.light_navy02,
-                  textColor: Colors.white,
-                  chatContent: chatMessages.content,
-                  margin: const EdgeInsets.only(left: 10),
-                )
+                        color: CustColors.light_navy02,
+                        textColor: Colors.white,
+                        chatContent: chatMessages.content,
+                        margin: const EdgeInsets.only(left: 10,top:2),
+                      )
                     : chatMessages.type == MessageType.image
-                    ? Container(
-                  margin: const EdgeInsets.only(
-                      left: 10, top:10),
-                  child: chatImage(
-                      imageSrc: chatMessages.content, onTap: () {}),
-                )
-                    : const SizedBox.shrink(),
+                        ? Container(
+                            margin: const EdgeInsets.only(left: 10, top: 10),
+                            child: chatImage(
+                                imageSrc: chatMessages.content, onTap: () {}),
+                          )
+                        : const SizedBox.shrink(),
               ],
             ),
             isMessageReceived(index)
                 ? Container(
-              margin: const EdgeInsets.only(
-                  left: 50,
-                  top: 6,
-                  bottom: 8),
-              child: Text(
-                DateFormat('dd MMM yyyy, hh:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(chatMessages.timestamp),
-                  ),
-                ),
-                style: const TextStyle(
-                    color: CustColors.light_navy02,
-                    fontSize: 10,
-                    fontStyle: FontStyle.italic),
-              ),
-            )
+                    margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
+                    child: Text(
+                      DateFormat('dd MMM yyyy, hh:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(chatMessages.timestamp),
+                        ),
+                      ),
+                      style: const TextStyle(
+                          color: CustColors.light_navy02,
+                          fontSize: 10,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );
@@ -413,41 +361,41 @@ class _ChatScreenState extends State<ChatScreen> {
     return Flexible(
       child: groupChatId.isNotEmpty
           ? StreamBuilder<QuerySnapshot>(
-          //stream: chatProvider.getChatMessage(groupChatId, _limit),
-          stream: chatProvider.getChatMessage("1727", _limit),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData) {
-              listMessages = snapshot.data!.docs;
-              if (listMessages.isNotEmpty) {
-                return Container(
-                 // height: 70,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.all(10),
-                      itemCount: snapshot.data?.docs.length,
-                      reverse: true,
-                      controller: scrollController,
-                      itemBuilder: (context, index) =>
-                          buildItem(index, snapshot.data?.docs[index])),
-                );
-              } else {
-                return const Center(
-                  child: Text('No messages...'),
-                );
-              }
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: CustColors.light_navy,
-                ),
-              );
-            }
-          })
+              //stream: chatProvider.getChatMessage(groupChatId, _limit),
+              stream: chatProvider.getChatMessage("1727", _limit),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  listMessages = snapshot.data!.docs;
+                  if (listMessages.isNotEmpty) {
+                    return Container(
+                      // height: 70,
+                      child: ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: snapshot.data?.docs.length,
+                          reverse: true,
+                          controller: scrollController,
+                          itemBuilder: (context, index) =>
+                              buildItem(index, snapshot.data?.docs[index])),
+                    );
+                  } else {
+                    return const Center(
+                      child: Text('No messages...'),
+                    );
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: CustColors.light_navy,
+                    ),
+                  );
+                }
+              })
           : const Center(
-        child: CircularProgressIndicator(
-          color: CustColors.light_navy,
-        ),
-      ),
+              child: CircularProgressIndicator(
+                color: CustColors.light_navy,
+              ),
+            ),
     );
   }
 
@@ -468,16 +416,77 @@ class _ChatScreenState extends State<ChatScreen> {
   Future getImage() async {
     ImagePicker imagePicker = ImagePicker();
     XFile? pickedFile;
-    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-      if (imageFile != null) {
-        setState(() {
-          isLoading = true;
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20), topLeft: Radius.circular(20))),
+        builder: (builder) {
+          return SizedBox(
+              height: 115.0,
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: const Icon(
+                      Icons.camera_alt,
+                      color: CustColors.blue,
+                    ),
+                    title: const Text("Camera",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      pickedFile = await imagePicker.pickImage(
+                          source: ImageSource.camera);
+
+                      setState(() {
+                        if (pickedFile != null) {
+                          imageFile = File(pickedFile!.path);
+                          if (imageFile != null) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            uploadImageFile();
+                          }
+                        }
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.image,
+                      color: CustColors.blue,
+                    ),
+                    title: const Text("Gallery",
+                        style: TextStyle(
+                            fontFamily: 'Corbel_Regular',
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                            color: Colors.black)),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      pickedFile = await imagePicker.pickImage(
+                          source: ImageSource.gallery);
+
+                      setState(() {
+                        if (pickedFile != null) {
+                          imageFile = File(pickedFile!.path);
+                          if (imageFile != null) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            uploadImageFile();
+                          }
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ));
         });
-        uploadImageFile();
-      }
-    }
   }
 
   void uploadImageFile() async {
@@ -500,9 +509,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget messageBubble(
       {required String chatContent,
-        required EdgeInsetsGeometry? margin,
-        Color? color,
-        Color? textColor}) {
+      required EdgeInsetsGeometry? margin,
+      Color? color,
+      Color? textColor}) {
     return Container(
       padding: const EdgeInsets.all(10),
       margin: margin,
@@ -538,11 +547,11 @@ class _ChatScreenState extends State<ChatScreen> {
             height: 200,
             child: Center(
               child: CircularProgressIndicator(
-                color:CustColors.pale_grey,
+                color: CustColors.pale_grey,
                 value: loadingProgress.expectedTotalBytes != null &&
-                    loadingProgress.expectedTotalBytes != null
+                        loadingProgress.expectedTotalBytes != null
                     ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
+                        loadingProgress.expectedTotalBytes!
                     : null,
               ),
             ),
@@ -568,5 +577,4 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     super.dispose();
   }
-
 }
