@@ -201,7 +201,7 @@ class _Search_Spare_PartsState extends State<Search_Spare_Parts> {
                             child: Text(
                               "\$ " +
                                   state.sparePartslistModel.data!
-                                      .sparePartsList[index].price,
+                                      .sparePartsList[index].price.toString(),
                               style: Styles.sparePartOrginalPriceSubTextBlack,
                             ),
                           ),
@@ -212,7 +212,7 @@ class _Search_Spare_PartsState extends State<Search_Spare_Parts> {
                                 Text(
                                   "\$ " +
                                       state.sparePartslistModel.data!
-                                          .sparePartsList[index].price,
+                                          .sparePartsList[index].price.toString(),
                                   style: Styles.sparePartOfferPriceSubTextBlack,
                                 ),
                                 const Spacer(),

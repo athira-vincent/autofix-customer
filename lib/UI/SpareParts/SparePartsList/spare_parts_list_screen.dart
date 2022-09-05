@@ -72,7 +72,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
           BlocProvider(
             create: (context) => SparePartListBloc()
               ..add(FetchSparePartListEvent(
-                  widget.modelname.toString(), "null", "null", "null","null")),
+                  widget.modelname.toString(), "null", "null", "null", "null")),
           ),
         ],
         child: MultiBlocListener(
@@ -97,8 +97,10 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                           .toString();
 
                       final addcartsBloc =
-                      BlocProvider.of<ShowCartPopBloc>(context);
+                          BlocProvider.of<ShowCartPopBloc>(context);
                       addcartsBloc.add(FetchShowCartPopEvent());
+
+
 
                       ViewCartUi();
                     });
@@ -164,8 +166,12 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
             width: 20,
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) =>  FilterScreen(modelname: widget.modelname,)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FilterScreen(
+                          modelname: widget.modelname,
+                        )));
           },
         ),
       ],
@@ -285,7 +291,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                             child: Text(
                               "\$ " +
                                   state.sparePartslistModel.data!
-                                      .sparePartsList[index].price,
+                                      .sparePartsList[index].price
+                                      .toString(),
                               style: Styles.sparePartOrginalPriceSubTextBlack,
                             ),
                           ),
@@ -296,7 +303,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                 Text(
                                   "\$ " +
                                       state.sparePartslistModel.data!
-                                          .sparePartsList[index].price,
+                                          .sparePartsList[index].price
+                                          .toString(),
                                   style: Styles.sparePartOfferPriceSubTextBlack,
                                 ),
                                 const Spacer(),
@@ -324,10 +332,20 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                                               color: CustColors.greyText3),
                                           borderRadius:
                                               BorderRadius.circular(4)),
-                                      child: const Text(
-                                        "+ Add to cart",
-                                        style: Styles.homeActiveTextStyle,
-                                      ),
+                                      child: state
+                                                  .sparePartslistModel
+                                                  .data!
+                                                  .sparePartsList[index]
+                                                  .inCart ==
+                                              false
+                                          ? const Text(
+                                              "+ Add to cart",
+                                              style: Styles.homeActiveTextStyle,
+                                            )
+                                          : const Text(
+                                              "in cart",
+                                              style: Styles.homeActiveTextStyle,
+                                            ),
                                     ),
                                   ),
                                 ),
@@ -490,7 +508,8 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                   widget.modelname.toString(),
                   searchController.text.toString(),
                   "null",
-                  "null","null"));
+                  "null",
+                  "null"));
             });
             Navigator.pushReplacement(
                 context,
@@ -520,6 +539,11 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
       ),
     );
   }
+
+   ChangeCartStatus() {
+
+
+   }
 }
 
 class MyBehavior extends ScrollBehavior {

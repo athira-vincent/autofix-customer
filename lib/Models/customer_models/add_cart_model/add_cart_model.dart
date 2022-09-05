@@ -57,7 +57,7 @@ class AddCart {
 
   Msg msg;
   int itemCount;
-  String totalAmount;
+  int totalAmount;
 
   factory AddCart.fromMap(Map<String, dynamic> json) => AddCart(
     msg: Msg.fromMap(json["msg"]),

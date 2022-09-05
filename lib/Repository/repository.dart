@@ -5,6 +5,7 @@ import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.da
 import 'package:auto_fix/Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'package:auto_fix/Models/customer_models/delete_address_model/delete_address_model.dart';
 import 'package:auto_fix/Models/customer_models/get_address_model/get_address_model.dart';
+import 'package:auto_fix/Models/customer_models/place_order_model/place_order_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
 import 'package:auto_fix/Models/delete_cart_model/delete_cart_model.dart';
@@ -69,6 +70,7 @@ class Repository {
   final _addressprovider = CustomerApiProvider();
   final _editaddressprovider = CustomerApiProvider();
   final _deleteaddressprovider = CustomerApiProvider();
+  final _placeorderprovider=CustomerApiProvider();
 
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
@@ -645,4 +647,6 @@ class Repository {
 
   Future<DeleteAddressModel> deleteaddress(addressid, status) =>
       _deleteaddressprovider.fetchServicedeleteaddresslist(addressid, status);
+  Future<PlaceOrderModel> placeorder(qty,totprice,productid,addressid) =>
+      _placeorderprovider.fetchServiceplaceorderlist(qty,totprice,productid,addressid);
 }

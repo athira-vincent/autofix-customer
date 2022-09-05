@@ -3456,12 +3456,13 @@ class QueryProvider {
 
     """;
     } else {
+        print("display");
       _query = """
        query
        {
     spare_parts_list(
       modelName: "$model"
-      search: "string"
+      search: null
       sortBy: null
       fromCost: null
       toCost: null
@@ -3776,6 +3777,41 @@ class QueryProvider {
   ) {
     status
     code
+    message
+  }
+}
+
+
+    """;
+
+    return await GqlClient.I.query01(
+      _query,
+      authToken,
+      enableDebug: true,
+      isTokenThere: false,
+    );
+  }
+
+
+  /// placeorder queryprovider
+  fetchServiceplaceorderlist(qty,totalprice,productid,addressid) async {
+    SharedPreferences shdPre = await SharedPreferences.getInstance();
+    String authToken = shdPre.getString(SharedPrefKeys.token).toString();
+    String custid=shdPre.getString(SharedPrefKeys.userID).toString();
+    print("noel");
+    print(authToken);
+    String _query = """
+                
+mutation {
+  placeOrder(
+    qty: $qty
+    totalPrice: $totalprice
+    paymentType: null
+    vendorId: [1]
+    customerId: $custid
+    productId: $productid
+    addressId: $addressid
+  ) {
     message
   }
 }

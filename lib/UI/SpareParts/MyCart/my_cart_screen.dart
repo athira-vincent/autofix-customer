@@ -4,6 +4,9 @@ import 'package:auto_fix/UI/Customer/payment_main_screen.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_state.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_order_event.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_state.dart';
 import 'package:auto_fix/UI/SpareParts/change_delivery_address_screen.dart';
@@ -80,6 +83,19 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     "Success") {
                   final addcartsBloc =
                       BlocProvider.of<ShowCartPopBloc>(context);
+                  addcartsBloc.add(FetchShowCartPopEvent());
+                }
+              }
+            },
+          ),
+          BlocListener<PlaceOrderBloc, PlaceOrderState>(
+            listener: (context, state) {
+              if (state is PlaceOrderLoadedState) {
+                if (state.placeorderModel.data!.placeOrder.message ==
+                    "Success") {
+                  Fluttertoast.showToast(msg: "Placed order successfully");
+                  final addcartsBloc =
+                  BlocProvider.of<ShowCartPopBloc>(context);
                   addcartsBloc.add(FetchShowCartPopEvent());
                 }
               }
@@ -538,14 +554,23 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                      child: Container(
-                                        height: 20,
-                                        width: 70,
-                                        alignment: Alignment.center,
-                                        color: CustColors.light_navy,
-                                        child: Text(
-                                          "Place order",
-                                          style: Styles.badgeTextStyle1,
+                                      child: InkWell(
+                                        onTap: (){
+                                          final placeorderBloc =
+                                          BlocProvider.of<PlaceOrderBloc>(context);
+                                          placeorderBloc.add(FetchPlaceOrderEvent(state.cartlistmodel.data!.cartList.data[index].quantity
+                                              .toString(),state.cartlistmodel.data!.cartList.data[index].product.price.toString(),state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
+                                              city));
+                                        },
+                                        child: Container(
+                                          height: 20,
+                                          width: 70,
+                                          alignment: Alignment.center,
+                                          color: CustColors.light_navy,
+                                          child: const Text(
+                                            "Place order",
+                                            style: Styles.badgeTextStyle1,
+                                          ),
                                         ),
                                       ),
                                     ),

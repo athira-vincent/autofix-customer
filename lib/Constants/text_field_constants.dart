@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 const kTextInputDecoration = InputDecoration(
   labelStyle: TextStyle(
-    color: CustColors.light_navy02,
+    color: CustColors.pinkish_grey05,
   ),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: CustColors.light_navy02, width: 1.5),
+    borderSide: BorderSide(color: CustColors.black_01, width: 1.5),
     borderRadius: BorderRadius.all(Radius.circular(10)),
   ),
   focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: CustColors.light_navy02, width: 1.5),
+    borderSide: BorderSide(color: CustColors.black_01, width: 1.5),
     borderRadius: BorderRadius.all(Radius.circular(10)),
   ),
   errorBorder: OutlineInputBorder(
