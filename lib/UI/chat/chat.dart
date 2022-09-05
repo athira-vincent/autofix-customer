@@ -10,6 +10,7 @@ import 'package:auto_fix/Constants/text_field_constants.dart';
 import 'package:auto_fix/Models/chat_messages.dart';
 
 import 'package:auto_fix/Provider/chat_provider.dart';
+import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fdottedline/fdottedline.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -115,8 +116,21 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back)),
+        backgroundColor: const Color(0xff173a8d),
+        toolbarHeight: 60,
+        title: Container(
+          child: Text('Athira',
+            style: TextStyle(
+              fontFamily: 'SamsungSharpSans-Medium',
+              fontSize: 16.7,
+            ),),
+        ),
         centerTitle: true,
-        title: Text('Chatting with Athira'.trim()),
       ),
       body: SafeArea(
         child: Padding(
@@ -135,29 +149,29 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget buildMessageInput() {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 45,
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 4),
+            margin: EdgeInsets.only(right: 5),
             decoration: BoxDecoration(
-              color: CustColors.light_navy,
+              color: CustColors.white_05,
               borderRadius: BorderRadius.circular(30),
             ),
             child: IconButton(
               onPressed: getImage,
               icon: const Icon(
                 Icons.camera_alt,
-                size: 28,
+                size: 20,
               ),
-              color: Colors.white,
+              color: CustColors.warm_grey03,
             ),
           ),
           Flexible(
               child: TextField(
             focusNode: focusNode,
             textInputAction: TextInputAction.send,
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.multiline,
             textCapitalization: TextCapitalization.sentences,
             controller: textEditingController,
             decoration:
@@ -197,7 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 chatMessages.type == MessageType.text
-                    ? messageBubble(
+                    ? messageBubbleReceiver(
                         chatContent: chatMessages.content,
                         color: CustColors.light_navy02,
                         textColor: Colors.white,
@@ -318,7 +332,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         width: 35,
                       ),
                 chatMessages.type == MessageType.text
-                    ? messageBubble(
+                    ? messageBubbleSender(
                         color: CustColors.light_navy02,
                         textColor: Colors.white,
                         chatContent: chatMessages.content,
@@ -507,23 +521,66 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Widget messageBubble(
+  /*Widget messageBubble(
       {required String chatContent,
       required EdgeInsetsGeometry? margin,
       Color? color,
       Color? textColor}) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      margin: margin,
-      width: 200,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        chatContent,
-        style: TextStyle(fontSize: 16, color: textColor),
-      ),
+    return
+      Container(
+        padding: const EdgeInsets.all(10),
+        margin: margin,
+        width: 200,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Text(
+          chatContent,
+          style: TextStyle(fontSize: 16, color: textColor),
+        ),
+    );
+  }*/
+
+  Widget messageBubbleSender(
+      {required String chatContent,
+        required EdgeInsetsGeometry? margin,
+        Color? color,
+        Color? textColor}) {
+    return
+      BubbleSpecialOne(
+        text: chatContent,
+        isSender: false,
+        tail: true,
+        color: CustColors.white_02,
+        textStyle: TextStyle(
+            fontSize: 10,
+            color: CustColors.almost_black,
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w900,
+            fontFamily: 'Samsung_SharpSans_Regular'
+        ),
+      );
+  }
+
+  Widget messageBubbleReceiver(
+      {required String chatContent,
+        required EdgeInsetsGeometry? margin,
+        Color? color,
+        Color? textColor}) {
+    return Flexible(
+      child: BubbleSpecialOne(
+          text: chatContent,
+          isSender: true,
+          color: CustColors.light_navy05,
+          textStyle: TextStyle(
+            fontSize: 10,
+            color: CustColors.almost_black,
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w900,
+            fontFamily: 'Samsung_SharpSans_Regular'
+          ),
+        ),
     );
   }
 
