@@ -38,8 +38,8 @@ class MyCartScreen extends StatefulWidget {
 }
 
 class _MyCartScreenState extends State<MyCartScreen> {
-  FocusNode _emailFocusNode = FocusNode();
-  TextStyle _labelStyleEmail = const TextStyle();
+  final FocusNode _emailFocusNode = FocusNode();
+  final TextStyle _labelStyleEmail =  const TextStyle();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   final ForgotPasswordBloc _forgotPasswordBloc = ForgotPasswordBloc();
@@ -164,17 +164,17 @@ class _MyCartScreenState extends State<MyCartScreen> {
         return Column(
           children: [
             ListView.builder(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: state.cartlistmodel.data!.cartList.data.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: state.cartlistmodel.data?.cartList.data.length??0,
               itemBuilder: (context, index) {
                 // image = state.cartlistmodel.data!.cartList.data[index].product.productImage
                 //     .replaceAll("[", "")
                 //     .replaceAll("]", "")
                 //     .split(",");
-                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   print("WidgetsBinding");
                   states = state.cartlistmodel.data!.cartList.data[index]
                       .customer.address.first.state;
@@ -560,7 +560,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                           BlocProvider.of<PlaceOrderBloc>(context);
                                           placeorderBloc.add(FetchPlaceOrderEvent(state.cartlistmodel.data!.cartList.data[index].quantity
                                               .toString(),state.cartlistmodel.data!.cartList.data[index].product.price.toString(),state.cartlistmodel.data!.cartList.data[index].product.id.toString(),
-                                              city));
+                                              "1"));
                                         },
                                         child: Container(
                                           height: 20,
@@ -580,20 +580,20 @@ class _MyCartScreenState extends State<MyCartScreen> {
                             ],
                           )),
                     ),
-                    Divider(),
+                   const Divider(),
                   ],
                 );
               },
             ),
             //placeOrderUi(state.cartlistmodel.data!.cartList.totalPrice),
-            Divider(),
+            const Divider(),
             changeAddressUi(),
-            Divider(),
+            const Divider(),
             // selectedBillDetailsUi(
             //     state.cartlistmodel.data!.cartList.totalPrice,
             //     state.cartlistmodel.data!.cartList.totalItems,
             //     state.cartlistmodel.data!.cartList.deliveryCharge),
-            Divider(),
+            const Divider(),
             continueButtonUi(),
           ],
         );
@@ -911,7 +911,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
           child: Container(
-            margin: EdgeInsets.only(top: 5, bottom: 5),
+            margin: const EdgeInsets.only(top: 5, bottom: 5),
             child: _isLoading
                 ? Center(
                     child: SizedBox(
@@ -923,33 +923,31 @@ class _MyCartScreenState extends State<MyCartScreen> {
                       ),
                     ),
                   )
-                : Container(
-                    child: MaterialButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Payment_Main_Screen()));
-                      },
-                      child: Container(
-                        height: 50,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Text(
-                              'Continue',
-                              textAlign: TextAlign.center,
-                              style: Styles.textButtonLabelSubTitle,
-                            ),
-                          ],
+                : MaterialButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Payment_Main_Screen()));
+                  },
+                  child: SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        Text(
+                          'Continue',
+                          textAlign: TextAlign.center,
+                          style: Styles.textButtonLabelSubTitle,
                         ),
-                      ),
-                      color: CustColors.materialBlue,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_setValue(10))),
+                      ],
                     ),
                   ),
+                  color: CustColors.materialBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(_setValue(10))),
+                ),
           ),
         ),
       ],

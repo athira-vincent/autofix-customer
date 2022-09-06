@@ -5,6 +5,7 @@ import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.da
 import 'package:auto_fix/Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'package:auto_fix/Models/customer_models/delete_address_model/delete_address_model.dart';
 import 'package:auto_fix/Models/customer_models/get_address_model/get_address_model.dart';
+import 'package:auto_fix/Models/customer_models/order_list_model/order_list_model.dart';
 import 'package:auto_fix/Models/customer_models/place_order_model/place_order_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_list_model/spare_parts_list_model.dart';
 import 'package:auto_fix/Models/customer_models/spare_parts_model/spare_parts_model.dart';
@@ -71,7 +72,8 @@ class Repository {
   final _editaddressprovider = CustomerApiProvider();
   final _deleteaddressprovider = CustomerApiProvider();
   final _placeorderprovider=CustomerApiProvider();
-
+  final _orderlistprovider=CustomerApiProvider();
+  final _cancelorderprovider=CustomerApiProvider();
   // Add Mechanic Service List
   Future<dynamic> getServiceList(String token, categoryId, search, catSearch) =>
       _serviceListApiProvider.getServiceListRequest(
@@ -649,4 +651,9 @@ class Repository {
       _deleteaddressprovider.fetchServicedeleteaddresslist(addressid, status);
   Future<PlaceOrderModel> placeorder(qty,totprice,productid,addressid) =>
       _placeorderprovider.fetchServiceplaceorderlist(qty,totprice,productid,addressid);
+
+  Future<OrderDetails> orderlist() =>
+      _orderlistprovider.fetchServiceorderdetailslist();
+  Future<OrderDetails> cancelorder(orderid) =>
+      _orderlistprovider.fetchcancelorderlist(orderid);
 }

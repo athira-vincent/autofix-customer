@@ -1,4 +1,5 @@
 import 'package:auto_fix/Constants/cust_colors.dart';
+import 'package:auto_fix/Constants/shared_pref_keys.dart';
 import 'package:auto_fix/Constants/styles.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_event.dart';
@@ -100,8 +101,6 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                           BlocProvider.of<ShowCartPopBloc>(context);
                       addcartsBloc.add(FetchShowCartPopEvent());
 
-
-
                       ViewCartUi();
                     });
                   }
@@ -201,6 +200,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                   .replaceAll("]", "")
                   .split(",");
               print("imagesss");
+
               print(image);
 
               return Container(
@@ -511,6 +511,14 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
                   "null",
                   "null"));
             });
+
+            String status =
+                shdPre.getString(SharedPrefKeys.isMechanicLoggedIn).toString();
+            String newstatus =
+                shdPre.getString(SharedPrefKeys.isUserLoggedIn).toString();
+            print(status);
+            print(newstatus);
+
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -540,10 +548,7 @@ class _SparePartsListScreenState extends State<SparePartsListScreen> {
     );
   }
 
-   ChangeCartStatus() {
-
-
-   }
+  ChangeCartStatus() {}
 }
 
 class MyBehavior extends ScrollBehavior {

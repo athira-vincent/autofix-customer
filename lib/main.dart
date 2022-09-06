@@ -7,6 +7,7 @@ import 'package:auto_fix/Provider/Profile/profile_data_provider.dart';
 import 'package:auto_fix/Provider/chat_provider.dart';
 import 'package:auto_fix/Provider/jobRequestNotifyProvider/job_request_notify_provider.dart';
 import 'package:auto_fix/UI/Customer/BottomBar/Home/home_spare_parts_list_bloc/home_spare_part_list_bloc.dart';
+import 'package:auto_fix/UI/Customer/BottomBar/Home/order_list_bloc/order_list_bloc.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/EmergencyTracking/mechanic_tracking_Screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/mechanic_profile_screen.dart';
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
@@ -19,6 +20,7 @@ import 'package:auto_fix/UI/SpareParts/MyCart/bloc/add_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_address_bloc/delete_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/delete_cart_bloc/delete_cart_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/edit_address_bloc/edit_address_bloc.dart';
+import 'package:auto_fix/UI/SpareParts/MyCart/place_order_bloc/place_oder_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/showcartpopbloc/show_cart_pop_event.dart';
 import 'package:auto_fix/UI/SpareParts/SparePartsList/spare_parts_list_screen.dart';
@@ -120,7 +122,7 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider(
                 create: (context) =>
-                ShowCartPopBloc()..add(FetchShowCartPopEvent()),
+                    ShowCartPopBloc()..add(FetchShowCartPopEvent()),
               ),
               BlocProvider<DeleteCartBloc>(
                 create: (context) => DeleteCartBloc(),
@@ -136,6 +138,12 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider<DeleteAddressBloc>(
                 create: (context) => DeleteAddressBloc(),
+              ),
+              BlocProvider<PlaceOrderBloc>(
+                create: (context) => PlaceOrderBloc(),
+              ),
+              BlocProvider<OrderListBloc>(
+                create: (context) => OrderListBloc(),
               ),
             ],
             child: MaterialApp(
