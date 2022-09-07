@@ -10,7 +10,7 @@ class CancelOrderBloc extends Bloc<CancelOrderEvent, CancelOrderState> {
       try {
         if (event is FetchCancelOrderEvent) {
           var cancelorderscreen = await Repository().cancelorder(event.orderid);
-          emit(CancelOrderLoadedState(deleteAddressModel: cancelorderscreen));
+          emit(CancelOrderLoadedState(cancelOrder: cancelorderscreen));
         }
       } catch (e) {
         emit(CancelOrderErrorState(message: e.toString()));

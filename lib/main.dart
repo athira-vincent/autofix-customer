@@ -13,6 +13,7 @@ import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/MechanicProfileView/me
 import 'package:auto_fix/UI/Customer/EmergencyServiceFlow/RateMechanic/rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/CommonScreensInRegular/RegularRateMechanic/regular_rate_mechanic_screen.dart';
 import 'package:auto_fix/UI/Customer/RegularServiceFlow/MobileMechanicFlow/MobileMechTracking/mobile_mechanic_tracking_screen.dart';
+import 'package:auto_fix/UI/Customer/SideBar/MyOrders/cacncel_order_bloc/cacncel_order_bloc.dart';
 import 'package:auto_fix/UI/Mechanic/BottomBar/AddPriceFault/emergencyServices.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/add_address_bloc/add_address_bloc.dart';
 import 'package:auto_fix/UI/SpareParts/MyCart/address_bloc/address_bloc.dart';
@@ -144,6 +145,9 @@ class _MyAppState extends State<MyApp> {
               ),
               BlocProvider<OrderListBloc>(
                 create: (context) => OrderListBloc(),
+              ),
+              BlocProvider<CancelOrderBloc>(
+                create: (context) => CancelOrderBloc(),
               ),
             ],
             child: MaterialApp(

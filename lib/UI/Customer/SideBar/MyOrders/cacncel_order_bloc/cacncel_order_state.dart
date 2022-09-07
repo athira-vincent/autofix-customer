@@ -1,3 +1,4 @@
+import 'package:auto_fix/Models/customer_models/cancel_order_module/cancel_order_module.dart';
 import 'package:auto_fix/Models/customer_models/delete_address_model/delete_address_model.dart';
 
 import 'package:equatable/equatable.dart';
@@ -18,9 +19,9 @@ class CancelOrderLoadingState extends CancelOrderState {
 }
 
 class CancelOrderLoadedState extends CancelOrderState {
-  final DeleteAddressModel deleteAddressModel;
+  final CancelOrder cancelOrder;
 
-  CancelOrderLoadedState({required this.deleteAddressModel});
+  CancelOrderLoadedState({required this.cancelOrder});
 
   @override
   List<Object> get props => [];

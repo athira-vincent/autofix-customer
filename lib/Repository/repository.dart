@@ -2,6 +2,7 @@ import 'package:auto_fix/ApiProvider/customer_apiProvider.dart';
 import 'package:auto_fix/ApiProvider/mechanic_api_provider.dart';
 import 'package:auto_fix/Models/customer_models/add_address_model/add_address_model.dart';
 import 'package:auto_fix/Models/customer_models/add_cart_model/add_cart_model.dart';
+import 'package:auto_fix/Models/customer_models/cancel_order_module/cancel_order_module.dart';
 import 'package:auto_fix/Models/customer_models/cart_list_model/cart_list_model.dart';
 import 'package:auto_fix/Models/customer_models/delete_address_model/delete_address_model.dart';
 import 'package:auto_fix/Models/customer_models/get_address_model/get_address_model.dart';
@@ -654,6 +655,6 @@ class Repository {
 
   Future<OrderDetails> orderlist() =>
       _orderlistprovider.fetchServiceorderdetailslist();
-  Future<OrderDetails> cancelorder(orderid) =>
-      _orderlistprovider.fetchcancelorderlist(orderid);
+  Future<CancelOrder> cancelorder(orderid) =>
+      _cancelorderprovider.fetchcancelorderlist(orderid);
 }
